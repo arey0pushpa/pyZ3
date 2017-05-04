@@ -1,9 +1,13 @@
-from __future__ import print_function
+# from __future__ import print_function
 from z3 import *
 import argparse
 
-# input number of nodes and molecules
+# def printf(str, *args):
+#     print(str % args, end='')
 
+#----------------------------------------------------
+# input parsing
+# input number of nodes and molecules
 parser = argparse.ArgumentParser(description='Auto testing for TARA')
 parser.add_argument("-M","--mols", type=int, default=3, help = "number of molecules")
 parser.add_argument("-N","--nodes", type=int, default=3, help = "number of nodes")
@@ -11,12 +15,11 @@ args = parser.parse_args()
 M = args.mols
 N = args.nodes
 
-def printf(str, *args):
-    print(str % args, end='')
+# printf( "Molecules : %d Nodes : %d\n", M, N )
 
 
-printf( "Molecules : %d Nodes : %d\n", M, N )
-
+#----------------------------------------------------
+# Constraint generation 
 
 def dump(i,j):
     s = "d_" + str(i) + "_" + str(j)
@@ -46,6 +49,12 @@ def pair_matrix(k,k1):
     s = "p_k" + str(k) + "_k" + str(k1)
     return Bool( s )
 
+f = (dump(0,2) and dump(3,0))
+
+print dump(0,2) 
+
+print dump(3,2) 
+
 # F_0
 
 
@@ -54,6 +63,7 @@ def pair_matrix(k,k1):
 # F_2
 
 # F_3
+
 
 solve(dump(0,2) or not dump(2,0))
 
