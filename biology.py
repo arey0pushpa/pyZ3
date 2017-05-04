@@ -57,6 +57,10 @@ print dump(3,2)
 
 # F_0
 
+at_least_one = False;
+for i range 1..N:
+    at_least_one = at_least_one or dump(i,i)
+
 
 # F_1
 
