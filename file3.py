@@ -96,3 +96,50 @@ print "f(x) =" ,m.evaluate(f(x))
 # Validity is about finding a proof of a statement; satisfiability is about finding a solution to a set of constraints. 
 p,q = Bools('p q')
 
+# LIST CMPREHENSION
+
+print [x+1 for x in range(1,5)]
+# Create lists containing 5 integer var
+
+X = [Int ('x%s' % i) for i in range(5)]
+Y = [Int ('y%s' % i) for i in range(5)]
+Z = [Bool ('z%s' % i) for i in range(5)]
+
+print X
+print Y
+print Z
+
+Z[3] = 3 > 1
+X[1] = 10 + 11 -1
+print X
+print Z
+
+
+# Create a List contatining X[i] + Y[i]
+X_plus_Y= [X[i] + Y[i] for i in range(5)]
+print X_plus_Y
+
+X_gt_Y= [X[i] > Y[i] for i in range(5)]
+print X_gt_Y
+
+print And(X_gt_Y)
+
+# Create a 3 * 3 matrix of integer variables.
+X = [[Int ("x_%s_%s" %(i+1,j+1)) for j in range(3)] for i in range(3)]
+pp(X)
+print X
+
+# Z3Py also provides functions for creating vectors of Boolean, Integer and Real variables. These functions are implemented using list comprehensions.
+
+X = IntVector('x',5)
+Y = RealVector('y',5)
+P = BoolVector('p',5)
+
+print X
+print Y
+print P
+print [y**2 for y in Y]
+print Sum([y**2 for y in Y])
+
+
+
