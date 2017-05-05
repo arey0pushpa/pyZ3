@@ -50,6 +50,10 @@ def pair_matrix(k,k1):
     s = "p_k" + str(k) + "_k" + str(k1)
     return Bool( s )
 
+def r(i,j,k):
+    s = "r_" + str(i) + "_" + str(j) + "_k" + str(k)
+    return Bool( s )
+
 #f = (dump(0,2) and dump(3,0))
 
 print dump(0,2) 
@@ -63,15 +67,15 @@ print dump(3,2)
 #    at_least_one = at_least_one or dump(i,i)
 
 # F_0:  e_ijk -) e_ijk   
-F_0 = for i in range(1,N):
-        for j in range(1,N):
-           for k in range(1,M):
-             Implies(active_edge(i,j,k), edge(i,j,k))
+for i in range(1,N):
+    for j in range(1,N):
+        for k in range(1,M):
+            Implies(active_edge(i,j,k), edge(i,j,k))
 # Not(active_edge(i,j,k)) Or edge(i,j,k)
 
 
 # F_1
-B1,B2, B22, B3, B33 = Bool('B1 B2 B22 B3 B33') 
+B1,B2, B22, B3, B33 = Bools('B1 B2 B22 B3 B33') 
 B1 = False
 B2 = False
 B22 = False
@@ -102,7 +106,7 @@ for i in range(1,N):
             for k1 in range(1,M):
                 B22 = B22 or active_edge(i,j,k) and active_node(j,k1) and pair_matrix(k,k1)
 
-(!B2 or B22)  
+(not B2 or B22)  
 # F_3
 for i in range(1,N):
     for j in range(1,N):
@@ -112,11 +116,11 @@ for i in range(1,N):
                 B33 = B33 or active_edge(i,j,k) and active_node(j,k1) and pair_matrix(k,k1)
         B33 = not(B33)
 
-const_c = F_0 +  F_1_1
+#const_c = F_0 +  F_1_1
 bio_c = B1 and (not(B2) or B22) and (not(B3) or not(B33))
 
 s = Solver()
-s.add(const_c,bio_c)
+s.add(bio_c)
 if s.check() == sat:
     m = s.model()
 
