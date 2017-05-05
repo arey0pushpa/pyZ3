@@ -56,9 +56,9 @@ def r(i,j,k):
 
 #f = (dump(0,2) and dump(3,0))
 
-print dump(0,2) 
+# print dump(0,2) 
 
-print dump(3,2) 
+# print dump(3,2) 
 
 # F_0
 
@@ -66,58 +66,85 @@ print dump(3,2)
 # for i in range (1,N):
 #    at_least_one = at_least_one or dump(i,i)
 
-# F_0:  e_ijk -) e_ijk   
+# b_ij > \/_k b_ijk
+F00 = True
+for i in range(1,N):
+    for j in range(1,N):
+        rhs = False
+        for k in range(1,M):
+            rhs = Or( edge(i,j,k), rhs )
+        F00 = Implies( real_edge(i,j), rhs )
+print F00
+
+
+# F_0:  b_ijk -) e_ijk   
+F0 = True
 for i in range(1,N):
     for j in range(1,N):
         for k in range(1,M):
-            Implies(active_edge(i,j,k), edge(i,j,k))
+            F0 = And( Implies(active_edge(i,j,k), edge(i,j,k)), F0 )
+print F0
+
 # Not(active_edge(i,j,k)) Or edge(i,j,k)
 
 
 # F_1
-B1,B2, B22, B3, B33 = Bools('B1 B2 B22 B3 B33') 
+# 
+# B1,B2, B22, B3, B33 = Bools('B1 B2 B22 B3 B33') 
+# reachability condition
+# fixed point issues??
 B1 = False
-B2 = False
-B22 = False
-B3 = False
-B33 = False
 for i in range(1,N):
     for j in range(1,N):
+        if j == i:
+            continue
         for k in range(1,M):
-            if (r(i,j,k) == False):
-                    continue
+            # if (r(i,j,k) == False):
+            #         continue
+            rhs = edge(i,j,k)
             for l in range(1,N):
-                if(i == l):
+                if i == l or j == l:
                     continue  
-                B1 = Or(And(r(l,j,k), edge(i,l,k)), B1)
-                print B1
+                rhs = Or(And(r(l,j,k), edge(i,l,k)), rhs)
+            B1 = Implies( r(i,j,k), rhs )
+
+print B1
                 #B1 = B1 or B2                
                 
 # F_1_1
+# stability condition 
+# e_ijk -> r_jik
 for i in range(1,N):
     for j in range(1,N):
+        if j == i:
+            continue
         for k in range(1,M):
             Implies(edge(i,j,k), r(j,i,k))
+
 # F_2
+B2 = False
+B22 = False
 for i in range(1,N):
     for j in range(1,N):
         for k in range(1,M):
             B2 = Or (B2, edge(i,j,k)) 
             for k1 in range(1,M):
                 B22 = Or (B22, And (active_edge(i,j,k), active_node(j,k1), pair_matrix(k,k1)))
-                print B22
+print B22
 
 #(not B2 or B22)  
 
 
 # F_3
+B3 = False
+B33 = False
 for i in range(1,N):
     for j in range(1,N):
         for k in range(1,M):
             B3 = Or(B3, edge(i,j,k)) 
             for k1 in range(1,M):
                 B33 = Or(B33, And(active_edge(i,j,k), active_node(j,k1), pair_matrix(k,k1)))
-            print B33
+print B33
 #        B33 = not(B33)
 
 ##const_c = F_0 +  F_1_1
