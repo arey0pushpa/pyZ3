@@ -84,45 +84,49 @@ B33 = False
 for i in range(1,N):
     for j in range(1,N):
         for k in range(1,M):
-            if (not r(i,j,k)):
+            if (r(i,j,k) == False):
                     continue
             for l in range(1,N):
                 if(i == l):
-                    continue 
-                B1 = B1 or (r(l,j,k) and e(i,l,k))
-                
-                
-# F_1_1
-for i in range(1,N):
-    for j in range(1,N):
-        for k in range(1,M):
-            Implies(edge(i,j,k), r(j,i,k))
-            
-# F_2
-for i in range(1,N):
-    for j in range(1,N):
-        for k in range(1,M):
-            B2 = B2 or edge(i,j,k) 
-            for k1 in range(1,M):
-                B22 = B22 or active_edge(i,j,k) and active_node(j,k1) and pair_matrix(k,k1)
-
-(not B2 or B22)  
-# F_3
-for i in range(1,N):
-    for j in range(1,N):
-        for k in range(1,M):
-            B3 = B3 or edge(i,j,k) 
-            for k1 in range(1,M):
-                B33 = B33 or active_edge(i,j,k) and active_node(j,k1) and pair_matrix(k,k1)
-        B33 = not(B33)
-
-#const_c = F_0 +  F_1_1
-bio_c = B1 and (not(B2) or B22) and (not(B3) or not(B33))
-
+                    continue  
+                B1 = Or(And(r(l,j,k), edge(i,l,k)), B1)
+                print B1
+                #B1 = B1 or B2
+ 
+#                
+#                
+## F_1_1
+#for i in range(1,N):
+#    for j in range(1,N):
+#        for k in range(1,M):
+#            Implies(edge(i,j,k), r(j,i,k))
+#            
+## F_2
+#for i in range(1,N):
+#    for j in range(1,N):
+#        for k in range(1,M):
+#            B2 = B2 or edge(i,j,k) 
+#            for k1 in range(1,M):
+#                B22 = B22 or active_edge(i,j,k) and active_node(j,k1) and pair_matrix(k,k1)
+#
+##(not B2 or B22)  
+## F_3
+#for i in range(1,N):
+#    for j in range(1,N):
+#        for k in range(1,M):
+#            B3 = B3 or edge(i,j,k) 
+#            for k1 in range(1,M):
+#                B33 = B33 or active_edge(i,j,k) and active_node(j,k1) and pair_matrix(k,k1)
+#        B33 = not(B33)
+#
+##const_c = F_0 +  F_1_1
+#bio_c = B1 and (not(B2) or B22) and (not(B3) or not(B33))
+#
 s = Solver()
-s.add(bio_c)
-if s.check() == sat:
-    m = s.model()
-
-#solve(dump(0,2) or not dump(2,0))
+s.add(B1)
+#s.add(bio_c)
+#if s.check() == sat:
+#    m = s.model()
+#
+##solve(dump(0,2) or not dump(2,0))
 
