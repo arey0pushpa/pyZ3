@@ -71,8 +71,12 @@ F_0 = for i in range(1,N):
 
 
 # F_1
-B1 = Bool('B1') 
+B1,B2, B22, B3, B33 = Bool('B1 B2 B22 B3 B33') 
 B1 = False
+B2 = False
+B22 = False
+B3 = False
+B33 = False
 for i in range(1,N):
     for j in range(1,N):
         for k in range(1,M):
@@ -91,16 +95,30 @@ for i in range(1,N):
             Implies(edge(i,j,k), r(j,i,k))
             
 # F_2
+for i in range(1,N):
+    for j in range(1,N):
+        for k in range(1,M):
+            B2 = B2 or edge(i,j,k) 
+            for k1 in range(1,M):
+                B22 = B22 or active_edge(i,j,k) and active_node(j,k1) and pair_matrix(k,k1)
 
-
+(!B2 or B22)  
 # F_3
+for i in range(1,N):
+    for j in range(1,N):
+        for k in range(1,M):
+            B3 = B3 or edge(i,j,k) 
+            for k1 in range(1,M):
+                B33 = B33 or active_edge(i,j,k) and active_node(j,k1) and pair_matrix(k,k1)
+        B33 = not(B33)
 
-bio_c = F_0 + F_1 + F_1_1 +  F_2 + F_3 
+const_c = F_0 +  F_1_1
+bio_c = B1 and (not(B2) or B22) and (not(B3) or not(B33))
 
 s = Solver()
-s.add(bio_c)
+s.add(const_c,bio_c)
 if s.check() == sat:
-    m =s.model()
+    m = s.model()
 
 #solve(dump(0,2) or not dump(2,0))
 
