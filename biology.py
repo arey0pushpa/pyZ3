@@ -93,14 +93,14 @@ for i in range(1,N):
                 print B1
                 #B1 = B1 or B2
  
-#                
-#                
-## F_1_1
-#for i in range(1,N):
-#    for j in range(1,N):
-#        for k in range(1,M):
-#            Implies(edge(i,j,k), r(j,i,k))
-#            
+                
+                
+# F_1_1
+for i in range(1,N):
+    for j in range(1,N):
+        for k in range(1,M):
+            Implies(edge(i,j,k), r(j,i,k))
+            
 ## F_2
 #for i in range(1,N):
 #    for j in range(1,N):
