@@ -63,10 +63,10 @@ print dump(3,2)
 #    at_least_one = at_least_one or dump(i,i)
 
 # F_0:  e_ijk -) e_ijk   
-for i in range(1,N):
-    for j in range(1,N):
-        for k in range(1,M):
-            Implies(active_edge(i,j,k), edge(i,j,k))
+F_0 = for i in range(1,N):
+        for j in range(1,N):
+           for k in range(1,M):
+             Implies(active_edge(i,j,k), edge(i,j,k))
 # Not(active_edge(i,j,k)) Or edge(i,j,k)
 
 
@@ -95,6 +95,12 @@ for i in range(1,N):
 
 # F_3
 
+bio_c = F_0 + F_1 + F_1_1 +  F_2 + F_3 
+
+s = Solver()
+s.add(bio_c)
+if s.check() == sat:
+    m =s.model()
 
 #solve(dump(0,2) or not dump(2,0))
 
