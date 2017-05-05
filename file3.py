@@ -141,5 +141,74 @@ print P
 print [y**2 for y in Y]
 print Sum([y**2 for y in Y])
 
+d,a,t,v_i,v_f = Reals('d a t v_i v_f')
+b = Bool('b')
+equations = [d== v_i * t + (a*t**2)/2,
+        v_f == v_i +a*t
+        ]
+print "kinematic equations"
+print equations
+print equations[1]
+print (d == v_i * t + (a*t**2)/2)
+
+## Boolean variable always getting eval. Not sure how to avaoid this.
+
+problem = [
+        v_i == 30,
+        v_f == 0,
+        a == -8
+        ]
+print problem
+
+solve(equations + problem)
+
+equations = [a == 10 * t,
+             d == 20 * t
+            ]
+problem = [
+        a == 10,
+        d == 10
+        ]
+print problem
+solve(equations + problem) # We got no solution !
+# This way is fantastic.
+
+# BITVECTOR TRICKS:
+x = BitVec ('x',32)
+powers = [2 ** i for i in range(32)]
+fast = And(x !=0 , x & (x-1) == 0)
+slow = Or([x == p for p in powers])
+print fast
+prove(fast == slow)
+
+print "trying to prove buggy version"
+fast = x & (x -1) == 0
+prove (fast == slow)
+
+x = BitVec ('x',32)
+y = BitVec ('x',32)
+
+trick = (x ^ y) < 0
+opposite = Or(And(x < 0,y>= 0),
+        And(x>=0, y<0))
+prove (trick == opposite)
+
+
+# PUZZLE - DOG CAT MOUSE
+d,c,m = Ints('d c m')
+solve(d >= 1,
+        c >= 1,
+        m >= 1,
+        c + d +  m == 100,
+        1500 *d + 100 *c + 25 *m == 10000)
+
+d,c,m = Reals('d c m')
+solve(d >= 1,
+        c >= 1,
+        m >= 1,
+        c + 15*d + 0.25 * m == 100)
+
+
+# SUDOKU
 
 

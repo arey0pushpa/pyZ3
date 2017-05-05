@@ -69,14 +69,29 @@ for i in range(1,N):
             Implies(active_edge(i,j,k), edge(i,j,k))
 # Not(active_edge(i,j,k)) Or edge(i,j,k)
 
+
 # F_1
+B1 = Bool('B1') 
+B1 = False
 for i in range(1,N):
     for j in range(1,N):
         for k in range(1,M):
-
-
-
+            if (not r(i,j,k)):
+                    continue
+            for l in range(1,N):
+                if(i == l):
+                    continue 
+                B1 = B1 or (r(l,j,k) and e(i,l,k))
+                
+                
+# F_1_1
+for i in range(1,N):
+    for j in range(1,N):
+        for k in range(1,M):
+            Implies(edge(i,j,k), r(j,i,k))
+            
 # F_2
+
 
 # F_3
 
