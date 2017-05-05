@@ -119,15 +119,15 @@ for i in range(1,N):
                 B33 = Or(B33, And(active_edge(i,j,k), active_node(j,k1), pair_matrix(k,k1)))
             print B33
 #        B33 = not(B33)
-#
+
 ##const_c = F_0 +  F_1_1
 #bio_c = B1 and (not(B2) or B22) and (not(B3) or not(B33))
-#
+
 s = Solver()
-s.add(B1)
+s.add(B1 and B2 and B22 and B33)
 #s.add(bio_c)
-#if s.check() == sat:
+if s.check() == sat:
 #    m = s.model()
-#
+
 ##solve(dump(0,2) or not dump(2,0))
 
