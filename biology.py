@@ -91,32 +91,33 @@ for i in range(1,N):
                     continue  
                 B1 = Or(And(r(l,j,k), edge(i,l,k)), B1)
                 print B1
-                #B1 = B1 or B2
- 
-                
+                #B1 = B1 or B2                
                 
 # F_1_1
 for i in range(1,N):
     for j in range(1,N):
         for k in range(1,M):
             Implies(edge(i,j,k), r(j,i,k))
-            
-## F_2
-#for i in range(1,N):
-#    for j in range(1,N):
-#        for k in range(1,M):
-#            B2 = B2 or edge(i,j,k) 
-#            for k1 in range(1,M):
-#                B22 = B22 or active_edge(i,j,k) and active_node(j,k1) and pair_matrix(k,k1)
-#
-##(not B2 or B22)  
-## F_3
-#for i in range(1,N):
-#    for j in range(1,N):
-#        for k in range(1,M):
-#            B3 = B3 or edge(i,j,k) 
-#            for k1 in range(1,M):
-#                B33 = B33 or active_edge(i,j,k) and active_node(j,k1) and pair_matrix(k,k1)
+# F_2
+for i in range(1,N):
+    for j in range(1,N):
+        for k in range(1,M):
+            B2 = Or (B2, edge(i,j,k)) 
+            for k1 in range(1,M):
+                B22 = Or (B22, And (active_edge(i,j,k), active_node(j,k1), pair_matrix(k,k1)))
+                print B22
+
+#(not B2 or B22)  
+
+
+# F_3
+for i in range(1,N):
+    for j in range(1,N):
+        for k in range(1,M):
+            B3 = Or(B3, edge(i,j,k)) 
+            for k1 in range(1,M):
+                B33 = Or(B33, And(active_edge(i,j,k), active_node(j,k1), pair_matrix(k,k1)))
+            print B33
 #        B33 = not(B33)
 #
 ##const_c = F_0 +  F_1_1
