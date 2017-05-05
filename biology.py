@@ -124,10 +124,12 @@ for i in range(1,N):
 #bio_c = B1 and (not(B2) or B22) and (not(B3) or not(B33))
 
 s = Solver()
-s.add(B1 and B2 and B22 and B33)
-#s.add(bio_c)
-if s.check() == sat:
-#    m = s.model()
+s.add(B1,B2,B22, B33)
+print s.check()
 
+if s.check() == sat:
+    m = s.model()
+    print m
+    
 ##solve(dump(0,2) or not dump(2,0))
 
