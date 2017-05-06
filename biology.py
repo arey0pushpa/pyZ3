@@ -58,10 +58,10 @@ def r(i,j,k):
 # F_0
 # b_ij > \/_k b_ijk
 F00 = True
-for i in range(1,N):
-    for j in range(1,N):
+for i in range(N):
+    for j in range(N):
         rhs = False
-        for k in range(1,M):
+        for k in range(M):
             rhs = Or( edge(i,j,k), rhs )
         F00 = Implies( real_edge(i,j), rhs )
 print F00
@@ -69,9 +69,9 @@ print F00
 
 # F_0:  b_ijk -> e_ijk   
 F0 = True
-for i in range(1,N):
-    for j in range(1,N):
-        for k in range(1,M):
+for i in range(N):
+    for j in range(N):
+        for k in range(M):
             F0 = And( Implies(active_edge(i,j,k), edge(i,j,k)), F0 )
 print F0
 
@@ -79,15 +79,15 @@ print F0
 # F_1
 # reachability condition; fixed point issues??
 B1 = False
-for i in range(1,N):
-    for j in range(1,N):
+for i in range(N):
+    for j in range(N):
         if j == i:
             continue
-        for k in range(1,M):
+        for k in range(M):
             # if (r(i,j,k) == False):
             #         continue
             rhs = edge(i,j,k)
-            for l in range(1,N):
+            for l in range(N):
                 if i == l or j == l:
                     continue  
                 rhs = Or(And(r(l,j,k), edge(i,l,k)), rhs)
@@ -98,20 +98,25 @@ F1 = True
 # F_1_1
 # stability condition 
 # e_ijk -> r_jik
-for i in range(1,N):
-    for j in range(1,N):
+for i in range(N):
+    for j in range(N):
         if j == i:
             continue
-        for k in range(1,M):
+        for k in range(M):
            F1 = And( Implies(edge(i,j,k), r(j,i,k)), F1)
 
 # F_2: Fusion Rules 
 # for_all(j,j'){j != j'} ( exists(k,k') p[k][k'] and (b[i][j][k] and a[j][k'] != b[i'][j'][k] and a[j'][k']))
 B2 = False
 B22 = False
-for i in range(1,N):
-    for j in range(1,N):
-        for k in range(1,M):
+for j in range(N):
+    for j1 in range(N):
+        if j1 == j:
+            continue
+        for i in range(N):
+            for i1 in range(N):
+                for k in range(M):
+                    for k1 in range(M):
             B2 = Or (B2, edge(i,j,k)) 
             for k1 in range(1,M):
                 B22 = Or (B22, And (active_edge(i,j,k), active_node(j,k1), pair_matrix(k,k1)))
