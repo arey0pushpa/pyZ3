@@ -85,7 +85,7 @@ print F0
 
 # F_1
 # reachability condition; fixed point issues??
-B1 = False
+F1 = False
 for i in range(N):
     for j in range(N):
         if j == i:
@@ -98,10 +98,10 @@ for i in range(N):
                 if i == l or j == l:
                     continue  
                 rhs = Or(And(r(l,j,k), edge(i,l,k)), rhs)
-            B1 = Implies( r(i,j,k), rhs )
-print B1
+            F1 = Implies( r(i,j,k), rhs )
+print F1
 
-F1 = True                
+F11 = True                
 # F_1_1
 # stability condition 
 # e_ijk -> r_jik
@@ -110,12 +110,11 @@ for i in range(N):
         if j == i:
             continue
         for k in range(M):
-           F1 = And( Implies(edge(i,j,k), r(j,i,k)), F1)
+           F11 = And( Implies(edge(i,j,k), r(j,i,k)), F1)
 
 # F_2: Fusion Rules 
 # for_all(j,j'){j != j'} ( exists(k,k') p[k][k'] and (b[i][j][k] and a[j][k'] != b[i'][j'][k] and a[j'][k']))
-B2 = False
-B22 = False
+F2 = False
 for j in range(N):
     for j1 in range(N):
         if j1 == j:
@@ -124,12 +123,8 @@ for j in range(N):
             for i1 in range(N):
                 for k in range(M):
                     for k1 in range(M):
-                        And (p(k,k1), And( 
-                        B22 = False
-            B2 = Or (B2, edge(i,j,k)) 
-            for k1 in range(1,M):
-                B22 = Or (B22, And (active_edge(i,j,k), active_node(j,k1), pair_matrix(k,k1)))
-print B22
+                       F2 =  And (p(k,k1), And(b(i,j,k),a(j)(k1) != And(b(i1,j1,k), a(j1)(k1))), F2) 
+print F2
 
 # Create Solver and add constraints in it.
 s = Solver()
