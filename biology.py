@@ -26,30 +26,37 @@ def dump(i,j):
     s = "d_" + str(i) + "_" + str(j)
     return Bool( s )
 
+# c(i,k) node with kth molecule present
 def node(i,k):
     s = "n_" + str(i) + "_k" + str(k)
     return Bool( s )
 
+# c(i,k) node with kth molecule active
 def active_node(i,k):
     s = "a_" + str(i) + "_k" + str(k)
     return Bool( s )
 
+# e(i,j) edge between node i and j
 def real_edge(i,j):
     s = "e_" + str(i) + "_" + str(j)
     return Bool( s )
 
+# e(i,j,k) edge with kth molecule present
 def edge(i,j,k):
     s = "e_" + str(i) + "_" + str(j) + "_k" + str(k)
     return Bool( s )
 
+# b(i,j,k) edge with kth molecule active
 def active_edge(i,j,k):
     s = "b_" + str(i) + "_" + str(j) + "_k" + str(k)
     return Bool( s )
 
-def pair_matrix(k,k1):
+# PAIR MATRIX
+def p(k,k1):
     s = "p_k" + str(k) + "_k" + str(k1)
     return Bool( s )
 
+# REACHABLE
 def r(i,j,k):
     s = "r_" + str(i) + "_" + str(j) + "_k" + str(k)
     return Bool( s )
@@ -117,13 +124,14 @@ for j in range(N):
             for i1 in range(N):
                 for k in range(M):
                     for k1 in range(M):
+                        And (p(k,k1), And( 
+                        B22 = False
             B2 = Or (B2, edge(i,j,k)) 
             for k1 in range(1,M):
                 B22 = Or (B22, And (active_edge(i,j,k), active_node(j,k1), pair_matrix(k,k1)))
 print B22
 
-
-
+# Create Solver and add constraints in it.
 s = Solver()
 s.add(B1,B2,B22, B33)
 print s.check()
