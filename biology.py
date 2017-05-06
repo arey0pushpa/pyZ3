@@ -54,8 +54,6 @@ def r(i,j,k):
     s = "r_" + str(i) + "_" + str(j) + "_k" + str(k)
     return Bool( s )
 
-#f = (dump(0,2) and dump(3,0))
-
 
 # F_0
 # b_ij > \/_k b_ijk
@@ -94,9 +92,9 @@ for i in range(1,N):
                     continue  
                 rhs = Or(And(r(l,j,k), edge(i,l,k)), rhs)
             B1 = Implies( r(i,j,k), rhs )
-
 print B1
-                
+
+F1 = True                
 # F_1_1
 # stability condition 
 # e_ijk -> r_jik
@@ -105,9 +103,10 @@ for i in range(1,N):
         if j == i:
             continue
         for k in range(1,M):
-            Implies(edge(i,j,k), r(j,i,k))
+           F1 = And( Implies(edge(i,j,k), r(j,i,k)), F1)
 
-# F_2
+# F_2: Fusion Rules 
+# for_all(j,j'){j != j'} ( exists(k,k') p[k][k'] and (b[i][j][k] and a[j][k'] != b[i'][j'][k] and a[j'][k']))
 B2 = False
 B22 = False
 for i in range(1,N):
@@ -119,18 +118,6 @@ for i in range(1,N):
 print B22
 
 
-# F_3
-B3 = False
-B33 = False
-for i in range(1,N):
-    for j in range(1,N):
-        for k in range(1,M):
-            B3 = Or(B3, edge(i,j,k)) 
-            for k1 in range(1,M):
-                B33 = Or(B33, And(active_edge(i,j,k), active_node(j,k1), pair_matrix(k,k1)))
-print B33
-
-##const_c = F_0 +  F_1_1
 
 s = Solver()
 s.add(B1,B2,B22, B33)
