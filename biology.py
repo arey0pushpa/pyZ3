@@ -123,7 +123,7 @@ for j in range(N):
             for i1 in range(N):
                 for k in range(M):
                     for k1 in range(M):
-                       F2 =  And (p(k,k1), And(b(i,j,k),a(j)(k1) != And(b(i1,j1,k), a(j1)(k1))), F2) 
+                       F2 =  And (p(k,k1), And(active_edge(i,j,k),active_node(j,k1) And(active_edge(i1,j1,k), active_node(j1,k1))), F2) 
 print F2
 
 # Create Solver and add constraints in it.
