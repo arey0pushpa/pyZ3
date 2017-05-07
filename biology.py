@@ -74,11 +74,18 @@ for i in range(N):
         for k in range(M):
             C1 = And (Implies(egde(i,j,k),node(i,k)),C1)
 
+C2 = True
+for i in range(N):
+    for j in range(N):
+        for k in range(M):
+            C2 = And (Implies(egde(i,j,k),node(j,k)),C2)
+
 #2. Self edges not allowed. 
 # not e_ii  
 
 for i in range(N):
-    B2 = Not(edge(i,i))
+    C2 = Not(edge(i,i))
+
 
 #3. Multiple(parallel) edges are allowed between two nodes. 
 # But we restrict it to two.
@@ -91,6 +98,14 @@ for i in range(N):
 
 # if (k,k' belongs to same half of the M * M matrix == 0
 # else (k,k') = nondet_Bool()
+
+#5. Activitu on the node.
+
+C5 = True 
+for i in range(N):
+    for k in range(M):
+        C5 = And (Implies active_node(i,k),C5) 
+
 # ----------------------------------------------------------------
 
 # MAIN Constraints:
