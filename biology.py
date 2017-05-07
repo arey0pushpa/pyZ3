@@ -80,7 +80,7 @@ def r(i,j,k):
 # we have two options 1. build the matrix as M * M or
 # 2. divide into two matrix M(qp) {p1} M(pq) {p2} each is M/2 size
 # I implemented as 2nd.  p1_kk' , P2_kk' but now u cant say k , k' you have to specify which k and k'?  
-# To avaoid breaking current setup : using 1
+# To avoid breaking current setup : using 1
 
 # if (k,k' belongs to same half of the M * M matrix == 0
 # else (k,k') = nondet_Bool()
@@ -144,21 +144,49 @@ for i in range(N):
 
 # F_2: Fusion Rules 
 # for_all(j,j'){j != j'} ( exists(k,k') p[k][k'] and (b[i][j][k] and a[j][k'] != b[i'][j'][k] and a[j'][k']))
-F2 = False
-for j in range(N):
-    for j1 in range(N):
-        if j1 == j:
-            continue
-        for i in range(N):
-            for i1 in range(N):
-                for k in range(M):
-                    for k1 in range(M):
-                       F2 =  And (p(k,k1), And(active_edge(i,j,k),active_node(j,k1) And(active_edge(i1,j1,k), active_node(j1,k1))), F2) 
+#F2 = False
+#for j in range(N):
+#    for j1 in range(N):
+#        if j1 == j:
+#            continue
+#        for i in range(N):
+#            for i1 in range(N):
+#                for k in range(M):
+#                    for k1 in range(M):
+#                       F2 =  And (p(k,k1), And(active_edge(i,j,k),active_node(j,k1) And(active_edge(i1,j1,k), active_node(j1,k1))), F2) 
+#print F2
+
+# F_2: Fusion rules:
+# /\_{i,j} ( \/_k e_{i,j,k}) -> \/_{k,k'} (b_{i,j,k} and a'_{j,k'} and p_{k,k'}) 
+# and /\_k b_{i,j,k} -> not(\/_{j' != j} (\/_k'' a'_{j',k''} and p_{k,k''}))  
+F2 = True
+for i in range(N):
+    for j in range(N):
+        rhs = False
+        for k in range(M):
+            rhs = Or(edge(i,j,k),rhs) 
+            for k1 in range(M):
+                lhs = And(active_edge(i,j,k),active_node(i,k),p(k,k1)) 
+        F2 = And (Implies(rhs,lhs) , F2)
 print F2
+
+F22 = True
+for i in range(N):
+    for j in range(N):
+        rhs = False
+        for k in range(M):
+            rhs = Or(active_edge(i,j,k),rhs)
+            lhs = False
+            for j1 in range(N):
+                if j == j1:
+                    continue
+                for k11 in range(M):
+                    lhs = Or(And (active_node(j1,k11),p(k,k11)), lhs)
+        F22 = And (Implies(rhs, Not(lhs)), F22)
 
 # Create Solver and add constraints in it.
 s = Solver()
-s.add(B1,B2,B22, B33)
+#s.add(B2,B22, B33)
 print s.check()
 
 if s.check() == sat:
