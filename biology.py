@@ -104,7 +104,7 @@ for i in range(N):
 C5 = True 
 for i in range(N):
     for k in range(M):
-        C5 = And (Implies active_node(i,k),C5) 
+        C5 = And (Implies (active_node(i,k),C5)) 
 
 # ----------------------------------------------------------------
 
