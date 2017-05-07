@@ -68,13 +68,20 @@ def r(i,j,k):
 
 #1. label(E) subset  label(N)
 # e_ijk -> aik
+C1 = True
+for i in range(N):
+    for j in range(N):
+        for k in range(M):
+            C1 = And (Implies(egde(i,j,k),node(i,k)),C1)
 
 #2. Self edges not allowed. 
 # not e_ii  
 
+for i in range(N):
+    B2 = Not(edge(i,i))
+
 #3. Multiple(parallel) edges are allowed between two nodes. 
 # But we restrict it to two.
-
 
 #4. Condition on p_kk' : 
 # we have two options 1. build the matrix as M * M or
