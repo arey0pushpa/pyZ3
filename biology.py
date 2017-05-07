@@ -51,30 +51,59 @@ def active_edge(i,j,k):
     s = "b_" + str(i) + "_" + str(j) + "_k" + str(k)
     return Bool( s )
 
-# PAIR MATRIX
+# PAIR MATRIX p(k,k'): Matrix has a non entry at k,k1 position.
 def p(k,k1):
     s = "p_k" + str(k) + "_k" + str(k1)
     return Bool( s )
 
-# REACHABLE
+# REACHABLE: node j is reachable from node i with kth molecule 
+#            present on the taken path. 
 def r(i,j,k):
     s = "r_" + str(i) + "_" + str(j) + "_k" + str(k)
     return Bool( s )
 
+# ---------------------------------------------------------------
+
+# Few additional condition that needs to be met.
+
+#1. label(E) subset  label(N)
+# e_ijk -> aik
+
+#2. Self edges not allowed. 
+# not e_ii  
+
+#3. Multiple(parallel) edges are allowed between two nodes. 
+# But we restrict it to two.
+
+
+#4. Condition on p_kk' : 
+# we have two options 1. build the matrix as M * M or
+# 2. divide into two matrix M(qp) {p1} M(pq) {p2} each is M/2 size
+# I implemented as 2nd.  p1_kk' , P2_kk' but now u cant say k , k' you have to specify which k and k'?  
+# To avaoid breaking current setup : using 1
+
+# if (k,k' belongs to same half of the M * M matrix == 0
+# else (k,k') = nondet_Bool()
+# ----------------------------------------------------------------
+
+# MAIN Constraints:
 
 # F_0
-# b_ij > \/_k b_ijk
-F00 = True
+# e_ij -> \/_k b_ijk  ?? or e_ijk ??
+# at evry edge there is an active molecules which is present.
+F00 = True, 
 for i in range(N):
     for j in range(N):
         rhs = False
         for k in range(M):
-            rhs = Or( edge(i,j,k), rhs )
+            rhs = Or( edge(i,j,k), rhs )          # Change it to active_edge(i,j,k)
         F00 = Implies( real_edge(i,j), rhs )
 print F00
 
 
 # F_0:  b_ijk -> e_ijk   
+# If molecule is active on an edge then it should be present on the edge. \newline
+
 F0 = True
 for i in range(N):
     for j in range(N):
@@ -84,8 +113,9 @@ print F0
 
 
 # F_1
-# reachability condition; fixed point issues??
-F1 = False
+# reachability condition; recursive definition. 
+# fixed point issues?? Check!
+F11 = False
 for i in range(N):
     for j in range(N):
         if j == i:
@@ -98,10 +128,10 @@ for i in range(N):
                 if i == l or j == l:
                     continue  
                 rhs = Or(And(r(l,j,k), edge(i,l,k)), rhs)
-            F1 = Implies( r(i,j,k), rhs )
-print F1
+            F11 = Implies( r(i,j,k), rhs )
+print F11
 
-F11 = True                
+F1 = True                
 # F_1_1
 # stability condition 
 # e_ijk -> r_jik
@@ -110,7 +140,7 @@ for i in range(N):
         if j == i:
             continue
         for k in range(M):
-           F11 = And( Implies(edge(i,j,k), r(j,i,k)), F1)
+           F1 = And( Implies(edge(i,j,k), r(j,i,k)), F1)
 
 # F_2: Fusion Rules 
 # for_all(j,j'){j != j'} ( exists(k,k') p[k][k'] and (b[i][j][k] and a[j][k'] != b[i'][j'][k] and a[j'][k']))
