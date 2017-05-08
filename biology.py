@@ -111,7 +111,7 @@ C4 = True
 for x in range(M):
     for y in range(M):
         if (x < M1 and x <= y) or (x>M1 and x>=y):
-            C4 = And (C4, Not(p(x,y))
+            C4 = And (Not(p(x,y),C4)
 
 #5. Activitu on the node.
 
