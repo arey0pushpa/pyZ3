@@ -98,6 +98,10 @@ C3 = True
 # Need to change the defination of the function to Int
 
 #4. Condition on p_kk' : 
+# we have two options 1. build the matrix as M * M or
+# 2. divide into two matrix M(qp) {p1} M(pq) {p2} each is M/2 size
+# I implemented as 2nd.  p1_kk' , P2_kk' but now u cant say k , k' you have to specify which k and k'?  
+# To avoid breaking current setup : using 1
 # if (k,k' belongs to same half of the M * M matrix == 0
 # else (k,k') = nondet_Bool()
 
@@ -107,7 +111,7 @@ C4 = True
 for x in range(M):
     for y in range(M):
         if (x < M1 and x <= y) or (x>M1 and x>=y):
-            C4 = And(Not (p(x,y)),C4)
+            C4 = And(Not(p(x,y),C4)
 
 #5. Activitu on the node.
 
@@ -174,6 +178,19 @@ for i in range(N):
         for k in range(M):
            F1 = And( Implies(edge(i,j,k), r(j,i,k)), F1)
 
+# F_2: Fusion Rules 
+# for_all(j,j'){j != j'} ( exists(k,k') p[k][k'] and (b[i][j][k] and a[j][k'] != b[i'][j'][k] and a[j'][k']))
+#F2 = False
+#for j in range(N):
+#    for j1 in range(N):
+#        if j1 == j:
+#            continue
+#        for i in range(N):
+#            for i1 in range(N):
+#                for k in range(M):
+#                    for k1 in range(M):
+#                       F2 =  And (p(k,k1), And(active_edge(i,j,k),active_node(j,k1) And(active_edge(i1,j1,k), active_node(j1,k1))), F2) 
+#print F2
 
 # F_2: Fusion rules:
 # /\_{i,j} ( \/_k e_{i,j,k}) -> \/_{k,k'} (b_{i,j,k} and a'_{j,k'} and p_{k,k'}) 
@@ -214,7 +231,7 @@ if s.check() == sat:
     m = s.model()
     e = [ [ m.evaluate(real_edge[i][j]) for j in range(M) ]
                       for i in range(M) ]
-    p = [ [ m.evaluate(p[i][j]) for j in range(M) ] for i in range(M)]
+    p = [ [ m.evaluate(p[i][j]) for j in range(M) ] for i in range(M))]
     print p
     print r
 
