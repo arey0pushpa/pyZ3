@@ -9,13 +9,13 @@ import argparse
 # input parsing
 # input number of nodes and molecules
 parser = argparse.ArgumentParser(description='Auto testing for TARA')
-parser.add_argument("-M","--mols", type=int, default=3, help = "number of molecules")
+parser.add_argument("-M","--mols", type=int, default=5, help = "number of molecules")
 parser.add_argument("-N","--nodes", type=int, default=3, help = "number of nodes")
-parser.add_argument("-E","--edges", type=int, default=3, help = "number of edges")
+#parser.add_argument("-E","--edges", type=int, default=3, help = "number of edges")
 args = parser.parse_args()
 M = args.mols
 N = args.nodes
-E = args.edges
+#E = args.edges
 # printf( "Molecules : %d Nodes : %d\n", M, N )
 
 
@@ -84,13 +84,13 @@ for i in range(N):
 # not e_ii  
 
 for i in range(N):
-    C2 = Not(real_edge(i,i))
+    C3 = Not(real_edge(i,i))
 
 
 #3. Multiple(parallel) edges are allowed between two nodes. 
 # But we restrict it to two.
 # At most two implementation: \/_{x,y,z} ~(x=y,y=z,z=x)
-C3 = True 
+#C4 = True 
 #for x in range(N):
 #    for y in range(N):
 #        for z in range(N):
@@ -218,6 +218,8 @@ if s.check() == sat:
  #   print p
  #   print r
     print m
+else:
+    print "failed to solve"
 
     
 
