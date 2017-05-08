@@ -212,11 +212,12 @@ print s.check()
 
 if s.check() == sat:
     m = s.model()
-    e = [ [ m.evaluate(real_edge[i][j]) for j in range(M) ]
-                      for i in range(M) ]
-    p = [ [ m.evaluate(p[i][j]) for j in range(M) ] for i in range(M)]
-    print p
-    print r
+ #   e = [ [ m.evaluate(real_edge[i][j]) for j in range(M) ]
+          #            for i in range(M) ]
+#    p = [ [ m.evaluate(p[i][j]) for j in range(M) ] for i in range(M)]
+ #   print p
+ #   print r
+    print m
 
     
 
