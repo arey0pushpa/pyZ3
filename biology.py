@@ -72,32 +72,46 @@ C1 = True
 for i in range(N):
     for j in range(N):
         for k in range(M):
-            C1 = And (Implies(egde(i,j,k),node(i,k)),C1)
+            C1 = And (Implies(edge(i,j,k),node(i,k)),C1)
 
 C2 = True
 for i in range(N):
     for j in range(N):
         for k in range(M):
-            C2 = And (Implies(egde(i,j,k),node(j,k)),C2)
+            C2 = And (Implies(edge(i,j,k),node(j,k)),C2)
 
 #2. Self edges not allowed. 
 # not e_ii  
 
 for i in range(N):
-    C2 = Not(edge(i,i))
+    C2 = Not(real_edge(i,i))
 
 
 #3. Multiple(parallel) edges are allowed between two nodes. 
 # But we restrict it to two.
+# At most two implementation: \/_{x,y,z} ~(x=y,y=z,z=x)
+C3 = True 
+#for x in range(N):
+#    for y in range(N):
+#        for z in range(N):
+##            edge(
+# Need to change the defination of the function to Int
 
 #4. Condition on p_kk' : 
 # we have two options 1. build the matrix as M * M or
 # 2. divide into two matrix M(qp) {p1} M(pq) {p2} each is M/2 size
 # I implemented as 2nd.  p1_kk' , P2_kk' but now u cant say k , k' you have to specify which k and k'?  
 # To avoid breaking current setup : using 1
-
 # if (k,k' belongs to same half of the M * M matrix == 0
 # else (k,k') = nondet_Bool()
+
+# \/_{x<M/2,y>=M/2} !p(x,x) and !p(y,y)
+M1 = M/2
+C4 = True
+for x in range(M):
+    for y in range(M):
+        if (x < M1 and x <= y) or (x>M1 and x>=y):
+            C4 = And (C4, Not(p(x,y))
 
 #5. Activitu on the node.
 
@@ -187,8 +201,10 @@ for i in range(N):
         rhs = False
         for k in range(M):
             rhs = Or(edge(i,j,k),rhs) 
-            for k1 in range(M):
-                lhs = And(active_edge(i,j,k),active_node(i,k),p(k,k1)) 
+        
+        for k1 in range(M): 
+            for k2 in range(M):
+                lhs = And(active_edge(i,j,k1),active_node(i,k1),p(k1,k2)) 
         F2 = And (Implies(rhs,lhs) , F2)
 print F2
 
