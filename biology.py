@@ -101,7 +101,7 @@ for i in range(N):
 # if (k,k' belongs to same half of the M * M matrix == 0
 # else (k,k') = nondet_Bool()
 
-# \/_{x<M/2,y>=M/2} !p(x,x) and !p(y,y)
+# \/_{x<M/2,y>=M/2} !p(x,y) and !p(x,y)
 M1 = M/2
 C4 = True
 for x in range(M):
