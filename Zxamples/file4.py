@@ -14,4 +14,6 @@ print(x >= 1).sort()
 x,y = Ints('x y')
 print eq(x+y, x+y)
 
-
+print(x+1).hash()
+print(1+x).hash()
+print x.sort().hash()

@@ -183,8 +183,7 @@ for i in range(N):
     for j in range(N):
         rhs = False
         for k in range(M):
-            rhs = Or(edge(i,j,k),rhs) 
-        
+            rhs = Or(edge(i,j,k),rhs)        
         for k1 in range(M): 
             for k2 in range(M):
                 lhs = And(active_edge(i,j,k1),active_node(i,k1),p(k1,k2)) 
