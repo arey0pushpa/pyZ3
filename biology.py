@@ -9,7 +9,7 @@ import argparse
 # input parsing
 # input number of nodes and molecules
 parser = argparse.ArgumentParser(description='Auto testing for TARA')
-parser.add_argument("-M","--mols", type=int, default=5, help = "number of molecules")
+parser.add_argument("-M","--mols", type=int, default=12, help = "number of molecules")
 parser.add_argument("-N","--nodes", type=int, default=3, help = "number of nodes")
 #parser.add_argument("-E","--edges", type=int, default=3, help = "number of edges")
 args = parser.parse_args()
@@ -147,7 +147,7 @@ for i in range(N):
 # F_1
 # reachability condition; recursive definition. 
 # fixed point issues?? Check!
-F11 = False
+F11 = True
 for i in range(N):
     for j in range(N):
         if j == i:
@@ -158,7 +158,7 @@ for i in range(N):
                 if i == l or j == l:
                     continue  
                 rhs = Or(And(r(l,j,k), edge(i,l,k)), rhs)
-            F11 = Implies( r(i,j,k), rhs )
+            F11 = And( Implies( r(i,j,k), rhs ), F11 )
 # print F11
 
 F1 = True                
@@ -177,17 +177,17 @@ for i in range(N):
 # /\_{i,j} ( \/_k e_{i,j,k}) -> \/_{k,k'} (b_{i,j,k} and a'_{j,k'} and p_{k,k'}) 
 # and /\_k b_{i,j,k} -> not(\/_{j' != j} (\/_k'' a'_{j',k''} and p_{k,k''}))  
 F2 = True
-# for i in range(N):
-#     for j in range(N):
-#         if i == j:
-#             continue
-#         rhs = False
-#         for k in range(M):
-#             rhs = Or(edge(i,j,k),rhs)        
-#         for k1 in range(M): 
-#             for k2 in range(M):
-#                 lhs = And(active_edge(i,j,k1),active_node(i,k1),p(k1,k2)) 
-#         F2 = And (Implies(rhs,lhs) , F2)
+for i in range(N):
+    for j in range(N):
+        if i == j:
+            continue
+        rhs = False
+        for k in range(M):
+            rhs = Or(edge(i,j,k),rhs)        
+        for k1 in range(M): 
+            for k2 in range(M):
+                lhs = And(active_edge(i,j,k1),active_node(i,k1),p(k1,k2)) 
+        F2 = And (Implies(rhs,lhs) , F2)
 # print F2
 
 F22 = True
@@ -206,7 +206,7 @@ F22 = True
 #                     lhs = Or(And (active_node(j1,k11),p(k,k11)), lhs)
 #         F22 = And (Implies(rhs, Not(lhs)), F22)
 
-Init = (edge(1,2,1) == True)
+Init = (edge(0,1,0) == True)
 
 # Create Solver and add constraints in it.
 s = Solver()
@@ -226,16 +226,9 @@ def dump_dot( filename, m ) :
                 node_vec = node_vec + "1"
             else:
                 node_vec = node_vec + "0"
-            for j in range(N):
-                if i == j :
-                    continue
-                # print r(i,j,k)
-                # print m[r(i,j,k)]
-                print edge(i,j,k)
-                print m[edge(i,j,k)]
-            # if m.evaluate(active_node(i,k)) :
-            #     node_vec = node_vec + "!"
-        dfile.write( str(i) + "[label=" + node_vec + "]\n")
+            if is_true(m.evaluate(active_node(i,k))) :
+                node_vec = node_vec + "-"
+        dfile.write( str(i) + "[label=\"" + node_vec + "\"]\n")
         for j in range(N):
             if i == j:
                 continue
@@ -246,7 +239,16 @@ def dump_dot( filename, m ) :
             # if is_true(m[real_edge(i,j)]):                
             #     dfile.write( str(i) + "->" + str(j) + "\n" )
     dfile.write("}\n")
-
+    for k2 in range(M):
+        print "\t"+str(k2),
+    print "\n"
+    for k1 in range(M):
+        for k2 in range(M):
+            if is_true(m[p(k1,k2)]):
+                print "\t0",
+            else:
+                print "\t1",
+        print "\n"
 
 if s.check() == sat:
     m = s.model()
