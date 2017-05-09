@@ -68,21 +68,19 @@ def r(i,j,k):
 
 #1. label(E) subset  label(N)
 # e_ijk -> aik
+# e_ijk -> ajk
 C1 = True
-for i in range(N):
-    for j in range(N):
-        for k in range(M):
-            C1 = And (Implies(edge(i,j,k),node(i,k)),C1)
-
 C2 = True
 for i in range(N):
     for j in range(N):
+        if i == j :
+            continue
         for k in range(M):
+            C1 = And (Implies(edge(i,j,k),node(i,k)),C1)
             C2 = And (Implies(edge(i,j,k),node(j,k)),C2)
 
 #2. Self edges not allowed. 
 # not e_ii  
-
 for i in range(N):
     C3 = Not(real_edge(i,i))
 
@@ -114,23 +112,25 @@ for x in range(M):
 C5 = True 
 for i in range(N):
     for k in range(M):
-        C5 = And (Implies (active_node(i,k),C5)) 
+        C5 = And (Implies (active_node(i,k), node(i,k) ), C5) 
 
 # ----------------------------------------------------------------
 
 # MAIN Constraints:
 
 # F_0
-# e_ij -> \/_k b_ijk  ?? or e_ijk ??
+# \/_k e_ijk -> e_ij   ?? or e_ijk ??
 # at evry edge there is an active molecules which is present.
 F00 = True, 
 for i in range(N):
     for j in range(N):
+        if j == i:
+            continue        
         rhs = False
         for k in range(M):
             rhs = Or( edge(i,j,k), rhs )          # Change it to active_edge(i,j,k)
-        F00 = Implies( real_edge(i,j), rhs )
-print F00
+        F00 = Implies(  rhs, real_edge(i,j) )
+# print F00
 
 
 # F_0:  b_ijk -> e_ijk   
@@ -141,7 +141,7 @@ for i in range(N):
     for j in range(N):
         for k in range(M):
             F0 = And( Implies(active_edge(i,j,k), edge(i,j,k)), F0 )
-print F0
+# print F0
 
 
 # F_1
@@ -153,15 +153,13 @@ for i in range(N):
         if j == i:
             continue
         for k in range(M):
-            # if (r(i,j,k) == False):
-            #         continue
             rhs = edge(i,j,k)
             for l in range(N):
                 if i == l or j == l:
                     continue  
                 rhs = Or(And(r(l,j,k), edge(i,l,k)), rhs)
             F11 = Implies( r(i,j,k), rhs )
-print F11
+# print F11
 
 F1 = True                
 # F_1_1
@@ -179,35 +177,76 @@ for i in range(N):
 # /\_{i,j} ( \/_k e_{i,j,k}) -> \/_{k,k'} (b_{i,j,k} and a'_{j,k'} and p_{k,k'}) 
 # and /\_k b_{i,j,k} -> not(\/_{j' != j} (\/_k'' a'_{j',k''} and p_{k,k''}))  
 F2 = True
-for i in range(N):
-    for j in range(N):
-        rhs = False
-        for k in range(M):
-            rhs = Or(edge(i,j,k),rhs)        
-        for k1 in range(M): 
-            for k2 in range(M):
-                lhs = And(active_edge(i,j,k1),active_node(i,k1),p(k1,k2)) 
-        F2 = And (Implies(rhs,lhs) , F2)
-print F2
+# for i in range(N):
+#     for j in range(N):
+#         if i == j:
+#             continue
+#         rhs = False
+#         for k in range(M):
+#             rhs = Or(edge(i,j,k),rhs)        
+#         for k1 in range(M): 
+#             for k2 in range(M):
+#                 lhs = And(active_edge(i,j,k1),active_node(i,k1),p(k1,k2)) 
+#         F2 = And (Implies(rhs,lhs) , F2)
+# print F2
 
 F22 = True
-for i in range(N):
-    for j in range(N):
-        rhs = False
-        for k in range(M):
-            rhs = Or(active_edge(i,j,k),rhs)
-            lhs = False
-            for j1 in range(N):
-                if j == j1:
-                    continue
-                for k11 in range(M):
-                    lhs = Or(And (active_node(j1,k11),p(k,k11)), lhs)
-        F22 = And (Implies(rhs, Not(lhs)), F22)
+# for i in range(N):
+#     for j in range(N):
+#         if i == j:
+#             continue
+#         rhs = False
+#         for k in range(M):
+#             rhs = Or(active_edge(i,j,k),rhs)
+#             lhs = False
+#             for j1 in range(N):
+#                 if j == j1:
+#                     continue
+#                 for k11 in range(M):
+#                     lhs = Or(And (active_node(j1,k11),p(k,k11)), lhs)
+#         F22 = And (Implies(rhs, Not(lhs)), F22)
+
+Init = (edge(1,2,1) == True)
 
 # Create Solver and add constraints in it.
 s = Solver()
-s.add(C1,C2,C3,C4,F0,F00,F1,F11,F2,F22)
+s.add(C1,C2,C3,C4,F0,F00,F1,F11,F2,F22,Init)
+print "solving...\n"
 print s.check()
+print "done\n"
+
+
+def dump_dot( filename, m ) :
+    dfile = open(filename, 'w')
+    dfile.write("digraph prog {\n")
+    for i in range(N):
+        node_vec = ""
+        for k in range(M):
+            if is_true(m[node(i,k)]) :
+                node_vec = node_vec + "1"
+            else:
+                node_vec = node_vec + "0"
+            for j in range(N):
+                if i == j :
+                    continue
+                # print r(i,j,k)
+                # print m[r(i,j,k)]
+                print edge(i,j,k)
+                print m[edge(i,j,k)]
+            # if m.evaluate(active_node(i,k)) :
+            #     node_vec = node_vec + "!"
+        dfile.write( str(i) + "[label=" + node_vec + "]\n")
+        for j in range(N):
+            if i == j:
+                continue
+            for k in range(M):
+                if is_true(m[edge(i,j,k)]):                
+                    dfile.write( str(i) + "-> " + str(j) + "[label=" + str(k) +"]" +"\n" )
+
+            # if is_true(m[real_edge(i,j)]):                
+            #     dfile.write( str(i) + "->" + str(j) + "\n" )
+    dfile.write("}\n")
+
 
 if s.check() == sat:
     m = s.model()
@@ -217,6 +256,7 @@ if s.check() == sat:
  #   print p
  #   print r
     print m
+    dump_dot( "/tmp/bio.dot", m )
 else:
     print "failed to solve"
 
