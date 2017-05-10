@@ -1,6 +1,9 @@
-
+# from __future__ import print_function
 from z3 import *
 import argparse
+
+# def printf(str, *args):
+#     print(str % args, end='')
 
 #----------------------------------------------------
 # input parsing
@@ -8,13 +11,16 @@ import argparse
 parser = argparse.ArgumentParser(description='Auto testing for TARA')
 parser.add_argument("-M","--mols", type=int, default=12, help = "number of molecules")
 parser.add_argument("-N","--nodes", type=int, default=3, help = "number of nodes")
+#parser.add_argument("-E","--edges", type=int, default=3, help = "number of edges")
 args = parser.parse_args()
 M = args.mols
 N = args.nodes
+#E = args.edges
+# printf( "Molecules : %d Nodes : %d\n", M, N )
+
 
 #----------------------------------------------------
 # Constraint generation 
-
 dump = [ [Bool ("d_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
 
 node = [ [Bool ("n_{}_{}".format(i,k)) for k in range(M)] for i in range(N)]
@@ -32,45 +38,109 @@ r = [ [ [Bool ("r_{}_{}_{}".format(i,j,k)) for k in range(M)] for j in range(N)]
 p = [ [Bool ("p_{}_{}".format(k,k1)) for k1 in range(M)] for k1 in range(M)]
 
 
-# Initial Constraints :
+C0 = [Implies (active_node[i][k], node[i][k]) for i in range(N) for k in range(M)] 
+
+C1 = [Implies(presence_edge[i][j][k],node[i][k]) for i in range(N) for j in range(N) for k in range(M)]
+
+#def dump(i,j):
+#    s = "d_" + str(i) + "_" + str(j)
+#    return Bool( s )
+#
+## c(i,k) node with kth molecule present
+#def node(i,k):
+#    s = "n_" + str(i) + "_k" + str(k)
+#    return Bool( s )
+#
+## c(i,k) node with kth molecule active
+#def active_node(i,k):
+#    s = "a_" + str(i) + "_k" + str(k)
+#    return Bool( s )
+#
+## e(i,j) edge between node i and j
+#def presence_edge(i,j):
+#    s = "e_" + str(i) + "_" + str(j)
+#    return Bool( s )
+#
+## e(i,j,k) edge with kth molecule present
+#def edge(i,j,k):
+#    s = "e_" + str(i) + "_" + str(j) + "_k" + str(k)
+#    return Bool( s )
+#
+## b(i,j,k) edge with kth molecule active
+#def active_edge(i,j,k):
+#    s = "b_" + str(i) + "_" + str(j) + "_k" + str(k)
+#    return Bool( s )
+#
+## PAIR MATRIX p(k,k'): Matrix has a non entry at k,k1 position.
+#def p(k,k1):
+#    s = "p_k" + str(k) + "_k" + str(k1)
+#    return Bool( s )
+#
+## REACHABLE: node j is reachable from node i with kth molecule 
+##            present on the taken path. 
+#def r(i,j,k):
+#    s = "r_" + str(i) + "_" + str(j) + "_k" + str(k)
+#    return Bool( s )
+#
+# ---------------------------------------------------------------
+
+# Few additional condition that needs to be met.
 
 #1. label(E) subset  label(N)
-# e_ijk -> aik # e_ijk -> ajk
-
-C0 = [Implies(presence_edge[i][j][k],node[i][k]) for i in range(N) for j in range(N) for k in range(M)]
-C1 = [Implies(presence_edge[i][j][k],node[j][k]) for i in range(N) for j in range(N) for k in range(M)]
-
+# e_ijk -> aik
+# e_ijk -> ajk
+C1 = True
+C2 = True
+for i in range(N):
+    for j in range(N):
+        if i == j :
+            continue
+        for k in range(M):
+            C1 = And (Implies(presence_edge[i][j][k],node[i][k]),C1)
+            C2 = And (Implies(presence_edge(i,j,k),node(j,k)),C2)
 
 #2. Self edges not allowed. 
 # not e_ii  
+for i in range(N):
+    C3 = Not(edge(i,i))
 
-C2 = [Not(edge[i][i]) for i in range(N)]
 
 #3. Multiple(parallel) edges are allowed between two nodes. 
 # But we restrict it to two.
+# At most two implementation: \/_{x,y,z} ~(x=y,y=z,z=x)
+#C4 = True 
+#for x in range(N):
+#    for y in range(N):
+#        for z in range(N):
+##            edge(
+# Need to change the defination of the function to Int
 
-C3 = True
+#4. Condition on p_kk' : 
+# if (k,k' belongs to same half of the M * M matrix == 0
+# else (k,k') = nondet_Bool()
 
-#4. Condition on p_kk' : first and last cube is empty.
 # \/_{x<M/2,y>=M/2} !p(x,y) and !p(x,y)
+M1 = M/2
+C4 = True
+for x in range(M):
+    for y in range(M):
+        if (x < M1 and x <= y) or (x>M1 and x>=y):
+            C4 = And( Not(p(x,y)),C4 )
 
-C4 = [ Not(p[x][y])  for x in range(M) for y in range(M) if (x < (M/2) and x <= y) or (x > (M/2) and x>=y) ] 
+#5. Activitu on the node.
 
+C5 = True 
+for i in range(N):
+    for k in range(M):
+        C5 = And (Implies (active_node(i,k), node(i,k) ), C5) 
 
-#5. Activity on the node.
-# if molecule is active on the node then its present. a(i,k) -> n(i,k) 
-
-C5 = [Implies (active_node[i][k], node[i][k]) for i in range(N) for k in range(M)] 
-
+# ----------------------------------------------------------------
 
 # MAIN Constraints:
 
 # F_0
-# at evry edge there is an active molecules which is present. # \/_k e_ijk -> e_ij 
-
-F0 = [Implies( rhs, edge(i,j) ) for i in range(N) for j in range(N)
-
-
+# \/_k e_ijk -> e_ij   ?? or e_ijk ??
+# at evry edge there is an active molecules which is present.
 F00 = True, 
 for i in range(N):
     for j in range(N):
