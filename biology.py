@@ -68,7 +68,7 @@ C5 = [Implies (active_node[i][k], node[i][k]) for i in range(N) for k in range(M
 # F_0
 # at evry edge there is an active molecules which is present. # \/_k e_ijk -> e_ij 
 
-F0 = [Implies( rhs, edge(i,j) ) for i in range(N) for j in range(N)
+F0 = [Implies(rhs, edge(i,j) ) for i in range(N) for j in range(N) if j != i else continue]
 
 
 F00 = True, 
@@ -162,7 +162,7 @@ Init = (edge(0,1,0) == True)
 s = Solver()
 s.add(C1,C2,C3,C4,F0,F00,F1,F11,F2,F22,Init)
 print "solving...\n"
-print s.check()
+print s.check b
 print "done\n"
 
 
