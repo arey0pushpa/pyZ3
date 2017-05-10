@@ -1,3 +1,4 @@
+#!/usr/bin/python
 
 from z3 import *
 import argparse
@@ -55,7 +56,7 @@ C3 = True
 # \/_{x<M/2,y>=M/2} !p(x,y) and !p(x,y)
 
 C4 = [ Not(p[x][y])  for x in range(M) for y in range(M) if (x < (M/2) and x <= y) or (x > (M/2) and x>=y) ] 
-
+print C4
 
 #5. Activity on the node.
 # if molecule is active on the node then its present. a(i,k) -> n(i,k) 
