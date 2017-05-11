@@ -160,6 +160,7 @@ for i in range(N):
 
 #Init = (presence_edge[0][1][0] == True)
 # Create Solver and add constraints in it.
+
 s = Solver()
 s.add(C0,C1,C3,C4,C5,F0,F1,F2,F3,F4,F5)
 print "solving...\n"
@@ -174,12 +175,10 @@ def dump_dot( filename, m ) :
         node_vec = ""
         for k in range(M):
             if is_true(m[node[i][k]]) :
-                node_vec = node_vec + "N"
+                node_vec = node_vec + "1"
             elif is_false(m[node[i][k]]):
-                node_vec = node_vec + "Z"
-            else:
-				node_vec = node_vec + "?"
-            if is_true(m.evaluate(active_node[i][k])) :
+                node_vec = node_vec + "0"
+            if is_true(m[active_node[i][k]]) :
                 node_vec = node_vec + "-"
         dfile.write( str(i) + "[label=\"" + node_vec + "\"]\n")
         for j in range(N):
@@ -190,22 +189,24 @@ def dump_dot( filename, m ) :
                     dfile.write( str(i) + "-> " + str(j) + "[label=" + str(k) +"]" +"\n" )
     dfile.write("}\n")
     
-    for k2 in range(M):
-		print "\t"+str(k2),
-    print "\n"
-    for k1 in range(M):
-		print "\t"+str(k1),
-		for k2 in range(M):
-			if is_true(m[p[k1][k2]]):
-				print "\tN",
-			else:
-				print "\tZ",
-		print "\n"
+#    for k2 in range(M):
+#        print "\t"+str(k2),
+#    print "\n"
+#    for k1 in range(M):
+#        for k2 in range(M):
+#            if is_true(m[p[k1][k2]]):
+#                print "\t0",
+#            else:
+#                print "\t1",
+#        print "\n"
 
 if s.check() == sat:
     m = s.model()
+    print m
     r = [ [ m[p[i][j]] for j in range(M) ]
           for i in range(M) ]
+    s = [[ [ m[active_edge[i][j][k]] for k in range (M)] for j in range(N) ] for i in range(N) ]
+    print "\n Pairing matrix p[{}][{}] = ".format(M,M)
     print_matrix(r)
     dump_dot( "/tmp/bio.dot", m )
 else:
