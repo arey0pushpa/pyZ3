@@ -28,7 +28,7 @@ active_edge = [ [ [Bool ("b_{}_{}_{}".format(i,j,k)) for k in range(M)] for j in
 
 r = [ [ [Bool ("r_{}_{}_{}".format(i,j,k)) for k in range(M)] for j in range(N)] for i in range (N)]
 
-p = [ [Bool ("p_{}_{}".format(k,k1)) for k1 in range(M)] for k1 in range(M)]
+p = [ [Bool ("p_{}_{}".format(k,k1)) for k1 in range(M)] for k in range(M)]
 
 # Few additional condition that needs to be met.
 
@@ -58,11 +58,13 @@ C3 = True
 
 #4. Condition on p_kk' : 
 # \/_{x<M/2,y>=M/2} !p(x,y) and !p(x,y)
+
 C4 = True
 for x in range(M):
     for y in range(M):
-        if (x < M/2 and x <= y) or (x>M/2 and x>=y):
+        if (((x < M/2) and (y < M/2)) or ((x>=M/2) and (y >=M/2))):
             C4 = And( Not(p[x][y]),C4 )
+
 
 #5. Activity on the node.
 C5 = True 
@@ -135,35 +137,31 @@ for i in range(N):
 	for j in range(N):
 		if i == j:
 			continue
-        rhs = False
+		lhs = False    
         for k in range(M):
-            rhs = Or(presence_edge[i][j][k],rhs)        
-        lhs = False    
-        for k1 in range(M): 
-            for k2 in range(M):
-                lhs = Or (And(active_edge[i][j][k1],active_node[j][k2],p[k1][k2]), lhs)  
-        F4 = And (Implies(rhs,lhs), F4)
-print F4
+			for k1 in range(M): 
+				lhs = Or (And(active_edge[i][j][k],active_node[j][k1],p[k][k1]), lhs)  
+        F4 = And (Implies(edge[i][j],lhs), F4)
+
 
 F5 = True
-#for i in range(N):
-#	for j in range(N):
-#		if i == j:
-#			continue
-#        for k in range(M):
-#			lhs = False 
-#			for j1 in range(N):
-#				if j == j1:
-#					continue
-#				for k11 in range(M):
-#					lhs = Or(And (active_node[j1][k11],p[k][k11], lhs)
-#			F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
+for i in range(N):
+	for j in range(N):
+		if i == j:
+			continue
+		lhs = False	
+        for k in range(M): 
+			for j1 in range(N):
+				if j == j1:
+					continue
+				for k11 in range(M):
+					lhs = Or(And (active_node[j1][k11],p[k][k11], lhs))
+			F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
 
-Init = (presence_edge[0][1][0] == True)
-
+#Init = (presence_edge[0][1][0] == True)
 # Create Solver and add constraints in it.
 s = Solver()
-s.add(C0,C1,C3,C4,C5,F0,F1,F2,F3,F4,F5,Init)
+s.add(C0,C1,C3,C4,C5,F0,F1,F2,F3,F4,F5)
 print "solving...\n"
 print s.check()
 print "done\n"
@@ -176,9 +174,11 @@ def dump_dot( filename, m ) :
         node_vec = ""
         for k in range(M):
             if is_true(m[node[i][k]]) :
-                node_vec = node_vec + "1"
+                node_vec = node_vec + "N"
+            elif is_false(m[node[i][k]]):
+                node_vec = node_vec + "Z"
             else:
-                node_vec = node_vec + "0"
+				node_vec = node_vec + "?"
             if is_true(m.evaluate(active_node[i][k])) :
                 node_vec = node_vec + "-"
         dfile.write( str(i) + "[label=\"" + node_vec + "\"]\n")
@@ -189,20 +189,24 @@ def dump_dot( filename, m ) :
                 if is_true(m[presence_edge[i][j][k]]):                
                     dfile.write( str(i) + "-> " + str(j) + "[label=" + str(k) +"]" +"\n" )
     dfile.write("}\n")
+    
     for k2 in range(M):
-        print "\t"+str(k2),
+		print "\t"+str(k2),
     print "\n"
     for k1 in range(M):
-        for k2 in range(M):
-            if is_true(m[p[k1][k2]]):
-                print "\t0",
-            else:
-                print "\t1",
-        print "\n"
+		print "\t"+str(k1),
+		for k2 in range(M):
+			if is_true(m[p[k1][k2]]):
+				print "\tN",
+			else:
+				print "\tZ",
+		print "\n"
 
 if s.check() == sat:
     m = s.model()
-    print m
+    r = [ [ m[p[i][j]] for j in range(M) ]
+          for i in range(M) ]
+    print_matrix(r)
     dump_dot( "/tmp/bio.dot", m )
 else:
     print "failed to solve"
