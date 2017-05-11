@@ -1,3 +1,4 @@
+#!/usr/bin/python
 
 from z3 import *
 import argparse
@@ -95,6 +96,8 @@ for i in range(N):
 F1 = True
 for i in range(N):
     for j in range(N):
+        if j == i:
+            continue
         for k in range(M):
             F1 = And( Implies(active_edge[i][j][k], presence_edge[i][j][k]), F1 )
 # print F1
@@ -103,6 +106,7 @@ for i in range(N):
 # F_2
 # reachability condition; recursive definition. 
 # fixed point issues?? Check!
+F2_List = []
 F2 = True
 for i in range(N):
     for j in range(N):
@@ -114,8 +118,10 @@ for i in range(N):
                 if i == l or j == l:
                     continue  
                 rhs = Or(And(r[l][j][k], presence_edge[i][l][k]), rhs)
+            F2_List.append( Implies( r[i][j][k], rhs ) )
             F2 = And( Implies( r[i][j][k], rhs ), F2 )
-# print F2
+# F2 = And( F2_List )
+print F2
 
 F3 = True                
 # F_1_1
@@ -172,7 +178,7 @@ def dump_dot( filename, m ) :
     dfile = open(filename, 'w')
     dfile.write("digraph prog {\n")
     for i in range(N):
-        node_vec = ""
+        node_vec = str(i)+":"
         for k in range(M):
             if is_true(m[node[i][k]]) :
                 node_vec = node_vec + "1"
@@ -185,8 +191,17 @@ def dump_dot( filename, m ) :
             if i == j:
                 continue
             for k in range(M):
-                if is_true(m[presence_edge[i][j][k]]):                
-                    dfile.write( str(i) + "-> " + str(j) + "[label=" + str(k) +"]" +"\n" )
+                if is_true(m[presence_edge[i][j][k]]):
+                    label = str(k)
+                    color = "black"
+                    if is_true(m[active_edge[i][j][k]]):
+                        color = "green"
+                        for k1 in range(M):
+                            if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
+                                color = "red"
+                                break
+                    dfile.write( str(i) + "-> " + str(j) +
+                                 "[label=" + label +",color=" + color +"]" +"\n" )
     dfile.write("}\n")
     
 #    for k2 in range(M):
