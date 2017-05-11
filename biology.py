@@ -1,23 +1,16 @@
-# from __future__ import print_function
+
 from z3 import *
 import argparse
-
-# def printf(str, *args):
-#     print(str % args, end='')
 
 #----------------------------------------------------
 # input parsing
 # input number of nodes and molecules
 parser = argparse.ArgumentParser(description='Auto testing for TARA')
-parser.add_argument("-M","--mols", type=int, default=12, help = "number of molecules")
-parser.add_argument("-N","--nodes", type=int, default=3, help = "number of nodes")
-#parser.add_argument("-E","--edges", type=int, default=3, help = "number of edges")
+parser.add_argument("-M","--mols", type=int, default=4, help = "number of molecules")
+parser.add_argument("-N","--nodes", type=int, default=2, help = "number of nodes")
 args = parser.parse_args()
 M = args.mols
 N = args.nodes
-#E = args.edges
-# printf( "Molecules : %d Nodes : %d\n", M, N )
-
 
 #----------------------------------------------------
 # Constraint generation 
@@ -49,13 +42,14 @@ for i in range(N):
         if i == j :
             continue
         for k in range(M):
-            C0 = And (Implies(presence_edge[i][j][k],node[i][k]),C1)
-            C1 = And (Implies(presence_edge[i][j][k],node[j][k]),C2)
+            C0 = And (Implies(presence_edge[i][j][k],node[i][k]),C0)
+            C1 = And (Implies(presence_edge[i][j][k],node[j][k]),C1)
 
 #2. Self edges not allowed. 
 # not e_ii  
+C2 = True
 for i in range(N):
-    C2 = Not(edge[i][i])
+    C2 = And(Not(edge[i][i]), C2)
 
 
 #3. Multiple(parallel) edges are allowed between two nodes. 
@@ -70,11 +64,11 @@ for x in range(M):
         if (x < M/2 and x <= y) or (x>M/2 and x>=y):
             C4 = And( Not(p[x][y]),C4 )
 
-#5. Activitu on the node.
+#5. Activity on the node.
 C5 = True 
 for i in range(N):
     for k in range(M):
-        C5 = And (Implies (active_node(i,k), node(i,k) ), C5) 
+        C5 = And (Implies (active_node[i][k], node[i][k] ), C5) 
 
 # ----------------------------------------------------------------
 
@@ -82,7 +76,7 @@ for i in range(N):
 
 # F_0
 # \/_k e_ijk -> e_ij  at evry edge there is an active molecules which is present.
-F0 = True, 
+F0 = True
 for i in range(N):
     for j in range(N):
         if j == i:
@@ -90,7 +84,7 @@ for i in range(N):
         rhs = False
         for k in range(M):
             rhs = Or( presence_edge[i][j][k], rhs )
-        F0 = Implies( rhs, edge[i][j] )
+        F0 = And (Implies(rhs, edge[i][j]),F0)
 # print F0
 
 
@@ -138,39 +132,38 @@ for i in range(N):
 # and /\_k b_{i,j,k} -> not(\/_{j' != j} (\/_k'' a'_{j',k''} and p_{k,k''}))  
 F4 = True
 for i in range(N):
-    for j in range(N):
-        if i == j:
-            continue
+	for j in range(N):
+		if i == j:
+			continue
         rhs = False
         for k in range(M):
             rhs = Or(presence_edge[i][j][k],rhs)        
+        lhs = False    
         for k1 in range(M): 
             for k2 in range(M):
-                lhs = And(active_edge[i][j][k1],active_node[i][k1],p[k1][k2]) 
-        F4 = And (Implies(rhs,lhs) , F4)
-# print F2
+                lhs = Or (And(active_edge[i][j][k1],active_node[j][k2],p[k1][k2]), lhs)  
+        F4 = And (Implies(rhs,lhs), F4)
+print F4
 
 F5 = True
-# for i in range(N):
-#     for j in range(N):
-#         if i == j:
-#             continue
-#         rhs = False
-#         for k in range(M):
-#             rhs = Or(active_edge[i][j][k],rhs)
-#             lhs = False
-#             for j1 in range(N):
-#                 if j == j1:
-#                     continue
-#                 for k11 in range(M):
-#                     lhs = Or(And (active_node[j1][k11],p[k][k11], lhs)
-#         F5 = And (Implies(rhs, Not(lhs)), F5)
+#for i in range(N):
+#	for j in range(N):
+#		if i == j:
+#			continue
+#        for k in range(M):
+#			lhs = False 
+#			for j1 in range(N):
+#				if j == j1:
+#					continue
+#				for k11 in range(M):
+#					lhs = Or(And (active_node[j1][k11],p[k][k11], lhs)
+#			F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
 
-Init = (presence_edge[0][1][0]) == True)
+Init = (presence_edge[0][1][0] == True)
 
 # Create Solver and add constraints in it.
 s = Solver()
-s.add(C0,C1,C2,C3,C4,C5,F0,F1,F2,F3,F4,Init)
+s.add(C0,C1,C3,C4,C5,F0,F1,F2,F3,F4,F5,Init)
 print "solving...\n"
 print s.check()
 print "done\n"
