@@ -120,8 +120,9 @@ for i in range(N):
                 rhs = Or(And(r[l][j][k], presence_edge[i][l][k]), rhs)
             F2_List.append( Implies( r[i][j][k], rhs ) )
             F2 = And( Implies( r[i][j][k], rhs ), F2 )
-# F2 = And( F2_List )
-print F2
+#F2 = And( F2_List )
+#print F2
+
 
 F3 = True                
 # F_1_1
@@ -140,35 +141,35 @@ for i in range(N):
 # and /\_k b_{i,j,k} -> not(\/_{j' != j} (\/_k'' a'_{j',k''} and p_{k,k''}))  
 F4 = True
 for i in range(N):
-	for j in range(N):
-		if i == j:
-			continue
-		lhs = False    
+    for j in range(N):
+	if i == j:
+	    continue
+	lhs = False    
         for k in range(M):
-			for k1 in range(M): 
-				lhs = Or (And(active_edge[i][j][k],active_node[j][k1],p[k][k1]), lhs)  
+	    for k1 in range(M): 
+	        lhs = Or (And(active_edge[i][j][k],active_node[j][k1],p[k][k1]), lhs)  
         F4 = And (Implies(edge[i][j],lhs), F4)
-
+print F4
 
 F5 = True
 for i in range(N):
-	for j in range(N):
-		if i == j:
-			continue
-		lhs = False	
+    for j in range(N):
+	if i == j:
+	    continue
+        lhs = False	
         for k in range(M): 
-			for j1 in range(N):
-				if j == j1:
-					continue
-				for k11 in range(M):
-					lhs = Or(And (active_node[j1][k11],p[k][k11], lhs))
-			F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
+	    for j1 in range(N):
+		if j == j1:
+		    continue
+		for k11 in range(M):
+		    lhs = Or(And (active_node[j1][k11],p[k][k11], lhs))
+	    F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
 
 #Init = (presence_edge[0][1][0] == True)
 # Create Solver and add constraints in it.
 
 s = Solver()
-s.add(C0,C1,C3,C4,C5,F0,F1,F2,F3,F4,F5)
+s.add(C0,C1,C2,C3,C4,C5,F0,F1,F2,F3,F4,F5)
 print "solving...\n"
 print s.check()
 print "done\n"
@@ -221,8 +222,14 @@ if s.check() == sat:
     r = [ [ m[p[i][j]] for j in range(M) ]
           for i in range(M) ]
     s = [[ [ m[active_edge[i][j][k]] for k in range (M)] for j in range(N) ] for i in range(N) ]
+    t = [ [ m[edge[i][j]] for j in range(N) ]
+          for i in range(N) ]
     print "\n Pairing matrix p[{}][{}] = ".format(M,M)
     print_matrix(r)
+    print "\n Edge  e[{}][{}] = ".format(N,N)
+    print t
+#    print "\n Activity on edge a[{}][{}][{}] = ".format(N,N,M)
+#    print_matrix(s)
     dump_dot( "/tmp/bio.dot", m )
 else:
     print "failed to solve"
