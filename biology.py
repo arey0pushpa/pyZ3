@@ -173,7 +173,7 @@ for i in range(N):
 # Create Solver and add constraints in it.
 
 s = Solver()
-s.add(C0,C1,C2,C3,C4,C5,F0,F1,F2,F3)
+s.add(C0,C1,C2,C3,C4,C5,F0,F1,F2,F3,F4,F5)
 print "solving...\n"
 print s.check()
 print "done\n"
