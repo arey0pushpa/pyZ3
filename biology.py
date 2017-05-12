@@ -71,8 +71,8 @@ for x in range(M):
 C5 = True 
 for i in range(N):
     for k in range(M):
-        C5 = And (Implies (active_node[i][k], node[i][k] ), C5) 
-
+        C5 = And (Implies (active_node[i][k], node[i][k]), C5) 
+print C5
 # ----------------------------------------------------------------
 
 # MAIN Constraints:
@@ -88,7 +88,18 @@ for i in range(N):
         for k in range(M):
             rhs = Or( presence_edge[i][j][k], rhs )
         F0 = And (Implies(rhs, edge[i][j]),F0)
-# print F0
+print F0
+
+#F00 = True
+#for i in range(N):
+#    for j in range(N):
+#        if j == i:
+#            continue        
+#        rhs = False
+#        for k in range(M):
+#            rhs = Or( edge[i][j], rhs )
+#        F00 = And (Implies(rhs, presence_edge[i][j][k]),F00)
+#print F00
 
 
 # F1:  b_ijk -> e_ijk   
@@ -145,12 +156,13 @@ for i in range(N):
 	    continue
 	lhs = False    
         for k in range(M):
+            rhs = Or(presence_edge[i][j][k],rhs)        
 	    for k1 in range(M): 
                 if k == k1:
                     continue
 	        lhs = Or (And(active_edge[i][j][k],active_node[j][k1],p[k][k1]), lhs)  
-        F4 = And (Implies(edge[i][j],lhs), F4)
-print F4
+        F4 = And (Implies(rhs,lhs), F4)
+#print F4
 
 F5 = True
 for i in range(N):
@@ -173,7 +185,7 @@ for i in range(N):
 # Create Solver and add constraints in it.
 
 s = Solver()
-s.add(C0,C1,C2,C3,C4,C5,F0,F1,F2,F3,F4,F5)
+s.add(C0,C1,C2,C3,C4,C5,F0,F1,F2,F3)
 print "solving...\n"
 print s.check()
 print "done\n"
