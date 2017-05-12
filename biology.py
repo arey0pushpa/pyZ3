@@ -117,7 +117,7 @@ for i in range(N):
             for l in range(N):
                 if i == l or j == l:
                     continue  
-                rhs = Or(And(r[l][j][k], presence_edge[i][l][k]), rhs)
+                rhs = Or(And(presence_edge[i][l][k],r[l][j][k]), rhs)
             F2_List.append( Implies( r[i][j][k], rhs ) )
             F2 = And( Implies( r[i][j][k], rhs ), F2 )
 #F2 = And( F2_List )
@@ -125,7 +125,6 @@ for i in range(N):
 
 
 F3 = True                
-# F_1_1
 # stability condition 
 # e_ijk -> r_jik
 for i in range(N):
@@ -164,6 +163,7 @@ for i in range(N):
 		for k11 in range(M):
 		    lhs = Or(And (active_node[j1][k11],p[k][k11], lhs))
 	    F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
+#print F5
 
 #Init = (presence_edge[0][1][0] == True)
 # Create Solver and add constraints in it.
