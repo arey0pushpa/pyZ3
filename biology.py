@@ -148,7 +148,7 @@ for i in range(N):
 	    for k1 in range(M): 
 	        lhs = Or (And(active_edge[i][j][k],active_node[j][k1],p[k][k1]), lhs)  
         F4 = And (Implies(edge[i][j],lhs), F4)
-print F4
+#print F4
 
 F5 = True
 for i in range(N):
@@ -158,12 +158,12 @@ for i in range(N):
         lhs = False	
         for k in range(M): 
 	    for j1 in range(N):
-		if j == j1:
+		if j1 == j:
 		    continue
 		for k11 in range(M):
-		    lhs = Or(And (active_node[j1][k11],p[k][k11], lhs))
+		    lhs = Or(And (active_node[j1][k11],p[k][k11]), lhs)
 	    F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
-#print F5
+print F5
 
 #Init = (presence_edge[0][1][0] == True)
 # Create Solver and add constraints in it.
@@ -228,8 +228,8 @@ if s.check() == sat:
     print_matrix(r)
     print "\n Edge  e[{}][{}] = ".format(N,N)
     print t
-#    print "\n Activity on edge a[{}][{}][{}] = ".format(N,N,M)
-#    print_matrix(s)
+    print "\n Activity on edge a[{}][{}][{}] = ".format(N,N,M)
+    print_matrix(s)
     dump_dot( "/tmp/bio.dot", m )
 else:
     print "failed to solve"
