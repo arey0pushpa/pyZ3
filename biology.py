@@ -146,9 +146,11 @@ for i in range(N):
 	lhs = False    
         for k in range(M):
 	    for k1 in range(M): 
+                if k == k1:
+                    continue
 	        lhs = Or (And(active_edge[i][j][k],active_node[j][k1],p[k][k1]), lhs)  
         F4 = And (Implies(edge[i][j],lhs), F4)
-#print F4
+print F4
 
 F5 = True
 for i in range(N):
@@ -171,7 +173,7 @@ for i in range(N):
 # Create Solver and add constraints in it.
 
 s = Solver()
-s.add(C0,C1,C2,C3,C4,C5,F0,F1,F2,F3,F4,F5)
+s.add(C0,C1,C2,C3,C4,C5,F0,F1,F2,F3)
 print "solving...\n"
 print s.check()
 print "done\n"
