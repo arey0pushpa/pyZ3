@@ -31,6 +31,8 @@ r = [ [ [Bool ("r_{}_{}_{}".format(i,j,k)) for k in range(M)] for j in range(N)]
 
 p = [ [Bool ("p_{}_{}".format(k,k1)) for k1 in range(M)] for k in range(M)]
 
+#f_e = [[Function 
+
 # Few additional condition that needs to be met.
 
 #1. label(E) subset  label(N)
@@ -79,6 +81,7 @@ print C5
 
 # F_0
 # \/_k e_ijk -> e_ij  at evry edge there is an active molecules which is present.
+# Involve equality and we'll require it while doing validity check.
 F0 = True
 for i in range(N):
     for j in range(N):
@@ -88,18 +91,8 @@ for i in range(N):
         for k in range(M):
             rhs = Or( presence_edge[i][j][k], rhs )
         F0 = And (Implies(rhs, edge[i][j]),F0)
-print F0
+#print F0
 
-#F00 = True
-#for i in range(N):
-#    for j in range(N):
-#        if j == i:
-#            continue        
-#        rhs = False
-#        for k in range(M):
-#            rhs = Or( edge[i][j], rhs )
-#        F00 = And (Implies(rhs, presence_edge[i][j][k]),F00)
-#print F00
 
 
 # F1:  b_ijk -> e_ijk   
@@ -114,36 +107,36 @@ for i in range(N):
 # print F1
 
 
-# F_2
-# reachability condition; recursive definition. 
-# fixed point issues?? Check!
-F2_List = []
-F2 = True
-for i in range(N):
-    for j in range(N):
-        if j == i:
-            continue
-        for k in range(M):
-            rhs = presence_edge[i][j][k]
-            for l in range(N):
-                if i == l or j == l:
-                    continue  
-                rhs = Or(And(presence_edge[i][l][k],r[l][j][k]), rhs)
-            F2_List.append( Implies( r[i][j][k], rhs ) )
-            F2 = And( Implies( r[i][j][k], rhs ), F2 )
-#F2 = And( F2_List )
-#print F2
-
-
-F3 = True                
-# stability condition 
-# e_ijk -> r_jik
-for i in range(N):
-    for j in range(N):
-        if j == i:
-            continue
-        for k in range(M):
-           F3 = And( Implies(presence_edge[i][j][k], r[j][i][k]), F3)
+## F_2
+## reachability condition; recursive definition. 
+## fixed point issues?? Check!
+#F2_List = []
+#F2 = True
+#for i in range(N):
+#    for j in range(N):
+#        if j == i:
+#            continue
+#        for k in range(M):
+#            rhs = presence_edge[i][j][k]
+#            for l in range(N):
+#                if i == l or j == l:
+#                    continue  
+#                rhs = Or(And(presence_edge[i][l][k],r[l][j][k]), rhs)
+#            F2_List.append( Implies( r[i][j][k], rhs ) )
+#            F2 = And( Implies( r[i][j][k], rhs ), F2 )
+##F2 = And( F2_List )
+##print F2
+#
+#
+#F3 = True                
+## stability condition 
+## e_ijk -> r_jik
+#for i in range(N):
+#    for j in range(N):
+#        if j == i:
+#            continue
+#        for k in range(M):
+#           F3 = And( Implies(presence_edge[i][j][k], r[j][i][k]), F3)
 
 
 # F4: Fusion rules:
@@ -156,12 +149,12 @@ for i in range(N):
 	    continue
 	lhs = False    
         for k in range(M):
-            rhs = Or(presence_edge[i][j][k],rhs)        
+   #         rhs = Or(presence_edge[i][j][k],rhs)        
 	    for k1 in range(M): 
                 if k == k1:
                     continue
 	        lhs = Or (And(active_edge[i][j][k],active_node[j][k1],p[k][k1]), lhs)  
-        F4 = And (Implies(rhs,lhs), F4)
+        F4 = And (Implies(edge[i][j],lhs), F4)
 #print F4
 
 F5 = True
@@ -179,13 +172,48 @@ for i in range(N):
 	    F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
 #print F5
 
+#--F_2 New reachability and stability condition-----
+F_2 = True
+reach = True
+for i in range(N):
+    for j in range(N):
+	if i == j:
+	    continue
+        reach = And(Implies(r[i][j][1],e[i][j]),reach) 
+        for k in range(M):
+            lhs = False
+            for p in range(N): 
+                for l in range(N):
+                    if i == l or j == l:
+                        continue
+                    lhs = Or(And (r[i][l][k][p-1],e[l][j]),lhs)   
+                F_2 = And (Implies (r[i][j][k][p],lhs), F_2) 
+F_2 = And(F_2,reach)
+
+F_3 = True 
+for i in range(N):
+    for j in range(N):
+	if i == j:
+	    continue
+        lhs = False
+        for l in range(N):
+            lhs = Or(r[i][j][l], lhs)
+        F_3 = And (Implies (e[i][j],lhs),F_3)
+
+#----3 Connectivity --------
+for k in range(M):
+    f = Function('f', IntSort(), IntSort())
+
+F6 = True
+
+
 #Init = (presence_edge[0][1][0] == True)
 #Init2 = (p[0][3] == False)
 #Init3 = (p[1][2] == False)
 # Create Solver and add constraints in it.
 
 s = Solver()
-s.add(C0,C1,C2,C3,C4,C5,F0,F1,F2,F3)
+s.add(C0,C1,C2,C3,C4,C5,F0,F1,F_2,F_3,F4,F5)
 print "solving...\n"
 print s.check()
 print "done\n"
