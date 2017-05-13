@@ -74,7 +74,7 @@ C5 = True
 for i in range(N):
     for k in range(M):
         C5 = And (Implies (active_node[i][k], node[i][k]), C5) 
-print C5
+#print C5
 # ----------------------------------------------------------------
 
 # MAIN Constraints:
@@ -179,16 +179,20 @@ for i in range(N):
     for j in range(N):
 	if i == j:
 	    continue
-        reach = And(Implies(r[i][j][1],e[i][j]),reach) 
         for k in range(M):
             lhs = False
-            for p in range(N): 
-                for l in range(N):
-                    if i == l or j == l:
-                        continue
-                    lhs = Or(And (r[i][l][k][p-1],e[l][j]),lhs)   
-                F_2 = And (Implies (r[i][j][k][p],lhs), F_2) 
+            for p in range(1,N): 
+                if p == 1:
+                  #  reach = And(Implies(r[i][j][k][p],edge[i][j]),reach) 
+                   # continue
+                else:
+                    for l in range(N):
+                        if i == l or j == l:
+                            continue
+                        lhs = Or(And (r[i][l][k][p-1],edge[l][j]),lhs)   
+                    F_2 = And (Implies (r[i][j][k][p],lhs), F_2) 
 F_2 = And(F_2,reach)
+print F2
 
 F_3 = True 
 for i in range(N):
