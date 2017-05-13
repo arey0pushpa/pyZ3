@@ -174,7 +174,7 @@ for i in range(N):
 
 #--F_2 New reachability and stability condition-----
 F_2 = True
-reach = True
+reach_1 = True
 for i in range(N):
     for j in range(N):
 	if i == j:
@@ -183,7 +183,7 @@ for i in range(N):
             lhs = False
             for p in range(1,N): 
                 if p == 1:
-                  #  reach = And(Implies(r[i][j][k][p],edge[i][j]),reach) 
+                    reach_1 = And(Implies(r[i][j][k][p],edge[i][j]),reach_1) 
                    # continue
                 else:
                     for l in range(N):
@@ -191,8 +191,8 @@ for i in range(N):
                             continue
                         lhs = Or(And (r[i][l][k][p-1],edge[l][j]),lhs)   
                     F_2 = And (Implies (r[i][j][k][p],lhs), F_2) 
-F_2 = And(F_2,reach)
-print F2
+F_2 = And(F_2,reach_1)
+print F_2
 
 F_3 = True 
 for i in range(N):
