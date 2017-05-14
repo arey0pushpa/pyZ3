@@ -27,7 +27,7 @@ presence_edge = [ [ [Bool ("e_{}_{}_{}".format(i,j,k)) for k in range(M)] for j 
 
 active_edge = [ [ [Bool ("b_{}_{}_{}".format(i,j,k)) for k in range(M)] for j in range(N)] for i in range (N)]
 
-r = [ [ [Bool ("r_{}_{}_{}".format(i,j,k)) for k in range(M)] for j in range(N)] for i in range (N)]
+r = [ [ [ [Bool ("r_{}_{}_{}_{}".format(i,j,k,p)) for p in range(1,N)] for k in range(M)] for j in range(N)] for i in range (N)]
 
 p = [ [Bool ("p_{}_{}".format(k,k1)) for k1 in range(M)] for k in range(M)]
 
@@ -106,37 +106,40 @@ for i in range(N):
             F1 = And( Implies(active_edge[i][j][k], presence_edge[i][j][k]), F1 )
 # print F1
 
+ 
+#F2 New reachability and stability condition-----
+F2 = True
+for i in range(N):
+    for j in range(N):
+	if i == j:
+	    continue
+        for k in range(M):
+            lhs = False
+            for p in range(1,N): 
+                if p == 1: 
+                    F2 = And (Implies(r[i][j][k][1],edge[i][j]),F2) 
+                    continue
+                else:
+                    for l in range(N):
+                        if i == l or j == l:
+                            continue
+                        lhs = Or(And (r[i][l][k][p-1],edge[l][j]),lhs)   
+                    F2 = And (Implies (r[i][j][k][p],lhs), F2) 
+                    
+#print F_2
 
-## F_2
-## reachability condition; recursive definition. 
-## fixed point issues?? Check!
-#F2_List = []
-#F2 = True
-#for i in range(N):
-#    for j in range(N):
-#        if j == i:
-#            continue
-#        for k in range(M):
-#            rhs = presence_edge[i][j][k]
-#            for l in range(N):
-#                if i == l or j == l:
-#                    continue  
-#                rhs = Or(And(presence_edge[i][l][k],r[l][j][k]), rhs)
-#            F2_List.append( Implies( r[i][j][k], rhs ) )
-#            F2 = And( Implies( r[i][j][k], rhs ), F2 )
-##F2 = And( F2_List )
-##print F2
-#
-#
-#F3 = True                
-## stability condition 
-## e_ijk -> r_jik
-#for i in range(N):
-#    for j in range(N):
-#        if j == i:
-#            continue
-#        for k in range(M):
-#           F3 = And( Implies(presence_edge[i][j][k], r[j][i][k]), F3)
+
+F3 = True 
+for i in range(N):
+    for j in range(N):
+	if i == j:
+	    continue
+        for k in range(M):
+            lhs = False
+            for p in range(1,N):
+                lhs = Or(r[i][j][k][p], lhs)
+        F3 = And (Implies (edge[i][j],lhs),F3)
+
 
 
 # F4: Fusion rules:
@@ -171,38 +174,6 @@ for i in range(N):
 		    lhs = Or(And (active_node[j1][k11],p[k][k11]), lhs)
 	    F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
 #print F5
-
-#--F_2 New reachability and stability condition-----
-F_2 = True
-reach_1 = True
-for i in range(N):
-    for j in range(N):
-	if i == j:
-	    continue
-        for k in range(M):
-            lhs = False
-            for p in range(1,N): 
-                if p == 1:
-                    reach_1 = And(Implies(r[i][j][k][p],edge[i][j]),reach_1) 
-                   # continue
-                else:
-                    for l in range(N):
-                        if i == l or j == l:
-                            continue
-                        lhs = Or(And (r[i][l][k][p-1],edge[l][j]),lhs)   
-                    F_2 = And (Implies (r[i][j][k][p],lhs), F_2) 
-F_2 = And(F_2,reach_1)
-print F_2
-
-F_3 = True 
-for i in range(N):
-    for j in range(N):
-	if i == j:
-	    continue
-        lhs = False
-        for l in range(N):
-            lhs = Or(r[i][j][l], lhs)
-        F_3 = And (Implies (e[i][j],lhs),F_3)
 
 #----3 Connectivity --------
 for k in range(M):
