@@ -115,10 +115,10 @@ for i in range(N):
 	    continue
         for k in range(M):
             lhs = False
-            for p in range(1,N): 
+            for p in range(1,N):
                 if p == 1: 
-                    F2 = And (Implies(r[i][j][k][1],edge[i][j]),F2) 
-                    continue
+                    F2 = And (Implies(r[i][j][k][p],edge[i][j]),F2) 
+                   # continue
                 else:
                     for l in range(N):
                         if i == l or j == l:
