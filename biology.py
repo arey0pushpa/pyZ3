@@ -27,9 +27,10 @@ presence_edge = [ [ [Bool ("e_{}_{}_{}".format(i,j,k)) for k in range(M)] for j 
 
 active_edge = [ [ [Bool ("b_{}_{}_{}".format(i,j,k)) for k in range(M)] for j in range(N)] for i in range (N)]
 
-r = [ [ [ [Bool ("r_{}_{}_{}_{}".format(i,j,k,p)) for p in range(1,N)] for k in range(M)] for j in range(N)] for i in range (N)]
+r = [ [ [ [Bool ("r_{}_{}_{}_{}".format(i,j,k,z)) for z in range(N-1)] for k in range(M)] for j in range(N)] for i in range (N)]
 
 p = [ [Bool ("p_{}_{}".format(k,k1)) for k1 in range(M)] for k in range(M)]
+
 
 #f_e = [[Function 
 
@@ -104,10 +105,15 @@ for i in range(N):
             continue
         for k in range(M):
             F1 = And( Implies(active_edge[i][j][k], presence_edge[i][j][k]), F1 )
-# print F1
+#print F1
 
  
 #F2 New reachability and stability condition-----
+# States reachability definition: nodes i,j is reachable with kth moleculein z steps if i'' is reachable from i in z steps and there is an edge between i'' and j with k present on that edge.
+# /\_{i,j,k,p, i!=j} r_{i,j,k,p} -> \/_{l!=i || j} r_{i,l,k,p-1} and e_{l,j,k}
+
+# Have also added one length reachability with F2. 
+# r_{i,j,k,1} -> e_{i,j,k} : In our case 1 is 0.
 F2 = True
 for i in range(N):
     for j in range(N):
@@ -115,20 +121,32 @@ for i in range(N):
 	    continue
         for k in range(M):
             lhs = False
-            for p in range(1,N):
-                if p == 1: 
-                    F2 = And (Implies(r[i][j][k][p],edge[i][j]),F2) 
-                   # continue
+            for z in range(N-1):
+                if z == 0: 
+                    F2 = And (Implies(r[i][j][k][0],presence_edge[i][j][k]),F2) 
                 else:
                     for l in range(N):
                         if i == l or j == l:
                             continue
-                        lhs = Or(And (r[i][l][k][p-1],edge[l][j]),lhs)   
-                    F2 = And (Implies (r[i][j][k][p],lhs), F2) 
-                    
-#print F_2
+                        lhs = Or(And (r[i][l][k][z-1],presence_edge[l][j][k]),lhs)   
+                    F2 = And (Implies (r[i][j][k][z],lhs), F2)                    
+#print F2
 
 
+#F3 = True 
+#for i in range(N):
+#    for j in range(N):
+#	if i == j:
+#	    continue
+#        lhs = False
+#        for k in range(M):
+#            for z in range(N-1):
+#                lhs = Or(r[i][j][k][z], lhs)
+#        F3 = And (Implies (edge[i][j],lhs),F3)
+##print F3
+#
+
+# ---- Rule change proposed----
 F3 = True 
 for i in range(N):
     for j in range(N):
@@ -136,10 +154,10 @@ for i in range(N):
 	    continue
         for k in range(M):
             lhs = False
-            for p in range(1,N):
-                lhs = Or(r[i][j][k][p], lhs)
-        F3 = And (Implies (edge[i][j],lhs),F3)
-
+            for z in range(N-1):
+                lhs = Or(r[j][i][k][z], lhs)
+            F3 = And (Implies (presence_edge[i][j][k],lhs),F3)
+#print F3
 
 
 # F4: Fusion rules:
@@ -165,20 +183,23 @@ for i in range(N):
     for j in range(N):
 	if i == j:
 	    continue
-        lhs = False	
         for k in range(M): 
+            lhs = False
 	    for j1 in range(N):
-		if j1 == j:
-		    continue
-		for k11 in range(M):
-		    lhs = Or(And (active_node[j1][k11],p[k][k11]), lhs)
+                if j != j1:
+	            for k11 in range(M):
+                        if k == k11:
+                            continue
+		        lhs = Or(And (active_node[j1][k11],p[k][k11]), lhs)
 	    F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
-#print F5
+print F5
 
 #----3 Connectivity --------
-for k in range(M):
-    f = Function('f', IntSort(), IntSort())
 
+# Activity as a function of other molecules presence.
+#for k in range(M):
+#    f = Function('f', IntSort(), IntSort())
+#
 F6 = True
 
 
@@ -188,7 +209,7 @@ F6 = True
 # Create Solver and add constraints in it.
 
 s = Solver()
-s.add(C0,C1,C2,C3,C4,C5,F0,F1,F_2,F_3,F4,F5)
+s.add(C0,C1,C2,C3,C4,C5,F0,F1,F2,F3,F4,F5)
 print "solving...\n"
 print s.check()
 print "done\n"
