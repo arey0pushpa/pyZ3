@@ -31,8 +31,15 @@ r = [ [ [ [Bool ("r_{}_{}_{}_{}".format(i,j,k,z)) for z in range(N-1)] for k in 
 
 p = [ [Bool ("p_{}_{}".format(k,k1)) for k1 in range(M)] for k in range(M)]
 
+r1 = [ [[Bool ("r1_{}_{}_{}".format(i,j,z)) for z in range(N-1)]for j in range(N)] for i in range(N)]
 
-#f_e = [[Function 
+sorts = [IntSort() for m in range(M)]
+
+act_node = [Function ("an_{}".format(m), *sorts) for m in range(M)] 
+act_edge = [Function ("ae_{}".format(m), *sorts) for m in range(M)] 
+
+#for k in range(M):
+#    f = Function('f', IntSort(), BoolSort())
 
 # Few additional condition that needs to be met.
 
@@ -132,20 +139,6 @@ for i in range(N):
                     F2 = And (Implies (r[i][j][k][z],lhs), F2)                    
 #print F2
 
-
-#F3 = True 
-#for i in range(N):
-#    for j in range(N):
-#	if i == j:
-#	    continue
-#        lhs = False
-#        for k in range(M):
-#            for z in range(N-1):
-#                lhs = Or(r[i][j][k][z], lhs)
-#        F3 = And (Implies (edge[i][j],lhs),F3)
-##print F3
-#
-
 # ---- Rule change proposed----
 F3 = True 
 for i in range(N):
@@ -192,13 +185,42 @@ for i in range(N):
                             continue
 		        lhs = Or(And (active_node[j1][k11],p[k][k11]), lhs)
 	    F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
-print F5
+#print F5
 
 #----3 Connectivity --------
 
-# Activity as a function of other molecules presence.
-#for k in range(M):
-#    f = Function('f', IntSort(), IntSort())
+# Summation of d_{i,j} == 2
+#D1 = 0
+#for i in range(N):
+#    for j in range(N):
+#        D1 = dump[i][j] + D1 
+#F6 = D1 == 2
+#F6 = [Or(dump[i][j] == dump[j][k] 
+
+
+# Make directed graph undirected
+# /\_{i,j} r1_{i,j} Or r1_{j,i} 
+F7 = True
+for i in range(N):
+    for j in range(N):
+        for z in range(N-1):
+            F7 = And( (r1[i][j][z],r1[j][i][z]), F7) 
+
+# Removal of Sum_d does't disconnects the graph.
+F8 = True
+for i in range(N):
+    for j in range(N):
+        lhs = False
+        for l in range(N):
+            if i == l:
+                continue
+            lhs = Or(And(r1[i][j], And(edge[i][l],Not(d[i][j]))), lhs) 
+        F8 = And (Implies(r1[i][j],lhs),F8)
+
+#--- Activity as a function of other molecules presence------
+
+for k in range(M):
+    f = Function('f', IntSort(), BoolSort())
 #
 F6 = True
 
@@ -211,8 +233,13 @@ F6 = True
 s = Solver()
 s.add(C0,C1,C2,C3,C4,C5,F0,F1,F2,F3,F4,F5)
 print "solving...\n"
+print "Printing the assertions..."
+for c in s.assertions():
+    print c
 print s.check()
-print "done\n"
+print "\nPrinting the statistics..."
+print s.statistics() 
+print "\n"
 
 
 def dump_dot( filename, m ) :
@@ -258,7 +285,10 @@ def dump_dot( filename, m ) :
 
 if s.check() == sat:
     m = s.model()
-    print m
+    print "Printing the model..."
+    for d in m.decls():
+        print "{} = {}".format(d.name(), m[d])
+    #print m
     r = [ [ m[p[i][j]] for j in range(M) ]
           for i in range(M) ]
     s = [[ [ m[active_edge[i][j][k]] for k in range (M)] for j in range(N) ] for i in range(N) ]
@@ -274,5 +304,4 @@ if s.check() == sat:
 else:
     print "failed to solve"
 
-    
 
