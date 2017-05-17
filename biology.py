@@ -35,8 +35,8 @@ r1 = [ [[Bool ("r1_{}_{}_{}".format(i,j,z)) for z in range(N-1)]for j in range(N
 
 sorts = [IntSort() for m in range(M)]
 
-act_node = [Function ("an_{}".format(m), *sorts) for m in range(M)] 
-act_edge = [Function ("ae_{}".format(m), *sorts) for m in range(M)] 
+actf_node = [Function ("an_{}".format(m), *sorts) for m in range(M)] 
+actf_edge = [Function ("ae_{}".format(m), *sorts) for m in range(M)] 
 
 #for k in range(M):
 #    f = Function('f', IntSort(), BoolSort())
@@ -83,6 +83,24 @@ for i in range(N):
     for k in range(M):
         C5 = And (Implies (active_node[i][k], node[i][k]), C5) 
 #print C5
+
+#5. Activity on node/edge is determined by presence of other molecule present 
+# on the node/edge 
+C6 = True
+for j in range(N):
+    for k in range(M):
+         s = [node[i][k1] for k1 in range(M) if k1 != k]     
+         C6 = And(Implies (actf_node[k](s),active_node[i][k]),C6)
+print C6
+
+C7 = True
+for i in range(N):
+    for j in range(N):
+        for k in range(N):
+            s = [presence_edge[i][j][k1] for k1 in range(M) if k1 != k]
+            C7 = And (Implies(actf_edge[k](s),active_edge[i][j][k]))
+print C7
+
 # ----------------------------------------------------------------
 
 # MAIN Constraints:
@@ -194,8 +212,8 @@ for i in range(N):
 #for i in range(N):
 #    for j in range(N):
 #        D1 = dump[i][j] + D1 
-#F6 = D1 == 2
-#F6 = [Or(dump[i][j] == dump[j][k] 
+#F6 = (D1 == 2)
+
 
 
 # Make directed graph undirected
@@ -204,7 +222,7 @@ F7 = True
 for i in range(N):
     for j in range(N):
         for z in range(N-1):
-            F7 = And( (r1[i][j][z],r1[j][i][z]), F7) 
+            F7 = And( Or(r1[i][j][z],r1[j][i][z]), F7) 
 
 # Removal of Sum_d does't disconnects the graph.
 F8 = True
@@ -231,7 +249,7 @@ F6 = True
 # Create Solver and add constraints in it.
 
 s = Solver()
-s.add(C0,C1,C2,C3,C4,C5,F0,F1,F2,F3,F4,F5)
+s.add(C0,C1,C2,C3,C4,C5,C6,C7,F0,F1,F2,F3,F4,F5)
 print "solving...\n"
 print "Printing the assertions..."
 for c in s.assertions():
