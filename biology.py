@@ -218,6 +218,7 @@ for i in range(N):
 
 # Make directed graph undirected
 # /\_{i,j} r1_{i,j} Or r1_{j,i} 
+# todo: negate F7
 F7 = True
 for i in range(N):
     for j in range(N):
@@ -225,15 +226,27 @@ for i in range(N):
             F7 = And( Or(r1[i][j][z],r1[j][i][z]), F7) 
 
 # Removal of Sum_d does't disconnects the graph.
+# F8 = True
+# for i in range(N):
+#     for j in range(N):
+#         lhs = False
+#         for l in range(N):
+#             if i == l:
+#                 continue
+#             lhs = Or(And(r1[i][j], And(edge[i][l],Not(dump[i][j]))), lhs) 
+#         F8 = And (Implies(r1[i][j],lhs),F8)
+
+# r1 - new reach
+# do we need length reach?
 F8 = True
 for i in range(N):
     for j in range(N):
-        lhs = False
+        rhs = And( edge[i][j], Not(dump[i][j]) )
         for l in range(N):
             if i == l:
                 continue
-            lhs = Or(And(r1[i][j], And(edge[i][l],Not(dump[i][j]))), lhs) 
-        F8 = And (Implies(r1[i][j],lhs),F8)
+            rhs = Or( And(And(edge[i][l],Not(dump[i][l])),r1[l][j] ), lhs) 
+        F8 = And( Implies( r1[i][j], rhs ), F8)
 
 #--- Activity as a function of other molecules presence------
 
