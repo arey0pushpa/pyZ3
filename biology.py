@@ -90,7 +90,7 @@ C6 = True
 for j in range(N):
     for k in range(M):
          s = [node[i][k1] for k1 in range(M) if k1 != k]     
-         C6 = And(Implies (actf_node[k](s),active_node[i][k]),C6)
+         C6 = And(actf_node[k](s) == active_node[i][k],C6)
 print C6
 
 C7 = True
@@ -98,7 +98,7 @@ for i in range(N):
     for j in range(N):
         for k in range(N):
             s = [presence_edge[i][j][k1] for k1 in range(M) if k1 != k]
-            C7 = And (Implies(actf_edge[k](s),active_edge[i][j][k]))
+            C7 = And (actf_edge[k](s) == active_edge[i][j][k], C7)
 print C7
 
 # ----------------------------------------------------------------
@@ -232,7 +232,7 @@ for i in range(N):
         for l in range(N):
             if i == l:
                 continue
-            lhs = Or(And(r1[i][j], And(edge[i][l],Not(d[i][j]))), lhs) 
+            lhs = Or(And(r1[i][j], And(edge[i][l],Not(dump[i][j]))), lhs) 
         F8 = And (Implies(r1[i][j],lhs),F8)
 
 #--- Activity as a function of other molecules presence------
