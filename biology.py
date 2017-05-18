@@ -33,15 +33,35 @@ p = [ [Bool ("p_{}_{}".format(k,k1)) for k1 in range(M)] for k in range(M)]
 
 r1 = [ [[Bool ("r1_{}_{}_{}".format(i,j,z)) for z in range(N-1)]for j in range(N)] for i in range(N)]
 
-sorts = [IntSort() for m in range(M)]
+sorts = [BoolSort() for m in range(M)]
 
-actf_node = [Function ("an_{}".format(m), *sorts) for m in range(M)] 
-actf_edge = [Function ("ae_{}".format(m), *sorts) for m in range(M)] 
-
-#for k in range(M):
-#    f = Function('f', IntSort(), BoolSort())
+f_n = [Function ("an_{}".format(m), *sorts) for m in range(M)] 
+f_e = [Function ("ae_{}".format(m), *sorts) for m in range(M)] 
 
 # Few additional condition that needs to be met.
+
+# Activity of a moolecule k on a node/edge is  
+# defined as a Boolean function of presence of 
+# Other molecule present on that node/edge.
+# A0. active_node[k] =  f_n[k](\/_{k1 != k} node(k1)) 
+A0 = True
+s = []
+for k in range(M):
+    for k1 in range(M):
+        if k1 == k:
+            continue
+        s = s.append(node[k])
+    A0 = And (active_node[k] == f_n[k](s), A0)
+
+# A1. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
+A1 = True
+S = []
+for k in range(M):
+    for k1 in range(M):
+        if k1 == k:
+            continue
+        s = s.append(presence_edge[k])
+    A1 = And (active_node[k] == f_e[k](s), A1) 
 
 #1. label(E) subset  label(N)
 # e_ijk -> aik
@@ -83,23 +103,6 @@ for i in range(N):
     for k in range(M):
         C5 = And (Implies (active_node[i][k], node[i][k]), C5) 
 #print C5
-
-#5. Activity on node/edge is determined by presence of other molecule present 
-# on the node/edge 
-C6 = True
-for j in range(N):
-    for k in range(M):
-         s = [node[i][k1] for k1 in range(M) if k1 != k]     
-         C6 = And(actf_node[k](s) == active_node[i][k],C6)
-print C6
-
-C7 = True
-for i in range(N):
-    for j in range(N):
-        for k in range(N):
-            s = [presence_edge[i][j][k1] for k1 in range(M) if k1 != k]
-            C7 = And (actf_edge[k](s) == active_edge[i][j][k], C7)
-print C7
 
 # ----------------------------------------------------------------
 
@@ -212,48 +215,58 @@ for i in range(N):
 #for i in range(N):
 #    for j in range(N):
 #        D1 = dump[i][j] + D1 
-#F6 = (D1 == 2)
 
+# Need flatening.
+d1 = [dump[i][j] for i in range(N) for j in range(N)]
+L = len(d1)
+
+print L
+
+# At most 2
+D0 = True
+for i in range(L):
+  for j in range(i+1, L-1):
+    lhs = And(d1[i],d1[j])
+    for k in range(j+1, L):
+      D0 = And(Implies (lhs,d1[k]),D0)
+      
+#print C0
+
+# At least 2
+D1 = False
+for i in range(L):
+  for j in range(i+1,L):
+    D1 = Or(And(d1[i],d1[j]),D1)
+
+#print C1
+
+# At Most two
+# Haskell 
+# [Or x | x = Or (d1[i] and d1[j] and d1[k]),   i <- [0..L], j <- [x+1..L-1] , k <- [j+1,L]]
+
+# At least two
+# [Or(x) | x = d1[i] and d1[j] , i <- [0..L], j <- [0..L] , i!=j]
+#D1 = [Or(And(d1[x],d1[y]), False) for x in range(L)  y in range(L) x != y]
 
 
 # Make directed graph undirected
 # /\_{i,j} r1_{i,j} Or r1_{j,i} 
-# todo: negate F7
-F7 = True
+D2 = True
 for i in range(N):
     for j in range(N):
-        for z in range(N-1):
-            F7 = And( Or(r1[i][j][z],r1[j][i][z]), F7) 
+            D2 = And( Or(r1[i][j],r1[j][i]), D2) 
+D2 = Not(D2)
 
-# Removal of Sum_d does't disconnects the graph.
-# F8 = True
-# for i in range(N):
-#     for j in range(N):
-#         lhs = False
-#         for l in range(N):
-#             if i == l:
-#                 continue
-#             lhs = Or(And(r1[i][j], And(edge[i][l],Not(dump[i][j]))), lhs) 
-#         F8 = And (Implies(r1[i][j],lhs),F8)
-
-# r1 - new reach
 # do we need length reach?
-F8 = True
+D3 = True
 for i in range(N):
     for j in range(N):
         rhs = And( edge[i][j], Not(dump[i][j]) )
         for l in range(N):
             if i == l:
                 continue
-            rhs = Or( And(And(edge[i][l],Not(dump[i][l])),r1[l][j] ), lhs) 
-        F8 = And( Implies( r1[i][j], rhs ), F8)
-
-#--- Activity as a function of other molecules presence------
-
-for k in range(M):
-    f = Function('f', IntSort(), BoolSort())
-#
-F6 = True
+            rhs = Or( And(And(edge[i][l],Not(dump[i][l])),r1[l][j] ), rhs) 
+        D3 = And( Implies( r1[i][j], rhs ), D3)
 
 
 #Init = (presence_edge[0][1][0] == True)
@@ -262,7 +275,7 @@ F6 = True
 # Create Solver and add constraints in it.
 
 s = Solver()
-s.add(C0,C1,C2,C3,C4,C5,C6,C7,F0,F1,F2,F3,F4,F5)
+s.add(A0,A1, C0,C1,C2,C3,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3)
 print "solving...\n"
 print "Printing the assertions..."
 for c in s.assertions():
