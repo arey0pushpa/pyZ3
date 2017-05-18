@@ -119,6 +119,7 @@ for i in range(N):
 # \/_k e_ijk -> e_ij  at evry edge there is an active molecules which is present.
 # Involve equality and we'll require it while doing validity check.
 F0 = True
+F0_list = []
 for i in range(N):
     for j in range(N):
         if j == i:
@@ -126,9 +127,9 @@ for i in range(N):
         rhs = False
         for k in range(M):
             rhs = Or( presence_edge[i][j][k], rhs )
-        F0 = And (Implies(rhs, edge[i][j]),F0)
+        F0_list.append(Implies(rhs, edge[i][j]),F0)
+F0 = And(F0_list)
 #print F0
-
 
 
 # F1:  b_ijk -> e_ijk   
@@ -153,6 +154,7 @@ F1 = And( F1_list )
 # Have also added one length reachability with F2. 
 # r_{i,j,k,1} -> e_{i,j,k} : In our case 1 is 0.
 F2 = True
+F2_list = []
 for i in range(N):
     for j in range(N):
 	if i == j:
@@ -167,11 +169,13 @@ for i in range(N):
                         if i == l or j == l:
                             continue
                         lhs = Or(And (r[i][l][k][z-1],presence_edge[l][j][k]),lhs)   
-                    F2 = And (Implies (r[i][j][k][z],lhs), F2)                    
+                    F2_list.append(Implies (r[i][j][k][z],lhs))                 
+F2 = And(F2_list)
 #print F2
 
 # ---- Rule change proposed----
 F3 = True 
+F3_list = []
 for i in range(N):
     for j in range(N):
 	if i == j:
@@ -180,7 +184,8 @@ for i in range(N):
             lhs = False
             for z in range(N-1):
                 lhs = Or(r[j][i][k][z], lhs)
-            F3 = And (Implies (presence_edge[i][j][k],lhs),F3)
+            F3_list.append(Implies (presence_edge[i][j][k],lhs))
+F3 = And(F3_list)
 #print F3
 
 
@@ -188,6 +193,7 @@ for i in range(N):
 # /\_{i,j} ( \/_k e_{i,j,k}) -> \/_{k,k'} (b_{i,j,k} and a'_{j,k'} and p_{k,k'}) 
 # and /\_k b_{i,j,k} -> not(\/_{j' != j} (\/_k'' a'_{j',k''} and p_{k,k''}))  
 F4 = True
+F4_list = []
 for i in range(N):
     for j in range(N):
 	if i == j:
@@ -199,10 +205,11 @@ for i in range(N):
                 if k == k1:
                     continue
 	        lhs = Or (And(active_edge[i][j][k],active_node[j][k1],p[k][k1]), lhs)  
-        F4 = And (Implies(edge[i][j],lhs), F4)
+        F4_list.append(Implies(edge[i][j],lhs))
 #print F4
 
 F5 = True
+F5_list = []
 for i in range(N):
     for j in range(N):
 	if i == j:
@@ -215,7 +222,8 @@ for i in range(N):
                         if k == k11:
                             continue
 		        lhs = Or(And (active_node[j1][k11],p[k][k11]), lhs)
-	    F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
+	    F5_list.append(Implies(active_edge[i][j][k], Not(lhs)))
+F5 = And(F5_list)
 #print F5
 
 #----3 Connectivity --------
@@ -234,12 +242,14 @@ print L
 
 # At most 2
 D0 = True
+D0_list = []
 for i in range(L):
   for j in range(i+1, L-1):
     lhs = And(d1[i],d1[j])
     for k in range(j+1, L):
-      D0 = And(Implies (lhs,d1[k]),D0)
-      
+      D0_list.append(Implies (lhs,d1[k]))
+
+D0 = And(D0_list)
 #print C0
 
 # At least 2
@@ -270,6 +280,7 @@ D2 = Not(D2)
 
 # do we need length reach?
 D3 = True
+D3_list = []
 for i in range(N):
     for j in range(N):
         rhs = And( edge[i][j], Not(dump[i][j]) )
@@ -277,8 +288,8 @@ for i in range(N):
             if i == l:
                 continue
             rhs = Or( And(And(edge[i][l],Not(dump[i][l])),r1[l][j] ), rhs) 
-        D3 = And( Implies( r1[i][j], rhs ), D3)
-
+        D3_list.append( Implies( r1[i][j], rhs ))
+D3 = And(D3_list)
 
 #Init = (presence_edge[0][1][0] == True)
 #Init2 = (p[0][3] == False)
