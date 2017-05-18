@@ -44,24 +44,24 @@ f_e = [Function ("ae_{}".format(m), *sorts) for m in range(M)]
 # defined as a Boolean function of presence of 
 # Other molecule present on that node/edge.
 # A0. active_node[k] =  f_n[k](\/_{k1 != k} node(k1)) 
-A0 = True
-s = []
-for k in range(M):
-    for k1 in range(M):
-        if k1 == k:
-            continue
-        s = s.append(node[k])
-    A0 = And (active_node[k] == f_n[k](s), A0)
+# A0 = True
+# s = []
+# for k in range(M):
+#     for k1 in range(M):
+#         if k1 == k:
+#             continue
+#         s = s.append(node[k])
+#     A0 = And (active_node[k] == f_n[k](s), A0)
 
-# A1. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
-A1 = True
-S = []
-for k in range(M):
-    for k1 in range(M):
-        if k1 == k:
-            continue
-        s = s.append(presence_edge[k])
-    A1 = And (active_node[k] == f_e[k](s), A1) 
+# # A1. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
+# A1 = True
+# S = []
+# for k in range(M):
+#     for k1 in range(M):
+#         if k1 == k:
+#             continue
+#         s = s.append(presence_edge[k])
+#     A1 = And (active_node[k] == f_e[k](s), A1) 
 
 #1. label(E) subset  label(N)
 # e_ijk -> aik
@@ -127,12 +127,15 @@ for i in range(N):
 # F1:  b_ijk -> e_ijk   
 # If molecule is active on an edge then it should be present on the edge. \newline
 F1 = True
+F1_list = []
 for i in range(N):
     for j in range(N):
         if j == i:
             continue
         for k in range(M):
-            F1 = And( Implies(active_edge[i][j][k], presence_edge[i][j][k]), F1 )
+            # F1 = And( Implies(active_edge[i][j][k], presence_edge[i][j][k]), F1 )
+            F1_list.append( Implies(active_edge[i][j][k], presence_edge[i][j][k]) )
+F1 = And( F1_list )
 #print F1
 
  
@@ -254,7 +257,8 @@ for i in range(L):
 D2 = True
 for i in range(N):
     for j in range(N):
-            D2 = And( Or(r1[i][j],r1[j][i]), D2) 
+        rijji = Or(r1[i][j],r1[j][i])
+        D2 = And( rijji, D2) 
 D2 = Not(D2)
 
 # do we need length reach?
