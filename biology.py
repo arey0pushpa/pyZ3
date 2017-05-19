@@ -2,6 +2,7 @@
 
 from z3 import *
 import argparse
+import time
 
 #----------------------------------------------------
 # input parsing
@@ -40,20 +41,31 @@ f_e = [Function ("ae_{}".format(m), *sorts) for m in range(M)]
 
 # Few additional condition that needs to be met.
 
+starttime = time.time()
+
 # Activity of a moolecule k on a node/edge is  
 # defined as a Boolean function of presence of 
 # Other molecule present on that node/edge.
 # A0. active_node[k] =  f_n[k](\/_{k1 != k} node(k1)) 
 A0 = True
-for i in range(N):
-    for k in range(M):
-        s = []
+s = []
+A_list = []
+for k in range(M):
+    f = f_n[k]
+    for i in range(N):
+        del s[:]
         for k1 in range(M):
             if k1 == k:
                 continue
-            s.append(node[i][k1])
-        A0 = And (active_node[i][k] == f_n[k](*s), A0)
+            s.append( node[i][k1] )
+        f_app = f(s)
+        l = Implies( node[i][k], active_node[i][k] == f_app )
+        # l = Implies( node[i][k], active_node[i][k] == f(*s) )
+        A_list.append(l)
+A0 = And( A_list )
 #print A0
+
+print "A0", str(time.time() - starttime)
 
 # A1. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
 A1 = True
@@ -62,13 +74,16 @@ for i in range(N):
         if i == j:
             continue
         for k in range(M):
-            s = []
+            del s[:]
+            # s = []
             for k1 in range(M):
                 if k1 == k:
                     continue
                 s.append(presence_edge[i][j][k1])
-            A1 = And (active_edge[i][j][k] == f_e[k](*s), A1) 
+            A1 = And( active_edge[i][j][k] == f_e[k](*s), A1 ) 
 #print A1
+
+print "A0 and A1 done", str(time.time() - starttime)
 
 #1. label(E) subset  label(N)
 # e_ijk -> aik
@@ -110,6 +125,9 @@ for i in range(N):
     for k in range(M):
         C5 = And (Implies (active_node[i][k], node[i][k]), C5) 
 #print C5
+
+
+print "C0-C5 done", str(time.time() - starttime)
 
 # ----------------------------------------------------------------
 
@@ -218,6 +236,8 @@ for i in range(N):
 	    F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
 #print F5
 
+print "F0-F5 done", str(time.time() - starttime)
+
 #----3 Connectivity --------
 
 # Summation of d_{i,j} == 2
@@ -279,6 +299,8 @@ for i in range(N):
             rhs = Or( And(And(edge[i][l],Not(dump[i][l])),r1[l][j] ), rhs) 
         D3 = And( Implies( r1[i][j], rhs ), D3)
 
+print "D0-D3 done", str(time.time() - starttime)
+sys.exit()
 
 #Init = (presence_edge[0][1][0] == True)
 #Init2 = (p[0][3] == False)
