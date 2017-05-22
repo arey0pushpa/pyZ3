@@ -8,8 +8,8 @@ import time
 # input parsing
 # input number of nodes and molecules
 parser = argparse.ArgumentParser(description='Auto testing for TARA')
-parser.add_argument("-M","--mols", type=int, default=4, help = "number of molecules")
-parser.add_argument("-N","--nodes", type=int, default=2, help = "number of nodes")
+parser.add_argument("-M","--mols", type=int, default=32, help = "number of molecules")
+parser.add_argument("-N","--nodes", type=int, default=8, help = "number of nodes")
 args = parser.parse_args()
 M = args.mols
 N = args.nodes
@@ -65,7 +65,8 @@ for k in range(M):
 A0 = And( A_list )
 #print A0
 
-print "A0", str(time.time() - starttime)
+a =  time.time() - starttime
+print "A0 took", str(a)
 
 # A1. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
 A1 = True
@@ -84,9 +85,11 @@ for i in range(N):
             l  =  Implies(presence_edge[i][j][k], active_edge[i][j][k] == f_e[k](*s)) 
             A_list.append(l)
 A1 = And( A_list )
-#print A1
 
-print "A0 and A1 done", str(time.time() - starttime)
+a1 = time.time() - starttime - a
+print "A1 took", str(a1)
+
+#print A1
 #sys.exit()
 
 #1. label(E) subset  label(N)
@@ -130,8 +133,8 @@ for i in range(N):
         C5 = And (Implies (active_node[i][k], node[i][k]), C5) 
 #print C5
 
-
-print "C0-C5 done", str(time.time() - starttime)
+c = time.time() - starttime - a1
+print "C0-C5 Took", str(c)
 
 # ----------------------------------------------------------------
 
@@ -167,7 +170,8 @@ for i in range(N):
 F1 = And( F1_list )
 #print F1
 
-print "F0-F1", str(time.time() - starttime)
+f = time.time() - starttime - c
+print "F0-F1 took ", str(f)
 
  
 #F2 New reachability and stability condition-----
@@ -213,9 +217,8 @@ for i in range(N):
 F3 = And(A_list)
 #print F3
 
-
-print "F2-F3", str(time.time() - starttime)
-
+ff = time.time() - starttime - f
+print "F2-F3 took ", str(ff)
 
 # F4: Fusion rules:
 # /\_{i,j} ( \/_k e_{i,j,k}) -> \/_{k,k'} (b_{i,j,k} and a'_{j,k'} and p_{k,k'}) 
@@ -257,8 +260,10 @@ for i in range(N):
 F5 = And(A_list)
 #print F5
 
-print "F4-F5 done", str(time.time() - starttime)
+fff = time.time() - starttime - ff
+print "F2-F3 took ", str(fff)
 
+starttime = time.time()
 #----3 Connectivity --------
 
 # Summation of d_{i,j} == 2
@@ -271,17 +276,20 @@ print "F4-F5 done", str(time.time() - starttime)
 d1 = [dump[i][j] for i in range(N) for j in range(N)]
 L = len(d1)
 
-print L
+#print L
 
 # At most 2
 D0 = True
+D_list = []
 for i in range(L):
   for j in range(i+1, L-1):
     lhs = And(d1[i],d1[j])
     for k in range(j+1, L):
-      D0 = And(Implies (lhs,Not(d1[k])),D0)
+      x = Implies (lhs,Not(d1[k]))
+      D_list.append(x)
+D0 = And(D_list)      
       
-print D0
+#print D0
 
 # At least 2
 D1 = False
@@ -309,6 +317,9 @@ for i in range(N):
         D2 = And( rijji, D2) 
 D2 = Not(D2)
 
+dd = time.time() - starttime 
+print "D0-D2 took", str(dd)
+
 # do we need length reach?
 D3 = True
 for i in range(N):
@@ -320,8 +331,10 @@ for i in range(N):
             rhs = Or( And(And(edge[i][l],Not(dump[i][l])),r1[l][j] ), rhs) 
         D3 = And( Implies( r1[i][j], rhs ), D3)
 
-print "D0-D3 done", str(time.time() - starttime)
-s#ys.exit()
+ddd = time.time() - starttime - dd
+print "D3 took", str(ddd)
+
+sys.exit()
 
 #Init = (presence_edge[0][1][0] == True)
 #Init2 = (p[0][3] == False)
