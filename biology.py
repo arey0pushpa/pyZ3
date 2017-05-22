@@ -187,16 +187,16 @@ for i in range(N):
 	if i == j:
 	    continue
         for k in range(M):
-            lhs = False
             for z in range(N-1):
                 if z == 0: 
-                    F2 = And (Implies(r[i][j][k][0],presence_edge[i][j][k]),F2) 
+                    A_list.append( Implies(r[i][j][k][0],presence_edge[i][j][k]) ) 
                 else:
+                    lhs = False
                     for l in range(N):
                         if i == l or j == l:
                             continue
                         lhs = Or(And (r[i][l][k][z-1],presence_edge[l][j][k]),lhs)   
-                    w  = Implies (r[i][j][k][z],lhs)
+                    w  = Implies( r[i][j][k][z],lhs)
                     A_list.append(w)
 F2 = And(A_list)
 #print F2
@@ -212,10 +212,10 @@ for i in range(N):
             lhs = False
             for z in range(N-1):
                 lhs = Or(r[j][i][k][z], lhs)
-            l  = Implies (presence_edge[i][j][k],lhs)
+            l  = Implies(presence_edge[i][j][k],lhs)
             A_list.append(l)
 F3 = And(A_list)
-#print F3
+# print F3
 
 ff = time.time() - starttime - f
 print "F2-F3 took ", str(ff)
@@ -334,7 +334,7 @@ for i in range(N):
 ddd = time.time() - starttime - dd
 print "D3 took", str(ddd)
 
-sys.exit()
+# sys.exit()
 
 #Init = (presence_edge[0][1][0] == True)
 #Init2 = (p[0][3] == False)
