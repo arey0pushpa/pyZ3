@@ -2,7 +2,7 @@
 
 from z3 import *
 import argparse
-
+import time
 #----------------------------------------------------
 # input parsing
 # input number of nodes and molecules
@@ -38,6 +38,8 @@ sorts = [BoolSort() for m in range(M)]
 f_n = [Function ("an_{}".format(m), *sorts) for m in range(M)] 
 f_e = [Function ("ae_{}".format(m), *sorts) for m in range(M)] 
 
+starttime = time.time()
+
 # Few additional condition that needs to be met.
 
 # Activity of a moolecule k on a node/edge is  
@@ -54,6 +56,8 @@ for i in range(N):
             s.append(node[i][k1])
         A0 = And (active_node[i][k] == f_n[k](*s), A0)
 #print A0
+a = str(time.time() - starttime)
+print 'A0' + a 
 
 # A1. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
 A1 = True
@@ -69,6 +73,8 @@ for i in range(N):
                 s.append(presence_edge[i][j][k1])
             A1 = And (active_edge[i][j][k] == f_e[k](*s), A1) 
 #print A1
+a = str(time.time() - a)
+print 'A1' + a
 
 #1. label(E) subset  label(N)
 # e_ijk -> aik

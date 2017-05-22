@@ -69,21 +69,25 @@ print "A0", str(time.time() - starttime)
 
 # A1. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
 A1 = True
+s = []
+A_list = []
 for i in range(N):
     for j in range(N):
         if i == j:
             continue
         for k in range(M):
             del s[:]
-            # s = []
             for k1 in range(M):
                 if k1 == k:
                     continue
                 s.append(presence_edge[i][j][k1])
-            A1 = And( active_edge[i][j][k] == f_e[k](*s), A1 ) 
+            l  =  Implies(presence_edge[i][j][k], active_edge[i][j][k] == f_e[k](*s)) 
+            A_list.append(l)
+A1 = And( A_list )
 #print A1
 
 print "A0 and A1 done", str(time.time() - starttime)
+#sys.exit()
 
 #1. label(E) subset  label(N)
 # e_ijk -> aik
@@ -163,6 +167,8 @@ for i in range(N):
 F1 = And( F1_list )
 #print F1
 
+print "F0-F1", str(time.time() - starttime)
+
  
 #F2 New reachability and stability condition-----
 # States reachability definition: nodes i,j is reachable with kth moleculein z steps if i'' is reachable from i in z steps and there is an edge between i'' and j with k present on that edge.
@@ -171,6 +177,7 @@ F1 = And( F1_list )
 # Have also added one length reachability with F2. 
 # r_{i,j,k,1} -> e_{i,j,k} : In our case 1 is 0.
 F2 = True
+A_list = []
 for i in range(N):
     for j in range(N):
 	if i == j:
@@ -185,11 +192,14 @@ for i in range(N):
                         if i == l or j == l:
                             continue
                         lhs = Or(And (r[i][l][k][z-1],presence_edge[l][j][k]),lhs)   
-                    F2 = And (Implies (r[i][j][k][z],lhs), F2)                    
+                    w  = Implies (r[i][j][k][z],lhs)
+                    A_list.append(w)
+F2 = And(A_list)
 #print F2
 
 # ---- Rule change proposed----
 F3 = True 
+A_list = []
 for i in range(N):
     for j in range(N):
 	if i == j:
@@ -198,14 +208,20 @@ for i in range(N):
             lhs = False
             for z in range(N-1):
                 lhs = Or(r[j][i][k][z], lhs)
-            F3 = And (Implies (presence_edge[i][j][k],lhs),F3)
+            l  = Implies (presence_edge[i][j][k],lhs)
+            A_list.append(l)
+F3 = And(A_list)
 #print F3
+
+
+print "F2-F3", str(time.time() - starttime)
 
 
 # F4: Fusion rules:
 # /\_{i,j} ( \/_k e_{i,j,k}) -> \/_{k,k'} (b_{i,j,k} and a'_{j,k'} and p_{k,k'}) 
 # and /\_k b_{i,j,k} -> not(\/_{j' != j} (\/_k'' a'_{j',k''} and p_{k,k''}))  
 F4 = True
+A_list = []
 for i in range(N):
     for j in range(N):
 	if i == j:
@@ -217,10 +233,13 @@ for i in range(N):
                 if k == k1:
                     continue
 	        lhs = Or (And(active_edge[i][j][k],active_node[j][k1],p[k][k1]), lhs)  
-        F4 = And (Implies(edge[i][j],lhs), F4)
+        w =  Implies(edge[i][j],lhs)
+        A_list.append(w)
+F4 = And(A_list)
 #print F4
 
 F5 = True
+A_list = []
 for i in range(N):
     for j in range(N):
 	if i == j:
@@ -233,10 +252,12 @@ for i in range(N):
                         if k == k11:
                             continue
 		        lhs = Or(And (active_node[j1][k11],p[k][k11]), lhs)
-	    F5 = And (Implies(active_edge[i][j][k], Not(lhs)), F5)
+	    w = Implies(active_edge[i][j][k], Not(lhs))
+            A_list.append(w)
+F5 = And(A_list)
 #print F5
 
-print "F0-F5 done", str(time.time() - starttime)
+print "F4-F5 done", str(time.time() - starttime)
 
 #----3 Connectivity --------
 
@@ -258,9 +279,9 @@ for i in range(L):
   for j in range(i+1, L-1):
     lhs = And(d1[i],d1[j])
     for k in range(j+1, L):
-      D0 = And(Implies (lhs,d1[k]),D0)
+      D0 = And(Implies (lhs,Not(d1[k])),D0)
       
-#print C0
+print D0
 
 # At least 2
 D1 = False
@@ -300,7 +321,7 @@ for i in range(N):
         D3 = And( Implies( r1[i][j], rhs ), D3)
 
 print "D0-D3 done", str(time.time() - starttime)
-sys.exit()
+s#ys.exit()
 
 #Init = (presence_edge[0][1][0] == True)
 #Init2 = (p[0][3] == False)
