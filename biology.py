@@ -10,25 +10,26 @@ import time
 parser = argparse.ArgumentParser(description='Auto testing for TARA')
 parser.add_argument("-M","--mols", type=int, default=32, help = "number of molecules")
 parser.add_argument("-N","--nodes", type=int, default=8, help = "number of nodes")
-parser.add_argument("-Q","--pedges", type=int, default=8, help = "max number of parallel edges between two nodes")
+parser.add_argument("-Q","--pedges", type=int, default=2, help = "max no.of parallel edges btw two nodes")
 args = parser.parse_args()
+
 M = args.mols
 N = args.nodes
 Q = args.pedges
 
 #----------------------------------------------------
 # Constraint generation 
-dump = [ [Bool ("d_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
+dump = [ [ [Bool ("d_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
 
 node = [ [Bool ("n_{}_{}".format(i,k)) for k in range(M)] for i in range(N)]
 
 active_node = [ [Bool ("a_{}_{}".format(i,k)) for k in range(M)] for i in range(N)]
 
-edge = [ [Bool ("e_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
+edge = [ [ [ Bool ("e_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
 
-presence_edge = [ [ [Bool ("e_{}_{}_{}".format(i,j,k)) for k in range(M)] for j in range(N)] for i in range (N)]
+presence_edge = [ [ [ [Bool ("e_{}_{}_{}_{}".format(i,j,q,k)) for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
 
-active_edge = [ [ [Bool ("b_{}_{}_{}".format(i,j,k)) for k in range(M)] for j in range(N)] for i in range (N)]
+active_edge = [ [ [ [Bool ("b_{}_{}_{}_{}".format(i,j,q,k))  for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
 
 r = [ [ [ [Bool ("r_{}_{}_{}_{}".format(i,j,k,z)) for z in range(N-1)] for k in range(M)] for j in range(N)] for i in range (N)]
 
@@ -62,7 +63,6 @@ for k in range(M):
             s.append( node[i][k1] )
         f_app = f(s)
         l = Implies( node[i][k], active_node[i][k] == f_app )
-        # l = Implies( node[i][k], active_node[i][k] == f(*s) )
         A_list.append(l)
 A0 = And( A_list )
 #print A0
@@ -78,14 +78,15 @@ for i in range(N):
     for j in range(N):
         if i == j:
             continue
-        for k in range(M):
-            del s[:]
-            for k1 in range(M):
-                if k1 == k:
-                    continue
-                s.append(presence_edge[i][j][k1])
-            l  =  Implies(presence_edge[i][j][k], active_edge[i][j][k] == f_e[k](*s)) 
-            A_list.append(l)
+        for q in range(Q):
+            for k in range(M):
+                del s[:]
+                for k1 in range(M):
+                    if k1 == k:
+                        continue
+                    s.append(presence_edge[i][j][q][k1])
+                l  =  Implies(presence_edge[i][j][q][k], active_edge[i][j][q][k] == f_e[k](*s)) 
+                A_list.append(l)
 A1 = And( A_list )
 
 a1 = time.time() - starttime - a
@@ -103,20 +104,22 @@ for i in range(N):
     for j in range(N):
         if i == j :
             continue
-        for k in range(M):
-            C0 = And (Implies(presence_edge[i][j][k],node[i][k]),C0)
-            C1 = And (Implies(presence_edge[i][j][k],node[j][k]),C1)
+        for q in range(Q):
+            for k in range(M):
+                C0 = And (Implies(presence_edge[i][j][q][k],node[i][k]),C0)
+                C1 = And (Implies(presence_edge[i][j][q][k],node[j][k]),C1)
 
 #2. Self edges not allowed. 
 # not e_ii  
 C2 = True
 for i in range(N):
-    C2 = And(Not(edge[i][i]), C2)
+    for q in range(Q):
+        C2 = And(Not(edge[i][i][q]), C2)
 
 
 #3. Multiple(parallel) edges are allowed between two nodes. 
 # But we restrict it to two.
-C3 = True
+#C3 = True
 
 #4. Condition on p_kk' : 
 # \/_{x<M/2,y>=M/2} !p(x,y) and !p(x,y)
@@ -144,18 +147,18 @@ print "C0-C5 Took", str(c)
 
 # F_0
 # \/_k e_ijk -> e_ij  at evry edge there is an active molecules which is present.
-# Involve equality and we'll require it while doing validity check.
+# Involve equality and we'll might  it while doing validity check.
 F0 = True
 for i in range(N):
     for j in range(N):
         if j == i:
-            continue        
-        rhs = False
-        for k in range(M):
-            rhs = Or( presence_edge[i][j][k], rhs )
-        F0 = And (Implies(rhs, edge[i][j]),F0)
+            continue
+        for q in range(Q):
+            rhs = False
+            for k in range(M):
+                rhs = Or( presence_edge[i][j][q][k], rhs )
+            F0 = And (Implies(rhs, edge[i][j][q]),F0)
 #print F0
-
 
 
 # F1:  b_ijk -> e_ijk   
@@ -166,9 +169,9 @@ for i in range(N):
     for j in range(N):
         if j == i:
             continue
-        for k in range(M):
-            # F1 = And( Implies(active_edge[i][j][k], presence_edge[i][j][k]), F1 )
-            F1_list.append( Implies(active_edge[i][j][k], presence_edge[i][j][k]) )
+        for q in range(Q):
+            for k in range(M):
+                F1_list.append( Implies(active_edge[i][j][q][k], presence_edge[i][j][q][k]) )
 F1 = And( F1_list )
 #print F1
 
@@ -188,18 +191,23 @@ for i in range(N):
     for j in range(N):
 	if i == j:
 	    continue
-        for k in range(M):
-            for z in range(N-1):
-                if z == 0: 
-                    A_list.append( Implies(r[i][j][k][0],presence_edge[i][j][k]) ) 
-                else:
-                    lhs = False
-                    for l in range(N):
-                        if i == l or j == l:
-                            continue
-                        lhs = Or(And (r[i][l][k][z-1],presence_edge[l][j][k]),lhs)   
-                    w  = Implies( r[i][j][k][z],lhs)
-                    A_list.append(w)
+        for q in range(Q):
+            for k in range(M):
+                for z in range(N-1):
+                    if z == 0: 
+                        for q1 in range(Q):
+                            pe = Or(presence_edge[i][j][q1][k])
+                        A_list.append( Implies(r[i][j][k][0],pe) ) 
+                    else:
+                        lhs = False
+                        for l in range(N):
+                            if i == l or j == l:
+                                continue
+                            for q1 in range(Q):
+                                pe = Or(presence_edge[i][j][q1][k])
+                            lhs = Or(And (r[i][l][k][z-1],pe),lhs)   
+                        w  = Implies( r[i][j][k][z],lhs)
+                        A_list.append(w)
 F2 = And(A_list)
 #print F2
 
@@ -210,12 +218,13 @@ for i in range(N):
     for j in range(N):
 	if i == j:
 	    continue
-        for k in range(M):
-            lhs = False
-            for z in range(N-1):
-                lhs = Or(r[j][i][k][z], lhs)
-            l  = Implies(presence_edge[i][j][k],lhs)
-            A_list.append(l)
+        for q in range(Q):
+            for k in range(M):
+                lhs = False
+                for z in range(N-1):
+                    lhs = Or(r[j][i][k][z], lhs)
+                l  = Implies(presence_edge[i][j][q][k],lhs)
+                A_list.append(l)
 F3 = And(A_list)
 # print F3
 
@@ -232,14 +241,14 @@ for i in range(N):
 	if i == j:
 	    continue
 	lhs = False    
-        for k in range(M):
-   #         rhs = Or(presence_edge[i][j][k],rhs)        
-	    for k1 in range(M): 
-                if k == k1:
-                    continue
-	        lhs = Or (And(active_edge[i][j][k],active_node[j][k1],p[k][k1]), lhs)  
-        w =  Implies(edge[i][j],lhs)
-        A_list.append(w)
+        for q in range(Q):
+            for k in range(M):
+	        for k1 in range(M): 
+                    if k == k1:
+                        continue
+	            lhs = Or (And(active_edge[i][j][q][k],active_node[j][k1],p[k][k1]), lhs)  
+            w =  Implies(edge[i][j][q],lhs)
+            A_list.append(w)
 F4 = And(A_list)
 #print F4
 
@@ -249,16 +258,17 @@ for i in range(N):
     for j in range(N):
 	if i == j:
 	    continue
-        for k in range(M): 
-            lhs = False
-	    for j1 in range(N):
-                if j != j1:
-	            for k11 in range(M):
-                        if k == k11:
-                            continue
-		        lhs = Or(And (active_node[j1][k11],p[k][k11]), lhs)
-	    w = Implies(active_edge[i][j][k], Not(lhs))
-            A_list.append(w)
+        for q in range(Q):
+            for k in range(M): 
+                lhs = False
+	        for j1 in range(N):
+                    if j != j1:
+	                for k11 in range(M):
+                            if k == k11:
+                                continue
+		            lhs = Or(And (active_node[j1][k11],p[k][k11]), lhs)
+	        w = Implies(active_edge[i][j][q][k], Not(lhs))
+                A_list.append(w)
 F5 = And(A_list)
 #print F5
 
@@ -275,7 +285,7 @@ starttime = time.time()
 #        D1 = dump[i][j] + D1 
 
 # Need flatening.
-d1 = [dump[i][j] for i in range(N) for j in range(N)]
+d1 = [dump[i][j][q] for i in range(N) for j in range(N) for q in range(Q)]
 L = len(d1)
 
 #print L
@@ -326,12 +336,13 @@ print "D0-D2 took", str(dd)
 D3 = True
 for i in range(N):
     for j in range(N):
-        rhs = And( edge[i][j], Not(dump[i][j]) )
-        for l in range(N):
-            if i == l:
-                continue
-            rhs = Or( And(And(edge[i][l],Not(dump[i][l])),r1[l][j] ), rhs) 
-        D3 = And( Implies( r1[i][j], rhs ), D3)
+        for q in range(Q):
+            rhs = And( edge[i][j][q], Not(dump[i][j][q]) )
+            for l in range(N):
+                if i == l:
+                    continue
+                rhs = Or( And(And(edge[i][l][q],Not(dump[i][l][q])),r1[l][j] ), rhs) 
+            D3 = And( Implies( r1[i][j], rhs ), D3)
 
 ddd = time.time() - starttime - dd
 print "D3 took", str(ddd)
@@ -344,7 +355,7 @@ print "D3 took", str(ddd)
 # Create Solver and add constraints in it.
 
 s = Solver()
-s.add(A0,A1, C0,C1,C2,C3,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3)
+s.add(A0,A1, C0,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3)
 print "solving...\n"
 print "Printing the assertions..."
 #for c in s.assertions():
