@@ -11,11 +11,38 @@ parser = argparse.ArgumentParser(description='Auto testing for TARA')
 parser.add_argument("-M","--mols", type=int, default=32, help = "number of molecules")
 parser.add_argument("-N","--nodes", type=int, default=8, help = "number of nodes")
 parser.add_argument("-Q","--pedges", type=int, default=2, help = "max no.of parallel edges btw two nodes")
+parser.add_argument("-V","--variation", type=int, default=1, help = "model of the biological system")
 args = parser.parse_args()
 
 M = args.mols
 N = args.nodes
 Q = args.pedges
+V = args.variation
+
+bag = []
+bag.append ('1. Boolean function on nodes and Boolean function on the edges.') 
+bag.append ('2. Only Boolean function on the edges.') 
+bag.append ('3. Boolean function on nodes and SNARE-SNARE inhibition on edges.')
+bag.append ('4. Only SNARE-SNARE inhibition on edges.')
+bag.append ('5. Only Boolean function on nodes.')
+bag.append ('6. No regulation at all.')
+
+def print_variation(): 
+    print ' '
+    for i in bag:
+        print i 
+    print ' '
+    print 'Running the chosen variation... \n' 
+
+def wall(v):
+    print bag[v-1]
+    print 'Use -V option to change the regulated variation.' 
+    print_variation()
+
+print 'Default/choosen vesicular traffic system is regulated by ...'
+for i in range(6):
+    if V == i:
+        wall(V)
 
 #----------------------------------------------------
 # Constraint generation 
@@ -46,54 +73,118 @@ f_e = [Function ("ae_{}".format(m), *sorts) for m in range(M)]
 
 starttime = time.time()
 
+# Function: no regulation on the node.
+# The present molecules at nodes are all active.
+def f_nn():
+    A_list = []
+    for i in range(N):
+        for k in range(M):
+            lhs = node[i][k] == active_node[i][k]
+            A_list.append(lhs)
+    A0 = And(A_list)
+
+# No regulation on edge.
+# The present molecules on the edge are all active.
+def f_ne():
+    A_list = []
+    for i in range(N):
+        for j in range(N):
+            if i == j:
+                continue
+            for q in range(Q):
+                for k in range(M):
+                    lhs = presence_edge[i][j][q][k] == active_edge[i][j][q][k]
+                    A_list.append(lhs)
+    A1 = And(A_list)
+
 # Activity of a moolecule k on a node/edge is  
 # defined as a Boolean function of presence of 
 # Other molecule present on that node/edge.
 # A0. active_node[k] =  f_n[k](\/_{k1 != k} node(k1)) 
-A0 = True
-s = []
-A_list = []
-for k in range(M):
-    f = f_n[k]
-    for i in range(N):
-        del s[:]
-        for k1 in range(M):
-            if k1 == k:
-                continue
-            s.append( node[i][k1] )
-        f_app = f(s)
-        l = Implies( node[i][k], active_node[i][k] == f_app )
-        A_list.append(l)
-A0 = And( A_list )
-#print A0
+def f_bn():
+    s = []
+    A_list = []
+    for k in range(M):
+        f = f_n[k]
+        for i in range(N):
+            del s[:]
+            for k1 in range(M):
+                if k1 == k:
+                    continue
+                s.append( node[i][k1] )
+            f_app = f(s)
+            l = Implies( node[i][k], active_node[i][k] == f_app )
+            A_list.append(l)
+    A0 = And( A_list )
 
-a =  time.time() - starttime
-print "A0 took", str(a)
-
+# Activity of the molecules on the edge is driven by the 
+# chosen boolean function. 
 # A1. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
+def f_be():
+    A1 = True
+    s = []
+    A_list = []
+    for i in range(N):
+        for j in range(N):
+            if i == j:
+                continue
+            for q in range(Q):
+                for k in range(M):
+                    del s[:]
+                    for k1 in range(M):
+                        if k1 == k:
+                            continue
+                        s.append(presence_edge[i][j][q][k1])
+                    l  =  Implies(presence_edge[i][j][q][k], active_edge[i][j][q][k] == f_e[k](*s)) 
+                    A_list.append(l)
+    A1 = And( A_list )
+
+# Inhibition of the edges are driven by the pairing matrix.
+# And(p[k][k1] -> edge[k]) -> active[k]
+def f_se():
+    A_list = []
+    for i in range(N):
+        for j in range(N):
+            if i == j:
+                continue
+            for q in range(Q):
+                for k in range(M):
+                    l = True
+                    for k1 in range(M):
+                        if k == k1:
+                            continue
+                        l = And (Implies( p[k][k1], presence_edge[i][j][q][k]),l)
+                    l1 = Implies( l, active_edge[i][j][q][k])
+                    A_list.append(l1)
+    A1 = And(A_list)
+
+A0 = True 
 A1 = True
-s = []
-A_list = []
-for i in range(N):
-    for j in range(N):
-        if i == j:
-            continue
-        for q in range(Q):
-            for k in range(M):
-                del s[:]
-                for k1 in range(M):
-                    if k1 == k:
-                        continue
-                    s.append(presence_edge[i][j][q][k1])
-                l  =  Implies(presence_edge[i][j][q][k], active_edge[i][j][q][k] == f_e[k](*s)) 
-                A_list.append(l)
-A1 = And( A_list )
+def regulation(v):
+    if v == 1:
+        f_bn() 
+        f_be()
+    elif v == 2:
+        f_n()
+        f_be()
+    elif v == 3:
+        f_bn()
+        f_se()
+    elif v == 4:
+        f_n()
+        f_se()
+    elif v == 5:
+        f_bn()
+        f_e()
+    else:
+        f_n()
+        f_e()
 
-a1 = time.time() - starttime - a
-print "A1 took", str(a1)
+regulation(V)
 
-#print A1
-#sys.exit()
+a = time.time() - starttime 
+print "A1 took", str(a)
+
 
 #1. label(E) subset  label(N)
 # e_ijk -> aik
@@ -138,7 +229,7 @@ for i in range(N):
         C5 = And (Implies (active_node[i][k], node[i][k]), C5) 
 #print C5
 
-c = time.time() - starttime - a1
+c = time.time() - starttime - a
 print "C0-C5 Took", str(c)
 
 # ----------------------------------------------------------------
@@ -194,18 +285,19 @@ for i in range(N):
         for q in range(Q):
             for k in range(M):
                 for z in range(N-1):
+                    pe = False
                     if z == 0: 
                         for q1 in range(Q):
-                            pe = Or(presence_edge[i][j][q1][k])
-                        A_list.append( Implies(r[i][j][k][0],pe) ) 
+                            pe = Or( presence_edge[i][j][q1][k], pe)
+                        A_list.append( Implies(r[i][j][k][0], pe) ) 
                     else:
                         lhs = False
                         for l in range(N):
                             if i == l or j == l:
                                 continue
                             for q1 in range(Q):
-                                pe = Or(presence_edge[i][j][q1][k])
-                            lhs = Or(And (r[i][l][k][z-1],pe),lhs)   
+                                pe = Or( presence_edge[i][j][q1][k], pe)
+                            lhs = Or(And ( r[i][l][k][z-1],pe), lhs)   
                         w  = Implies( r[i][j][k][z],lhs)
                         A_list.append(w)
 F2 = And(A_list)
@@ -334,15 +426,20 @@ print "D0-D2 took", str(dd)
 
 # do we need length reach?
 D3 = True
+A_list = []
 for i in range(N):
     for j in range(N):
+        rhs = False
         for q in range(Q):
-            rhs = And( edge[i][j][q], Not(dump[i][j][q]) )
-            for l in range(N):
-                if i == l:
-                    continue
+            rhs = Or( And( edge[i][j][q], Not(dump[i][j][q]) ), rhs) 
+        for l in range(N):
+            if i == l:
+                continue
+            for q in range(Q):
                 rhs = Or( And(And(edge[i][l][q],Not(dump[i][l][q])),r1[l][j] ), rhs) 
-            D3 = And( Implies( r1[i][j], rhs ), D3)
+        w = Implies( r1[i][j], rhs )
+        A_list.append(w)
+D3 = And(A_list)
 
 ddd = time.time() - starttime - dd
 print "D3 took", str(ddd)
@@ -382,30 +479,20 @@ def dump_dot( filename, m ) :
         for j in range(N):
             if i == j:
                 continue
-            for k in range(M):
-                if is_true(m[presence_edge[i][j][k]]):
-                    label = str(k)
-                    color = "black"
-                    if is_true(m[active_edge[i][j][k]]):
-                        color = "green"
-                        for k1 in range(M):
-                            if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
-                                color = "red"
-                                break
-                    dfile.write( str(i) + "-> " + str(j) +
+            for q in range(Q):
+                for k in range(M):
+                    if is_true(m[presence_edge[i][j][q][k]]):
+                        label = str(k)
+                        color = "black"
+                        if is_true(m[active_edge[i][j][q][k]]):
+                            color = "green"
+                            for k1 in range(M):
+                                if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
+                                    color = "red"
+                                    break
+                        dfile.write( str(i) + "-> " + str(j) +
                                  "[label=" + label +",color=" + color +"]" +"\n" )
-    dfile.write("}\n")
-    
-#    for k2 in range(M):
-#        print "\t"+str(k2),
-#    print "\n"
-#    for k1 in range(M):
-#        for k2 in range(M):
-#            if is_true(m[p[k1][k2]]):
-#                print "\t0",
-#            else:
-#                print "\t1",
-#        print "\n"
+        dfile.write("}\n")
 
 if s.check() == sat:
     m = s.model()
@@ -415,15 +502,13 @@ if s.check() == sat:
     #print m
     r = [ [ m[p[i][j]] for j in range(M) ]
           for i in range(M) ]
-    s = [[ [ m[active_edge[i][j][k]] for k in range (M)] for j in range(N) ] for i in range(N) ]
-    t = [ [ m[edge[i][j]] for j in range(N) ]
+    s = [[ [ [m[active_edge[i][j][q][k]] for k in range (M)] for q in range(Q)] for j in range(N) ] for i in range(N) ]
+    t = [ [ [m[edge[i][j][q]]  for q in range(Q)] for j in range(N) ]
           for i in range(N) ]
     print "\n Pairing matrix p[{}][{}] = ".format(M,M)
     print_matrix(r)
     print "\n Edge  e[{}][{}] = ".format(N,N)
     print t
-#    print "\n Activity on edge a[{}][{}][{}] = ".format(N,N,M)
-#    print_matrix(s)
     dump_dot( "/tmp/bio.dot", m )
 else:
     print "failed to solve"
