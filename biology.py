@@ -155,7 +155,8 @@ def f_se():
                             continue
                         l = And (Implies( p[k][k1], presence_edge[i][j][q][k1]),l)
                     l1 = Implies( l, Not(active_edge[i][j][q][k]))
-                    A_list.append(l1)
+                    l2 = Implies ( Not(l), active_edge[i][j][q][k])
+                    A_list.append(And(l1,l2))
     A1 = And(A_list)
 
 A0 = True 
