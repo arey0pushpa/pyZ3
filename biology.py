@@ -12,12 +12,14 @@ parser.add_argument("-M","--mols", type=int, default=32, help = "number of molec
 parser.add_argument("-N","--nodes", type=int, default=8, help = "number of nodes")
 parser.add_argument("-Q","--pedges", type=int, default=2, help = "max no.of parallel edges btw two nodes")
 parser.add_argument("-V","--variation", type=int, default=1, help = "model of the biological system")
+parser.add_argument("-C","--connected", type=int, default=3, help = "graph connectivity want to check")
 args = parser.parse_args()
 
 M = args.mols
 N = args.nodes
 Q = args.pedges
 V = args.variation
+C = args.connected
 
 bag = []
 bag.append ('1. Boolean function on nodes and Boolean function on the edges.') 
@@ -121,7 +123,6 @@ def f_bn():
 # chosen boolean function. 
 # A1. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
 def f_be():
-    A1 = True
     s = []
     A_list = []
     for i in range(N):
@@ -187,10 +188,12 @@ a = time.time() - starttime
 print "A1 took", str(a)
 
 
-#1. label(E) subset  label(N)
+#1. label(E) subset label(N)
 # e_ijk -> aik
 # e_ijk -> ajk
-C0 = True
+
+# -- Updated.
+# e_ijk -> a_ik and a_jk
 C1 = True
 for i in range(N):
     for j in range(N):
@@ -198,8 +201,8 @@ for i in range(N):
             continue
         for q in range(Q):
             for k in range(M):
-                C0 = And (Implies(presence_edge[i][j][q][k],node[i][k]),C0)
-                C1 = And (Implies(presence_edge[i][j][q][k],node[j][k]),C1)
+                C1 = And (Implies( presence_edge[i][j][q][k], And( node[i][k], node[j][k]) ),C1)
+
 
 #2. Self edges not allowed. 
 # not e_ii  
@@ -211,6 +214,9 @@ for i in range(N):
 
 #3. Multiple(parallel) edges are allowed between two nodes. 
 # But we restrict it to two.
+
+#-- Update:
+# Implemented explicitely using another dimension in edge [:Q].
 #C3 = True
 
 #4. Condition on p_kk' : 
@@ -270,41 +276,9 @@ F1 = And( F1_list )
 f = time.time() - starttime - c
 print "F0-F1 took ", str(f)
 
- 
-#F2 New reachability and stability condition-----
-# States reachability definition: nodes i,j is reachable with kth moleculein z steps if i'' is reachable from i in z steps and there is an edge between i'' and j with k present on that edge.
-# /\_{i,j,k,p, i!=j} r_{i,j,k,p} -> \/_{l!=i || j} r_{i,l,k,p-1} and e_{l,j,k}
-
-# Have also added one length reachability with F2. 
-# r_{i,j,k,1} -> e_{i,j,k} : In our case 1 is 0.
-F2 = True
-A_list = []
-for i in range(N):
-    for j in range(N):
-	if i == j:
-	    continue
-        for q in range(Q):
-            for k in range(M):
-                for z in range(N-1):
-                    pe = False
-                    if z == 0: 
-                        for q1 in range(Q):
-                            pe = Or( presence_edge[i][j][q1][k], pe)
-                        A_list.append( Implies(r[i][j][k][0], pe) ) 
-                    else:
-                        lhs = False
-                        for l in range(N):
-                            if i == l or j == l:
-                                continue
-                            for q1 in range(Q):
-                                pe = Or( presence_edge[i][j][q1][k], pe)
-                            lhs = Or(And ( r[i][l][k][z-1],pe), lhs)   
-                        w  = Implies( r[i][j][k][z],lhs)
-                        A_list.append(w)
-F2 = And(A_list)
-#print F2
-
 # ---- Rule change proposed----
+# for_all i,j,q,k : e(i,j,q,k) -> exists(r(j,i,k,z)) 
+# for every molecule present on a edge comes back in a cycle.
 F3 = True 
 A_list = []
 for i in range(N):
@@ -321,10 +295,59 @@ for i in range(N):
 F3 = And(A_list)
 # print F3
 
-ff = time.time() - starttime - f
+#F2 New reachability and stability condition-----
+# States reachability definition: 
+# nodes i,j is reachable with kth molecule in z steps if 
+# there is an edge between i'' and j (i != i'') with k present on that edge.
+# and i'' is reachable from i in z steps.
+
+#-- Update with multiple edges.
+# for_all i,j,k,z : if z = 0 -> [r(i,j,k,0) -> exists q : (e(i,j,q,k)) -> ]  
+#                   else: r(i,j,k,z) -> exists l,q (e(i,l,q,k) and r(l,q,k,z-1)) 
+
+#--- Old specifiction.
+# /\_{i,j,k,p, i!=j} r(i,j,k,p) -> \/_{l!=i || j}  e(i,l,k) and r(l,j,k-1)
+
+# Have also added one length reachability with F2. 
+# i,j is reachaable in one step if there is a direct edge between them.
+# r_{i,j,k,1} -> e_{i,j,k} : In our case 1 is 0.
+F2 = True
+A_list = []
+for i in range(N):
+    for j in range(N):
+	if i == j:
+	    continue
+        for k in range(M):
+            for z in range(N-1):
+                pe = False
+                if z == 0: 
+                    for q1 in range(Q):
+                        pe = Or( presence_edge[i][j][q1][k], pe)
+                    A_list.append( Implies(r[i][j][k][0], pe) ) 
+                else:
+                    lhs = False
+                    for l in range(N):
+                        if i == l or j == l:
+                            continue
+                        for q1 in range(Q):
+                            pe = Or( presence_edge[i][l][q1][k], pe)
+                        lhs = Or(And ( r[l][j][k][z-1],pe), lhs)   
+                    w  = Implies( r[i][j][k][z],lhs)
+                    A_list.append(w)
+F2 = And(A_list)
+#print F2
+
+ff = time.time() - starttime 
 print "F2-F3 took ", str(ff)
 
 # F4: Fusion rules:
+# For an edge to be valid, at least one
+# SNARE pair on the vesicle and target compartment must be active, and have a
+# non-zero entry in the pairing matrix
+
+# -- Updated specification.
+# forall_{i,j,q} e(i,j,q) -> exists_{k,k'}: b(i,j,q,k) and a(j,k') and p(k,k')
+
 # /\_{i,j} ( \/_k e_{i,j,k}) -> \/_{k,k'} (b_{i,j,k} and a'_{j,k'} and p_{k,k'}) 
 # and /\_k b_{i,j,k} -> not(\/_{j' != j} (\/_k'' a'_{j',k''} and p_{k,k''}))  
 F4 = True
@@ -333,18 +356,23 @@ for i in range(N):
     for j in range(N):
 	if i == j:
 	    continue
-	lhs = False    
         for q in range(Q):
+	    lhs = False    
             for k in range(M):
 	        for k1 in range(M): 
                     if k == k1:
                         continue
-	            lhs = Or (And(active_edge[i][j][q][k],active_node[j][k1],p[k][k1]), lhs)  
+	            lhs = Or (  And( active_edge[i][j][q][k], And ( active_node[j][k1],p[k][k1]) ), lhs)  
             w =  Implies(edge[i][j][q],lhs)
             A_list.append(w)
 F4 = And(A_list)
 #print F4
 
+# Fusion respects the graph structure by the vesicle (edge) under consideration, 
+# fusing only with its target node and not with any other node.
+
+# --Updated specification with multiple edges.
+# forall_{i,j,q,k} b(i,j,q,k) -> ~ [exits_{j',k"}: a(j',k") and p(k,k")]
 F5 = True
 A_list = []
 for i in range(N):
@@ -355,12 +383,13 @@ for i in range(N):
             for k in range(M): 
                 lhs = False
 	        for j1 in range(N):
-                    if j != j1:
-	                for k11 in range(M):
-                            if k == k11:
-                                continue
-		            lhs = Or(And (active_node[j1][k11],p[k][k11]), lhs)
-	        w = Implies(active_edge[i][j][q][k], Not(lhs))
+                    if j == j1:
+                        continue
+	            for k11 in range(M):
+                        if k == k11:
+                            continue
+		        lhs = Or(And ( active_node[j1][k11], p[k][k11]), lhs)
+	        w = Implies( active_edge[i][j][q][k], Not(lhs))
                 A_list.append(w)
 F5 = And(A_list)
 #print F5
@@ -369,15 +398,25 @@ fff = time.time() - starttime - ff
 print "F2-F3 took ", str(fff)
 
 starttime = time.time()
-#----3 Connectivity --------
 
+#----3 Connectivity --------
 # Summation of d_{i,j} == 2
+
+# -- Trivial implementaion in Haskell. 
+# At Most two
+# [Or x | x = Or (d1[i] and d1[j] and d1[k]),   i <- [0..L], j <- [x+1..L-1] , k <- [j+1,L]]
+# At least two
+# [Or(x) | x = d1[i] and d1[j] , i <- [0..L], j <- [0..L] , i!=j]
+#D1 = [Or(And(d1[x],d1[y]), False) for x in range(L)  y in range(L) x != y]
+
+# -- Coolest one: encoding in CBMC.
 #D1 = 0
 #for i in range(N):
 #    for j in range(N):
 #        D1 = dump[i][j] + D1 
 
-# Need flatening.
+# In z3Py. 
+# First step: Need flatening.
 d1 = [dump[i][j][q] for i in range(N) for j in range(N) for q in range(Q)]
 L = len(d1)
 
@@ -396,6 +435,19 @@ D0 = And(D_list)
       
 #print D0
 
+D0 = 0
+#def at_least(u):
+#    for i in range(L):
+#        for j in range(i+1,L):
+#            D0 = Implies ( d1[i][j]  
+#            
+#
+#def exactly_u(u):
+#    at_least(u)
+#    at_most(u)
+#
+#exactly_n(C-1)
+
 # At least 2
 D1 = False
 for i in range(L):
@@ -404,17 +456,13 @@ for i in range(L):
 
 #print C1
 
-# At Most two
-# Haskell 
-# [Or x | x = Or (d1[i] and d1[j] and d1[k]),   i <- [0..L], j <- [x+1..L-1] , k <- [j+1,L]]
+# ---- ---- --- 
 
-# At least two
-# [Or(x) | x = d1[i] and d1[j] , i <- [0..L], j <- [0..L] , i!=j]
-#D1 = [Or(And(d1[x],d1[y]), False) for x in range(L)  y in range(L) x != y]
+# Graph becomes disconnected.
+# Ensure that there is no path between some nodes i,j 
+#                 in the underlying undirected graph. 
 
-
-# Make directed graph undirected
-# /\_{i,j} r1_{i,j} Or r1_{j,i} 
+# ~ [forall_{i,j} r1(i,j) Or r1(j,i)]
 D2 = True
 for i in range(N):
     for j in range(N):
@@ -422,9 +470,15 @@ for i in range(N):
         D2 = And( rijji, D2) 
 D2 = Not(D2)
 
-dd = time.time() - starttime 
-print "D0-D2 took", str(dd)
+# forall_{i,j} r'(i,j) -> exists_{i'!=i}: [r'(i',j) and e(i,i') and ~d(i,i')]
 
+# --Updated specification.
+# New reachability definition for grph connectedness: dReachable
+# Node i,j are reachable either if there is a direct edge and its not dropped. 
+# Or there is an node i' such that, there is a direct edge between i,i' which is not droped
+# and i' and j is dReachable.
+
+# forall_{i,j} r'(i,j) -> exists_{q} [e(i,j,q) and not d(i,j,q)] Or  exists_{i'!=i}: [r'(i',j) and [exists_{q}: e(i,i',q) and ~d(i,i',q)] ]   
 # do we need length reach?
 D3 = True
 A_list = []
@@ -437,10 +491,14 @@ for i in range(N):
             if i == l:
                 continue
             for q in range(Q):
-                rhs = Or( And(And(edge[i][l][q],Not(dump[i][l][q])),r1[l][j] ), rhs) 
+                rhs = Or( And( edge[i][l][q], Not(dump[i][l][q])), rhs)
+            rhs = And( rhs, r1[l][j])
         w = Implies( r1[i][j], rhs )
         A_list.append(w)
 D3 = And(A_list)
+# print D3
+
+# HAVE TO CHECK THE EDGE in case of q = 0 ?? 
 
 ddd = time.time() - starttime - dd
 print "D3 took", str(ddd)
@@ -477,23 +535,23 @@ def dump_dot( filename, m ) :
             if is_true(m[active_node[i][k]]) :
                 node_vec = node_vec + "-"
         dfile.write( str(i) + "[label=\"" + node_vec + "\"]\n")
-        for j in range(N):
-            if i == j:
-                continue
-            for q in range(Q):
-                for k in range(M):
-                    if is_true(m[presence_edge[i][j][q][k]]):
-                        label = str(k)
-                        color = "black"
-                        if is_true(m[active_edge[i][j][q][k]]):
-                            color = "green"
-                            for k1 in range(M):
-                                if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
-                                    color = "red"
-                                    break
-                        dfile.write( str(i) + "-> " + str(j) +
-                                 "[label=" + label +",color=" + color +"]" +"\n" )
-        dfile.write("}\n")
+#        for j in range(N):
+#            if i == j:
+#                continue
+#            for q in range(Q):
+#                for k in range(M):
+#                    if is_true(m[presence_edge[i][j][q][k]]):
+#                        label = str(k)
+#                        color = "black"
+#                        if is_true(m[active_edge[i][j][q][k]]):
+#                            color = "green"
+#                            for k1 in range(M):
+#                                if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
+#                                    color = "red"
+#                                    break
+#                        dfile.write( str(i) + "-> " + str(j) +
+#                                 "[label=" + label +",color=" + color +"]" +"\n" )
+#        dfile.write("}\n")
 
 if s.check() == sat:
     m = s.model()
