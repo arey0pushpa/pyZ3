@@ -167,7 +167,7 @@ def regulation(v):
         f_bn() 
         f_be()
     elif v == 2:
-        f_n()
+        f_nn()
         f_be()
     elif v == 3:
         f_bn()
@@ -177,10 +177,10 @@ def regulation(v):
         f_se()
     elif v == 5:
         f_bn()
-        f_e()
+        f_ne()
     else:
-        f_n()
-        f_e()
+        f_nn()
+        f_ne()
 
 regulation(V)
 
