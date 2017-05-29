@@ -45,6 +45,7 @@ print 'Default/choosen vesicular traffic system is regulated by ...'
 for i in range(6):
     if V == i:
         wall(V)
+        break
 
 #----------------------------------------------------
 # Constraint generation 
@@ -394,8 +395,8 @@ for i in range(N):
 F5 = And(A_list)
 #print F5
 
-fff = time.time() - starttime - ff
-print "F2-F3 took ", str(fff)
+#fff = time.time() - starttime - ff
+#print "F2-F3 took ", str(fff)
 
 starttime = time.time()
 
@@ -418,6 +419,7 @@ starttime = time.time()
 # In z3Py. 
 # First step: Need flatening.
 d1 = [dump[i][j][q] for i in range(N) for j in range(N) for q in range(Q)]
+
 L = len(d1)
 
 #print L
@@ -435,7 +437,6 @@ D0 = And(D_list)
       
 #print D0
 
-D0 = 0
 #def at_least(u):
 #    for i in range(L):
 #        for j in range(i+1,L):
@@ -452,7 +453,17 @@ D0 = 0
 D1 = False
 for i in range(L):
   for j in range(i+1,L):
-    D1 = Or(And(d1[i],d1[j]),D1)
+    D1 = Or( And( d1[i], d1[j]), D1)
+
+
+# Only present edges can be dropped.
+D2 = True
+for i in range(N):
+    for j in range(N):
+        if i == j:
+            continue
+        for q in range(Q):
+            D2 = And ( Implies (dump[i][j][q], edge[i][j][q]), D2) 
 
 #print C1
 
@@ -463,12 +474,17 @@ for i in range(L):
 #                 in the underlying undirected graph. 
 
 # ~ [forall_{i,j} r1(i,j) Or r1(j,i)]
-D2 = True
+D4 = True
 for i in range(N):
     for j in range(N):
+        if i == j:
+            continue
         rijji = Or(r1[i][j],r1[j][i])
-        D2 = And( rijji, D2) 
-D2 = Not(D2)
+        D4 = And( rijji, D4) 
+D4 = Not(D4)
+
+print ' '
+#print D4
 
 # forall_{i,j} r'(i,j) -> exists_{i'!=i}: [r'(i',j) and e(i,i') and ~d(i,i')]
 
@@ -484,24 +500,40 @@ D3 = True
 A_list = []
 for i in range(N):
     for j in range(N):
+        if i == j:
+            continue
         rhs = False
+        bhs = False
         for q in range(Q):
-            rhs = Or( And( edge[i][j][q], Not(dump[i][j][q]) ), rhs) 
+            bhs = Or( And( edge[i][j][q], Not(dump[i][j][q]) ), bhs) 
         for l in range(N):
-            if i == l:
+            if i == l or j == l:
                 continue
             for q in range(Q):
                 rhs = Or( And( edge[i][l][q], Not(dump[i][l][q])), rhs)
             rhs = And( rhs, r1[l][j])
-        w = Implies( r1[i][j], rhs )
+        w = Implies( r1[i][j], Or (bhs , rhs) )
         A_list.append(w)
 D3 = And(A_list)
-# print D3
+print D3
+
+# Initial D3 u have encoded.
+# do we need length reach?
+#D3 = True
+#for i in range(N):
+#    for j in range(N):
+#        rhs = And( edge[i][j], Not(dump[i][j]) )
+#        for l in range(N):
+#            if i == l:
+#                continue
+#            rhs = Or( And(And(edge[i][l],Not(dump[i][l])),r1[l][j] ), rhs) 
+#        D3 = And( Implies( r1[i][j], rhs ), D3)
+#
 
 # HAVE TO CHECK THE EDGE in case of q = 0 ?? 
 
-ddd = time.time() - starttime - dd
-print "D3 took", str(ddd)
+#ddd = time.time() - starttime - fff
+#`print "D3 took", str(ddd)
 
 # sys.exit()
 
@@ -511,16 +543,15 @@ print "D3 took", str(ddd)
 # Create Solver and add constraints in it.
 
 s = Solver()
-s.add(A0,A1, C0,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3)
+s.add(A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4)
 print "solving...\n"
-print "Printing the assertions..."
+#print "Printing the assertions..."
 #for c in s.assertions():
 #    print c
 print s.check()
-print "\nPrinting the statistics..."
-print s.statistics() 
-print "\n"
-
+#print "\nPrinting the statistics..."
+#print s.statistics() 
+#print "\n"
 
 def dump_dot( filename, m ) :
     dfile = open(filename, 'w')
@@ -535,39 +566,51 @@ def dump_dot( filename, m ) :
             if is_true(m[active_node[i][k]]) :
                 node_vec = node_vec + "-"
         dfile.write( str(i) + "[label=\"" + node_vec + "\"]\n")
-#        for j in range(N):
-#            if i == j:
-#                continue
-#            for q in range(Q):
-#                for k in range(M):
-#                    if is_true(m[presence_edge[i][j][q][k]]):
-#                        label = str(k)
-#                        color = "black"
-#                        if is_true(m[active_edge[i][j][q][k]]):
-#                            color = "green"
-#                            for k1 in range(M):
-#                                if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
-#                                    color = "red"
-#                                    break
-#                        dfile.write( str(i) + "-> " + str(j) +
-#                                 "[label=" + label +",color=" + color +"]" +"\n" )
-#        dfile.write("}\n")
+        for j in range(N):
+            if i == j:
+                continue
+            for q in range(Q):
+                for k in range(M):
+                    if q == 0:
+                        if is_true(m[presence_edge[i][j][q][k]]):
+                            label = str(k)
+                            color = "black"
+                            if is_true(m[active_edge[i][j][q][k]]):
+                                color = "green"
+                                for k1 in range(M):
+                                    if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
+                                        color = "red"
+                                        break
+                            dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color +"]" +"\n" )
+                    if q == 1:
+                        if is_true(m[presence_edge[i][j][q][k]]):
+                            label = str(k)
+                            color = "yellow"
+                            if is_true(m[active_edge[i][j][q][k]]):
+                                color = "pink"
+                                for k1 in range(M):
+                                    if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
+                                            color = "blue"
+                                            break
+                            dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color +"]" +"\n" )
+
+    dfile.write("}\n")
 
 if s.check() == sat:
     m = s.model()
-    print "Printing the model..."
-    for d in m.decls():
-        print "{} = {}".format(d.name(), m[d])
-    #print m
+#    print "Printing the model..."
+#    for d in m.decls():
+#        print "{} = {}".format(d.name(), m[d])
+    print m
     r = [ [ m[p[i][j]] for j in range(M) ]
           for i in range(M) ]
     s = [[ [ [m[active_edge[i][j][q][k]] for k in range (M)] for q in range(Q)] for j in range(N) ] for i in range(N) ]
     t = [ [ [m[edge[i][j][q]]  for q in range(Q)] for j in range(N) ]
           for i in range(N) ]
-    print "\n Pairing matrix p[{}][{}] = ".format(M,M)
-    print_matrix(r)
-    print "\n Edge  e[{}][{}] = ".format(N,N)
-    print t
+#    print "\n Pairing matrix p[{}][{}] = ".format(M,M)
+#    print_matrix(r)
+#    print "\n Edge  e[{}][{}] = ".format(N,N)
+#    print t
     dump_dot( "/tmp/bio.dot", m )
 else:
     print "failed to solve"
