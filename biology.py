@@ -450,11 +450,12 @@ D0 = And(D_list)
 #exactly_n(C-1)
 
 # At least 2
-D1 = False
+D1_List = []
 for i in range(L):
   for j in range(i+1,L):
-    D1 = Or( And( d1[i], d1[j]), D1)
-
+    D1_List.append( And( d1[i], d1[j]) )
+D1 = Or(D1_List)
+# print D1
 
 # Only present edges can be dropped.
 D2 = True
@@ -502,17 +503,18 @@ for i in range(N):
     for j in range(N):
         if i == j:
             continue
-        rhs = False
         bhs = False
         for q in range(Q):
             bhs = Or( And( edge[i][j][q], Not(dump[i][j][q]) ), bhs) 
+        rhs = False
         for l in range(N):
             if i == l or j == l:
                 continue
             for q in range(Q):
                 rhs = Or( And( edge[i][l][q], Not(dump[i][l][q])), rhs)
             rhs = And( rhs, r1[l][j])
-        w = Implies( r1[i][j], Or (bhs , rhs) )
+        # w = Implies( r1[i][j], Or (bhs , rhs) )
+        w = Implies( Or(bhs , rhs), r1[i][j] )
         A_list.append(w)
 D3 = And(A_list)
 print D3
@@ -554,6 +556,7 @@ print s.check()
 #print "\n"
 
 def dump_dot( filename, m ) :
+    print "dumping dot file: ", filename
     dfile = open(filename, 'w')
     dfile.write("digraph prog {\n")
     for i in range(N):
@@ -572,6 +575,9 @@ def dump_dot( filename, m ) :
             for q in range(Q):
                 for k in range(M):
                     if q == 0:
+                        style = "solid"
+                        if is_true( m[dump[i][j][q]] ):
+                            style="dashed"
                         if is_true(m[presence_edge[i][j][q][k]]):
                             label = str(k)
                             color = "black"
@@ -581,8 +587,11 @@ def dump_dot( filename, m ) :
                                     if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
                                         color = "red"
                                         break
-                            dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color +"]" +"\n" )
+                            dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color + ",style=" + style + "]" +"\n" )
                     if q == 1:
+                        style = "solid"
+                        if is_true( m[dump[i][j][q]] ):
+                            style="dashed"
                         if is_true(m[presence_edge[i][j][q][k]]):
                             label = str(k)
                             color = "yellow"
@@ -592,16 +601,16 @@ def dump_dot( filename, m ) :
                                     if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
                                             color = "blue"
                                             break
-                            dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color +"]" +"\n" )
+                            dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color + ",style=" + style + "]" +"\n" )
 
     dfile.write("}\n")
 
 if s.check() == sat:
     m = s.model()
 #    print "Printing the model..."
-#    for d in m.decls():
-#        print "{} = {}".format(d.name(), m[d])
-    print m
+    for d in m.decls():
+       print "{} = {}".format(d.name(), m[d])
+    # print m
     r = [ [ m[p[i][j]] for j in range(M) ]
           for i in range(M) ]
     s = [[ [ [m[active_edge[i][j][q][k]] for k in range (M)] for q in range(Q)] for j in range(N) ] for i in range(N) ]
