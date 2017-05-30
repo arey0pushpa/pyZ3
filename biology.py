@@ -84,7 +84,7 @@ def f_nn():
         for k in range(M):
             lhs = node[i][k] == active_node[i][k]
             A_list.append(lhs)
-    A0 = And(A_list)
+    return And(A_list)
 
 # No regulation on edge.
 # The present molecules on the edge are all active.
@@ -98,13 +98,14 @@ def f_ne():
                 for k in range(M):
                     lhs = presence_edge[i][j][q][k] == active_edge[i][j][q][k]
                     A_list.append(lhs)
-    A1 = And(A_list)
+    return And(A_list)
 
 # Activity of a moolecule k on a node/edge is  
 # defined as a Boolean function of presence of 
 # Other molecule present on that node/edge.
 # A0. active_node[k] =  f_n[k](\/_{k1 != k} node(k1)) 
 def f_bn():
+    print "I am here!!"
     s = []
     A_list = []
     for k in range(M):
@@ -118,7 +119,7 @@ def f_bn():
             f_app = f(s)
             l = Implies( node[i][k], active_node[i][k] == f_app )
             A_list.append(l)
-    A0 = And( A_list )
+    return And( A_list )
 
 # Activity of the molecules on the edge is driven by the 
 # chosen boolean function. 
@@ -139,7 +140,7 @@ def f_be():
                         s.append(presence_edge[i][j][q][k1])
                     l  =  Implies(presence_edge[i][j][q][k], active_edge[i][j][q][k] == f_e[k](*s)) 
                     A_list.append(l)
-    A1 = And( A_list )
+    return And( A_list )
 
 # Inhibition of the edges are driven by the pairing matrix.
 # And(p[k][k1] -> edge[k]) -> active[k]
@@ -159,31 +160,33 @@ def f_se():
                     l1 = Implies( l, Not(active_edge[i][j][q][k]))
                     l2 = Implies ( Not(l), active_edge[i][j][q][k])
                     A_list.append(And(l1,l2))
-    A1 = And(A_list)
+    return And(A_list)
 
 A0 = True 
 A1 = True
-def regulation(v):
-    if v == 1:
-        f_bn() 
-        f_be()
-    elif v == 2:
-        f_nn()
-        f_be()
-    elif v == 3:
-        f_bn()
-        f_se()
-    elif v == 4:
-        f_n()
-        f_se()
-    elif v == 5:
-        f_bn()
-        f_ne()
-    else:
-        f_nn()
-        f_ne()
+if V == 1:
+    A0 = f_bn() 
+    A1 = f_be()
+elif V == 2:
+    A0 = f_nn()
+    A1 = f_be()
+elif V == 3:
+    A0 = f_bn()
+    A1 = f_se()
+elif V == 4:
+    A0 = f_nn()
+    A1 = f_se()
+elif V == 5:
+    A0 = f_bn()
+    A1 = f_ne()
+else:
+    A0 = f_nn()
+    A1 = f_ne()
 
-regulation(V)
+# print A0
+# print A1
+# exit(0)
+
 
 a = time.time() - starttime 
 print "A1 took", str(a)
