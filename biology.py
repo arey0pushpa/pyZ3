@@ -29,22 +29,16 @@ bag.append ('4. Only SNARE-SNARE inhibition on edges.')
 bag.append ('5. Only Boolean function on nodes.')
 bag.append ('6. No regulation at all.')
 
-def print_variation(): 
-    print ' '
-    for i in bag:
-        print i 
-    print ' '
-    print 'Running the chosen variation... \n' 
-
-def wall(v):
-    print bag[v-1]
-    print 'Use -V option to change the regulated variation.' 
-    print_variation()
-
-print 'Default/choosen vesicular traffic system is regulated by ...'
 for i in range(6):
-    if V == i:
-        wall(V)
+    if V == i + 1:
+        print ' '
+        print 'Default/choosen vesicular traffic system is regulated by ...',
+        print bag[i]
+        print ' '
+        print 'Use -V option to change the regulated variation.' 
+        for i in bag:
+            print i 
+        print ' '
         break
 
 #----------------------------------------------------
@@ -164,6 +158,7 @@ def f_se():
 
 A0 = True 
 A1 = True
+
 if V == 1:
     A0 = f_bn() 
     A1 = f_be()
@@ -187,10 +182,8 @@ else:
 # print A1
 # exit(0)
 
-
 a = time.time() - starttime 
 print "A1 took", str(a)
-
 
 #1. label(E) subset label(N)
 # e_ijk -> aik
@@ -206,7 +199,6 @@ for i in range(N):
         for q in range(Q):
             for k in range(M):
                 C1 = And (Implies( presence_edge[i][j][q][k], And( node[i][k], node[j][k]) ),C1)
-
 
 #2. Self edges not allowed. 
 # not e_ii  
@@ -261,7 +253,6 @@ for i in range(N):
                 rhs = Or( presence_edge[i][j][q][k], rhs )
             F0 = And (Implies(rhs, edge[i][j][q]),F0)
 #print F0
-
 
 # F1:  b_ijk -> e_ijk   
 # If molecule is active on an edge then it should be present on the edge. \newline
@@ -404,42 +395,19 @@ F5 = And(A_list)
 starttime = time.time()
 
 #----3 Connectivity --------
-# Summation of d_{i,j} == 2
 
-# -- Trivial implementaion in Haskell. 
-# At Most two
-# [Or x | x = Or (d1[i] and d1[j] and d1[k]),   i <- [0..L], j <- [x+1..L-1] , k <- [j+1,L]]
-# At least two
-# [Or(x) | x = d1[i] and d1[j] , i <- [0..L], j <- [0..L] , i!=j]
-#D1 = [Or(And(d1[x],d1[y]), False) for x in range(L)  y in range(L) x != y]
+# Only present edges can be dropped.
+# D0 = dump(i,j,q) -> e(i,j,q) 
+D1_list = []
+for i in range(N):
+    for j in range(N):
+        if i == j:
+            continue
+        for q in range(Q):
+            D1_list.append( Implies (dump[i][j][q], edge[i][j][q]) )
+D0 = And (D1_list)
 
-# -- Coolest one: encoding in CBMC.
-#D1 = 0
-#for i in range(N):
-#    for j in range(N):
-#        D1 = dump[i][j] + D1 
-
-# In z3Py. 
-# First step: Need flatening.
-d1 = [dump[i][j][q] for i in range(N) for j in range(N) for q in range(Q)]
-
-L = len(d1)
-
-#print L
-
-# At most 2
-D0 = True
-D_list = []
-for i in range(L):
-  for j in range(i+1, L-1):
-    lhs = And(d1[i],d1[j])
-    for k in range(j+1, L):
-      x = Implies (lhs,Not(d1[k]))
-      D_list.append(x)
-D0 = And(D_list)      
-      
-#print D0
-
+# General encoding rather than one one call.
 #def at_least(u):
 #    for i in range(L):
 #        for j in range(i+1,L):
@@ -450,24 +418,93 @@ D0 = And(D_list)
 #    at_least(u)
 #    at_most(u)
 #
-#exactly_n(C-1)
+# Summation of d_{i,j} == 2
 
-# At least 2
-D1_List = []
-for i in range(L):
-  for j in range(i+1,L):
-    D1_List.append( And( d1[i], d1[j]) )
-D1 = Or(D1_List)
-# print D1
+# -- Coolest one: encoding in CBMC.
+#D1 = 0
+#for i in range(N):
+#    for j in range(N):
+#        D1 = dump[i][j] + D1 
 
-# Only present edges can be dropped.
-D2 = True
+# Flattening the array. Avoid i == j. 
+d1 = []
 for i in range(N):
     for j in range(N):
         if i == j:
             continue
         for q in range(Q):
-            D2 = And ( Implies (dump[i][j][q], edge[i][j][q]), D2) 
+            d1.append(dump[i][j][q])
+L = len(d1)
+
+#print L
+
+# At most 2
+#def Mtwo_conn():
+#    D_list = []
+#    for i in range(L):
+#        for j in range(i+1, L-1):
+#            lhs = And(d1[i],d1[j])
+#            for k in range(j+1, L):
+#                x = Implies (lhs,Not(d1[k]))
+#                D_list.append(x)
+#    return And(D_list)      
+
+# At least 2
+def Ltwo_conn():
+    D1_list = []
+    for i in range(L-1):
+        for j in range(i+1,L):
+            D1_list.append( And( d1[i], d1[j]) )
+    return Or(D1_list)
+
+# At least 3
+def Lthree_conn():
+    D1_list = []
+    for i in range(L-2):
+        for j in range(i+1,L-1):
+            lhs = And ( d1[i], d1[j])
+            for k in range(j+1,L):
+                D1_list.append( And( lhs,d1[k]))
+    return Or(D1_list)
+
+# At least 4
+def Lfour_conn():
+    D1_list = []
+    for i in range(L-3):
+        for j in range(i+1,L-2):
+            lft = And ( d1[j], d1[i])
+            for k in range(j+1,L-1):
+                lft1 = And ( lft, d1[k])
+                for l in range(k+1,L):
+                    D1_list.append( And (d1[l], lft1))
+    return Or(D1_list)                
+
+# At least 5
+def Lfive_conn():
+    D1_list = []
+    for i in range(L-4):
+        for j in range(i+1,L-3):
+            rhs = And ( d1[i], d1[j]) 
+            for k in range(j+1,L-2):
+                rhs1 = And ( d1[k], rhs)
+                for l in range(k+1,L-1):
+                    rhs2 = And ( d1[l], rhs1)
+                    for m in range(l+1,L):
+                        D1_list.append( And( d1[m], rhs2 ))
+    return Or(D1_list)                
+
+if V == 1:
+    D1 = Ltwo_conn()
+    D2 = Not( Lthree_conn())
+elif V == 2:
+    D1 = Lthree_conn()
+    D2 = Not( Lfour_conn())
+elif V == 3:
+    D1 = Lfour_conn()
+    D2 = Not( Lfive_conn())
+else:
+    D1 = Lthree_conn()
+    D2 = Not( Lfour_conn())
 
 #print C1
 
@@ -478,14 +515,14 @@ for i in range(N):
 #                 in the underlying undirected graph. 
 
 # ~ [forall_{i,j} r1(i,j) Or r1(j,i)]
-D4 = True
+D3 = True
 for i in range(N):
     for j in range(N):
         if i == j:
             continue
         rijji = Or(r1[i][j],r1[j][i])
-        D4 = And( rijji, D4) 
-D4 = Not(D4)
+        D3 = And( rijji, D3) 
+D3 = Not(D3)
 
 print ' '
 #print D4
@@ -500,7 +537,7 @@ print ' '
 
 # forall_{i,j} r'(i,j) -> exists_{q} [e(i,j,q) and not d(i,j,q)] Or  exists_{i'!=i}: [r'(i',j) and [exists_{q}: e(i,i',q) and ~d(i,i',q)] ]   
 # do we need length reach?
-D3 = True
+#D3 = True
 A_list = []
 for i in range(N):
     for j in range(N):
@@ -519,8 +556,8 @@ for i in range(N):
         # w = Implies( r1[i][j], Or (bhs , rhs) )
         w = Implies( Or(bhs , rhs), r1[i][j] )
         A_list.append(w)
-D3 = And(A_list)
-print D3
+D4 = And(A_list)
+print D4
 
 # Initial D3 u have encoded.
 # do we need length reach?
@@ -613,7 +650,7 @@ if s.check() == sat:
 #    print "Printing the model..."
     for d in m.decls():
        print "{} = {}".format(d.name(), m[d])
-    # print m
+    print m
     r = [ [ m[p[i][j]] for j in range(M) ]
           for i in range(M) ]
     s = [[ [ [m[active_edge[i][j][q][k]] for k in range (M)] for q in range(Q)] for j in range(N) ] for i in range(N) ]
