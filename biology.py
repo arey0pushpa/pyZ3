@@ -250,6 +250,7 @@ for i in range(N):
         for q in range(Q):
             rhs = False
             for k in range(M):
+                # Change the presence to activity from the last change on 1st June.
                 rhs = Or( presence_edge[i][j][q][k], rhs )
             F0 = And (Implies(rhs, edge[i][j][q]),F0)
 #print F0
@@ -280,13 +281,15 @@ for i in range(N):
     for j in range(N):
 	if i == j:
 	    continue
-        for q in range(Q):
-            for k in range(M):
-                lhs = False
-                for z in range(N-1):
-                    lhs = Or(r[j][i][k][z], lhs)
-                l  = Implies(presence_edge[i][j][q][k],lhs)
-                A_list.append(l)
+        for k in range(M):
+            lhs = False
+            rhs = False
+            for q in range(Q):
+                rhs = Or( presence_edge[i][j][q][k]
+            for z in range(N-1):
+                lhs = Or(r[j][i][k][z], lhs)
+            l  = Implies(rhs,lhs)
+            A_list.append(l)
 F3 = And(A_list)
 # print F3
 
@@ -493,13 +496,14 @@ def Lfive_conn():
                         D1_list.append( And( d1[m], rhs2 ))
     return Or(D1_list)                
 
-if V == 1:
+# C is the neccesary condition.
+if C == 2:
     D1 = Ltwo_conn()
     D2 = Not( Lthree_conn())
-elif V == 2:
+elif C == 3:
     D1 = Lthree_conn()
     D2 = Not( Lfour_conn())
-elif V == 3:
+elif C == 4:
     D1 = Lfour_conn()
     D2 = Not( Lfive_conn())
 else:
@@ -650,16 +654,16 @@ if s.check() == sat:
 #    print "Printing the model..."
     for d in m.decls():
        print "{} = {}".format(d.name(), m[d])
-    print m
+#    print m
     r = [ [ m[p[i][j]] for j in range(M) ]
           for i in range(M) ]
     s = [[ [ [m[active_edge[i][j][q][k]] for k in range (M)] for q in range(Q)] for j in range(N) ] for i in range(N) ]
     t = [ [ [m[edge[i][j][q]]  for q in range(Q)] for j in range(N) ]
           for i in range(N) ]
-#    print "\n Pairing matrix p[{}][{}] = ".format(M,M)
-#    print_matrix(r)
-#    print "\n Edge  e[{}][{}] = ".format(N,N)
-#    print t
+    print "\n Pairing matrix p[{}][{}] = ".format(M,M)
+    print_matrix(r)
+    print "\n Edge  e[{}][{}] = ".format(N,N)
+    print t
     dump_dot( "/tmp/bio.dot", m )
 else:
     print "failed to solve"
