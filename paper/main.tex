@@ -164,12 +164,12 @@ A0: Boolean regulation on nodes. Activity of a molecule k on a node is defined a
 \[ \bigwedge\limits_{i,k} n_{i,k} \supset a_{i,k} ==   f_n[k] (\bigvee_{ k' != k} n_{i,k'}) \, \]  
 
 A1: Boolean regulation on edges. Activity of a molecule k on a node is defined as a Boolean function of presence of other molecule present on that node.
-\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} \supset b_{i,j,q,k} == f_e[k](\bigvee_{k' != k} e(i,j,q,k')) \, \]  
+\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} \supset b_{i,j,q,k} == f_e[k](\bigvee_{k' != k} e_{i,j,q,k'}) \, \]  
 
 A1: SNARE-SNARE inhibition. Inhibition of the edges are driven by the pairing matrix.
-\[ \bigwedge\limits_{i,j,i != j, q, k} (\bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'}) \supset \neg b(i,j,q,k)) \, \]  
+\[ \bigwedge\limits_{i,j,q, k}  (e_{i,j,q,k} \land [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset \neg b_{i,j,q,k}) \, \]  
 
-\[ \bigwedge\limits_{i,j,i != j, q, k} \neg [(\bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] \supset b(i,j,q,k)) \, \]  
+\[ \bigwedge\limits_{i,j, q, k}  (e_{i,j,q,k} \land \neg [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset b_{i,j,q,k}) \, \]  
 
 \section{Basic constraints on the edges and nodes}
 The edge labels are subset of the node label of source and target compartment. \newline
@@ -207,7 +207,7 @@ F0:  An edge has to have one present molecule. F0 looks redundant.
 
 F1: If molecule is active on an edge then it should be present on the edge.
 
-\[ \bigwedge\limits_{i,j,q,k} a_{i,j,q,k} \supset e_{i,j,q,k}\, \]
+\[ \bigwedge\limits_{i,j,q,k} b_{i,j,q,k} \supset e_{i,j,q,k}\, \]
 
 
 

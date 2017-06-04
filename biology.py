@@ -99,7 +99,7 @@ def f_ne():
 # Other molecule present on that node/edge.
 # A0. active_node[k] =  f_n[k](\/_{k1 != k} node(k1)) 
 def f_bn():
-    print "I am here!!"
+   # print "I am here!!"
     s = []
     A_list = []
     for k in range(M):
@@ -137,7 +137,12 @@ def f_be():
     return And( A_list )
 
 # Inhibition of the edges are driven by the pairing matrix.
-# And(p[k][k1] -> edge[k]) -> active[k]
+# If there is a molecule k present on the edge(i,j) and with non-zero pairing matrix
+# the evry pairing matrix elements are present on that node makes that molecule inactive.
+# else its active.
+# { e(i,j,k) and (exists_k': p(k,k') and [p(k,k') -> e(i,j,k')] )) } -> ~ b(i,j,k)   
+# { e(i,j,k) and ~(exists_k': p(k,k') and [p(k,k') -> e(i,j,k')] )) } -> b(i,j,k)   
+
 def f_se():
     A_list = []
     for i in range(N):
@@ -146,15 +151,36 @@ def f_se():
                 continue
             for q in range(Q):
                 for k in range(M):
-                    l = True
+                    lhs = presence_edge[i][j][q][k]
+                    l1 = False
+                    l2 = True
                     for k1 in range(M):
-                        if k == k1:
+                        if k1 == k:
                             continue
-                        l = And (Implies( p[k][k1], presence_edge[i][j][q][k1]),l)
-                    l1 = Implies( l, Not(active_edge[i][j][q][k]))
-                    l2 = Implies ( Not(l), active_edge[i][j][q][k])
-                    A_list.append(And(l1,l2))
-    return And(A_list)
+                        l1 = Or( p[k][k1], l1)
+                        l2 = And( Implies( p[k][k1], presence_edge[i][j][q][k1]) , l2)   
+                    l = Implies ( And( lhs, And( l1,l2)), Not( active_edge[i][j][q][k]) )
+                    ll = Implies ( And ( lhs, Not (And ( l1,l2)) ), active_edge[i][j][q][k]) 
+                    A_list.append(And ( l, ll) )
+    return And (A_list)
+
+#def f_se():
+#    A_list = []
+#    for i in range(N):
+#        for j in range(N):
+#            if i == j:
+#                continue
+#            for q in range(Q):
+#                for k in range(M):
+#                    l = True
+#                    for k1 in range(M):
+#                        if k == k1:
+#                            continue
+#                        l = And (Implies( p[k][k1], presence_edge[i][j][q][k1]),l)
+#                    l1 = Implies( l, Not(active_edge[i][j][q][k]))
+#                    l2 = Implies ( Not(l), active_edge[i][j][q][k])
+#                    A_list.append(And(l1,l2))
+#    return And(A_list)
 
 A0 = True 
 A1 = True
@@ -162,12 +188,17 @@ A1 = True
 if V == 1:
     A0 = f_bn() 
     A1 = f_be()
+    #print A0
+    #print A1
+    #exit(0)
 elif V == 2:
     A0 = f_nn()
     A1 = f_be()
 elif V == 3:
     A0 = f_bn()
     A1 = f_se()
+    #print A1
+    #exit(0)
 elif V == 4:
     A0 = f_nn()
     A1 = f_se()
@@ -275,7 +306,24 @@ print "F0-F1 took ", str(f)
 # ---- Rule change proposed----
 # for_all i,j,q,k : e(i,j,q,k) -> exists(r(j,i,k,z)) 
 # for every molecule present on a edge comes back in a cycle.
-F3 = True 
+#F3 = True 
+#A_list = []
+#for i in range(N):
+#    for j in range(N):
+#	if i == j:
+#	    continue
+#        for q in range(M):
+#            lhs = False
+#            for k in range(M):
+#   not fiixed            rhs = Or( presence_edge[i][j][q][k])
+#     ""           for z in range(N-1):
+#    ""            lhs = Or(r[j][i][k][z], lhs)
+#    ""        l  = Implies(rhs,lhs)
+#            A_list.append(l)
+#F3 = And(A_list)
+
+# print F3
+
 A_list = []
 for i in range(N):
     for j in range(N):
@@ -285,13 +333,14 @@ for i in range(N):
             lhs = False
             rhs = False
             for q in range(Q):
-                rhs = Or( presence_edge[i][j][q][k]
+                rhs = Or( presence_edge[i][j][q][k], rhs)
             for z in range(N-1):
-                lhs = Or(r[j][i][k][z], lhs)
-            l  = Implies(rhs,lhs)
+                lhs = Or( r[j][i][k][z], lhs)
+            l  = Implies( rhs, lhs)
             A_list.append(l)
 F3 = And(A_list)
-# print F3
+#print F3
+#exit(0)
 
 #F2 New reachability and stability condition-----
 # States reachability definition: 
