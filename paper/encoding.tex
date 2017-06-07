@@ -1,3 +1,152 @@
+\section{Formula variables}
+Basic notation for the formula we are trying to generate.
+\begin{enumerate}
+\item edge = e(i,j,q)
+      There is an qth edge between node i and j.
+      
+\item dump = d(i,j,q)
+       drop edge(i,j,q) from the graph. 
+       
+\item presence node = n(i,k) 
+	  kth molecule is present on the node i.
+      
+\item active\_node = a(i,k) 
+      kth molecule is active on the node i.
+      
+\item presence\_edge = e(i,j,q,k)
+      There is an qth edge between node i and j with kth molecule present.
+
+\item active\_edge = b(i,j,q,k)
+      There is an qth edge between node i and j with kth molecule active.
+
+\item reachability = r(i,j,k,z)
+      Node i and j are reachable with kth molecule present in z steps.
+
+\item pairing matrix = p(k,k')
+      Molecule k and k' are pairing molecules in the matrix.
+
+\item Type of the Boolean function = sorts (takes k-1 arguments Bool and return Bool) 
+\item Boolean function on nodes Function (fn\_{m},*sorts) 
+
+\item Boolean function on edge Function(fe\_{m},*sorts)
+
+\end{enumerate}
+
+\section{Regulation on nodes and edges}
+Regulation of a model is based on the kind of the model under consideration. for example model 1 (-V 1) has two different arbitrary Boolean function dictating the activity of the molecules on edge and nodes and for variation 3 (-V 3) activity on edge is driven by SNARE-SNARE inhibition.  
+
+We have build constraints A0, A1 for these two regulations. \newline
+
+A0: No regulation on nodes.
+\[ \bigwedge\limits_{i,k} n_{i,k} == a_{i,k} \, \]  
+
+A1: No regulation on edges.
+\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} == b_{i,j,q,k} \, \]  
+
+A0: Boolean regulation on nodes. Activity of a molecule k on a node is defined as a Boolean function of presence of other molecule present on that node.
+\[ \bigwedge\limits_{i,k} n_{i,k} \supset a_{i,k} ==   f_n[k] (\bigvee_{ k' != k} n_{i,k'}) \, \]  
+
+A1: Boolean regulation on edges. Activity of a molecule k on a node is defined as a Boolean function of presence of other molecule present on that node.
+\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} \supset b_{i,j,q,k} == f_e[k](\bigvee_{k' != k} e_{i,j,q,k'}) \, \]  
+
+A1: SNARE-SNARE inhibition. Inhibition of the edges are driven by the pairing matrix.
+\[ \bigwedge\limits_{i,j,q, k}  (e_{i,j,q,k} \land [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset \neg b_{i,j,q,k}) \, \]  
+
+\[ \bigwedge\limits_{i,j, q, k}  (e_{i,j,q,k} \land \neg [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset b_{i,j,q,k}) \, \]  
+
+\section{Basic constraints on the edges and nodes}
+The edge labels are subset of the node label of source and target compartment. \newline
+
+C0: The edge labels are subset of the node label of source compartment.
+
+\[ \bigwedge\limits_{i,j,k} e_{i,j,k} \supset a_{i,k} \, \]  
+
+C1: The edge labels are subset of the node label of target compartment.
+
+\[ \bigwedge\limits_{i,q}  e_{i,j,k} \supset a_{j,k} \, \]  
+%C1 =  e_ijk -> aik and e_ijk -> ajk
+
+C2: Self edges are not allowed. 
+
+\[  \bigwedge\limits_{i,q} \neg e_{i,i,q} \, \]
+
+C4: Condition on p\_kk'. Diagonal blocks should be all 0's.
+
+\[ \bigwedge\limits_{(x < M/2 \, \land  \, y < M/2) \lor  (x >= M/2 \land y >= M/2)} \neg p(x,y) \, \]
+
+C5: Activity on the node. A molecule should be present to be active on a node.  
+\[ \bigwedge\limits_{i,k} a_{i,k} \supset n_{j,k} \, \]  
+
+% - F0: b(i,j,k) $\supset$ e(i,j,k)
+
+
+
+\section{Main constraints}
+Main constraints to be followed. \newline
+
+F0:  An edge has to have one present molecule. F0 looks redundant.
+
+\[ \bigwedge\limits_{i,j,q} \bigvee_k e_{i,j,q,k} \supset e_{i,j,q} \, \]  
+
+F1: If molecule is active on an edge then it should be present on the edge.
+
+\[ \bigwedge\limits_{i,j,q,k} b_{i,j,q,k} \supset e_{i,j,q,k}\, \]
+
+
+
+\section{Steady state specification}
+Each molecule leaving the node on a vesicle should come back to its source node in a cycle, i.e., \textbf{for every molecule leaving the node there exists a cycle with that molecule present on \textit{each of the edges and nodes} of the path taken}.
+
+\subsection{Reachability definition and stability condition}
+If molecule is active on an edge then it should be present on the edge. \newline
+
+
+F3: stability condition. Source node is reachable by target node with that molecule present in p steps.
+
+% I have implemented: Changed the implementation in code too.
+%\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} \supset (r_{j,i,k,0}  \lor r_{j,i,k,1} \lor ... \lor r_{j,i,k,p}) \, \]
+
+% Update: Better 
+\[ \bigwedge\limits_{i,j,k} (\bigvee_{q} e_{i,j,q,k}) \supset (r_{j,i,k,0}  \lor r_{j,i,k,1} \lor ... \lor r_{j,i,k,p}) \, \]
+
+F2: Reachability definition.
+\[ \bigwedge\limits_{i,j,k,p} r_{i,j,k,p} \supset (\bigvee_{q} \, e_{i,j,q,k} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,k}) \land r_{i^{\prime},j,k,p-1} ) \, \]
+
+
+\section{ Fusion rule Formula}
+
+Fusion rules consist of two different mechanisms.
+
+\begin{enumerate}
+\item  A \textbf{SNARE pairing mechanism} which determines compatible Q-R pairs on vesicles and compartments that can cause fusion.
+\item \textbf{Regulatory mechanisms} on edges and on nodes (possibly distinct) which regulate SNARE activity based on the presence/absence of other molecules on the corresponding node or edge.
+\end{enumerate}
+
+F4: For an edge to be valid, at least one SNARE pair on the vesicle and target compartment must be active, and have a non-zero entry in the pairing matrix.  
+
+\[ \bigwedge\limits_{i,j,q} e_{i,j,q} \supset \bigvee_{k,k^{\prime}} (b_{i,j,q,k} \land a_{j,k^{\prime}} \land p_{k,k^{\prime}}) \, \]
+
+F5: To ensure that fusion respects the graph structure by the edge under consideration, it should not be possible to fuse with any other node.
+
+\[ \bigwedge\limits_{i,j,k} b_{i,j,k} \supset \neg \bigvee_{j \neq j^{\prime}, k^{\prime\prime}} ( a_{j^{\prime},k^{\prime\prime}} \land p_{k,k^{\prime\prime}}) \, \]
+
+
+\section{Connectivity}
+To check the whether that n connected is necessary condition, we remove (drop) n edges from the graph and if it disconnects the graph and we get an assignment we have a n connected satisfying graph. We can go down or up using -C \_ option.  \newline 
+
+D0: Only present edges can be dropped.
+\[ \bigwedge\limits_{i,j,q} d_{i,j,q} \supset e_{i,j,q}  \]
+
+D1,D2: We are dropping c edges from the graph. exactly c are dropped.
+\[ \sum_{i,j,q} d_{i,j,q} == c \]
+
+D3:  Graph becomes disconnected. Ensure that there is no path between some nodes i,j in the underlying undirected graph. Different reachability.
+\[ \bigwedge\limits_{i,j} \neg (r^{\prime}_{i,j} \lor r^{\prime}_{j,i})]  \]
+
+D4: New reachability definition for grph connectedness: dReachable. Node i,j are reachable either if there is a direct edge and its not dropped. 
+Or there is an node i' such that, there is a direct edge between i,i' which is not dropped and i' and j is dReachable.
+
+\[ \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' != i}  r^{\prime}(i',j) \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \supset r^{\prime}(i,j)  \]
 
 %--------------------- DO NOT ERASE BELOW THIS LINE --------------------------
 
