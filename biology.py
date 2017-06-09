@@ -194,6 +194,8 @@ if V == 1:
 elif V == 2:
     A0 = f_nn()
     A1 = f_be()
+    #print A0
+    #print A1
 elif V == 3:
     A0 = f_bn()
     A1 = f_se()
