@@ -76,6 +76,11 @@ C1 = ForAll ([i,j,k], Implies ( presence_edge[i][j][k], node[j][k]) )
 
 C2 = ForAll (i, Not( presence_edge[i][i]) )
 
+C2_List = []
+for i in N:
+    C_List.append( Not( presence_edge[i][i]) )
+C2 = And( C2_List )
+
 #C4 =  
 
 s = Solver()

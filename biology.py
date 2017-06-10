@@ -639,6 +639,11 @@ print D4
 #Init3 = (p[1][2] == False)
 # Create Solver and add constraints in it.
 
+
+#Full = And(A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4)
+#QF = ForAll( QVars , Full )
+
+
 s = Solver()
 s.add(A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4)
 print "solving...\n"
