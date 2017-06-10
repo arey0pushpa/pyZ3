@@ -1,4 +1,8 @@
-\section{Formula variables}
+In this section, we will present our encoding of the search problem.
+
+
+\subsection{Network description}
+
 Basic notation for the formula we are trying to generate.
 \begin{enumerate}
 \item edge = e(i,j,q)
@@ -32,7 +36,7 @@ Basic notation for the formula we are trying to generate.
 
 \end{enumerate}
 
-\section{Regulation on nodes and edges}
+\subsubsection{Regulation on nodes and edges}
 Regulation of a model is based on the kind of the model under consideration. for example model 1 (-V 1) has two different arbitrary Boolean function dictating the activity of the molecules on edge and nodes and for variation 3 (-V 3) activity on edge is driven by SNARE-SNARE inhibition.  
 
 We have build constraints A0, A1 for these two regulations. \newline
@@ -54,7 +58,7 @@ A1: SNARE-SNARE inhibition. Inhibition of the edges are driven by the pairing ma
 
 \[ \bigwedge\limits_{i,j, q, k}  (e_{i,j,q,k} \land \neg [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset b_{i,j,q,k}) \, \]  
 
-\section{Basic constraints on the edges and nodes}
+\subsubsection{Basic constraints on the edges and nodes}
 The edge labels are subset of the node label of source and target compartment. \newline
 
 C0: The edge labels are subset of the node label of source compartment.
@@ -81,7 +85,7 @@ C5: Activity on the node. A molecule should be present to be active on a node.
 
 
 
-\section{Main constraints}
+\subsubsection{Main constraints}
 Main constraints to be followed. \newline
 
 F0:  An edge has to have one present molecule. F0 looks redundant.
@@ -94,10 +98,10 @@ F1: If molecule is active on an edge then it should be present on the edge.
 
 
 
-\section{Steady state specification}
+\subsubsection{Steady state specification}
 Each molecule leaving the node on a vesicle should come back to its source node in a cycle, i.e., \textbf{for every molecule leaving the node there exists a cycle with that molecule present on \textit{each of the edges and nodes} of the path taken}.
 
-\subsection{Reachability definition and stability condition}
+\subsubsection{Reachability definition and stability condition}
 If molecule is active on an edge then it should be present on the edge. \newline
 
 
@@ -113,7 +117,7 @@ F2: Reachability definition.
 \[ \bigwedge\limits_{i,j,k,p} r_{i,j,k,p} \supset (\bigvee_{q} \, e_{i,j,q,k} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,k}) \land r_{i^{\prime},j,k,p-1} ) \, \]
 
 
-\section{ Fusion rule Formula}
+\subsubsection{ Fusion rule Formula}
 
 Fusion rules consist of two different mechanisms.
 
@@ -131,7 +135,7 @@ F5: To ensure that fusion respects the graph structure by the edge under conside
 \[ \bigwedge\limits_{i,j,k} b_{i,j,k} \supset \neg \bigvee_{j \neq j^{\prime}, k^{\prime\prime}} ( a_{j^{\prime},k^{\prime\prime}} \land p_{k,k^{\prime\prime}}) \, \]
 
 
-\section{Connectivity}
+\subsubsection{Connectivity}
 To check the whether that n connected is necessary condition, we remove (drop) n edges from the graph and if it disconnects the graph and we get an assignment we have a n connected satisfying graph. We can go down or up using -C \_ option.  \newline 
 
 D0: Only present edges can be dropped.
