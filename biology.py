@@ -603,8 +603,45 @@ D4 = And(A_list)
 #Init3 = (p[1][2] == False)
 # Create Solver and add constraints in it.
 
+# Edge between nodes
+E = [ edge[i][j][q] for i in range(N) for j in range(N) for q in range(Q) if i != j]
+
+# dumped edges
+D = [ dump[i][j][q] for i in range(N) for j in range(N) for q in range(Q) if i != j]
+
+# presence on node  
+Node = [ node[i][k] for i in range(N) for k in range(M) ]
+print E + D + Node
+
+# Active node 
+Node1 = [ active_node[i][k] for i in range(N) for k in range(M)]
+print Node1
+
+#presence edge
+E1 = [ presence_edge[i][j][q][k] for i in range(N) for j in range(N) for q in range(Q) for k in range(M) if i != j]
+
+#Active edge
+E2 = [ active_edge[i][j][q] for i in range(N) for j in range(N) for q in range(Q) for k in range(M) if i != j]
+
+#reachability
+R = [ r[i][j][k][z] for i in range(N) for j in range(N) for k in range(M) for z in range(N-1) if i != j]
+
+R1 = [ r[i][j] for i in range(N) for j in range(N) if i != j]
+
+# pairing matrix
+P = [ p[k][k1] for k in range(M) for k1 in range(M) ]
+
+QVars = [E + N + E1 + R + R1 ] 
+#Some = [N2 + E2 ]
+
+#print All 
+#print Some 
+
+#sys.exit(0)
 A1_list = [A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4]
 Full = And( A1_list )
+
+
 #QF = ForAll( QVars , Full )
 
 s = Solver()
