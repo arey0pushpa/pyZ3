@@ -164,24 +164,6 @@ def f_se():
                     A_list.append(And ( l, ll) )
     return And (A_list)
 
-#def f_se():
-#    A_list = []
-#    for i in range(N):
-#        for j in range(N):
-#            if i == j:
-#                continue
-#            for q in range(Q):
-#                for k in range(M):
-#                    l = True
-#                    for k1 in range(M):
-#                        if k == k1:
-#                            continue
-#                        l = And (Implies( p[k][k1], presence_edge[i][j][q][k1]),l)
-#                    l1 = Implies( l, Not(active_edge[i][j][q][k]))
-#                    l2 = Implies ( Not(l), active_edge[i][j][q][k])
-#                    A_list.append(And(l1,l2))
-#    return And(A_list)
-
 A0 = True 
 A1 = True
 
@@ -238,7 +220,7 @@ for i in range(N):
 C2 = True
 for i in range(N):
     for q in range(Q):
-        C2 = And(Not(edge[i][i][q]), C2)
+        C2 = And( Not(edge[i][i][q]), C2)
 
 
 #3. Multiple(parallel) edges are allowed between two nodes. 
@@ -592,7 +574,7 @@ print ' '
 
 # forall_{i,j} r'(i,j) -> exists_{q} [e(i,j,q) and not d(i,j,q)] Or  exists_{i'!=i}: [r'(i',j) and [exists_{q}: e(i,i',q) and ~d(i,i',q)] ]   
 # do we need length reach?
-#D3 = True
+# D3 = True
 A_list = []
 for i in range(N):
     for j in range(N):
@@ -612,25 +594,7 @@ for i in range(N):
         w = Implies( Or(bhs , rhs), r1[i][j] )
         A_list.append(w)
 D4 = And(A_list)
-print D4
-
-# Initial D3 u have encoded.
-# do we need length reach?
-#D3 = True
-#for i in range(N):
-#    for j in range(N):
-#        rhs = And( edge[i][j], Not(dump[i][j]) )
-#        for l in range(N):
-#            if i == l:
-#                continue
-#            rhs = Or( And(And(edge[i][l],Not(dump[i][l])),r1[l][j] ), rhs) 
-#        D3 = And( Implies( r1[i][j], rhs ), D3)
-#
-
-# HAVE TO CHECK THE EDGE in case of q = 0 ?? 
-
-#ddd = time.time() - starttime - fff
-#`print "D3 took", str(ddd)
+#print D4
 
 # sys.exit()
 
@@ -639,13 +603,13 @@ print D4
 #Init3 = (p[1][2] == False)
 # Create Solver and add constraints in it.
 
-
-#Full = And(A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4)
+A1_list = [A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4]
+Full = And( A1_list )
 #QF = ForAll( QVars , Full )
 
-
 s = Solver()
-s.add(A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4)
+s.add(True)
+#s.add(A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4)
 print "solving...\n"
 #print "Printing the assertions..."
 #for c in s.assertions():
@@ -708,8 +672,8 @@ def dump_dot( filename, m ) :
 if s.check() == sat:
     m = s.model()
 #    print "Printing the model..."
-    for d in m.decls():
-       print "{} = {}".format(d.name(), m[d])
+#    for d in m.decls():
+#       print "{} = {}".format(d.name(), m[d])
 #    print m
     r = [ [ m[p[i][j]] for j in range(M) ]
           for i in range(M) ]
@@ -724,4 +688,22 @@ if s.check() == sat:
 else:
     print "failed to solve"
 
+# Converting the formula in CNF.
+print ' '
+print 'Converting cnf ... '
 
+g = Goal() 
+g.add(A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4)
+#print g
+# t is a tactic that reduces a Boolean problem into propositional CNF
+t = Then('simplify', 'tseitin-cnf')
+subgoal = t(g)
+assert len(subgoal) == 1
+
+# Traverse each clause of the first subgoal
+for c in subgoal[0]:
+        #print "children: ", c.children()
+        #print "1st child:", c.arg(0)
+        #print "operator: ", c.decl()
+        #print "op name:  ", c.decl().name()
+        print c

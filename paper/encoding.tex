@@ -63,11 +63,11 @@ The edge labels are subset of the node label of source and target compartment. \
 
 C0: The edge labels are subset of the node label of source compartment.
 
-\[ \bigwedge\limits_{i,j,k} e_{i,j,k} \supset a_{i,k} \, \]  
+\[ \bigwedge\limits_{i,j,k} e_{i,j,k} \supset n_{i,k} \, \]  
 
 C1: The edge labels are subset of the node label of target compartment.
 
-\[ \bigwedge\limits_{i,q}  e_{i,j,k} \supset a_{j,k} \, \]  
+\[ \bigwedge\limits_{i,q}  e_{i,j,k} \supset n_{j,k} \, \]  
 %C1 =  e_ijk -> aik and e_ijk -> ajk
 
 C2: Self edges are not allowed. 
@@ -95,7 +95,6 @@ F0:  An edge has to have one present molecule. F0 looks redundant.
 F1: If molecule is active on an edge then it should be present on the edge.
 
 \[ \bigwedge\limits_{i,j,q,k} b_{i,j,q,k} \supset e_{i,j,q,k}\, \]
-
 
 
 \subsubsection{Steady state specification}
@@ -132,7 +131,7 @@ F4: For an edge to be valid, at least one SNARE pair on the vesicle and target c
 
 F5: To ensure that fusion respects the graph structure by the edge under consideration, it should not be possible to fuse with any other node.
 
-\[ \bigwedge\limits_{i,j,k} b_{i,j,k} \supset \neg \bigvee_{j \neq j^{\prime}, k^{\prime\prime}} ( a_{j^{\prime},k^{\prime\prime}} \land p_{k,k^{\prime\prime}}) \, \]
+\[ \bigwedge\limits_{i,j,q,k} b_{i,j,q,k} \supset \neg \bigvee_{j \neq j^{\prime}, k^{\prime\prime}} ( a_{j^{\prime},k^{\prime\prime}} \land p_{k,k^{\prime\prime}}) \, \]
 
 
 \subsubsection{Connectivity}
