@@ -44,15 +44,33 @@ for i in range(6):
 #----------------------------------------------------
 # Constraint generation 
 edge = [ [ [ Bool ("e_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
-
 E = [ edge[i][j][q] for i in range(N) for j in range(N) for q in range(Q) if i != j]
 
 #print len(E)
 #print E
 
-funE = len(E)
-lenE = len(E) + 1
+# Un_Skolemized dumped edges and reachability.
+dump = [ [ [Bool ("d_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
+DX = [ dump[i][j][q] for i in range(N) for j in range(N) for k in range(Q) if i != j ]
 
+#print DX
+#print len(DX)
+
+r1 = [ [Bool ("r1_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
+RX = [ r1[i][j] for i in range(N) for j in range(N) if i != j ]
+
+#print RX
+#print len(RX)
+
+funE = len(E) + len(DX) + len(RX)
+lenE = funE + 1
+
+#print funE
+#print lenE
+#sys.exit(0)
+
+# Define nodeSort that will server the purpose of the total number
+# Arguments skolem nodes,edges takes.
 nodeSort = [BoolSort() for x in range(lenE)]
 #print nodeSort
 #print len(nodeSort)
@@ -68,20 +86,23 @@ for i in range(N):
         nxx = fnode[i][k] 
         for t in E:
             s.append( t )
+        for tt in DX:
+            s.append( tt )
+        for ttt in RX:
+            s.append( ttt )
         node[i][k] = nxx( s )
 
 # Skolemized dumped edges
-fdump = [ [ [Function ("fd_{}_{}_{}".format(i,j,q), *nodeSort) for q in range(Q)] for j in range(N)] for i in range(N)]
-dump = [ [ [Bool ("d_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
-
-for i in range(N):
-    for j in range(N):
-        for q in range(Q): 
-            s = []
-            nxx = fdump[i][j][q] 
-            for t in E:
-                s.append( t )
-            dump[i][j][q] = nxx( s )
+#fdump = [ [ [Function ("fd_{}_{}_{}".format(i,j,q), *nodeSort) for q in range(Q)] for j in range(N)] for i in range(N)]
+#for i in range(N):
+#    for j in range(N):
+#        for q in range(Q): 
+#            s = []
+#            nxx = fdump[i][j][q] 
+#            for t in E:
+#                s.append( t )
+#            dump[i][j][q] = nxx( s )
+#
 
 # Skolemized Active node 
 factive_node = [ [Function ("fa_{}_{}".format(i,k), *nodeSort) for k in range(M)] for i in range(N)]
@@ -93,6 +114,10 @@ for i in range(N):
         nxx = factive_node[i][k] 
         for t in E:
             s.append( t )
+        for tt in DX:
+            s.append( tt )
+        for ttt in RX:
+            s.append( ttt )
         active_node[i][k] = nxx( s )
 
 # Skolemized presence_edges :
@@ -107,6 +132,10 @@ for i in range(N):
                 nxx = fpresence_edge[i][j][q][k] 
                 for t in E:
                     s.append( t )
+                for tt in DX:
+                    s.append( tt )
+                for ttt in RX:
+                    s.append( ttt )
                 presence_edge[i][j][q][k] = nxx( s )
 
 
@@ -122,6 +151,10 @@ for i in range(N):
                 nxx = factive_edge[i][j][q][k] 
                 for t in E:
                     s.append( t )
+                for tt in DX:
+                    s.append( tt )
+                for ttt in RX:
+                    s.append( ttt )
                 active_edge[i][j][q][k] = nxx( s )
 
 
@@ -137,6 +170,10 @@ for i in range(N):
                 nxx = fr[i][j][k][z] 
                 for t in E:
                     s.append( t )
+                for tt in DX:
+                    s.append( tt )
+                for ttt in RX:
+                    s.append( ttt )
                 r[i][j][q][z] = nxx( s )
 
 # Skolemized pairing matrix
@@ -149,20 +186,24 @@ for k in range(M):
         s  = []
         for t in E:
             s.append( t )
+        for tt in DX:
+            s.append( tt )
+        for ttt in RX:
+            s.append( ttt )
         p[k][k1] = nxx( s )  
          
 # Skolemized dReachable
-fr1 = [ [Function ("fr1_{}_{}".format(i,j), *nodeSort) for j in range(N)] for i in range(N)]
-r1 = [ [Bool ("r1_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
+#fr1 = [ [Function ("fr1_{}_{}".format(i,j), *nodeSort) for j in range(N)] for i in range(N)]
+#r1 = [ [Bool ("r1_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
 
-for i in range(N):
-    for j in range(N):
-        nxx = fr1[i][j]
-        s  = []
-        for t in E:
-            s.append( t )
-        r1[i][j] = nxx( s )  
-
+#for i in range(N):
+#    for j in range(N):
+#        nxx = fr1[i][j]
+#        s  = []
+#        for t in E:
+#            s.append( t )
+#        r1[i][j] = nxx( s )  
+#
 sorts = [BoolSort() for m in range( M + funE )]
 #print sorts
 #print 'M = ' + str(M) + 'funE =' + str(funE) 
@@ -248,6 +289,10 @@ def f_bn():
             del s[:]
             for t in E:
                 s.append( t )
+            for tt in DX:
+                s.append( tt )
+            for ttt in RX:
+                s.append( ttt )
             for k1 in range(M):
                 if k1 == k:
                     continue
@@ -274,6 +319,10 @@ def f_be():
                     f = f_e[k]
                     for t in E:
                         s.append( t )
+                    for tt in DX:
+                         s.append( tt )
+                    for ttt in RX:
+                        s.append( ttt )
                     for k1 in range(M):
                         if k1 == k:
                             continue
@@ -749,12 +798,14 @@ D4 = And(A_list)
 #Init3 = (p[1][2] == False)
 # Create Solver and add constraints in it.
 
-A1_list = [A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4]
+A1_list = [A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5]
+A2_list = [D0,D1,D2,D3,D4]
 Full = And( A1_list )
+Semi = And( A2_list ) 
 
 #print Full
 
-QF = ForAll( QVars , Full )
+QF = ForAll( QVars, Implies (Semi, Full))
 #print QF
 #sys.exit(0)
 
@@ -822,19 +873,19 @@ def dump_dot( filename, m ) :
 
 if s.check() == sat:
     m = s.model()
+    print m
 #    print "Printing the model..."
 #    for d in m.decls():
 #       print "{} = {}".format(d.name(), m[d])
-#    print m
-    r = [ [ m[p[i][j]] for j in range(M) ]
-          for i in range(M) ]
-    s = [[ [ [m[active_edge[i][j][q][k]] for k in range (M)] for q in range(Q)] for j in range(N) ] for i in range(N) ]
-    t = [ [ [m[edge[i][j][q]]  for q in range(Q)] for j in range(N) ]
-          for i in range(N) ]
-    print "\n Pairing matrix p[{}][{}] = ".format(M,M)
-    print_matrix(r)
-    print "\n Edge  e[{}][{}] = ".format(N,N)
-    print t
+#    print 
+#    xc = [ [ m[p[i][j]] for j in range(M) ] for i in range(M) ]
+   # s = [[ [ [m[active_edge[i][j][q][k]] for k in range (M)] for q in range(Q)] for j in range(N) ] for i in range(N) ]
+   # t = [ [ [m[edge[i][j][q]]  for q in range(Q)] for j in range(N) ]
+   #       for i in range(N) ]
+  #  print "\n Pairing matrix p[{}][{}] = ".format(M,M)
+  #  print_matrix(xc)
+    #print "\n Edge  e[{}][{}] = ".format(N,N)
+    #print t
     dump_dot( "/tmp/bio.dot", m )
 else:
     print "failed to solve"
