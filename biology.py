@@ -65,6 +65,9 @@ RX = [ r1[i][j] for i in range(N) for j in range(N) if i != j ]
 funE = len(E) + len(DX) + len(RX)
 lenE = funE + 1
 
+QVars = E + RX + DX
+print QVars
+
 #print funE
 #print lenE
 #sys.exit(0)
@@ -84,12 +87,8 @@ for i in range(N):
     for k in range(M):
         s = []
         nxx = fnode[i][k] 
-        for t in E:
+        for t in QVars:
             s.append( t )
-        for tt in DX:
-            s.append( tt )
-        for ttt in RX:
-            s.append( ttt )
         node[i][k] = nxx( s )
 
 # Skolemized dumped edges
@@ -112,12 +111,8 @@ for i in range(N):
     for k in range(M):
         s = []
         nxx = factive_node[i][k] 
-        for t in E:
+        for t in QVars:
             s.append( t )
-        for tt in DX:
-            s.append( tt )
-        for ttt in RX:
-            s.append( ttt )
         active_node[i][k] = nxx( s )
 
 # Skolemized presence_edges :
@@ -130,12 +125,8 @@ for i in range(N):
             for k in range(M):
                 s = []
                 nxx = fpresence_edge[i][j][q][k] 
-                for t in E:
+                for t in QVars:
                     s.append( t )
-                for tt in DX:
-                    s.append( tt )
-                for ttt in RX:
-                    s.append( ttt )
                 presence_edge[i][j][q][k] = nxx( s )
 
 
@@ -149,12 +140,8 @@ for i in range(N):
             for k in range(M):
                 s = []
                 nxx = factive_edge[i][j][q][k] 
-                for t in E:
+                for t in QVars:
                     s.append( t )
-                for tt in DX:
-                    s.append( tt )
-                for ttt in RX:
-                    s.append( ttt )
                 active_edge[i][j][q][k] = nxx( s )
 
 
@@ -168,12 +155,8 @@ for i in range(N):
             for z in range(N-1):
                 s = []
                 nxx = fr[i][j][k][z] 
-                for t in E:
+                for t in QVars:
                     s.append( t )
-                for tt in DX:
-                    s.append( tt )
-                for ttt in RX:
-                    s.append( ttt )
                 r[i][j][q][z] = nxx( s )
 
 # Skolemized pairing matrix
@@ -184,12 +167,8 @@ for k in range(M):
     for k1 in range(M):
         nxx = fp[k][k1]
         s  = []
-        for t in E:
+        for t in QVars:
             s.append( t )
-        for tt in DX:
-            s.append( tt )
-        for ttt in RX:
-            s.append( ttt )
         p[k][k1] = nxx( s )  
          
 # Skolemized dReachable
@@ -244,7 +223,6 @@ f_e = [Function ("ae_{}".format(m), *sorts) for m in range(M)]
 #
 #print f_e
 
-QVars = E 
 
 # God! this Skolemization ended ----------------
 
@@ -287,12 +265,8 @@ def f_bn():
         f = f_n[k]
         for i in range(N):
             del s[:]
-            for t in E:
+            for t in QVars:
                 s.append( t )
-            for tt in DX:
-                s.append( tt )
-            for ttt in RX:
-                s.append( ttt )
             for k1 in range(M):
                 if k1 == k:
                     continue
@@ -317,12 +291,8 @@ def f_be():
                 for k in range(M):
                     del s[:]
                     f = f_e[k]
-                    for t in E:
+                    for t in QVars:
                         s.append( t )
-                    for tt in DX:
-                         s.append( tt )
-                    for ttt in RX:
-                        s.append( ttt )
                     for k1 in range(M):
                         if k1 == k:
                             continue
@@ -805,7 +775,7 @@ Semi = And( A2_list )
 
 #print Full
 
-QF = ForAll( QVars, Implies (Semi, Full))
+QF = ForAll( QVars, And (Semi, Full))
 #print QF
 #sys.exit(0)
 
