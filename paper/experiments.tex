@@ -4,16 +4,55 @@ in the python interface of $\zthree$.
 Our implementation supports several versions of the
 models of vesicle traffic systems.
 \todo{describe the variations}
-\begin{itemize}
-\item 
-\end{itemize}
+
+\begin{enumerate}[label=\Alph*]
+\item Every present molecule is considered to be active.
+\item Activity of molecules on the nodes is based on Boolean function of presence of other molecules. 
+\item Activity of molecules on the edges is based on Boolean function of presence of other molecules
+\item Activity of molecules both on the edges and nodes is based on Boolean function of presence of other molecules.
+\item Activity of molecules on the edges is driven by pairing inhibition.
+\item Activity of molecules on the nodes is based on Boolean function of presence of other molecules and on edge by pairing inhibition.
+\item Version F with additional constraint that every edge is distinct.
+%\item Activity of molecules on the nodes is based on Boolean function of presence of other molecules and on edge by pairing inhibition with every edge is distinct.
+%\item Activity of molecules on the nodes is based on Boolean function of presence of other moleculess and on edge by pairing inhibition with self-edges are allowed.
+\item Version F but self-edges are allowed.
+\end{enumerate}
 
 We have applied the tool for the above variations
 for searching the vesicle traffic systems that satisfies
 their corresponding properties.
-%
+
+
 \input{tbl-qf-graph}
 In table~\ref{tbl:qf-results} 
+\b PARTIAL ...
+
+\begin{table}[!ht]
+\centering
+\def\arraystretch{1.6}
+\caption{
+{\bf Activity regulation of molecules and corresponding connectivity of the graph.}}
+  \begin{tabular}{|c|l|l|c|c|}
+    \hline
+  \multirow{2}{*}{\textbf{Sr.No}}  & \multicolumn{2}{c|}{\textbf{Activity mechanism}} &  \multicolumn{2}{c|}{\textbf{Graph connectivity}}  \\
+    % \hline
+    % \textbf{Inactive Modes} & \textbf{Description}\\
+    \cline{2-5}
+    {} & \multirow{1}{*} {\bf{ On compartment}} & \multirow{1}{*} {\bf{On vesicle}}  & \textbf{\textbf{Least}} & \textbf{Highest}\\
+    %\hhline{~--}
+    \hline
+E. & Boolean function & Boolean function & 2-connected & 3-connected \\ \hline
+C. & None & Boolean function & 3-connected & 3-connected \\  \hline
+F. & Boolean function & Pairing inhibition & 4-connected & 4-connected \\ \hline
+D. & None & Pairing inhibition & No graph & No graph \\ \hline
+B. & Boolean function & None & No graph & No graph \\ \hline
+A. & None & None & No graph & No graph \\ \hline
+G. & Boolean function & Every edge is distict & 3-connected & 3-connected \\ \hline
+H. & Self edges are allowed & Boolean funcion & No-idea & No-idea \\ \hline
+
+  \end{tabular}
+\label{table1}
+\end{table}
 
 \todo{Make table for all sizes and variants of the tool}
 

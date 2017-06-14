@@ -37,29 +37,28 @@ Basic notation for the formula we are trying to generate.
 \end{enumerate}
 
 \subsubsection{Regulation on nodes and edges}
-Regulation of a model is based on the kind of the model under consideration. for example model 1 (-V 1) has two different arbitrary Boolean function dictating the activity of the molecules on edge and nodes and for variation 3 (-V 3) activity on edge is driven by SNARE-SNARE inhibition.  
+Regulation of a model is based on the kind of the model under consideration. for example model 1 (-V 1) has two different arbitrary Boolean function dictating the activity of the molecules on edge and nodes and for variation 3 (-V 3) activity on edge is driven by pairing inhibition.  
 
 We have build constraints A0, A1 for these two regulations. \newline
 
 A0: No regulation on nodes.
 \[ \bigwedge\limits_{i,k} n_{i,k} == a_{i,k} \, \]  
 
-A1: No regulation on edges.
-\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} == b_{i,j,q,k} \, \]  
-
 A0: Boolean regulation on nodes. Activity of a molecule k on a node is defined as a Boolean function of presence of other molecule present on that node.
-\[ \bigwedge\limits_{i,k} n_{i,k} \supset a_{i,k} ==   f_n[k] (\bigvee_{ k' != k} n_{i,k'}) \, \]  
+\[ \bigwedge\limits_{i,k} n_{i,k} \supset a_{i,k} ==   f_n[k] (\bigvee_{ k' != k} n_{i,k'}) \, \]
+
+A1: No regulation on edges.
+\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} == b_{i,j,q,k} \, \]    
 
 A1: Boolean regulation on edges. Activity of a molecule k on a node is defined as a Boolean function of presence of other molecule present on that node.
 \[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} \supset b_{i,j,q,k} == f_e[k](\bigvee_{k' != k} e_{i,j,q,k'}) \, \]  
 
-A1: SNARE-SNARE inhibition. Inhibition of the edges are driven by the pairing matrix.
+A1: Pairing inhibition. Inhibition of the edges are driven by the pairing matrix.
 \[ \bigwedge\limits_{i,j,q, k}  (e_{i,j,q,k} \land [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset \neg b_{i,j,q,k}) \, \]  
 
 \[ \bigwedge\limits_{i,j, q, k}  (e_{i,j,q,k} \land \neg [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset b_{i,j,q,k}) \, \]  
 
-\subsubsection{Basic constraints on the edges and nodes}
-The edge labels are subset of the node label of source and target compartment. \newline
+\subsubsection{Constraints on the structure of the edges, nodes and pairing matrix}
 
 C0: The edge labels are subset of the node label of source compartment.
 
@@ -83,10 +82,8 @@ C5: Activity on the node. A molecule should be present to be active on a node.
 
 % - F0: b(i,j,k) $\supset$ e(i,j,k)
 
-
-
-\subsubsection{Main constraints}
-Main constraints to be followed. \newline
+\subsubsection{Constraints on presence and activity of the molecule}
+Few additional constrints are required on the molesules presence and activity. \newline
 
 F0:  An edge has to have one present molecule. F0 looks redundant.
 
@@ -96,13 +93,12 @@ F1: If molecule is active on an edge then it should be present on the edge.
 
 \[ \bigwedge\limits_{i,j,q,k} b_{i,j,q,k} \supset e_{i,j,q,k}\, \]
 
+\subsubsection{Constraints for stability condition}
+The whole cell should be in stable condition i.e global flow of the molecule is balanced at every point. Each molecule leaving the node on a vesicle should come back to its source node in a cycle, i.e., \textbf{for every molecule leaving the node there exists a cycle with that molecule present on \textit{each of the edges and nodes} of the path taken}.
 
-\subsubsection{Steady state specification}
-Each molecule leaving the node on a vesicle should come back to its source node in a cycle, i.e., \textbf{for every molecule leaving the node there exists a cycle with that molecule present on \textit{each of the edges and nodes} of the path taken}.
-
-\subsubsection{Reachability definition and stability condition}
+\bf{Reachability definition and stability condition}
+We have encoded this requiremnt by using reachability definition. 
 If molecule is active on an edge then it should be present on the edge. \newline
-
 
 F3: stability condition. Source node is reachable by target node with that molecule present in p steps.
 
@@ -116,13 +112,13 @@ F2: Reachability definition.
 \[ \bigwedge\limits_{i,j,k,p} r_{i,j,k,p} \supset (\bigvee_{q} \, e_{i,j,q,k} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,k}) \land r_{i^{\prime},j,k,p-1} ) \, \]
 
 
-\subsubsection{ Fusion rule Formula}
+\subsubsection{Fusion rule constraints}
 
 Fusion rules consist of two different mechanisms.
 
 \begin{enumerate}
-\item  A \textbf{SNARE pairing mechanism} which determines compatible Q-R pairs on vesicles and compartments that can cause fusion.
-\item \textbf{Regulatory mechanisms} on edges and on nodes (possibly distinct) which regulate SNARE activity based on the presence/absence of other molecules on the corresponding node or edge.
+\item  A \textbf{Pairing mechanism} which determines compatible Q-R pairs on vesicles and compartments that can cause fusion.
+\item \textbf{Regulatory mechanisms} on edges and on nodes (possibly distinct) which regulate molecules activity based on the presence/absence of other molecules on the corresponding node or edge.
 \end{enumerate}
 
 F4: For an edge to be valid, at least one SNARE pair on the vesicle and target compartment must be active, and have a non-zero entry in the pairing matrix.  
@@ -134,7 +130,7 @@ F5: To ensure that fusion respects the graph structure by the edge under conside
 \[ \bigwedge\limits_{i,j,q,k} b_{i,j,q,k} \supset \neg \bigvee_{j \neq j^{\prime}, k^{\prime\prime}} ( a_{j^{\prime},k^{\prime\prime}} \land p_{k,k^{\prime\prime}}) \, \]
 
 
-\subsubsection{Connectivity}
+\subsubsection{Graph connectivity constraints}
 To check the whether that n connected is necessary condition, we remove (drop) n edges from the graph and if it disconnects the graph and we get an assignment we have a n connected satisfying graph. We can go down or up using -C \_ option.  \newline 
 
 D0: Only present edges can be dropped.

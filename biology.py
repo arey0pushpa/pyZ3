@@ -51,21 +51,23 @@ E = [ edge[i][j][q] for i in range(N) for j in range(N) for q in range(Q) if i !
 
 # Un_Skolemized dumped edges and reachability.
 dump = [ [ [Bool ("d_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
-DX = [ dump[i][j][q] for i in range(N) for j in range(N) for k in range(Q) if i != j ]
+#DX = [ dump[i][j][q] for i in range(N) for j in range(N) for k in range(Q) if i != j ]
 
 #print DX
 #print len(DX)
 
 r1 = [ [Bool ("r1_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
-RX = [ r1[i][j] for i in range(N) for j in range(N) if i != j ]
+#RX = [ r1[i][j] for i in range(N) for j in range(N) if i != j ]
 
 #print RX
 #print len(RX)
 
-funE = len(E) + len(DX) + len(RX)
+funE = len(E)
+#funE = len(E) + len(DX) + len(RX)
 lenE = funE + 1
 
-QVars = E + RX + DX
+QVars = E
+#QVars = E + RX + DX
 print QVars
 
 #print funE
@@ -80,17 +82,17 @@ nodeSort = [BoolSort() for x in range(lenE)]
 
 #print nodeSort 
 # Skolemized presence edge
-fnode = [ [Function ("fn_{}_{}".format(i,k), *nodeSort) for k in range(M)] for i in range(N)]
+#fnode = [ [Function ("fn_{}_{}".format(i,k), *nodeSort) for k in range(M)] for i in range(N)]
 node = [ [Bool ("n_{}_{}".format(i,k)) for k in range(M)] for i in range(N)]
 
-for i in range(N):
-    for k in range(M):
-        s = []
-        nxx = fnode[i][k] 
-        for t in QVars:
-            s.append( t )
-        node[i][k] = nxx( s )
-
+#for i in range(N):
+#    for k in range(M):
+#        s = []
+#        nxx = fnode[i][k] 
+#        for t in QVars:
+#            s.append( t )
+#        node[i][k] = nxx( s )
+#
 # Skolemized dumped edges
 #fdump = [ [ [Function ("fd_{}_{}_{}".format(i,j,q), *nodeSort) for q in range(Q)] for j in range(N)] for i in range(N)]
 #for i in range(N):
@@ -104,73 +106,73 @@ for i in range(N):
 #
 
 # Skolemized Active node 
-factive_node = [ [Function ("fa_{}_{}".format(i,k), *nodeSort) for k in range(M)] for i in range(N)]
+#factive_node = [ [Function ("fa_{}_{}".format(i,k), *nodeSort) for k in range(M)] for i in range(N)]
 active_node = [ [Bool ("a_{}_{}".format(i,k)) for k in range(M)] for i in range(N)]
 
-for i in range(N):
-    for k in range(M):
-        s = []
-        nxx = factive_node[i][k] 
-        for t in QVars:
-            s.append( t )
-        active_node[i][k] = nxx( s )
-
+#for i in range(N):
+#    for k in range(M):
+#        s = []
+#        nxx = factive_node[i][k] 
+#        for t in QVars:
+#            s.append( t )
+#        active_node[i][k] = nxx( s )
+#
 # Skolemized presence_edges :
-fpresence_edge = [ [ [ [Function ("fe_{}_{}_{}_{}".format(i,j,q,k), *nodeSort) for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
+#fpresence_edge = [ [ [ [Function ("fe_{}_{}_{}_{}".format(i,j,q,k), *nodeSort) for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
 presence_edge = [ [ [ [Bool ("e_{}_{}_{}_{}".format(i,j,q,k)) for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
 
-for i in range(N):
-    for j in range(N):
-        for q in range(Q):
-            for k in range(M):
-                s = []
-                nxx = fpresence_edge[i][j][q][k] 
-                for t in QVars:
-                    s.append( t )
-                presence_edge[i][j][q][k] = nxx( s )
-
+#for i in range(N):
+#    for j in range(N):
+#        for q in range(Q):
+#            for k in range(M):
+#                s = []
+#                nxx = fpresence_edge[i][j][q][k] 
+#                for t in QVars:
+#                    s.append( t )
+#                presence_edge[i][j][q][k] = nxx( s )
+#
 
 # Skolemized Active edge 
-factive_edge = [ [ [ [Function ("fb_{}_{}_{}_{}".format(i,j,q,k), *nodeSort)  for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
+#factive_edge = [ [ [ [Function ("fb_{}_{}_{}_{}".format(i,j,q,k), *nodeSort)  for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
 active_edge = [ [ [ [Bool ("b_{}_{}_{}_{}".format(i,j,q,k)) for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
 
-for i in range(N):
-    for j in range(N):
-        for q in range(Q):
-            for k in range(M):
-                s = []
-                nxx = factive_edge[i][j][q][k] 
-                for t in QVars:
-                    s.append( t )
-                active_edge[i][j][q][k] = nxx( s )
-
+#for i in range(N):
+#    for j in range(N):
+#        for q in range(Q):
+#            for k in range(M):
+#                s = []
+#                nxx = factive_edge[i][j][q][k] 
+#                for t in QVars:
+#                    s.append( t )
+#                active_edge[i][j][q][k] = nxx( s )
+#
 
 # Skolemized reachability.
-fr = [ [ [ [Function ("fr_{}_{}_{}_{}".format(i,j,k,z), *nodeSort) for z in range(N-1)] for k in range(M)] for j in range(N)] for i in range (N)]
+#fr = [ [ [ [Function ("fr_{}_{}_{}_{}".format(i,j,k,z), *nodeSort) for z in range(N-1)] for k in range(M)] for j in range(N)] for i in range (N)]
 r = [ [ [ [Bool ("r_{}_{}_{}_{}".format(i,j,k,z)) for z in range(N-1)] for k in range(M)] for j in range(N)] for i in range (N)]
 
-for i in range(N):
-    for j in range(N):
-        for k in range(M):
-            for z in range(N-1):
-                s = []
-                nxx = fr[i][j][k][z] 
-                for t in QVars:
-                    s.append( t )
-                r[i][j][q][z] = nxx( s )
-
+#for i in range(N):
+#    for j in range(N):
+#        for k in range(M):
+#            for z in range(N-1):
+#                s = []
+#                nxx = fr[i][j][k][z] 
+#                for t in QVars:
+#                    s.append( t )
+#                r[i][j][q][z] = nxx( s )
+#
 # Skolemized pairing matrix
-fp = [ [Function ("fp_{}_{}".format(k,k1), *nodeSort) for k1 in range(M)] for k in range(M)]
+#fp = [ [Function ("fp_{}_{}".format(k,k1), *nodeSort) for k1 in range(M)] for k in range(M)]
 p = [ [Bool ("p_{}_{}".format(k,k1)) for k1 in range(M)] for k in range(M)]
 
-for k in range(M):
-    for k1 in range(M):
-        nxx = fp[k][k1]
-        s  = []
-        for t in QVars:
-            s.append( t )
-        p[k][k1] = nxx( s )  
-         
+#for k in range(M):
+#    for k1 in range(M):
+#        nxx = fp[k][k1]
+#        s  = []
+#        for t in QVars:
+#            s.append( t )
+#        p[k][k1] = nxx( s )  
+#         
 # Skolemized dReachable
 #fr1 = [ [Function ("fr1_{}_{}".format(i,j), *nodeSort) for j in range(N)] for i in range(N)]
 #r1 = [ [Bool ("r1_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
@@ -725,7 +727,7 @@ for i in range(N):
             continue
         rijji = Or(r1[i][j],r1[j][i])
         D3 = And( rijji, D3) 
-D3 = Not(D3)
+#D3 = Not(D3)
 
 print ' '
 #print D4
@@ -768,10 +770,11 @@ D4 = And(A_list)
 #Init3 = (p[1][2] == False)
 # Create Solver and add constraints in it.
 
-A1_list = [A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5]
-A2_list = [D0,D1,D2,D3,D4]
-Full = And( A1_list )
-Semi = And( A2_list ) 
+# C4 ??
+A1_list = [D0,D1,D2,D3,D4, C1,C2,C4,F0,F1,F2,F3]
+A2_list = [A0,A1, F4,F5, C5]
+Full = And( A2_list )
+Semi = And( A1_list ) 
 
 #print Full
 
