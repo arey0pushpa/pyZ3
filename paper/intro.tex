@@ -7,18 +7,14 @@ Total two pages
 
 \item \srivas{Graph to previous encoding}
 
-\item \ashu{Graph to new encoding}
-
-\item \ashu{Experiments}
-
-\item \ashu{Contribution summary}
-
 \end{itemize}
 
 % \noindent
 
 
 % What is vesicle traffic systems
+
+vesicle traffic systems(VTS)
 
 % Graph properties of the systems
 
@@ -29,6 +25,38 @@ Total two pages
 
 %
 
+In this paper, we have developed a novel SAT encoding for
+searching a VTS that satisfy the given properties.
+%
+We improved the encoding of some of the conditions for VTSs.
+%
+In the earlier implementation, reachability was encoded as
+by enumeration of paths.
+%
+In our encoding, we have recursively defined the reachability condition
+such that that we avoid exponential enumeration.
+%
+We have also encoded $k$-connectivity in the similar fashion and
+avoided a blowup in the formula size.
+%
+
+We have implemented the encoding using Z3~\cite{z3} python API and searched for
+VTS satisfying various properties upto size \ankit{....} nodes as compare
+earlier tool that could only search graph upto size 6 nodes.
+%
+Since most VTSs in the cells are less than \ankit{....} nodes,
+our tool will be useful for biologists to study VTSs.
+%
+Furthermore, our encoding supports several variations of
+the conditions.
+
+
+The following are the contributions of this work:
+\begin{itemize}
+\item We have added novel encoding reachability and 3-4 connectivity
+\item Direct encoding into the SAT solver
+\item A user friendly and scalable tool based on well known SMT solver Z3
+\end{itemize}
 
 %--------------------- DO NOT ERASE BELOW THIS LINE --------------------------
 
