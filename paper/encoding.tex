@@ -1,15 +1,16 @@
-In this section, we will present our encoding of the search problem.
+In this section, we will present our encoding of the search problem. Every variable is a Boolean bit, for example, n(0,1) represents node 0 with type 1 molecule present. Assignment to the Boolean variable n(0,1) to True will mean that at node 0 type 1 molecule is present. 
 
 
 \subsection{Network description}
 
 Basic notation for the formula we are trying to generate.
 \begin{enumerate}
-\item edge = e(i,j,q)
-      There is an qth edge between node i and j.
-      
+
+\item edge = e(i,j,q)      
+      we will assign e(i,j,q) for a qth edge between node i and j.
+
 \item dump = d(i,j,q)
-       drop edge(i,j,q) from the graph. 
+      to represent drop of edge(i,j,q) from the graph we will use d(i,j,q).        
        
 \item presence node = n(i,k) 
 	  kth molecule is present on the node i.
@@ -37,28 +38,29 @@ Basic notation for the formula we are trying to generate.
 \end{enumerate}
 
 \subsubsection{Regulation on nodes and edges}
-Regulation of a model is based on the kind of the model under consideration. for example model 1 (-V 1) has two different arbitrary Boolean function dictating the activity of the molecules on edge and nodes and for variation 3 (-V 3) activity on edge is driven by pairing inhibition.  
+Regulation of the molecules is based on the kind of the model under consideration. For example, model 1 (-V 1) has two different arbitrary Boolean functions dictating the activity of the molecules on edge and nodes. For variation 3 (-V 3) activity on edge is driven by pairing inhibition.  
 
-We have build constraints A0, A1 for these two regulations. \newline
+We use two Boolean variables A0 and A1 to build these two constraints. \newline
 
-A0: No regulation on nodes.
+A0: No regulation on nodes i.e all the present molecules on the nodes are active.
 \[ \bigwedge\limits_{i,k} n_{i,k} == a_{i,k} \, \]  
 
-A0: Boolean regulation on nodes. Activity of a molecule k on a node is defined as a Boolean function of presence of other molecule present on that node.
+A0: Boolean regulation on nodes. Activity of a molecule k on the node is defined as a Boolean function of presence of other molecule present on that node.
 \[ \bigwedge\limits_{i,k} n_{i,k} \supset a_{i,k} ==   f_n[k] (\bigvee_{ k' != k} n_{i,k'}) \, \]
 
-A1: No regulation on edges.
+A1: No regulation on edges i.e all the present molecules on the edges are active.
 \[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} == b_{i,j,q,k} \, \]    
 
-A1: Boolean regulation on edges. Activity of a molecule k on a node is defined as a Boolean function of presence of other molecule present on that node.
+A1: Boolean regulation on edges. Activity of a molecule k on the node is defined as a Boolean function of presence of other molecule present on that node.
 \[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} \supset b_{i,j,q,k} == f_e[k](\bigvee_{k' != k} e_{i,j,q,k'}) \, \]  
 
-A1: Pairing inhibition. Inhibition of the edges are driven by the pairing matrix.
+A1: Pairing inhibition. The activity of the molecules is defined by inhibition by other molecules based on the pairing matrix. 
 \[ \bigwedge\limits_{i,j,q, k}  (e_{i,j,q,k} \land [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset \neg b_{i,j,q,k}) \, \]  
 
 \[ \bigwedge\limits_{i,j, q, k}  (e_{i,j,q,k} \land \neg [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset b_{i,j,q,k}) \, \]  
 
 \subsubsection{Constraints on the structure of the edges, nodes and pairing matrix}
+A few additional constraints are required on the nodes, edges and pairing matrix to set up the essential conditions. We use Boolean variables C0-C5 to build all these constraints.
 
 C0: The edge labels are subset of the node label of source compartment.
 
@@ -83,9 +85,9 @@ C5: Activity on the node. A molecule should be present to be active on a node.
 % - F0: b(i,j,k) $\supset$ e(i,j,k)
 
 \subsubsection{Constraints on presence and activity of the molecule}
-Few additional constrints are required on the molesules presence and activity. \newline
+Few additional constraints that are required for the molecules presence and activity is build using F0 and F1. \newline
 
-F0:  An edge has to have one present molecule. F0 looks redundant.
+F0: An edge has to have one present molecule. F0 looks redundant.
 
 \[ \bigwedge\limits_{i,j,q} \bigvee_k e_{i,j,q,k} \supset e_{i,j,q} \, \]  
 
@@ -94,13 +96,12 @@ F1: If molecule is active on an edge then it should be present on the edge.
 \[ \bigwedge\limits_{i,j,q,k} b_{i,j,q,k} \supset e_{i,j,q,k}\, \]
 
 \subsubsection{Constraints for stability condition}
-The whole cell should be in stable condition i.e global flow of the molecule is balanced at every point. Each molecule leaving the node on a vesicle should come back to its source node in a cycle, i.e., \textbf{for every molecule leaving the node there exists a cycle with that molecule present on \textit{each of the edges and nodes} of the path taken}.
+The whole cell should be in stable condition i.e flow of the molecule is balanced at every point and globally. Each molecule leaving its source node on a vesicle should come back in a cycle. Boolean variable F3 and F2 are used to model these constraints. 
 
-\bf{Reachability definition and stability condition}
-We have encoded this requiremnt by using reachability definition. 
-If molecule is active on an edge then it should be present on the edge. \newline
+\textbf {Reachability definition and stability condition.}
+We have encoded stable condition by using reachability definition. \newline
 
-F3: stability condition. Source node is reachable by target node with that molecule present in p steps.
+F3: Stability condition. For every leaving molecule, the source node is reachable from the target node with that molecule present, in maximum p steps. 
 
 % I have implemented: Changed the implementation in code too.
 %\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} \supset (r_{j,i,k,0}  \lor r_{j,i,k,1} \lor ... \lor r_{j,i,k,p}) \, \]
@@ -108,7 +109,8 @@ F3: stability condition. Source node is reachable by target node with that molec
 % Update: Better 
 \[ \bigwedge\limits_{i,j,k} (\bigvee_{q} e_{i,j,q,k}) \supset (r_{j,i,k,0}  \lor r_{j,i,k,1} \lor ... \lor r_{j,i,k,p}) \, \]
 
-F2: Reachability definition.
+F2: Reachability definition. Node j is reachable from node i with kth molecule present in maximum p steps if either there is a direct edge between i-j with that molecule present or there is a direct edge between $i^{\prime \prime}$ $(i != i^{\prime \prime})$ and j with kth molecule present on that edge and $i^{\prime \prime}$ are reachable from i in p steps. 
+
 \[ \bigwedge\limits_{i,j,k,p} r_{i,j,k,p} \supset (\bigvee_{q} \, e_{i,j,q,k} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,k}) \land r_{i^{\prime},j,k,p-1} ) \, \]
 
 
@@ -117,11 +119,13 @@ F2: Reachability definition.
 Fusion rules consist of two different mechanisms.
 
 \begin{enumerate}
-\item  A \textbf{Pairing mechanism} which determines compatible Q-R pairs on vesicles and compartments that can cause fusion.
-\item \textbf{Regulatory mechanisms} on edges and on nodes (possibly distinct) which regulate molecules activity based on the presence/absence of other molecules on the corresponding node or edge.
+\item  A \textbf{pairing mechanism} which determines compatible Q-R pairs on vesicles and compartments that can cause fusion.
+\item \textbf{regulatory mechanisms} on the edges and nodes (possibly distinct) which regulates molecules activity based on the presence/absence of other molecules on the corresponding node or edge.
 \end{enumerate}
 
-F4: For an edge to be valid, at least one SNARE pair on the vesicle and target compartment must be active, and have a non-zero entry in the pairing matrix.  
+Boolean variable F4 and F5 are used to model these constraints. 
+
+F4: For an edge to be valid, at least one SNARE pair on the vesicle and target compartment must be active and have a non-zero entry in the pairing matrix.  
 
 \[ \bigwedge\limits_{i,j,q} e_{i,j,q} \supset \bigvee_{k,k^{\prime}} (b_{i,j,q,k} \land a_{j,k^{\prime}} \land p_{k,k^{\prime}}) \, \]
 
@@ -131,7 +135,7 @@ F5: To ensure that fusion respects the graph structure by the edge under conside
 
 
 \subsubsection{Graph connectivity constraints}
-To check the whether that n connected is necessary condition, we remove (drop) n edges from the graph and if it disconnects the graph and we get an assignment we have a n connected satisfying graph. We can go down or up using -C \_ option.  \newline 
+To check the whether that n connected is a necessary condition, we remove (drop) n edges from the graph and if it disconnects the graph and we get an assignment we have an n connected satisfying graph. We can go down or up using -C \_ option.  \newline 
 
 D0: Only present edges can be dropped.
 \[ \bigwedge\limits_{i,j,q} d_{i,j,q} \supset e_{i,j,q}  \]
@@ -142,10 +146,28 @@ D1,D2: We are dropping c edges from the graph. exactly c are dropped.
 D3:  Graph becomes disconnected. Ensure that there is no path between some nodes i,j in the underlying undirected graph. Different reachability.
 \[ \bigwedge\limits_{i,j} \neg (r^{\prime}_{i,j} \lor r^{\prime}_{j,i})]  \]
 
-D4: New reachability definition for grph connectedness: dReachable. Node i,j are reachable either if there is a direct edge and its not dropped. 
-Or there is an node i' such that, there is a direct edge between i,i' which is not dropped and i' and j is dReachable.
+D4: New reachability definition for graph connectedness: dReachable. Node i,j are reachable either if there is a direct edge and its not dropped or there is an node $i^{\prime}$ such that, there is a direct edge between i, $i^{\prime}$ which is not dropped and $i^{\prime}$ and j is dReachable.
 
 \[ \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' != i}  r^{\prime}(i',j) \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \supset r^{\prime}(i,j)  \]
+
+\subsection{Creating a solver and solving these constraints}
+We will create a solver and add these build formula using these constraints to that and then check whether there a satisfiable assignment that satisfies all these constraints.
+
+\begin{figure}[ht]
+%\vspace{-3mm}
+\begin{verbatim}
+# Create a solver
+s = Solver()
+# Add these formulas to it.
+s.add(A0, A1, C0, C1, C2, C4, C5, F0, F1, F2, F3, F4, F5, D0, D1, D2, D3)
+
+# Check for the satisfiability assignment.
+print s.check()   
+\end{verbatim}
+\caption{Solving for these constraints.}
+\label{code:motivate}
+\end{figure} 
+
 
 %--------------------- DO NOT ERASE BELOW THIS LINE --------------------------
 
