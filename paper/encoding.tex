@@ -1,9 +1,32 @@
+In this section, we will formally define VTSs as a labelled graph
+and the conditions on the graphs that are discussed in the previous
+section.
+Subsequently, we will present the SAT encoding of the search problems
+for the graphs that satisfies the conditions.
 
 \subsection{Model}
 
+We model VTSs as labelled directed graphs.
+The graph labels both edges and labels with sets of molecules to denote
+the set of molecules present in the node.
+The graph is formally defined as follows.
+
 \begin{df}
-  A VTS $G$ consists of ...... most general model 
+  A VTS $G$ is tuple $(\nodes,\mols,\edges,\nlabel,\pair,\edgef,\nodef)$, where
+  \begin{itemize}
+  \item $\nodes$ is a set of nodes representing compartments in the VTS,
+  \item $\mols$ is the set of molecules flowing in the network, 
+  \item $\nlabel : \nodes \maps \powerset{\mols}$ defines the molecules present in the nodes  
+  \item $ \nodes \times \powerset{\mols} \times \nodes \subseteq \edges$ is the set of edges
+    with molecule sets as labels
+  \item $\pair : \mols \times \mols$ is pairing relating
+  \item $\nodef : \mols \maps \powerset{\mols} \maps \booleans$ is activity maps for nodes
+  \item $\edgef : \mols \maps \powerset{\mols} \maps \booleans $ is activity maps for edges
+  \end{itemize}
 \end{df}
+$\pair$, $\nodef$, and $\edgef$ defines activity of a molecule on nodes and edges.
+A molecule $k$ is {\em active} at node $n$ if $\nodef(k,\nlabel(n))$ is true.
+A molecule $k$ is {\em active} at edges $(n,M',n')$ if $\edgef(k,M')$ is true.
 
 
 Variants of the model : restrictions... 
@@ -17,7 +40,9 @@ State the SAT problem
 
 \subsection{Boolean satisfiability of the problem}
 
-In this section, we will present our encoding of the search problem. Every variable is a Boolean bit, for example, n(0,1) represents node 0 with type 1 molecule present. Assignment to the Boolean variable n(0,1) to True will mean that at node 0 type 1 molecule is present. 
+
+
+Every variable is a Boolean bit, for example, n(0,1) represents node 0 with type 1 molecule present. Assignment to the Boolean variable n(0,1) to True will mean that at node 0 type 1 molecule is present. 
 
 
 \subsection{Network description}
