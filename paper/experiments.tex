@@ -44,36 +44,39 @@ and ... RAM.
 %
 
 %
-$\zthree$ was able to solve the constraints up to 10
+$\zthree$ was able to solve the constraints up to 15
 nodes.
 %
 
 In table~\ref{tbl:qf-results} 
-\b PARTIAL .... Form change is proposed in the table and table will consists of constraints used in the model rather than the model itself. 
+
+
 
 \begin{table}[!ht]
 \centering
 \def\arraystretch{1.6}
 \caption{
 {\bf Activity regulation of molecules and corresponding connectivity of the graph.}}
-  \begin{tabular}{|c|l|l|c|c|}
+  \begin{tabular}{|c|c|c|c|c|}
     \hline
-  \multirow{2}{*}{\textbf{Sr.No}}  & \multicolumn{2}{c|}{\textbf{Activity mechanism}} &  \multicolumn{2}{c|}{\textbf{Graph connectivity}}  \\
+  \multirow{2}{*}{\textbf{Sr.No}}  & \multicolumn{2}{c|}{\textbf{Activity constraint}} &  \multicolumn{2}{c|}{\textbf{Graph connectivity}}  \\
     % \hline
     % \textbf{Inactive Modes} & \textbf{Description}\\
     \cline{2-5}
     {} & \multirow{1}{*} {\bf{ On compartment}} & \multirow{1}{*} {\bf{On vesicle}}  & \textbf{\textbf{Least}} & \textbf{Highest}\\
     %\hhline{~--}
     \hline
-E. & Boolean function & Boolean function & 2-connected & 3-connected \\ \hline
-C. & None & Boolean function & 3-connected & 3-connected \\  \hline
-F. & Boolean function & Pairing inhibition & 4-connected & 4-connected \\ \hline
-D. & None & Pairing inhibition & No graph & No graph \\ \hline
-B. & Boolean function & None & No graph & No graph \\ \hline
-A. & None & None & No graph & No graph \\ \hline
-G. & Boolean function & Every edge is distinct & 3-connected & 3-connected \\ \hline
-H. & Self edges are allowed & Boolean function & No-idea & No-idea \\ \hline
+E. & A\_nb & A\_eb & 2-connected & 3-connected \\ \hline
+C. & A\_nn & A\_eb & 3-connected & 3-connected \\  \hline
+F. & A\_nb & A\_ep & 4-connected & 4-connected \\ \hline
+D. & A\_nn & A\_ep & No graph & No graph \\ \hline
+B. & A\_nb & A\_en & No graph & No graph \\ \hline
+A. & A\_nn & A\_en & No graph & No graph \\ \hline
+G. & A\_nb & A\_eb + C\_ed & 3-connected & 3-connected \\ \hline
+H. & A\_nb & A\_eb + C\_es & No-idea & No-idea \\ \hline
 
+% C_es :Self edges are allowed
+% C_ed : Every edge is distinct 
   \end{tabular}
 \label{table1}
 \end{table}
