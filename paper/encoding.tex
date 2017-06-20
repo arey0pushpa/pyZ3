@@ -17,22 +17,49 @@ The graph is formally defined as follows.
   \item $\nodes$ is a set of nodes representing compartments in the VTS,
   \item $\mols$ is the set of molecules flowing in the network, 
   \item $\nlabel : \nodes \maps \powerset{\mols}$ defines the molecules present in the nodes  
-  \item $ \nodes \times \powerset{\mols} \times \nodes \subseteq \edges$ is the set of edges
+  \item $ \nodes \times (\powerset{\mols}-\emptyset) \times \nodes \subseteq \edges$ is the set of edges
     with molecule sets as labels
   \item $\pair : \mols \times \mols$ is pairing relating
   \item $\nodef : \mols \maps \powerset{\mols} \maps \booleans$ is activity maps for nodes
   \item $\edgef : \mols \maps \powerset{\mols} \maps \booleans $ is activity maps for edges
   \end{itemize}
 \end{df}
-$\pair$, $\nodef$, and $\edgef$ defines activity of a molecule on nodes and edges.
-A molecule $k$ is {\em active} at node $n$ if $\nodef(k,\nlabel(n))$ is true.
-A molecule $k$ is {\em active} at edges $(n,M',n')$ if $\edgef(k,M')$ is true.
+$\pair$ defines which molecules can fuse with which molecules. 
+$\nodef$ and $\edgef$ are used to define activity of molecules on nodes and edges.
+A molecule $k$ is {\em active} at node $n$ if $k \in \nlabel(n)$ and $\nodef(k,\nlabel(n))$ is true.
+A molecule $k$ is {\em active} at edges $(n,M',n')$ if $k \in M'$ and $\edgef(k,M')$ is true.
 
+We will also consider several variations of the model.
+%
+For example, unique edge between two nodes, activity of molecules is not constrained by
+$\nodef$ and $\edgef$, and \ashu{other variations?}.
+%
 
-Variants of the model : restrictions... 
-
-
-formal definition of the properties in the terms of VTS.
+A {\em path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes 
+such that $(n_i,\_,n_{i+1}) \in \edges$ for each $ 0 < i < \ell$.
+%
+For a molecule $m \in M$,
+An {\em $m$-path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes 
+such that $(n_i,M',n_{i+1}) \in \edges$ and $m \in M'$ for
+each $ 0 < i < \ell$.
+%
+A node $n'$ is {\em reachable} from node $n$ in $G$ if there is a path
+$n,...,n'$ in $G$.
+%
+A node $n'$ is {\em $m$-reachable} from node $n$ in $G$ if there is a
+$m$-path $n,...,n'$ in $G$.
+%
+We call $G$ {\em stable} if for each $(n,M',n') \in \edges$ and $m \in M'$,
+$n$ is $m$-reachable from $n'$.
+%
+We call $G$ {\em connected} if for each $n,n' \in \nodes$,
+$n'$ is reachable from $n$ in $G$.
+%
+We call $G$ $k$-connected if for each $E' \subseteq \edges$ and $|E'| < k$,
+$(\nodes,\mols,\edges-E',\nlabel,\pair,\edgef,\nodef)$ is connected.
+%
+An edge $(n,M',n') \in \edges$ {\em fuses} with its destination node $n'$
+if 
 
 
 State the SAT problem
@@ -84,21 +111,21 @@ Basic notation for the formula we are trying to generate.
 \subsubsection{Regulation on nodes and edges}
 Regulation of the molecules is based on the kind of the model under consideration. For example, model 1 (-V 1) has two different arbitrary Boolean functions dictating the activity of the molecules on edge and nodes. For variation 3 (-V 3) activity on edge is driven by pairing inhibition.  
 
-We use two Boolean variables A0 and A1 to build these two constraints. \newline
+We use two Boolean variables A\_* to build these two constraints. \newline
 
-A0: No regulation on nodes i.e all the present molecules on the nodes are active.
+A\_nn: No regulation on nodes i.e all the present molecules on the nodes are active.
 \[ \bigwedge\limits_{i,k} n_{i,k} == a_{i,k} \, \]  
 
-A0: Boolean regulation on nodes. Activity of a molecule k on the node is defined as a Boolean function of presence of other molecule present on that node.
+A\_nb: Boolean regulation on nodes. Activity of a molecule k on the node is defined as a Boolean function of presence of other molecule present on that node.
 \[ \bigwedge\limits_{i,k} n_{i,k} \supset a_{i,k} ==   f_n[k] (\bigvee_{ k' != k} n_{i,k'}) \, \]
 
-A1: No regulation on edges i.e all the present molecules on the edges are active.
+A\_en: No regulation on edges i.e all the present molecules on the edges are active.
 \[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} == b_{i,j,q,k} \, \]    
 
-A1: Boolean regulation on edges. Activity of a molecule k on the node is defined as a Boolean function of presence of other molecule present on that node.
+A\_eb: Boolean regulation on edges. Activity of a molecule k on the node is defined as a Boolean function of presence of other molecule present on that node.
 \[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} \supset b_{i,j,q,k} == f_e[k](\bigvee_{k' != k} e_{i,j,q,k'}) \, \]  
 
-A1: Pairing inhibition. The activity of the molecules is defined by inhibition by other molecules based on the pairing matrix. 
+A\_ep: Pairing inhibition. The activity of the molecules is defined by inhibition by other molecules based on the pairing matrix. 
 \[ \bigwedge\limits_{i,j,q, k}  (e_{i,j,q,k} \land [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset \neg b_{i,j,q,k}) \, \]  
 
 \[ \bigwedge\limits_{i,j, q, k}  (e_{i,j,q,k} \land \neg [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset b_{i,j,q,k}) \, \]  
