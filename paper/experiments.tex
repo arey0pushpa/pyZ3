@@ -35,17 +35,15 @@ output to the user. The graph provides an overview of the vesicle transport syst
 
 \input{tbl-qf-graph}
 
-In table~\ref{tab:qf-graph}, we present the running times
-for the search of vesicle traffic systems of sizes 2 to 10
-that satisfies the model variants.
-%
+In table~\ref{tab:qf-graph}, we present the running times for the search of vesicle traffic systems of sizes 2 to 10 that satisfies the model variants. Formula for N = 10 returns in 45 mins with a SAT result. In CBMC N = 10 results in OUT OF MEMORY. Hence with use of this novel encoding we are able to scale the system to much larger compartmentalized systems especially eukaryotics cells with ten compartments.  This additional cushion of scalability can provide us leverage to ask for more questions that were not previously possible for example what is the minimum number of molecules required to satisfy the vesicular traffic system in eukaryotes.
+
+% REQUIRE COMPARISION WITH CBMC RUN TIME ?
 The experiments were done on a machine with ... processor 
 and ... RAM.
 %
 
 %
-$\zthree$ was able to solve the constraints up to 15
-nodes.
+$\zthree$ was able to solve the constraints up to 15 nodes.
 %
 
 In table~\ref{tbl:qf-results} 
