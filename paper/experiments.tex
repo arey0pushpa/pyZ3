@@ -1,12 +1,15 @@
-We have implemented the encoding of the constraints
-in the python interface of $\zthree$. Basic idea is to constraint the variables such that vesicular transport rules are respected and using constraints (D0-D5) connect this system with the connectivity of the underlying structure (graph). We are interested in both least connectivity that is required for a vesicular transport version to work and least connectivity that guarantees that vesicular transport system with that connectivity will always satisfies the rules.
+Given a system that follows the VTS, we are interested in its connectivity (graph) property. We have implemented the encoding of the constraints in the python interface of $\zthree$. The basic idea is to constraint the variables such that vesicular transport rules are respected and using constraints (D0-D5) reason about the connectivity of the underlying structure (graph). We are interested in both least connectivity requirement (LRC) and least guarantee connectivity (LGC).
+%LCR, that is required for a vesicular transport version to work and least connectivity that guarantees that vesicular transport system with that connectivity will always satisfies the rules.
 
 % Whether a valid vesicular transport system is of certain connectiviity.   
-After creating the formula we ship them directly to the solver without any additional overhead. Besides using the default Z3 solvers we have used for these experiments \ankit{Z3, picoSAT, Lingeling}. The performance of Z3 was ...
+%negation of the property .... STATE THE MEANING OF RESULT.  
+
+%Besides using the default Z3 solvers we have used for these experiments \ankit{Z3, picoSAT, Lingeling}. The performance of Z3 was ...
 %
-Our implementation supports several versions of the
-models of vesicle traffic systems listed in Table 2. Starting from most basic model  \Ankit{add...}
-\todo{describe the variations}
+Our implementation supports several versions of the models of vesicle traffic systems listed in Table 2. Starting from most basic version (A) where every present molecule is considered to be active. Other cases includes different combinations of constraints on the activity on nodes and edges. Most general restriction is activity of the molecule is dependent on the other molecule present on the node (a Boolean function of N-1 parameters) (B,C,D,F,G,H). In very special case (E,F,G,H) activity of the molecules on the edges is dictated by pairing matrix, we call this process ``pairing inhibition".
+
+% DIVIDE INTO COLUMNS and TALK ABOUT A/1 or A/0.
+%\todo{describe the variations}
 
 \begin{enumerate}[label=\Alph*]
 \item Every present molecule is considered to be active.
@@ -21,19 +24,14 @@ models of vesicle traffic systems listed in Table 2. Starting from most basic mo
 \item Version F but self-edges are allowed.
 \end{enumerate}
 %
-Our tool allows user to choose a model and the size of
-the network besides other parameters like connectivity and number of parallel edges. 
-%
-Our tool uses Z3 python interface to build the needed constraints and applies $\zthree$
-on the constraints. \Ankit{In other solver variations ...}
-%
-Our tool also translates the model found by $\zthree$
-into a vesicle traffic system and presents a visual
-output to the user. The graph provides an overview of the vesicle transport system with directed labeled edges and nodes providing the complete information about the shown graph. The output graph will satisfy the underlying rules of the system, so it is a valid vesicle transport network.
-
 We have applied the tool for the above variations for searching the vesicle traffic systems that satisfies
-their corresponding properties. In case the solver finds an satisfying assignment to the generated formula i
+their corresponding properties. Our tool allows user to choose a model and the size of the network besides other parameters like connectivity and number of parallel edges. Our tool uses Z3 python interface to build the needed constraints and applies $\zthree$ on the constraints.
 
+After creating the formula using different Boolean variables we ship them directly to the solver. In case of a satisfying (SAT) assignment of the added constraints the Z3 theorem prover gives a model with the variable assignment. In case no possible satisfying assignment the solver returns UNSAT.
+%
+% \Ankit{In other solver variations ...}
+Our tool also translates the model found by $\zthree$ into a vesicle traffic system and presents a visual
+output to the user. The graph provides an overview of the vesicle transport system with directed labeled edges and nodes providing the complete information about the shown graph. The output graph will satisfy the underlying rules of the system, so it is a valid vesicle transport network. Dashed lines are used in the resultant visual network output to specify which edges edges are dropped to make the graph disconnected specifying the connectivity of the graph.
 
 \input{tbl-qf-graph}
 
