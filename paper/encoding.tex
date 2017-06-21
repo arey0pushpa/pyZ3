@@ -12,27 +12,36 @@ the set of molecules present in the node.
 The graph is formally defined as follows.
 
 \begin{df}
-  A VTS $G$ is tuple $(\nodes,\mols,\edges,\nlabel,\pair,\edgef,\nodef)$, where
+  A VTS $G$ is tuple $(\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$, where
   \begin{itemize}
   \item $\nodes$ is a set of nodes representing compartments in the VTS,
   \item $\mols$ is the set of molecules flowing in the network, 
   \item $\nlabel : \nodes \maps \powerset{\mols}$ defines the molecules present in the nodes  
   \item $ \nodes \times (\powerset{\mols}-\emptyset) \times \nodes \subseteq \edges$ is the set of edges
     with molecule sets as labels
-  \item $\pair : \mols \times \mols$ is pairing relating
+  \item $\pairs : \mols \times \mols$ is pairing relating
   \item $\nodef : \mols \maps \powerset{\mols} \maps \booleans$ is activity maps for nodes
   \item $\edgef : \mols \maps \powerset{\mols} \maps \booleans $ is activity maps for edges
   \end{itemize}
 \end{df}
-$\pair$ defines which molecules can fuse with which molecules. 
-$\nodef$ and $\edgef$ are used to define activity of molecules on nodes and edges.
-A molecule $k$ is {\em active} at node $n$ if $k \in \nlabel(n)$ and $\nodef(k,\nlabel(n))$ is true.
-A molecule $k$ is {\em active} at edges $(n,M',n')$ if $k \in M'$ and $\edgef(k,M')$ is true.
+$\pairs$ defines which molecules can fuse with which molecules.
+%
+Let $\pairs(M')$ denote $\{m|(m,m') \in P \text{ and } m' \in M'\}$.
+%
+$\nodef$ and $\edgef$ are used to define activity of molecules on
+nodes and edges.
+%
+A molecule $k$ is {\em active} at node $n$ if $k \in \nlabel(n)$ and
+$\nodef(k,\nlabel(n))$ is true.
+%
+A molecule $k$ is {\em active} at edges $(n,M',n')$ if $k \in M'$ and
+$\edgef(k,M')$ is true.
 
 We will also consider several variations of the model.
 %
-For example, unique edge between two nodes, activity of molecules is not constrained by
-$\nodef$ and $\edgef$, and \ashu{other variations?}.
+For example, unique edge between two nodes, activity of molecules is
+not constrained by $\nodef$ and $\edgef$, and \ashu{other
+variations?}.
 %
 
 A {\em path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes 
@@ -52,27 +61,95 @@ $m$-path $n,...,n'$ in $G$.
 We call $G$ {\em stable} if for each $(n,M',n') \in \edges$ and $m \in M'$,
 $n$ is $m$-reachable from $n'$.
 %
+An edge $(n,M',n') \in \edges$ {\em fuses} with its destination node $n'$
+if there are molecules $m,m' \in \mols$ such that $m$ is active in
+$(n,M',n')$, $m'$ is active in $n'$, and $(m,m') \in \pairs$.
+%
+We call $G$ {\em well-fused} if each edge $(n,M',n') \in \edges$ fuses
+with non-empty fusing molecules $M'' \subseteq M'$
+and $\pairs(M'')$ are not active in any other node.
+
+
+
+%
 We call $G$ {\em connected} if for each $n,n' \in \nodes$,
 $n'$ is reachable from $n$ in $G$.
 %
 We call $G$ $k$-connected if for each $E' \subseteq \edges$ and $|E'| < k$,
-$(\nodes,\mols,\edges-E',\nlabel,\pair,\edgef,\nodef)$ is connected.
+VTS $(\nodes,\mols,\edges-E',\nlabel,\pairs,\edgef,\nodef)$ is connected.
+
+
+\paragraph{Search problem}
+
+Based upon earlier discussion, we need to answer the following search
+question for ......\ashu{match with the earlier text}
+For a given $k$, size $\nu$, and molecule number $\mu$,
+we are searching for stable and well-fused VTS
+$G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ such that
+$|\nodes| = \nu$, $|\mols = \mu|$, and
+$G$ is not $k$-connected.    
+
+
+\subsection{Boolean satisfiability of the search problem}
+
+We translate the search problem into a Boolean satisfiability
+problem and use SAT solvers to find the satisfying VTSs.
 %
-An edge $(n,M',n') \in \edges$ {\em fuses} with its destination node $n'$
-if 
+We will first present the variables used to encode the
+VTSs and the properties.
+%
+Afterwards, we will present the formulas corresponding to the
+properties.
+
+\subsubsection{Variables for VTS description}
+%
+We assume that size of the graph is $\nu$ and number of molecules is
+$\mu$.
+%
+Furthermore, we also limit the maximum number $\pi$ of edges present
+between two nodes.
+%
+Here, we list the vector of Boolean variables and uninterpreted function symbols
+that encode the VTSs.
+\begin{enumerate}
+
+\item $n_{i,m}$ indicates if $m \in \nlabel(i)$
+\item $e_{i,j,q}$ indicates if $q$th edge exists between $i$ and $j$.
+\item $e_{i,j,q,m}$ indicates if $q$th edge between $i$ and $j$ contains molecule $m$.
+
+\item $p_{k,k'}$ indicates if $(m,m') \in \pairs$
+\item uninterpreted Boolean functions $\nodef_m : \booleans^\mu \maps \booleans$
+encoding $\nodef(m)$ map
+\item uninterpreted Boolean functions $\edgef_m : \booleans^\mu \maps \booleans$
+encoding $\edgef(m)$ map
+\end{enumerate}
+
+We also have auxiliary variables that will help us encode the properties 
+\begin{enumerate}
+\item dump = d{i,j,q}
+      to represent drop of edge{i,j,q} from the graph we will use d{i,j,q}.        
+       
+      
+\item active\_node = a{i,k} 
+      kth molecule is active on the node i.
+      
+\item presence\_edge = e{i,j,q,k}
+      There is an qth edge between node i and j with kth molecule present.
+
+\item active\_edge = b{i,j,q,k}
+      There is an qth edge between node i and j with kth molecule active.
+
+\item reachability = r{i,j,k,z}
+      Node i and j are reachable with kth molecule present in z steps.
 
 
-State the SAT problem
-
-
-\subsection{Boolean satisfiability of the problem}
+\end{enumerate}
 
 
 
-Every variable is a Boolean bit, for example, n(0,1) represents node 0 with type 1 molecule present. Assignment to the Boolean variable n(0,1) to True will mean that at node 0 type 1 molecule is present. 
-
-
-\subsection{Network description}
+Every variable is a Boolean bit, for example, n(0,1) represents node 0
+with type 1 molecule present. Assignment to the Boolean variable
+n(0,1) to True will mean that at node 0 type 1 molecule is present. 
 
 Basic notation for the formula we are trying to generate.
 \begin{enumerate}
