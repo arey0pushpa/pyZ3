@@ -362,6 +362,25 @@ By adding the path length, we break the circular dependencies and the formula re
 \subsection{SAT problems for different variants}
 \ankit{Bring model variant table here}
 
+We have encoded several versions of the models of vesicle traffic systems listed. Starting from most basic version (A) where every present molecule is considered to be active. Other cases includes different combinations of constraints on the activity on nodes and edges. Most general restriction is activity of the molecule is dependent on the other molecule present on the node (a Boolean function of N-1 parameters) (B,C,D,F,G,H). In very special case (E,F,G,H) activity of the molecules on the edges is dictated by pairing matrix, we call this process ``pairing inhibition".
+
+% DIVIDE INTO COLUMNS and TALK ABOUT A/1 or A/0.
+%\todo{describe the variations}
+
+\begin{enumerate}[label=\Alph*]
+\item Every present molecule is considered to be active.
+\item Activity of molecules on the nodes is based on Boolean function of presence of other molecules. 
+\item Activity of molecules on the edges is based on Boolean function of presence of other molecules
+\item Activity of molecules both on the edges and nodes is based on Boolean function of presence of other molecules.
+\item Activity of molecules on the edges is driven by pairing inhibition.
+\item Activity of molecules on the nodes is based on Boolean function of presence of other molecules and on edge by pairing inhibition.
+\item Version F with additional constraint that every edge is distinct.
+%\item Activity of molecules on the nodes is based on Boolean function of presence of other molecules and on edge by pairing inhibition with every edge is distinct.
+%\item Activity of molecules on the nodes is based on Boolean function of presence of other moleculess and on edge by pairing inhibition with self-edges are allowed.
+\item Version F but self-edges are allowed.
+\end{enumerate}
+%
+
 % \subsection{Creating a solver and solving these constraints}
 % We will create a solver and add these build formula using these constraints to that and then check whether there a satisfiable assignment that satisfies all these constraints.
 
