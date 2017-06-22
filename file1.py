@@ -651,6 +651,7 @@ print s.check()
 
 b = time.time() - st
 print "Solving took...", str(b)
+print "Total took...", str(a + b)
 
 
 
@@ -715,9 +716,9 @@ if s.check() == sat:
     s = [[ [ [m[active_edge[i][j][q][k]] for k in range (M)] for q in range(Q)] for j in range(N) ] for i in range(N) ]
     t = [ [ [m[edge[i][j][q]]  for q in range(Q)] for j in range(N) ] for i in range(N) ]
     print 'Printing the pairing matrix'
-    print_matrix(xc)
-    print ' '
-    print t
+    #print_matrix(xc)
+    #print ' '
+    #print t
     dump_dot( "/tmp/bio.dot", m )
 else:
     print "failed to solve"

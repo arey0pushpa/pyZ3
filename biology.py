@@ -13,6 +13,8 @@ parser.add_argument("-N","--nodes", type=int, default=2, help = "number of nodes
 parser.add_argument("-Q","--pedges", type=int, default=1, help = "max no.of parallel edges btw two nodes")
 parser.add_argument("-V","--variation", type=int, default=1, help = "model of the biological system")
 parser.add_argument("-C","--connected", type=int, default=3, help = "graph connectivity want to check")
+parser.add_argument("-E","--edges", type=int, default=3, help = "graph connectivity want to check")
+
 args = parser.parse_args()
 
 M = args.mols
@@ -44,193 +46,88 @@ for i in range(6):
 #----------------------------------------------------
 # Constraint generation 
 edge = [ [ [ Bool ("e_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
-E = [ edge[i][j][q] for i in range(N) for j in range(N) for q in range(Q) if i != j]
 
-#print len(E)
-#print E
-
-# Un_Skolemized dumped edges and reachability.
 dump = [ [ [Bool ("d_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
-#DX = [ dump[i][j][q] for i in range(N) for j in range(N) for k in range(Q) if i != j ]
-
-#print DX
-#print len(DX)
 
 r1 = [ [Bool ("r1_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
-#RX = [ r1[i][j] for i in range(N) for j in range(N) if i != j ]
 
-#print RX
-#print len(RX)
-
-funE = len(E)
-#funE = len(E) + len(DX) + len(RX)
-lenE = funE + 1
-
-QVars = E
-#QVars = E + RX + DX
-print QVars
-
-#print funE
-#print lenE
-#sys.exit(0)
-
-# Define nodeSort that will server the purpose of the total number
-# Arguments skolem nodes,edges takes.
-nodeSort = [BoolSort() for x in range(lenE)]
-#print nodeSort
-#print len(nodeSort)
-
-#print nodeSort 
-# Skolemized presence edge
-#fnode = [ [Function ("fn_{}_{}".format(i,k), *nodeSort) for k in range(M)] for i in range(N)]
 node = [ [Bool ("n_{}_{}".format(i,k)) for k in range(M)] for i in range(N)]
 
-#for i in range(N):
-#    for k in range(M):
-#        s = []
-#        nxx = fnode[i][k] 
-#        for t in QVars:
-#            s.append( t )
-#        node[i][k] = nxx( s )
-#
-# Skolemized dumped edges
-#fdump = [ [ [Function ("fd_{}_{}_{}".format(i,j,q), *nodeSort) for q in range(Q)] for j in range(N)] for i in range(N)]
-#for i in range(N):
-#    for j in range(N):
-#        for q in range(Q): 
-#            s = []
-#            nxx = fdump[i][j][q] 
-#            for t in E:
-#                s.append( t )
-#            dump[i][j][q] = nxx( s )
-#
-
-# Skolemized Active node 
-#factive_node = [ [Function ("fa_{}_{}".format(i,k), *nodeSort) for k in range(M)] for i in range(N)]
 active_node = [ [Bool ("a_{}_{}".format(i,k)) for k in range(M)] for i in range(N)]
 
-#for i in range(N):
-#    for k in range(M):
-#        s = []
-#        nxx = factive_node[i][k] 
-#        for t in QVars:
-#            s.append( t )
-#        active_node[i][k] = nxx( s )
-#
-# Skolemized presence_edges :
-#fpresence_edge = [ [ [ [Function ("fe_{}_{}_{}_{}".format(i,j,q,k), *nodeSort) for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
 presence_edge = [ [ [ [Bool ("e_{}_{}_{}_{}".format(i,j,q,k)) for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
 
-#for i in range(N):
-#    for j in range(N):
-#        for q in range(Q):
-#            for k in range(M):
-#                s = []
-#                nxx = fpresence_edge[i][j][q][k] 
-#                for t in QVars:
-#                    s.append( t )
-#                presence_edge[i][j][q][k] = nxx( s )
-#
-
-# Skolemized Active edge 
-#factive_edge = [ [ [ [Function ("fb_{}_{}_{}_{}".format(i,j,q,k), *nodeSort)  for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
 active_edge = [ [ [ [Bool ("b_{}_{}_{}_{}".format(i,j,q,k)) for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
 
-#for i in range(N):
-#    for j in range(N):
-#        for q in range(Q):
-#            for k in range(M):
-#                s = []
-#                nxx = factive_edge[i][j][q][k] 
-#                for t in QVars:
-#                    s.append( t )
-#                active_edge[i][j][q][k] = nxx( s )
-#
-
-# Skolemized reachability.
-#fr = [ [ [ [Function ("fr_{}_{}_{}_{}".format(i,j,k,z), *nodeSort) for z in range(N-1)] for k in range(M)] for j in range(N)] for i in range (N)]
 r = [ [ [ [Bool ("r_{}_{}_{}_{}".format(i,j,k,z)) for z in range(N-1)] for k in range(M)] for j in range(N)] for i in range (N)]
 
-#for i in range(N):
-#    for j in range(N):
-#        for k in range(M):
-#            for z in range(N-1):
-#                s = []
-#                nxx = fr[i][j][k][z] 
-#                for t in QVars:
-#                    s.append( t )
-#                r[i][j][q][z] = nxx( s )
-#
-# Skolemized pairing matrix
-#fp = [ [Function ("fp_{}_{}".format(k,k1), *nodeSort) for k1 in range(M)] for k in range(M)]
 p = [ [Bool ("p_{}_{}".format(k,k1)) for k1 in range(M)] for k in range(M)]
 
-#for k in range(M):
-#    for k1 in range(M):
-#        nxx = fp[k][k1]
-#        s  = []
-#        for t in QVars:
-#            s.append( t )
-#        p[k][k1] = nxx( s )  
-#         
-# Skolemized dReachable
-#fr1 = [ [Function ("fr1_{}_{}".format(i,j), *nodeSort) for j in range(N)] for i in range(N)]
-#r1 = [ [Bool ("r1_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
+sorts = [BoolSort() for m in range( M )]
 
-#for i in range(N):
-#    for j in range(N):
-#        nxx = fr1[i][j]
-#        s  = []
-#        for t in E:
-#            s.append( t )
-#        r1[i][j] = nxx( s )  
-#
-sorts = [BoolSort() for m in range( M + funE )]
-#print sorts
-#print 'M = ' + str(M) + 'funE =' + str(funE) 
-#print len(sorts)
-#print ' ' 
-
-#Skolemize functions on node
-#ff_n = [Function ("fan_{}".format(m), *sorts) for m in range(M)] 
 f_n = [Function ("an_{}".format(m), *sorts) for m in range(M)] 
 
-# Stupidity
-#for i in range(N):
-#    for k in range(M):
-#        s  = []
-#        nxx = ff_n[k]
-#        for t in E:
-#            s.append( t )
-#        for k1 in range(M):
-#            if k == k1:
-#                continue
-#            s.append( node[i][k])
-#        f_n[k] = nxx (s)
-#
-
-# Skolemize functions on edges. 
-#ff_e = [Function ("fae_{}".format(m), *sorts) for m in range(M)] 
 f_e = [Function ("ae_{}".format(m), *sorts) for m in range(M)] 
 
-#for i in range(N):
-#    for k in range(M):
-#        s  = []
-#        nxx = ff_e[y]
-#        for t in E:
-#            s.append( t )
-#        for k in range(M):
-#            s.append( presence_edge[i][k])
-#    f_e[y] = nxx (s)
-#
-#print f_e
-
-
-# God! this Skolemization ended ----------------
-
-# Few additional condition that needs to be met.
 starttime = time.time()
 
+e1 = [ edge[i][j][q] for i in range(N) for j in range(N) for q in range(Q) if i != j]
+
+L = len (e1)
+
+# At least 2
+D1_list = []
+for i in range(L-1):
+    for j in range(i+1,L):
+        D1_list.append( And( e1[i], e1[j]) )
+B0 = Or(D1_list)
+    
+    
+# At least 3
+D1_list = []
+for i in range(L-2):
+    for j in range(i+1,L-1):
+        lhs = And ( e1[i], e1[j])
+        for k in range(j+1,L):
+              D1_list.append( And( lhs,e1[k]))
+B1 = Or(D1_list)
+
+# At least 4
+
+D1_list = []
+for i in range(L-3):
+    for j in range(i+1,L-2):
+        lft = And ( e1[j], e1[i])
+        for k in range(j+1,L-1):
+            lft1 = And ( lft, e1[k])
+            for l in range(k+1,L):
+                D1_list.append( And (e1[l], lft1))
+B2 = Or(D1_list)
+
+#e1 = [ edge[i][j][q] for i in range(N) for j in range(N) for q in range(Q) if i != j]
+#
+#L = len (e11)
+## At least 3
+#D1_list = []
+#for i in range(L-2):
+#    for j in range(i+1,L-1):
+#        lhs = And ( e1[i], e1[j])
+#        for k in range(j+1,L):
+#              D1_list.append( And( lhs,e1[k]))
+#B1 = Or(D1_list)
+#
+## At least 4
+#def Lfour_conn():
+#    D1_list = []
+#    for i in range(L-3):
+#        for j in range(i+1,L-2):
+#            lft = And ( e1[j], e1[i])
+#            for k in range(j+1,L-1):
+#                lft1 = And ( lft, e1[k])
+#                for l in range(k+1,L):
+#                    D1_list.append( And (e1[l], lft1))
+#B2 = Or(D1_list)   
+#    
 # Function: no regulation on the node.
 # The present molecules at nodes are all active.
 def f_nn():
@@ -267,8 +164,8 @@ def f_bn():
         f = f_n[k]
         for i in range(N):
             del s[:]
-            for t in QVars:
-                s.append( t )
+          #  for t in QVars:
+          #      s.append( t )
             for k1 in range(M):
                 if k1 == k:
                     continue
@@ -293,8 +190,8 @@ def f_be():
                 for k in range(M):
                     del s[:]
                     f = f_e[k]
-                    for t in QVars:
-                        s.append( t )
+                   # for t in QVars:
+                   #     s.append( t )
                     for k1 in range(M):
                         if k1 == k:
                             continue
@@ -363,9 +260,6 @@ else:
 # print A0
 # print A1
 
-a = time.time() - starttime 
-print "A1 took", str(a)
-
 #1. label(E) subset label(N)
 # e_ijk -> aik
 # e_ijk -> ajk
@@ -416,9 +310,6 @@ for i in range(N):
 C5 = And (A1_list)
 #print C5
 
-c = time.time() - starttime - a
-print "C0-C5 Took", str(c)
-
 # ----------------------------------------------------------------
 
 # MAIN Constraints:
@@ -452,30 +343,6 @@ for i in range(N):
                 F1_list.append( Implies(active_edge[i][j][q][k], presence_edge[i][j][q][k]) )
 F1 = And( F1_list )
 #print F1
-
-f = time.time() - starttime - c
-print "F0-F1 took ", str(f)
-
-# ---- Rule change proposed----
-# for_all i,j,q,k : e(i,j,q,k) -> exists(r(j,i,k,z)) 
-# for every molecule present on a edge comes back in a cycle.
-#F3 = True 
-#A_list = []
-#for i in range(N):
-#    for j in range(N):
-#	if i == j:
-#	    continue
-#        for q in range(M):
-#            lhs = False
-#            for k in range(M):
-#   not fiixed            rhs = Or( presence_edge[i][j][q][k])
-#     ""           for z in range(N-1):
-#    ""            lhs = Or(r[j][i][k][z], lhs)
-#    ""        l  = Implies(rhs,lhs)
-#            A_list.append(l)
-#F3 = And(A_list)
-
-# print F3
 
 A_list = []
 for i in range(N):
@@ -537,9 +404,6 @@ for i in range(N):
 F2 = And(A_list)
 #print F2
 
-ff = time.time() - starttime 
-print "F2-F3 took ", str(ff)
-
 # F4: Fusion rules:
 # For an edge to be valid, at least one
 # SNARE pair on the vesicle and target compartment must be active, and have a
@@ -592,12 +456,6 @@ for i in range(N):
 	        w = Implies( active_edge[i][j][q][k], Not(lhs))
                 A_list.append(w)
 F5 = And(A_list)
-#print F5
-
-#fff = time.time() - starttime - ff
-#print "F2-F3 took ", str(fff)
-
-starttime = time.time()
 
 #----3 Connectivity --------
 
@@ -624,13 +482,6 @@ D0 = And (D1_list)
 #    at_most(u)
 #
 # Summation of d_{i,j} == 2
-
-# -- Coolest one: encoding in CBMC.
-#D1 = 0
-#for i in range(N):
-#    for j in range(N):
-#        D1 = dump[i][j] + D1 
-
 # Flattening the array. Avoid i == j. 
 d1 = []
 for i in range(N):
@@ -641,19 +492,14 @@ for i in range(N):
             d1.append(dump[i][j][q])
 L = len(d1)
 
-#print L
+#print L  
 
-# At most 2
-#def Mtwo_conn():
-#    D_list = []
-#    for i in range(L):
-#        for j in range(i+1, L-1):
-#            lhs = And(d1[i],d1[j])
-#            for k in range(j+1, L):
-#                x = Implies (lhs,Not(d1[k]))
-#                D_list.append(x)
-#    return And(D_list)      
-
+def Lone_conn():
+    D1_list = []
+    for i in range(L):
+        D1_list.append( d1[i] )
+    return Or( D1_list )
+    
 # At least 2
 def Ltwo_conn():
     D1_list = []
@@ -699,18 +545,43 @@ def Lfive_conn():
     return Or(D1_list)                
 
 # C is the neccesary condition.
-if C == 2:
+
+# Check the 2 connected but not three connected.
+if C == 23: 
+    print 'X'
+    #alo = Lone_conn()
+    #amo = Not ( Ltwo_conn())
+    
+    #alt = Ltwo_conn()
+    #amt = Not( Lthree_conn())
+    
+    #D1 = And ( And ( alo, amo ),   
+    #D2 =  
+    #print "DROPPED EXACTLY 1"
+elif C == 2:
     D1 = Ltwo_conn()
     D2 = Not( Lthree_conn())
+    print "DROPPED EXACTLY 2"
 elif C == 3:
     D1 = Lthree_conn()
     D2 = Not( Lfour_conn())
+    print "DROPPED EXACTLY 3"
+   # s = Solver()
+   # s.add(D1,D2)
+    #if s.check() == sat:
+    #    m = s.model()
+    #    print m
+    #sys.exit(0)
 elif C == 4:
     D1 = Lfour_conn()
     D2 = Not( Lfive_conn())
+    print "DROPPED EXACTLY 3"
+
 else:
     D1 = Lthree_conn()
     D2 = Not( Lfour_conn())
+    print "DROPPED EXACTLY 3"
+
 
 #print C1
 
@@ -727,9 +598,7 @@ for i in range(N):
             continue
         rijji = Or(r1[i][j],r1[j][i])
         D3 = And( rijji, D3) 
-#D3 = Not(D3)
-
-print ' '
+D3 = Not(D3)
 #print D4
 
 # forall_{i,j} r'(i,j) -> exists_{i'!=i}: [r'(i',j) and e(i,i') and ~d(i,i')]
@@ -765,34 +634,25 @@ D4 = And(A_list)
 #print D4
 # sys.exit()
 
+a = time.time() - starttime 
+print "Formula Building process took...", str(a)
+
 #Init = (presence_edge[0][1][0] == True)
 #Init2 = (p[0][3] == False)
 #Init3 = (p[1][2] == False)
 # Create Solver and add constraints in it.
 
-# C4 ??
-A1_list = [D0,D1,D2,D3,D4, C1,C2,C4,F0,F1,F2,F3]
-A2_list = [A0,A1, F4,F5, C5]
-Full = And( A2_list )
-Semi = And( A1_list ) 
-
-#print Full
-
-QF = ForAll( QVars, And (Semi, Full))
-#print QF
-#sys.exit(0)
-
 s = Solver()
-s.add(QF)
+s.add(A0,A1, C1,C2, C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4)
 
 print "solving...\n"
-#print "Printing the assertions..."
-#for c in s.assertions():
-#    print c
+st = time.time()
 print s.check()
-#print "\nPrinting the statistics..."
-#print s.statistics() 
-#print "\n"
+
+b = time.time() - st
+print "Solving took...", str(b)
+
+
 
 def dump_dot( filename, m ) :
     print "dumping dot file: ", filename
@@ -846,53 +706,18 @@ def dump_dot( filename, m ) :
 
 if s.check() == sat:
     m = s.model()
-    print m
-#    print "Printing the model..."
-#    for d in m.decls():
-#       print "{} = {}".format(d.name(), m[d])
+    #print m
+    #print "Printing the model..."
+    #for d in m.decls():
+     #  print "{} = {}".format(d.name(), m[d])
 #    print 
-#    xc = [ [ m[p[i][j]] for j in range(M) ] for i in range(M) ]
-   # s = [[ [ [m[active_edge[i][j][q][k]] for k in range (M)] for q in range(Q)] for j in range(N) ] for i in range(N) ]
-   # t = [ [ [m[edge[i][j][q]]  for q in range(Q)] for j in range(N) ]
-   #       for i in range(N) ]
-  #  print "\n Pairing matrix p[{}][{}] = ".format(M,M)
-  #  print_matrix(xc)
-    #print "\n Edge  e[{}][{}] = ".format(N,N)
-    #print t
+    xc = [ [ m[p[i][j]] for j in range(M) ] for i in range(M) ]
+    s = [[ [ [m[active_edge[i][j][q][k]] for k in range (M)] for q in range(Q)] for j in range(N) ] for i in range(N) ]
+    t = [ [ [m[edge[i][j][q]]  for q in range(Q)] for j in range(N) ] for i in range(N) ]
+    print 'Printing the pairing matrix'
+    print_matrix(xc)
+    print ' '
+    print t
     dump_dot( "/tmp/bio.dot", m )
 else:
     print "failed to solve"
-
-##---- Code To convert into QBF Formula -----------------------------
-
-#QVars = [E + N + E1 + R + R1 ] 
-#Some = [N2 + E2 ]
-#print All 
-#print Some 
-#sys.exit(0)
-#A1_list = [A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4]
-#Full = And( A1_list )
-
-#QF = ForAll( QVars , Full )
-
-# Stage 1: Convert The Formula Into CNF
-#g = Goal() 
-#g.add(A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4)
-##print g
-## t is a tactic that reduces a Boolean problem into propositional CNF
-#t = Then('simplify', 'tseitin-cnf')
-#subgoal = t(g)
-#assert len(subgoal) == 1
-#
-## Traverse each clause of the first subgoal
-#for c in subgoal[0]:
-#        #print "children: ", c.children()
-#        #print "1st child:", c.arg(0)
-#        #print "operator: ", c.decl()
-#        #print "op name:  ", c.decl().name()
-#        print c
-
-# Stage 2 : Convert CNF to QDIMAC
-# Accessing the structure of a Z3 expression via the API
-# Check goal.cpp goal::display_dimacs
-# Use PicoSat and Plingeling (fmv.jku.at/lingeling) 
