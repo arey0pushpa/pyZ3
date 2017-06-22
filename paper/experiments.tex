@@ -6,7 +6,7 @@ Given a system that follows the VTS, we are interested in its connectivity (grap
 
 %Besides using the default Z3 solvers we have used for these experiments \ankit{Z3, picoSAT, Lingeling}. The performance of Z3 was ...
 %
-Our implementation supports several versions of the models of vesicle traffic systems listed in Table 2. Starting from most basic version (A) where every present molecule is considered to be active. Other cases includes different combinations of constraints on the activity on nodes and edges. Most general restriction is activity of the molecule is dependent on the other molecule present on the node (a Boolean function of N-1 parameters) (B,C,D,F,G,H). In very special case (E,F,G,H) activity of the molecules on the edges is dictated by pairing matrix, we call this process ``pairing inhibition".
+Our implementation supports several versions of the models of vesicle traffic systems listed in below. Starting from most basic version (A) where every present molecule is consider to be active. Other cases includes different combinations of constraints on the activity on nodes and edges. Most general restriction is activity of the molecule is dependent on the other molecule present on the node/edge (a Boolean function of N-1 parameters) (B,C,D,F,G,H). In very special case (E,F,G,H) activity of the molecules on the edges is dictated by pairing matrix, we call this process ``pairing inhibition".
 
 % DIVIDE INTO COLUMNS and TALK ABOUT A/1 or A/0.
 %\todo{describe the variations}
@@ -25,17 +25,17 @@ Our implementation supports several versions of the models of vesicle traffic sy
 \end{enumerate}
 %
 We have applied the tool for the above variations for searching the vesicle traffic systems that satisfies
-their corresponding properties. Our tool allows user to choose a model and the size of the network besides other parameters like connectivity and number of parallel edges. Our tool uses Z3 python interface to build the needed constraints and applies $\zthree$ on the constraints.
+their corresponding properties. Our tool allows the user to choose a model and the size of the network besides other parameters like connectivity and number of parallel edges. It uses Z3 Python interface to build the needed constraints and applies $\zthree$ on the constraints. 
 
-After creating the formula using different Boolean variables we ship them directly to the solver. In case of a satisfying (SAT) assignment of the added constraints the Z3 theorem prover gives a model with the variable assignment. In case no possible satisfying assignment the solver returns UNSAT.
+After creating the formula using different Boolean variables we ship them directly to the solver. Searching is reduced to SAT solving the resultant formula. In the case of a satisfying (SAT) assignment of the added constraints, the Z3 theorem prover gives a model with the variable assignment. In case no possible satisfying assignment the solver returns UNSAT.
 %
 % \Ankit{In other solver variations ...}
 Our tool also translates the model found by $\zthree$ into a vesicle traffic system and presents a visual
-output to the user. The graph provides an overview of the vesicle transport system with directed labeled edges and nodes providing the complete information about the shown graph. The output graph will satisfy the underlying rules of the system, so it is a valid vesicle transport network. Dashed lines are used in the resultant visual network output to specify which edges edges are dropped to make the graph disconnected specifying the connectivity of the graph.
+output to the user. The graph provides an overview of the vesicle transport system with directed labeled edges and nodes providing the complete information about the shown graph. The output graph will satisfy the underlying rules of the system, so it is a valid vesicle transport network. Dashed lines are used in the resultant visual network output to specify which edges are dropped to make the graph disconnected specifying the connectivity of the graph. For example if removing two edges disconnects the graph; the graph is not 3-connected.
 
 \input{tbl-qf-graph}
 
-In table~\ref{tab:qf-graph}, we present the running times for the search of vesicle traffic systems of sizes 2 to 10 that satisfies the model variants. Formula for N = 10 returns in 45 mins with a SAT result. In CBMC N = 10 results in OUT OF MEMORY. Hence with use of this novel encoding we are able to scale the system to much larger compartmentalized systems especially eukaryotics cells with ten compartments.  This additional cushion of scalability can provide us leverage to ask for more questions that were not previously possible for example what is the minimum number of molecules required to satisfy the vesicular traffic system in eukaryotes.
+In table~\ref{tab:qf-graph}, we present the running times for the search of vesicle traffic systems of sizes 2 to 10 that satisfies the model variants. The formula for N = 10 returns in approximately 45 mins with a SAT result. The previous encoding with CBMC was unable to handle this case for N = 10 [Refer PLOSONE paper] for variation 2 and SAT solving results in OUT OF MEMORY. Hence with the use of this novel encoding, we are able to scale the system to much larger compartmentalized systems especially eukaryotic cells with ten compartments.  This additional cushion of scalability can provide us leverage to ask for more questions that were not previously possible for example what is the minimum number of molecules required to satisfy the vesicular traffic system in eukaryotes.
 
 % REQUIRE COMPARISION WITH CBMC RUN TIME ?
 The experiments were done on a machine with ... processor 
