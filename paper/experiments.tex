@@ -31,8 +31,8 @@ After creating the formula using different Boolean variables we ship them direct
 %
 % \Ankit{In other solver variations ...}
 Our tool also translates the model found by $\zthree$ into a vesicle traffic system and presents a visual
-output to the user. The graph provides an overview of the vesicle transport system with directed labeled edges and nodes providing the complete information about the shown graph. The output graph will satisfy the underlying rules of the system, so it is a valid vesicle transport network. Dashed lines are used in the resultant visual network output to specify which edges are dropped to make the graph disconnected specifying the connectivity of the graph. For example if removing two edges disconnects the graph; the graph is not 3-connected.
-
+output to the user. The graph provides an overview of the vesicle transport system with directed labeled edges and nodes providing the complete information about the shown graph. The output graph will satisfy the underlying rules of the system, so it is a valid vesicle transport network. Dashed lines are used in the resultant visual network output to specify which edges are dropped to make the graph disconnected specifying the connectivity of the graph. For example if removing two edges disconnects he graph; the graph is not 3-connected.
+t
 \input{tbl-qf-graph}
 
 In table~\ref{tab:qf-graph}, we present the running times for the search of vesicle traffic systems of sizes 2 to 10 that satisfies the model variants. The formula for N = 10 returns in approximately 45 mins with a SAT result. The previous encoding with CBMC was unable to handle this case for N = 10 [Refer PLOSONE paper] for variation 2 and SAT solving results in OUT OF MEMORY. Hence with the use of this novel encoding, we are able to scale the system to much larger compartmentalized systems especially eukaryotic cells with ten compartments.  This additional cushion of scalability can provide us leverage to ask for more questions that were not previously possible for example what is the minimum number of molecules required to satisfy the vesicular traffic system in eukaryotes.
