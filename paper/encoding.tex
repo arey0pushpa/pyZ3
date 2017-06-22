@@ -36,6 +36,8 @@ $\nodef(k,\nlabel(n))$ is true.
 %
 A molecule $k$ is {\em active} at edges $(n,M',n')$ if $k \in M'$ and
 $\edgef(k,M')$ is true.
+%
+\ashu{define missing conds V1-V7}
 
 We will also consider several variations of the model.
 %
@@ -113,11 +115,11 @@ Here, we list the vector of Boolean variables and uninterpreted function symbols
 that encode the VTSs.
 \begin{enumerate}
 
-\item $n_{i,m}$ indicates if $m \in \nlabel(i)$
-\item $e_{i,j,q}$ indicates if $q$th edge exists between $i$ and $j$.
-\item $e_{i,j,q,m}$ indicates if $q$th edge between $i$ and $j$ contains molecule $m$.
+\item Boolean variable $n_{i,m}$ indicates if $m \in \nlabel(i)$
+\item Boolean variable $e_{i,j,q}$ indicates if $q$th edge exists between $i$ and $j$.
+\item Boolean variable $e_{i,j,q,m}$ indicates if $q$th edge between $i$ and $j$ contains molecule $m$.
 
-\item $p_{k,k'}$ indicates if $(m,m') \in \pairs$
+\item Boolean variable $p_{k,k'}$ indicates if $(m,m') \in \pairs$
 \item uninterpreted Boolean functions $\nodef_m : \booleans^\mu \maps \booleans$
 encoding $\nodef(m)$ map
 \item uninterpreted Boolean functions $\edgef_m : \booleans^\mu \maps \booleans$
@@ -126,122 +128,176 @@ encoding $\edgef(m)$ map
 
 We also have auxiliary variables that will help us encode the properties 
 \begin{enumerate}
-\item dump = d{i,j,q}
-      to represent drop of edge{i,j,q} from the graph we will use d{i,j,q}.        
-       
-      
-\item active\_node = a{i,k} 
-      kth molecule is active on the node i.
-      
-\item presence\_edge = e{i,j,q,k}
-      There is an qth edge between node i and j with kth molecule present.
-
-\item active\_edge = b{i,j,q,k}
-      There is an qth edge between node i and j with kth molecule active.
-
-\item reachability = r{i,j,k,z}
-      Node i and j are reachable with kth molecule present in z steps.
-
-
+\item $a_{i,m}$ indicates that molecule $m$ is active at node $i$, i.e., $\nodef(m,L(i))$
+  holds
+\item $b_{i,j,q,m}$ indicates that molecule $m$ is active at $q$th edge $(i,M',j)$ between $i$ and $j$, i.e., $\edgef(m,M')$ holds
+\item $r_{i,j,m,z}$ indicates that there is a path from $i$ to $j$ of length $z$
+\item $d_{i,j,q}$ indicates $q$th edge between $i$ and $j$ is dropped(used in encoding
+  $k$-connected property)
 \end{enumerate}
 
 
+% Every variable is a Boolean bit, for example, $n_{0,1}$ represents node 0
+% with type 1 molecule present. Assignment to the Boolean variable
+% n(0,1) to True will mean that at node 0 type 1 molecule is present. 
 
-Every variable is a Boolean bit, for example, n(0,1) represents node 0
-with type 1 molecule present. Assignment to the Boolean variable
-n(0,1) to True will mean that at node 0 type 1 molecule is present. 
+% Basic notation for the formula we are trying to generate.
+% \begin{enumerate}
 
-Basic notation for the formula we are trying to generate.
-\begin{enumerate}
+% \item edge = e(i,j,q)      
+%       we will assign e(i,j,q) for a qth edge between node i and j.
 
-\item edge = e(i,j,q)      
-      we will assign e(i,j,q) for a qth edge between node i and j.
-
-\item dump = d(i,j,q)
-      to represent drop of edge(i,j,q) from the graph we will use d(i,j,q).        
+% \item dump = d(i,j,q)
+%       to represent drop of edge(i,j,q) from the graph we will use d(i,j,q).        
        
-\item presence node = n(i,k) 
-	  kth molecule is present on the node i.
+% \item presence node = n(i,k) 
+% 	  kth molecule is present on the node i.
       
-\item active\_node = a(i,k) 
-      kth molecule is active on the node i.
+% \item active\_node = a(i,k) 
+%       kth molecule is active on the node i.
       
-\item presence\_edge = e(i,j,q,k)
-      There is an qth edge between node i and j with kth molecule present.
+% \item presence\_edge = e(i,j,q,k)
+%       There is an qth edge between node i and j with kth molecule present.
 
-\item active\_edge = b(i,j,q,k)
-      There is an qth edge between node i and j with kth molecule active.
+% \item active\_edge = b(i,j,q,k)
+%       There is an qth edge between node i and j with kth molecule active.
 
-\item reachability = r(i,j,k,z)
-      Node i and j are reachable with kth molecule present in z steps.
+% \item reachability = r(i,j,k,z)
+%       Node i and j are reachable with kth molecule present in z steps.
 
-\item pairing matrix = p(k,k')
-      Molecule k and k' are pairing molecules in the matrix.
+% \item pairing matrix = p(k,k')
+%       Molecule k and k' are pairing molecules in the matrix.
 
-\item Type of the Boolean function = sorts (takes k-1 arguments Bool and return Bool) 
-\item Boolean function on nodes Function (fn\_{m},*sorts) 
+% \item Type of the Boolean function = sorts (takes k-1 arguments Bool and return Bool) 
+% \item Boolean function on nodes Function (fn\_{m},*sorts) 
 
-\item Boolean function on edge Function(fe\_{m},*sorts)
+% \item Boolean function on edge Function(fe\_{m},*sorts)
 
-\end{enumerate}
+% \end{enumerate}
+
+
+We will describe the Boolean formulas that encode VTSs in several categories.
+%
+In the end, we will present in a table the formulas needed for the
+model variants.
+%
+To avoid cumbersome notation, we will not explicitly write the ranges of the indexing
+in the formulas.
+%
+$i$ and $j$ will be ranged over nodes.
+%
+$m$ will be ranged over molecules.
+%
+$q$ will be ranged over edges between two nodes.
+%
+
+% \subsubsection{Constraints on the structure of the edges, nodes and }
+\subsubsection{Constraints on presence, activity of the molecule, and pairing matrix}
+%
+We need the following constraints~\eqref{eq:f0} and~\eqref{eq:c3}
+to encode the basic structure of VTSs.
+%
+For an edge to exist it should have one molecule present. 
+%
+\begin{align}
+  \bigwedge\limits_{i,j,q} (\bigvee_m e_{i,j,q,m} )\limplies e_{i,j,q}\tag{V1}\label{eq:f0}
+\end{align}
+
+If a molecule is active on an edge, it should be present on the edge.
+%
+\begin{align}
+  \bigwedge\limits_{i,j,q,m} b_{i,j,q,m} \limplies e_{i,j,q,m}\tag{V2}\label{eq:f1}
+\end{align}
+
+A molecule should be present to be active on a node.  
+\begin{align}
+  \bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
+  \tag{V3}\label{eq:c4}
+\end{align}
+
+The edge labels are subset of the node label of source and target compartments.
+
+\begin{align}
+  \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies n_{i,m}\tag{V4}\label{eq:c0}\\
+  \bigwedge\limits_{i,j,q,m}  e_{i,j,q,m} \limplies n_{j,m}\tag{V5}\label{eq:c1}
+\end{align}
+
+%C1 =  e_ijk -> aik and e_ijk -> ajk
+
+Self edges are not allowed. 
+
+\begin{align}
+   \bigwedge\limits_{i,q} \neg e_{i,i,q}\tag{V6}\label{eq:c2}
+\end{align}
+
+Condition on $p_{kk'}$. \ashu{why???} Diagonal blocks should be all 0's.
+
+\begin{align}
+  \bigwedge\limits_{(x < M/2 \, \land  \, y < M/2) \lor  (x >= M/2 \land y >= M/2)} \neg p(x,y)
+  \tag{V7}\label{eq:c3}
+\end{align}
+
+\subsubsection{Well-fused constraints}
+Boolean constraint~\eqref{eq:fuse1} encodes that each edge must fuse with
+destination node.
+%
+Boolean constraint~\eqref{eq:fuse2} encodes the each should not be able to
+potentially fuse with any other node.
+
+% Fusion rules consist of two different mechanisms.
+% \begin{enumerate}
+% \item  A \textbf{pairing mechanism} which determines compatible Q-R pairs on vesicles and compartments that can cause fusion.
+% \item \textbf{regulatory mechanisms} on the edges and nodes (possibly distinct) which regulates molecules activity based on the presence/absence of other molecules on the corresponding node or edge.
+% \end{enumerate}
+% Boolean constraint~\eqref{eq:fuse1} and~\eqref{eq:fuse2} are used to encode well-fused
+% property.
+
+% F4: For an edge to be valid, at least one SNARE pair on the vesicle and target compartment must be active and have a non-zero entry in the pairing matrix.  
+\begin{align}
+  \bigwedge\limits_{i,j,q} e_{i,j,q} \limplies \bigvee_{m,m^{\prime}} (b_{i,j,q,m} \land a_{j,m^{\prime}} \land p_{m,m^{\prime}})
+  \tag{V8}\label{eq:fuse1}  \\
+\bigwedge\limits_{i,j,q,m} b_{i,j,q,m} \limplies \neg \bigvee_{j \neq j^{\prime}, m^{\prime\prime}} ( a_{j^{\prime},m^{\prime\prime}} \land p_{m,m^{\prime\prime}})
+  \tag{V9}\label{eq:fuse2}  
+\end{align}
+
+% F5: To ensure that fusion respects the graph structure by the edge under consideration, it should not be possible to fuse with any other node.
+
 
 \subsubsection{Regulation on nodes and edges}
-Regulation of the molecules is based on the kind of the model under consideration. For example, model 1 (-V 1) has two different arbitrary Boolean functions dictating the activity of the molecules on edge and nodes. For variation 3 (-V 3) activity on edge is driven by pairing inhibition.  
+%
+Regulation of the molecules is based on the kind of the model under
+consideration.
+%
+For example, model 1 (-V 1) has two different arbitrary
+Boolean functions dictating the activity of the molecules on edge and
+nodes.
+%
+For variation 3 (-V 3) activity on edge is driven by pairing
+inhibition.  
 
 We use two Boolean variables A\_* to build these two constraints. \newline
 
 A\_nn: No regulation on nodes i.e all the present molecules on the nodes are active.
-\[ \bigwedge\limits_{i,k} n_{i,k} == a_{i,k} \, \]  
+\[
+\bigwedge\limits_{i,m} n_{i,m} = a_{i,m} \,
+\]  
 
 A\_nb: Boolean regulation on nodes. Activity of a molecule k on the node is defined as a Boolean function of presence of other molecule present on that node.
-\[ \bigwedge\limits_{i,k} n_{i,k} \supset a_{i,k} ==   f_n[k] (\bigvee_{ k' != k} n_{i,k'}) \, \]
+\[ \bigwedge\limits_{i,k} n_{i,m} \limplies a_{i,m} =   f_m (n_{i,1},\dots,n_{i,\mu}) \, \]
 
 A\_en: No regulation on edges i.e all the present molecules on the edges are active.
-\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} == b_{i,j,q,k} \, \]    
+\[ \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} = b_{i,j,q,m} \, \]    
 
 A\_eb: Boolean regulation on edges. Activity of a molecule k on the node is defined as a Boolean function of presence of other molecule present on that node.
-\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} \supset b_{i,j,q,k} == f_e[k](\bigvee_{k' != k} e_{i,j,q,k'}) \, \]  
+\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} \limplies b_{i,j,q,k} == f_e[k](\bigvee_{k' != k} e_{i,j,q,k'}) \, \]  
 
 A\_ep: Pairing inhibition. The activity of the molecules is defined by inhibition by other molecules based on the pairing matrix. 
-\[ \bigwedge\limits_{i,j,q, k}  (e_{i,j,q,k} \land [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset \neg b_{i,j,q,k}) \, \]  
+\[ \bigwedge\limits_{i,j,q, k}  (e_{i,j,q,k} \land [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \limplies e_{i,j,q,k'})] ) \limplies \neg b_{i,j,q,k}) \, \]  
 
-\[ \bigwedge\limits_{i,j, q, k}  (e_{i,j,q,k} \land \neg [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \supset e_{i,j,q,k'})] ) \supset b_{i,j,q,k}) \, \]  
+\[ \bigwedge\limits_{i,j, q, k}  (e_{i,j,q,k} \land \neg [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \limplies e_{i,j,q,k'})] ) \limplies b_{i,j,q,k}) \, \]  
 
-\subsubsection{Constraints on the structure of the edges, nodes and pairing matrix}
-A few additional constraints are required on the nodes, edges and pairing matrix to set up the essential conditions. We use Boolean variables C0-C5 to build all these constraints.
 
-C0: The edge labels are subset of the node label of source compartment.
-
-\[ \bigwedge\limits_{i,j,k} e_{i,j,k} \supset n_{i,k} \, \]  
-
-C1: The edge labels are subset of the node label of target compartment.
-
-\[ \bigwedge\limits_{i,q}  e_{i,j,k} \supset n_{j,k} \, \]  
-%C1 =  e_ijk -> aik and e_ijk -> ajk
-
-C2: Self edges are not allowed. 
-
-\[  \bigwedge\limits_{i,q} \neg e_{i,i,q} \, \]
-
-C4: Condition on p\_kk'. Diagonal blocks should be all 0's.
-
-\[ \bigwedge\limits_{(x < M/2 \, \land  \, y < M/2) \lor  (x >= M/2 \land y >= M/2)} \neg p(x,y) \, \]
-
-C5: Activity on the node. A molecule should be present to be active on a node.  
-\[ \bigwedge\limits_{i,k} a_{i,k} \supset n_{j,k} \, \]  
-
-% - F0: b(i,j,k) $\supset$ e(i,j,k)
-
-\subsubsection{Constraints on presence and activity of the molecule}
-Few additional constraints that are required for the molecules presence and activity is build using F0 and F1. \newline
-
-F0: An edge has to have one present molecule. F0 looks redundant.
-
-\[ \bigwedge\limits_{i,j,q} \bigvee_k e_{i,j,q,k} \supset e_{i,j,q} \, \]  
-
-F1: If molecule is active on an edge then it should be present on the edge.
-
-\[ \bigwedge\limits_{i,j,q,k} b_{i,j,q,k} \supset e_{i,j,q,k}\, \]
+% - F0: b(i,j,k) $\limplies$ e(i,j,k)
 
 \subsubsection{Constraints for stability condition}
 The whole cell should be in stable condition i.e flow of the molecule is balanced at every point and globally. Each molecule leaving its source node on a vesicle should come back in a cycle. Boolean variable F3 and F2 are used to model these constraints. 
@@ -252,41 +308,21 @@ We have encoded stable condition by using reachability definition. \newline
 F3: Stability condition. For every leaving molecule, the source node is reachable from the target node with that molecule present, in maximum p steps. 
 
 % I have implemented: Changed the implementation in code too.
-%\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} \supset (r_{j,i,k,0}  \lor r_{j,i,k,1} \lor ... \lor r_{j,i,k,p}) \, \]
+%\[ \bigwedge\limits_{i,j,q,k} e_{i,j,q,k} \limplies (r_{j,i,k,0}  \lor r_{j,i,k,1} \lor ... \lor r_{j,i,k,p}) \, \]
 
 % Update: Better 
-\[ \bigwedge\limits_{i,j,k} (\bigvee_{q} e_{i,j,q,k}) \supset (r_{j,i,k,0}  \lor r_{j,i,k,1} \lor ... \lor r_{j,i,k,p}) \, \]
+\[ \bigwedge\limits_{i,j,k} (\bigvee_{q} e_{i,j,q,k}) \limplies (r_{j,i,k,0}  \lor r_{j,i,k,1} \lor ... \lor r_{j,i,k,p}) \, \]
 
 F2: Reachability definition. Node j is reachable from node i with kth molecule present in maximum p steps if either there is a direct edge between i-j with that molecule present or there is a direct edge between $i^{\prime \prime}$ $(i != i^{\prime \prime})$ and j with kth molecule present on that edge and $i^{\prime \prime}$ are reachable from i in p steps. 
 
-\[ \bigwedge\limits_{i,j,k,p} r_{i,j,k,p} \supset (\bigvee_{q} \, e_{i,j,q,k} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,k}) \land r_{i^{\prime},j,k,p-1} ) \, \]
-
-
-\subsubsection{Fusion rule constraints}
-
-Fusion rules consist of two different mechanisms.
-
-\begin{enumerate}
-\item  A \textbf{pairing mechanism} which determines compatible Q-R pairs on vesicles and compartments that can cause fusion.
-\item \textbf{regulatory mechanisms} on the edges and nodes (possibly distinct) which regulates molecules activity based on the presence/absence of other molecules on the corresponding node or edge.
-\end{enumerate}
-
-Boolean variable F4 and F5 are used to model these constraints. 
-
-F4: For an edge to be valid, at least one SNARE pair on the vesicle and target compartment must be active and have a non-zero entry in the pairing matrix.  
-
-\[ \bigwedge\limits_{i,j,q} e_{i,j,q} \supset \bigvee_{k,k^{\prime}} (b_{i,j,q,k} \land a_{j,k^{\prime}} \land p_{k,k^{\prime}}) \, \]
-
-F5: To ensure that fusion respects the graph structure by the edge under consideration, it should not be possible to fuse with any other node.
-
-\[ \bigwedge\limits_{i,j,q,k} b_{i,j,q,k} \supset \neg \bigvee_{j \neq j^{\prime}, k^{\prime\prime}} ( a_{j^{\prime},k^{\prime\prime}} \land p_{k,k^{\prime\prime}}) \, \]
+\[ \bigwedge\limits_{i,j,k,p} r_{i,j,k,p} \limplies (\bigvee_{q} \, e_{i,j,q,k} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,k}) \land r_{i^{\prime},j,k,p-1} ) \, \]
 
 
 \subsubsection{Graph connectivity constraints}
 To check the whether that n connected is a necessary condition, we remove (drop) n edges from the graph and if it disconnects the graph and we get an assignment we have an n connected satisfying graph. We can go down or up using -C \_ option.  \newline 
 
 D0: Only present edges can be dropped.
-\[ \bigwedge\limits_{i,j,q} d_{i,j,q} \supset e_{i,j,q}  \]
+\[ \bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \]
 
 D1,D2: We are dropping c edges from the graph. exactly c are dropped.
 \[ \sum_{i,j,q} d_{i,j,q} == c \]
@@ -296,7 +332,7 @@ D3:  Graph becomes disconnected. Ensure that there is no path between some nodes
 
 D4: New reachability definition for graph connectedness: dReachable. Node i,j are reachable either if there is a direct edge and its not dropped or there is an node $i^{\prime}$ such that, there is a direct edge between i, $i^{\prime}$ which is not dropped and $i^{\prime}$ and j is dReachable.
 
-\[ \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' != i}  r^{\prime}(i',j) \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \supset r^{\prime}(i,j)  \]
+\[ \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' != i}  r^{\prime}(i',j) \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}(i,j)  \]
 
 \subsection{Creating a solver and solving these constraints}
 We will create a solver and add these build formula using these constraints to that and then check whether there a satisfiable assignment that satisfies all these constraints.
