@@ -8,19 +8,19 @@ for the graphs that satisfies the conditions.
 \subsection{Model}
 
 We model VTSs as labelled directed graphs.
-The graph labels both edges and labels with sets of molecules to denote
-the set of molecules present in the node.
+The graph labels both nodes and edges with sets of molecules to denote
+the set of molecules present in them.
 The graph is formally defined as follows.
 
 \begin{df}
   A VTS $G$ is tuple $(\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$, where
   \begin{itemize}
   \item $\nodes$ is a set of nodes representing compartments in the VTS,
-  \item $\mols$ is the set of molecules flowing in the network, 
+  \item $\mols$ is the set of molecules flowing in the system, 
   \item $\nlabel : \nodes \maps \powerset{\mols}$ defines the molecules present in the nodes  
-  \item $ \nodes \times (\powerset{\mols}-\emptyset) \times \nodes \subseteq \edges$ is the set of edges
-    with molecule sets as labels
-  \item $\pairs : \mols \times \mols$ is pairing relating
+  \item $ \nodes \times (\powerset{\mols}-\emptyset) \times \nodes \subseteq \edges$ is the
+    set of edges with molecule sets as labels
+  \item $\pairs : \mols \times \mols$ is pairing relation
   \item $\nodef : \mols \maps \powerset{\mols} \maps \booleans$ is activity maps for nodes
   \item $\edgef : \mols \maps \powerset{\mols} \maps \booleans $ is activity maps for edges
   \end{itemize}
@@ -30,7 +30,7 @@ $\pairs$ defines which molecules can fuse with which molecules.
 Let $\pairs(M')$ denote $\{m|(m,m') \in P \text{ and } m' \in M'\}$.
 %
 $\nodef$ and $\edgef$ are used to define activity of molecules on
-nodes and edges.
+nodes and edges respectively.
 %
 A molecule $k$ is {\em active} at node $n$ if $k \in \nlabel(n)$ and
 $\nodef(k,\nlabel(n))$ is true.
@@ -38,10 +38,9 @@ $\nodef(k,\nlabel(n))$ is true.
 A molecule $k$ is {\em active} at edges $(n,M',n')$ if $k \in M'$ and
 $\edgef(k,M')$ is true.
 %
-We call $G$ {\em well-structured} if 
-Molecules $M$ is divided into two partitions $M_1$ and $M_2$
-such that $M_1 \times M_2 \intersection P = \emptyset$, and
-for each $(n,M',n')$, $n \neq n'$, 
+We call $G$ {\em well-structured} if molecules $M$ is divided into
+two equal partitions $M_1$ and $M_2$ such that $P \subseteq M_1 \times M_2$, and
+for each $(n,M',n') \in \edges$, $n \neq n'$, 
 $M' \subseteq \nlabel(n)$, and $M' \subseteq \nlabel(n')$.
 %
 
@@ -56,7 +55,7 @@ A {\em path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes
 such that $(n_i,\_,n_{i+1}) \in \edges$ for each $ 0 < i < \ell$.
 %
 For a molecule $m \in M$,
-An {\em $m$-path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes 
+an {\em $m$-path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes 
 such that $(n_i,M',n_{i+1}) \in \edges$ and $m \in M'$ for
 each $ 0 < i < \ell$.
 %
@@ -83,7 +82,7 @@ and $\pairs(M'')$ are not active in any other node.
 We call $G$ {\em connected} if for each $n,n' \in \nodes$,
 $n'$ is reachable from $n$ in $G$.
 %
-We call $G$ $k$-connected if for each $E' \subseteq \edges$ and $|E'| < k$,
+We call $G$ $k$-connected if for each $\edges' \subseteq \edges$ and $|\edges'| < k$,
 VTS $(\nodes,\mols,\edges-E',\nlabel,\pairs,\edgef,\nodef)$ is connected.
 
 
@@ -266,7 +265,7 @@ The following formula encodes that the activity of the molecules on
 edges is defined by inhibition by other molecules based on the pairing
 matrix. 
 \begin{align}
-   \bigwedge\limits_{i,j,q, m}  e_{i,j,q,m} \limplies(  [ ( \bigvee_{m'} p_{m,m'} \land \bigwedge_{m' != m} p_{m,m'} \limplies e_{i,j,q,m'})] \lequiv \neg b_{i,j,q,m})
+   \bigwedge\limits_{i,j,q, m}  e_{i,j,q,m} \limplies(  [ ( \bigvee_{m'} p_{m,m'} \land \bigwedge_{m' \neq m} p_{m,m'} \limplies e_{i,j,q,m'})] \lequiv \neg b_{i,j,q,m})
   \tag{Aep}\label{eq:aep}
 \end{align}
 % \[ \bigwedge\limits_{i,j,q, k}  (e_{i,j,q,k} \land [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \limplies e_{i,j,q,k'})] ) \limplies \neg b_{i,j,q,k}) \, \]  
@@ -282,7 +281,7 @@ We use $m$-reachability to encode the stability condition in VTSs.
 %
 The following formula recursively encodes that node $j$ is $m$-reachable from node $i$ in less than $p$ steps
 if either there is a direct edge between $i$ and $j$ with $m$ present on the edge or there is a edge between $i^{\prime \prime}$ and
-$(i != i^{\prime \prime})$ with $m$ present, and j is $m$-reachable from $i'$ in less than $p-1$ steps.
+$(i \neq i^{\prime \prime})$ with $m$ present, and j is $m$-reachable from $i'$ in less than $p-1$ steps.
 %
 \begin{align}
   \bigwedge\limits_{i,j,m,p} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
@@ -305,7 +304,7 @@ $m$-reachable path from $j$ to $i$.\ashu{disjunction needed??}
 % F3: Stability condition. For every leaving molecule, the source node is reachable from the target node with that molecule present, in maximum p steps. 
 
 
-% F2: Reachability definition. Node j is reachable from node i with kth molecule present in maximum p steps if either there is a direct edge between i-j with that molecule present or there is a direct edge between $i^{\prime \prime}$ $(i != i^{\prime \prime})$ and j with kth molecule present on that edge and $i^{\prime \prime}$ are reachable from i in p steps. 
+% F2: Reachability definition. Node j is reachable from node i with kth molecule present in maximum p steps if either there is a direct edge between i-j with that molecule present or there is a direct edge between $i^{\prime \prime}$ $(i \neq i^{\prime \prime})$ and j with kth molecule present on that edge and $i^{\prime \prime}$ are reachable from i in p steps. 
 
 
 \subsubsection{$k$-connectivity constraints}
@@ -327,7 +326,7 @@ edge $(i,\_,j)$ and it is not dropped, or there is a node
 $i^{\prime}$ such that, there is an edge $(i,\_,i^{\prime})$ which is
 not dropped and $r'_{i',j}$ is true.
 \begin{align}
-\bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' != i}  r^{\prime}(i',j) \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}(i,j)  
+\bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}_{i,j}  
   \tag{D3}\label{eq:drop3}
 \end{align}
 Since we are looking for a graph that is not $k$-connected,
@@ -341,21 +340,27 @@ there is no path between them in the underlying undirected graph.
 The key improvement in our work over the earlier tool is the
 encoding of reachability, which was done using enumeration of paths.
 %
-We have encoded reachability in two different ways in~\eqref{eq:reach1} and~\eqref{eq:drop3}.
+In the current work, we have encoded reachability in two different
+ways in formulas~\eqref{eq:reach1} and~\eqref{eq:drop3}.
 %
-The reachability is recursively defined~\eqref{eq:drop3} and has trivial solution by
-making all $r'$s true.
+The reachability is recursively defined in~\eqref{eq:drop3} and has
+trivial solution by making all $r'$s true.
 %
-However, the trivial solution is disallowed by~\eqref{eq:drop3} and we find only the
-solutions that captures the evidence of unreachability.
+However, the trivial solution is disallowed by formula~\eqref{eq:drop4} and we find
+only the solutions that captures the evidence of unreachability.
 %
-In~\eqref{eq:reach1}, we have added length of paths in our reachability encoding.
+On the other hand,
+we have added length of paths in our reachability encoding in formula~\eqref{eq:reach1},
+which needs relatively more auxiliary variables.
 %
-This is because~\eqref{eq:reach2} has only positive occurrences of the reachability variables
-and circular dependencies in the recursive definition in~\eqref{eq:reach1} 
-may result in spurious satisfying assignments that do not encode reachability.
+This is because formula~\eqref{eq:reach2} has only positive
+occurrences of the reachability variables and circular dependencies in
+the recursive definition of $r'$s in ~\eqref{eq:reach1} may result
+in spurious satisfying assignments that do not encode reachability.
 %
-By adding the path length, we break the circular dependencies and the formula remain polynomial in size.
+By adding the path length, we break the circular dependencies, the
+formula remains polynomial in size, and satisfying assignments only
+corresponds to correct reachability.
 
 % We can go down or up using -C \_ option.  \newline 
 
