@@ -3,22 +3,9 @@ Total two pages
 \begin{itemize}
 \item \mukund{BIO motivation}
 
-The conservation of basic molecular processes across all living cells, including the genetic code, suggests that life on Earth arose only once: all extant organisms are presumed to trace their lineages back to a last universal common ancestor (LUCA). However, there are still vast differences in cellular and molecular architecture among the three kingdoms of life: bacteria, archaea, and eukaryotes [1]. Eukaryotic cells have larger genomes and have more complex cellular architectures than the prokaryotic bacteria and archaea. In particular, the cytoplasm of all eukaryotic cells is broken up into distinct membrane-bound locations known as organelles: the nuclear membrane, endoplasmic reticulum (ER), Golgi apparatus, vacuoles and lysosomes are examples of these. Cargo is moved between these organelles in small membrane-bound transporters known as vesicles [2].
+The conservation of basic molecular processes across all living cells, including the genetic code, suggests that life on Earth arose only once: all extant organisms are presumed to trace their lineages back to a last universal common ancestor (LUCA). However, there are still vast differences in cellular and molecular architecture among the three kingdoms of life: bacteria, archaea, and eukaryotes \cite{embley2006eukaryotic}. Eukaryotic cells have larger genomes and have more complex cellular architectures than the prokaryotic bacteria and archaea. In particular, the cytoplasm of all eukaryotic cells is broken up into distinct membrane-bound locations known as organelles: the nuclear membrane, endoplasmic reticulum (ER), Golgi apparatus, vacuoles and lysosomes are examples of these. Cargo is moved between these organelles in small membrane-bound transporters known as vesicles \cite{stenmark2009rab}.
 
-This organization resembles a transport logistics network, and is commonly known as the membrane traffic system. Membrane traffic underpins nearly every aspect of eukaryotic cellular physiology, including human cellular physiology. Defects in membrane traffic lead to a variety of disorders or even cell death [2]. Understanding how membrane traffic functions is therefore one of the central challenges of cell biology. Some progress has been made, as cell biologists have assembled a “parts list” of molecules that drive vesicle traffic [3]. The essential processes involve the creation of vesicles loaded with cargo from source organelles, known as “budding”, and the depositing of those vesicles and cargo into target organelles, known as “fusion” [4]. Budding is regulated by proteins known as coats and adaptors that select cargo. Fusion is regulated by proteins known as SNAREs and tethers, that ensure that vesicles fuse to the correct target [5]. Although we know a great deal about molecular-level details, there has been very little work done on how such processes are integrated across scales to build the entire vesicle traffic system. We have recently attempted to use ideas of graph theory to address this question [5,6]. The SNARE proteins are the focus of our current work. Abstractly, we can think of these proteins as labels that are collected from the source compartment and taken to the target compartment on vesicles. There is a corresponding set of label molecules on the target compartments. If the two sets of labels (on vesicles and targets) are compatible, then the vesicle will fuse. The question is: does this physical picture place any constrains on the global topology of the traffic graph? We have previously shown that one informative constraint is graph connectivity [6].
-
-
-1. Embley, T. M., and Martin, W. (2006). Eukaryotic evolution: changes and challenges. Nature 440, 623-630.
-
-2. Stenmark, Harald. "Rab GTPases as coordinators of vesicle traffic." Nature Reviews Molecular Cell Biology 10, no. 8 (2009): 513-525.
-
-3. Dacks, J. B., & Field, M. C. (2007). Evolution of the eukaryotic membrane-trafficking system: origin, tempo and mode. Journal of cell science, 120(17), 2977-2985.
-
-4. Munro S. 2004. Organelle identity and the organization of membrane traffic. Nature Cell Biology 6:469–472. doi: 10.1038/ncb0604-469.
-
-5. Mani, S., and Thattai, M. (2016b). Stacking the odds for Golgi cisternal maturation. eLife 10.7554/eLife.16231.
-
-6. Shukla, A., Bhattacharyya, A., Kuppusamy, L., Srivas, M., & Thattai, M. (2017). Discovering vesicle traffic network constraints by model checking. PLoS ONE, in press.
+This organization resembles a transport logistics network, and is commonly known as the membrane traffic system. Membrane traffic underpins nearly every aspect of eukaryotic cellular physiology, including human cellular physiology. Defects in membrane traffic lead to a variety of disorders or even cell death \cite{stenmark2009rab}. Understanding how membrane traffic functions is therefore one of the central challenges of cell biology. Some progress has been made, as cell biologists have assembled a “parts list” of molecules that drive vesicle traffic \cite{dacks2007evolution}. The essential processes involve the creation of vesicles loaded with cargo from source organelles, known as “budding”, and the depositing of those vesicles and cargo into target organelles, known as “fusion” \cite{munro2004organelle}. Budding is regulated by proteins known as coats and adaptors that select cargo. Fusion is regulated by proteins known as SNAREs and tethers, that ensure that vesicles fuse to the correct target \cite{mani2016stacking}. Although we know a great deal about molecular-level details, there has been very little work done on how such processes are integrated across scales to build the entire vesicle traffic system. We have recently attempted to use ideas of graph theory to address this question \cite{mani2016stacking,shukla}. The SNARE proteins are the focus of our current work. Abstractly, we can think of these proteins as labels that are collected from the source compartment and taken to the target compartment on vesicles. There is a corresponding set of label molecules on the target compartments. If the two sets of labels (on vesicles and targets) are compatible, then the vesicle will fuse. The question is: does this physical picture place any constrains on the global topology of the traffic graph? We have previously shown that one informative constraint is graph connectivity \cite{shukla}.
 
 \item \srivas{BIO to Graph problem}
 
@@ -31,7 +18,7 @@ This organization resembles a transport logistics network, and is commonly known
 
 % What is vesicle traffic systems
 
-vesicle traffic systems(VTS)
+Vesicle traffic systems(VTS)
 
 % Graph properties of the systems
 

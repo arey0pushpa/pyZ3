@@ -1,32 +1,10 @@
 \ankit{related work: other SAT works related to bio; Graph problems; Models of VTS/GRN}
 
-Satisfiability was the first NP-complete problem discovered by Cook in his famous paper [ref]. Every NP-complete problem can be reduced to solving for satisfiability. The fact is that SAT solvers have seen a surge in the handling of millions of variables, hence many general problems are encoded as a SAT problem. Due to the nature of the searching (exhaustive), solving the combinatorial problem is a natural fit for the SAT solvers. There are many graphs related combinatorial work [1-4] that have used SAT solvers. Thanks to the improvement in SAT solver and formal techniques, tools like model checkers and theorem provers scalability and combinatorial solving capability are now being used to model complex biological problems [1-3].
+Satisfiability was the first NP-complete problem discovered by Cook in his famous paper [ref]. Every NP-complete problem can be reduced to solving for satisfiability. The fact is that SAT solvers have seen a surge in the handling of millions of variables, hence many general problems are encoded as a SAT problem. Due to the nature of the searching (exhaustive), solving the combinatorial problem is a natural fit for the SAT solvers. There are many graphs related combinatorial work \cite{gay2013solving,wotzlaw2012generalized} that have used SAT solvers. Thanks to the improvement in SAT solver and formal techniques, tools like model checkers and theorem provers scalability and combinatorial solving capability are now being used to model complex biological systems \cite{heule2010exact,yordanov2013smt,mangla2010timing}.
 % Many network questions are being reduced to solving a SAT question.
-Many of these biological system uses model checkers to reason about graphs and networks rules with possible exhaustive search [5-6].  
+Many of these biological system uses model checkers to reason about graphs and networks rules with possible exhaustive search \cite{guerra2012reasoning,chin2008biographe}.  
 
-Recently model checkers found the use of modeling and understanding the gene regulatory networks (GNR) [7-9]. GNR is a complex system driven by many complex rules. We extended this work and have applied model checkers to the more complex transport network (VTS) [Mani and Thattai]. Model checkers are far scalable in comparison to simulations, but scaling it to cases which are interesting biologically is still a challenge. In this paper we have achieved the scalability required for analyzing vesicular transport network for eukaryotic cells, of total ten compartments (N = 10). \\
-
-
-\textbf{SAT, Bio and Graph}
-\begin{enumerate}
-\item Reasoning over Biological Networks using Maximum Satisfiability.
-\item BioGraphE: high-performance bionetwork analysis using the Biological Graph Environment.
-\item Generalized k-ary tanglegrams on level graphs: A satisfiability-based approach and its evaluation.
-\item SMT-Based Analysis of Biological Computation.
-\item A SAT-based algorithm for finding attractors in synchronous Boolean networks.
-\item ILP/SMT-Based Method for Design of Boolean Networks Based on Singleton Attractors.
-\item Exact DFA Identification Using SAT Solvers
-\item Timing Robustness in the Budding and Fission Yeast Cell Cycles.
-\item Solving Subgraph Epimorphism Problems using CLP
-and SAT.
-\end{enumerate}
-
-\textbf{GNR and SAT}
-\begin{enumerate}
-\item Model Checking Gene Regulatory Networks.
-\item Inference of Boolean Networks from Gene Interaction Graphs Using a SAT Solver
-\item Efficient parameter search for qualitative models of regulatory networks using symbolic model checking.
-\end{enumerate}
+Recently model checkers found the use of modeling and understanding the gene regulatory networks (GNR) \cite{giacobbe2015model,rosenblueth2014inference, batt2010efficient}. GNR is a complex system driven by many complex rules. We extended this work and have applied model checkers to the more complex transport network (VTS) \cite{mani2016stacking}. Model checkers are far scalable in comparison to simulations, but scaling it to cases which are interesting biologically is still a challenge. In this paper we have achieved the scalability required for analyzing vesicular transport network for eukaryotic cells, of total ten compartments (N = 10). \\
 
 %--------------------- DO NOT ERASE BELOW THIS LINE --------------------------
 
