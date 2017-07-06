@@ -1,8 +1,7 @@
-Again about two pages long
+%Again about two pages long
 
-\begin{itemize}
-\item \mukund{Detailed BIO}
-The cell as a transport graph: We consider a cell to be a collection of
+%\item \mukund{Detailed BIO}
+\textbf{The cell as a transport graph:} We consider a cell to be a collection of
 compartments (nodes) and vesicles (edges), thus defining a transport graph.
 Compartments represent the large membrane-bound organelles, which are
 connected by constant fluxes of small transport vesicles. Every compartment
@@ -11,7 +10,7 @@ and other biomolecules that regulate membrane traffic, or that play the
 role of passive cargo. Here we consider an abstract set of molecules and do
 not explicitly associate them with particular protein varieties.
 
-Molecular flows and steady state: The total amount of each molecular type
+\textbf{Molecular flows and steady state:} The total amount of each molecular type
 on each compartment can increase or decrease: this is due to gain or loss
 of that molecular type driven by incoming or outgoing vesicles. Each edge
 is thus associated with a flux of all the molecular types carried by the
@@ -20,7 +19,7 @@ compartments composition does not vary over time, meaning that all
 incoming and outgoing fluxes are balanced for each molecular type at each
 compartment.
 
-Vesicle targeting driven by molecular interactions: The model specification
+\textbf{Vesicle targeting driven by molecular interactions:} The model specification
 includes a description of how molecular properties influence vesicle
 transport. A vesicle can only contain a set of molecules that are present
 on its source compartment. Once a vesicle has budded out of the source, the
@@ -32,7 +31,7 @@ between at least one molecular type on the vesicle and one molecular type
 on the compartment. The list of molecular pairs that can drive a fusion
 event is given an a fusion pairing matrix.
 
-Molecular regulation: The final layer of our framework involves how the
+\textbf{Molecular regulation:} The final layer of our framework involves how the
 molecules are regulated. We assume that for fusion to occur, the pair of
 molecular types involved on the vesicle and compartment must both be in an
 “active” state. Whether these molecules are active or inactive depends on
@@ -46,32 +45,34 @@ molecules that can pair to drive fusion inhibit one another. This is
 motivated by the idea that pairing must generate an inactive bi-molecular
 complex.
 
-Synthesis: We now combine all the above ingredients. Given a particular
+\textbf{Synthesis:} We now combine all the above ingredients. Given a particular
 transport graph, a particular labeling of all the compartments and edges,
 a particular fusion pairing matrix, and a particular regulatory model we do
-the following. 1. We determine which molecules are “active” on every
-compartment or vesicle. 2. For every vesicle fusing to a compartment, we
+the following.
+\begin{enumerate}
+\item We determine which molecules are ``active" on every
+compartment or vesicle.
+\item or every vesicle fusing to a compartment, we
 determine whether there exists an active pair (one molecule on the vesicle,
-one on the compartment) which drives that fusion event. 3. For every
-vesicle-compartment pair where the vesicle does not fuse to the
+one on the compartment) which drives that fusion event.
+\item For every vesicle-compartment pair where the vesicle does not fuse to the
 compartment, we verify that there is no pairing of active molecules on the
-vesicle and compartment that could drive their fusion. 4. We verify that
-every molecular type entering a compartment also leaves the compartment,
+vesicle and compartment that could drive their fusion.
+\item We verify that every molecular type entering a compartment also leaves the compartment,
 and also that every molecular type entering a set of compartments also
 leaves that set; this is the steady state condition. This tells us that the
 particular graph and molecular labeling does represent an allowed steady
 state configuration of a VTS.
+\end{enumerate}
 
+\begin{itemize}
 \item \srivas{Detailed BIO to Graph problem}
 \end{itemize}
 
 
-The whole cell should be in stable condition i.e flow of the molecule
-is balanced at every point and globally. Each molecule leaving its
-source node on a vesicle should come back in a cycle.
+%he whole cell should be in stable condition i.e flow of the molecule is balanced at every point and globally. Each molecule leaving its source node on a vesicle should come back in a cycle.
 
 The following terms must be defined in this section
-
 \begin{itemize}
 \item Vesicular traffic network.
 \item Recycling of molecules, steady state.

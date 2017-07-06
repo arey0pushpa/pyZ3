@@ -1,24 +1,34 @@
-Total two pages
+%Total two pages
 
-\begin{itemize}
-\item \mukund{BIO motivation}
+%\begin{itemize}
+%\item \mukund{BIO motivation}
 
 The conservation of basic molecular processes across all living cells, including the genetic code, suggests that life on Earth arose only once: all extant organisms are presumed to trace their lineages back to a last universal common ancestor (LUCA). However, there are still vast differences in cellular and molecular architecture among the three kingdoms of life: bacteria, archaea, and eukaryotes \cite{embley2006eukaryotic}. Eukaryotic cells have larger genomes and have more complex cellular architectures than the prokaryotic bacteria and archaea. In particular, the cytoplasm of all eukaryotic cells is broken up into distinct membrane-bound locations known as organelles: the nuclear membrane, endoplasmic reticulum (ER), Golgi apparatus, vacuoles and lysosomes are examples of these. Cargo is moved between these organelles in small membrane-bound transporters known as vesicles \cite{stenmark2009rab}.
 
-This organization resembles a transport logistics network, and is commonly known as the membrane traffic system. Membrane traffic underpins nearly every aspect of eukaryotic cellular physiology, including human cellular physiology. Defects in membrane traffic lead to a variety of disorders or even cell death \cite{stenmark2009rab}. Understanding how membrane traffic functions is therefore one of the central challenges of cell biology. Some progress has been made, as cell biologists have assembled a “parts list” of molecules that drive vesicle traffic \cite{dacks2007evolution}. The essential processes involve the creation of vesicles loaded with cargo from source organelles, known as “budding”, and the depositing of those vesicles and cargo into target organelles, known as “fusion” \cite{munro2004organelle}. Budding is regulated by proteins known as coats and adaptors that select cargo. Fusion is regulated by proteins known as SNAREs and tethers, that ensure that vesicles fuse to the correct target \cite{mani2016stacking}. Although we know a great deal about molecular-level details, there has been very little work done on how such processes are integrated across scales to build the entire vesicle traffic system. We have recently attempted to use ideas of graph theory to address this question \cite{mani2016stacking,shukla}. The SNARE proteins are the focus of our current work. Abstractly, we can think of these proteins as labels that are collected from the source compartment and taken to the target compartment on vesicles. There is a corresponding set of label molecules on the target compartments. If the two sets of labels (on vesicles and targets) are compatible, then the vesicle will fuse. The question is: does this physical picture place any constrains on the global topology of the traffic graph? We have previously shown that one informative constraint is graph connectivity \cite{shukla}.
+This organization resembles a transport logistics network, and is commonly known as the membrane traffic system. Membrane traffic underpins nearly every aspect of eukaryotic cellular physiology, including human cellular physiology. Defects in membrane traffic lead to a variety of disorders or even cell death \cite{stenmark2009rab}. Understanding how membrane traffic functions is therefore one of the central challenges of cell biology. Some progress has been made, as cell biologists have assembled a “parts list” of molecules that drive vesicle traffic \cite{dacks2007evolution}. The essential processes involve the creation of vesicles loaded with cargo from source organelles, known as “budding”, and the depositing of those vesicles and cargo into target organelles, known as “fusion” \cite{munro2004organelle}. Budding is regulated by proteins known as coats and adaptors that select cargo. Fusion is regulated by proteins known as SNAREs and tethers, that ensure that vesicles fuse to the correct target \cite{mani2016stacking}. Although we know a great deal about molecular-level details, there has been very little work done on how such processes are integrated across scales to build the entire vesicle traffic system. We have recently attempted to use ideas of graph theory to address this question \cite{mani2016stacking,shukla}.
 
-\item \srivas{BIO to Graph problem}
+The SNARE proteins and the constraints that SNARE-to-SNARE regulations impose on feasibile behaviors of vesicular systems are the focus of our current work. Abstractly, we can think of these proteins as labels that are collected from the source compartment and taken to the target compartment on vesicles. There is a corresponding set of label molecules on the target compartments. If the two sets of labels (on vesicles and targets) are compatible, then the vesicle will fuse. The question is: does this physical picture place any constrains on the global topology of the traffic graph? We have previously shown that one informative constraint is graph connectivity \cite{shukla}.  The intricacies of SNARE regulation are largely unknown. How stringent SNARE regulation is can determine whether graph topologies of particular level of connectivity are biologically realizable.  For example, if SNAREs are completely unregulated and thus always active, they cannot be used to generate a traffic network. If these SNAREs are regulated by relatively simple rules then only highly connected traffic networks can be generated using them.   The question is can we work toward a predictive analytical framework of vesicle traffic?
 
-\item \srivas{Graph to previous encoding}
+The analysis of vesicle traffic systems is a difficult problem because of the combinatorial scaling of possible traffic topologies and regulatory rules.  Previous analyses of vesicle traffic networks dealt with this combinatorial explosion by using a sampling approach: simulating randomly generated regulatory rules and taking averages over many samples \cite{mani2016stacking}.  The outcome of such simulations is necessarily statistical rather than rigorous and precise. To make definite predictions about vesicle traffic network topologies, we need to efficiently check useful system properties over all possible graphs and all possible variations of rules, preferably without enumerating them.  Formal verification tools, such as model checkers \cite{clarke1996symbolic, biere2003bounded, clarke2008birth, cimatti2000nusmv, holzmann1997model} and SAT solvers \cite{moskewicz2001chaff,een2004extensible} serve precisely this purpose. These tools encode the problem symbolically, and check various properties without explicit enumeration of the graphs up to large but finite size of the models.
+%These tools are central to formal verification methods in computer science, and are increasingly being applied to understand biological systems, including gene regulatory networks [16-18]. 
 
-\end{itemize}
+In a recent work, we employed the model checker CBMC \cite{CKY03, ckl2004} meant to analyze ANSI C programs for studying this problem.  In this work, vesicular systems and SNARE regulations were modeled as C code mostly using arrays to represent graphs and boolean tables.  Queries about graph connectivity requirements for different variations of SNARE Regulations were modeled as logical assertions to be checked by the model checker.  CBMC uses its own built-in encodings to reduce the analysis problem to boolean satisfiability problem which is solved using SAT solvers.  This work was successful in demonstrating the feasibility of this technology to this domain.  However, the scalability of this approach was limited (up to vesicular systems with 7-8 nodes) due to the following reasons: 
+\begin{enumerate}
+\item The encoding used to model vesicular systems was not fine-tuned to the structure of the problem.
+\item The queries to be solved involve quantified formulas, i.e., we needed to solve queries of the form ``\emph{for all} graphs does  there \emph{exist} SNARE regulation constraints that satisfy biological steady state.
+\end{enumerate}
+As CBMC does not directly support solving such quantified formulas, we had to use a technique that combined non-determinism and partial enumeration that is not as efficient.\newline
+%\item \srivas{BIO to Graph problem}
+
+%\item \srivas{Graph to previous encoding}
+
+%\end{itemize}
 
 % \noindent
 
 
 % What is vesicle traffic systems
 
-Vesicle traffic systems(VTS)
 
 % Graph properties of the systems
 
@@ -28,8 +38,7 @@ Vesicle traffic systems(VTS)
 
 
 %
-
-In this paper, we have developed a novel SAT encoding for
+\textbf{Vesicle traffic systems(VTS)} In this paper, we have developed a novel SAT encoding for
 searching a VTS that satisfy the given properties.
 %
 We improved the encoding of some of the conditions for VTSs.
@@ -45,14 +54,14 @@ avoided a blowup in the formula size.
 %
 
 We have implemented the encoding using Z3~\cite{z3} python API and searched for
-VTS satisfying various properties upto size \ankit{15} nodes as compare
-earlier tool that could only search graph upto size 8 nodes.
+VTS satisfying various properties upto size 14-18 nodes as compare
+earlier tool that could only search graph upto size 7-8 nodes.
 %
-Since most VTSs in the cells are of \ankit{10} compartments,
+Since most VTSs in the cells are of 10 compartments,
 our tool will be useful for biologists to study VTSs.
 %
 Furthermore, our encoding supports several variations of
-the conditions.
+the conditions.\newline
 
 The following are the contributions of this work:
 \begin{itemize}

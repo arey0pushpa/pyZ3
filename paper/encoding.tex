@@ -1,4 +1,4 @@
-In this section, we will formally define VTSs as a labelled graph
+In this section, we will formally define VTSs as a labeled graph
 and the conditions on the graphs that are discussed in the previous
 section.
 %
@@ -7,7 +7,7 @@ for the graphs that satisfies the conditions.
 
 \subsection{Model}
 
-We model VTSs as labelled directed graphs.
+We model VTSs as labeled directed graphs.
 The graph labels both nodes and edges with sets of molecules to denote
 the set of molecules present in them.
 The graph is formally defined as follows.
@@ -265,7 +265,7 @@ The following formula encodes that the activity of the molecules on
 edges is defined by inhibition by other molecules based on the pairing
 matrix. 
 \begin{align}
-   \bigwedge\limits_{i,j,q, m}  e_{i,j,q,m} \limplies(  [ ( \bigvee_{m'} p_{m,m'} \land \bigwedge_{m' \neq m} p_{m,m'} \limplies e_{i,j,q,m'})] \lequiv \neg b_{i,j,q,m})
+   \bigwedge\limits_{i,j,q, m}  [e_{i,j,q,m} \limplies  \bigwedge_{m' \neq m} (p_{m,m'} \limplies e_{i,j,q,m'})] \lequiv (\neg b_{i,j,q,m} \land  \bigwedge_{m' \neq m, p_{m,m'}} \neg b_{i,j,q,m'})
   \tag{Aep}\label{eq:aep}
 \end{align}
 % \[ \bigwedge\limits_{i,j,q, k}  (e_{i,j,q,k} \land [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \limplies e_{i,j,q,k'})] ) \limplies \neg b_{i,j,q,k}) \, \]  
@@ -365,9 +365,10 @@ corresponds to correct reachability.
 % We can go down or up using -C \_ option.  \newline 
 
 \subsection{SAT problems for different variants}
-\ankit{Bring model variant table here}
+%\ankit{Bring model variant table here}
 
-We have encoded several versions of the models of vesicle traffic systems listed. Starting from most basic version (A) where every present molecule is considered to be active. Other cases includes different combinations of constraints on the activity on nodes and edges. Most general restriction is activity of the molecule is dependent on the other molecule present on the node (a Boolean function of N-1 parameters) (B,C,D,F,G,H). In very special case (E,F,G,H) activity of the molecules on the edges is dictated by pairing matrix, we call this process ``pairing inhibition".
+We have encoded several versions of the models of vesicle traffic systems listed. Starting from most basic version (A) where every present molecule is considered to be active. Other cases includes different combinations of constraints on the activity on nodes and edges. Most general restriction is activity of the molecule is dependent on the other molecules presence on the node (a Boolean function of N-1 parameters) (B,C,D,F,G,H). In very special case (E,F,G,H) activity of the molecules on the edges is dictated by pairing matrix, we call this process ``pairing inhibition". 
+%In this case if the corresponding pairing molecules present on the edge with the molecules , both the molecule and all corresponding molecules gets inhibited/become inactive.  
 
 % DIVIDE INTO COLUMNS and TALK ABOUT A/1 or A/0.
 %\todo{describe the variations}
@@ -384,6 +385,12 @@ We have encoded several versions of the models of vesicle traffic systems listed
 %\item Activity of molecules on the nodes is based on Boolean function of presence of other moleculess and on edge by pairing inhibition with self-edges are allowed.
 \item Version F but self-edges are allowed.
 \end{enumerate}
+
+We have applied the tool for the above variations for searching the vesicle traffic systems that satisfies
+their corresponding properties. 
+
+After creating the formula using different Boolean variables we ship them directly to the solver. In case of a satisfying (SAT) assignment of the added constraints the Z3 theorem prover gives a model with the variable assignment. In case no possible satisfying assignment the solver returns UNSAT.
+%
 %
 
 % \subsection{Creating a solver and solving these constraints}

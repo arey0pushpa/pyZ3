@@ -6,52 +6,58 @@ Given a system that follows the VTS, we are interested in its connectivity (grap
 
 %Besides using the default Z3 solvers we have used for these experiments \ankit{Z3, picoSAT, Lingeling}. The performance of Z3 was ...
 %
-We have applied the tool for the above variations for searching the vesicle traffic systems that satisfies
-their corresponding properties. Our tool allows user to choose a model and the size of the network besides other parameters like connectivity and number of parallel edges. Our tool uses Z3 python interface to build the needed constraints and applies $\zthree$ on the constraints.
-
-After creating the formula using different Boolean variables we ship them directly to the solver. In case of a satisfying (SAT) assignment of the added constraints the Z3 theorem prover gives a model with the variable assignment. In case no possible satisfying assignment the solver returns UNSAT.
-%
 % \Ankit{In other solver variations ...}
+Our tool allows user to choose a model and the size of the network besides other parameters like connectivity and number of parallel edges. Our tool uses Z3 python interface to build the needed constraints and applies $\zthree$ on the constraints.
+
 Our tool also translates the model found by $\zthree$ into a vesicle traffic system and presents a visual
-output to the user. The graph provides an overview of the vesicle transport system with directed labeled edges and nodes providing the complete information about the shown graph. The output graph will satisfy the underlying rules of the system, so it is a valid vesicle transport network. Dashed lines are used in the resultant visual network output to specify which edges edges are dropped to make the graph disconnected specifying the connectivity of the graph.
+output to the user. The output graph will satisfy the underlying rules of the system, so it is a valid vesicle transport network. The graph provides an overview of the underlying vesicle transport system with directed labeled edges and nodes providing the complete information about the system. Dashed lines are used in the resultant visual network output to specify the dropped edges to make the graph disconnected, which gives information about the connectivity of the graph.
 
 \input{tbl-qf-graph}
-
-In table~\ref{tab:qf-graph}, we present the running times for the search of vesicle traffic systems of sizes 2 to 10 that satisfies the model variants. Formula for N = 10 returns in 45 mins with a SAT result. In CBMC N = 10 results in OUT OF MEMORY. Hence with use of this novel encoding we are able to scale the system to much larger compartmentalized systems especially eukaryotics cells with ten compartments.  This additional cushion of scalability can provide us leverage to ask for more questions that were not previously possible for example what is the minimum number of molecules required to satisfy the vesicular traffic system in eukaryotes.
+\input{tbl-qf1-graph}
+In Table 1. and Table 2.
+%~\ref{tab:qf-graph},
+we present the running times for the search of vesicle traffic systems of sizes 2 to 10 that satisfies the model variants. Formula for N = 10 returns in 45 minutes with a SAT result. In CBMC N = 10 results in OUT OF MEMORY. Hence with use of this novel encoding we are able to scale the system to much larger compartmentalized systems especially eukaryotics cells with ten compartments.  This additional cushion of scalability can provide us leverage to ask for more questions that were not previously possible for example what is the minimum number of molecules required to satisfy the vesicular traffic system in eukaryotes.
 
 % REQUIRE COMPARISION WITH CBMC RUN TIME ?
-The experiments were done on a machine with ... processor 
-and ... RAM.
+The experiments were done on a machine with Intel(R) Core(TM) i3-4030U CPU @ 1.90GHz processor 
+and 4GB RAM.
+%
+$\zthree$ was able to solve the constraints up to 18 nodes.
 %
 
-%
-$\zthree$ was able to solve the constraints up to 15 nodes.
-%
-
-In table~\ref{tbl:qf-results} 
+%table~\ref{tbl:qf-results} 
 
 \begin{table}[!ht]
 \centering
 \def\arraystretch{1.6}
 \caption{
 {\bf Activity regulation of molecules and corresponding connectivity of the graph.}}
-  \begin{tabular}{|c|c|c|c|c|}
+  \begin{tabular}{|c|c|c|c|}
     \hline
-  \multirow{2}{*}{\textbf{Sr.No}}  & \multicolumn{2}{c|}{\textbf{Activity constraint}} &  \multicolumn{2}{c|}{\textbf{Graph connectivity}}  \\
+  {\textbf{Version}}  & {\textbf{Constraints} &  {\textbf{Least graph connectivity}}  \\
     % \hline
     % \textbf{Inactive Modes} & \textbf{Description}\\
-    \cline{2-5}
-    {} & \multirow{1}{*} {\bf{ On compartment}} & \multirow{1}{*} {\bf{On vesicle}}  & \textbf{\textbf{Least}} & \textbf{Highest}\\
+  %  \cline{3-4}
+  %  {} & {} & \textbf{\textbf{Least}} & \textbf{Highest}\\
     %\hhline{~--}
     \hline
-E. & A\_nb & A\_eb & 2-connected & 3-connected \\ \hline
-C. & A\_nn & A\_eb & 3-connected & 3-connected \\  \hline
-F. & A\_nb & A\_ep & 4-connected & 4-connected \\ \hline
-D. & A\_nn & A\_ep & No graph & No graph \\ \hline
-B. & A\_nb & A\_en & No graph & No graph \\ \hline
-A. & A\_nn & A\_en & No graph & No graph \\ \hline
-G. & A\_nb & A\_eb + C\_ed & 3-connected & 3-connected \\ \hline
-H. & A\_nb & A\_eb + C\_es & No-idea & No-idea \\ \hline
+    
+    A. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_en & No graph  \\ \hline
+B. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_en & No graph  \\ \hline
+C. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_eb & 3-connected  \\  \hline
+D. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_ep & No graph  \\ \hline
+E. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb & 2-connected  \\ \hline
+F. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_ep & 4-connected  \\ \hline
+G. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb C\_ed & 3-connected \\ \hline
+
+%A. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_en & No graph & No graph \\ \hline
+%B. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_en & No graph & No graph \\ \hline
+%C. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_eb & 3-connected & 3-connected \\  \hline
+%D. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_ep & No graph & No graph \\ \hline
+%E. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb & 2-connected & 3-connected \\ \hline
+%F. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_ep & 4-connected & 4-connected \\ \hline
+%G. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb C\_ed & 3-connected & 3-connected \\ \hline
+%H. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb  A\_eb + C\_es & No-idea & No-idea \\ \hline
 
 % C_es :Self edges are allowed
 % C_ed : Every edge is distinct 
