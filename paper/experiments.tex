@@ -20,9 +20,14 @@ we present the running times for the search of vesicle traffic systems of sizes 
 
 % REQUIRE COMPARISION WITH CBMC RUN TIME ?
 The experiments were done on a machine with Intel(R) Core(TM) i3-4030U CPU @ 1.90GHz processor 
-and 4GB RAM.
-%
-$\zthree$ was able to solve the constraints up to 18 nodes.
+and 4GB RAM. On this machine the CBMC encoding ran out of memory (M/O) for N $\geq$ 6 whereas new novel encoding was able to handle the case fairly easily. We think the main reason for such improvement are:
+\begin{enumerate}
+\item Direct encoding into the solver rather than using CFE (CBMC C front end), which treats front end variables as C variable and similarly other C overheads.
+\item Current novel encoding is fine-tuned to the structure of the problem.
+\item Improved encoding based on reachability rather than complete enumeration and non-determinism.
+\end{enumerate} 
+% 
+$\zthree$ was able to solve the constraints up to 14-18 nodes (based on the versions).
 %
 
 %table~\ref{tbl:qf-results} 
@@ -34,29 +39,29 @@ $\zthree$ was able to solve the constraints up to 18 nodes.
 {\bf Activity regulation of molecules and corresponding connectivity of the graph.}}
   \begin{tabular}{|c|c|c|c|}
     \hline
-  {\textbf{Version}}  & {\textbf{Constraints}} &  {\textbf{Graph connectivity}}  \\
+  {\multirow{2}{*}{\textbf{Version}}}  & {\multirow{2}{*}{\textbf{Constraints}}} &  \multicolumn{2}{c|}{\textbf{Graph connectivity}}  \\
     % \hline
     % \textbf{Inactive Modes} & \textbf{Description}\\
-  %  \cline{3-4}
-  %  {} & {} & \textbf{\textbf{Least}} & \textbf{Highest}\\
+   \cline{3-4}
+   {} & {} & \textbf{\textbf{Least}} & \textbf{Highest}\\
     %\hhline{~--}
     \hline
     
-    A. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_en & No graph  \\ \hline
-B. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_en & No graph  \\ \hline
-C. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_eb & 3-connected  \\  \hline
-D. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_ep & No graph  \\ \hline
-E. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb & 2-connected  \\ \hline
-F. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_ep & 4-connected  \\ \hline
-G. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb C\_ed & 3-connected \\ \hline
+%    A. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_en & No graph  \\ \hline
+%B. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_en & No graph  \\ \hline
+%C. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_eb & 3-connected  \\  \hline
+%D. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_ep & No graph  \\ \hline
+%E. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb & 2-connected  \\ \hline
+%F. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_ep & 4-connected  \\ \hline
+%G. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb C\_ed & 3-connected \\ \hline
 
-%A. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_en & No graph & No graph \\ \hline
-%B. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_en & No graph & No graph \\ \hline
-%C. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_eb & 3-connected & 3-connected \\  \hline
-%D. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_ep & No graph & No graph \\ \hline
-%E. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb & 2-connected & 3-connected \\ \hline
-%F. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_ep & 4-connected & 4-connected \\ \hline
-%G. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb C\_ed & 3-connected & 3-connected \\ \hline
+A. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_en & No graph & No graph \\ \hline
+B. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_en & No graph & No graph \\ \hline
+C. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_eb & 3-connected & 3-connected \\  \hline
+D. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_ep & No graph & No graph \\ \hline
+E. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb & 2-connected & 3-connected \\ \hline
+F. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_ep & 4-connected & 4-connected \\ \hline
+G. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb C\_ed & 3-connected & 3-connected \\ \hline
 %H. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb  A\_eb + C\_es & No-idea & No-idea \\ \hline
 
 % C_es :Self edges are allowed
