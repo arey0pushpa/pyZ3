@@ -1,22 +1,66 @@
 \begin{table}[t]
   \centering
-  \begin{tabular}[t]{|c|c|c|c|}\hline
-    \textbf{Size} &  \textbf{Model E}   & \textbf{ Model C} &  \textbf{Model F} \\\hline
+  \begin{tabular}[t]{|c|c|c|c|c|c|c|c|c|}\hline
+    \textbf{Size}  & \multicolumn{2}{c|}{\textbf{Model A}} & \multicolumn{2}{c|}{\textbf{Model C}} & \multicolumn{2}{c|}{\textbf{Model D}}  &  \multicolumn{2}{c|}{\textbf{Model F}} \\\hline
    
-    2 & !0.12580037117 & 0.151083230972 (6 m) & 0.346032619476 (8m)\\\hline
-    3 & 0.6180164814 & 0.950254201889 (8 m) & 1.36192512512 (8m)\\\hline
-    4 & 2.85294270515 & 2.33548283577 (8m)& 4.81189107895 (8m)\\\hline
-    5 & 10.2665607929 & 7.59908008575 (10m)& 33.3597934246 (10m) \\\hline
-    6 & 30.8151321411 & 19.5222249031 (14m)& 147.51689291 (12m)\\\hline
-    7 & 82.9429190159& 81.8970763683 (14m)& 522.259805918 (14m)\\\hline
-    8 & 303.199189901 &  630.852905273 (16m)&  2142.76 (16 m)\\\hline
-    9 & 971.009485006& 1262.26939797 (18m) , 1444.16951442 (20m)
-& 4243.3466 (20 m)\\\hline
-    10 & 2274.30059648 &  7681.93265533 (20 m) &  - (20m)\\\hline
+   \cline{2-9}
+    {} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} \\\hline
+    
+    2 & !0.085 & !2.43 & 0.15 & 2.12 & !0.13 & !1.89 & 0.35 & 5.12 \\\hline
+    3 & !0.54 & !8.04 & 0.95  & 7.65 & 0.62 & 7.66  & 1.36 & 23.94\\\hline
+    4 & !2.57 & !297.93 & 2.33 & 22.74 & 2.85 & 48.35  & 4.81 & 123.34\\\hline
+    5 & !7.7 & !3053.8 & 7.60 & 500.03 & 10.27 & 890.84 & 33.36  & 2482.71 \\\hline
+    6 & !22.98 & - & 19.52 & - & 30.81 & -  & 147.52 & -\\\hline
+    7 & !57.07 & - & 81.89 & - & 82.94 & - & 522.26  & - \\\hline
+    8 & !164.14 & - & 630.85 & - & 303.19 &  - & 2142.76 & -\\\hline
+    9 & !307.67 & - & 2203.45 & - & 971.01 & - & 4243.34 & -\\\hline
+    10 & !558.34 & - & 7681.93 & - & 2274.30 & - & 7786.82 & -\\\hline
   \end{tabular}
-  \caption{Runtimes for searching for models in secs.}
+  \caption{Run-times for searching for models (in secs).}
   \label{tab:qf-grabh}
 \end{table}
+
+
+%\begin{table}[t]
+%  \centering
+%  \begin{tabular}[t]{|c|c|c|c|}\hline
+%    \textbf{Size} &  \textbf{Model D}   & \textbf{ Model C} &  \textbf{Model F} \\\hline
+%   
+%    2 & !0.12580037117 & 0.151083230972 (6 m) & 0.346032619476 (8m)\\\hline
+%    3 & 0.6180164814 & 0.950254201889 (8 m) & 1.36192512512 (8m)\\\hline
+%    4 & 2.85294270515 & 2.33548283577 (8m)& 4.81189107895 (8m)\\\hline
+%    5 & 10.2665607929 & 7.59908008575 (10m)& 33.3597934246 (10m) \\\hline
+%    6 & 30.8151321411 & 19.5222249031 (14m)& 147.51689291 (12m)\\\hline
+%    7 & 82.9429190159& 81.8970763683 (14m)& 522.259805918 (14m)\\\hline
+%    8 & 303.199189901 &  630.852905273 (16m)& 2142.76 (16 m)\\\hline
+%    9 & 971.009485006& 1262.26939797 (18m), 2203.44609618 (20m)
+%& 4243.3466 (20 m)\\\hline
+%    10 & 2274.30059648 & 7681.93265533 (20 m) & 7786.81822681 (20m)\\\hline
+%  \end{tabular}
+%  \caption{Runtimes for searching for models in secs.}
+%  \label{tab:qf-grabh}
+%\end{table}
+%
+%\begin{table}[t]
+%  \centering
+%  \begin{tabular}[t]{|c|c|c|c|}\hline
+%    \textbf{Size} &  \textbf{Model E}   & \textbf{ Model C} &  \textbf{Model F} \\\hline
+%   
+%    2 & !1.89 & 2.12  & 5.12 (8m)\\\hline
+%    3 &  7.66 & 7.65  & 23.94 \\\hline
+%    4 & 48.35 & 22.74 &  123.34 \\\hline
+%    5 & 890.84 & 500 & 2482.741s  \\\hline
+%    6 &  & - & -\\\hline
+%    7 & - & - & - \\\hline
+%    8 & - &  - & - \\\hline
+%    9 & - & -
+%& - \\\hline
+%    10 & - & - & - \\\hline
+%  \end{tabular}
+%  \caption{Runtimes for searching for models in secs CBMC.}
+%  \label{tab:qf-grabh}
+%\end{table}
+
 %  \todo{Make table for all sizes and variants of the tool}
 
 %--------------------- DO NOT ERASE BELOW THIS LINE --------------------------
