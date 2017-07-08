@@ -18,6 +18,28 @@ In Table 1. and Table 2.
 %~\ref{tab:qf-graph},
 we present the running times for the search of vesicle traffic systems of sizes 2 to 10 that satisfies the model variants. Formula for N = 10 returns in 45 minutes with a SAT result. In CBMC N = 10 results in OUT OF MEMORY. Hence with use of this novel encoding we are able to scale the system to much larger compartmentalized systems especially eukaryotics cells with ten compartments.  This additional cushion of scalability can provide us leverage to ask for more questions that were not previously possible for example what is the minimum number of molecules required to satisfy the vesicular traffic system in eukaryotes.
 
+\begin{tikzpicture}
+
+  \begin{axis}[title  = CBMC Vs Z3 encoding for N $\equal$ 5 (in secs),
+    xbar,
+    y axis line style = { opacity = 0 },
+    axis x line       = none,
+    tickwidth         = 0pt,
+    enlarge y limits  = 0.32,
+    enlarge x limits  = 0.04,
+    symbolic y coords = {Version F, Version E, Version C, Version A},
+    nodes near coords,
+    legend pos=outer north east,
+  ]
+  \legend{CBMC, Z3}
+  \addplot coordinates { (3053.8,Version A)         (500.03,Version C)
+                         (890.84,Version E)  (2482.71,Version F) };
+  \addplot coordinates { (7.7,Version A)         (7.60,Version C)
+                         (10.27,Version E)   (33.36,Version F)  };
+  
+  \end{axis}
+\end{tikzpicture}
+
 % REQUIRE COMPARISION WITH CBMC RUN TIME ?
 The experiments were done on a machine with Intel(R) Core(TM) i3-4030U CPU @ 1.90GHz processor 
 and 4GB RAM. On this machine the CBMC encoding ran out of memory (M/O) for N $\geq$ 6 whereas new novel encoding was able to handle the case fairly easily. We think the main reason for such improvement are:
@@ -43,7 +65,7 @@ $\zthree$ was able to solve the constraints up to 14-18 nodes (based on the vers
     % \hline
     % \textbf{Inactive Modes} & \textbf{Description}\\
    \cline{3-4}
-   {} & {} & \textbf{\textbf{Least}} & \textbf{Highest}\\
+   {} & {} & \textbf{\textbf{Least connected}} & \textbf{Sampling: Guarantee}\\
     %\hhline{~--}
     \hline
     
