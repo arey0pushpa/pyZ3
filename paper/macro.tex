@@ -56,6 +56,25 @@
 \usepackage{verbatim}
 \usepackage{pgfplots}
 \newcommand*{\equal}{=}
+ \usepackage{tikz}
+ \usepackage{xparse}
+\usetikzlibrary{matrix,backgrounds}
+\pgfdeclarelayer{myback}
+\pgfsetlayers{myback,background,main}
+
+\tikzset{mycolor/.style = {line width=1bp,color=#1}}%
+\tikzset{myfillcolor/.style = {draw,fill=#1}}%
+
+
+\NewDocumentCommand{\highlight}{O{blue!40} m m}{%
+\draw[mycolor=#1] (#2.north west)rectangle (#3.south east);
+}
+
+\NewDocumentCommand{\fhighlight}{O{blue!40} m m}{%
+\draw[myfillcolor=#1] (#2.north west)rectangle (#3.south east);
+}
+ \usetikzlibrary{matrix,decorations.pathreplacing, calc, positioning}
+
 
 
 % create "+" rule type for thick vertical lines
