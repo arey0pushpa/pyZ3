@@ -1,4 +1,6 @@
-Given a system that follows the VTS, we are interested in its connectivity (graph) property. We have implemented the encoding of the constraints in the python interface of $\zthree$. The basic idea is to constraint the variables such that vesicular transport rules are respected and using constraints (D0-D5) reason about the connectivity of the underlying structure (graph). We are interested in both least connectivity requirement (LRC) and least guarantee connectivity (LGC).
+Given a system that follows the VTS, we are interested in its connectivity (graph) property. We have implemented the encoding of the constraints in the python interface of $\zthree$. The basic idea is to constraint the variables such that vesicular transport rules are respected and using constraints (D0-D5) reason about the connectivity of the underlying structure (graph).
+
+% We are interested in both least connectivity requirement (LRC) and least guarantee connectivity (LGC).
 %LCR, that is required for a vesicular transport version to work and least connectivity that guarantees that vesicular transport system with that connectivity will always satisfies the rules.
 
 % Whether a valid vesicular transport system is of certain connectiviity.   
@@ -7,22 +9,18 @@ Given a system that follows the VTS, we are interested in its connectivity (grap
 %Besides using the default Z3 solvers we have used for these experiments \ankit{Z3, picoSAT, Lingeling}. The performance of Z3 was ...
 %
 % \Ankit{In other solver variations ...}
-Our tool allows user to choose a model and the size of the network besides other parameters like connectivity and number of parallel edges. Our tool uses Z3 python interface to build the needed constraints and applies $\zthree$ on the constraints.
-
-Our tool also translates the model found by $\zthree$ into a vesicle traffic system and presents a visual
-output to the user. The output graph will satisfy the underlying rules of the system, so it is a valid vesicle transport network. The graph provides an overview of the underlying vesicle transport system with directed labeled edges and nodes providing the complete information about the system. Dashed lines are used in the resultant visual network output to specify the dropped edges to make the graph disconnected, which gives information about the connectivity of the graph.
+Our tool allows the user to choose a model and the size of the network besides other parameters like connectivity and number of parallel edges. It uses Z3 Python interface to build the needed constraints and applies $\zthree$ solver on the constraints to find a model ( a satisfying assignment that respects the constraints). This tool also translates the satisfying model found by $\zthree$ into a vesicle traffic system and presents a visual output to the user in form of annotated graph. The output graph will satisfy the underlying rules of the system, so it always is a valid vesicle transport network. The resultant graph provides an overview of the underlying vesicle transport system where directed labeled edges and nodes provide the complete information about the system. Dashed lines are used in the resultant visual network output to specify the dropped edges to make the graph disconnected, which gives information about the connectivity of the graph.
 
 \input{tbl-qf-graph}
 %\input{tbl-qf1-graph}
-In Table 1. and Table 2.
+In Table 1. 
 %~\ref{tab:qf-graph},
-we present the running times for the search of vesicle traffic systems of sizes 2 to 10 that satisfies the model variants. Formula for N = 10 returns in 45 minutes with a SAT result. In CBMC N = 10 results in OUT OF MEMORY. Hence with use of this novel encoding we are able to scale the system to much larger compartmentalized systems especially eukaryotics cells with ten compartments.  This additional cushion of scalability can provide us leverage to ask for more questions that were not previously possible for example what is the minimum number of molecules required to satisfy the vesicular traffic system in eukaryotes.
+we present the running times for the search of vesicle traffic systems of sizes 2 to 10 that satisfies the model variants. For example, the formula for variation F, the total number of compartments (N) equals to 10, returns in 129.78 minutes (7786.8 secs) with a SAT result. In comparison, CBMC encoding results in OUT OF MEMORY for the same variation and same compartment size. Hence with the use of this novel encoding, we are able to scale the system to a much larger compartmentalized system, especially to eukaryotic cells with a total number of ten compartments. This additional cushion of scalability can provide us leverage to ask for related open questions that were not previously possible, for example, what is the minimum number of molecules required to satisfy the vesicular traffic system in eukaryotes.
 
 \input{cz-comparision}
 
 % REQUIRE COMPARISION WITH CBMC RUN TIME ?
-The experiments were done on a machine with Intel(R) Core(TM) i3-4030U CPU @ 1.90GHz processor 
-and 4GB RAM. On this machine the CBMC encoding ran out of memory (M/O) for N $\geq$ 6 whereas new novel encoding was able to handle the case fairly easily. We think the main reason for such improvement are:
+The experiments were done on a machine with Intel(R) Core(TM) i3-4030U CPU @ 1.90GHz processor and 4GB RAM. On this machine, the CBMC encoding ran out of memory (M/O) for N $\geq$ 6 whereas new novel encoding was able to handle the case fairly easily. We think the main reasons for such an improvement are the following:
 \begin{enumerate}
 \item Direct encoding into the solver rather than using CFE (CBMC C front end), which treats front end variables as C variable and similarly other C overheads.
 \item Current novel encoding is fine-tuned to the structure of the problem.

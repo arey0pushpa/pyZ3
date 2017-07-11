@@ -2,10 +2,10 @@
 \centering
 \begin{tikzpicture}
 \matrix [matrix of math nodes,left delimiter=(,right delimiter=),row sep=0.5cm,column sep=0.5cm] (m) {
-\times & \times & \times &\times&\times&\times & 1 & \times\\
-\times & \times & \times&\times&\times&1& \times &\times \\
-\times & \times & \times&\times&1&\times&\times &\times\\
-\times & \times & \times&\times & \times & \times &\times & \times\\
+\times & \times & \times &\times&\times&\times & \times & \times\\
+\times & \times & \times&\times&\times&\times& 1 &\times \\
+\times & \times & \times&\times&\times&1&\times &\times\\
+\times & \times & \times&\times & 1 & \times &\times & \times\\
  \times & \times & \times & \times & \times & \times & \times & \times\\
  \times & \times & \times &\times & \times & \times & \times & \times\\
  \times & \times & \times & \times & \times & \times & \times & \times\\
@@ -48,11 +48,11 @@
 
 \begin{pgfonlayer}{myback}
 
-%\foreach \element in {m-1-1,m-6-5,m-5-3}{
-%\highlight[pink]{\element}{\element}
-%}
-\foreach \element in {m-1-7,m-2-6,m-3-5}{
-\highlight[blue!50]{\element}{\element}
+\foreach \element in {m-1-7,m-3-8,m-5-1,m-5-2,m-5-3,m-5-4,m-6-1,m-6-2,m-6-3,m-6-4,m-7-1,m-7-2,m-7-3,m-7-4,m-8-1,m-8-2,m-8-3,m-8-4}{
+\highlight[pink]{\element}{\element}
+}
+\foreach \element in {m-2-7,m-3-6,m-4-5}{
+\fhighlight[blue!10]{\element}{\element}
 }
 \end{pgfonlayer}
 
