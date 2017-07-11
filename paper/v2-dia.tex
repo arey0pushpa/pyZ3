@@ -2,7 +2,7 @@
 \centering
 
 \begin{tikzpicture}[orm,every predicate/.style={}]
-    \entity (E) {Node1\\($M_0 M_1 M_2 M_3 M_4$)};
+    \entity (E) {Node1\\[$M_0 M_1 M_2 M_3 M_4$]};
     \binary[left=of E.north west, unique=2] (h) {};
 
        % \binary[left=of E.north west, unique=1-2] (w) {};
@@ -16,7 +16,7 @@ at=(i.north),anchor=south] {[$M_{0} M_{1} M_{3}$]};
 \node[role name,
 at=(h.north),anchor=south] {[$M_{0} M_{1}$]};
 
-    \entity[left=of h] (Rank) {Node0\\($M_0 M_1 M_2 M_3 M_6$)};
+    \entity[left=of h] (Rank) {Node0\\[$M_0 M_1 M_2 M_3 M_6$]};
   %  \entity[left=of u] (Car) {CompanyCar\\(.regNr)};
   
 
@@ -43,7 +43,7 @@ at=(xyz.north),anchor=south] {[$M_{0} M_{1} M_{3}$]};
       \plays (Rank) to (xyz.west); 
     \plays[mandatory] (E) to (xyz.east);
       
-    \entity[right=1.8 of E] (Date) {Node2\\($M_1 M_2 M_3 M_6 M_8$)};
+    \entity[right=1.8 of E] (Date) {Node2\\[$M_1 M_2 M_3 M_6 M_8$]};
    %\plays[mandatory] (E) to (xx.west); 
 
     \plays[mandatory] (E) to (b.west); 
