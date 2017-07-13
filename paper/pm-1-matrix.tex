@@ -68,13 +68,13 @@
   \node[draw,below right of=n0] (n2) {$n_2:\overline{12357}$};
 
   \draw[->,thick] (n0) -- node[left=1mm]  {$0\overline{1}$} (n1);
-  \draw [->,thick] (n0) to [bend right=-30] node[left=1mm]  {$\overline{01}23$} (n1);
-  \draw [->,thick] (n1) to [bend right=-30] node[below=2pt,xshift=3pt]  {$01\overline{3}$} (n0);
+  \draw [->,thick] (n0) to [bend right=-30] node[right=1mm]  {$\overline{01}23$} (n1);
+  \draw [->,thick] (n1) to [bend right=-30] node[left=1mm]  {$01\overline{3}$} (n0);
 
   \draw [->,thick] (n1) -- node[below=1mm]  {$1\overline{2}3$} (n2);
   \draw [->,thick] (n2) to [bend right=-45] node[below=2pt]  {$1\overline{3}$} (n1);
 
-  \draw [->,thick] (n2) -- node[left=2pt]  {$2\overline{3}$} (n0);
+  \draw [->,thick] (n2) -- node[right=2pt]  {$2\overline{3}$} (n0);
 
 \end{tikzpicture}
 \end{minipage}
