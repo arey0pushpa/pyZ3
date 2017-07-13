@@ -66,76 +66,20 @@
     sqloc/.style  = { draw, thick, inner sep=1.0mm },
     loc/.style    = { draw, circle, thick, inner sep=1.0mm },
   }
-\begin{tikzpicture}
-  \node[draw] (n0) {$n_1:\{0,1,2,3,4\}$};
-  \node[draw,below left of=n0] (n1) {$n_1:\{0,1,2,3,4\}$};
-  \node[draw] (n2) {$n_1:\{0,1,2,3,4\}$};
+\begin{tikzpicture}[node distance = 30mm]
+  \node[draw] (n0) {$n_1:\{01234\}$};
+  \node[draw,below left of=n0] (n1) {$n_0:\{01236\}$};
+  \node[draw,below right of=n0] (n2) {$n_2:\{012368\}$};
 
-    \entity[yshift=-20mm] (E) {$n_1$ $[m_0 m_1 m_2 m_3 m_4]$};
-    % \entity (E) {Node1\\[]};
-    \binary[left=of E.north west, unique=2] (h) {};
+  \draw[->,thick] (n1) -- node[left=1mm]  {$01$} (n0);
+  \draw [->,thick] (n1) to [bend right=-30] node[left=1mm]  {$013$} (n0);
+  \draw [->,thick] (n0) to [bend right=-30] node[below=2pt,xshift=3pt]  {$013$} (n1);
 
-       % \binary[left=of E.north west, unique=1-2] (w) {};
+  \draw [->,thick] (n1) -- node[below=1mm]  {$123$} (n2);
+  \draw [->,thick] (n2) to [bend right=-45] node[below=2pt]  {$01$} (n1);
 
-    \binary[left=of E.south west, unique=1-2](i) [below=6mm of h]{};
-    \node[role name, at=(i.north),anchor=south] {[$m_{0} m_{1} m_{3}$]};
-    \plays[] (E) to (i.east);
-   % \plays(h) to (i);
-%         label=below:\ormleft{uses] (u) {};
-\node[role name,
-at=(h.north),anchor=south] {[$m_{0} m_{1}$]};
+  \draw [->,thick] (n2) -- node[left=2pt]  {$23$} (n0);
 
-    \entity[left=of h] (Rank) {$n_0:m_0 m_1 m_2 m_3 m_6$};
-  
-    \plays[mandatory] (E) to (h.east);
-    \plays (h) to (Rank) (E);
-    \plays[mandatory] (Rank) to (i.west);
-    %to (u.east) (u) to (Car);
-
-
-    \binary[right=of E.north east] (b) {};
-    \node[role name,
-at=(b.north),anchor=south] {[$m_{0} m_{1}$]};
-       % \binary[right=of E.north east] (dd) {};
-
-    \binary[right=of E.south east, unique,] (i) {};
-    \node[role name,
-at=(i.north),anchor=south] {[$m_{1} m_{2} m_{3}$]};
-\binary[unique=1-2,skip unique=1-2] (xyz) [above=6mm of h] {};
-% describes blue label above h Left uppermost
-\node[role name,
-at=(xyz.north),anchor=south] {[$m_{0} m_{1} m_{3}$]};
-      
-        
-      \plays (Rank) to (xyz.west); 
-    \plays[mandatory] (E) to (xyz.east);
-      
-    \entity[right=1.8 of E] (Date) {$n_2: m_1 m_2 m_3 m_6 m_8$};
-
-    \plays[mandatory] (E) to (b.west); 
-    \plays (E) to (i.west);
-    \plays (b.east) to (Date);
-    \plays[mandatory] (Date) to (i.east);
-    
-%    \entity[label={[constraint]\#=$n$}] {E};
-%\draw (Rank) to node[vroles,label=has,label=below:\ormup{of}]{} (E);
-%\node[constraint,anchor=north west,inner ysep=0]
-%at (h.) {\ormbraces{a, b, c}};
-%\draw (E) to node[roles,
-%label=below:drives]{} (Rank);
-
-\node[roles=2][,unique=1-2,skip unique=2] (abc) [below=11mm of E] {};
-\node[role name,
-at=(abc.north),anchor=south] {[$m_{2} m_{3}$]};
-\plays[mandatory] (Rank.south) -- (abc.west);  
-\plays (abc.east) -- (Date.south);
-
-  %  \node[role name, anchor=south west] at (b.east) {[birthdate]};
-  %  \node[role name, anchor=north west] at (i.east) {[hiredate]};
-
-%     \rules at (-.4, -2) {
-%          \node[rule=1] {{$m_{2}$} $m_{3}$};\\
-%      };
 \end{tikzpicture}
 \end{minipage}
 
