@@ -1,7 +1,9 @@
 \begin{figure}
 \centering
+\begin{minipage}{0.45\linewidth}
+  \hspace{-4ex}
 \begin{tikzpicture}
-\matrix [matrix of math nodes,left delimiter=(,right delimiter=),row sep=0.5cm,column sep=0.5cm] (m) {
+\matrix [matrix of math nodes,left delimiter=(,right delimiter=),row sep=0.16cm,column sep=0.1cm] (m) {
 \times & \times & \times &\times&\times&\times & \times & \times\\
 \times & \times & \times&\times&\times&\times& 1 &\times \\
 \times & \times & \times&\times&\times&1&\times &\times\\
@@ -17,14 +19,14 @@
 \draw[dashed] ($0.5*(m-4-1.south west)+0.5*(m-5-1.north west)$) --
  ($0.5*(m-4-8.south east)+0.5*(m-5-8.north east)$);
 
-\node[above=10pt of m-1-1] (top-1) {$M_1$};
-\node[above=10pt of m-1-2] (top-2) {$M_2$};
-\node[above=10pt of m-1-3] (top-3) {$M_3$};
-\node[above=10pt of m-1-4] (top-4) {$M_4$};
-\node[above=10pt of m-1-5] (top-5) {$M_5$};
-\node[above=10pt of m-1-6] (top-6) {$M_6$};
-\node[above=10pt of m-1-7] (top-7) {$M_7$};
-\node[above=10pt of m-1-8] (top-8) {$M_8$};
+\node[above=4pt of m-1-1] (top-1) {$M_1$};
+\node[above=4pt of m-1-2] (top-2) {$M_2$};
+\node[above=4pt of m-1-3] (top-3) {$M_3$};
+\node[above=4pt of m-1-4] (top-4) {$M_4$};
+\node[above=4pt of m-1-5] (top-5) {$M_5$};
+\node[above=4pt of m-1-6] (top-6) {$M_6$};
+\node[above=4pt of m-1-7] (top-7) {$M_7$};
+\node[above=4pt of m-1-8] (top-8) {$M_8$};
 
 \node[left=12pt of m-1-1] (left-1) {$M_1$};
 \node[left=12pt of m-2-1] (left-2) {$M_2$};
@@ -42,9 +44,9 @@
 \node[above=10pt] at (del-top-2.north) {$R-Snares$};
 
 \node[rectangle,left delimiter=\{] (del-left-1) at ($0.5*(left-1.east) +0.5*(left-4.east)$) {\tikz{\path (left-1.north east) rectangle (left-4.south west);}};
-\node[left=10pt] at (del-left-1.west) {$Q-Snares$};
+\node[left=15pt,rotate=90,xshift=9mm] at (del-left-1.west) {$Q-Snares$};
 \node[rectangle,left delimiter=\{] (del-left-2) at ($0.5*(left-5.east) +0.5*(left-8.east)$) {\tikz{\path (left-5.north east) rectangle (left-8.south west);}};
-\node[left=10pt] at (del-left-2.west) {$R-Snares$};
+\node[left=15pt,rotate=90,xshift=9mm] at (del-left-2.west) {$R-Snares$};
 
 \begin{pgfonlayer}{myback}
 
@@ -56,8 +58,91 @@
 }
 \end{pgfonlayer}
 
-\end{tikzpicture}
+\end{tikzpicture}  
+\end{minipage}
+\begin{minipage}{0.45\linewidth}
+  \tikzset{
+    ln/.style  = { draw, thick, fill=black, circle, inner sep=0.3mm},
+    sqloc/.style  = { draw, thick, inner sep=1.0mm },
+    loc/.style    = { draw, circle, thick, inner sep=1.0mm },
+  }
+\begin{tikzpicture}
+  \node[draw] (n0) {$n_1:\{0,1,2,3,4\}$};
+  \node[draw,below left of=n0] (n1) {$n_1:\{0,1,2,3,4\}$};
+  \node[draw] (n2) {$n_1:\{0,1,2,3,4\}$};
 
+    \entity[yshift=-20mm] (E) {$n_1$ $[m_0 m_1 m_2 m_3 m_4]$};
+    % \entity (E) {Node1\\[]};
+    \binary[left=of E.north west, unique=2] (h) {};
+
+       % \binary[left=of E.north west, unique=1-2] (w) {};
+
+    \binary[left=of E.south west, unique=1-2](i) [below=6mm of h]{};
+    \node[role name, at=(i.north),anchor=south] {[$m_{0} m_{1} m_{3}$]};
+    \plays[] (E) to (i.east);
+   % \plays(h) to (i);
+%         label=below:\ormleft{uses] (u) {};
+\node[role name,
+at=(h.north),anchor=south] {[$m_{0} m_{1}$]};
+
+    \entity[left=of h] (Rank) {$n_0:m_0 m_1 m_2 m_3 m_6$};
+  
+    \plays[mandatory] (E) to (h.east);
+    \plays (h) to (Rank) (E);
+    \plays[mandatory] (Rank) to (i.west);
+    %to (u.east) (u) to (Car);
+
+
+    \binary[right=of E.north east] (b) {};
+    \node[role name,
+at=(b.north),anchor=south] {[$m_{0} m_{1}$]};
+       % \binary[right=of E.north east] (dd) {};
+
+    \binary[right=of E.south east, unique,] (i) {};
+    \node[role name,
+at=(i.north),anchor=south] {[$m_{1} m_{2} m_{3}$]};
+\binary[unique=1-2,skip unique=1-2] (xyz) [above=6mm of h] {};
+% describes blue label above h Left uppermost
+\node[role name,
+at=(xyz.north),anchor=south] {[$m_{0} m_{1} m_{3}$]};
+      
+        
+      \plays (Rank) to (xyz.west); 
+    \plays[mandatory] (E) to (xyz.east);
+      
+    \entity[right=1.8 of E] (Date) {$n_2: m_1 m_2 m_3 m_6 m_8$};
+
+    \plays[mandatory] (E) to (b.west); 
+    \plays (E) to (i.west);
+    \plays (b.east) to (Date);
+    \plays[mandatory] (Date) to (i.east);
+    
+%    \entity[label={[constraint]\#=$n$}] {E};
+%\draw (Rank) to node[vroles,label=has,label=below:\ormup{of}]{} (E);
+%\node[constraint,anchor=north west,inner ysep=0]
+%at (h.) {\ormbraces{a, b, c}};
+%\draw (E) to node[roles,
+%label=below:drives]{} (Rank);
+
+\node[roles=2][,unique=1-2,skip unique=2] (abc) [below=11mm of E] {};
+\node[role name,
+at=(abc.north),anchor=south] {[$m_{2} m_{3}$]};
+\plays[mandatory] (Rank.south) -- (abc.west);  
+\plays (abc.east) -- (Date.south);
+
+  %  \node[role name, anchor=south west] at (b.east) {[birthdate]};
+  %  \node[role name, anchor=north west] at (i.east) {[hiredate]};
+
+%     \rules at (-.4, -2) {
+%          \node[rule=1] {{$m_{2}$} $m_{3}$};\\
+%      };
+\end{tikzpicture}
+\end{minipage}
 
 \caption{Pairing matrix} \label{fig:M1}
 \end{figure}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

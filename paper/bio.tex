@@ -1,51 +1,91 @@
 %Again about two pages long
+%
+In this section, we will describe the model of VTSs and the properties
+relevant to the biologists.
 
-%\item \mukund{Detailed BIO}
-\textbf{The cell as a transport graph:} We consider a cell to be a collection of
-compartments (nodes) and vesicles (edges), thus defining a transport graph.
+\textbf{The cell as a transport graph:} We consider a cell to be a
+collection of compartments (nodes) and vesicles (edges), thus defining
+a transport graph.
+%
 Compartments represent the large membrane-bound organelles, which are
-connected by constant fluxes of small transport vesicles. Every compartment
-or vesicle has a set of molecules associated with it. These include SNAREs
-and other biomolecules that regulate membrane traffic, or that play the
-role of passive cargo. Here we consider an abstract set of molecules and do
+connected by constant fluxes of small transport vesicles.
+%
+Every compartment or vesicle has a set of molecules associated with
+it.
+%
+These include SNAREs and other biomolecules that regulate membrane
+traffic, or that play the role of passive cargo.
+%
+Here we consider an abstract set of molecules and do
 not explicitly associate them with particular protein varieties.
 
-\textbf{Molecular flows and steady state:} The total amount of each molecular type
-on each compartment can increase or decrease: this is due to gain or loss
-of that molecular type driven by incoming or outgoing vesicles. Each edge
-is thus associated with a flux of all the molecular types carried by the
-corresponding vesicle. We assume the cell is in a steady state where each
-compartments composition does not vary over time, meaning that all
-incoming and outgoing fluxes are balanced for each molecular type at each
+\textbf{Molecular flows and steady state:} The total amount of each
+molecular type on each compartment can increase or decrease: this is
+due to gain or loss of that molecular type driven by incoming or
+outgoing vesicles.
+%
+Each edge is thus associated with a flux of all the molecular types
+carried by the corresponding vesicle.
+%
+We assume the cell is in a steady state where each compartments
+composition does not vary over time, meaning that all incoming and
+outgoing fluxes are balanced for each molecular type at each
 compartment.
 
-\textbf{Vesicle targeting driven by molecular interactions:} The model specification
-includes a description of how molecular properties influence vesicle
-transport. A vesicle can only contain a set of molecules that are present
-on its source compartment. Once a vesicle has budded out of the source, the
-molecules it carries determine its properties. In particular, for any given
-pair of a vesicle and a compartment, the set of molecules that label the
-former and latter determine whether the vesicle will fuse to that
-compartment. Biophysically, fusion requires a direct physical interaction
-between at least one molecular type on the vesicle and one molecular type
-on the compartment. The list of molecular pairs that can drive a fusion
-event is given an a fusion pairing matrix.
+\textbf{Vesicle targeting driven by molecular interactions:} The model
+specification includes a description of how molecular properties
+influence vesicle transport.
+%
+A vesicle can only contain a set of molecules that are present
+on its source compartment.
+%
+Once a vesicle has budded out of the source, the molecules it carries
+determine its properties.
+%
+In particular, for any given pair of a vesicle and a compartment, the
+set of molecules that label the former and latter determine whether
+the vesicle will fuse to that compartment.
+%
+Biophysically, fusion requires a direct physical interaction between
+at least one molecular type on the vesicle and one molecular type on
+the compartment.
+%
+The list of molecular pairs that can drive a fusion event is given an
+a fusion pairing matrix.
 
-\textbf{Molecular regulation:} The final layer of our framework involves how the
-molecules are regulated. We assume that for fusion to occur, the pair of
-molecular types involved on the vesicle and compartment must both be in an
-“active” state. Whether these molecules are active or inactive depends on
-the remaining molecules found on the vesicle or compartment, respectively.
+\textbf{Molecular regulation:} The final layer of our framework
+involves how the molecules are regulated.
+%
+We assume that for fusion to occur, the pair of molecular types
+involved on the vesicle and compartment must both be in an
+“active” state.
+%
+Whether these molecules are active or inactive depends on the
+remaining molecules found on the vesicle or compartment, respectively.
+%
 This embodies the biological fact that other molecules can regulate the
-fusion-driving molecules. We test many different versions of molecular
-regulation. Most generally, the activity state of a given molecule can be a
+fusion-driving molecules.
+%
+VTSs also require that if molecule is involved in fusion of some
+vesicle and compartment, it must not be possible that the molecule 
+can potentially fuse with some molecule in some other compartment.
+%
+
+We test many different versions of molecular
+regulation.
+%
+Most generally, the activity state of a given molecule can be a
 Boolean function of all the molecular types on a compartment or vesicles.
 We have also tested a particularly simple regulation mechanism in which two
-molecules that can pair to drive fusion inhibit one another. This is
+molecules that can pair to drive fusion inhibit one another.
+%
+This is
 motivated by the idea that pairing must generate an inactive bi-molecular
 complex.
 
-\textbf{Synthesis:} We now combine all the above ingredients. Given a particular
+\textbf{Synthesis:} We now combine all the above ingredients.
+%
+Given a particular
 transport graph, a particular labeling of all the compartments and edges,
 a particular fusion pairing matrix, and a particular regulatory model we do
 the following.
@@ -60,30 +100,17 @@ compartment, we verify that there is no pairing of active molecules on the
 vesicle and compartment that could drive their fusion.
 \item We verify that every molecular type entering a compartment also leaves the compartment,
 and also that every molecular type entering a set of compartments also
-leaves that set; this is the steady state condition. This tells us that the
+leaves that set; this is the steady state condition.
+%
+This tells us that the
 particular graph and molecular labeling does represent an allowed steady
 state configuration of a VTS.
 \end{enumerate}
 
-\begin{itemize}
-\item \srivas{Detailed BIO to Graph problem}
-\end{itemize}
-
-
-%he whole cell should be in stable condition i.e flow of the molecule is balanced at every point and globally. Each molecule leaving its source node on a vesicle should come back in a cycle.
-
-The following terms must be defined in this section
-\begin{itemize}
-\item Vesicular traffic network.
-\item Recycling of molecules, steady state.
-\item Maximum connectivity [LGC, Least guarantee connectivity] and minimal connective [LRC (least required connectivity)] (rather than necc and suff cond) required by the graph. 
-\item Connected-ness. 3 and 4.
-\item Pairing mechanism (matrix).
-\item Fusion rules, inhibition/regulation mechanism, Pairing inhibition.
-\item Potential to connect.
-\item Property of interest.
-\item Reachability definition.
-\end{itemize}
+Given the above conditions, the biologists search for VTSs that are
+not $k$-connected, i.e., every pair of compartments remain reachable
+after dropping $k$ vesicles.\ashu{why asking this question}
+\ankit{Maximum connectivity [LGC, Least guarantee connectivity] and minimal connective [LRC (least required connectivity)] (rather than necc and suff cond) required by the graph.}
 
 
 
