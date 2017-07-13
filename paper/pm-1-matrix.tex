@@ -1,6 +1,6 @@
 \begin{figure}
 \centering
-\begin{minipage}{0.45\linewidth}
+\begin{minipage}{0.50\linewidth}
   \hspace{-4ex}
 \begin{tikzpicture}
 \matrix [matrix of math nodes,left delimiter=(,right delimiter=),row sep=0.16cm,column sep=0.1cm] (m) {
@@ -67,9 +67,9 @@
     loc/.style    = { draw, circle, thick, inner sep=1.0mm },
   }
 \begin{tikzpicture}[node distance = 30mm]
-  \node[draw] (n0) {$n_1:\{01234\}$};
-  \node[draw,below left of=n0] (n1) {$n_0:\{01236\}$};
-  \node[draw,below right of=n0] (n2) {$n_2:\{012368\}$};
+  \node[draw] (n0) {$n_1:01234$};
+  \node[draw,below left of=n0] (n1) {$n_0:01236$};
+  \node[draw,below right of=n0] (n2) {$n_2:012368$};
 
   \draw[->,thick] (n1) -- node[left=1mm]  {$01$} (n0);
   \draw [->,thick] (n1) to [bend right=-30] node[left=1mm]  {$013$} (n0);
