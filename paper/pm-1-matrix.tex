@@ -63,18 +63,18 @@
 \begin{minipage}{0.45\linewidth}
 
 \begin{tikzpicture}[node distance = 30mm]
-  \node[draw] (n1) {$n_1:\overline{01234}$};
-  \node[draw,below left of=n1] (n0) {$n_0:\overline{01236}$};
-  \node[draw,below right of=n1] (n2) {$n_2:\overline{012368}$};
+  \node[draw] (n0) {$n_0:\overline{01234}$};
+  \node[draw,below left of=n0] (n1) {$n_1:\overline{01236}$};
+  \node[draw,below right of=n0] (n2) {$n_2:\overline{12357}$};
 
   \draw[->,thick] (n0) -- node[left=1mm]  {$0\overline{1}$} (n1);
   \draw [->,thick] (n0) to [bend right=-30] node[left=1mm]  {$\overline{01}23$} (n1);
-  \draw [->,thick] (n1) to [bend right=-30] node[below=2pt,xshift=3pt]  {$013$} (n0);
+  \draw [->,thick] (n1) to [bend right=-30] node[below=2pt,xshift=3pt]  {$01\overline{3}$} (n0);
 
-  \draw [->,thick] (n0) -- node[below=1mm]  {$123$} (n2);
-  \draw [->,thick] (n2) to [bend right=-45] node[below=2pt]  {$01$} (n0);
+  \draw [->,thick] (n1) -- node[below=1mm]  {$1\overline{2}3$} (n2);
+  \draw [->,thick] (n2) to [bend right=-45] node[below=2pt]  {$1\overline{3}$} (n1);
 
-  \draw [->,thick] (n2) -- node[left=2pt]  {$23$} (n1);
+  \draw [->,thick] (n2) -- node[left=2pt]  {$2\overline{3}$} (n0);
 
 \end{tikzpicture}
 \end{minipage}
