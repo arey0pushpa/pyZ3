@@ -1,6 +1,6 @@
 \begin{figure}
 \centering
-\begin{minipage}{0.45\linewidth}
+\begin{minipage}{0.50\linewidth}
   \hspace{-4ex}
 \begin{tikzpicture}
 \matrix [matrix of math nodes,left delimiter=(,right delimiter=),row sep=0.16cm,column sep=0.1cm] (m) {
@@ -66,6 +66,7 @@
     sqloc/.style  = { draw, thick, inner sep=1.0mm },
     loc/.style    = { draw, circle, thick, inner sep=1.0mm },
   }
+<<<<<<< HEAD
 \begin{tikzpicture}
   \node[draw] (n0) {$n_1:\{0,1,2,3,4\}$};
   \node[draw,below left of=n0] (n1) {$n_1:\{0,1,2,3,4\}$};
@@ -136,6 +137,22 @@ at=(abc.north),anchor=south] {[$m_{2} m_{3}$]};
 %     \rules at (-.4, -2) {
 %          \node[rule=1] {{$m_{2}$} $m_{3}$};\\
 %      };
+=======
+\begin{tikzpicture}[node distance = 30mm]
+  \node[draw] (n0) {$n_1:01234$};
+  \node[draw,below left of=n0] (n1) {$n_0:01236$};
+  \node[draw,below right of=n0] (n2) {$n_2:012368$};
+
+  \draw[->,thick] (n1) -- node[left=1mm]  {$01$} (n0);
+  \draw [->,thick] (n1) to [bend right=-30] node[left=1mm]  {$013$} (n0);
+  \draw [->,thick] (n0) to [bend right=-30] node[below=2pt,xshift=3pt]  {$013$} (n1);
+
+  \draw [->,thick] (n1) -- node[below=1mm]  {$123$} (n2);
+  \draw [->,thick] (n2) to [bend right=-45] node[below=2pt]  {$01$} (n1);
+
+  \draw [->,thick] (n2) -- node[left=2pt]  {$23$} (n0);
+
+>>>>>>> e5f85aae4c60dc7cb8feebcd813cd1eeb3564b2a
 \end{tikzpicture}
 \end{minipage}
 
