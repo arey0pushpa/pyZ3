@@ -1,9 +1,28 @@
-\begin{figure}
+\begin{figure}[t]
 \centering
+\begin{minipage}{0.45\linewidth}
+
+\begin{tikzpicture}[node distance = 26mm]
+  \node[draw] (n0) {$n_0:\overline{01234}$};
+  \node[draw,below left of=n0] (n1) {$n_1:\overline{01236}$};
+  \node[draw,below right of=n0] (n2) {$n_2:\overline{12357}$};
+
+  \draw[->,thick] (n0) -- node[left=1mm]  {$0\overline{1}$} (n1);
+  \draw [->,thick] (n0) to [bend right=-30] node[right=1mm]  {$\overline{01}23$} (n1);
+  \draw [->,thick] (n1) to [bend right=-30] node[left=1mm]  {$01\overline{3}$} (n0);
+
+  \draw [->,thick] (n1) -- node[below=1mm]  {$1\overline{2}3$} (n2);
+  \draw [->,thick] (n2) to [bend right=-45] node[below=2pt]  {$1\overline{3}$} (n1);
+
+  \draw [->,thick] (n2) -- node[right=2pt]  {$2\overline{3}$} (n0);
+
+\end{tikzpicture}
+\end{minipage}
 \begin{minipage}{0.50\linewidth}
-  \hspace{-4ex}
+  \center
 \begin{tikzpicture}
-\matrix [matrix of math nodes,left delimiter=(,right delimiter=),row sep=0.16cm,column sep=0.1cm] (m) {
+\matrix [matrix of math nodes,left delimiter=(,right delimiter=),
+         row sep=0.07cm,column sep=0.07cm] (m) {
 \times & \times & \times &\times&\times&\times & \times & \times\\
 \times & \times & \times&\times&\times&\times& 1 &\times \\
 \times & \times & \times&\times&\times&1&\times &\times\\
@@ -48,38 +67,20 @@
 \node[rectangle,left delimiter=\{] (del-left-2) at ($0.5*(left-5.east) +0.5*(left-8.east)$) {\tikz{\path (left-5.north east) rectangle (left-8.south west);}};
 \node[left=15pt,rotate=90,xshift=9mm] at (del-left-2.west) {$R-Snares$};
 
-\begin{pgfonlayer}{myback}
-
-\foreach \element in {m-1-7,m-3-8,m-5-1,m-5-2,m-5-3,m-5-4,m-6-1,m-6-2,m-6-3,m-6-4,m-7-1,m-7-2,m-7-3,m-7-4,m-8-1,m-8-2,m-8-3,m-8-4}{
-\highlight[pink]{\element}{\element}
-}
-\foreach \element in {m-2-7,m-3-6,m-4-5}{
-\fhighlight[blue!10]{\element}{\element}
-}
-\end{pgfonlayer}
+% \begin{pgfonlayer}{myback}
+% \foreach \element in {m-1-7,m-3-8,m-5-1,m-5-2,m-5-3,m-5-4,m-6-1,m-6-2,m-6-3,m-6-4,m-7-1,m-7-2,m-7-3,m-7-4,m-8-1,m-8-2,m-8-3,m-8-4}{
+% \highlight[pink]{\element}{\element}
+% }
+% \foreach \element in {m-2-7,m-3-6,m-4-5}{
+% \fhighlight[blue!10]{\element}{\element}
+% }
+% \end{pgfonlayer}
 
 \end{tikzpicture}  
 \end{minipage}
-\begin{minipage}{0.45\linewidth}
 
-\begin{tikzpicture}[node distance = 30mm]
-  \node[draw] (n0) {$n_0:\overline{01234}$};
-  \node[draw,below left of=n0] (n1) {$n_1:\overline{01236}$};
-  \node[draw,below right of=n0] (n2) {$n_2:\overline{12357}$};
 
-  \draw[->,thick] (n0) -- node[left=1mm]  {$0\overline{1}$} (n1);
-  \draw [->,thick] (n0) to [bend right=-30] node[right=1mm]  {$\overline{01}23$} (n1);
-  \draw [->,thick] (n1) to [bend right=-30] node[left=1mm]  {$01\overline{3}$} (n0);
-
-  \draw [->,thick] (n1) -- node[below=1mm]  {$1\overline{2}3$} (n2);
-  \draw [->,thick] (n2) to [bend right=-45] node[below=2pt]  {$1\overline{3}$} (n1);
-
-  \draw [->,thick] (n2) -- node[right=2pt]  {$2\overline{3}$} (n0);
-
-\end{tikzpicture}
-\end{minipage}
-
-\caption{\textbf{Pairing matrix}. VTS has 3 compartments and 8 molecules. Molecules are numbered 0-7 and and intersection matrix entry describes the fusion dependency. The entry 1 represents pairing, entry $\times$ represents no dependency and rectangles colored $\times$ one represents don't cares. In the right side of the pairing matrix is the graph VTS representation. This graph is an example of version where every present molecule on the node is considered as active and activity of the molecules on the edges are described by presence of other molecules. Activity is shown by use of an overline in the grap both on the nodes and the edges. Everwhere in the graph you can see the flux is maintained, that is every molecule is coming back to it's source node in a cycle. The graph follows the fusion rules described in later sections. The resultant graph is a 3-connected graph.} \label{fig:M1}
+\caption{An example of VTS and corresponding pairing matrix.} \label{fig:M1}
 \end{figure}
 
 %%% Local Variables:

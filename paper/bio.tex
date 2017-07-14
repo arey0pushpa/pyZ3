@@ -79,9 +79,8 @@ Boolean function of all the molecular types on a compartment or vesicles.
 We have also tested a particularly simple regulation mechanism in which two
 molecules that can pair to drive fusion inhibit one another.
 %
-This is
-motivated by the idea that pairing must generate an inactive bi-molecular
-complex.
+This is motivated by the idea that pairing must generate an inactive
+bi-molecular complex.
 
 \textbf{Synthesis:} We now combine all the above ingredients.
 %
@@ -109,18 +108,47 @@ state configuration of a VTS.
 
 Given the above conditions, the biologists search for VTSs that are
 not $k$-connected, i.e., every pair of compartments remain reachable
-after dropping $k$ vesicles.\ashu{why asking this question}
+after dropping $k-1$ vesicles.
+%
+It has been observed in nature, most VTSs are 3-connected.
+%
+It raised the natural question what are the properties of VTSs
+that are not 3-connected.
+%
+To study them, we have build a tool that finds VTSs that are not
+$k$-connected from some $k$.
+
 \ankit{Maximum connectivity [LGC, Least guarantee connectivity] and minimal connective [LRC (least required connectivity)] (rather than necc and suff cond) required by the graph.}
 
 \input{pm-1-matrix}
 
 \begin{example}
-In figure~\ref{fig:M1}(a), we present a VTS that has three compartments as nodes, vesicles as edges,
-and 8 molecules.
-Each node and edge is labelled with a set of molecules that present in them.
-Overline on a molecule indicates activation.
-In figure~\ref{fig:M1}(b), we present the corresponding fusion matrix.
-\ashu{discuss the properties on the figure.}
+%
+In figure~\ref{fig:M1}, we present a VTS that has 3
+compartments and 8 molecules, and corresponding pairing matrix that
+describes the fusion dependency.
+%
+Molecules are numbered 0-7.
+%
+In the VTS, labels consists of sting of molecule ids and overline
+over an id indicates that the molecule is active.
+%
+This VTS is an example of version where every present molecule on
+the node is active and activity of the molecules on the
+edges are controlled by presence of the other molecules.
+%
+On the right side of the figure, we present pairing matrix.
+%
+An entry 1 represents pairing between molecules and
+entry $\times$ represents no pairing.
+% rectangles colored $\times$ one represents don't cares.
+%
+Everywhere in the graph the flux is maintained, i.e.,
+every molecule is coming back to it's source node in a cycle.
+%
+The graph follows the fusion rules as discussed earlier and
+is a 3-connected graph.
+\ashu{R Q molecule types are not discussed anywhere.}
 \end{example}
 
 %--------------------- DO NOT ERASE BELOW THIS LINE --------------------------
