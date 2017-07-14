@@ -1,4 +1,41 @@
-Given a system that follows the VTS, we are interested in its connectivity (graph) property. We have implemented the encoding of the constraints in the python interface of $\zthree$. The basic idea is to constraint the variables such that vesicular transport rules are respected and using constraints (D0-D5) reason about the connectivity of the underlying structure (graph).
+\begin{table}[t]
+\centering
+% \def\arraystretch{1.6}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    {\multirow{2}{*}{\textbf{Version}}}  & 
+    \multicolumn{2}{c|}{\multirow{2}{*}{\textbf{Constraints}}} & 
+    \multicolumn{2}{c|}{\textbf{Graph connectivity}}  \\
+   \cline{4-5}
+   &  &  & \textbf{\textbf{Least connected}} & \textbf{Sampling: Guarantee}\\ \hline
+    
+A. & \multirow{5}{*}{
+     \makecell{ \ref{eq:f0}--\ref{eq:fuse2},\\
+     \ref{eq:reach1},\ref{eq:reach2},\\
+     \ref{eq:drop1}--\ref{eq:drop4}}
+     } 
+& \ref{eq:ann},\ref{eq:aen} & No graph & No graph \\ \cline{3-5}
+B. & & \ref{eq:anb},\ref{eq:aen} & No graph & No graph \\ \cline{3-5}
+C. & & \ref{eq:ann},\ref{eq:aeb} & 3-connected & 3-connected \\  \cline{3-5}
+D. & & \ref{eq:ann},\ref{eq:aep} & No graph & No graph \\ \cline{3-5}
+E. & & \ref{eq:anb},\ref{eq:aeb} & 2-connected & 3-connected \\ \cline{3-5}
+F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected & 4-connected \\ \cline{3-5}
+G. & & \ref{eq:anb},\ref{eq:aeb},\ref{eq:ced} & 3-connected & 3-connected \\ \hline
+
+% C_es :Self edges are allowed
+% C_ed : Every edge is distinct 
+  \end{tabular}
+\caption{{\bf Activity regulation of molecules vs. graph connectivity.}}
+\label{tab:grph}
+\end{table}
+
+
+% Given a system that follows the VTS, we are interested in its connectivity (graph) property.
+
+
+% The basic idea is to constraint the variables such that vesicular
+% transport rules are respected and using constraints (D0-D5) reason
+% about the connectivity of the underlying structure (graph).
 
 % We are interested in both least connectivity requirement (LRC) and least guarantee connectivity (LGC).
 %LCR, that is required for a vesicular transport version to work and least connectivity that guarantees that vesicular transport system with that connectivity will always satisfies the rules.
@@ -9,66 +46,88 @@ Given a system that follows the VTS, we are interested in its connectivity (grap
 %Besides using the default Z3 solvers we have used for these experiments \ankit{Z3, picoSAT, Lingeling}. The performance of Z3 was ...
 %
 % \Ankit{In other solver variations ...}
-Our tool allows the user to choose a model and the size of the network besides other parameters like connectivity and number of parallel edges. It uses Z3 Python interface to build the needed constraints and applies $\zthree$ solver on the constraints to find a model ( a satisfying assignment that respects the constraints). This tool also translates the satisfying model found by $\zthree$ into a vesicle traffic system and presents a visual output to the user in form of annotated graph. The output graph will satisfy the underlying rules of the system, so it always is a valid vesicle transport network. The resultant graph provides an overview of the underlying vesicle transport system where directed labeled edges and nodes provide the complete information about the system. Dashed lines are used in the resultant visual network output to specify the dropped edges to make the graph disconnected, which gives information about the connectivity of the graph.
+
+We have implemented the encoding of the constraints for each version
+using the python interface of $\zthree$ in a tool.
+%
+Our tool allows the user to choose a model and the size of the network
+besides other parameters like connectivity and number of parallel
+edges.
+%
+It uses Z3 Python interface to build the needed constraints and
+applies $\zthree$ solver on the constraints to find a model ( a
+satisfying assignment that respects the constraints).
+%
+This tool also translates the satisfying model found by $\zthree$ into
+a VTS and presents a visual output to the user in form of annotated graph.
+%
+The output graph will satisfy the underlying rules of the system, so
+it always is a valid vesicle transport network.
+%
+The resultant graph provides an overview of the underlying VTS
+where directed labeled edges and nodes provide the
+complete information about the system.
+%
+We also visually report the dropped edges to make the graph
+disconnected, which gives information about the connectivity of the
+graph.
+
+% Dashed lines are used in the resultant visual network output to
+% specify the dropped edges to make the graph disconnected, which gives
+% information about the connectivity of the graph.
+\ashu{discuss table~\ref{tab:grph}}
 
 \input{tbl-qf-graph}
-%\input{tbl-qf1-graph}
-In Table 1. 
-%~\ref{tab:qf-graph},
-we present the running times for the search of vesicle traffic systems of sizes 2 to 10 that satisfies the model variants. For example, the formula for variation F, the total number of compartments (N) equals to 10, returns in 129.78 minutes (7786.8 secs) with a SAT result. In comparison, CBMC encoding results in OUT OF MEMORY for the same variation and same compartment size. Hence with the use of this novel encoding, we are able to scale the system to a much larger compartmentalized system, especially to eukaryotic cells with a total number of ten compartments. This additional cushion of scalability can provide us leverage to ask for related open questions that were not previously possible, for example, what is the minimum number of molecules required to satisfy the vesicular traffic system in eukaryotes.
 
-\input{cz-comparision}
+In Table~\ref{tab:qf-grabh}, we present the running times for the search of
+vesicle traffic systems of sizes 2 to 10 that satisfies the model
+variants.
+%
+The experiments were done on a machine with Intel(R) Core(TM) i3-4030U
+CPU @ 1.90GHz processor and 4GB RAM.
+%
+We have compared our performance with the performance of our earlier 
+CBMC based implementation.
+%
+For example, the formula for variation F, the total number of
+compartments ($|N|$) equals to 10, returns in 129.78 minutes (7786.8 secs)
+with a SAT result.
+%
+In comparison, CBMC results in OUT OF MEMORY for $|N|$ greater than 5.
+%
+Hence with the use of this novel encoding, we are able to scale the
+system to a much larger compartmentalized system, especially to
+eukaryotic cells with a total number of ten compartments.
+%
+This additional scalability can provide us leverage to ask for related
+open questions that were not previously possible, for example, what is
+the minimum number of molecules required to satisfy the vesicular
+traffic system in eukaryotes.
+%
+Furthermore, we experimented with limits of our tools and found
+that $\zthree$ was able to solve the constraints up to $\sim{14-18}$ nodes.
+
+
+
+% \input{cz-comparision}
 
 % REQUIRE COMPARISION WITH CBMC RUN TIME ?
-The experiments were done on a machine with Intel(R) Core(TM) i3-4030U CPU @ 1.90GHz processor and 4GB RAM. On this machine, the CBMC encoding ran out of memory (M/O) for N $\geq$ 6 whereas new novel encoding was able to handle the case fairly easily. We think the main reasons for such an improvement are the following:
-\begin{enumerate}
-\item Direct encoding into the solver rather than using CFE (CBMC C front end), which treats front end variables as C variable and similarly other C overheads.
-\item Current novel encoding is fine-tuned to the structure of the problem.
-\item Improved encoding based on reachability rather than complete enumeration and non-determinism.
-\end{enumerate} 
-% 
-$\zthree$ was able to solve the constraints up to 14-18 nodes (based on the versions).
-%
+
+% %
+% On this machine, the CBMC encoding ran out of memory (M/O) for N
+% $\geq$ 6 whereas new novel encoding was able to handle the case fairly
+% easily.
+% %
+% We think the main reasons for such an improvement are the following:
+% \begin{enumerate}
+% \item Direct encoding into the solver rather than using CFE (CBMC C front end), which treats front end variables as C variable and similarly other C overheads.
+% \item Current novel encoding is fine-tuned to the structure of the problem.
+% \item Improved encoding based on reachability rather than complete enumeration and non-determinism.
+% \end{enumerate} 
+% % 
+% %
 
 %table~\ref{tbl:qf-results} 
-
-\begin{table}[!ht]
-\centering
-\def\arraystretch{1.6}
-\caption{
-{\bf Activity regulation of molecules and corresponding connectivity of the graph.}}
-  \begin{tabular}{|c|c|c|c|}
-    \hline
-  {\multirow{2}{*}{\textbf{Version}}}  & {\multirow{2}{*}{\textbf{Constraints}}} &  \multicolumn{2}{c|}{\textbf{Graph connectivity}}  \\
-    % \hline
-    % \textbf{Inactive Modes} & \textbf{Description}\\
-   \cline{3-4}
-   {} & {} & \textbf{\textbf{Least connected}} & \textbf{Sampling: Guarantee}\\
-    %\hhline{~--}
-    \hline
-    
-%    A. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_en & No graph  \\ \hline
-%B. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_en & No graph  \\ \hline
-%C. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_eb & 3-connected  \\  \hline
-%D. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_ep & No graph  \\ \hline
-%E. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb & 2-connected  \\ \hline
-%F. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_ep & 4-connected  \\ \hline
-%G. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb C\_ed & 3-connected \\ \hline
-
-A. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_en & No graph & No graph \\ \hline
-B. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_en & No graph & No graph \\ \hline
-C. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_eb & 3-connected & 3-connected \\  \hline
-D. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nn A\_ep & No graph & No graph \\ \hline
-E. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb & 2-connected & 3-connected \\ \hline
-F. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_ep & 4-connected & 4-connected \\ \hline
-G. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb A\_eb C\_ed & 3-connected & 3-connected \\ \hline
-%H. & V1-V7 V8 V9 R1 R2 D1-D4 A\_nb  A\_eb + C\_es & No-idea & No-idea \\ \hline
-
-% C_es :Self edges are allowed
-% C_ed : Every edge is distinct 
-  \end{tabular}
-\label{table1}
-\end{table}
 
 
 %--------------------- DO NOT ERASE BELOW THIS LINE --------------------------

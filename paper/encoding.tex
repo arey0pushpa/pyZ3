@@ -172,7 +172,6 @@ If a molecule is active on an edge, it should be present on the edge.
 \begin{align}
   \bigwedge\limits_{i,j,q,m} b_{i,j,q,m} \limplies e_{i,j,q,m}\tag{V2}\label{eq:f1}
 \end{align}
-
 A molecule should be present to be active on a node.  
 \begin{align}
   \bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
@@ -182,25 +181,19 @@ A molecule should be present to be active on a node.
 The edge labels are subset of the node label of source and target compartments.
 
 \begin{align}
-  \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies n_{i,m}\tag{V4}\label{eq:c0}\\
-  \bigwedge\limits_{i,j,q,m}  e_{i,j,q,m} \limplies n_{j,m}\tag{V5}\label{eq:c1}
+  \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies (n_{i,m} \land n_{j,m} )\tag{V4}\label{eq:c0}
 \end{align}
-
-%C1 =  e_ijk -> aik and e_ijk -> ajk
-
 Self edges are not allowed. 
-
 \begin{align}
-   \bigwedge\limits_{i,q} \neg e_{i,i,q}\tag{V6}\label{eq:c2}
+   \bigwedge\limits_{i,q} \neg e_{i,i,q}\tag{V5}\label{eq:c2}
 \end{align}
-
 Since a molecule cannot be both SNARE and tether,
 we set diagonal blocks in pairing matrix to be 0's.
 It reduces the search space.
 % Condition on $p_{kk'}$. \ashu{why???} .
 \begin{align}
   \bigwedge\limits_{(x < M/2 \, \land  \, y < M/2) \lor  (x >= M/2 \land y >= M/2)} \neg p(x,y)
-  \tag{V7}\label{eq:c3}
+  \tag{V6}\label{eq:c3}
 \end{align}
 
 \subsubsection{Well-fused constraints}
@@ -211,9 +204,9 @@ Boolean constraint~\eqref{eq:fuse2} encodes that each edge should not
 be able to potentially fuse with any node other than its destination node.
 \begin{align}
   \bigwedge\limits_{i,j,q} e_{i,j,q} \limplies \bigvee_{m,m^{\prime}} (b_{i,j,q,m} \land a_{j,m^{\prime}} \land p_{m,m^{\prime}})
-  \tag{V8}\label{eq:fuse1}  \\
+  \tag{V7}\label{eq:fuse1}  \\
 \bigwedge\limits_{i,j,q,m} b_{i,j,q,m} \limplies \neg \bigvee_{j \neq j^{\prime}, m^{\prime\prime}} ( a_{j^{\prime},m^{\prime\prime}} \land p_{m,m^{\prime\prime}})
-  \tag{V9}\label{eq:fuse2}  
+  \tag{V8}\label{eq:fuse2}  
 \end{align}
 
 
@@ -265,16 +258,10 @@ The following formula encodes that the activity of the molecules on
 edges is defined by inhibition by other molecules based on the pairing
 matrix. 
 \begin{align}
-   \bigwedge\limits_{i,j,q, m}  [e_{i,j,q,m} \limplies  \bigwedge_{m' \neq m} (p_{m,m'} \limplies e_{i,j,q,m'})] \lequiv (\neg b_{i,j,q,m} \land  \bigwedge_{m' \neq m, p_{m,m'}} \neg b_{i,j,q,m'})
+   \bigwedge\limits_{i,j,q, m}  [e_{i,j,q,m} \limplies  \bigwedge_{m' \neq m} (p_{m,m'} \limplies e_{i,j,q,m'})] \lequiv (\neg b_{i,j,q,m} \land\;\;\;\;  \bigwedge_{\mathclap{m' \neq m, p_{m,m'}}} \neg b_{i,j,q,m'})
   \tag{Aep}\label{eq:aep}
 \end{align}
-% \[ \bigwedge\limits_{i,j,q, k}  (e_{i,j,q,k} \land [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \limplies e_{i,j,q,k'})] ) \limplies \neg b_{i,j,q,k}) \, \]  
-
-% \[ \bigwedge\limits_{i,j, q, k}  (e_{i,j,q,k} \land \neg [ ( \bigvee_{k'} p_{k,k'} \land \bigwedge_{k' != k} p_{k,k'} \limplies e_{i,j,q,k'})] ) \limplies b_{i,j,q,k}) \, \]  
-
-
-% - F0: b(i,j,k) $\limplies$ e(i,j,k)
-
+%
 \subsubsection{Constraints for stability condition}
 %
 We use $m$-reachability to encode the stability condition in VTSs.
@@ -289,9 +276,9 @@ $(i \neq i^{\prime \prime})$ with $m$ present, and j is $m$-reachable from $i'$ 
 \end{align}
 Now we can encode stability using the reachability variables.
 and say if there is an $m$-edge between $i$ and $j$, there is
-$m$-reachable path from $j$ to $i$.\ashu{disjunction needed??}
+$m$-reachable path from $j$ to $i$.
 \begin{align}
- \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies (r_{j,i,m,0}  \lor r_{j,i,m,1} \lor ... \lor r_{j,i,m,p})  
+ \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,|N|}
   \tag{R2}\label{eq:reach2}
 \end{align}
 
@@ -310,10 +297,13 @@ $m$-reachable path from $j$ to $i$.\ashu{disjunction needed??}
 \subsubsection{$k$-connectivity constraints}
 To check whether $k$-connected is a necessary condition, we remove (drop) $k-1$ edges from the graph and if it
 disconnects the graph, and we get an assignment. We have a graph that is not  $k$-connected.
-The following formulas encode the relevant constraints for reachability in the modified VTS. 
-
-The following formulas encode that only existing edges can be dropped
-and exactly $k-1$ edges are dropped.
+%
+Boolean constraints~\ref{eq:drop1}-\ref{eq:drop4}
+encode the relevant constraints for reachability
+in the modified VTS. 
+%
+The following formulas encode that only
+existing edges can be dropped and exactly $k-1$ edges are dropped.
 \begin{align}
   \bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \tag{D1}\label{eq:drop1}\\
   \sum_{i,j,q} d_{i,j,q} = k-1
@@ -367,7 +357,13 @@ corresponds to correct reachability.
 \subsection{SAT problems for different variants}
 %\ankit{Bring model variant table here}
 
-We have encoded several versions of the models of vesicle traffic systems listed. Starting from most basic version (A) where every present molecule is considered to be active. Other cases includes different combinations of constraints on the activity on nodes and edges. Most general restriction is activity of the molecule is dependent on the other molecules presence on the node (a Boolean function of N-1 parameters) (B,C,D,F,G,H). In very special case (E,F,G,H) activity of the molecules on the edges is dictated by pairing matrix, we call this process ``pairing inhibition". 
+We have encoded several versions of the models of VTSs listed.
+%
+The cases includes different combinations of constraints on the
+activity on nodes and edges.
+%
+
+
 %In this case if the corresponding pairing molecules present on the edge with the molecules , both the molecule and all corresponding molecules gets inhibited/become inactive.  
 
 % DIVIDE INTO COLUMNS and TALK ABOUT A/1 or A/0.
@@ -380,18 +376,36 @@ We have encoded several versions of the models of vesicle traffic systems listed
 \item Activity of molecules both on the edges and nodes is based on Boolean function of presence of other molecules.
 \item Activity of molecules on the edges is driven by pairing inhibition.
 \item Activity of molecules on the nodes is based on Boolean function of presence of other molecules and on edge by pairing inhibition.
-\item Version F with additional constraint that every edge is distinct.
+\item Version F with additional constraint that every edge is distinct.\ashu{encode this??}
 %\item Activity of molecules on the nodes is based on Boolean function of presence of other molecules and on edge by pairing inhibition with every edge is distinct.
 %\item Activity of molecules on the nodes is based on Boolean function of presence of other moleculess and on edge by pairing inhibition with self-edges are allowed.
 %\item Version F but self-edges are allowed.
 \end{enumerate}
+%
+The version (A) is most basic where every present molecule is active.
+%
+In versions (B-D,F-H),
+most general restriction is activity of the molecule is dependent on
+the other molecules presence on the node.
+%
+In the versions (E-H), activity of the molecules on the edges
+is dictated by pairing matrix; we call this process ``pairing
+inhibition".
+%
+In the column 2-3 of table~\ref{table1}, we list the constraints involved
+in each version.
 
-We have applied the tool for the above variations for searching the vesicle traffic systems that satisfies
-their corresponding properties. 
+% We have applied the tool for the above variations for searching the
+% VTSs that satisfies their corresponding properties. 
+%
+% After creating the formula using different Boolean variables 
+% we ship them directly to the solver.
+% %
+% In case of a satisfying (SAT) assignment of the added constraints the
+% Z3 theorem prover gives a model with the variable assignment.
+% %
+% In case no possible satisfying assignment the solver returns UNSAT.
 
-\input{v2-dia}
-
-After creating the formula using different Boolean variables we ship them directly to the solver. In case of a satisfying (SAT) assignment of the added constraints the Z3 theorem prover gives a model with the variable assignment. In case no possible satisfying assignment the solver returns UNSAT.
 %
 %
 

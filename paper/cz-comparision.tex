@@ -1,6 +1,7 @@
+\begin{figure}[t]
+  \centering
 \begin{tikzpicture}
-
-  \begin{axis}[title  = CBMC Vs Z3 encoding for N $\equal$ 5 (in secs),
+  \begin{axis}[
     xbar,
     y axis line style = { opacity = 0 },
     axis x line       = none,
@@ -15,7 +16,14 @@
   \addplot coordinates { (3053.8,Version A)         (500.03,Version C)
                          (890.84,Version E)  (2482.71,Version F) };
   \addplot coordinates { (7.7,Version A)         (7.60,Version C)
-                         (10.27,Version E)   (33.36,Version F)  };
-  
+                         (10.27,Version E)   (33.36,Version F)  };  
   \end{axis}
-\end{tikzpicture}
+\end{tikzpicture}  
+  \caption{CBMC Vs Z3 encoding for N $\equal$ 5 (in secs)}
+  \label{fig:cz-comp}
+\end{figure}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
