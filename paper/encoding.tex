@@ -382,18 +382,9 @@ activity on nodes and edges.
 %\item Version F but self-edges are allowed.
 \end{enumerate}
 %
-The version (A) is most basic where every present molecule is active.
+For the version A, every present molecule is in active state. In the table~\ref{table1}, we list the constraints involved in each version. Constraints V1-V8, R1-R2 and D1-D4 are same for every version but the difference is the constraint deciding the activity of the molecules. One type of restriction is where the activity of the present molecule is dependent on the presence of the other molecules. For example in version B, E, F activity of the molecules on the node is a boolean function of the presence of other molecules on that node; Anb. Similarly for the case of the edge in version C and E; Aeb. In the case of versions F the activity of the molecules on the edges is described by pairing matrix, if all the pairs of the present molecule are present on the same edge than all of them inhibit each other resulting in making all the molecules inactive, we term this process ``pairing inhibition".
 %
-In versions (B-D,F),
-most general restriction is activity of the molecule is dependent on
-the other molecules presence on the node.
-%
-In the versions (E,F), activity of the molecules on the edges
-is dictated by pairing matrix; we call this process ``pairing
-inhibition".
-%
-In the column 2-3 of table~\ref{table1}, we list the constraints involved
-in each version.
+
 
 % We have applied the tool for the above variations for searching the
 % VTSs that satisfies their corresponding properties. 

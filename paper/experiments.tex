@@ -17,8 +17,8 @@ A. & \multirow{5}{*}{
 & \ref{eq:ann},\ref{eq:aen} & No graph & No graph \\ \cline{3-5}
 B. & & \ref{eq:anb},\ref{eq:aen} & No graph & No graph \\ \cline{3-5}
 C. & & \ref{eq:ann},\ref{eq:aeb} & 3-connected & 3-connected \\  \cline{3-5}
-D. & & \ref{eq:ann},\ref{eq:aep} & No graph & No graph \\ \cline{3-5}
-E. & & \ref{eq:anb},\ref{eq:aeb} & 2-connected & 3-connected \\ \cline{3-5}
+D. & & \ref{eq:anb},\ref{eq:aeb} & 2-connected & 3-connected \\ \cline{3-5}
+E. & & \ref{eq:ann},\ref{eq:aep} & No graph & No graph \\ \cline{3-5}
 F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected & 4-connected \\ \hline
 %G. & & \ref{eq:anb},\ref{eq:aeb},\ref{eq:ced} & 3-connected & 3-connected \\ \hline
 
@@ -75,8 +75,8 @@ graph.
 % Dashed lines are used in the resultant visual network output to
 % specify the dropped edges to make the graph disconnected, which gives
 % information about the connectivity of the graph.
-\ashu{discuss table~\ref{tab:grph}}
-
+%\ashu{discuss table~\ref{tab:grph}}
+table~\ref{tab:grph} shows the result of the different variations of the VTS. We haven't found any graph for the version A with constraints Ann and Aen. Replacing constraint on the node of Ann with Anb (version B) does not affect the outcome and hence there is no graph that is a valid VTS following these constraints. Interestingly if we allow every present molecule to stay active (Ann) but constraint the edge by a boolean function (Aeb) the resultant graph is a 3-connected graph. Constraining the activity of both the edge and the nodes with the boolean function (Anb Aeb) results in 2 connected graphs. Again there is no graph for the case where every molecule on the node is active but the activity on the edge is driven by pairing inhibition (Aep). But if we replace the constraint on the node to be a boolean function (Anb) with Aep we have found that 4 connected graphs satisfies all the constraints. 
 \input{tbl-qf-graph}
 
 In Table~\ref{tab:qf-grabh}, we present the running times for the search of
