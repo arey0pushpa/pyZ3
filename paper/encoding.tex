@@ -357,18 +357,11 @@ corresponds to correct reachability.
 \subsection{SAT problems for different variants}
 %\ankit{Bring model variant table here}
 
-We have encoded several versions of the models of VTSs listed.
+We have encoded the following variants of VTSs.
 %
-The cases includes different combinations of constraints on the
+The variants are due to different combinations of constraints on the
 activity on nodes and edges.
 %
-
-
-%In this case if the corresponding pairing molecules present on the edge with the molecules , both the molecule and all corresponding molecules gets inhibited/become inactive.  
-
-% DIVIDE INTO COLUMNS and TALK ABOUT A/1 or A/0.
-%\todo{describe the variations}
-
 \begin{enumerate}[label=\Alph*]
 \item Every present molecule is considered to be active.
 \item Activity of molecules on the nodes is based on Boolean function of presence of other molecules. 
@@ -376,14 +369,32 @@ activity on nodes and edges.
 \item Activity of molecules both on the edges and nodes is based on Boolean function of presence of other molecules.
 \item Activity of molecules on the edges is driven by pairing inhibition.
 \item Activity of molecules on the nodes is based on Boolean function of presence of other molecules and on edge by pairing inhibition.
-%\item Version F with additional constraint that every edge is distinct.\ashu{encode this??}
-%\item Activity of molecules on the nodes is based on Boolean function of presence of other molecules and on edge by pairing inhibition with every edge is distinct.
-%\item Activity of molecules on the nodes is based on Boolean function of presence of other moleculess and on edge by pairing inhibition with self-edges are allowed.
-%\item Version F but self-edges are allowed.
 \end{enumerate}
 %
-For the version A, every present molecule is in active state. In the table~\ref{table1}, we list the constraints involved in each version. Constraints V1-V8, R1-R2 and D1-D4 are same for every version but the difference is the constraint deciding the activity of the molecules. One type of restriction is where the activity of the present molecule is dependent on the presence of the other molecules. For example in version B, E, F activity of the molecules on the node is a boolean function of the presence of other molecules on that node; Anb. Similarly for the case of the edge in version C and E; Aeb. In the case of versions F the activity of the molecules on the edges is described by pairing matrix, if all the pairs of the present molecule are present on the same edge than all of them inhibit each other resulting in making all the molecules inactive, we term this process ``pairing inhibition".
+% For the version A, every present molecule is in active state.
 %
+In the table~\ref{table1}, we present the constraints involved in each version.
+%
+The column two of the table shows that the constraints V1-V8, R1-R2, and D1-D4 are present
+for every variant.
+%
+The column three of the table lists the constraints that are different among the variants.
+%
+%
+One of the restriction is where the activity of the present molecule is dependent on the presence of the other molecules.
+%
+For example in version B, D, F activity of the molecules on the node is a boolean function of the presence of other molecules on that node; Anb.
+%
+Similarly for the case of the edge in version C and E; Aeb.
+%
+In the case of versions F the activity of the molecules on the edges
+is described by pairing matrix, if all the pairs of the present
+molecule are present on the same edge than all of them inhibit each
+other resulting in making all the molecules inactive, we term this
+process ``pairing inhibition".
+%
+The constraints for the variants can be given to a SAT solver to find
+VTSs that belong to the variants.
 
 
 % We have applied the tool for the above variations for searching the
