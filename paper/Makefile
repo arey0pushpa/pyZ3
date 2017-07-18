@@ -6,6 +6,7 @@ all: $(MAIN).pdf
 
 $(MAIN).pdf: *.tex *.bib *.cls
 	latexmk -pdf $(MAIN).tex
+	git rev-parse HEAD
 
 spell:
 	for f in `find . -name "*.tex"`; do aspell -t -l en_us -c $$f; done;
