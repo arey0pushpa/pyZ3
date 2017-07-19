@@ -1,0 +1,91 @@
+%Again about two pages long
+
+In this section, we will describe the model of VTSs and the basic constraints imposed by cell biology.
+
+\textbf{The cell as a transport graph:} We consider a cell to be a collection of compartments (nodes) and vesicles (edges), thus defining a transport graph. Every compartment or vesicle has a set of molecular labels, such as SNARE proteins, associated with it.
+
+\textbf{Molecular flows and steady state:} Each edge is associated with a flux of all the molecular types carried by the corresponding vesicle. The total amount of each molecular type on each compartment can therefore increase or decrease. We assume the cell is in a steady state where each compartment’s composition does not vary over short time scales. This implies incoming and outgoing fluxes are balanced for each molecular type at each compartment.
+
+\textbf{Vesicle targeting driven by molecular interactions:} Once a vesicle has budded out of the source, the molecules it carries determine its properties. In particular, for any given pair of a vesicle and a compartment, the set of SNARE proteins that label the former and latter influence whether the vesicle will fuse to that compartment. Biophysically, fusion requires a direct physical interaction between at least one SNARE type on the vesicle and one SNARE type on the compartment. SNAREs fall into two classes (known as Q and R in the cell biology literature) and vesicle fusion requires a pairing of a Q-SNARE with an R-SNARE. The list of molecular pairs that can drive a fusion event is given in a pairing matrix between Q and R SNAREs. Without loss of generality we assume equal numbers of Q and R SNARE types.
+
+\textbf{Molecular regulation:} We assume that for fusion to occur, the pair of SNARE types involved on the vesicle and compartment must both be in an active state. Whether these SNAREs are active or inactive depends on the other molecules found on the vesicle or compartment, respectively. We test many different versions of this kind of molecular regulation. Most generally, the activity state of a given SNARE can be a Boolean function of all the molecular types on a compartment or vesicle. We have also tested \cite{shukla} a particularly simple regulation mechanism in which a two SNAREs that can pair to drive fusion inhibit one another. This is motivated by the idea that pairing must generate an inactive bi-molecular complex.
+
+\textbf{Synthesis:} Given a particular transport graph, a particular labeling of all the compartments and edges, a particular fusion pairing matrix, and a particular regulatory model, we do the following.
+
+\begin{enumerate}
+\item We determine which molecules are active on every compartment or vesicle.
+\item For every vesicle fusing to a compartment, we determine whether there exists an active pair (one molecule on the vesicle, one on the compartment) which drives that fusion event.
+\item For every vesicle-compartment pair where the vesicle does not fuse to the compartment, we verify that there is no pairing of active molecules on the
+vesicle and compartment that could drive their fusion.
+\item We verify that every molecular type entering a compartment also leaves the compartment, and also that every molecular type entering a set of compartments also leaves that set; this is the steady state condition.
+\end{enumerate}
+
+If a VTS is $k$-connected, every pair of compartments remain reachable after dropping $k-1$ vesicles. In principle the connectivity of a VTS can be determined by cell-biological studies. We have previously shown \cite{shukla} that a feasible VTS must be at least 3-connected but might need to have higher connectivity. Here we have build a tool that studies properties of VTSs that are not $k$-connected, from some $k$. We later will discuss conditions of maximum connectivity [or LGC, least guarantee connectivity] and minimal connectivity [or LRC, least required connectivity].
+
+\input{pm-1-matrix}
+
+\begin{example}
+%
+In figure~\ref{fig:M1}, we present a VTS that has 3 compartments and 8 molecules, and a corresponding pairing matrix. Molecules are numbered 0-7. In the VTS, labels are a string of molecule ids, and an overline over a an id indicates that the molecule is active. This VTS is an example of one where every molecule on the node is active, and the activity of the molecules on the edges are controlled by presence of the other molecules. On the right side of the figure, we show the pairing matrix. An entry 1 represents pairing between molecules; $\times$ represents no pairing. Rows are labels on vesicles, columns are labels on compartments. Every molecule flows on a cycle, ensuring steady state. This is a 3-connected graph.
+\end{example}
+
+\subsection{Modeling and Symbolic Analysis of VTS: An Overview}
+\label{subsec:graphmodel}
+Since a VTS are a transport graph, it is but natural to formally model VTS as graphs (as used in computer science) with their nodes denoting compartments and labeled edges denoting transport vesicles with labels denoting the set of molecules being transported.  The budding and fusion regulations can be represented as matching tables over sets of molecules, i.e., formally as a boolean function that given requisite labels of nodes and vesicles that returns true if the required regulations are met.  Given such a graph model of a VTS, then properties, such as $k$-connectedness or steady state condition, can be formally defined as constraints, i.e., first-order logical formulas, over graphs and function types.  Note that these formulas define among other things constraints over paths between nodes in the graph model of VTS.  For example, the steady state condition, described informally earlier, can be defined by the formula shown in Listing~1.1.
+
+\begin{lstlisting}[mathescape,
+ breaklines,
+  rulecolor=\color{black},
+  frame=single,
+  caption= \textbf{Steady state specification.},
+  moredelim={[is][keywordstyle]{@@}{@@}}
+]
+# Every edge E is represented by a label; labelE (a bitvector).
+# E(x,y): Edge between node x and y. E.source = x, E.target = y    
+# labelE(m): mth molecule is present on edge E.
+# Edge(m)(x,y): Edge between node x and y with labelE(m).                 
+# seq(a1..an): each ak represents a node. len(seq) is |seq|.
+# N: total number of nodes, = : Mathematical equality.
+ 
+@@$\forall$ z $\in$ {Nodes} $\forall$ E $\in$ {Edges}: E.source = z
+    $\forall$ m $\in$ {Molecules}: labelE(m) $\supset$
+       ($\exists$ a seq(a1..an): (2 $\leq$ |seq| $\leq$ N)  $\wedge$
+            ((a1 = z) $\wedge$ (a2 = E.target) $\wedge$
+             (($\forall$ k from 1 to |seq| - 1) $\supset$ Edge(m)(ak,ak+1)) $\wedge$
+             (Edge(m)(an,a1))) @@
+
+\end{lstlisting}    
+%\begin{itemize}
+%\item \srivas{Detailed BIO to Graph problem}
+%\end{itemize}
+
+Similarly, one can define fusion and budding rules as constraints over the boolean functions modeling the regulations.  Given definitions of fusion and budding rules and the steady state conditions, whether a VTS meets maximum connectivity requirement, i.e. the LGC property, can be verified by checking if the formula show in Listing~1.2 is valid.  Here we have defined the property by checking over existence of any fusion/budding rules.  We can eliminate the existential quantifier if we are interested in checking the property for a particular fusion/budding rule.
+
+\begin{lstlisting}[mathescape,
+  breaklines,
+  rulecolor=\color{black},
+  frame=single, 
+  caption= \textbf{Maximal Connectedness (LGC) Property.},
+  moredelim={[is][keywordstyle]{@@}{@@}}
+] 
+# C1: Steady state condition.
+# C2, C3: Fusion rules.
+# C4: Graph is 4-connected.
+# G: Graph, f: Constrained function.
+# $\supset$: material conditional (if..then), $\wedge$: Logical and.
+$\forall$: Universal quantifier, $\exists$: Existential quantifier.
+# For every 4-connected graph following conditions must be valid.  
+@@VALID ($\forall$ G: C4(G) $\supset$  ($\exists$ f: C1(G) $\wedge$ C2(G,f) $\wedge$ C3(G,f) )) @@
+
+\end{lstlisting} 
+
+\subsection{Converting the Graph Problem into Boolean SAT problem}
+\label{subsec:satproblem}
+To convert the graph problem described in sec~\ref{subsec:graphmodeling}, into a boolean SAT problem, we need to define a scheme to represent graphs and boolean functions using a suitable set of propositional variables.  In our earlier work, we modeled the graph problem in C using arrays to model graphs and boolean function.  We then used the CBMC model checker to convert the graph problem into a SAT problem.  One of the challenges we had in our earlier work is dealing with quantifiers.  Note that the connectedness property defined in Listing~1.2 has quantifier alternation.  Even if we were to eliminate the existential quantifier by instantiating the problem for a fixed set of fusion rules, we would have embedded quantifiers in the antecedent of implications.   CBMC supports only a quantifier-free logic n its assertion language.  In our earlier work we used a combination of explicit enumeration at the C-level and clever use f non-determinism to eliminate alternation of quantifiers.  This enumeration was one source of bottleneck for scaling in our earlier work.  In the current work we eliminate this bottleneck by modeling the problem directly as a SAT instance using uninterpreted functions and recursive relations.  The details of te hnew encding will described in subsequent sections.
+
+%--------------------- DO NOT ERASE BELOW THIS LINE --------------------------
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
