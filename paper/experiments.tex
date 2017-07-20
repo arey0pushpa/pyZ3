@@ -1,26 +1,28 @@
 \begin{table}[t]
 \centering
 % \def\arraystretch{1.6}
-  \begin{tabular}{|c|c|c|c|c|}
+  \begin{tabular}{|c|c|c|c|}
     \hline
     {\multirow{2}{*}{\textbf{Variant}}}  & 
     \multicolumn{2}{c|}{\textbf{Constraints}} & 
-    \multicolumn{2}{c|}{\textbf{Graph connectivity}}  \\
-   \cline{2-5}
-   &  \textbf{Rest} & \textbf{Activity} & \textbf{\textbf{Least connected}} & \textbf{Sampling: Guarantee}\\ \hline
+    \textbf{Graph connectivity}
+    % \multicolumn{2}{c|}{\textbf{Graph connectivity}}
+    \\
+   \cline{2-4}
+   &  \textbf{Rest} & \textbf{Activity} & \textbf{\textbf{Least connected}} % & \textbf{Sampling: Guarantee}
+\\ \hline
     
 A. & \multirow{5}{*}{
      \makecell{ \ref{eq:f0}--\ref{eq:fuse2},\\
      \ref{eq:reach1},\ref{eq:reach2},\\
      \ref{eq:drop1}--\ref{eq:drop4}}
      } 
-& \ref{eq:ann},\ref{eq:aen} & No graph & No graph \\ \cline{3-5}
-B. & & \ref{eq:anb},\ref{eq:aen} & No graph & No graph \\ \cline{3-5}
-C. & & \ref{eq:ann},\ref{eq:aeb} & 3-connected & 3-connected \\  \cline{3-5}
-D. & & \ref{eq:anb},\ref{eq:aeb} & 2-connected & 3-connected \\ \cline{3-5}
-E. & & \ref{eq:ann},\ref{eq:aep} & No graph & No graph \\ \cline{3-5}
-F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected & 4-connected \\ \hline
-%G. & & \ref{eq:anb},\ref{eq:aeb},\ref{eq:ced} & 3-connected & 3-connected \\ \hline
+     & \ref{eq:ann},\ref{eq:aen} & No graph     \\\cline{3-4}
+B. & & \ref{eq:anb},\ref{eq:aen} & No graph     \\\cline{3-4}
+C. & & \ref{eq:ann},\ref{eq:aeb} & 3-connected  \\\cline{3-4}
+D. & & \ref{eq:anb},\ref{eq:aeb} & 2-connected  \\\cline{3-4}
+E. & & \ref{eq:ann},\ref{eq:aep} & No graph     \\\cline{3-4}
+F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected  \\\hline
 
 % C_es :Self edges are allowed
 % C_ed : Every edge is distinct 
