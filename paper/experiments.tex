@@ -29,7 +29,6 @@ F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected  \\\hline
   \end{tabular}
 \caption{{\bf Activity regulation of molecules vs. graph connectivity.}}
 \label{tab:grph}
-\vspace{-5ex}
 \end{table}
 
 
@@ -51,7 +50,7 @@ F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected  \\\hline
 % \Ankit{In other solver variations ...}
 
 We have implemented the encodings for each variants
-using the python interface of $\zthree$ in a tool.
+using the python interface of $\zthree$ in a tool (A'tool).
 %
 Our tool allows the user to choose a model and the size of the network
 besides other parameters like connectivity and number of parallel
@@ -107,7 +106,7 @@ The experiments were done on a machine with Intel(R) Core(TM) i3-4030U
 CPU @ 1.90GHz processor and 4GB RAM.
 %
 We have compared our performance with the performance of our earlier 
-CBMC based implementation.
+CBMC based implementation (O'cbmc).
 %
 For example, the formula for variation F, the total number of
 compartments ($|N|$) equals to 10, returns in 129.78 minutes (7786.8 secs)
@@ -117,11 +116,8 @@ In comparison, CBMC results in OUT OF MEMORY for $|N|$ greater than 5.
 %
 ``!'' indicate that the constraints were unsatisfiable.
 %
-Hence with the use of this novel encoding, we are able to scale the
-system to a much larger compartmentalized system, especially to
-eukaryotic cells with a total number of 10 compartments. \textbf{Not only we have improved finding a SAT model but this encoding also did better in comparison to cbmc in the
-case of refutation that no model exists. Refer table variant A timing
-comparison and VARIANT D with N =2.}
+ \textbf{Using this encoding in comparison to the old one, not only we got efficiency improved for finding a SAT model but also did better in the case of refutation that no model exist (Table 2 variant A timing comparison and variant D with N =2).}. Hence with the use of this novel encoding, we are able to scale the system to a much larger compartmentalized system, especially to
+eukaryotic cells with a total number of 10 compartments.
 %
 % \ankit{
 % This additional scalability can provide us leverage to ask for related
@@ -132,7 +128,7 @@ comparison and VARIANT D with N =2.}
 Furthermore, we experimented with limits of our tools and found
 that $\zthree$ was able to solve the constraints up to $\sim{14-18}$ nodes.
 
-% \vspace{-3ex}
+
 
 % \input{cz-comparision}
 
