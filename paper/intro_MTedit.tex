@@ -12,7 +12,7 @@ There has been very little work done on how these molecular processes are integr
 The analysis of VTSs is a difficult computational problem because of the combinatorial scaling of graph topologies and regulatory rules. Many questions require us to check useful properties over all possible graphs and regulatory rules. Formal verification tools such as model checkers \cite{clarke1996symbolic, biere2003bounded, clarke2008birth, cimatti2000nusmv, holzmann1997model} and SAT solvers \cite{moskewicz2001chaff,een2004extensible} allow us to do this symbolically for graphs of finite size, without enumerating all instances. In a recent work, we employed the model checker CBMC \cite{CKY03, ckl2004} meant to analyze ANSI C programs for studying this problem. VTSs and SNARE regulations were modeled as C code using arrays to represent graphs and Boolean tables. Queries about graph connectivity requirements for different variations of SNARE regulations were modeled as logical assertions to be checked by the model checker. CBMC uses its own built-in encodings to reduce the analysis problem to a Boolean satisfiability problem which is solved using SAT solvers.
 %
 However, the scalability of our recent approach was limited (up to
-VTSs with 6 nodes) due to the encoding used to model VTSs was not
+VTSs with 6 nodes) due to the encoding used to model VTSs was not completely
 fine-tuned to the structure of the problem.
 %
 In particular, we needed to encode conditional reachability between

@@ -1,19 +1,42 @@
-   \begin{tabular}[t]{|c|c|c|}\hline
-    \textbf{Size}  & {\textbf{Model B}}  &  {\textbf{Model E}} \\\hline
+\begin{table}[t]
+  \centering
+  \begin{tabular}[t]{|c|c|c|c|c|c|c|c|c|}\hline
+    {\multirow{2}{*} \textbf{Size}}  & \multicolumn{2}{c|}{\textbf{Variant A}} & \multicolumn{2}{c|}{\textbf{Variant C}} & \multicolumn{2}{c|}{\textbf{Variant D}}  &  \multicolumn{2}{c|}{\textbf{Variant F}} \\\hline
+   
+   \cline{2-9}
+    {} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} \\\hline
     
-    2 & !0.09 & !0.12 \\\hline
-    3  & !0.54  & !0.75 \\\hline
-    4 &  !2.33 & !3.35 \\\hline
-    5 & !7.7 & !13.05 \\\hline
-    6 &  !20.05 & !40.64 \\\hline
-    7 & !51.86 & !152.78 \\\hline
-    8 & !112.24 &  !344.26 \\\hline
-    9 &  !236.31 & !880.73\\\hline
-    10 &  !531.56 &  !2133.89\\\hline
+    2 & !0.085 & !2.43 & 0.15 & 2.12 & !0.13 & !1.89 & 0.35 & 5.12 \\\hline
+    3 & !0.54 & !8.04 & 0.95  & 7.65 & 0.62 & 7.66  & 1.36 & 23.94\\\hline
+    4 & !2.57 & !297.93 & 2.33 & 22.74 & 2.85 & 48.35  & 4.81 & 123.34\\\hline
+    5 & !7.7 & !3053.8 & 7.60 & 500.03 & 10.27 & 890.84 & 33.36  & 2482.71 \\\hline
+    6 & !22.98 & M/O & 19.52 & M/O & 30.81 & M/O  & 147.52 & M/O\\\hline
+    7 & !57.07 & M/O & 81.89 & M/O & 82.94 & M/O & 522.26  & M/O \\\hline
+    8 & !164.14 & M/O & 630.85 & M/O & 303.19 & M/O & 2142.76 & M/O\\\hline
+    9 & !307.67 & M/O & 2203.45 & M/O & 971.01 & M/O & 4243.34 & M/O\\\hline
+    10 & !558.34 & M/O & 7681.93 & M/O & 2274.30 & M/O & 7786.82 & M/O\\\hline
   \end{tabular}
   \caption{Run-times for searching for models (in secs).}
- % \label{tab:qf-grabh}
+  \label{tab:qf-grabh}
 \end{table}
+
+
+%   \begin{tabular}[t]{|c|c|c|}\hline
+%    \textbf{Size}  & {\textbf{Model B}}  &  {\textbf{Model E}} \\\hline
+%    
+%    2 & !0.09 & !0.12 \\\hline
+%    3  & !0.54  & !0.75 \\\hline
+%    4 &  !2.33 & !3.35 \\\hline
+%    5 & !7.7 & !13.05 \\\hline
+%    6 &  !20.05 & !40.64 \\\hline
+%    7 & !51.86 & !152.78 \\\hline
+%    8 & !112.24 &  !344.26 \\\hline
+%    9 &  !236.31 & !880.73\\\hline
+%    10 &  !531.56 &  !2133.89\\\hline
+%  \end{tabular}
+%  \caption{Run-times for searching for models (in secs).}
+% % \label{tab:qf-grabh}
+%\end{table} 
 
 %\begin{table}[t]
 %  \centering

@@ -70,9 +70,7 @@ a VTS and presents a visual output to the user in form of annotated graph.
 % where directed labeled edges and nodes provide the
 % complete information about the system.
 %
-We also visually report the dropped edges to make the graph
-disconnected, which gives information about the connectivity of the
-graph.
+We also visually report the dropped edges required to disconnect the graph, it gives information about the connectivity of the graph.
 
 % Dashed lines are used in the resultant visual network output to
 % specify the dropped edges to make the graph disconnected, which gives
@@ -119,7 +117,9 @@ In comparison, CBMC results in OUT OF MEMORY for $|N|$ greater than 5.
 %
 Hence with the use of this novel encoding, we are able to scale the
 system to a much larger compartmentalized system, especially to
-eukaryotic cells with a total number of ten compartments.
+eukaryotic cells with a total number of 10 compartments. \textbf{Not only we have improved finding a SAT model but this encoding also did better in comparison to cbmc in the
+case of refutation that no model exists. Refer table variant A timing
+comparison and VARIANT D with N =2.}
 %
 % \ankit{
 % This additional scalability can provide us leverage to ask for related
