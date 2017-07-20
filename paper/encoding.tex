@@ -20,7 +20,7 @@ The graph is formally defined as follows.
   \item $\nlabel : \nodes \maps \powerset{\mols}$ defines the molecules present in the nodes  
   \item $ \nodes \times (\powerset{\mols}-\emptyset) \times \nodes \subseteq \edges$ is the
     set of edges with molecule sets as labels
-  \item $\pairs : \mols \times \mols$ is pairing relation
+  \item $\pairs \subseteq \mols \times \mols$ is pairing relation
   \item $\nodef : \mols \maps \powerset{\mols} \maps \booleans$ is activity maps for nodes
   \item $\edgef : \mols \maps \powerset{\mols} \maps \booleans $ is activity maps for edges
   \end{itemize}
@@ -58,11 +58,11 @@ an {\em $m$-path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes
 such that $(n_i,M',n_{i+1}) \in \edges$ and $m \in M'$ for
 each $ 0 < i < \ell$.
 %
-A node $n'$ is {\em reachable} from node $n$ in $G$ if there is a path
+A node $n'$ is {\em ($m$-)reachable} from node $n$ in $G$ if there is a ($m$-)path
 $n,...,n'$ in $G$.
 %
-A node $n'$ is {\em $m$-reachable} from node $n$ in $G$ if there is a
-$m$-path $n,...,n'$ in $G$.
+% A node $n'$ is {\em $m$-reachable} from node $n$ in $G$ if there is a
+% $m$-path $n,...,n'$ in $G$.
 %
 We call $G$ {\em stable} if for each $(n,M',n') \in \edges$ and $m \in M'$,
 $n$ is $m$-reachable from $n'$.
@@ -74,9 +74,6 @@ $(n,M',n')$, $m'$ is active in $n'$, and $(m,m') \in \pairs$.
 We call $G$ {\em well-fused} if each edge $(n,M',n') \in \edges$ fuses
 with non-empty fusing molecules $M'' \subseteq M'$
 and $\pairs(M'')$ are not active in any other node.
-
-
-
 %
 We call $G$ {\em connected} if for each $n,n' \in \nodes$,
 $n'$ is reachable from $n$ in $G$.
@@ -133,12 +130,13 @@ We also have auxiliary Boolean variables that will help us encode the well-fused
 \item $a_{i,m}$ indicates that molecule $m$ is active at node $i$, i.e., $\nodef(m,L(i))$
   holds
 \item $b_{i,j,q,m}$ indicates that molecule $m$ is active at $q$th edge $(i,M',j)$ between $i$ and $j$, i.e., $\edgef(m,M')$ holds
-\item $r_{i,j,m,p}$ indicates that there is a path from $i$ to $j$ of length less than or equal to $p$
+\item $r_{i,j,m,p}$ indicates that there is a $m$-path from
+  $i$ to $j$ of length less than or equal to $p$
 \end{enumerate}
 For $k$-connected property, we also use the following auxiliary Boolean variables
 \begin{enumerate}
 \item $d_{i,j,q}$ indicates $q$th edge between $i$ and $j$ is dropped
-\item $r'_{i,j}$ indicates that there is a path from $i$ to $j$ is a modified VTS
+\item $r'_{i,j}$ indicates that there is a path from $i$ to $j$ in the modified VTS
 \end{enumerate}
 
 We will describe the Boolean formulas that encode VTSs in several categories.
@@ -177,9 +175,7 @@ A molecule should be present to be active on a node.
   \bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
   \tag{V3}\label{eq:c4}
 \end{align}
-
-The edge labels are subset of the node label of source and target compartments.
-
+The edge labels are subset of the node labels of the source and target compartments.
 \begin{align}
   \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies (n_{i,m} \land n_{j,m} )\tag{V4}\label{eq:c0}
 \end{align}
