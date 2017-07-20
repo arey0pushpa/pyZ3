@@ -30,7 +30,7 @@ carried by the corresponding vesicle.
 We assume the cell is in a steady state where each compartments
 composition does not vary over time, meaning that all incoming and
 outgoing fluxes are balanced for each molecular type at each
-compartment.
+compartment; this is the \textit{stability condition}.
 
 \textbf{Vesicle targeting driven by molecular interactions:} The model
 specification includes a description of how molecular properties
@@ -78,7 +78,7 @@ regulation.
 Most generally, the activity state of a given molecule can be a
 Boolean function of all the molecular types on a compartment or vesicles.
 We have also tested a particularly simple regulation mechanism in which two
-molecules that can pair to drive fusion inhibit one another.
+molecules that can pair to drive fusion inhibit one another; this is the \textit{pairing inhibition}.
 %
 This is motivated by the idea that pairing must generate an inactive
 bi-molecular complex.
@@ -100,7 +100,7 @@ compartment, we verify that there is no pairing of active molecules on the
 vesicle and compartment that could drive their fusion.
 \item We verify that every molecular type entering a compartment also leaves the compartment,
 and also that every molecular type entering a set of compartments also
-leaves that set; this is the steady state condition.
+leaves that set.
 %
 This tells us that the
 particular graph and molecular labeling does represent an allowed steady
