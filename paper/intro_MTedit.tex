@@ -13,11 +13,13 @@ The analysis of VTSs is a difficult computational problem because of the combina
 
 \begin{enumerate}
 \item The encoding used to model VTSs was not fine-tuned to the structure of the problem.
-\item The queries to be solved involved quantified formulas, i.e., we needed to solve queries of the form ``\emph{for all} graphs does there \emph{exist} SNARE regulation constraints that satisfy cellular steady state conditions.
+\item The \textbf{specification involved enumeration of all the possible paths in order to satisfy both the graph connectivity and the stability condition (refer section 3).}
+%quantified formulas, i.e., we needed to solve queries of the form ``\emph{for all} graphs does there \emph{exist} SNARE regulation constraints that satisfy cellular steady state conditions.
 \end{enumerate}
 
-As CBMC does not directly support solving such quantified formulas, we had to use a technique that combined non-determinism and partial enumeration that is not as efficient.\newline
+The problem of encoding graph connectivity and stability condition in CBMC was solved combined non-determinism and partial enumeration that is not as efficient.\newline
 
+\todo{REQUIRE A REWRITE FLOW PROBS}
 In this paper, we have developed a novel SAT encoding for searching a VTS that satisfy the given properties. We improved the encoding of some of the conditions for VTSs. In the earlier implementation, reachability was encoded by enumeration of paths. In our current encoding, we have recursively defined the reachability condition such that that we avoid the exponential enumeration. We have also encoded $k$-connectivity in a similar fashion and avoided a blowup in the formula size. Furthermore, our encoding supports several variations of the conditions. We have implemented the encoding using Z3~\cite{z3} python API and searched for VTS satisfying various properties upto size 14-18 nodes as compare earlier tool that could only search graph upto size 8 nodes. Our tool is useful to cell biologists since VTSs of real cells have approximately ten compartments.  \\
 
 %\newline
