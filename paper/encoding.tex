@@ -100,7 +100,7 @@ problem and use SAT solvers to find the satisfying VTSs.
 We will first present the variables used to encode the
 VTSs and the properties.
 %
-Afterwards, we will present the formulas corresponding to the
+Afterwards, we will present the constraints corresponding to the
 properties.
 
 \subsubsection{Variables for VTS description}
@@ -117,9 +117,8 @@ that encode the VTSs.
 
 \item Boolean variable $n_{i,m}$ indicates if $m \in \nlabel(i)$
 \item Boolean variable $e_{i,j,q}$ indicates if $q$th edge exists between $i$ and $j$.
-\item Boolean variable $e_{i,j,q,m}$ indicates if $q$th edge between $i$ and $j$ contains molecule $m$.
-
-\item Boolean variable $p_{k,k'}$ indicates if $(m,m') \in \pairs$
+\item Boolean variable $e_{i,j,q,m}$ indicates if $q$th edge between $i$ and $j$ contains $m$.
+\item Boolean variable $p_{m,m'}$ indicates if $(m,m') \in \pairs$
 \item uninterpreted Boolean functions $\nodef_m : \booleans^\mu \maps \booleans$
 encoding $\nodef(m)$ map
 \item uninterpreted Boolean functions $\edgef_m : \booleans^\mu \maps \booleans$
@@ -130,28 +129,28 @@ We also have auxiliary Boolean variables that will help us encode the well-fused
 \item $a_{i,m}$ indicates that molecule $m$ is active at node $i$, i.e., $\nodef(m,L(i))$
   holds
 \item $b_{i,j,q,m}$ indicates that molecule $m$ is active at $q$th edge $(i,M',j)$ between $i$ and $j$, i.e., $\edgef(m,M')$ holds
-\item $r_{i,j,m,p}$ indicates that there is a $m$-path from
+\item $r_{i,j,m,p}$ indicates if there is an $m$-path from
   $i$ to $j$ of length less than or equal to $p$
 \end{enumerate}
 For $k$-connected property, we also use the following auxiliary Boolean variables
 \begin{enumerate}
 \item $d_{i,j,q}$ indicates $q$th edge between $i$ and $j$ is dropped
-\item $r'_{i,j}$ indicates that there is a path from $i$ to $j$ in the modified VTS
+\item $r'_{i,j}$ indicates if there is a path from $i$ to $j$ in the modified VTS
 \end{enumerate}
 
-We will describe the Boolean formulas that encode VTSs in several categories.
+We will describe the Boolean constraints that encode VTSs in several categories.
 %
-In the end, we will present in a table the formulas needed for the
+In the end, we will present in a table the constraints needed for the
 model variants.
 %
 To avoid cumbersome notation, we will not explicitly write the ranges of the indexing
-in the formulas.
+in the constraints.
 %
-$i$ and $j$ will be ranged over nodes.
+$i$ and $j$ will range over nodes.
 %
-$m$ will be ranged over molecules.
+$m$ will range over molecules.
 %
-$q$ will be ranged over edges between two nodes.
+$q$ will range over edges between two nodes.
 %
 
 % \subsubsection{Constraints on the structure of the edges, nodes and }
@@ -192,10 +191,10 @@ We fix first half as Q-SNAREs and rest as R-SNAREs and set diagonal blocks in pa
 \end{align}
 
 \subsubsection{Well-fused constraints}
-Boolean constraint~\eqref{eq:fuse1} encodes that each edge must fuse with
+Constraint~\eqref{eq:fuse1} encodes that each edge must fuse with
 its destination node.
 %
-Boolean constraint~\eqref{eq:fuse2} encodes that each edge should not
+Constraint~\eqref{eq:fuse2} encodes that each edge should not
 be able to potentially fuse with any node other than its destination node.
 \begin{align}
   \bigwedge\limits_{i,j,q} e_{i,j,q} \limplies \bigvee_{m,m^{\prime}} (b_{i,j,q,m} \land a_{j,m^{\prime}} \land p_{m,m^{\prime}})
@@ -225,31 +224,31 @@ the activity of molecules.
 We will present~\eqref{eq:ann}-~\eqref{eq:aep} that encodes
 the varying constraints.
 %
-The following formula encodes no conditions on activities on nodes,
+The following constraint encodes no conditions on activities on nodes,
 i.e., all the present molecules on the nodes are active.
 \begin{align}
 \bigwedge\limits_{i,m} n_{i,m} = a_{i,m}    \tag{Ann}\label{eq:ann}
 \end{align}
-The following formula encodes that activity of a molecule $m$ on the node is
+The following constraint encodes that activity of a molecule $m$ on the node is
 defined by a Boolean function $\nodef_m$ of presence of molecules present on that node.
 \begin{align}
 \bigwedge\limits_{i,m} n_{i,m} \limplies a_{i,m} =  \nodef_m (n_{i,1},\dots,n_{i,\mu}) 
 \tag{Anb}\label{eq:anb}
 \end{align}
-The following formula encodes no conditions on activities on edges,
+The following constraint encodes no conditions on activities on edges,
 i.e., all the present molecules on the edges are active.
 \begin{align}
   \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} = b_{i,j,q,m}
 \tag{Aen}\label{eq:aen}
 \end{align}
-The following formula encodes that activity of a molecule $m$ on the edge is
+The following constraint encodes that activity of a molecule $m$ on the edge is
 defined by a Boolean function $\edgef_m$ of presence of molecules present on that edge.
 \begin{align}
    \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies b_{i,j,q,m} = \edgef_k(e_{i,j,q,1}, .., e_{i,j,q,\mu} )
   \tag{Aeb}\label{eq:aeb}
 \end{align}
 %
-The following formula encodes that the activity of the molecules on
+The following constraint encodes that the activity of the molecules on
 edges is defined by inhibition by other molecules based on the pairing
 matrix. 
 \begin{align}
@@ -261,7 +260,7 @@ matrix.
 %
 We use $m$-reachability to encode the stability condition in VTSs.
 %
-The following formula recursively encodes that node $j$ is $m$-reachable from node $i$ in less than $p$ steps
+The following constraint recursively encodes that node $j$ is $m$-reachable from node $i$ in less than $p$ steps
 if either there is a direct edge between $i$ and $j$ with $m$ present on the edge or there is a edge between $i^{\prime \prime}$ and
 $(i \neq i^{\prime \prime})$ with $m$ present, and j is $m$-reachable from $i'$ in less than $p-1$ steps.
 %
@@ -297,7 +296,7 @@ Boolean constraints~\ref{eq:drop1}-\ref{eq:drop4}
 encode the relevant constraints for reachability
 in the modified VTS. 
 %
-The following formulas encode that only
+The following constraints encode that only
 existing edges can be dropped and exactly $k-1$ edges are dropped.
 \begin{align}
   \bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \tag{D1}\label{eq:drop1}\\
@@ -306,7 +305,7 @@ existing edges can be dropped and exactly $k-1$ edges are dropped.
 \end{align}
 We need to define reachability in the modified VTS, therefore we use
 a new variable $r'_{i,j}$ to encode reachability from $i$ to $j$.
-In the following formula, we encode $r'_{i,j}$ is true if there is an
+In the following constraint, we encode $r'_{i,j}$ is true if there is an
 edge $(i,\_,j)$ and it is not dropped, or there is a node
 $i^{\prime}$ such that, there is an edge $(i,\_,i^{\prime})$ which is
 not dropped and $r'_{i',j}$ is true.
@@ -315,7 +314,7 @@ not dropped and $r'_{i',j}$ is true.
   \tag{D3}\label{eq:drop3}
 \end{align}
 Since we are looking for a graph that is not $k$-connected,
-the following formula encodes that there are nodes $i$ and $j$ such that
+the following constraint encodes that there are nodes $i$ and $j$ such that
 there is no path between them in the underlying undirected graph.
 \begin{align}
    \bigvee\limits_{i,j} \neg (r^{\prime}_{i,j} \lor r^{\prime}_{j,i})
@@ -326,19 +325,19 @@ The key improvement in our work over the earlier tool is the
 encoding of reachability, which was done using enumeration of paths.
 %
 In the current work, we have encoded reachability in two different
-ways in formulas~\eqref{eq:reach1} and~\eqref{eq:drop3}.
+ways in constraints~\eqref{eq:reach1} and~\eqref{eq:drop3}.
 %
 The reachability is recursively defined in~\eqref{eq:drop3} and has
 trivial solutions by making all $r'$s true.
 %
-However, the trivial solutions are disallowed by formula~\eqref{eq:drop4} and we find
+However, the trivial solutions are disallowed by constraint~\eqref{eq:drop4} and we find
 only the solutions that captures the evidence of unreachability.
 %
 On the other hand,
-we have added length of paths in our reachability encoding in formula~\eqref{eq:reach1},
+we have added length of paths in our reachability encoding in constraint~\eqref{eq:reach1},
 which needs relatively more auxiliary variables.
 %
-This is because formula~\eqref{eq:reach2} has only positive
+This is because constraint~\eqref{eq:reach2} has only positive
 occurrences of the reachability variables and if we had defined
 $r$s in ~\eqref{eq:reach1} without paths,
 the circular dependencies in the recursive definitions of $r$s
@@ -346,7 +345,7 @@ may have resulted in spurious satisfying assignments that
 do not encode reachability.
 %
 By adding the path length, we break the circular dependencies, the
-formula remains polynomial in size, and satisfying assignments only
+constraint remains polynomial in size, and satisfying assignments only
 correspond to correct reachability.
 
 % We can go down or up using -C \_ option.  \newline 
@@ -396,7 +395,7 @@ VTSs that belong to the variants.
 % We have applied the tool for the above variations for searching the
 % VTSs that satisfies their corresponding properties. 
 %
-% After creating the formula using different Boolean variables 
+% After creating the constraint using different Boolean variables 
 % we ship them directly to the solver.
 % %
 % In case of a satisfying (SAT) assignment of the added constraints the
@@ -408,14 +407,14 @@ VTSs that belong to the variants.
 %
 
 % \subsection{Creating a solver and solving these constraints}
-% We will create a solver and add these build formula using these constraints to that and then check whether there a satisfiable assignment that satisfies all these constraints.
+% We will create a solver and add these build constraint using these constraints to that and then check whether there a satisfiable assignment that satisfies all these constraints.
 
 % \begin{figure}[ht]
 % %\vspace{-3mm}
 % \begin{verbatim}
 % # Create a solver
 % s = Solver()
-% # Add these formulas to it.
+% # Add these constraints to it.
 % s.add(A0, A1, C0, C1, C2, C4, C5, F0, F1, F2, F3, F4, F5, D0, D1, D2, D3)
 
 % # Check for the satisfiability assignment.
