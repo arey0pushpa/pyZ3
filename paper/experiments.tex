@@ -29,6 +29,7 @@ F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected  \\\hline
   \end{tabular}
 \caption{{\bf Activity regulation of molecules vs. graph connectivity.}}
 \label{tab:grph}
+\vspace{-4ex}
 \end{table}
 
 
@@ -49,7 +50,8 @@ F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected  \\\hline
 %
 % \Ankit{In other solver variations ...}
 
-We have implemented the encodings for each variants
+We have implemented~\footnote{\url{https://github.com/arey0pushpa/pyZ3}}
+the encodings for each variants
 using the python interface of $\zthree$ in a tool (A'tool).
 %
 Our tool allows the user to choose a model and the size of the network
@@ -116,7 +118,12 @@ In comparison, CBMC results in OUT OF MEMORY for $|N|$ greater than 5.
 %
 ``!'' indicate that the constraints were unsatisfiable.
 %
- \textbf{Using this encoding in comparison to the old one, not only we got efficiency improved for finding a SAT model but also did better in the case of refutation that no model exist (Table 2 variant A timing comparison and variant D with N =2).}. Hence with the use of this novel encoding, we are able to scale the system to a much larger compartmentalized system, especially to
+Using this encoding in comparison to the old one, not only we got
+efficiency improved for finding a SAT model but also did better in the
+case of refutation that no model exist (Table 2 variant A timing
+comparison and variant D with N =2).
+%
+Hence with the use of this novel encoding, we are able to scale the system to a much larger compartmentalized system, especially to
 eukaryotic cells with a total number of 10 compartments.
 %
 % \ankit{

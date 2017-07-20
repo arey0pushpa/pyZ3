@@ -291,7 +291,7 @@ $m$-reachable path from $j$ to $i$.
 To check whether $k$-connected is a necessary condition, we remove (drop) $k-1$ edges from the graph and if it
 disconnects the graph, and we get an assignment. We have a graph that is not  $k$-connected.
 %
-Boolean constraints~\ref{eq:drop1}-\ref{eq:drop4}
+Constraints~\ref{eq:drop1}-\ref{eq:drop4}
 encode the relevant constraints for reachability
 in the modified VTS. 
 %
@@ -312,9 +312,11 @@ not dropped and $r'_{i',j}$ is true.
 \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}_{i,j}  
   \tag{D3}\label{eq:drop3}
 \end{align}
-Since we are looking for a graph that is not $k$-connected,
-the following constraint encodes that there are nodes $i$ and $j$ such that
-there is no path between them in the underlying undirected graph.
+Since we search for disconnected modified VTS,
+the following constraint encodes that there are 
+unreachable pair of nodes in the underlying undirected graph.
+% nodes such that
+% there is no path between them .
 \begin{align}
    \bigvee\limits_{i,j} \neg (r^{\prime}_{i,j} \lor r^{\prime}_{j,i})
   \tag{D4}\label{eq:drop4}
