@@ -16,9 +16,9 @@ VTSs with 6 nodes) due to the encoding used to model VTSs was not
 fine-tuned to the structure of the problem.
 %
 In particular, we needed to encode conditional reachability between
-nodes (refer section 3, stability condition), and solved using a
-combination of non-determinism and partial enumeration that is not as
-efficient.
+nodes (refer section 3, stability condition), and solved in CBMC using a
+combination of non-determinism and partial enumeration that is
+inefficient.
 
 % \begin{enumerate}
 % \item 
@@ -30,7 +30,7 @@ efficient.
 
 % \todo{REQUIRE A REWRITE FLOW PROBS}
 In this paper, we have developed a novel SAT encoding for
-searching VTSs that satisfy the given properties.
+searching VTSs that satisfy the useful properties.
 %
 We have improved the encoding of some of the conditions for VTSs.
 %
@@ -40,15 +40,17 @@ such that that we avoid the inefficient enumeration.
 % We have also encoded $k$-connectivity in a similar fashion and avoided
 % a blowup in the formula size.
 %
-Furthermore, our encoding supports several variations of the properties.
+% Furthermore, our encoding supports several variations of the properties.
 %
 We have implemented the encoding using Z3~\cite{z3} python API and
 searched for VTS satisfying various properties upto size 14-18 nodes
-as compare earlier tool that could only search graph upto size 6
-nodes.
+as compare earlier tool that could only search graph upto
+size~6\footnote{The experiments in~\cite{shukla} scale upto 8.
+However, our experiments only scale upto 6, because
+we are using less powerful machine.} nodes.
 %
 Our tool is useful to cell biologists since VTSs of real cells have
-approximately ten compartments.
+approximately 10 compartments.
 
   % \\
 
