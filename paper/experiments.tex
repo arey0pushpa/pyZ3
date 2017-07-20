@@ -50,7 +50,7 @@ F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected  \\\hline
 % \Ankit{In other solver variations ...}
 
 We have implemented the encodings for each variants
-using the python interface of $\zthree$ in a tool (A'tool).
+using the python interface of $\zthree$ in a tool (MAA).
 %
 Our tool allows the user to choose a model and the size of the network
 besides other parameters like connectivity and number of parallel
@@ -78,7 +78,7 @@ We also visually report the dropped edges required to disconnect the graph, it g
 %\ashu{discuss table~\ref{tab:grph}}
 
 In the table~\ref{tab:grph}, we also present the minimum connectedness needed for
-the different variants after applying our tool for sizes from 2 to 10.
+the different variants after applying our tool for sizes from 2 to 10. \textbf{For the comparison between both encodings we have fixed the total number of molecules to be twice as number of the nodes for N > 2 and M = 2N + 1 for N = 2. For each version we fix total number of parallel edges to maximum two. In the table we have shown comparison for specific connectivity, for example Variant A is checked against any graph with connectivity 2, Variant B with connectivity 3 similarly for the rest of the Variants. }
 %
 We haven't found any graph for the variant A with constraints Ann and Aen.
 %
@@ -105,7 +105,7 @@ The experiments were done on a machine with Intel(R) Core(TM) i3-4030U
 CPU @ 1.90GHz processor and 4GB RAM.
 %
 We have compared our performance with the performance of our earlier 
-CBMC based implementation (O'cbmc).
+CBMC based implementation (old-encoding).
 %
 For example, the formula for variation F, the total number of
 compartments ($|N|$) equals to 10, returns in 129.78 minutes (7786.8 secs)
@@ -115,7 +115,7 @@ In comparison, CBMC results in OUT OF MEMORY for $|N|$ greater than 5.
 %
 ``!'' indicate that the constraints were unsatisfiable.
 %
- \textbf{Using this encoding in comparison to the old one, not only we got efficiency improved for finding a SAT model but also did better in the case of refutation that no model exist (Table 2 variant A timing comparison and variant D with N =2).}. Hence with the use of this novel encoding, we are able to scale the system to a much larger compartmentalized system, especially to
+ \textbf{Using this encoding in comparison to the old one, not only we got efficiency improved for finding a SAT model but also did better in the case of refutation that no model exist (Table 2 variant A timing comparison and variant D with N =2)}. Hence with the use of this novel encoding, we are able to scale the system to a much larger compartmentalized system, especially to
 eukaryotic cells with a total number of 10 compartments.
 %
 % \ankit{
