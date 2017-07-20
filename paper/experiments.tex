@@ -77,20 +77,22 @@ We also visually report the dropped edges required to disconnect the graph, it g
 % information about the connectivity of the graph.
 %\ashu{discuss table~\ref{tab:grph}}
 
-In the table~\ref{tab:grph}, we also present the minimum connectedness needed for
+To illustrate usability of our tool 
+in last column of the table~\ref{tab:grph}, we also present the minimum connectedness needed for
 the different variants after applying our tool for sizes from 2 to 10. \textbf{For the comparison between both encodings we have fixed the total number of molecules to be twice as number of the nodes for N > 2 and M = 2N + 1 for N = 2. For each version we fix total number of parallel edges to maximum two. In the table we have shown comparison for specific connectivity, for example Variant A is checked against any graph with connectivity 2, Variant B with connectivity 3 similarly for the rest of the Variants. }
+
 %
-We haven't found any graph for the variant A with constraints Ann and Aen.
+We found no graph for the variant A with constraints Ann and Aen.
 %
-Replacing constraint on the node of Ann with Anb (version B) does not affect the outcome.
+Replacing constraint on the node of Ann with Anb (variant B) does not affect the outcome.
 %
 If we allow every present molecule to stay active (Ann) but constraint the edge
 by a boolean function (Aeb) the resultant VTS has to be at least 3-connected.
 %
-If we constrain the activity of both the edge and the nodes with the boolean function (Anb and Aeb), 
-the VTS has to be 2-connected.
+% If we constrain the activity of both the edge and the nodes with the boolean function (Anb and Aeb), 
+% the VTS has to be 2-connected.
 %
-Similarly, the results for the other cases are also presented in the table.
+Similarly, the results for the other cases are presented in the table.
 
 % Again there is no graph for the case where every molecule on the node is active, but the activity on the edge is driven by pairing inhibition (Aep).
 % %
