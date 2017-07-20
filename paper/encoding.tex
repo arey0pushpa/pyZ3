@@ -334,9 +334,9 @@ In the current work, we have encoded reachability in two different
 ways in formulas~\eqref{eq:reach1} and~\eqref{eq:drop3}.
 %
 The reachability is recursively defined in~\eqref{eq:drop3} and has
-trivial solution by making all $r'$s true.
+trivial solutions by making all $r'$s true.
 %
-However, the trivial solution is disallowed by formula~\eqref{eq:drop4} and we find
+However, the trivial solutions are disallowed by formula~\eqref{eq:drop4} and we find
 only the solutions that captures the evidence of unreachability.
 %
 On the other hand,
@@ -344,13 +344,15 @@ we have added length of paths in our reachability encoding in formula~\eqref{eq:
 which needs relatively more auxiliary variables.
 %
 This is because formula~\eqref{eq:reach2} has only positive
-occurrences of the reachability variables and circular dependencies in
-the recursive definition of $r'$s in ~\eqref{eq:reach1} may result
-in spurious satisfying assignments that do not encode reachability.
+occurrences of the reachability variables and if we had defined
+$r$s in ~\eqref{eq:reach1} without paths,
+the circular dependencies in the recursive definitions of $r$s
+may have resulted in spurious satisfying assignments that
+do not encode reachability.
 %
 By adding the path length, we break the circular dependencies, the
 formula remains polynomial in size, and satisfying assignments only
-corresponds to correct reachability.
+correspond to correct reachability.
 
 % We can go down or up using -C \_ option.  \newline 
 
