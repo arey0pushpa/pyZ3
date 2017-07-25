@@ -1,0 +1,71 @@
+%Total two pages
+
+%\begin{itemize}
+%\item \mukund{BIO motivation}
+
+The cytoplasm of eukaryotic cells is broken into membrane-bound compartments known as organelles. Cargo is moved between these compartments in small membrane-bound transporters known as vesicles \cite{stenmark2009rab}. This organization resembles a transport logistics network (compartments are nodes, vesicles are directed edges) and is commonly known as the vesicle traffic system (VTS). Vesicle traffic underpins nearly every aspect of eukaryotic cellular physiology, including human cellular physiology. Understanding how this system functions is therefore one of the central challenges of cell biology.
+
+Cell biologists have identified many molecules that drive vesicle traffic~\cite{dacks2007evolution}. The key steps are the creation of vesicles loaded with cargo from source compartments (budding), and the depositing of those vesicles and cargo into target compartments (fusion) \cite{munro2004organelle}. Budding is regulated by proteins known as coats and adaptors that select cargo. Fusion is regulated by proteins known as SNAREs and tethers, that ensure that vesicles fuse to the correct target \cite{mani2016stacking}. Abstractly, we think of SNARE proteins as labels that are collected from the source compartment by vesicles. There is a corresponding set of label molecules on potential target compartments. If the two sets of labels (on vesicles and targets) are compatible, then the vesicle will fuse to the target. Importantly, it is likely that SNARE proteins can be regulated by other molecules, thereby being in active or inactive states. However, SNARE regulation is not well understood.
+
+There has been very little work done on how these molecular processes are integrated across scales to build the entire VTS. We have recently used ideas of graph theory to address this question \cite{mani2016stacking}. We have shown that SNARE regulation places constraints on the structure of the traffic network \cite{shukla}. One informative constraint is graph connectivity. The nature of SNARE regulation determines whether graph topologies of particular levels of connectivity are biologically realizable. For example, if SNAREs are completely unregulated and thus always active, they cannot be used to generate a traffic network. If these SNAREs are regulated by relatively simple rules, then only highly connected traffic networks can be generated using them. In this way, biological inputs (about SNARE regulation) lead to clear testable predictions (about graph topologies).
+
+The analysis of VTSs is a difficult computational problem because of the combinatorial scaling of graph topologies and regulatory rules. Many questions require us to check useful properties over all possible graphs and regulatory rules. Formal verification tools such as model checkers \cite{clarke1996symbolic, biere2003bounded, clarke2008birth, cimatti2000nusmv, holzmann1997model} and SAT solvers \cite{moskewicz2001chaff,een2004extensible} allow us to do this symbolically for graphs of finite size, without enumerating all instances. In a recent work, we employed the model checker CBMC \cite{CKY03, ckl2004} meant to analyze ANSI C programs for studying this problem. VTSs and SNARE regulations were modeled as C code using arrays to represent graphs and Boolean tables. Queries about graph connectivity requirements for different variations of SNARE regulations were modeled as logical assertions to be checked by the model checker. CBMC uses its own built-in encodings to reduce the analysis problem to a Boolean satisfiability problem which is solved using SAT solvers.
+%
+However, the scalability of our recent approach was limited (up to
+VTSs with 6 nodes) due to the encoding used to model VTSs was not completely
+fine-tuned to the structure of the problem.
+%
+In particular, we had to encode conditional reachability between
+nodes (refer sec. 3, stability condition), and solved in CBMC using a
+combination of non-determinism and partial enumeration that is
+inefficient.
+
+% \begin{enumerate}
+% \item 
+% \item The \textbf{specification involved enumeration of all the possible paths in order to satisfy both the graph connectivity and the stability condition (refer section 3).}
+% %quantified formulas, i.e., we needed to solve queries of the form ``\emph{for all} graphs does there \emph{exist} SNARE regulation constraints that satisfy cellular steady state conditions.
+% \end{enumerate}
+
+% \newline
+
+% \todo{REQUIRE A REWRITE FLOW PROBS}
+In this paper, we have developed a novel SAT encoding for
+searching VTSs that satisfy the useful properties.
+%
+We have improved the encoding of some of the conditions for VTSs.
+%
+Especially, we have recursively defined the reachability condition
+such that that we avoid the inefficient enumeration.
+%
+% We have also encoded $k$-connectivity in a similar fashion and avoided
+% a blowup in the formula size.
+%
+% Furthermore, our encoding supports several variations of the properties.
+%
+We have implemented the encoding using Z3~\cite{z3} python API and
+searched for VTS satisfying various properties upto size 14-18 nodes
+as compare earlier tool that could only search graph upto
+size~6\footnote{The original experiments in~\cite{shukla} scaled upto 8.
+However, our current experiments only scale upto 6, because
+we are using less powerful machine.} nodes.
+%
+Our tool is useful to cell biologists since VTSs of real cells have
+approximately 10 compartments.
+
+  % \\
+
+%\newline
+
+The following are the contributions of this work:
+\begin{itemize}
+\item Novel encodings of reachability and 3-4 connectivity
+\item Direct encoding into the SAT solver
+\item A user friendly and scalable tool based on well known SMT solver Z3
+\end{itemize}
+
+%--------------------- DO NOT ERASE BELOW THIS LINE --------------------------
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

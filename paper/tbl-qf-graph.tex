@@ -1,11 +1,13 @@
 \begin{table}[t]
   \centering
   \begin{tabular}[t]{|c|c|c|c|c|c|c|c|c|}\hline
-    {\multirow{2}{*} \textbf{Size}}  & \multicolumn{2}{c|}{\textbf{Version A}} & \multicolumn{2}{c|}{\textbf{Version C}} & \multicolumn{2}{c|}{\textbf{Version D}}  &  \multicolumn{2}{c|}{\textbf{Version F}} \\\hline
-   
-   \cline{2-9}
-    {} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} \\\hline
-    
+  
+    {\multirow{2}{*} {\textbf{Size}}}  & \multicolumn{2}{c|}{\textbf{Variant A}} & \multicolumn{2}{c|}{\textbf{Variant C}} & \multicolumn{2}{c|}{\textbf{Variant D}}  &  \multicolumn{2}{c|}{\textbf{Variant F}} \\\cline{2-9}
+  
+   {} & \multicolumn{2}{c|}{\textbf{2-connected} } & \multicolumn{2}{c|}{\textbf{3-connected} } & \multicolumn{2}{c|}{\textbf{2-connected}}  &  \multicolumn{2}{c|}{\textbf{4-connected}}
+   %{} & \multicolumn{2}{c|}{2-connected} & \multicolumn{2}{c|}{3-connected} & \multicolumn{2}{c|}{2-connected}  &  \multicolumn{2}{c|}{4-connected}
+   \\\cline{2-9}
+    {} & {\textbf{MAA}} & {\textbf{Old-e}} & {\textbf{MAA}} & {\textbf{Old-e}} & {\textbf{MAA}} & {\textbf{Old-e}} & {\textbf{MAA}} & {\textbf{Old-e}} \\\hline
     2 & !0.085 & !2.43 & 0.15 & 2.12 & !0.13 & !1.89 & 0.35 & 5.12 \\\hline
     3 & !0.54 & !8.04 & 0.95  & 7.65 & 0.62 & 7.66  & 1.36 & 23.94\\\hline
     4 & !2.57 & !297.93 & 2.33 & 22.74 & 2.85 & 48.35  & 4.81 & 123.34\\\hline
@@ -20,28 +22,27 @@
   \label{tab:qf-grabh}
 \end{table}
 
-
-\begin{table}[t]
-  \centering
-  \begin{tabular}[t]{|c|c|c|c|c|c|c|c|c|}\hline
-    {\multirow{2}{*} \textbf{Size}}  & \multicolumn{2}{c|}{\textbf{Version A}} & \multicolumn{2}{c|}{\textbf{Version C}} & \multicolumn{2}{c|}{\textbf{Version D}}  &  \multicolumn{2}{c|}{\textbf{Version F}} \\\hline
-   
-   \cline{2-9}
-    {} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} \\\hline
-       D     1C
-    2 &  & !0.335 & 0.15 & 2.12 & !0.13 & !1.89 & 0.35 & 5.12 \\\hline
-    3 &  & 3.84 & 0.95  & 7.65 & 0.62 & 7.66  & 1.36 & 23.94\\\hline
-    4 &  & 11.05 & 2.33 & 22.74 & 2.85 & 48.35  & 4.81 & 123.34\\\hline
-    5 &  & 98.48 & 7.60 & 500.03 & 10.27 & 890.84 & 33.36  & 2482.71 \\\hline
-    6 &  & M/O & 19.52 & M/O & 30.81 & M/O  & 147.52 & M/O\\\hline
-    7 &  & M/O & 81.89 & M/O & 82.94 & M/O & 522.26  & M/O \\\hline
-    8 &  & M/O & 630.85 & M/O & 303.19 & M/O & 2142.76 & M/O\\\hline
-    9 &  & M/O & 2203.45 & M/O & 971.01 & M/O & 4243.34 & M/O\\\hline
-    10 &  & M/O & 7681.93 & M/O & 2274.30 & M/O & 7786.82 & M/O\\\hline
-  \end{tabular}
-  \caption{Run-times for searching for models (in secs).}
-  \label{tab:qbf-grabh}
-\end{table}
+%\begin{table}[t]
+%  \centering
+%  \begin{tabular}[t]{|c|c|c|c|c|c|c|c|c|}\hline
+%    {\multirow{2}{*} \textbf{Size}}  & \multicolumn{2}{c|}{\textbf{Version A}} & \multicolumn{2}{c|}{\textbf{Version C}} & \multicolumn{2}{c|}{\textbf{Version D}}  &  \multicolumn{2}{c|}{\textbf{Version F}} \\\hline
+%   
+%   \cline{2-9}
+%    {} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} & {\textbf{Z3}} & {\textbf{CBMC}} \\\hline
+%       D     1C
+%    2 &  & !0.335 & 0.15 & 2.12 & !0.13 & !1.89 & 0.35 & 5.12 \\\hline
+%    3 &  & 3.84 & 0.95  & 7.65 & 0.62 & 7.66  & 1.36 & 23.94\\\hline
+%    4 &  & 11.05 & 2.33 & 22.74 & 2.85 & 48.35  & 4.81 & 123.34\\\hline
+%    5 &  & 98.48 & 7.60 & 500.03 & 10.27 & 890.84 & 33.36  & 2482.71 \\\hline
+%    6 &  & M/O & 19.52 & M/O & 30.81 & M/O  & 147.52 & M/O\\\hline
+%    7 &  & M/O & 81.89 & M/O & 82.94 & M/O & 522.26  & M/O \\\hline
+%    8 &  & M/O & 630.85 & M/O & 303.19 & M/O & 2142.76 & M/O\\\hline
+%    9 &  & M/O & 2203.45 & M/O & 971.01 & M/O & 4243.34 & M/O\\\hline
+%    10 &  & M/O & 7681.93 & M/O & 2274.30 & M/O & 7786.82 & M/O\\\hline
+%  \end{tabular}
+%  \caption{Run-times for searching for models (in secs).}
+%  \label{tab:qbf-grabh}
+%\end{table}
 
 
 %\begin{table}[t]
