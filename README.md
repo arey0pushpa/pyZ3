@@ -10,9 +10,7 @@ To run the example of the cbmc you need either of two:
 
 The method for cbmc v <= 5.4 is shown.
 
-```c
- cbmc filename.c --unwindset main.loopnumber:numberoftimes,main.loopnumber1:numberoftimes,main.loopnumber:numberoftimes
-```
+`cbmc filename.c --unwindset main.loopnumber:numberoftimes,main.loopnumber1:numberoftimes,main.loopnumber:numberoftimes`
 loopnumber can be obtained using :
 
 `cbmc filename.c --show-loops`
