@@ -1,6 +1,6 @@
 %Again about two pages long
 
-In this section, we will describe the model of VTSs and the basic constraints imposed by cell biology.
+In this section, we will describe the basic constraints imposed by cell biology. These are all incorporated into an abstract model of a VTS, whose properties will then be explored using SMT solvers.
 
 \textbf{The cell as a transport graph:} We consider a cell to be a collection of compartments (nodes) and vesicles (edges), thus defining a transport graph. Every compartment or vesicle has a set of molecular labels, such as SNARE proteins, associated with it.
 
@@ -10,16 +10,20 @@ In this section, we will describe the model of VTSs and the basic constraints im
 
 \textbf{Molecular regulation:} We assume that for fusion to occur, the pair of SNARE types involved on the vesicle and compartment must both be in an active state. Whether these SNAREs are active or inactive depends on the other molecules found on the vesicle or compartment, respectively. We test many different versions of this kind of molecular regulation. Most generally, the activity state of a given SNARE can be a Boolean function of all the molecular types on a compartment or vesicle. We have also tested \cite{shukla} a particularly simple regulation mechanism in which two SNAREs that can pair to drive fusion inhibit one another; this is the \textit{pairing inhibition}. This is motivated by the idea that pairing must generate an inactive bi-molecular complex.
 
-\textbf{Synthesis:} Given a particular transport graph, a particular labeling of all the compartments and edges, a particular fusion pairing matrix, and a particular regulatory model, we do the following.
-
+\textbf{Properties of a VTS that satisfies all cell-biological constraints:} Suppose we are given a particular transport graph, a particular labeling of all the compartments and edges, a particular fusion pairing matrix, and a particular regulatory model. This information is then sufficient to check the following properties, which summarise the cell-biological constraints described above:
 \begin{enumerate}
-\item We determine which molecules are active on every compartment or vesicle.
-\item For every vesicle fusing to a compartment, we determine whether there exists an active pair (one molecule on the vesicle, one on the compartment) which drives that fusion event.
-\item For every vesicle-compartment pair where the vesicle does not fuse to the compartment, we verify that there is no pairing of active molecules on the
+\item We can determine which molecules are active on every compartment or vesicle.
+\item For every vesicle fusing to a compartment, we can determine whether there exists an active pair (one molecule on the vesicle, one on the compartment) which drives that fusion event.
+\item For every vesicle-compartment pair where the vesicle does not fuse to the compartment, we can verify that there is no pairing of active molecules on the
 vesicle and compartment that could drive their fusion.
-\item We verify that every molecular type entering a compartment also leaves the compartment, and also that every molecular type entering a set of compartments also leaves that set.
-%steady state condition.
+\item We can verify that every molecular type entering a compartment also leaves the compartment, and also that every molecular type entering a set of compartments also leaves that set. This is the steady state condition. In the biological literature this is often referred to as “homeostasis” and is a widespread and well-accepted assumption about cellular behaviour, at least over timescales of minutes to hours \cite{mani2017}.
 \end{enumerate}
+
+The biological problem often boils down to such an analysis. A cell biologist might determine which molecules flow between which set of compartments, and biochemical experiments could be used to see how these molecules activate one another. We can then ask: is this a complete and consistent description? That is, do all the required properties listed above hold, given what the experimentalists have told us? It is often the case that biological data is missing. For example, only a few of the dozens of molecules involved in real VTSs have been mapped out. Therefore, it is extremely likely that the description provided by the cell biologist is incomplete. We can use our model to find out which properties have failed to hold, and thus prescribe new experiments in order to fill in the missing information.
+
+Can we find a simple test to see whether any information is missing, given the experimental data? We have shown that graph k-connecte furnishes precisely such a test \cite{shukla}. If the data provided by cell-biologists, suitably represented as a graph, does not have a certain degree of connectivity, this implies that some biological data has been missed. (The converse is not true: even if the required connectivity does hold, there might of course be more information missing.)
+
+Our result about k-connectedness being a useful test of missing information \cite{shukla} was obtained using SAT solvers for graphs up to a certain size, and a certain number of molecules. This was due to limitations in how we encoded the problem. Here we present a much more natural encoding that allows our result to be extended to graph sizes and molecule numbers that are typical of those found in real cells.
 
 
 %\subsection{Modeling and Symbolic Analysis of VTS: An Overview}
