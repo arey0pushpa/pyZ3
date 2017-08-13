@@ -49,10 +49,8 @@ F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected  \\\hline
 %
 % \Ankit{In other solver variations ...}
 
-We have
-implemented~\footnote{\url{https://github.com/arey0pushpa/pyZ3}} the
-encodings for each variants using the python interface of $\zthree$ in
-a tool (MAA).
+We have implemented the encodings for each variants
+using the python interface of $\zthree$ in a tool (MAA).
 %
 Our tool allows the user to choose a model and the size of the network
 besides other parameters like connectivity and number of parallel
@@ -88,12 +86,12 @@ We found no graph for the variant A with constraints Ann and Aen.
 Replacing constraint on the node of Ann with Anb (variant B) does not affect the outcome.
 %
 If we allow every present molecule to stay active (Ann) but constraint the edge
-by a boolean function (Aeb) the resultant VTS has to be at least 3-connected.
+by a boolean function (Aeb) the resultant VTS has to be at least 3-connected. Similarly, the results for the other cases are presented in the table. 
 %
 % If we constrain the activity of both the edge and the nodes with the boolean function (Anb and Aeb), 
 % the VTS has to be 2-connected.
 %
-Similarly, the results for the other cases are presented in the table.
+We ran experiments varying all parameters for specific N (size). For the comparison between both encodings (Table 2) we have fixed the total number of molecules to be twice as number of the nodes for N $>$ 2 and M = 2N + 1 for N = 2. For each version we also fix total number of parallel edges to maximum two. We have specifically chosen the same connectivity as Table 1 just for illustration purpose; for example in Table~\ref{tab:qf-grabh} Variant A, only check against graph with connectivity 2 is shown, in Variant B with connectivity 3 and similarly for the rest of the Variants. Choice of Variants in the table reflects different type of results variations, for example we left out version B and E as it is of same connectivity type as of A \footnote{Complete result is present in our referenced repository}. 
 
 % Again there is no graph for the case where every molecule on the node is active, but the activity on the edge is driven by pairing inhibition (Aep).
 % %
@@ -130,12 +128,7 @@ In comparison, CBMC results in OUT OF MEMORY for $|N|$ greater than 5.
 %
 ``!'' indicate that the constraints were unsatisfiable.
 %
-Using this encoding in comparison to the old one, not only we got
-efficiency improved for finding a SAT model but also did better in the
-case of refutation that no model exist (Table 2 variant A timing
-comparison and variant D with N =2).
-%
-Hence with the use of this novel encoding, we are able to scale the system to a much larger compartmentalized system, especially to
+Using this encoding in comparison to the old one, not only we got efficiency improved for finding a SAT model but also did better in the case of refutation that no model exist (Table 2 Variant A timing comparison and Variant D with N =2). Hence with the use of this novel encoding, we are able to scale the system to a much larger compartmentalized system, especially to
 eukaryotic cells with a total number of 10 compartments.
 %
 % \ankit{
