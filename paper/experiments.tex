@@ -80,7 +80,7 @@ We also visually report the dropped edges required to disconnect the graph, it g
 %\ashu{discuss table~\ref{tab:grph}}
 
 To illustrate usability of our tool 
-in last column of the table~\ref{tab:grph}, we also present the minimum connectedness needed for
+in the last column of the table~\ref{tab:grph}, we present the minimum connectedness needed for
 the different variants after applying our tool for sizes from 2 to 10. 
 %
 We found no graph for the variant A with constraints Ann and Aen.
@@ -102,15 +102,19 @@ Similarly, the results for the other cases are presented in the table.
 \input{tbl-qf-graph}
 
 In Table~\ref{tab:qf-grabh}, we present the running times for the search of
-VTSs of sizes 2 to 10 that satisfy the variants.
+VTSs of sizes 2 to 10 that satisfy the variants and compare with our old encoding
+({Old-e}) from~\cite{shukla}.
 %
 For the comparison between both encodings we have fixed the total
-number of molecules to be twice as number of the nodes for N $>$ 2 and M
-= 2N + 1 for N = 2. For each version we fix total number of parallel
-edges to maximum two. In the table we have shown comparison for
-specific connectivity, for example Variant A is checked against any
-graph with connectivity 2, Variant B with connectivity 3 similarly for
-the rest of the Variants.
+number of molecules to be $|M| = 2|N|$ for $ |N|> 2$ and
+$|M| = 2|N| + 1$ for $|N| = 2$.
+%
+For each variant, we fix maximum number of parallel
+edges to 2.
+%
+In the table we have shown comparison for specific connectivity, for
+example variant A is checked against any graph with connectivity 2,
+variant B with connectivity 3 similarly for the rest of the Variants.
 %
 The experiments were done on a machine with Intel(R) Core(TM) i3-4030U
 CPU @ 1.90GHz processor and 4GB RAM.

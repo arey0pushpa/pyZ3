@@ -149,10 +149,9 @@ $i$ and $j$ will range over nodes.
 %
 $m$ will range over molecules.
 %
-$q$ will range over edges between two nodes.
+$q$ will range over edges between two nodes, i.e., from $1$ to $\pi$.
 %
 
-% \subsubsection{Constraints on the structure of the edges, nodes and }
 \subsubsection{Constraints on presence, activity of the molecule, and pairing matrix}
 %
 We need the following constraints~\eqref{eq:f0} and~\eqref{eq:c3}
@@ -271,7 +270,7 @@ Now we can encode stability using the reachability variables.
 and say if there is an $m$-edge between $i$ and $j$, there is
 $m$-reachable path from $j$ to $i$.
 \begin{align}
- \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,|N|}
+ \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,\nu}
   \tag{R2}\label{eq:reach2}
 \end{align}
 
