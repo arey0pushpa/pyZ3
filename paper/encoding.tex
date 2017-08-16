@@ -16,12 +16,12 @@ The graph is formally defined as follows.
   \begin{itemize}
   \item $\nodes$ is a set of nodes representing compartments in the VTS,
   \item $\mols$ is the set of molecules flowing in the system, 
-  \item $\nlabel : \nodes \maps \powerset{\mols}$ defines the molecules present in the nodes  
-  \item $ \nodes \times (\powerset{\mols}-\emptyset) \times \nodes \subseteq \edges$ is the
-    set of edges with molecule sets as labels
-  \item $\pairs \subseteq \mols \times \mols$ is pairing relation
-  \item $\nodef : \mols \maps \powerset{\mols} \maps \booleans$ is activity maps for nodes
-  \item $\edgef : \mols \maps \powerset{\mols} \maps \booleans $ is activity maps for edges
+  \item $\edges \subseteq \nodes \times (\powerset{\mols}-\emptyset) \times \nodes$ is the
+    set of edges with molecule sets as labels,
+  \item $\nlabel : \nodes \maps \powerset{\mols}$ defines the molecules present in the nodes,
+  \item $\pairs \subseteq \mols \times \mols$ is pairing relation,
+  \item $\nodef : \mols \maps \powerset{\mols} \maps \booleans$ is activity maps for nodes, and
+  \item $\edgef : \mols \maps \powerset{\mols} \maps \booleans $ is activity maps for edges.
   \end{itemize}
 \end{df}
 $\pairs$ defines which molecules can fuse with which molecules.
