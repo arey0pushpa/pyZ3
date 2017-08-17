@@ -40,21 +40,40 @@
 \item {Overall evaluation: Weak accept\\}
 \end{enumerate}
 \textbf{{\color{black} Evaluation\\}}
-{\color{green!20!blue}The paper describes a SAT encoding of the model identification problem for graphical
+The paper describes a SAT encoding of the model identification problem for graphical
 models of cellular vesicle traffic systems (VTS).
 By integrating all the constraints on admissible graphs for VTS, and in particular
 regarding stability and reachability constraints, the author obtained an efficient
 implementation relying on Z3 which outputs a model (if exists) which satisfy
 necessary constraints for VTS and variants of additional constraints on the
-topology/functionality of the model.\\}
+topology/functionality of the model.\\
 
 
 
-As far as I understood, the method allows to identify one graph (if any) ; \todo{Discuss with Ashutosh} \textbf{it would be interesting to consider counting the number of solutions as well.}
+As far as I understood, the method allows to identify one graph (if any) ; \textbf{it would be interesting to consider counting the number of solutions as well.}\newline
+{\color{red}{done.}}
 
 The paper is very technical and focuses mainly on the SAT encoding of the problem
-and \textbf{gives very few examples of application on concrete biological examples.} \todo{Mukund should address this} It will be interesting to discuss the results of the different variants of the model identification on small cases with a biological perspective.\\
+and \textbf{gives very few examples of application on concrete biological examples.}\\ 
+{\color{red}{Ankit\\}}
 
+
+It will be interesting to discuss the results of the different variants of the model identification on small cases with a biological perspective.\\
+{\color{red}{Our Comment/Reply:}}
+%The reviewer has highlighted that it would be interesting to connect thedifferent variants of the model to relevant biological cases.
+{\color{blue}{ We agree wholeheartedly. However, there is at the moment very little known about how
+the regulation of SNAREs functions. What we have done here is to study many
+possible variants of SNARE regulation, from simple to complex. It is
+difficult to say which one of these variants is likely to hold in real
+cells, and indeed, different species might use different versions of SNARE
+regulation. Luckily, even given the most general variant of SNARE
+regulation (of which all other models are just special cases) we have still
+managed to find a constraint on graph connectedness. Thus we are confident
+that our results apply to existing cell-biological data. One of the authors
+(MT) is presently assembling a list of known SNARE fluxes in yeast and
+mammalian cells to see whether our predictions hold. This will be published
+as a follow-up manuscript, and we are happy to share a draft of this
+manuscript with the reviewers.}}
 
 \section{Review 2}
 \begin{enumerate}
@@ -63,22 +82,25 @@ and \textbf{gives very few examples of application on concrete biological exampl
 
 \textbf{Evaluation }
 
-{\color{green!20!blue}The paper presents a SAT-based method to study vesicle traffic systems and
+The paper presents a SAT-based method to study vesicle traffic systems and
 specifically, to derive network models for these systems that satisfy some given
 properties, specifically, k-connectedness.
 
 The motivation behind the work is very important, i.e. understanding the regulation
 of the SNARE protein that is crucial in this system and in particular, in
-determining specific network topologies. \todo {We should motivate why k-connected is important? Just reference to old paper i think is not enough. I and Mukund can address this.} \textbf{However biological considerations are only
+determining specific network topologies. \textbf{However biological considerations are only
 marginal in this work, and the use of the k-connectedness property} (the only
 property considered in this work) \textbf{is not motivated or justified}. \textbf{The authors should
-put more effort into explaining why k-connectedness is important here. }}
+put more effort into explaining why k-connectedness is important here. }
 
-Discussion of results also reflect this \todo {we should discuss this} \textbf{lack of bio insights}, and is mainly devoted to comparing performance w.r.t. a previous BMC-based version of the approach.
+{\color{red}{Fixed! refer new updated draft.\\}}
+
+Discussion of results also reflect this \textbf{lack of bio insights}, and is mainly devoted to comparing performance w.r.t. a previous BMC-based version of the approach. \newline 
+{\color{red}{Commented! see first review blue color paragraph\\}}
 
 On the other hand, the SAT-based method is adequate, sound and very relevant (for
 both this case study and SASB), even though the encoding is quite straightforward.
-The paper is generally well written and easy to follow. \\
+The paper is generally well written and easy to follow. \\ \\
 
 Please find more detailed comments below:\\
 \begin{enumerate}
@@ -87,37 +109,39 @@ various combinations of those properties?" what you actually do is finding ONE
 network (i.e. a model satisfying the SMT problem), not all networks. Consider
 rephrasing this.\newline
 \todo{We should discuss how to rephrase this or stay as it is.}
-{\color{red}{Mukund, Ashutosh}}\\
+{\color{red}{done.}}\\
+
 \item can you better motivate the steady state assumption? have you performed any
 dynamic/transient analysis of such derived networks? \newline
-{\color{red}{Mukund}}\\
+{\color{red}{Fixed ! refer updated draft.}}\\
+
 \item Page 3, Line 110: "in which a two SNAREs" --"in which two SNAREs" \newline{\color{red}{Fixed!}}\\
 
-\item  Page 3, "synthesis" paragraph: \todo{Not sure why people are finding too many biology section gaps, happened with last paper also. May be they are too much interested in understanding the biology.} I don't get what you are explaining here, is that a list of analysis performed? I couldn't see any of this in the result section. \newline
-{\color{red}{Mukund}}\\
+\item  Page 3, "synthesis" paragraph: I don't get what you are explaining here, is that a list of analysis performed? I couldn't see any of this in the result section. \newline
+{\color{red}{Fixed! See updated draft}}\\
 
 \item Definition 1: shouldn't it be $E \subseteq N \times ... $(not the other way round)? \newline
-{\color{red}{Ashutosh}}\\
+{\color{red}{done.}}\\
 
 \item the definition of well-structured network deserves better explanation: what does
 "equal partitions" mean? partitions with the same num of elements? the second
 condition would be clearer if you added an explanation.\newline
-{\color{red}{Ashutosh}}\\
+{\color{red}{done.}}\\
 
 \item - \todo{We should add to the definition. This reviewer have read things in detail} Do you allow self-edges in G? I see that you later add constraints to avoid that, but I've missed this point from definition 1\newline
-{\color{red}{Ankit, Ashutosh}}\\
+{\color{red}{it was already written in the definition of well-structured}}\\
 
 \item Definition of connectedness for G: do you allow any path, or it must exist $m \in M$ such that for all n,n', n' is m-reachable from n? this is not clear at this point
 and should be improved. \newline
-{\color{red}{Ashutosh}}\\
+{\color{red}{done.}}\\
 
 
 \item Since you use uninterpreted functions, I guess you can no longer say that you use
 SAT, \todo{valid point should be addressed} but you are using SMT (the theory being that of uninterpreted functions).\newline
-{\color{red}{Srivas, Ankit, Ashutosh}}\\
+{\color{red}{Ankit will replace everywhere from SAT to SMT}}\\
 
 \item Eq. V1: I don't get why you use implication and not double implication \newline
-{\color{red}{Ashutosh}}\\
+{\color{red}{Ashutosh. needs thinking?? }}\\
 
 \item Related work: some key references are missing about SAT/SMT-based methods for the
 synthesis of gene regulatory networks.\newline

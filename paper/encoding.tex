@@ -12,7 +12,7 @@ the set of molecules present in them.
 The graph is formally defined as follows.
 
 \begin{df}
-  A VTS $G$ is tuple $(\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$, where
+  A VTS $G$ is a tuple $(\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$, where
   \begin{itemize}
   \item $\nodes$ is a set of nodes representing compartments in the VTS,
   \item $\mols$ is the set of molecules flowing in the system, 
@@ -38,10 +38,14 @@ A molecule $k$ is {\em active} at edges $(n,M',n')$ if $k \in M'$ and
 $\edgef(k,M')$ is true.
 %
 We call $G$ {\em well-structured} if molecules $M$ is divided into
-two equal partitions $M_1$ and $M_2$ such that $P \subseteq M_1 \times M_2$, and
+two equal-sized partitions $M_1$ and $M_2$ such that
+$P \subseteq M_1 \times M_2$, and
 for each $(n,M',n') \in \edges$, $n \neq n'$, 
-$M' \subseteq \nlabel(n)$, and $M' \subseteq \nlabel(n')$.
+$M' \subseteq \nlabel(n) \intersection \nlabel(n')$.
 %
+In other words, a well-structured VTS has no self loops, and 
+each edge carry only those molecules that are present in its source
+and destination nodes. 
 
 We will also consider several variations of the model.
 %
@@ -79,7 +83,11 @@ $n'$ is reachable from $n$ in $G$.
 %
 We call $G$ $k$-connected if for each $\edges' \subseteq \edges$ and $|\edges'| < k$,
 VTS $(\nodes,\mols,\edges-E',\nlabel,\pairs,\edgef,\nodef)$ is connected.
-
+%
+In the definition, we do not care about the paths to be $m$-connected for some $m$.  
+%
+A variant of the definition may be sensitive to the $m$-connectedness, but
+we are not considering the variation.
 
 \paragraph{Search problem}
 Based upon earlier discussion, we need to answer the following search
@@ -388,7 +396,7 @@ is described by pairing matrix; Aep.
 
 %if all the pairs of the present molecule are present on the same edge than all of them inhibit each other resulting in making all the molecules inactive, we term this process ``pairing inhibition".
 %
-The constraints for the variants can be given to a SAT solver to find
+The constraints for the variants can be given to a SMT solver to find
 VTSs that belong to the variants.
 
 

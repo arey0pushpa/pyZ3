@@ -4,7 +4,8 @@ of careful encoding of the problems into SMT queries.
 We manage to scale the tool upto the size that makes tool
 biologically relevant.
 %
-However, there are many further search problems that are of interest.
+However, there are many further search problems or extensions
+that are of interest.
 %
 For example, are there any k-connected graphs that can not be
 annotated into a VTS?
@@ -16,6 +17,14 @@ Therefore, a simple call to SAT solver will not work.
 We are planning to use QBF(quantified Boolean formulas) solvers or develop
 iterative search algorithm for such queries.
 %
+
+One may be interested in counting the number of graphs that satisfy
+a given property.
+%
+Exact counting of the graphs using SAT solvers may prove to be very difficult.
+%
+We are also planning to employ some methods for approximate counting of solutions.
+
 
 % \ankit{interpret experiments (3-4 lines)}
 
