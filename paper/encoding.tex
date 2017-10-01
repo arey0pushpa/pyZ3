@@ -1,7 +1,7 @@
 In this section, we will formally define VTSs as a labeled graph
 and the discussed conditions on the graphs.
 %
-Subsequently, we will present the SAT encoding of the search problems
+Subsequently, we will present the SMT encoding of the search problems
 for the graphs that satisfy the conditions.
 
 \subsection{Model}
@@ -102,7 +102,7 @@ $G$ is not $k$-connected.
 \subsection{Boolean satisfiability of the search problem}
 
 We translate the search problem into a Boolean satisfiability
-problem and use SAT solvers to find the satisfying VTSs.
+problem and use SMT solvers to find the satisfying VTSs.
 %
 We will first present the variables used to encode the
 VTSs and the properties.
@@ -358,7 +358,13 @@ correspond to correct reachability.
 
 % We can go down or up using -C \_ option.  \newline 
 
-\subsection{SAT problems for different variants}
+\subsection{Complete formula}
+The complete QBF looks like the following.
+\begin{align}
+\exists \, e_{i,j,q} \forall \,d_{i,j,q}, r^{\prime}_{i,j,q} \, (D1 \land D2 \land D3 \land D4)  \, \land \notag\\  \forall\, n_{i,k}, a_{i,k}, e_{i,j,k,q}, b_{i,j,k,q}, r_{i,j,k}, p_{k,k^{\prime}} \, \neg (V1 \land V2 \land ... V8 \land A_{n} \land A_{e})  \label{eq:final}
+\end{align}
+
+\subsection{SMT problems for different variants}
 %\ankit{Bring model variant table here}
 
 We have encoded the following variants of VTSs.
