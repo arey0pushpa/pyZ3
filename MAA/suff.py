@@ -551,7 +551,7 @@ for i in range(N):
             continue
         rijji = Or(r1[i][j],r1[j][i])
         D4 = And( rijji, D4) 
-D4 = Not(D4)
+#D4 = Not(D4)
 #print D4
 
 # ---------------------
