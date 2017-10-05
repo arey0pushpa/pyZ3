@@ -81,7 +81,11 @@ f_e = [Function ("ae_{}".format(m), *sorts) for m in range(M)]
 
 st = time.time()
  
-# Function: no regulation on the node.
+
+# REGULATION MECHANISM VARIATION #####
+
+
+# Regulation : no regulation on the node.
 # The present molecules at nodes are all active.
 def f_nn():
     A_list = []
@@ -91,7 +95,7 @@ def f_nn():
             A_list.append(lhs)
     return And(A_list)
 
-# No regulation on edge.
+# Regulation : No regulation on the edge.
 # The present molecules on the edge are all active.
 def f_ne():
     A_list = []
@@ -105,8 +109,8 @@ def f_ne():
                     A_list.append(lhs)
     return And(A_list)
 
-# Activity of a moolecule k on a node/edge is  
-# defined as a Boolean function of presence of 
+# Regulation : Boolean on Node. 
+# Activity of a moolecule k on a node is a Boolean function of presence of 
 # Other molecule present on that node/edge.
 # A0. active_node[k] =  f_n[k](\/_{k1 != k} node(k1)) 
 def f_bn():
@@ -129,6 +133,7 @@ def f_bn():
     return And( A_list )
 
 
+# Regulation : Boolean on Edge. 
 # Activity of the molecules on the edge is driven by the 
 # chosen boolean function. 
 # A1. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
@@ -153,6 +158,7 @@ def f_be():
                     A_list.append(l)
     return And( A_list )
 
+# Regulation : SNARE-SNARE Inhibition. 
 # Inhibition of the edges are driven by the pairing matrix.
 # If there is a molecule k present on the edge(i,j) and with non-zero pairing matrix
 # the evry pairing matrix elements are present on that node makes that molecule inactive.
@@ -183,8 +189,6 @@ def f_se():
 
 # Setting Activity Bits --------------------------
 
-# REGULATION MECHANISM VARIATION #####
-
 A0 = True 
 A1 = True
 
@@ -214,10 +218,9 @@ else:
     A0 = f_nn()
     A1 = f_ne()
 
-xx = time.time() - st
-print "Building A's took...", str(xx)
-
-st = time.time()
+#xx = time.time() - st
+#print "Building A's took...", str(xx)
+#st = time.time()
 # print A0
 # print A1
 
@@ -673,7 +676,8 @@ else:
 #t = Then('simplify', 'tseitin-cnf')
 #subgoal = t(g)
 #assert len(subgoal) == 1
-#
+
+
 ## Traverse each clause of the first subgoal
 #for c in subgoal[0]:
 #        #print "children: ", c.children()
@@ -685,4 +689,5 @@ else:
 # Stage 2 : Convert CNF to QDIMAC
 # Accessing the structure of a Z3 expression via the API
 # Check goal.cpp goal::display_dimacs
+
 # Use PicoSat and Plingeling (fmv.jku.at/lingeling) 
