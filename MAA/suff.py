@@ -666,8 +666,8 @@ else:
 # CADET TRANSFORMATION #####
 
 # Stage 1: Convert The Formula Into CNF
-#g = Goal() 
-#g.add(A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4)
+#g = Goal()
+#g.add (V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4) 
 ##print g
 ## t is a tactic that reduces a Boolean problem into propositional CNF
 #t = Then('simplify', 'tseitin-cnf')
