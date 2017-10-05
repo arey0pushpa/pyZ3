@@ -10,10 +10,10 @@ import time
 parser = argparse.ArgumentParser(description='Auto testing for TARA')
 parser.add_argument("-M","--mols", type=int, default=4, help = "number of molecules")
 parser.add_argument("-N","--nodes", type=int, default=2, help = "number of nodes")
-parser.add_argument("-Q","--pedges", type=int, default=1, help = "max no.of parallel edges btw two nodes")
+parser.add_argument("-Q","--pedges", type=int, default=2, help = "max no.of parallel edges btw two nodes")
 parser.add_argument("-V","--variation", type=int, default=1, help = "model of the biological system")
 #parser.add_argument("-C","--connected", type=int, default=3, help = "graph connectivity want to check")
-parser.add_argument("-E","--edges", type=int, default=3, help = "graph connectivity want to check")
+#parser.add_argument("-E","--edges", type=int, default=3, help = "graph connectivity want to check")
 
 args = parser.parse_args()
 
@@ -583,7 +583,7 @@ s = Solver()
 #s.add(rest)
 #s.add (Exists (setE, wwe) )
 
-s.add (V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D0, D1, D2, D3, D4)
+s.add (V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4)
 
 print "solving...\n"
 #st = time.time()
@@ -629,7 +629,7 @@ def dump_dot( filename, m ) :
                             dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color + ",style=" + style + "]" +"\n" )
                     if q == 1:
                         style = "solid"
-                        if is_true( m[dump[i][j][q]] ):
+                        if is_true( m[dump1[i][j][q]] ):
                             style="dashed"
                         if is_true(m[presence_edge[i][j][q][k]]):
                             label = str(k)
