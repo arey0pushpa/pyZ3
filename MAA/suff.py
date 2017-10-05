@@ -386,7 +386,7 @@ for i in range(N):
                         for q1 in range(Q):
                             pe = Or( presence_edge[i][l][q1][k], pe)
                         lhs = Or(And ( r[l][j][k][z-1],pe), lhs)   
-                    w  = Implies( r[i][j][k][z],lhs)
+                    w  = Implies( r[i][j][k][z], lhs)
                     A_list.append(w)
 R1 = And(A_list)
 #print R1
