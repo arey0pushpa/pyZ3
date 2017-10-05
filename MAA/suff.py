@@ -551,6 +551,7 @@ for i in range(N):
             continue
         rijji = Or(r1[i][j],r1[j][i])
         D4 = And( rijji, D4) 
+D4 = Not(D4)
 #print D4
 
 # ---------------------
@@ -576,9 +577,9 @@ D44 = Not(D44)
 s = Solver()
 
 # Updated check for qbf formula. Suff condition.
-#rest = And (D0, D1, D3, D5)
-#kconn =  ForAll (setDump1, Implies (D1, ForAll (setR1, D5)) )  
-#notk1conn = ForAll (setDump2, Implies (D2, Exists (setR2, D6)) )  
+#rest = And (D1, D11, D3, D33)
+#kconn =  ForAll (setDump1, Implies (D1, ForAll (setR1, D4)) )  
+#notk1conn = ForAll (setDump2, Implies (D11, Exists (setR2, D44)) )  
 #wwe = And (rest, kconn)
 #s.add(rest)
 #s.add (Exists (setE, wwe) )
