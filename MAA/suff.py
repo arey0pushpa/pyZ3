@@ -593,7 +593,6 @@ print s.check()
 #b = time.time() - st 
 #print "Solving took...", str(b + fbx)
 
-
 # Printing the Graph ##########
 def dump_dot( filename, m ) :
     print "dumping dot file: ", filename
@@ -662,3 +661,28 @@ if s.check() == sat:
     dump_dot( "/tmp/bio.dot", m )
 else:
     print "failed to solve"
+    
+    
+# CADET TRANSFORMATION #####
+
+# Stage 1: Convert The Formula Into CNF
+#g = Goal() 
+#g.add(A0,A1,C1,C2,C4,C5, F0,F1,F2,F3,F4,F5, D0,D1,D2,D3,D4)
+##print g
+## t is a tactic that reduces a Boolean problem into propositional CNF
+#t = Then('simplify', 'tseitin-cnf')
+#subgoal = t(g)
+#assert len(subgoal) == 1
+#
+## Traverse each clause of the first subgoal
+#for c in subgoal[0]:
+#        #print "children: ", c.children()
+#        #print "1st child:", c.arg(0)
+#        #print "operator: ", c.decl()
+#        #print "op name:  ", c.decl().name()
+#        print c
+
+# Stage 2 : Convert CNF to QDIMAC
+# Accessing the structure of a Z3 expression via the API
+# Check goal.cpp goal::display_dimacs
+# Use PicoSat and Plingeling (fmv.jku.at/lingeling) 
