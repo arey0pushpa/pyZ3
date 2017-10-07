@@ -360,29 +360,6 @@ V8 = And(A_list)
 
 # STABILITY CONDITION #########
 
-
-# Constraint R2 ----------------------
-# Encode stability using the reachability variables. 
-# If there is an m-edge between i and j, there is m reachble path from j and i.
-# Implementation: /\_i,j,m (\/_q e_ijqm) -> r_ijqU
-A_list = []
-for i in range(N):
-    for j in range(N):
-	if i == j:
-	    continue
-        for k in range(M):
-            lhs = False
-            rhs = False
-            for q in range(Q):
-                rhs = Or (presence_edge[i][j][q][k], rhs)
-            for z in range(N-1):
-                lhs = Or (r[j][i][k][z], lhs)
-            l  = Implies (rhs, lhs)
-            A_list.append(l)
-R2 = And(A_list)
-#print R2
-
-
 # Constraint R1 ----------------------
 # R1 : Encode Reachability 
 # " nodes i,j is reachable with kth molecule in z steps if 
@@ -414,6 +391,29 @@ for i in range(N):
                     A_list.append(w)
 R1 = And(A_list)
 #print R1
+
+
+# Constraint R2 ----------------------
+# Encode stability using the reachability variables. 
+# If there is an m-edge between i and j, there is m reachble path from j and i.
+# Implementation: /\_i,j,m (\/_q e_ijqm) -> r_ijqU
+A_list = []
+for i in range(N):
+    for j in range(N):
+	if i == j:
+	    continue
+        for k in range(M):
+            lhs = False
+            rhs = False
+            for q in range(Q):
+                rhs = Or (presence_edge[i][j][q][k], rhs)
+            for z in range(N-1):
+                lhs = Or (r[j][i][k][z], lhs)
+            l  = Implies (rhs, lhs)
+            A_list.append(l)
+R2 = And(A_list)
+#print R2
+
 
 #fss = time.time() - st
 #print "Building F0-F3's took...", str(fss)
@@ -579,14 +579,15 @@ D44 = Not(D44)
 s = Solver()
 
 # Updated check for qbf formula. Suff condition.
-#rest = And (D1, D11, D3, D33)
-#kconn =  ForAll (setDump1, Implies (D1, ForAll (setR1, D4)) )  
-#notk1conn = ForAll (setDump2, Implies (D11, Exists (setR2, D44)) )  
-#wwe = And (rest, kconn)
-#s.add(rest)
-#s.add (Exists (setE, wwe) )
+#rst = And (D1, D3)
+rest = And (D1, D11, D3, D33)
+kconn =  ForAll (setDump1, Implies (D1, Exists (setR1, D4)) )  
+notk1conn = ForAll (setDump2, Implies (D11, Exists (setR2, D44)) )  
+wwe = And (rest, kconn, notk1conn)
+#s.add(wwe)
+s.add (Exists (setE, wwe) )
 
-s.add (A0, A1, V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4)
+#s.add (A0, A1, V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4)
 
 print "solving...\n"
 #st = time.time()
