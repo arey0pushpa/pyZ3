@@ -571,7 +571,7 @@ D44 = Not(D44)
 #print "D0-D3 Building took", str(dx)
 
 # Fix some edges in the Graph.
-Init = (presence_edge[1][0][0] == True)
+Init = (edge[1][0][0] == True)
 #Init2 = (p[0][3] == False)
 #Init3 = (p[1][2] == False)
 # Create Solver and add constraints in it.
