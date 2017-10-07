@@ -579,20 +579,30 @@ Init = (edge[1][0][0] == True)
 s = Solver()
 
 # Updated check for qbf formula. Suff condition.
-rst = And (D1, D3)
-#rest = And (D1, D11, D3, D33)
+#rst = And (D1, D3)
+rest = And (D1, D11, D3, D33)
 kconn =  ForAll (setDump1, Implies (D2, Exists (setR1, D4)) )  
 #print kconn 
 #exit(0)
-#notk1conn = ForAll (setDump2, Implies (D22, Exists (setR2, D44)) )  
-wwe = And (kconn, rst)
+notk1conn = ForAll (setDump2, Implies (D22, Exists (setR2, D44)) )  
+wwe = And (kconn, notk1conn, rest)
 
 # Sufficient condition check
 #s.add(wwe)
-s.add (Exists (setE, wwe) )
+#xxx = Exists (setE, wwe) 
+#s.add (Exists (setE, wwe) )
+
+#xxx =  (Exists (setE, ForAll (setDump1, And (Implies (D2, Exists (setR1, D4)) , D1, D3) ) ) )  
+
+#xxx = Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1, D4))) ) ,  ForAll (setDump2, And (Implies (D22, Exists (setR2, D44))) ), D1, D11, D3, D33) )  
+#print xxx
+#exit(0)
 
 # This cause Core dump.
-#s.add (Exists (setE, ForAll (setDump1, And (Implies (D2, Exists (setR1, D4)) , D1, D3) ) ) )  
+#s.add (Exists (setE, ForAll (setDump1, And (Implies (D2, Exists (setR1, D4)) , D1, D3) ) ) ) 
+
+# BUT This Does't not ----
+s.add( Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1, D4))) ) ,  ForAll (setDump2, And (Implies (D22, Exists (setR2, D44))) ), D1, D11, D3, D33) )  )
 
 # Neccessary condition Check.
 #s.add (A0, A1, V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4)

@@ -1,0 +1,128 @@
+ 
+Default/choosen vesicular traffic system is regulated by ... 1. Boolean function on nodes and Boolean function on the edges.
+ 
+Use -V option to change the regulated variation.
+1. Boolean function on nodes and Boolean function on the edges.
+2. Only Boolean function on the edges.
+3. Boolean function on nodes and SNARE-SNARE inhibition on edges.
+4. Only SNARE-SNARE inhibition on edges.
+5. Only Boolean function on nodes.
+6. No regulation at all.
+ 
+[1, 1, 1, 1]
+Exists([e_0_1_0, e_0_1_1, e_1_0_0, e_1_0_1],
+       And(ForAll([d1_0_1_0, d1_0_1_1, d1_1_0_0, d1_1_0_1],
+                  Implies(pbeq(d1_0_1_0,
+                               d1_0_1_1,
+                               d1_1_0_0,
+                               d1_1_0_1),
+                          Exists([r1_0_1, r1_1_0],
+                                 Not(And(Or(r1_1_0, r1_0_1),
+                                        And(Or(r1_0_1,
+                                        r1_1_0),
+                                        True)))))),
+           ForAll([d2_0_1_0, d2_0_1_1, d2_1_0_0, d2_1_0_1],
+                  Implies(pbeq(d2_0_1_0,
+                               d2_0_1_1,
+                               d2_1_0_0,
+                               d2_1_0_1),
+                          Exists([r1_0_1, r1_1_0],
+                                 Not(And(Or(r1_1_0, r1_0_1),
+                                        And(Or(r1_0_1,
+                                        r1_1_0),
+                                        True)))))),
+           And(And(Implies(d1_0_1_0, e_0_1_0),
+                   Implies(d1_0_1_1, e_0_1_1),
+                   Implies(d1_1_0_0, e_1_0_0),
+                   Implies(d1_1_0_1, e_1_0_1)),
+               And(Implies(d2_0_1_0, e_0_1_0),
+                   Implies(d2_0_1_1, e_0_1_1),
+                   Implies(d2_1_0_0, e_1_0_0),
+                   Implies(d2_1_0_1, e_1_0_1)),
+               And(Implies(Or(Or(And(e_0_1_1, Not(d1_0_1_1)),
+                                 Or(And(e_0_1_0,
+                                        Not(d1_0_1_0)),
+                                    False)),
+                              False),
+                           r1_0_1),
+                   Implies(Or(Or(And(e_1_0_1, Not(d1_1_0_1)),
+                                 Or(And(e_1_0_0,
+                                        Not(d1_1_0_0)),
+                                    False)),
+                              False),
+                           r1_1_0)),
+               And(Implies(Or(Or(And(e_0_1_1, Not(d2_0_1_1)),
+                                 Or(And(e_0_1_0,
+                                        Not(d2_0_1_0)),
+                                    False)),
+                              False),
+                           r2_0_1),
+                   Implies(Or(Or(And(e_1_0_1, Not(d2_1_0_1)),
+                                 Or(And(e_1_0_0,
+                                        Not(d2_1_0_0)),
+                                    False)),
+                              False),
+                           r2_1_0)))))
+ 
+Default/choosen vesicular traffic system is regulated by ... 1. Boolean function on nodes and Boolean function on the edges.
+ 
+Use -V option to change the regulated variation.
+1. Boolean function on nodes and Boolean function on the edges.
+2. Only Boolean function on the edges.
+3. Boolean function on nodes and SNARE-SNARE inhibition on edges.
+4. Only SNARE-SNARE inhibition on edges.
+5. Only Boolean function on nodes.
+6. No regulation at all.
+ 
+[1, 1, 1, 1]
+Exists([e_0_1_0, e_0_1_1, e_1_0_0, e_1_0_1],
+       And(ForAll([d1_0_1_0, d1_0_1_1, d1_1_0_0, d1_1_0_1],
+                  And(Implies(pbeq(d1_0_1_0,
+                                   d1_0_1_1,
+                                   d1_1_0_0,
+                                   d1_1_0_1),
+                              Exists([r1_0_1, r1_1_0],
+                                     Not(And(Or(r1_1_0,
+                                        r1_0_1),
+                                        And(Or(r1_0_1,
+                                        r1_1_0),
+                                        True))))))),
+           ForAll([d2_0_1_0, d2_0_1_1, d2_1_0_0, d2_1_0_1],
+                  And(Implies(pbeq(d2_0_1_0,
+                                   d2_0_1_1,
+                                   d2_1_0_0,
+                                   d2_1_0_1),
+                              Exists([r1_0_1, r1_1_0],
+                                     Not(And(Or(r1_1_0,
+                                        r1_0_1),
+                                        And(Or(r1_0_1,
+                                        r1_1_0),
+                                        True))))))),
+           And(Implies(d1_0_1_0, e_0_1_0),
+               Implies(d1_0_1_1, e_0_1_1),
+               Implies(d1_1_0_0, e_1_0_0),
+               Implies(d1_1_0_1, e_1_0_1)),
+           And(Implies(d2_0_1_0, e_0_1_0),
+               Implies(d2_0_1_1, e_0_1_1),
+               Implies(d2_1_0_0, e_1_0_0),
+               Implies(d2_1_0_1, e_1_0_1)),
+           And(Implies(Or(Or(And(e_0_1_1, Not(d1_0_1_1)),
+                             Or(And(e_0_1_0, Not(d1_0_1_0)),
+                                False)),
+                          False),
+                       r1_0_1),
+               Implies(Or(Or(And(e_1_0_1, Not(d1_1_0_1)),
+                             Or(And(e_1_0_0, Not(d1_1_0_0)),
+                                False)),
+                          False),
+                       r1_1_0)),
+           And(Implies(Or(Or(And(e_0_1_1, Not(d2_0_1_1)),
+                             Or(And(e_0_1_0, Not(d2_0_1_0)),
+                                False)),
+                          False),
+                       r2_0_1),
+               Implies(Or(Or(And(e_1_0_1, Not(d2_1_0_1)),
+                             Or(And(e_1_0_0, Not(d2_1_0_0)),
+                                False)),
+                          False),
+                       r2_1_0))))
