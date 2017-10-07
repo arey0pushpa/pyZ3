@@ -58,8 +58,8 @@ setDump2 =  [ dump2[i][j][q] for i in range(N) for j in range(N) for q in range(
 r1 = [ [Bool ("r1_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
 r2 = [ [Bool ("r2_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
 
-setR1 = [ r1[i][j] for i in range(N) for j in range(N)]
-setR2 = [ r2[i][j] for i in range(N) for j in range(N)]
+setR1 = [ r1[i][j] for i in range(N) for j in range(N) if i != j]
+setR2 = [ r2[i][j] for i in range(N) for j in range(N) if i != j]
 
 node = [ [Bool ("n_{}_{}".format(i,k)) for k in range(M)] for i in range(N)]
 
