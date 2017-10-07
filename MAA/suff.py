@@ -85,7 +85,7 @@ st = time.time()
 # REGULATION MECHANISM VARIATION #####
 
 
-# Regulation : no regulation on the node.
+# Regulation : No regulation on the node.
 # The present molecules at nodes are all active.
 def f_nn():
     A_list = []
@@ -242,9 +242,8 @@ for i in range(N):
         for q in range(Q):
             rhs = False
             for k in range(M):
-                # Change the presence to activity from the last change on 1st June.
                 rhs = Or( presence_edge[i][j][q][k], rhs )
-            V1 = And (Implies(rhs, edge[i][j][q]), V1)
+            V1 = And (Implies (rhs, edge[i][j][q]), V1)
 #print V1
 
 # Constraint V2 ----------------------
@@ -286,7 +285,7 @@ for i in range(N):
             continue
         for q in range(Q):
             for k in range(M):
-                V4 = And (Implies( presence_edge[i][j][q][k], And( node[i][k], node[j][k]) ),V4)
+                V4 = And (Implies( presence_edge[i][j][q][k], And( node[i][k], node[j][k]) ), V4)
 
 # Constraint V5 -------------------------
 # V5: Self edges not allowed. 
@@ -306,7 +305,7 @@ V6 = True
 for x in range(M):
     for y in range(M):
         if ( ((x < M/2) and (y < M/2)) or ((x>=M/2) and (y >=M/2)) ):
-            V6 = And( Not(p[x][y]), V6)
+            V6 = And (Not(p[x][y]), V6)
 
 
 # WELL FUSED CONSTRAINTS ###### 
@@ -316,7 +315,6 @@ for x in range(M):
 # Fuse : There should be an active pair corresponding to pairing matrix 
 #        on the edge and target node.
 # Implementation : /\_ijq e_ijq -> \/_m,m' (b_ijqm and a_jm' and p_mm') 
-
 V7 = True
 A_list = []
 for i in range(N):
@@ -330,7 +328,7 @@ for i in range(N):
                     if k == k1:
                         continue
 	            lhs = Or ( And (active_edge[i][j][q][k], And (active_node[j][k1],p[k][k1])), lhs)  
-            w =  Implies(edge[i][j][q], lhs)
+            w =  Implies (edge[i][j][q], lhs)
             A_list.append(w)
 V7 = And(A_list)
 #print V7
@@ -355,12 +353,35 @@ for i in range(N):
 	            for k11 in range(M):
                         if k == k11:
                             continue
-		        lhs = Or(And ( active_node[j1][k11], p[k][k11]), lhs)
+		        lhs = Or (And ( active_node[j1][k11], p[k][k11]), lhs)
 	        w = Implies( active_edge[i][j][q][k], Not(lhs))
                 A_list.append(w)
 V8 = And(A_list)
 
 # STABILITY CONDITION #########
+
+
+# Constraint R2 ----------------------
+# Encode stability using the reachability variables. 
+# If there is an m-edge between i and j, there is m reachble path from j and i.
+# Implementation: /\_i,j,m (\/_q e_ijqm) -> r_ijqU
+A_list = []
+for i in range(N):
+    for j in range(N):
+	if i == j:
+	    continue
+        for k in range(M):
+            lhs = False
+            rhs = False
+            for q in range(Q):
+                rhs = Or (presence_edge[i][j][q][k], rhs)
+            for z in range(N-1):
+                lhs = Or (r[j][i][k][z], lhs)
+            l  = Implies (rhs, lhs)
+            A_list.append(l)
+R2 = And(A_list)
+#print R2
+
 
 # Constraint R1 ----------------------
 # R1 : Encode Reachability 
@@ -387,34 +408,12 @@ for i in range(N):
                         if i == l or j == l:
                             continue
                         for q1 in range(Q):
-                            pe = Or( presence_edge[i][l][q1][k], pe)
-                        lhs = Or(And ( r[l][j][k][z-1],pe), lhs)   
-                    w  = Implies( r[i][j][k][z], lhs)
+                            pe = Or (presence_edge[i][l][q1][k], pe)
+                        lhs = Or (And ( r[l][j][k][z-1],pe), lhs)   
+                    w  = Implies (r[i][j][k][z], lhs)
                     A_list.append(w)
 R1 = And(A_list)
 #print R1
-
-# Constraint R2 ----------------------
-# Encode stability using the reachability variables. 
-# If there is an m-edge between i and j, there is m reachble path from j and i.
-# Implementation: /\_i,j,m (\/_q e_ijqm) -> r_ijqU
-A_list = []
-for i in range(N):
-    for j in range(N):
-	if i == j:
-	    continue
-        for k in range(M):
-            lhs = False
-            rhs = False
-            for q in range(Q):
-                rhs = Or( presence_edge[i][j][q][k], rhs)
-            for z in range(N-1):
-                lhs = Or( r[j][i][k][z], lhs)
-            l  = Implies( rhs, lhs)
-            A_list.append(l)
-R2 = And(A_list)
-#print R2
-
 
 #fss = time.time() - st
 #print "Building F0-F3's took...", str(fss)
@@ -434,7 +433,6 @@ for i in range(N):
         for q in range(Q):
             D1_list.append( Implies (dump1[i][j][q], edge[i][j][q]) )
 D1 = And (D1_list)
-
 
 #--------------------------
 # D11 : For second set of variables.
@@ -459,16 +457,17 @@ for i in range(N):
         if i == j:
             continue
         for q in range(Q):
-            d1.append(dump1[i][j][q])
+            d1.append (dump1[i][j][q])
 L = len(d1)
 
+# 2. K drops from the graph.
 oneList = []
 for i in range(L):
     oneList.append(1)
 
 z = zip (d1, oneList)
 
-D2 = PbEq(z,3)
+D2 = PbEq (z, 2)
 #print D2
  
 #-------------------------------
@@ -482,7 +481,7 @@ for i in range(N):
         if i == j:
             continue
         for q in range(Q):
-            d2.append(dump2[i][j][q])
+            d2.append (dump2[i][j][q])
 L = len(d2)
 
 oneList = []
@@ -490,9 +489,9 @@ for i in range(L):
     oneList.append(1)
 print oneList
 
-z = zip(d2,oneList)
+z = zip (d2, oneList)
 
-D22 = PbEq(z,4)
+D22 = PbEq (z, 4)
 #print D22
 
 # Constraint D3 ----------------------
@@ -506,13 +505,13 @@ for i in range(N):
             continue
         bhs = False
         for q in range(Q):
-            bhs = Or( And( edge[i][j][q], Not(dump1[i][j][q]) ), bhs) 
+            bhs = Or( And (edge[i][j][q], Not(dump1[i][j][q]) ), bhs) 
         rhs = False
         for l in range(N):
             if i == l or j == l:
                 continue
             for q in range(Q):
-                rhs = Or( And( edge[i][l][q], Not(dump1[i][l][q])), rhs)
+                rhs = Or( And( edge[i][l][q], Not (dump1[i][l][q]) ), rhs)
             rhs = And( rhs, r1[l][j])
         # w = Implies( r1[i][j], Or (bhs , rhs) )
         w = Implies( Or(bhs , rhs), r1[i][j] )
@@ -536,9 +535,9 @@ for i in range(N):
                 continue
             for q in range(Q):
                 rhs = Or( And( edge[i][l][q], Not(dump2[i][l][q])), rhs)
-            rhs = And( rhs, r2[l][j])
+            rhs = And (rhs, r2[l][j])
         # w = Implies( r2[i][j], Or (bhs , rhs) )
-        w = Implies( Or(bhs , rhs), r2[i][j] )
+        w = Implies (Or (bhs , rhs), r2[i][j] )
         A_list.append(w)
 D33 = And(A_list)
 #print D33
@@ -552,9 +551,9 @@ for i in range(N):
     for j in range(N):
         if i == j:
             continue
-        rijji = Or(r1[i][j],r1[j][i])
-        D4 = And( rijji, D4) 
-#D4 = Not(D4)
+        rijji = Or (r1[i][j], r1[j][i])
+        D4 = And (rijji, D4) 
+D4 = Not(D4)
 #print D4
 
 # ---------------------
@@ -564,8 +563,8 @@ for i in range(N):
     for j in range(N):
         if i == j:
             continue
-        rijji = Or(r2[i][j],r2[j][i])
-        D6 = And( rijji, D44) 
+        rijji = Or (r2[i][j], r2[j][i])
+        D44 = And (rijji, D44) 
 D44 = Not(D44)
 
 #dx = time.time() - st
@@ -587,7 +586,7 @@ s = Solver()
 #s.add(rest)
 #s.add (Exists (setE, wwe) )
 
-s.add (V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4)
+s.add (A0, A1, V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4)
 
 print "solving...\n"
 #st = time.time()
@@ -659,6 +658,9 @@ if s.check() == sat:
     t = [ [ [m[edge[i][j][q]]  for q in range(Q)] for j in range(N) ] for i in range(N) ]
     print 'Printing the pairing matrix'
     print_matrix(xc)
+    print '\n printing the dropped edges: \n '
+    d = [ [ [m [dump1[i][j][k]] for k in range(Q)] for j in range(N)] for i in range(N)]
+    print d
    # print ' '
     #print t
     dump_dot( "/tmp/bio.dot", m )

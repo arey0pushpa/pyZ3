@@ -476,6 +476,7 @@ for i in range(L-2):
         for k in range(j+1,L):
             D1_list.append( And( lhs,d1[k]))
 D2 = Or(D1_list)
+D2 = Not (D2)
 
 st = time.time()
 # forall_{i,j} r'(i,j) -> exists_{q} [e(i,j,q) and not d(i,j,q)] Or  exists_{i'!=i}: [r'(i',j) and [exists_{q}: e(i,i',q) and ~d(i,i',q)] ]   
@@ -513,7 +514,7 @@ for i in range(N):
     for j in range(N):
         if i == j:
             continue
-        rijji = Or(r1[i][j],r1[j][i])
+        rijji = Or(r1[i][j], r1[j][i])
         D3 = And( rijji, D3) 
 D3 = Not(D3)
 #print D4
