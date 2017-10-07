@@ -52,8 +52,8 @@ setE = [ edge[i][j][q] for i in range(N) for j in range(N) for q in range(Q) if 
 dump1 = [ [ [Bool ("d1_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
 dump2 = [ [ [Bool ("d2_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
 
-setDump1 =  [ dump1[i][j][q] for i in range(N) for j in range(N) for q in range(Q)]
-setDump2 =  [ dump2[i][j][q] for i in range(N) for j in range(N) for q in range(Q)]
+setDump1 =  [ dump1[i][j][q] for i in range(N) for j in range(N) for q in range(Q) if i != j]
+setDump2 =  [ dump2[i][j][q] for i in range(N) for j in range(N) for q in range(Q) if i != j]
 
 r1 = [ [Bool ("r1_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
 r2 = [ [Bool ("r2_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
@@ -571,7 +571,7 @@ D44 = Not(D44)
 #print "D0-D3 Building took", str(dx)
 
 # Fix some edges in the Graph.
-#Init = (presence_edge[0][1][0] == True)
+Init = (presence_edge[1][0][0] == True)
 #Init2 = (p[0][3] == False)
 #Init3 = (p[1][2] == False)
 # Create Solver and add constraints in it.
@@ -579,13 +579,13 @@ D44 = Not(D44)
 s = Solver()
 
 # Updated check for qbf formula. Suff condition.
-#rst = And (D1, D3)
-rest = And (D1, D11, D3, D33)
+rst = And (D1, D3)
+#rest = And (D1, D11, D3, D33)
 kconn =  ForAll (setDump1, Implies (D1, Exists (setR1, D4)) )  
-notk1conn = ForAll (setDump2, Implies (D11, Exists (setR2, D44)) )  
-wwe = And (rest, kconn, notk1conn)
+#notk1conn = ForAll (setDump2, Implies (D11, Exists (setR2, D44)) )  
+wwe = And (kconn, rst, Init)
 #s.add(wwe)
-s.add (Exists (setE, wwe) )
+s.add (Exists (setE, wwe ))
 
 #s.add (A0, A1, V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4)
 
