@@ -606,7 +606,9 @@ s = Solver()
 #s.add (Exists (setE, ForAll (setDump1, And (Implies (D2, Exists (setR1, D4)) , D1, D3) ) ) ) 
 
 # BUT This Does't not ----
-s.add( Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1, D4))) ) ,  ForAll (setDump2, And (Implies (D22, Exists (setR2, D44))) ), D1, D11, D3, D33) )  )
+#s.add( Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1, D4))) ),  ForAll (setDump2, And (Implies (D22, Exists (setR2, D44))) ), D1, D11, D3, D33) )  )
+
+s.add( Exists (setE, ForAll (setDump1, (ForAll (setDump2, And ( Implies (D2, Exists (setR1, D4)), Implies (D22, Exists (setR2, D44)),  D1, D11, D3, D33) )  )) ) )
 
 # Neccessary condition Check.
 #s.add (A0, A1, V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4)
