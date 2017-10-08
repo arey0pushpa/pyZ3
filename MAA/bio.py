@@ -491,7 +491,7 @@ print oneList
 
 z = zip (d2, oneList)
 
-D22 = PbEq (z, 4)
+D22 = PbEq (z, 3)
 #print D22
 
 # Constraint D3 ----------------------
@@ -572,6 +572,7 @@ D44 = Not(D44)
 
 # Fix some edges in the Graph.
 Init = (edge[1][0][0] == True)
+Xf = (dump1[1][0][0] == True)
 #Init2 = (p[0][3] == False)
 #Init3 = (p[1][2] == False)
 # Create Solver and add constraints in it.
@@ -580,17 +581,17 @@ s = Solver()
 
 # Updated check for qbf formula. Suff condition.
 #rst = And (D1, D3)
-rest = And (D1, D11, D3, D33)
+rest = And (D1, D11, D3, D33, D2, D22)
 kconn =  ForAll (setDump1, Implies (D2, Exists (setR1, D4)) )  
 #print kconn 
 #exit(0)
 notk1conn = ForAll (setDump2, Implies (D22, Exists (setR2, D44)) )  
-wwe = And (kconn, notk1conn, rest)
+wwe = And (kconn, notk1conn, rest, Init, Xf)
 
 # Sufficient condition check
 #s.add(wwe)
 #xxx = Exists (setE, wwe) 
-#s.add (Exists (setE, wwe) )
+s.add (Exists (setE, wwe) )
 
 #xxx =  (Exists (setE, ForAll (setDump1, And (Implies (D2, Exists (setR1, D4)) , D1, D3) ) ) )  
 
@@ -602,7 +603,7 @@ wwe = And (kconn, notk1conn, rest)
 #s.add (Exists (setE, ForAll (setDump1, And (Implies (D2, Exists (setR1, D4)) , D1, D3) ) ) ) 
 
 # BUT This Does't not ----
-s.add( Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1, D4))) ) ,  ForAll (setDump2, And (Implies (D22, Exists (setR2, D44))) ), D1, D11, D3, D33) )  )
+#s.add( Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1, D4))) ) ,  ForAll (setDump2, And (Implies (D22, Exists (setR2, D44))) ), D1, D11, D3, D33) )  )
 
 # Neccessary condition Check.
 #s.add (A0, A1, V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4)
