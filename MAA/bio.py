@@ -64,10 +64,12 @@ setR1 = [ r1[i][j] for i in range(N) for j in range(N) if i != j]
 setR2 = [ r2[i][j] for i in range(N) for j in range(N) if i != j]
 
 node = [ [Bool ("n_{}_{}".format(i,k)) for k in range(M)] for i in range(N)]
+setN = [ node[i][k] for i in range(N) for k in range(M)]
 
 active_node = [ [Bool ("a_{}_{}".format(i,k)) for k in range(M)] for i in range(N)]
 
 presence_edge = [ [ [ [Bool ("e_{}_{}_{}_{}".format(i,j,q,k)) for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
+setPresentE = [ presence_edge[i][j][q][k] for i in range(N) for j in range(N) for k in range(M) for k in range(Q) if i != j] 
 
 active_edge = [ [ [ [Bool ("b_{}_{}_{}_{}".format(i,j,q,k)) for k in range(M)] for q in range(Q)] for j in range(N)] for i in range (N)]
 
@@ -570,6 +572,7 @@ for i in range(N):
         D44 = And (rijji, D44) 
 D44 = Not(D44)
 
+
 #dx = time.time() - st
 #print "D0-D3 Building took", str(dx)
 
@@ -608,7 +611,10 @@ s = Solver()
 # BUT This Does't not ----
 #s.add( Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1, D4))) ),  ForAll (setDump2, And (Implies (D22, Exists (setR2, D44))) ), D1, D11, D3, D33) )  )
 
-s.add( Exists (setE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1, Exists (setR2 , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33) )  )) )  ) ))
+#s.add( Exists (setE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1, Exists (setR2 , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33) )  )) )  ) ))
+
+# NOISE WITH EDGES:
+s.add( Exists (setE, ForAll (setN , ForAll ( setPresentE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1, Exists (setR2 , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33, V1, V4, V5) )  )) )  ) ) ) ) )
 
 # Neccessary condition Check.
 #s.add (A0, A1, V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4)
@@ -639,11 +645,11 @@ def dump_dot( filename, m ) :
             if i == j:
                 continue
             for q in range(Q):
-                for k in range(M):
+                for k in range(M):                    
                     if q == 0:
                         style = "solid"
-                        if is_true( m[dump1[i][j][q]] ):
-                            style="dashed"
+                       # if is_true( m[dump1[i][j][q]] ):
+                       #     style="dashed"
                         if is_true(m[presence_edge[i][j][q][k]]):
                             label = str(k)
                             color = "black"
@@ -654,10 +660,11 @@ def dump_dot( filename, m ) :
                                         color = "red"
                                         break
                             dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color + ",style=" + style + "]" +"\n" )
+                    
                     if q == 1:
                         style = "solid"
-                        if is_true( m[dump1[i][j][q]] ):
-                            style="dashed"
+                     #   if is_true( m[dump1[i][j][q]] ):
+                     #       style="dashed"
                         if is_true(m[presence_edge[i][j][q][k]]):
                             label = str(k)
                             color = "yellow"
