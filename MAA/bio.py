@@ -544,7 +544,7 @@ D33 = And(A_list)
 
 
 # Constraint D4 ----------------------
-# D4 : Graph becomes disconnected.
+# D4 : Graph remains connected after k-1 drops.
 # There are unreachable pairs of nodes in the underlying undirected graph.
 D4 = True
 for i in range(N):
@@ -553,11 +553,12 @@ for i in range(N):
             continue
         rijji = Or (r1[i][j], r1[j][i])
         D4 = And (rijji, D4) 
-D4 = Not(D4)
+#D4 = Not(D4)
 #print D4
 
 # ---------------------
 # D44 : For second set of variables.
+# D4 : Graph becomes disconnected after k drops.
 D44 = True
 for i in range(N):
     for j in range(N):
@@ -571,8 +572,8 @@ D44 = Not(D44)
 #print "D0-D3 Building took", str(dx)
 
 # Fix some edges in the Graph.
-Init = (edge[1][0][0] == True)
-Xf = (dump1[1][0][0] == True)
+#Init = (edge[1][0][0] == True)
+#Xf = (dump1[1][0][0] == True)
 #Init2 = (p[0][3] == False)
 #Init3 = (p[1][2] == False)
 # Create Solver and add constraints in it.
@@ -586,7 +587,7 @@ kconn =  ForAll (setDump1, Implies (D2, Exists (setR1, D4)) )
 #print kconn 
 #exit(0)
 notk1conn = ForAll (setDump2, Implies (D22, Exists (setR2, D44)) )  
-wwe = And (kconn, notk1conn, rest, Init, Xf)
+wwe = And (kconn, notk1conn, rest)
 
 # Sufficient condition check
 #s.add(wwe)
