@@ -14,8 +14,10 @@ parser.add_argument("-M","--mols", type=int, default=4, help = "number of molecu
 parser.add_argument("-N","--nodes", type=int, default=2, help = "number of nodes")
 parser.add_argument("-Q","--pedges", type=int, default=2, help = "max no.of parallel edges btw two nodes")
 parser.add_argument("-V","--variation", type=int, default=1, help = "model of the biological system")
-#parser.add_argument("-C","--connected", type=int, default=3, help = "graph connectivity want to check")
+parser.add_argument("-C","--connected", type=int, default=3, help = "graph connectivity want to check")
 #parser.add_argument("-E","--edges", type=int, default=3, help = "graph connectivity want to check")
+
+
 
 args = parser.parse_args()
 
@@ -23,7 +25,7 @@ M = args.mols
 N = args.nodes
 Q = args.pedges
 V = args.variation
-#C = args.connected
+C = args.connected
 
 bag = []
 bag.append ('1. Boolean function on nodes and Boolean function on the edges.') 
@@ -436,7 +438,7 @@ for i in range(N):
             continue
         for q in range(Q):
             D1_list.append( Implies (dump1[i][j][q], edge[i][j][q]) )
-D1 = And (D1_list)
+D1_edge_exists = And (D1_list)
 
 #--------------------------
 # D11 : For second set of variables.
@@ -447,7 +449,7 @@ for i in range(N):
             continue
         for q in range(Q):
             D1_list.append( Implies (dump2[i][j][q], edge[i][j][q]) )
-D11 = And (D1_list)
+D11_edge_exists = And( D1_list )
 
 
 # Constraint D2 ----------------------
@@ -471,7 +473,8 @@ for i in range(L):
 
 z = zip (d1, oneList)
 
-D2 = PbEq (z, 2)
+D2_drops_are_k_minus_1 = PbEq (z, C-1)
+
 #print D2
  
 #-------------------------------
@@ -495,7 +498,8 @@ print oneList
 
 z = zip (d2, oneList)
 
-D22 = PbEq (z, 3)
+D22_drops_are_k = PbEq (z, C)
+
 #print D22
 
 # Constraint D3 ----------------------
@@ -520,7 +524,7 @@ for i in range(N):
         # w = Implies( r1[i][j], Or (bhs , rhs) )
         w = Implies( Or(bhs , rhs), r1[i][j] )
         A_list.append(w)
-D3 = And(A_list)
+D3_1_reachability = And(A_list)
 
 
 #------------------------------------------
@@ -543,7 +547,7 @@ for i in range(N):
         # w = Implies( r2[i][j], Or (bhs , rhs) )
         w = Implies (Or (bhs , rhs), r2[i][j] )
         A_list.append(w)
-D33 = And(A_list)
+D33_2_reachability = And(A_list)
 #print D33
 
 
@@ -551,12 +555,15 @@ D33 = And(A_list)
 # D4 : Graph remains connected after k-1 drops.
 # There are unreachable pairs of nodes in the underlying undirected graph.
 D4 = True
+D4_list = []
 for i in range(N):
     for j in range(N):
         if i == j:
             continue
         rijji = Or (r1[i][j], r1[j][i])
-        D4 = And (rijji, D4) 
+        D4_list.append( rijji )
+D4_1_all_connected = And( D4_list )
+
 #D4 = Not(D4)
 #print D4
 
@@ -564,14 +571,29 @@ for i in range(N):
 # D44 : For second set of variables.
 # D4 : Graph becomes disconnected after k drops.
 D44 = True
+D44_list = []
 for i in range(N):
     for j in range(N):
         if i == j:
             continue
         rijji = Or (r2[i][j], r2[j][i])
-        D44 = And (rijji, D44) 
-D44 = Not(D44)
+        D44_list.append( rijji )
+D44 = And( D44_list )
+D44_2_some_disconnected = Not(D44)
 
+
+
+# first one - for all drops ( D1_edge_exists /\ D2_drops_are_k_minus_1  /\ exists reachVars (D3_1_reachability) -> D4_1_all_connected ) 
+is_reach = Exists( setR1, And(D3_1_reachability, D4_1_all_connected) )
+
+k_min_1_connected = ForAll( setDump1,
+                            Implies( And( D1_edge_exists, D2_drops_are_k_minus_1), is_reach ))
+
+is_reach = Exists( setR2, And(D33_2_reachability, D44_2_some_disconnected) )
+k_not_connected = Exists( setDump2, And( D11_edge_exists, D22_drops_are_k, is_reach ) )
+
+
+connectivity = And( k_min_1_connected, k_not_connected )
 
 #dx = time.time() - st
 #print "D0-D3 Building took", str(dx)
@@ -611,10 +633,10 @@ s = Solver()
 # BUT This Does't not ----
 #s.add( Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1, D4))) ),  ForAll (setDump2, And (Implies (D22, Exists (setR2, D44))) ), D1, D11, D3, D33) )  )
 
-#s.add( Exists (setE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1, Exists (setR2 , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33) )  )) )  ) ))
+# s.add( Exists( setE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1, Exists (setR2 , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33) )  )) )  ) ))
 
 # NOISE WITH EDGES:
-s.add( Exists (setE, ForAll (setN , ForAll ( setPresentE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1, Exists (setR2 , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33, V1, V4, V5) )  )) )  ) ) ) ) )
+# s.add( Exists ( setE, ForAll(setN, ForAll( setPresentE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1, Exists (setR2 , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33, V1, V4, V5) )  )) )  ) ) ) ) )
 
 # Neccessary condition Check.
 #s.add (A0, A1, V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4)
