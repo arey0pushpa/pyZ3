@@ -17,6 +17,8 @@ parser.add_argument("-V","--variation", type=int, default=1, help = "model of th
 parser.add_argument("-C","--connected", type=int, default=3, help = "graph connectivity want to check")
 #parser.add_argument("-E","--edges", type=int, default=3, help = "graph connectivity want to check")
 
+
+
 args = parser.parse_args()
 
 M = args.mols
@@ -593,7 +595,9 @@ k_not_connected = Exists( setDump2, And( D11_edge_exists, D22_drops_are_k, is_re
 
 
 connectivity = And( k_min_1_connected, k_not_connected )
+k_not_connected = Exists( setDump2, And( D11_edge_exists, D22_drops_are_k, is_reach ) )
 
+connectivity = And( k_min_1_connected, k_not_connected )
 
 #dx = time.time() - st
 #print "D0-D3 Building took", str(dx)
