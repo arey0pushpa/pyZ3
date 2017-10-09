@@ -503,12 +503,12 @@ D2_2_drops_are_k = PbEq (z, C)
 
 # Make sure that the summation of edges present is greater than k-1
 oneList = []
-for i in lenE:
+for i in range(lenE):
     oneList.append(1)
 print oneList
 
 xzx = zip(setE, oneList)
-Atleastkedges = PbGe(xzx, C)
+At_least_k_edges = PbGe(xzx, C)
 
 #print D22
 
@@ -608,7 +608,7 @@ k_not_connected = And( D1_2_edge_exists, D2_2_drops_are_k, is_reach )
 
 # connectivity = And( k_min_1_connected, k_not_connected )
 
-connectivity = k_min_1_connected
+connectivity = And( At_least_k_edges, k_min_1_connected )
 
 #dx = time.time() - st
 #print "D0-D3 Building took", str(dx)
