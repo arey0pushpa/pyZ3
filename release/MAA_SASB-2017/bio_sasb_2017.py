@@ -1,8 +1,21 @@
-# This version is for the submissted paper at SASB-2017 ###
+#!/usr/bin/python
+
+##############################################################################
+# Author: Ashutosh gupta and ankit shukla 
+
+# # This version is for the submissted paper at SASB-2017 ###
 # It only solves necc. condition of VTS. ##########
 # For sufficient condition please refer main repo bio.py #####
 
-#!/usr/bin/python
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+##############################################################################
 
 from z3 import *
 import argparse

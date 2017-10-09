@@ -18,7 +18,6 @@ parser.add_argument("-C","--connected", type=int, default=3, help = "graph conne
 #parser.add_argument("-E","--edges", type=int, default=3, help = "graph connectivity want to check")
 
 
-
 args = parser.parse_args()
 
 M = args.mols
@@ -581,7 +580,10 @@ for i in range(N):
 D44 = And( D44_list )
 D44_2_some_disconnected = Not(D44)
 
-
+# Dummy constraint
+for i in range(N):
+    for k in range(M):
+        node[i][k] = True
 
 # first one - for all drops ( D1_edge_exists /\ D2_drops_are_k_minus_1  /\ exists reachVars (D3_1_reachability) -> D4_1_all_connected ) 
 is_reach = Exists( setR1, And(D3_1_reachability, D4_1_all_connected) )
@@ -718,9 +720,9 @@ if s.check() == sat:
     xc = [ [ m[p[i][j]] for j in range(M) ] for i in range(M) ]
     s = [[ [ [m[active_edge[i][j][q][k]] for k in range (M)] for q in range(Q)] for j in range(N) ] for i in range(N) ]
     t = [ [ [m[edge[i][j][q]]  for q in range(Q)] for j in range(N) ] for i in range(N) ]
-    print 'Printing the pairing matrix'
+    print '\nPrinting the pairing matrix'
     print_matrix(xc)
-    print '\n printing the dropped edges: \n '
+    print '\nPrinting the dropped edges:'
     d = [ [ [m [dump1[i][j][k]] for k in range(Q)] for j in range(N)] for i in range(N)]
     print d
    # print ' '
