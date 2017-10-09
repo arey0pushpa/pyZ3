@@ -52,6 +52,8 @@ edge = [ [ [ Bool ("e_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range
 
 setE = [ edge[i][j][q] for i in range(N) for j in range(N) for q in range(Q) if i != j]
 
+lenE = len(setE)
+
 dump1 = [ [ [Bool ("d1_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
 dump2 = [ [ [Bool ("d2_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
 
@@ -498,6 +500,15 @@ print oneList
 z = zip (d2, oneList)
 
 D2_2_drops_are_k = PbEq (z, C)
+
+# Make sure that the summation of edges present is greater than k-1
+oneList = []
+for i in lenE:
+    oneList.append(1)
+print oneList
+
+xzx = zip(setE, oneList)
+Atleastkedges = PbGe(xzx, C)
 
 #print D22
 
