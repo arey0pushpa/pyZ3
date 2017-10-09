@@ -588,13 +588,16 @@ for i in range(N):
 is_reach = Exists( setR1_connectivity, And(D3_1_reachability, D4_1_all_connected) )
 
 k_min_1_connected = ForAll( setDump1,
-                            Implies( And( D1_1_edge_exists, D2_1_drops_are_k_minus_1), is_reach ))
+                            Implies( And(D2_1_drops_are_k_minus_1, D1_1_edge_exists) ,
+                                     is_reach ) )
 
 is_reach = Exists( setR2_connectivity, And(D3_2_reachability, D4_2_some_disconnected) )
 
 k_not_connected = And( D1_2_edge_exists, D2_2_drops_are_k, is_reach )
 
-connectivity = And( k_min_1_connected, k_not_connected )
+# connectivity = And( k_min_1_connected, k_not_connected )
+
+connectivity = k_min_1_connected
 
 #dx = time.time() - st
 #print "D0-D3 Building took", str(dx)
@@ -647,6 +650,7 @@ def dump_dot( filename, m ) :
                     label = str(k)
                     color = "black"
                     dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color + ",style=" + style + "]" +"\n" )
+    dfile.write("}\n")
 
 ## Printing the Graph ##########
 #def dump_dot( filename, m ) :
