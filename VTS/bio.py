@@ -641,37 +641,63 @@ def dump_dot( filename, m ) :
             if i == j:
                 continue
             for q in range(Q):
-                for k in range(M):                    
-                    if q == 0:
-                        style = "solid"
-                       # if is_true( m[dump1[i][j][q]] ):
-                       #     style="dashed"
-                        if is_true(m[presence_edge[i][j][q][k]]):
-                            label = str(k)
-                            color = "black"
-                            if is_true(m[active_edge[i][j][q][k]]):
-                                color = "green"
-                                for k1 in range(M):
-                                    if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
-                                        color = "red"
-                                        break
-                            dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color + ",style=" + style + "]" +"\n" )
-                    
-                    if q == 1:
-                        style = "solid"
-                     #   if is_true( m[dump1[i][j][q]] ):
-                     #       style="dashed"
-                        if is_true(m[presence_edge[i][j][q][k]]):
-                            label = str(k)
-                            color = "yellow"
-                            if is_true(m[active_edge[i][j][q][k]]):
-                                color = "pink"
-                                for k1 in range(M):
-                                    if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
-                                            color = "blue"
-                                            break
-                            dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color + ",style=" + style + "]" +"\n" )
+               # for k in range(M):  
+                style = "solid"
+                if is_true(m[edge[i][j][q]]):
+                    label = str(k)
+                    color = "black"
+                    dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color + ",style=" + style + "]" +"\n" )
 
+## Printing the Graph ##########
+#def dump_dot( filename, m ) :
+#    print "dumping dot file: ", filename
+#    dfile = open(filename, 'w')
+#    dfile.write("digraph prog {\n")
+#    for i in range(N):
+#        node_vec = str(i)+":"
+#        for k in range(M):
+#            if is_true(m[node[i][k]]) :
+#                node_vec = node_vec + "1"
+#            elif is_false(m[node[i][k]]):
+#                node_vec = node_vec + "0"
+#            if is_true(m[active_node[i][k]]) :
+#                node_vec = node_vec + "-"
+#        dfile.write( str(i) + "[label=\"" + node_vec + "\"]\n")
+#        for j in range(N):
+#            if i == j:
+#                continue
+#            for q in range(Q):
+#               # for k in range(M):                    
+#               if q == 0:
+#                    style = "solid"
+#                       # if is_true( m[dump1[i][j][q]] ):
+#                       #     style="dashed"
+#                    if is_true(m[edge[i][j][q]]):
+#                        label = str(k)
+#                        color = "black"
+#                        if is_true(m[edge[i][j][q]]):
+#                            color = "green"
+#                            for k1 in range(M):
+#                                if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
+#                                    color = "red"
+#                                    break
+#                        dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color + ",style=" + style + "]" +"\n" )
+#                    
+#                if q == 1:
+#                    style = "solid"
+#                     #   if is_true( m[dump1[i][j][q]] ):
+#                     #       style="dashed"
+#                        if is_true(m[edge[i][j][q]):
+#                            label = str(k)
+#                            color = "yellow"
+#                          #  if is_true(m[active_edge[i][j][q][k]]):
+#                         #       color = "pink"
+#                         #       for k1 in range(M):
+#                         #           if is_true(m[active_node[j][k1]]) and is_true(m[p[k][k1]]):
+#                          #                  color = "blue"
+#                           #                 break
+#                            dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color + ",style=" + style + "]" +"\n" )
+#
     dfile.write("}\n")
 
 if s.check() == sat:
