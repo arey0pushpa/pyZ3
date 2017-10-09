@@ -20,4 +20,3 @@ for g in r:
 describe_tactics()
 
 
-

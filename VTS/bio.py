@@ -248,7 +248,7 @@ for i in range(N):
             rhs = False
             for k in range(M):
                 rhs = Or( presence_edge[i][j][q][k], rhs )
-            V1_molecule_presence_require_for_present_edge = And (Implies (rhs, edge[i][j][q]), V1)
+            V1_molecule_presence_require_for_present_edge = And (Implies (rhs, edge[i][j][q]), V1_molecule_presence_require_for_present_edge)
 #print V1_molecule_presence_require_for_present_edge
 
 # Constraint V2_active_molecule_should_be_present ----------------------
@@ -290,7 +290,7 @@ for i in range(N):
             continue
         for q in range(Q):
             for k in range(M):
-                V4_edgelabel_subset_of_nodelabel = And (Implies( presence_edge[i][j][q][k], And( node[i][k], node[j][k]) ), V4)
+                V4_edgelabel_subset_of_nodelabel = And (Implies( presence_edge[i][j][q][k], And( node[i][k], node[j][k]) ), V4_edgelabel_subset_of_nodelabel)
 
 # Constraint V5_self_edge_not_allowed -------------------------
 # V5_self_edge_not_allowed: Self edges not allowed. 
@@ -299,7 +299,7 @@ for i in range(N):
 V5_self_edge_not_allowed = True
 for i in range(N):
     for q in range(Q):
-        V5_self_edge_not_allowed = And( Not(edge[i][i][q]), V5)
+        V5_self_edge_not_allowed = And( Not(edge[i][i][q]), V5_self_edge_not_allowed)
 
 
 # Constraint V6_pairing_matrix_restrictions ------------------------
@@ -310,7 +310,7 @@ V6_pairing_matrix_restrictions = True
 for x in range(M):
     for y in range(M):
         if ( ((x < M/2) and (y < M/2)) or ((x>=M/2) and (y >=M/2)) ):
-            V6_pairing_matrix_restrictions = And (Not(p[x][y]), V6)
+            V6_pairing_matrix_restrictions = And (Not(p[x][y]), V6_pairing_matrix_restrictions)
 
 
 # WELL FUSED CONSTRAINTS ###### 
@@ -580,7 +580,7 @@ for i in range(N):
 D44 = And( D44_list )
 D44_2_some_disconnected = Not(D44)
 
-# Dummy constraint
+# Dummy molecule presence.
 for i in range(N):
     for k in range(M):
         node[i][k] = True
@@ -594,7 +594,6 @@ k_min_1_connected = ForAll( setDump1,
 is_reach = Exists( setR2_steady_state_stability, And(D33_2_reachability, D44_2_some_disconnected) )
 
 k_not_connected = Exists( setDump2, And( D11_edge_exists, D22_drops_are_k, is_reach ) )
-
 
 connectivity = And( k_min_1_connected, k_not_connected )
 k_not_connected = Exists( setDump2, And( D11_edge_exists, D22_drops_are_k, is_reach ) )
@@ -612,41 +611,10 @@ connectivity = And( k_min_1_connected, k_not_connected )
 # Create Solver and add constraints in it.
 
 s = Solver()
-
+# Sufficient condition check
 s.add( Exists( setE, And( ForAll( setDump1, Implies( And( D1_edge_exists, D2_drops_are_k_minus_1), Exists( setR1_steady_state_reachability_defination, And( D3_1_reachability, D4_1_all_connected)) ) ), ForAll (setDump2, Implies( And (D11_edge_exists, D22_drops_are_k ), Exists( setR2_steady_state_stability, And( D33_2_reachability, D44_2_some_disconnected) ))) ) ))
     
 #s.add( Exists( setE, connectivity) )
-
-# Updated check for qbf formula. Suff condition.
-#rst = And (D1, D3)
-#rest = And (D1, D11, D3, D33)
-#kconn =  ForAll (setDump1, Implies (D2, Exists (setR1_steady_state_reachability_defination, D4)) )  
-#print kconn 
-#exit(0)
-#notk1conn = ForAll (setDump2, Implies (D22, Exists (setR2_steady_state_stability, D44)) )  
-#wwe = And (kconn, notk1conn, rest)
-
-# Sufficient condition check
-#s.add(wwe)
-#xxx = Exists (setE, wwe) 
-#s.add (Exists (setE, wwe) )
-
-#xxx =  (Exists (setE, ForAll (setDump1, And (Implies (D2, Exists (setR1_steady_state_reachability_defination, D4)) , D1, D3) ) ) )  
-
-#xxx = Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1_steady_state_reachability_defination, D4))) ) ,  ForAll (setDump2, And (Implies (D22, Exists (setR2_steady_state_stability, D44))) ), D1, D11, D3, D33) )  
-#print xxx
-#exit(0)
-
-# This cause Core dump.
-#s.add (Exists (setE, ForAll (setDump1, And (Implies (D2, Exists (setR1_steady_state_reachability_defination, D4)) , D1, D3) ) ) ) 
-
-# BUT This Does't not ----
-#s.add( Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1_steady_state_reachability_defination, D4))) ),  ForAll (setDump2, And (Implies (D22, Exists (setR2_steady_state_stability, D44))) ), D1, D11, D3, D33) )  )
-
-# s.add( Exists( setE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1_steady_state_reachability_defination, Exists (setR2_steady_state_stability , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33) )  )) )  ) ))
-
-# NOISE WITH EDGES:
-# s.add( Exists ( setE, ForAll(setN, ForAll( setPresentE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1_steady_state_reachability_defination, Exists (setR2_steady_state_stability , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33, V1_molecule_presence_require_for_present_edge, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed) )  )) )  ) ) ) ) )
 
 # Neccessary condition Check.
 #s.add (Activity_node, Activity_edge, V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, V7_fusion_edge_must_fuse_with_target, V8_fusion2_edge_potentially_not_fuse_anythingelse, R1_steady_state_reachability_defination, R2_steady_state_stability, D1, D2, D3, D4)
