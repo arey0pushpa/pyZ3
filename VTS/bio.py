@@ -61,8 +61,8 @@ setDump2 =  [ dump2[i][j][q] for i in range(N) for j in range(N) for q in range(
 r1 = [ [Bool ("r1_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
 r2 = [ [Bool ("r2_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
 
-setR1_steady_state_reachability_defination = [ r1[i][j] for i in range(N) for j in range(N) if i != j]
-setR2_steady_state_stability = [ r2[i][j] for i in range(N) for j in range(N) if i != j]
+setR1_connectivity = [ r1[i][j] for i in range(N) for j in range(N) if i != j]
+setR2_connectivity = [ r2[i][j] for i in range(N) for j in range(N) if i != j]
 
 node = [ [Bool ("n_{}_{}".format(i,k)) for k in range(M)] for i in range(N)]
 setN = [ node[i][k] for i in range(N) for k in range(M)]
@@ -437,7 +437,7 @@ for i in range(N):
             continue
         for q in range(Q):
             D1_list.append( Implies (dump1[i][j][q], edge[i][j][q]) )
-D1_edge_exists = And (D1_list)
+D1_1_edge_exists = And (D1_list)
 
 #--------------------------
 # D11 : For second set of variables.
@@ -448,7 +448,7 @@ for i in range(N):
             continue
         for q in range(Q):
             D1_list.append( Implies (dump2[i][j][q], edge[i][j][q]) )
-D11_edge_exists = And( D1_list )
+D1_2_edge_exists = And( D1_list )
 
 
 # Constraint D2 ----------------------
@@ -472,7 +472,7 @@ for i in range(L):
 
 z = zip (d1, oneList)
 
-D2_drops_are_k_minus_1 = PbEq (z, C-1)
+D2_1_drops_are_k_minus_1 = PbEq (z, C-1)
 
 #print D2
  
@@ -497,7 +497,7 @@ print oneList
 
 z = zip (d2, oneList)
 
-D22_drops_are_k = PbEq (z, C)
+D2_2_drops_are_k = PbEq (z, C)
 
 #print D22
 
@@ -546,7 +546,7 @@ for i in range(N):
         # w = Implies( r2[i][j], Or (bhs , rhs) )
         w = Implies (Or (bhs , rhs), r2[i][j] )
         A_list.append(w)
-D33_2_reachability = And(A_list)
+D3_2_reachability = And(A_list)
 #print D33
 
 
@@ -578,25 +578,21 @@ for i in range(N):
         rijji = Or (r2[i][j], r2[j][i])
         D44_list.append( rijji )
 D44 = And( D44_list )
-D44_2_some_disconnected = Not(D44)
+D4_2_some_disconnected = Not(D44)
 
 # Dummy molecule presence.
 for i in range(N):
     for k in range(M):
         node[i][k] = True
 
-# first one - for all drops ( D1_edge_exists /\ D2_drops_are_k_minus_1  /\ exists reachVars (D3_1_reachability) -> D4_1_all_connected ) 
-is_reach = Exists( setR1_steady_state_reachability_defination, And(D3_1_reachability, D4_1_all_connected) )
+is_reach = Exists( setR1_connectivity, And(D3_1_reachability, D4_1_all_connected) )
 
 k_min_1_connected = ForAll( setDump1,
-                            Implies( And( D1_edge_exists, D2_drops_are_k_minus_1), is_reach ))
+                            Implies( And( D1_1_edge_exists, D2_1_drops_are_k_minus_1), is_reach ))
 
-is_reach = Exists( setR2_steady_state_stability, And(D33_2_reachability, D44_2_some_disconnected) )
+is_reach = Exists( setR2_connectivity, And(D3_2_reachability, D4_2_some_disconnected) )
 
-k_not_connected = Exists( setDump2, And( D11_edge_exists, D22_drops_are_k, is_reach ) )
-
-connectivity = And( k_min_1_connected, k_not_connected )
-k_not_connected = Exists( setDump2, And( D11_edge_exists, D22_drops_are_k, is_reach ) )
+k_not_connected = And( D1_2_edge_exists, D2_2_drops_are_k, is_reach )
 
 connectivity = And( k_min_1_connected, k_not_connected )
 
@@ -612,9 +608,9 @@ connectivity = And( k_min_1_connected, k_not_connected )
 
 s = Solver()
 # Sufficient condition check
-s.add( Exists( setE, And( ForAll( setDump1, Implies( And( D1_edge_exists, D2_drops_are_k_minus_1), Exists( setR1_steady_state_reachability_defination, And( D3_1_reachability, D4_1_all_connected)) ) ), ForAll (setDump2, Implies( And (D11_edge_exists, D22_drops_are_k ), Exists( setR2_steady_state_stability, And( D33_2_reachability, D44_2_some_disconnected) ))) ) ))
+# s.add( Exists( setE, And( ForAll( setDump1, Implies( And( D1_edge_exists, D2_drops_are_k_minus_1), Exists( setR1_steady_state_reachability_defination, And( D3_1_reachability, D4_1_all_connected)) ) ), ForAll (setDump2, Implies( And (D11_edge_exists, D22_drops_are_k ), Exists( setR2_steady_state_stability, And( D33_2_reachability, D44_2_some_disconnected) ))) ) ))
     
-#s.add( Exists( setE, connectivity) )
+s.add( connectivity )
 
 # Neccessary condition Check.
 #s.add (Activity_node, Activity_edge, V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, V7_fusion_edge_must_fuse_with_target, V8_fusion2_edge_potentially_not_fuse_anythingelse, R1_steady_state_reachability_defination, R2_steady_state_stability, D1, D2, D3, D4)
