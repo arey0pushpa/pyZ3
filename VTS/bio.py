@@ -61,8 +61,8 @@ setDump2 =  [ dump2[i][j][q] for i in range(N) for j in range(N) for q in range(
 r1 = [ [Bool ("r1_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
 r2 = [ [Bool ("r2_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
 
-setR1 = [ r1[i][j] for i in range(N) for j in range(N) if i != j]
-setR2 = [ r2[i][j] for i in range(N) for j in range(N) if i != j]
+setR1_steady_state_reachability_defination = [ r1[i][j] for i in range(N) for j in range(N) if i != j]
+setR2_steady_state_stability = [ r2[i][j] for i in range(N) for j in range(N) if i != j]
 
 node = [ [Bool ("n_{}_{}".format(i,k)) for k in range(M)] for i in range(N)]
 setN = [ node[i][k] for i in range(N) for k in range(M)]
@@ -117,7 +117,7 @@ def f_ne():
 # Regulation : Boolean on Node. 
 # Activity of a moolecule k on a node is a Boolean function of presence of 
 # Other molecule present on that node/edge.
-# A0. active_node[k] =  f_n[k](\/_{k1 != k} node(k1)) 
+# Activity_node. active_node[k] =  f_n[k](\/_{k1 != k} node(k1)) 
 def f_bn():
    # print "I am here!!"
     s = []
@@ -141,7 +141,7 @@ def f_bn():
 # Regulation : Boolean on Edge. 
 # Activity of the molecules on the edge is driven by the 
 # chosen boolean function. 
-# A1. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
+# Activity_edge. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
 def f_be():
     s = []
     A_list = []
@@ -194,52 +194,52 @@ def f_se():
 
 # Setting Activity Bits --------------------------
 
-A0 = True 
-A1 = True
+Activity_node = True 
+Activity_edge = True
 
 if V == 1:
-    A0 = f_bn() 
-    A1 = f_be()
-    #print A0
-    #print A1
+    Activity_node = f_bn() 
+    Activity_edge = f_be()
+    #print Activity_node
+    #print Activity_edge
     #exit(0)
 elif V == 2:
-    A0 = f_nn()
-    A1 = f_be()
-    #print A0
-    #print A1
+    Activity_node = f_nn()
+    Activity_edge = f_be()
+    #print Activity_node
+    #print Activity_edge
 elif V == 3:
-    A0 = f_bn()
-    A1 = f_se()
-    #print A1
+    Activity_node = f_bn()
+    Activity_edge = f_se()
+    #print Activity_edge
     #exit(0)
 elif V == 4:
-    A0 = f_nn()
-    A1 = f_se()
+    Activity_node = f_nn()
+    Activity_edge = f_se()
 elif V == 5:
-    A0 = f_bn()
-    A1 = f_ne()
+    Activity_node = f_bn()
+    Activity_edge = f_ne()
 else:
-    A0 = f_nn()
-    A1 = f_ne()
+    Activity_node = f_nn()
+    Activity_edge = f_ne()
 
 #xx = time.time() - st
 #print "Building A's took...", str(xx)
 #st = time.time()
-# print A0
-# print A1
+# print Activity_node
+# print Activity_edge
 
 
 # Add constraints one by one ------------
 
-# SET OF BASIC CONSTRAINTS V1-V6 ####
+# SET OF BASIC CONSTRAINTS V1_molecule_presence_require_for_present_edge-V6_pairing_matrix_restrictions ####
 
-# Constraint V1 ----------------------
-# V1 : For an edge to exist it should have one molecule present.
+# Constraint V1_molecule_presence_require_for_present_edge ----------------------
+# V1_molecule_presence_require_for_present_edge : For an edge to exist it should have one molecule present.
 # Basic intuition: \/_k e_ijk -> e_ij  
 # Implementation: /\_ijq ( (\/_m e_ijqm) -> e_ijq) 
 # DANGER :: Involve equality and we'll might it while doing validity check.
-V1 = True
+V1_molecule_presence_require_for_present_edge = True
 for i in range(N):
     for j in range(N):
         if j == i:
@@ -248,14 +248,14 @@ for i in range(N):
             rhs = False
             for k in range(M):
                 rhs = Or( presence_edge[i][j][q][k], rhs )
-            V1 = And (Implies (rhs, edge[i][j][q]), V1)
-#print V1
+            V1_molecule_presence_require_for_present_edge = And (Implies (rhs, edge[i][j][q]), V1)
+#print V1_molecule_presence_require_for_present_edge
 
-# Constraint V2 ----------------------
-# V2 : If molecule is active on an edge then it should be present on the edge.
+# Constraint V2_active_molecule_should_be_present ----------------------
+# V2_active_molecule_should_be_present : If molecule is active on an edge then it should be present on the edge.
 # Basic intuition :  b_ijk -> e_ijk   
 # Implementation : /\_ijqm b_ijqm -> e_ijqm 
-V2 = True
+V2_active_molecule_should_be_present = True
 F1_list = []
 for i in range(N):
     for j in range(N):
@@ -264,63 +264,63 @@ for i in range(N):
         for q in range(Q):
             for k in range(M):
                 F1_list.append( Implies(active_edge[i][j][q][k], presence_edge[i][j][q][k]) )
-V2 = And( F1_list )
-#print V2
+V2_active_molecule_should_be_present = And( F1_list )
+#print V2_active_molecule_should_be_present
 
-# Constraint V3 ----------------------
-# V3 : A mmolecule should be present to be active.
+# Constraint V3_active_molecule_on_node_should_be_present ----------------------
+# V3_active_molecule_on_node_should_be_present : A mmolecule should be present to be active.
 # Implementation: /\_i,m (a_im -> n_im) 
-V3 = True 
-A1_list = []
+V3_active_molecule_on_node_should_be_present = True 
+Activity_edge_list = []
 for i in range(N):
     for k in range(M):
         l = Implies ( active_node[i][k], node[i][k])
-        A1_list.append(l) 
-V3 = And (A1_list)
-#print V3
+        Activity_edge_list.append(l) 
+V3_active_molecule_on_node_should_be_present = And (Activity_edge_list)
+#print V3_active_molecule_on_node_should_be_present
 
-# Constraint V4 -------------------------
-# V4 : The edge label are subset of the source and target.
+# Constraint V4_edgelabel_subset_of_nodelabel -------------------------
+# V4_edgelabel_subset_of_nodelabel : The edge label are subset of the source and target.
 # Basic Intution: e_ijk -> a_ik and a_jk
 # Implementation: /\_i,j,q,m (e_ijqm -> (n_im and n_jm))
-V4 = True
+V4_edgelabel_subset_of_nodelabel = True
 for i in range(N):
     for j in range(N):
         if i == j :
             continue
         for q in range(Q):
             for k in range(M):
-                V4 = And (Implies( presence_edge[i][j][q][k], And( node[i][k], node[j][k]) ), V4)
+                V4_edgelabel_subset_of_nodelabel = And (Implies( presence_edge[i][j][q][k], And( node[i][k], node[j][k]) ), V4)
 
-# Constraint V5 -------------------------
-# V5: Self edges not allowed. 
+# Constraint V5_self_edge_not_allowed -------------------------
+# V5_self_edge_not_allowed: Self edges not allowed. 
 # Basic Intuition: ~ e_ii  
 # Implemenatation: /\_i,q (not e_i,i,q) 
-V5 = True
+V5_self_edge_not_allowed = True
 for i in range(N):
     for q in range(Q):
-        V5 = And( Not(edge[i][i][q]), V5)
+        V5_self_edge_not_allowed = And( Not(edge[i][i][q]), V5)
 
 
-# Constraint V6 ------------------------
-# V6: Only Q R entry has possible non zero entry.  
+# Constraint V6_pairing_matrix_restrictions ------------------------
+# V6_pairing_matrix_restrictions: Only Q R entry has possible non zero entry.  
 # Basic intuition: \/_{x<M/2,y>=M/2} !p(x,y) and !p(y,x)
 # Implementation: /\_( (x < M/2 and y < M/2) or (x >= M/2 and y >= M/2))
-V6 = True
+V6_pairing_matrix_restrictions = True
 for x in range(M):
     for y in range(M):
         if ( ((x < M/2) and (y < M/2)) or ((x>=M/2) and (y >=M/2)) ):
-            V6 = And (Not(p[x][y]), V6)
+            V6_pairing_matrix_restrictions = And (Not(p[x][y]), V6)
 
 
 # WELL FUSED CONSTRAINTS ###### 
 
-# Constraint V7 ----------------------
+# Constraint V7_fusion_edge_must_fuse_with_target ----------------------
 # Each edge must fuse with its destination node.
 # Fuse : There should be an active pair corresponding to pairing matrix 
 #        on the edge and target node.
 # Implementation : /\_ijq e_ijq -> \/_m,m' (b_ijqm and a_jm' and p_mm') 
-V7 = True
+V7_fusion_edge_must_fuse_with_target = True
 A_list = []
 for i in range(N):
     for j in range(N):
@@ -335,15 +335,15 @@ for i in range(N):
 	            lhs = Or ( And (active_edge[i][j][q][k], And (active_node[j][k1],p[k][k1])), lhs)  
             w =  Implies (edge[i][j][q], lhs)
             A_list.append(w)
-V7 = And(A_list)
-#print V7
+V7_fusion_edge_must_fuse_with_target = And(A_list)
+#print V7_fusion_edge_must_fuse_with_target
 
 
-# Constraint V8 ----------------------
-# V8 : Edge should not be able to potentially fuse with any node other than
+# Constraint V8_fusion2_edge_potentially_not_fuse_anythingelse ----------------------
+# V8_fusion2_edge_potentially_not_fuse_anythingelse : Edge should not be able to potentially fuse with any node other than
 #      than its target node.
 # Implementation: /\_ijqk b_ijqk -> not (/\_(j' != k", m'') a_j'm" and p_mm" )
-V8 = True
+V8_fusion2_edge_potentially_not_fuse_anythingelse = True
 A_list = []
 for i in range(N):
     for j in range(N):
@@ -361,17 +361,17 @@ for i in range(N):
 		        lhs = Or (And ( active_node[j1][k11], p[k][k11]), lhs)
 	        w = Implies( active_edge[i][j][q][k], Not(lhs))
                 A_list.append(w)
-V8 = And(A_list)
+V8_fusion2_edge_potentially_not_fuse_anythingelse = And(A_list)
 
 # STABILITY CONDITION #########
 
-# Constraint R1 ----------------------
-# R1 : Encode Reachability 
+# Constraint R1_steady_state_reachability_defination ----------------------
+# R1_steady_state_reachability_defination : Encode Reachability 
 # " nodes i,j is reachable with kth molecule in z steps if 
 #   there is an edge between i'' and j (i != i'') with k 
 #   present on that edge  and i'' is reachable from i in z steps.
 # Implemetation : /\_ijmp r_ijmp -> (\/_q e_ijqm or \/_i!=i' (\/_q e_ii'qm and r_i'jmp-1) )
-R1 = True
+R1_steady_state_reachability_defination = True
 A_list = []
 for i in range(N):
     for j in range(N):
@@ -394,11 +394,11 @@ for i in range(N):
                         lhs = Or (And ( r[l][j][k][z-1],pe), lhs)   
                     w  = Implies (r[i][j][k][z], lhs)
                     A_list.append(w)
-R1 = And(A_list)
-#print R1
+R1_steady_state_reachability_defination = And(A_list)
+#print R1_steady_state_reachability_defination
 
 
-# Constraint R2 ----------------------
+# Constraint R2_steady_state_stability ----------------------
 # Encode stability using the reachability variables. 
 # If there is an m-edge between i and j, there is m reachble path from j and i.
 # Implementation: /\_i,j,m (\/_q e_ijqm) -> r_ijqU
@@ -416,8 +416,8 @@ for i in range(N):
                 lhs = Or (r[j][i][k][z], lhs)
             l  = Implies (rhs, lhs)
             A_list.append(l)
-R2 = And(A_list)
-#print R2
+R2_steady_state_stability = And(A_list)
+#print R2_steady_state_stability
 
 
 #fss = time.time() - st
@@ -586,12 +586,12 @@ for i in range(N):
         node[i][k] = True
 
 # first one - for all drops ( D1_edge_exists /\ D2_drops_are_k_minus_1  /\ exists reachVars (D3_1_reachability) -> D4_1_all_connected ) 
-is_reach = Exists( setR1, And(D3_1_reachability, D4_1_all_connected) )
+is_reach = Exists( setR1_steady_state_reachability_defination, And(D3_1_reachability, D4_1_all_connected) )
 
 k_min_1_connected = ForAll( setDump1,
                             Implies( And( D1_edge_exists, D2_drops_are_k_minus_1), is_reach ))
 
-is_reach = Exists( setR2, And(D33_2_reachability, D44_2_some_disconnected) )
+is_reach = Exists( setR2_steady_state_stability, And(D33_2_reachability, D44_2_some_disconnected) )
 
 k_not_connected = Exists( setDump2, And( D11_edge_exists, D22_drops_are_k, is_reach ) )
 
@@ -613,17 +613,17 @@ connectivity = And( k_min_1_connected, k_not_connected )
 
 s = Solver()
 
-s.add( Exists( setE, And( ForAll( setDump1, Implies( And( D1_edge_exists, D2_drops_are_k_minus_1), Exists( setR1, And( D3_1_reachability, D4_1_all_connected)) ) ), ForAll (setDump2, Implies( And (D11_edge_exists, D22_drops_are_k ), Exists( setR2, And( D33_2_reachability, D44_2_some_disconnected) ))) ) ))
+s.add( Exists( setE, And( ForAll( setDump1, Implies( And( D1_edge_exists, D2_drops_are_k_minus_1), Exists( setR1_steady_state_reachability_defination, And( D3_1_reachability, D4_1_all_connected)) ) ), ForAll (setDump2, Implies( And (D11_edge_exists, D22_drops_are_k ), Exists( setR2_steady_state_stability, And( D33_2_reachability, D44_2_some_disconnected) ))) ) ))
     
 #s.add( Exists( setE, connectivity) )
 
 # Updated check for qbf formula. Suff condition.
 #rst = And (D1, D3)
 #rest = And (D1, D11, D3, D33)
-#kconn =  ForAll (setDump1, Implies (D2, Exists (setR1, D4)) )  
+#kconn =  ForAll (setDump1, Implies (D2, Exists (setR1_steady_state_reachability_defination, D4)) )  
 #print kconn 
 #exit(0)
-#notk1conn = ForAll (setDump2, Implies (D22, Exists (setR2, D44)) )  
+#notk1conn = ForAll (setDump2, Implies (D22, Exists (setR2_steady_state_stability, D44)) )  
 #wwe = And (kconn, notk1conn, rest)
 
 # Sufficient condition check
@@ -631,25 +631,25 @@ s.add( Exists( setE, And( ForAll( setDump1, Implies( And( D1_edge_exists, D2_dro
 #xxx = Exists (setE, wwe) 
 #s.add (Exists (setE, wwe) )
 
-#xxx =  (Exists (setE, ForAll (setDump1, And (Implies (D2, Exists (setR1, D4)) , D1, D3) ) ) )  
+#xxx =  (Exists (setE, ForAll (setDump1, And (Implies (D2, Exists (setR1_steady_state_reachability_defination, D4)) , D1, D3) ) ) )  
 
-#xxx = Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1, D4))) ) ,  ForAll (setDump2, And (Implies (D22, Exists (setR2, D44))) ), D1, D11, D3, D33) )  
+#xxx = Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1_steady_state_reachability_defination, D4))) ) ,  ForAll (setDump2, And (Implies (D22, Exists (setR2_steady_state_stability, D44))) ), D1, D11, D3, D33) )  
 #print xxx
 #exit(0)
 
 # This cause Core dump.
-#s.add (Exists (setE, ForAll (setDump1, And (Implies (D2, Exists (setR1, D4)) , D1, D3) ) ) ) 
+#s.add (Exists (setE, ForAll (setDump1, And (Implies (D2, Exists (setR1_steady_state_reachability_defination, D4)) , D1, D3) ) ) ) 
 
 # BUT This Does't not ----
-#s.add( Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1, D4))) ),  ForAll (setDump2, And (Implies (D22, Exists (setR2, D44))) ), D1, D11, D3, D33) )  )
+#s.add( Exists (setE, And (ForAll (setDump1, And (Implies (D2, Exists (setR1_steady_state_reachability_defination, D4))) ),  ForAll (setDump2, And (Implies (D22, Exists (setR2_steady_state_stability, D44))) ), D1, D11, D3, D33) )  )
 
-# s.add( Exists( setE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1, Exists (setR2 , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33) )  )) )  ) ))
+# s.add( Exists( setE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1_steady_state_reachability_defination, Exists (setR2_steady_state_stability , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33) )  )) )  ) ))
 
 # NOISE WITH EDGES:
-# s.add( Exists ( setE, ForAll(setN, ForAll( setPresentE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1, Exists (setR2 , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33, V1, V4, V5) )  )) )  ) ) ) ) )
+# s.add( Exists ( setE, ForAll(setN, ForAll( setPresentE, ForAll (setDump1, (ForAll (setDump2, Exists (setR1_steady_state_reachability_defination, Exists (setR2_steady_state_stability , And ( Implies (D2, D4), Implies (D22, D44),  D1, D11, D3, D33, V1_molecule_presence_require_for_present_edge, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed) )  )) )  ) ) ) ) )
 
 # Neccessary condition Check.
-#s.add (A0, A1, V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4)
+#s.add (Activity_node, Activity_edge, V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, V7_fusion_edge_must_fuse_with_target, V8_fusion2_edge_potentially_not_fuse_anythingelse, R1_steady_state_reachability_defination, R2_steady_state_stability, D1, D2, D3, D4)
 
 print "solving...\n"
 #st = time.time()
@@ -736,22 +736,38 @@ else:
 
 # Stage 1: Convert The Formula Into CNF
 #g = Goal()
-#g.add (V1, V2, V3, V4, V5, V6, V7, V8, R1, R2, D1, D2, D3, D4) 
-##print g
-## t is a tactic that reduces a Boolean problem into propositional CNF
+#g.add( Exists( setE, And( ForAll( setDump1, Implies( And( D1_edge_exists, D2_drops_are_k_minus_1), Exists( setR1_steady_state_reachability_defination, And( D3_1_reachability, D4_1_all_connected)) ) ), ForAll (setDump2, Implies( And (D11_edge_exists, D22_drops_are_k ), Exists( setR2_steady_state_stability, And( D33_2_reachability, D44_2_some_disconnected) ))) ) ))
+##g.add (V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, V7_fusion_edge_must_fuse_with_target, V8_fusion2_edge_potentially_not_fuse_anythingelse, R1_steady_state_reachability_defination, R2_steady_state_stability) 
+### t is a tactic that reduces a Boolean problem into propositional CNF
 #t = Then('simplify', 'tseitin-cnf')
 #subgoal = t(g)
+##print subgoal
 #assert len(subgoal) == 1
-
-
-## Traverse each clause of the first subgoal
+#
+## Try to solve the formula using qsat
+#t = Then('simplify','qe','qsat')
+#
+#r = t(g)
+## r contains only one subgoal
+#print r
+#
+#s = Solver()
+#s.add(r[0])
+#print s.check()
+## Model for the subgoal
+#print s.model()
+## Model for the original goal
+#print r.convert_model(s.model())
+#
+#print '\nPrinting CNF formulas:'
+### Traverse each clause of the first subgoal
 #for c in subgoal[0]:
 #        #print "children: ", c.children()
 #        #print "1st child:", c.arg(0)
 #        #print "operator: ", c.decl()
 #        #print "op name:  ", c.decl().name()
 #        print c
-
+#
 # Stage 2 : Convert CNF to QDIMAC
 # Accessing the structure of a Z3 expression via the API
 # Check goal.cpp goal::display_dimacs
