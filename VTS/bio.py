@@ -588,8 +588,7 @@ for i in range(N):
             continue
         rijji = Or (r2[i][j], r2[j][i])
         D44_list.append( rijji )
-D44 = And( D44_list )
-D4_2_some_disconnected = Not(D44)
+D4_2_some_disconnected = Not( And( D44_list ) )
 
 # Dummy molecule presence.
 for i in range(N):
@@ -602,13 +601,16 @@ k_min_1_connected = ForAll( setDump1,
                             Implies( And(D2_1_drops_are_k_minus_1, D1_1_edge_exists) ,
                                      is_reach ) )
 
-#is_reach = Exists( setR2_connectivity, And(D3_2_reachability, D4_2_some_disconnected) )
+is_reach = And(D3_2_reachability, D4_2_some_disconnected)
+k_not_connected =  And( D2_2_drops_are_k, D1_2_edge_exists, is_reach)
 
-#k_not_connected = ForAll( setDump2, Implies( And(D2_2_drops_are_k, D1_2_edge_exists), is_reach) )
+# is_reach = Exists( setR2_connectivity, And(D3_2_reachability, D4_2_some_disconnected) )
+
+# k_not_connected = ForAll( setDump2, Implies( And(D2_2_drops_are_k, D1_2_edge_exists), is_reach) )
 
 connectivity = And( At_least_k_edges, k_min_1_connected, k_not_connected )
 
-# connectivity = And( At_least_k_edges, k_min_1_connected )
+# connectivity = And( k_not_connected )
 
 #dx = time.time() - st
 #print "D0-D3 Building took", str(dx)
@@ -660,7 +662,7 @@ def dump_dot( filename, m ) :
                 if is_true(m[edge[i][j][q]]):
                     #label = str(k)
                     color = "black"
-                    dfile.write( str(i) + "-> " + str(j) +  "color=" + color +"\n" )
+                    dfile.write( str(i) + "-> " + str(j) +  "[color=" + color +"]\n" )
     dfile.write("}\n")
 
 ## Printing the Graph ##########
