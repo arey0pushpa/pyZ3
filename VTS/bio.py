@@ -602,9 +602,9 @@ k_min_1_connected = ForAll( setDump1,
                             Implies( And(D2_1_drops_are_k_minus_1, D1_1_edge_exists) ,
                                      is_reach ) )
 
-is_reach = Exists( setR2_connectivity, And(D3_2_reachability, D4_2_some_disconnected) )
+#is_reach = Exists( setR2_connectivity, And(D3_2_reachability, D4_2_some_disconnected) )
 
-k_not_connected = And( D1_2_edge_exists, D2_2_drops_are_k, is_reach )
+#k_not_connected = ForAll( setDump2, Implies( And(D2_2_drops_are_k, D1_2_edge_exists), is_reach) )
 
 connectivity = And( At_least_k_edges, k_min_1_connected, k_not_connected )
 
@@ -627,7 +627,7 @@ s = Solver()
 s.add( connectivity )
 
 # Neccessary condition Check.
-#s.add (Activity_node, Activity_edge, V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, V7_fusion_edge_must_fuse_with_target, V8_fusion2_edge_potentially_not_fuse_anythingelse, R1_steady_state_reachability_defination, R2_steady_state_stability, D1, D2, D3, D4)
+#s.add (Activity_node, Activity_edge, V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, V7_fusion_edge_must_fuse_with_target, V8_fusion2_edge_potentially_not_fuse_anythingelse, R1_steady_state_reachability_defination, R2_steady_state_stability)
 
 print "solving...\n"
 #st = time.time()
@@ -650,7 +650,7 @@ def dump_dot( filename, m ) :
                 node_vec = node_vec + "0"
             if is_true(m[active_node[i][k]]) :
                 node_vec = node_vec + "-"
-        dfile.write( str(i) + "[label=\"" + node_vec + "\"]\n")
+        dfile.write( str(i) + "\n")
         for j in range(N):
             if i == j:
                 continue
@@ -658,9 +658,9 @@ def dump_dot( filename, m ) :
                # for k in range(M):  
                 style = "solid"
                 if is_true(m[edge[i][j][q]]):
-                    label = str(k)
+                    #label = str(k)
                     color = "black"
-                    dfile.write( str(i) + "-> " + str(j) + "[label=" + label +",color=" + color + ",style=" + style + "]" +"\n" )
+                    dfile.write( str(i) + "-> " + str(j) +  "color=" + color +"\n" )
     dfile.write("}\n")
 
 ## Printing the Graph ##########
