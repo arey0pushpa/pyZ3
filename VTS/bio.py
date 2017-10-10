@@ -531,8 +531,8 @@ for i in range(N):
             for q in range(Q):
                 rhs = Or( And( edge[i][l][q], Not (dump1[i][l][q]) ), rhs)
             rhs = And( rhs, r1[l][j])
-        # w = Implies( r1[i][j], Or (bhs , rhs) )
-        w = Implies( Or(bhs , rhs), r1[i][j] )
+        w = Implies( r1[i][j], Or (bhs , rhs) )
+        # w = Implies( Or(bhs , rhs), r1[i][j] )
         A_list.append(w)
 D3_1_reachability = And(A_list)
 
@@ -606,9 +606,9 @@ is_reach = Exists( setR2_connectivity, And(D3_2_reachability, D4_2_some_disconne
 
 k_not_connected = And( D1_2_edge_exists, D2_2_drops_are_k, is_reach )
 
-# connectivity = And( k_min_1_connected, k_not_connected )
+connectivity = And( At_least_k_edges, k_min_1_connected, k_not_connected )
 
-connectivity = And( At_least_k_edges, k_min_1_connected )
+# connectivity = And( At_least_k_edges, k_min_1_connected )
 
 #dx = time.time() - st
 #print "D0-D3 Building took", str(dx)
