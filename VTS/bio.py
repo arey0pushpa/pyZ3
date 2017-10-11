@@ -495,7 +495,6 @@ L = len(d2)
 oneList = []
 for i in range(L):
     oneList.append(1)
-print oneList
 
 z = zip (d2, oneList)
 
@@ -505,7 +504,7 @@ D2_2_drops_are_k = PbEq (z, C)
 oneList = []
 for i in range(lenE):
     oneList.append(1)
-print oneList
+#print oneList
 
 xzx = zip(setE, oneList)
 At_least_k_edges = PbGe(xzx, C)
@@ -524,15 +523,17 @@ for i in range(N):
         bhs = False
         for q in range(Q):
             bhs = Or( And (edge[i][j][q], Not(dump1[i][j][q]) ), bhs) 
-        rhs = False
+        kbc = False
         for l in range(N):
             if i == l or j == l:
                 continue
+            rhs = False
             for q in range(Q):
                 rhs = Or( And( edge[i][l][q], Not (dump1[i][l][q]) ), rhs)
             rhs = And( rhs, r1[l][j])
-        w = Implies( r1[i][j], Or (bhs , rhs) )
-        # w = Implies( Or(bhs , rhs), r1[i][j] )
+            kbc = Or ( kbc, rhs) 
+        #w = Implies( r1[i][j], Or (bhs , rhs) )
+        w = Implies( Or(bhs , kbc), r1[i][j] )
         A_list.append(w)
 D3_1_reachability = And(A_list)
 
@@ -547,19 +548,70 @@ for i in range(N):
         bhs = False
         for q in range(Q):
             bhs = Or( And( edge[i][j][q], Not(dump2[i][j][q]) ), bhs) 
-        rhs = False
+        kbc = False
         for l in range(N):
             if i == l or j == l:
                 continue
+            rhs = False
             for q in range(Q):
                 rhs = Or( And( edge[i][l][q], Not(dump2[i][l][q])), rhs)
-            rhs = And (rhs, r2[l][j])
-        # w = Implies( r2[i][j], Or (bhs , rhs) )
-        w = Implies (Or (bhs , rhs), r2[i][j] )
+            rhs = And (r2[l][j], rhs)
+            kbc = Or ( kbc , rhs) 
+        #w = Implies( r2[i][j], Or (bhs , rhs) )
+        w = Implies (Or (bhs , kbc), r2[i][j] )
         A_list.append(w)
 D3_2_reachability = And(A_list)
-#print D33
+#print D3_2_reachability
+#exit(0)
 
+## INITIAL RECHABILITY ATTEMPT:
+## Constraint D3 ----------------------
+## D3 : New reachability for the connectivity check.
+## Implementation :  /\_ij [ (\/_q eijq and not d_ijq) or (\/_i!=i' r'_i'j and \/_q (e_ii'q and not d_ii'q) ) ] -> \/_ij r'_ij 
+##D3 = True
+#A_list = []
+#for i in range(N):
+#    for j in range(N):
+#        if i == j:
+#            continue
+#        bhs = False
+#        for q in range(Q):
+#            bhs = Or( And (edge[i][j][q], Not(dump1[i][j][q]) ), bhs) 
+#        rhs = False
+#        for l in range(N):
+#            if i == l or j == l:
+#                continue
+#            for q in range(Q):
+#                rhs = Or( And( edge[i][l][q], Not (dump1[i][l][q]) ), rhs)
+#            rhs = And( rhs, r1[l][j])
+#        #w = Implies( r1[i][j], Or (bhs , rhs) )
+#        w = Implies( Or(bhs , rhs), r1[i][j] )
+#        A_list.append(w)
+#D3_1_reachability = And(A_list)
+#
+#
+##------------------------------------------
+## Reachability for the second set of variables.
+#A_list = []
+#for i in range(N):
+#    for j in range(N):
+#        if i == j:
+#            continue
+#        bhs = False
+#        for q in range(Q):
+#            bhs = Or( And( edge[i][j][q], Not(dump2[i][j][q]) ), bhs) 
+#        rhs = False
+#        for l in range(N):
+#            if i == l or j == l:
+#                continue
+#            for q in range(Q):
+#                rhs = Or( And( edge[i][l][q], Not(dump2[i][l][q])), rhs)
+#            rhs = And (rhs, r2[l][j])
+#        # w = Implies( r2[i][j], Or (bhs , rhs) )
+#        w = Implies (Or (bhs , rhs), r2[i][j] )
+#        A_list.append(w)
+#D3_2_reachability = And(A_list)
+##print D33
 
 # Constraint D4 ----------------------
 # D4 : Graph remains connected after k-1 drops.
@@ -567,12 +619,14 @@ D3_2_reachability = And(A_list)
 D4 = True
 D4_list = []
 for i in range(N):
-    for j in range(N):
+    for j in range(i+1, N):
         if i == j:
             continue
         rijji = Or (r1[i][j], r1[j][i])
         D4_list.append( rijji )
 D4_1_all_connected = And( D4_list )
+#print D4_1_all_connected
+#exit(0)
 
 #D4 = Not(D4)
 #print D4
@@ -580,15 +634,17 @@ D4_1_all_connected = And( D4_list )
 # ---------------------
 # D44 : For second set of variables.
 # D4 : Graph becomes disconnected after k drops.
-D44 = True
+#D44 = True
 D44_list = []
 for i in range(N):
-    for j in range(N):
+    for j in range(i+1, N):
         if i == j:
             continue
         rijji = Or (r2[i][j], r2[j][i])
         D44_list.append( rijji )
 D4_2_some_disconnected = Not( And( D44_list ) )
+#print D4_2_some_disconnected
+#exit(0)
 
 # Dummy molecule presence.
 for i in range(N):
@@ -603,12 +659,16 @@ k_min_1_connected = ForAll( setDump1,
 
 is_reach = And(D3_2_reachability, D4_2_some_disconnected)
 k_not_connected =  And( D2_2_drops_are_k, D1_2_edge_exists, is_reach)
+#print k_not_connected
+#exit(0)
 
 # is_reach = Exists( setR2_connectivity, And(D3_2_reachability, D4_2_some_disconnected) )
 
 # k_not_connected = ForAll( setDump2, Implies( And(D2_2_drops_are_k, D1_2_edge_exists), is_reach) )
 
 connectivity = And( At_least_k_edges, k_min_1_connected, k_not_connected )
+#print connectivity
+#exit(0)
 
 # connectivity = And( k_not_connected )
 
