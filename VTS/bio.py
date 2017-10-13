@@ -532,8 +532,8 @@ for i in range(N):
                 rhs = Or( And( edge[i][l][q], Not (dump1[i][l][q]) ), rhs)
             rhs = And( rhs, r1[l][j])
             kbc = Or ( kbc, rhs) 
-        #w = Implies( r1[i][j], Or (bhs , rhs) )
-        w = Implies( Or(bhs , kbc), r1[i][j] )
+        w = Implies( r1[i][j], Or (bhs , rhs) )
+        # w = Implies( Or(bhs , kbc), r1[i][j] )
         A_list.append(w)
 D3_1_reachability = And(A_list)
 
@@ -722,6 +722,8 @@ def dump_dot( filename, m ) :
                 if is_true(m[edge[i][j][q]]):
                     #label = str(k)
                     color = "black"
+                    if is_true(m[dump2[i][j][q]]):
+                        color = "red"
                     dfile.write( str(i) + "-> " + str(j) +  "[color=" + color +"]\n" )
     dfile.write("}\n")
 
