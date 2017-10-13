@@ -3,7 +3,7 @@
 from z3 import *
 print z3.__file__
 import argparse
-import itertools
+
 import time
 
 #----------------------------------------------------
@@ -49,6 +49,7 @@ for i in range(6):
 #----------------------------------------------------
 # Constraint generation 
 edge = [ [ [ Bool ("e_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
+
 setE = [ edge[i][j][q] for i in range(N) for j in range(N) for q in range(Q) if i != j]
 
 lenE = len(setE)
@@ -89,6 +90,7 @@ f_n = [Function ("an_{}".format(m), *sorts) for m in range(M)]
 f_e = [Function ("ae_{}".format(m), *sorts) for m in range(M)] 
 
 st = time.time()
+ 
 
 # REGULATION MECHANISM VARIATION #####
 
@@ -654,31 +656,27 @@ for i in range(N):
     for k in range(M):
         node[i][k] = True
 
-
-# K-1 Connectivity constraints. ####### 
 is_reach = Exists( setR1_connectivity, And(D3_1_reachability, D4_1_all_connected) )
-k_min_1_connected = ForAll( setDump1, Implies( D2_1_drops_are_k_minus_1, is_reach ) )
 
-# K disconnectivity constraints. ########
+k_min_1_connected = ForAll( setDump1,
+                            Implies( And(D2_1_drops_are_k_minus_1, D1_1_edge_exists) ,
+                                     is_reach ) )
+
 is_reach = And(D3_2_reachability, D4_2_some_disconnected)
 k_not_connected =  And( D2_2_drops_are_k, D1_2_edge_exists, is_reach)
+#print k_not_connected
+#exit(0)
 
 # is_reach = Exists( setR2_connectivity, And(D3_2_reachability, D4_2_some_disconnected) )
+
 # k_not_connected = ForAll( setDump2, Implies( And(D2_2_drops_are_k, D1_2_edge_exists), is_reach) )
 
-# Graph is K connected. ######
 connectivity = And( At_least_k_edges, k_min_1_connected, k_not_connected )
-
 #connectivity = And( At_least_k_edges, k_min_1_connected )
 #print connectivity
 #exit(0)
 
-# V1-V6 and R1, R2
-allconstraints = And (V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, R1_steady_state_reachability_defination, R2_steady_state_stability)
-
-parameter = [setN] + [setActiveN] + [setPresentE] + [setActiveE] + [setPairingM]
-
-qv =  list(itertools.chain(*parameter))
+# connectivity = And( k_not_connected )
 
 #dx = time.time() - st
 #print "D0-D3 Building took", str(dx)
@@ -691,35 +689,20 @@ qv =  list(itertools.chain(*parameter))
 # Create Solver and add constraints in it.
 
 s = Solver()
+
+not_function = 
+for i in range(N):
+    for j in range(
+
+# V1-V6 and R1, R2
+allconstraints = And (V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, R1_steady_state_reachability_defination, R2_steady_state_stability)
+
+s.add( Exists( setE, And( connectivity, ForAll ( Implies( allconnstraints 
+
 # Sufficient condition check
 # s.add( Exists( setE, And( ForAll( setDump1, Implies( And( D1_edge_exists, D2_drops_are_k_minus_1), Exists( setR1_steady_state_reachability_defination, And( D3_1_reachability, D4_1_all_connected)) ) ), ForAll (setDump2, Implies( And (D11_edge_exists, D22_drops_are_k ), Exists( setR2_steady_state_stability, And( D33_2_reachability, D44_2_some_disconnected) ))) ) ))
-
-#---------- NOT A FUNCTION --###
-# Constraint that if two nodes are identical hence the activity of the molecules is same but there is no such function.
-# Step1: Flattening.
-nodeList = []
-for i in range(N):
-    dummyList = [] 
-    for k in range(M):
-        dummyList.append(node[i][k])
-    nodeList.append(dummyList)
-
-nl = len(nodeList)
-
-# Step 2: Build the constraint. 
-Nf_list = []
-for i in range(nl):
-    for j in range(i+1, nl):
-        lhs = (nodeList[i] == nodeList[j]) 
-        rhs = True
-        for k in range(M):
-            rhs = And (active_node[i][k] == active_node[j][k], rhs) 
-        Nf_list.append( Implies (lhs, rhs) ) 
-not_a_function = Not( And( Nf_list ) ) 
-
-s.add( Exists( setE, And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) )))  
-  
-# s.add( connectivity )
+    
+s.add( connectivity )
 
 # Neccessary condition Check.
 #s.add (Activity_node, Activity_edge, V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, V7_fusion_edge_must_fuse_with_target, V8_fusion2_edge_potentially_not_fuse_anythingelse, R1_steady_state_reachability_defination, R2_steady_state_stability)
@@ -754,9 +737,10 @@ def dump_dot( filename, m ) :
                 style = "solid"
                 if is_true(m[edge[i][j][q]]):
                     #label = str(k)
-                    color = "black"
                     if is_true(m[dump2[i][j][q]]):
                         color = "red"
+                    else:
+                        color = "black"
                     dfile.write( str(i) + "-> " + str(j) +  "[color=" + color +"]\n" )
     dfile.write("}\n")
 
