@@ -522,18 +522,18 @@ for i in range(N):
             continue
         bhs = False
         for q in range(Q):
-            bhs = Or( And (edge[i][j][q], Not(dump1[i][j][q]) ), bhs) 
+            bhs = Or( Or ( And (edge[i][j][q], Not(dump1[i][j][q]) ) , And (edge[j][i][q], Not ( dump1[j][i][q]) ) ), bhs) 
         kbc = False
         for l in range(N):
             if i == l or j == l:
                 continue
             rhs = False
             for q in range(Q):
-                rhs = Or( And( edge[i][l][q], Not (dump1[i][l][q]) ), rhs)
-            rhs = And( rhs, r1[l][j])
-            kbc = Or ( kbc, rhs) 
-        w = Implies( r1[i][j], Or (bhs , rhs) )
-        # w = Implies( Or(bhs , kbc), r1[i][j] )
+                rhs = Or( Or (And( edge[i][l][q], Not (dump1[i][l][q]) ), And (edge[l][i][q], Not ( dump1[l][i][q]) ) ) , rhs)
+            #rhs = And( rhs, r1[l][j])
+            kbc = Or ( kbc, And (rhs, r1[i][j])) 
+        w = Implies( r1[i][j], Or (bhs , kbc) )
+        #w = Implies( Or(bhs , kbc), r1[i][j] )
         A_list.append(w)
 D3_1_reachability = And(A_list)
 
@@ -547,16 +547,16 @@ for i in range(N):
             continue
         bhs = False
         for q in range(Q):
-            bhs = Or( And( edge[i][j][q], Not(dump2[i][j][q]) ), bhs) 
+            bhs = Or( Or( And( edge[i][j][q], Not(dump2[i][j][q]) ), And (edge[j][i][q], Not ( dump2[j][i][q]) )) , bhs) 
         kbc = False
         for l in range(N):
             if i == l or j == l:
                 continue
             rhs = False
             for q in range(Q):
-                rhs = Or( And( edge[i][l][q], Not(dump2[i][l][q])), rhs)
-            rhs = And (r2[l][j], rhs)
-            kbc = Or ( kbc , rhs) 
+                rhs = Or( Or( And( edge[i][l][q], Not(dump2[i][l][q])) , And (edge[l][i][q], Not ( dump2[l][i][q]) ) ), rhs)
+            #rhs = And (r2[l][j], rhs)
+            kbc = Or ( kbc , And (r2[l][j], rhs) ) 
         #w = Implies( r2[i][j], Or (bhs , rhs) )
         w = Implies (Or (bhs , kbc), r2[i][j] )
         A_list.append(w)
@@ -622,8 +622,9 @@ for i in range(N):
     for j in range(i+1, N):
         if i == j:
             continue
-        rijji = Or (r1[i][j], r1[j][i])
-        D4_list.append( rijji )
+        D4_list.append( r1[i][j])
+        #rijji = Or (r1[i][j], r1[j][i])
+        #D4_list.append( rijji )
 D4_1_all_connected = And( D4_list )
 #print D4_1_all_connected
 #exit(0)
@@ -640,8 +641,9 @@ for i in range(N):
     for j in range(i+1, N):
         if i == j:
             continue
-        rijji = Or (r2[i][j], r2[j][i])
-        D44_list.append( rijji )
+        D44_list.append( r2[i][j] )
+        #rijji = Or (r2[i][j], r2[j][i])
+        #D44_list.append( rijji )
 D4_2_some_disconnected = Not( And( D44_list ) )
 #print D4_2_some_disconnected
 #exit(0)
@@ -667,6 +669,7 @@ k_not_connected =  And( D2_2_drops_are_k, D1_2_edge_exists, is_reach)
 # k_not_connected = ForAll( setDump2, Implies( And(D2_2_drops_are_k, D1_2_edge_exists), is_reach) )
 
 connectivity = And( At_least_k_edges, k_min_1_connected, k_not_connected )
+#connectivity = And( At_least_k_edges, k_min_1_connected )
 #print connectivity
 #exit(0)
 
@@ -721,9 +724,16 @@ def dump_dot( filename, m ) :
                 style = "solid"
                 if is_true(m[edge[i][j][q]]):
                     #label = str(k)
+<<<<<<< HEAD
                     color = "black"
                     if is_true(m[dump2[i][j][q]]):
                         color = "red"
+=======
+                    if is_true(m[dump2[i][j][q]]):
+                        color = "red"
+                    else:
+                        color = "black"
+>>>>>>> dd42a94a551a6b67f4bb22d5528a6a9e395d40a0
                     dfile.write( str(i) + "-> " + str(j) +  "[color=" + color +"]\n" )
     dfile.write("}\n")
 
