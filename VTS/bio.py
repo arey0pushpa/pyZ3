@@ -724,16 +724,9 @@ def dump_dot( filename, m ) :
                 style = "solid"
                 if is_true(m[edge[i][j][q]]):
                     #label = str(k)
-<<<<<<< HEAD
                     color = "black"
                     if is_true(m[dump2[i][j][q]]):
                         color = "red"
-=======
-                    if is_true(m[dump2[i][j][q]]):
-                        color = "red"
-                    else:
-                        color = "black"
->>>>>>> dd42a94a551a6b67f4bb22d5528a6a9e395d40a0
                     dfile.write( str(i) + "-> " + str(j) +  "[color=" + color +"]\n" )
     dfile.write("}\n")
 
