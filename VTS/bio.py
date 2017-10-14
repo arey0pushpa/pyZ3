@@ -683,6 +683,8 @@ allconstraints = And( Activity_node, Activity_edge,
                       V4_edgelabel_subset_of_nodelabel,
                       V5_self_edge_not_allowed,
                       V6_pairing_matrix_restrictions,
+                      V7_fusion_edge_must_fuse_with_target,
+                      V8_fusion2_edge_potentially_not_fuse_anythingelse,
                       R1_steady_state_reachability_defination,
                       R2_steady_state_stability )
 
@@ -727,12 +729,10 @@ for i in range(nl):
         Nf_list.append( Implies (lhs, rhs) ) 
 not_a_function = Not( And( Nf_list ) ) 
 
-<<<<<<< HEAD
+
 s.add( And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) ))  
 #s.add( Exists( setE, And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) )))  
-=======
-s.add( And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function) ) ) )
->>>>>>> ce4fff889ba07a02391ec79b1a215837ff69c05f
+#s.add( And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function) ) ) )
   
 # s.add( connectivity )
 
