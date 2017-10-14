@@ -92,7 +92,6 @@ st = time.time()
 
 # REGULATION MECHANISM VARIATION #####
 
-
 # Regulation : No regulation on the node.
 # The present molecules at nodes are all active.
 def f_nn():
@@ -118,53 +117,53 @@ def f_ne():
     return And(A_list)
 
 # Regulation : Boolean on Node. 
-# Activity of a moolecule k on a node is a Boolean function of presence of 
-# Other molecule present on that node/edge.
-# Activity_node. active_node[k] =  f_n[k](\/_{k1 != k} node(k1)) 
-def f_bn():
-   # print "I am here!!"
-    s = []
-    A_list = []
-    for k in range(M):
-        f = f_n[k]
-        for i in range(N):
-            del s[:]
-          #  for t in QVars:
-          #      s.append( t )
-            for k1 in range(M):
-                if k1 == k:
-                    continue
-                s.append( node[i][k1])
-            f_app = f(s)
-            l = Implies( node[i][k], active_node[i][k] == f_app )
-            A_list.append(l)
-    return And( A_list )
-
-
-# Regulation : Boolean on Edge. 
-# Activity of the molecules on the edge is driven by the 
-# chosen boolean function. 
-# Activity_edge. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
-def f_be():
-    s = []
-    A_list = []
-    for i in range(N):
-        for j in range(N):
-            if i == j:
-                continue
-            for q in range(Q):
-                for k in range(M):
-                    del s[:]
-                    f = f_e[k]
-                   # for t in QVars:
-                   #     s.append( t )
-                    for k1 in range(M):
-                        if k1 == k:
-                            continue
-                        s.append(presence_edge[i][j][q][k1])
-                    l  =  Implies(presence_edge[i][j][q][k], active_edge[i][j][q][k] == f(s)) 
-                    A_list.append(l)
-    return And( A_list )
+## Activity of a moolecule k on a node is a Boolean function of presence of 
+## Other molecule present on that node/edge.
+## Activity_node. active_node[k] =  f_n[k](\/_{k1 != k} node(k1)) 
+#def f_bn():
+#   # print "I am here!!"
+#    s = []
+#    A_list = []
+#    for k in range(M):
+#        f = f_n[k]
+#        for i in range(N):
+#            del s[:]
+#          #  for t in QVars:
+#          #      s.append( t )
+#            for k1 in range(M):
+#                if k1 == k:
+#                    continue
+#                s.append( node[i][k1])
+#            f_app = f(s)
+#            l = Implies( node[i][k], active_node[i][k] == f_app )
+#            A_list.append(l)
+#    return And( A_list )
+#
+#
+## Regulation : Boolean on Edge. 
+## Activity of the molecules on the edge is driven by the 
+## chosen boolean function. 
+## Activity_edge. active_edge[k] = f_e[k](\/_{k1 != k} presence_edge(k1))
+#def f_be():
+#    s = []
+#    A_list = []
+#    for i in range(N):
+#        for j in range(N):
+#            if i == j:
+#                continue
+#            for q in range(Q):
+#                for k in range(M):
+#                    del s[:]
+#                    f = f_e[k]
+#                   # for t in QVars:
+#                   #     s.append( t )
+#                    for k1 in range(M):
+#                        if k1 == k:
+#                            continue
+#                        s.append(presence_edge[i][j][q][k1])
+#                    l  =  Implies(presence_edge[i][j][q][k], active_edge[i][j][q][k] == f(s)) 
+#                    A_list.append(l)
+#    return And( A_list )
 
 # Regulation : SNARE-SNARE Inhibition. 
 # Inhibition of the edges are driven by the pairing matrix.
@@ -194,25 +193,27 @@ def f_se():
                     ll = Implies ( And ( lhs, Not (And ( l1,l2)) ), active_edge[i][j][q][k]) 
                     A_list.append(And ( l, ll) )
     return And (A_list)
-
+#
 # Setting Activity Bits --------------------------
 
 Activity_node = True 
 Activity_edge = True
 
 if V == 1:
-    Activity_node = f_bn() 
-    Activity_edge = f_be()
+    Activity_node = True 
+    Activity_edge = True
+    #Activity_node = f_bn() 
+    #Activity_edge = f_be()
     #print Activity_node
     #print Activity_edge
     #exit(0)
 elif V == 2:
     Activity_node = f_nn()
-    Activity_edge = f_be()
+    #Activity_edge = f_be()
     #print Activity_node
     #print Activity_edge
 elif V == 3:
-    Activity_node = f_bn()
+    #Activity_node = f_bn()
     Activity_edge = f_se()
     #print Activity_edge
     #exit(0)
@@ -220,7 +221,7 @@ elif V == 4:
     Activity_node = f_nn()
     Activity_edge = f_se()
 elif V == 5:
-    Activity_node = f_bn()
+    #Activity_node = f_bn()
     Activity_edge = f_ne()
 else:
     Activity_node = f_nn()
@@ -674,7 +675,7 @@ connectivity = And( At_least_k_edges, k_min_1_connected, k_not_connected )
 #exit(0)
 
 # V1-V6 and R1, R2
-allconstraints = And (V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, R1_steady_state_reachability_defination, R2_steady_state_stability)
+allconstraints = And (Activity_node, Activity_edge, V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, R1_steady_state_reachability_defination, R2_steady_state_stability)
 
 parameter = [setN] + [setActiveN] + [setPresentE] + [setActiveE] + [setPairingM]
 
@@ -691,7 +692,7 @@ qv =  list(itertools.chain(*parameter))
 # Create Solver and add constraints in it.
 
 s = Solver()
-# Sufficient condition check
+# Sufficient condition check Old definition code. 
 # s.add( Exists( setE, And( ForAll( setDump1, Implies( And( D1_edge_exists, D2_drops_are_k_minus_1), Exists( setR1_steady_state_reachability_defination, And( D3_1_reachability, D4_1_all_connected)) ) ), ForAll (setDump2, Implies( And (D11_edge_exists, D22_drops_are_k ), Exists( setR2_steady_state_stability, And( D33_2_reachability, D44_2_some_disconnected) ))) ) ))
 
 #---------- NOT A FUNCTION --###
@@ -717,6 +718,7 @@ for i in range(nl):
         Nf_list.append( Implies (lhs, rhs) ) 
 not_a_function = Not( And( Nf_list ) ) 
 
+#s.add( And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) ))  
 s.add( Exists( setE, And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) )))  
   
 # s.add( connectivity )
