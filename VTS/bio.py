@@ -78,6 +78,7 @@ active_edge = [ [ [ [Bool ("b_{}_{}_{}_{}".format(i,j,q,k)) for k in range(M)] f
 setActiveE = [ active_edge[i][j][q][k] for i in range(N) for j in range(N) for q in range(Q) for k in range(M)  if i!= j]
 
 r = [ [ [ [Bool ("r_{}_{}_{}_{}".format(i,j,k,z)) for z in range(N-1)] for k in range(M)] for j in range(N)] for i in range (N)]
+setReach = [ r[i][j][k][z] for i in range(N) for j in range(N) for k in range(M) for z in range(N-1)] 
 
 p = [ [Bool ("p_{}_{}".format(k,k1)) for k1 in range(M)] for k in range(M)]
 setPairingM = [p[k][k1] for k in range(M) for k1 in range(M)]  
@@ -677,7 +678,7 @@ connectivity = And( At_least_k_edges, k_min_1_connected, k_not_connected )
 # V1-V6 and R1, R2
 allconstraints = And (Activity_node, Activity_edge, V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, R1_steady_state_reachability_defination, R2_steady_state_stability)
 
-parameter = [setN] + [setActiveN] + [setPresentE] + [setActiveE] + [setPairingM]
+parameter = [setN] + [setActiveN] + [setPresentE] + [setActiveE] + [setPairingM] + [setReach]
 
 qv =  list(itertools.chain(*parameter))
 
@@ -718,8 +719,8 @@ for i in range(nl):
         Nf_list.append( Implies (lhs, rhs) ) 
 not_a_function = Not( And( Nf_list ) ) 
 
-#s.add( And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) ))  
-s.add( Exists( setE, And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) )))  
+s.add( And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) ))  
+#s.add( Exists( setE, And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) )))  
   
 # s.add( connectivity )
 
