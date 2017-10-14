@@ -651,12 +651,6 @@ D4_2_some_disconnected = Not( And( D44_list ) )
 #print D4_2_some_disconnected
 #exit(0)
 
-# Dummy molecule presence.
-for i in range(N):
-    for k in range(M):
-        node[i][k] = True
-
-
 # K-1 Connectivity constraints. ####### 
 is_reach = Exists( setR1_connectivity, And(D3_1_reachability, D4_1_all_connected) )
 k_min_1_connected = ForAll( setDump1, Implies( D2_1_drops_are_k_minus_1, is_reach ) )
@@ -708,27 +702,55 @@ s = Solver()
 
 #---------- NOT A FUNCTION --###
 # Constraint that if two nodes are identical hence the activity of the molecules is same but there is no such function.
-# Step1: Flattening.
-nodeList = []
-for i in range(N):
-    dummyList = [] 
-    for k in range(M):
-        dummyList.append(node[i][k])
-    nodeList.append(dummyList)
 
-nl = len(nodeList)
 
-# Step 2: Build the constraint. 
+# Directly compare the complete list.
 Nf_list = []
-for i in range(nl):
-    for j in range(i+1, nl):
-        lhs = (nodeList[i] == nodeList[j]) 
+for i in range(N):
+    for j in range (i+1, N):
+        lhs = True
         rhs = True
         for k in range(M):
-            rhs = And (active_node[i][k] == active_node[j][k], rhs) 
-        Nf_list.append( Implies (lhs, rhs) ) 
+            lhs = And( lhs, node[i][k] == node[j][k])
+            rhs = And( rhs, active_node[i][k] == active_node[j][k]) 
+        Nf_list.append( Implies( lhs, rhs ) ) 
+        #print Nf_list 
+        #exit(0)
 not_a_function = Not( And( Nf_list ) ) 
+#print Nf_list
+#exit(0)
 
+## Dummy molecule presence.
+#for i in range(N):
+#    for k in range(M):
+#        node[i][k] = True
+#
+## Step1: Flattening.
+#nodeList = []
+#for i in range(N):
+#    dummyList = [] 
+#    for k in range(M):
+#        dummyList.append(node[i][k])
+#    nodeList.append(dummyList)
+#print nodeList
+#exit(0)
+#
+#nl = len(nodeList)
+#
+## Step 2: Build the constraint. 
+#Nf_list = []
+#for i in range(nl):
+#    for j in range(i+1, nl):
+#        lhs = True
+#        #for m in range(M):
+#        #    lhs = And( lhs, nodeList[i][m] == nodeList[j][m]) 
+#        rhs = True
+#        for k in range(M):
+#            rhs = And (rhs, active_node[i][k] == active_node[j][k]) 
+#        Nf_list.append( Implies (lhs , rhs) ) 
+#        #print Nf_list
+#        #exit(0)
+#not_a_function = Not( And( Nf_list ) ) 
 
 s.add( And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) ))  
 #s.add( Exists( setE, And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) )))  
