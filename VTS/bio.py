@@ -78,7 +78,7 @@ active_edge = [ [ [ [Bool ("b_{}_{}_{}_{}".format(i,j,q,k)) for k in range(M)] f
 setActiveE = [ active_edge[i][j][q][k] for i in range(N) for j in range(N) for q in range(Q) for k in range(M)  if i!= j]
 
 r = [ [ [ [Bool ("r_{}_{}_{}_{}".format(i,j,k,z)) for z in range(N-1)] for k in range(M)] for j in range(N)] for i in range (N)]
-setReach = [ r[i][j][k][z] for i in range(N) for j in range(N) for k in range(M) for z in range(N-1)] 
+setReach = [ r[i][j][k][z] for i in range(N) for j in range(N) for k in range(M) for z in range(N-1) if i != j] 
 
 p = [ [Bool ("p_{}_{}".format(k,k1)) for k1 in range(M)] for k in range(M)]
 setPairingM = [p[k][k1] for k in range(M) for k1 in range(M)]  
@@ -301,11 +301,11 @@ for i in range(N):
 # V5_self_edge_not_allowed: Self edges not allowed. 
 # Basic Intuition: ~ e_ii  
 # Implemenatation: /\_i,q (not e_i,i,q) 
-V5_self_edge_not_allowed = True
+V5_list = []
 for i in range(N):
     for q in range(Q):
-        V5_self_edge_not_allowed = And( Not(edge[i][i][q]), V5_self_edge_not_allowed)
-
+        V5_list.append( Not(edge[i][i][q]) )
+V5_self_edge_not_allowed = And(V5_list)
 
 # Constraint V6_pairing_matrix_restrictions ------------------------
 # V6_pairing_matrix_restrictions: Only Q R entry has possible non zero entry.  
@@ -669,23 +669,6 @@ connectivity = And( At_least_k_edges, k_min_1_connected, k_not_connected )
 #print connectivity
 #exit(0)
 
-# V1-V6 and R1, R2
-allconstraints = And( Activity_node, Activity_edge,
-                      V1_molecule_presence_require_for_present_edge,
-                      V2_active_molecule_should_be_present,
-                      V3_active_molecule_on_node_should_be_present,
-                      V4_edgelabel_subset_of_nodelabel,
-                      V5_self_edge_not_allowed,
-                      V6_pairing_matrix_restrictions,
-                      V7_fusion_edge_must_fuse_with_target,
-                      V8_fusion2_edge_potentially_not_fuse_anythingelse,
-                      R1_steady_state_reachability_defination,
-                      R2_steady_state_stability )
-
-parameter = [setN] + [setActiveN] + [setPresentE] + [setActiveE] + [setPairingM] + [setReach]
-
-qv =  list(itertools.chain(*parameter))
-
 #dx = time.time() - st
 #print "D0-D3 Building took", str(dx)
 
@@ -708,12 +691,12 @@ s = Solver()
 Nf_list = []
 for i in range(N):
     for j in range (i+1, N):
-        lhs = True
-        rhs = True
+        lhs_list = []
+        rhs_list = []
         for k in range(M):
-            lhs = And( lhs, node[i][k] == node[j][k])
-            rhs = And( rhs, active_node[i][k] == active_node[j][k]) 
-        Nf_list.append( Implies( lhs, rhs ) ) 
+            lhs_list.append( node[i][k] == node[j][k] )
+            rhs_list.append( active_node[i][k] == active_node[j][k] ) 
+        Nf_list.append( Implies( And(lhs_list), And(rhs_list) ) ) 
         #print Nf_list 
         #exit(0)
 not_a_function = Not( And( Nf_list ) ) 
@@ -752,7 +735,28 @@ not_a_function = Not( And( Nf_list ) )
 #        #exit(0)
 #not_a_function = Not( And( Nf_list ) ) 
 
-s.add( And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) ))  
+# V1-V6 and R1, R2
+allconstraints = And( Activity_node, Activity_edge,
+                      V1_molecule_presence_require_for_present_edge,
+                      V2_active_molecule_should_be_present,
+                      V3_active_molecule_on_node_should_be_present,
+                      V4_edgelabel_subset_of_nodelabel,
+                      V6_pairing_matrix_restrictions,
+                      V7_fusion_edge_must_fuse_with_target,
+                      V8_fusion2_edge_potentially_not_fuse_anythingelse,
+                      R1_steady_state_reachability_defination,
+                      R2_steady_state_stability
+                      )
+
+parameter = [setN] + [setActiveN] + [setPresentE] + [setActiveE] + [setPairingM] + [setReach]
+qv =  list(itertools.chain(*parameter))
+
+noFunctionPossible = ForAll(qv,  Implies( allconstraints, not_a_function))
+
+print noFunctionPossible
+
+s.add( And( connectivity, V5_self_edge_not_allowed, noFunctionPossible ) )
+
 #s.add( Exists( setE, And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) )))  
 #s.add( And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function) ) ) )
   
