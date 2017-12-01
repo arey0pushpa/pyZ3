@@ -6,6 +6,8 @@ import argparse
 import itertools
 import time
 
+set_option(max_args=10000000, max_lines=1000000, max_depth=10000000, max_visited=1000000)
+
 #----------------------------------------------------
 # input parsing
 # input number of nodes and molecules
@@ -16,7 +18,6 @@ parser.add_argument("-Q","--pedges", type=int, default=2, help = "max no.of para
 parser.add_argument("-V","--variation", type=int, default=1, help = "model of the biological system")
 parser.add_argument("-C","--connected", type=int, default=3, help = "graph connectivity want to check")
 #parser.add_argument("-E","--edges", type=int, default=3, help = "graph connectivity want to check")
-
 
 args = parser.parse_args()
 
@@ -753,9 +754,12 @@ qv =  list(itertools.chain(*parameter))
 
 noFunctionPossible = ForAll(qv,  Implies( allconstraints, not_a_function))
 
-print noFunctionPossible
+#print noFunctionPossible
 
 s.add( And( connectivity, V5_self_edge_not_allowed, noFunctionPossible ) )
+
+print(s)
+#exit(0)
 
 #s.add( Exists( setE, And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function)) )))  
 #s.add( And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function) ) ) )
