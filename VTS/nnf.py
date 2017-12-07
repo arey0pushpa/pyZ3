@@ -29,8 +29,15 @@ def nnf(e, seen, sign):
             if sign == False:
                 return Exists(var_list, nnf(e.body(), seen, sign))
             else:
-                #print (e.body())
-                #exit(0)
+                print(e)
+                wwe =  e.body()
+                #wwe =  e.body().arg(0).arg(0)
+                print (wwe)
+                print(var_list)
+#                print(var_list[0].is_var())
+                describe_tactics()
+
+                exit(0)
                 return ForAll(var_list, nnf(e.body(), seen, sign))
         
         else:
@@ -85,8 +92,9 @@ def nnf(e, seen, sign):
             #if(is_const(e.children())):
             #if(is_var(e.children())):
             for i in e.children():
-                print(i) 
-            return nnf(e.children(), seen, sign) 
+                #print(i)
+                print(is_const(i))
+                return nnf(i, seen, sign) 
             #if type(e.children()) is list:
             #    print ('Mandir wahi banayenge')
             #return nnf(e.children(), seen, sign)
@@ -94,16 +102,28 @@ def nnf(e, seen, sign):
         
        # Handle the variable case.  
         if(is_const(e)):
-           # print('I was here')
+            print('Im a constant')
             if sign == True:
                 return e
             else:
                 return Not(e)
+        
+        if(is_var(e)):
+            print('I a variable')
+            print(e)
+            return e
+#            print('I was here')
+#            if sign == True:
+#                return e
+#            else:
+#                return Not(e)
 
+    
 def impl_elim(e, seen):
-    if e in seen:
-        return
-    seen[e] = True
+    #if e in seen:
+    #    return
+    #seen[e] = True
+    # CHECK HOW NNF HAS IMPLEMENTED THE STUFF...
     if is_quantifier(e):
         if e.is_forall():
             var_list = []
@@ -150,32 +170,48 @@ def impl_elim(e, seen):
         if(is_const(e)):
                 return e
 
-#def impl_eli(fml, seen):
-#def reverse_enum(L):
-#   for index in reversed(xrange(len(L))):
-#      yield index, L[index]
-
 x, y, z = Bools( 'x y z' )
 
 sign = Bool('sign')
 sign = True
+seen = {}
+# Describe all the possible Tactics.
+#describe_tactics()
 #print(sign)
 # Step 1 : Convert the QBF formula into all quantifiers in front and propositional  at the end.
 #fml = Or(x, y)
-fml = Not(x)
-#fml = ForAll (x, ForAll (y, And(x,y) ) )
-#fml = ForAll( x, Exists( y, And( Or( Not(x), y), Or( Not(y), x)))) 
-#fml = ForAll( x, Exists( y, And (And( Or( Not(x), y), Or( Not(y), x)), Exists(z, And (Or( Not(x), z), Or(y, Not(z))))) )) 
+#fml = Not(And (x, y))
+f = Function( 'f', BoolSort(), BoolSort(), BoolSort()) 
 
-#fml = Or( And( Not(x), y), And( Not(y), x))
-#fml = Implies( Implies (x, y), Or(y,z)) 
-seen = {}
+#r = Tactic('nnf')(q).as_expr()
+#fml = ForAll( x, f(x,x) == x)
+#fml = ForAll (x, ForAll (y, And(x,y) ) )
+fml = ForAll( x, Implies (Exists(y, And(x, y) ), f(x,x) == x))
+#fml = ForAll( x, Exists( y, Not( And (Or( Not(x), y), Or( Not(y), x)) ))) 
+#fml = ForAll( x, Exists( y, And (And( Or( Not(x), y), Or( Not(y), x)), Exists(z, And (Or( Not(x), z), Or(y, Not(z))))) )) 
+#fml = And( Implies (x, y), Or(y,z)) 
+#impl_elim_fml = impl_elim(fml, seen)
+#print(impl_elim_fml)
+#exit(0)
 
 #index = 0
 #qbf_list = []
 #impl_elim_fml = impl_elim (fml,seen)
-cnf_formula = nnf(fml, seen, sign)
-print(cnf_formula)
+#g  = Goal()
+#g.add(fml)
+
+t = Tactic('simplify')(fml).as_expr()
+
+# YOU'LL GET A LIST OF FORMULAS...
+#t = Tactic('nnf')
+# YOU'LL GET A FORMULA...
+#t = Tactic('nnf')(fml).as_expr()
+
+#r = t(g)
+print(t)
+#cnf_formula = r 
+#cnf_formula = nnf(fml, seen, sign)
+#print(cnf_formula)
 
 #for e in nnf(fml, seen, sign):
 #    if is_const(e) and e.decl().kind == Z3_OP_UNINTERPRETED:
