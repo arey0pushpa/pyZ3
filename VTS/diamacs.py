@@ -216,26 +216,27 @@ trx = Then(Tactic('simplify'),Tactic('tseitin-cnf'))(nnf_fml).as_expr()
 #rx = trx(tr)
 print(trx)
 print quant_set
+
 #exit(0)
 #t = Then (Then(t1,t2), t3)
 
 # FILL THE QUANTIFIERS BACK AND ALSO TAKE CARE OF ADDITIONAL EXISTENTIAL QUANTIFIER
 # ADDED FOR AUX VARIABLES......
-def create_formula(quant_set, trx):
-    i = quant_set[0]
-    if len(quant_set) > 1:
-        if i[0] == 'A':
-            return ForAll ( vs = i[1], body =  create_formula(quant_set.pop(0), trx))
-        else:
-            return Exists ( vs = i[1], body =  create_formula(quant_set.pop(0), trx))
-    else:
-        if i[0] == 'A':
-            return ForAll ( vs = i[1], body =  trx )
-        else:
-            return Exists ( vs = i[1], body =  trx )
-
-build_formula =  create_formula(quant_set, trx)
-print build_formula
+#def create_formula(quant_set, trx):
+#    i = quant_set[0]
+#    if len(quant_set) > 1:
+#        if i[0] == 'A':
+#            return ForAll ( i[1] + "" , create_formula(quant_set.pop(0), trx))
+#        else:
+#            return Exists ( i[1] + "" , create_formula(quant_set.pop(0), trx))
+#    else:
+#        if i[0] == 'A':
+#            return ForAll ( i[1] + "", trx )
+#        else:
+#            return Exists ( i[1] + "", trx )
+#
+#build_formula =  create_formula(quant_set, trx)
+#print build_formula
 
 # QDIAMAC TRANSFORMATION .... EASY
 # QDIAMACS FORMAT :
