@@ -14,7 +14,19 @@
 
 from z3 import *
 
+#
+# posMap : forumla -> NNFFormula
+# negMap : forumla -> NNFFormula of ~formula
+posMap = { True: True, False : False }
+negMap = { True: False, False : False }
+
 def nnf(e, seen, sign):
+    if sign:
+        if e in posMap:
+            return
+    else:
+        if e in negMap:
+            return
     if is_quantifier(e):
         if e.is_forall(): 
             var_list = []
@@ -46,17 +58,20 @@ def nnf(e, seen, sign):
             n = e.num_args()
             arg_list = []
             for i in range(n):
-                #print (e.arg(i))
-                arg_list.append( nnf(e.arg(i), seen, sign))
+                nnf(e.arg(i), sign)
             if sign == False:
                 #print 'Going for the print arg_list'
                 #print arg_list
                 #print is_var(arg_list[0])
                 #print is_const(arg_list[0])
                 #exit(0)
-                return Or(arg_list)
+                for i in range(n):
+                    arg_list.append( negMap[e.arg(i)] )                
+                negMap[e] = Or(arg_list)
             else:
-                return And(arg_list)
+                for i in range(n):
+                    arg_list.append( posMap[e.arg(i)] )
+                posMap[e] = And(arg_list)
         
     # Handle And: Return And (Neg(inl), Neg(inr))
         if (is_or(e)):
@@ -78,7 +93,7 @@ def nnf(e, seen, sign):
                 sign = True
             for i in e.children():
                 return nnf(i, seen, sign) 
-    
+            
     # Handle variables
         if (is_var(e)):
             #print 'Can someone gets heres :)'
