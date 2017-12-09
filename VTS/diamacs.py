@@ -191,7 +191,7 @@ t3 = Tactic('tseitin-cnf')
 
 # STEP 1: ~SIMPLIFY ND NNF -- IMPLIES ELIM AND NNF PROP
 #tr = Tactic('simplify')(fml).as_expr()
-tr = Then(Tactic('simplify'),Tactic('tseitin-cnf'))(fml).as_expr()
+tr = Then(Tactic('simplify'),Tactic('nnf'))(fml).as_expr()
 #r = tr(fml)
 print tr
 exit(0)
