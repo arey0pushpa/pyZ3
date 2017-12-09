@@ -176,8 +176,8 @@ quant_set = []
 f =  Function('f', BoolSort(), BoolSort(), BoolSort())
 
 #fml = ForAll( x, ForAll ( y, And( x, y) ) )
-fml = ForAll (x, ForAll (y, ForAll (z, Or (And(x,y), And (y,z)) )))
-#fml = Not (ForAll (x, ForAll (y,  And(x,y) )))
+#fml = ForAll (x, ForAll (y, ForAll (z, Or (And(x,y), And (y,z)) )))
+fml = ForAll (x, Exists (y,  And(x,y) ))
 
 #g = Goal()
 #g.add(fml)
@@ -190,10 +190,11 @@ t3 = Tactic('tseitin-cnf')
 #trx = Then(t1,t3)
 
 # STEP 1: ~SIMPLIFY ND NNF -- IMPLIES ELIM AND NNF PROP
-tr = Tactic('simplify')(fml).as_expr()
+#tr = Tactic('simplify')(fml).as_expr()
+tr = Then(Tactic('simplify'),Tactic('tseitin-cnf'))(fml).as_expr()
 #r = tr(fml)
-#print tr
-#exit(0)
+print tr
+exit(0)
 
 # NNF DOES: BOTH NNF TRANSFORMTAION AND PULL QUANTIFIERS OUT
 nnf_fml = nnf(tr, seen, sign)

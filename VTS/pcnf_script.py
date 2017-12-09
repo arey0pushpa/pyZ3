@@ -106,7 +106,7 @@ trx = Then(Tactic('simplify'),Tactic('tseitin-cnf'))(nnf_fml).as_expr()
 #rx = trx(tr)
 print(trx)
 print quant_set
-#exit(0)
+exit(0)
 #t = Then (Then(t1,t2), t3)
 #def create_formula(quant_set):
 formula = ''
