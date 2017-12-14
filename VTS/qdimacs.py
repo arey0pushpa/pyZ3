@@ -26,17 +26,47 @@ class AstRefKey:
     def __repr__(self):
         return str(self.n)
 
-def askey(n):
-    assert isinstance(n, AstRef)
-    return AstRefKey(n)
-
+#def askey(n):
+#    assert isinstance(n, AstRef)
+#    return AstRefKey(n)
+#
 #def get_vars(f):
 #    r = set()
-#    if (is_const(f) or is_var(f)): 
-#        for c in f.children():
-#            collect(c)
+#    def collect(f):
+#        if is_var(f):
+#            r.add(f)
+#        if is_const(f): 
+#            if f.decl().kind() == Z3_OP_UNINTERPRETED and not askey(f) in r:
+#                r.add(askey(f))
+#        else:
+#            for c in f.children():
+#                collect(c)
 #    collect(f)
 #    return r
+
+def traverse(e):
+    r = set()
+    def collect(e):
+        if is_bool(e):
+            if ( is_and(e) ):
+                n = e.num_args()
+                for i in range(n):
+                    collect( e.arg(i) )
+            if ( is_or(e) ):
+                n = e.num_args()
+                for i in range(n):
+                    collect( e.arg(i) )
+            if ( is_not(e) ):
+                for i in e.children():
+                    return collect( i ) 
+            if ( is_var(e) ):
+                r.add( e )
+       # if( is_const(e) ):
+       #     print 'came to const'
+       #     r.add( e )
+    collect(e)
+    #print r
+    return r
 
 def nnf( e, seen, sign ):
     index = 1
@@ -137,7 +167,6 @@ def create_formula(quant_set, trx):
         else:
             return Exists(i[1], trx )
 
-
 x, y, z = Bools('x y z')
 sign = True
 seen = {}
@@ -172,33 +201,35 @@ print 'NNfd : ' + str(nnf_fml)
 #print is_quantifier(terror)
 #exit(0)
 
-var_present = get_vars(nnf_fml)
-print var_present
+nnf_vars = traverse( nnf_fml )
+print 'nnf_vars : '+ str( nnf_vars )
+
+def find_index(i):
+    return get_var_index( i ) 
+sorted_vars = sorted( nnf_vars, key = find_index, reverse = True ) 
+#print sorted_vars
+
+# ADDITIONAL SETUP WHERE EVERY DISTINCT VARIABLES IN A DICTIONARY.
+var_set = []
+for i in quant_set:
+    var_set = var_set + i[1]
+#print var_set
+var_const_map = dict (zip( sorted_vars, var_set ) )
+#print var_const_map
 
 # CHECK THE QUNATIFIERS THAT THE SUBEXPRESSIONS HAVE AND PULL THE VARIABLE TO THE TREE ONE LEVEL A
 #  REQUIRE RENAMING THE VARIABLE ...
 
-# PULL QUA1NTIFIER OUT
-#nnf_fml = nnf(terror, seen)
-
-#print 'The resultant formula after bs is : \t'
-#print nnf_fml
-
-# ADDITIONAL SETUP WHERE EVERY DISTINCT VARIABLES IN A DICTIONARY.
-
 # STEP 2: SIMPLIFY ND CNF
-#trx = Then(Tactic('simplify'),Tactic('tseitin-cnf'))(nnf_fml).as_expr()
-#var_added_with_present = get_vars(trx) 
-#print var_added_with_present 
-
+trx = Then(Tactic('simplify'),Tactic('tseitin-cnf'))(nnf_fml).as_expr()
+# take second element for sort
 #trx = Then(t1,t3)
 #rx = trx(tr)
 #print 'CNfd : ' + str(trx)
 #print quant_set
 
-
 t = Then('simplify', 'tseitin-cnf')
-subgoal = t(nnf_fml)
+subgoal = t( nnf_fml )
 assert len(subgoal) == 1
 
 # Traverse each clause of the first subgoal
@@ -211,38 +242,54 @@ for c in subgoal[0]:
         cnf_list.append(c)
         #print c
 # Prints cnf list of the formula
-print 'CNfd : ' + str(cnf_list)
+print '\nCNfd : ' + str(cnf_list)
+cnf_vars = traverse( trx ) 
+print 'cnf_vars : ' + str( cnf_vars ) 
 #print cnf_list
 #print get_var_index(cnf_list[0])
 
 #exit(0)
 #t = Then (Then(t1,t2), t3)
 
-# FILL THE QUANTIFIERS BACK AND ALSO TAKE CARE OF ADDITIONAL EXISTENTIAL QUANTIFIER
-# ADDED FOR AUX VARIABLES..... try freshVar().
-var_set = []
-for i in quant_set:
-    var_set = var_set + i[1]
+# TAKE CARE OF ADDITIONAL EXISTENTIAL QUANTIFIER
+# ADDED FOR AUX VARIABLES.
 
-print quant_set
+#print quant_set
+var_diff =  nnf_vars ^ cnf_vars 
+
+var_list = []
+if (len(var_diff) != 0):
+    for v in var_diff:
+        tup = ( v, len(var_set) )
+        var_const_map[v] = (v, len( var_const_map ) )
+    if (quant_set != [] and quant_set[-1][0] == 'E'):
+        quant_set[-1][1] = quant_set[-1][1] + var_list  
+    else:
+        quant_set.append('E', var_list)
+
+#print var_const_map
+#for e in var_const_map:
+#    print e[1][1]
+#exit(0)
+# JUST A MAPPING FROM VAR(I) TO X, Y, Z IS REQUIRED...
 
 # CHECK ADDITIONAL VARIABLES PRESENT 
 #print get_vars(trx)
-new_set = var_set 
+#new_set = var_set 
 # DO IT AFTER ADDING TO A DICTIONARY...
 
 # ADD ADITIONAL VARIABLES DUE TO TSETING ...
 dict_set = {k : v for k,v in  var_set}
 #dict_set = dict( zip( var_list, index_list))
-print dict_set
+print 'dictionary set is : ' + str( dict_set )
+print 'var const map is : ' + str ( var_const_map )
+#exit(0)
 #print var_list
-
-
 #build_formula =  create_formula(quant_set, trx)
 #print build_formula
 
 # QDIAMAC TRANSFORMATION .... 
-q_var =  len(new_set)
+q_var =  len(var_set)
 num_clause = len(cnf_list)
 
 #if os.path.exists("myfile.qdimacs"):
@@ -262,6 +309,7 @@ with open('myfile.qdimacs', 'r+') as f:
             f.write('a' + ' ')
             for i in range( len( q[1] ) ):
                 f.write( str( dict_set[ q[1][i][0] ] ) + ' ') 
+                #f.write( str( dict_set[ q[1][i][0] ] ) + ' ') 
             f.write(str(0) + '\n')
         else:
             f.write('e' + ' ')
@@ -273,16 +321,25 @@ with open('myfile.qdimacs', 'r+') as f:
         if is_or(e): 
             n = e.num_args()
             for i in range(n):
+                #print e.arg(i)
+                wvar = var_const_map[e.arg(i)][1]
                 if is_not( e.arg(i) ):
-                    f.write('-' + str( dict_set[ e.arg(i) ] ) )   
+                    #f.write('-' + str( dict_set[ e.arg(i) ] ) )   
+                    f.write('-' + str( wvar ) + ' '  )  
                 else:
-                    f.write( str( dict_set[ e.arg(i) ] ) ) 
+                    #f.write( str( dict_set[ e.arg(i) ] ) ) 
+                    f.write( str( wvar ) + ' ' ) 
             f.write(str(0) + '\n')
         else:
-            if is_not( d[ e.arg(i) ] ):
-                f.write('-' + str( dict_set[ e.arg(i) ] ) ) 
+            #print  var_const_map[e][1]
+            #exit(0)
+            wvar = var_const_map[e][1]
+            if is_not( e ):
+                f.write('-' + str( wvar ) + ' ')
+                #f.write('-' + str( dict_set[ e.arg(i) ] ) ) 
             else:
-                f.write( str( dict_set[ e.arg(i) ] ) ) 
+                f.write( str( wvar ) + ' ') 
+                #f.write( str( dict_set[ e.arg(i) ] ) ) 
             f.write(str(0) + '\n')
     f.truncate()
 
