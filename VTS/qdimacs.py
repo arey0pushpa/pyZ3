@@ -285,6 +285,7 @@ f =  Function('f', BoolSort(), BoolSort(), BoolSort())
 #fml = ForAll (x, Exists (y,  And ( And(x,y), ForAll(z, Or( And(x,y), And(y,z))))))
 
 fml = ForAll( x, ForAll ( y, Exists (z, Or( z == x,  z == y) )))
+#fml = ForAll( x, ForAll ( y, Exists (z, z == Or (x, y) ) ) )
 #g = Goal()
 #g.add(fml)
 
