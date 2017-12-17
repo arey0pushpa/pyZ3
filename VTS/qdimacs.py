@@ -43,6 +43,26 @@ class AstRefKey:
 #                collect(c)
 #    collect(f)
 #    return r
+def traverse_cnf( l ):
+    r = set()
+    def collect(e):
+        if is_bool(e):
+            if ( is_or(e) ):
+                n = e.num_args()
+                for i in range(n):
+                    collect( e.arg(i) )
+            if ( is_not(e) ):
+                collect( e.arg(0) )
+                #print e.arg(0)
+                #exit(0)
+            if ( is_var(e) ):
+                r.add( e )
+           # HANDLE ONLY BOUNDED CASE.
+            if( is_const(e) ):
+                r.add( e )
+    for e in l :
+        collect(e)
+    return r
 
 def traverse(e):
     r = set()
@@ -57,9 +77,10 @@ def traverse(e):
                 for i in range(n):
                     collect( e.arg(i) )
             if ( is_not(e) ):
+                collect( e.arg(0) )
                 #print 'i was here'
-                for i in e.children():
-                    return collect( i ) 
+                #for i in e.children():
+                #    return collect( i ) 
             if ( is_var(e) ):
                 r.add( e )
            # HANDLE ONLY BOUNDED CASE.
@@ -247,7 +268,6 @@ def impl_elim( e ):
             #print 'Mitroon... :)'
             return e
 
-
 x, y, z = Bools('x y z')
 sign = True
 seen = {}
@@ -287,8 +307,6 @@ print 'Impl_elimd : ' + str(tr)
 # NNF DOES: BOTH NNF TRANSFORMTAION AND PULL QUANTIFIERS OUT
 nnf_fml = nnf(tr, seen, sign)
 print 'NNfd : ' + str(nnf_fml)
-#print is_quantifier(terror)
-#exit(0)
 
 nnf_vars = traverse( nnf_fml )
 print 'nnf_vars : '+ str( nnf_vars )
@@ -297,8 +315,6 @@ def find_index(i):
     return get_var_index( i ) 
 sorted_vars = sorted( nnf_vars, key = find_index, reverse = True ) 
 #print sorted_vars
-
-#print quant_set
 # ADDITIONAL SETUP WHERE EVERY DISTINCT VARIABLES IN A DICTIONARY.
 var_set = []
 for i in quant_set:
@@ -311,7 +327,8 @@ var_const_map = dict (zip( sorted_vars, var_set ) )
 #  REQUIRE RENAMING THE VARIABLE ...
 
 # STEP 2: SIMPLIFY ND CNF
-trx = Then(Tactic('simplify'),Tactic('tseitin-cnf'))(nnf_fml).as_expr()
+#trx = Then(Tactic('simplify'),Tactic('tseitin-cnf'))(nnf_fml).as_expr()
+
 # take second element for sort
 #trx = Then(t1,t3)
 #rx = trx(tr)
@@ -331,57 +348,37 @@ for c in subgoal[0]:
         #print "op name:  ", c.decl().name()
         cnf_list.append(c)
         #print c
-# Prints cnf list of the formula
+
 print '\nCNfd : ' + str(cnf_list)
-print 'trx is : ' + str(trx)
-cnf_vars = traverse( trx ) 
+cnf_vars = traverse_cnf( cnf_list ) 
 print 'cnf_vars : ' + str( cnf_vars ) 
-#print cnf_list
-#print get_var_index(cnf_list[0])
 
-#exit(0)
-#t = Then (Then(t1,t2), t3)
-
-# TAKE CARE OF ADDITIONAL EXISTENTIAL QUANTIFIER
-# ADDED FOR AUX VARIABLES.
-
-#print quant_set
 var_diff =  nnf_vars ^ cnf_vars 
-#print var_diff
-#exit(0)
 #print var_diff
 #exit(0)
 
 var_list = []
 if (len(var_diff) != 0):
+    val_map = len(var_set) + 1
     for v in var_diff:
-        tup = ( v, len(var_set) )
-        var_const_map[v] = (v, len( var_const_map ) )
+        tup = ( v, val_map )
+        val_map = val_map + 1
+        var_list.append( tup )
+        var_const_map[v] = (v, len( var_const_map ) + 1 )
     if (quant_set != [] and quant_set[-1][0] == 'E'):
         for i in var_list:
             quant_set[-1][1].append(i)
-        #quant_set[-1][1] = quant_set[-1][1] + var_list  
     else:
         quant_set.append( ('E', var_list) )
 
-#print var_const_map
-#for e in var_const_map:
-#    print e[1][1]
-#exit(0)
 # JUST A MAPPING FROM VAR(I) TO X, Y, Z IS REQUIRED...
-
-# CHECK ADDITIONAL VARIABLES PRESENT 
-#print get_vars(trx)
-#new_set = var_set 
 # DO IT AFTER ADDING TO A DICTIONARY...
 
-#print var_set 
 # ADD ADITIONAL VARIABLES DUE TO TSETING ...
-dict_set = {k : v for k,v in  var_set}
+#dict_set = {k : v for k,v in  var_set}
 #dict_set = dict( zip( var_list, index_list))
-print 'dictionary set is : ' + str( dict_set )
+#print 'dictionary set is : ' + str( dict_set )
 print 'var const map is : ' + str ( var_const_map )
-#exit(0)
 #print var_list
 #build_formula =  create_formula(quant_set, trx)
 #print build_formula
@@ -408,37 +405,29 @@ with open('myfile.qdimacs', 'r+') as f:
         if q[0] == 'A':
             f.write('a' + ' ')
             for i in range( len( q[1] ) ):
-                f.write( str( dict_set[ q[1][i][0] ] ) + ' ') 
-                #f.write( str( dict_set[ q[1][i][0] ] ) + ' ') 
+                #print q[1][i][1]
+                f.write( str( q[1][i][1]  ) + ' ') 
             f.write(str(0) + '\n')
         else:
             f.write('e' + ' ')
             for i in range( len (q[1]) ):
-                f.write( str( dict_set[ q[1][i][0] ] ) + ' ') 
+                #print q[1][i][1]
+                f.write( str( q[1][i][1] ) + ' ') 
             f.write(str(0) + '\n')
 
     for e in cnf_list:
         if is_or(e): 
             n = e.num_args()
             for i in range(n):
-                #print e.arg(i).arg(0)
-                #exit(0)
-                #wvar = var_const_map[e.arg(i)][1]
                 if is_not( e.arg(i) ):
                     wvar = var_const_map[e.arg(i).arg(0)][1]
-                    #f.write('-' + str( dict_set[ e.arg(i) ] ) )   
                     f.write('-' + str( wvar ) + ' '  )  
                 else:
-                    #print var_const_map [e.arg(i) ]
-                    #exit(0)
                     wvar = var_const_map[e.arg(i)][1]
                     #f.write( str( dict_set[ e.arg(i) ] ) ) 
                     f.write( str( wvar ) + ' ' ) 
             f.write(str(0) + '\n')
         else:
-            #print  var_const_map[e][1]
-            #exit(0)
-            #wvar = var_const_map[e][1]
             if is_not( e ):
                 wvar = var_const_map[e.arg(0)][1]
                 f.write('-' + str( wvar ) + ' ')
