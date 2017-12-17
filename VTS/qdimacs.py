@@ -355,7 +355,9 @@ if (len(var_diff) != 0):
         tup = ( v, len(var_set) )
         var_const_map[v] = (v, len( var_const_map ) )
     if (quant_set != [] and quant_set[-1][0] == 'E'):
-        quant_set[-1][1] = quant_set[-1][1] + var_list  
+        for i in var_list:
+            quant_set[-1][1].append(i)
+        #quant_set[-1][1] = quant_set[-1][1] + var_list  
     else:
         quant_set.append( ('E', var_list) )
 
