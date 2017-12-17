@@ -63,8 +63,8 @@ def traverse(e):
             if ( is_var(e) ):
                 r.add( e )
            # HANDLE ONLY BOUNDED CASE.
-           # if( is_const(e) ):
-           #     r.add( e )
+            if( is_const(e) ):
+                r.add( e )
     collect(e)
     #print r
     return r
@@ -259,11 +259,12 @@ f =  Function('f', BoolSort(), BoolSort(), BoolSort())
 #fml = ForAll ( x, ForAll ( y , x == y) ) 
 
 # HANDLE IF SOMETHING VAPOURIZE IN AIR...
-fml = ForAll (x, ForAll( y, ForAll ( z, And ( Or( x, y), Or( x, Not(x), z)) )))
+#fml = ForAll (x, ForAll( y, ForAll ( z, And ( Or( x, y), Or( x, Not(x), z)) )))
 #fml = ForAll( x, ForAll ( y, And( x, y) ) )
 #fml = ForAll (x, ForAll (y, ForAll (z, Or ( And(x,y), And (y,z)) )))
 #fml = ForAll (x, Exists (y,  And ( And(x,y), ForAll(z, Or( And(x,y), And(y,z))))))
 
+fml = ForAll( x, ForAll ( y, Exists (z, Or( z == x,  z == y) )))
 #g = Goal()
 #g.add(fml)
 
@@ -332,6 +333,7 @@ for c in subgoal[0]:
         #print c
 # Prints cnf list of the formula
 print '\nCNfd : ' + str(cnf_list)
+print 'trx is : ' + str(trx)
 cnf_vars = traverse( trx ) 
 print 'cnf_vars : ' + str( cnf_vars ) 
 #print cnf_list
@@ -347,7 +349,8 @@ print 'cnf_vars : ' + str( cnf_vars )
 var_diff =  nnf_vars ^ cnf_vars 
 #print var_diff
 #exit(0)
-
+#print var_diff
+#exit(0)
 
 var_list = []
 if (len(var_diff) != 0):
@@ -372,7 +375,7 @@ if (len(var_diff) != 0):
 #new_set = var_set 
 # DO IT AFTER ADDING TO A DICTIONARY...
 
-print var_set 
+#print var_set 
 # ADD ADITIONAL VARIABLES DUE TO TSETING ...
 dict_set = {k : v for k,v in  var_set}
 #dict_set = dict( zip( var_list, index_list))
@@ -426,6 +429,8 @@ with open('myfile.qdimacs', 'r+') as f:
                     #f.write('-' + str( dict_set[ e.arg(i) ] ) )   
                     f.write('-' + str( wvar ) + ' '  )  
                 else:
+                    #print var_const_map [e.arg(i) ]
+                    #exit(0)
                     wvar = var_const_map[e.arg(i)][1]
                     #f.write( str( dict_set[ e.arg(i) ] ) ) 
                     f.write( str( wvar ) + ' ' ) 
