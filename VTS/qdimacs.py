@@ -57,34 +57,46 @@ def traverse(e):
                 for i in range(n):
                     collect( e.arg(i) )
             if ( is_not(e) ):
+                #print 'i was here'
                 for i in e.children():
                     return collect( i ) 
             if ( is_var(e) ):
                 r.add( e )
-       # if( is_const(e) ):
-       #     print 'came to const'
-       #     r.add( e )
+           # HANDLE ONLY BOUNDED CASE.
+           # if( is_const(e) ):
+           #     r.add( e )
     collect(e)
     #print r
     return r
 
 def nnf( e, seen, sign ):
-    index = 1
+    global index
     if is_quantifier(e):
         if e.is_forall(): 
             var_list = []
             for i in range( e.num_vars() ):
                 c = Const( e.var_name(i), e.var_sort(i) )
+                #print index
+                #exit(0)
                 var_list.append( ( c, index ) )
                 index = index + 1 
+                #print var_list
+                #print ' '
             if sign == False:
                 if (quant_set != [] and quant_set[-1][0] == 'E'):
-                        quant_set[-1][1] = quant_set[-1][1] + var_list  
+                    for i in var_list:
+                        quant_set[-1][1].append(i)
+                    #quant_set[-1][1] = quant_set[-1][1] + var_list  
                 else:
                     quant_set.append(( 'E', var_list ) )
             else:
                 if (quant_set != []  and quant_set[-1][0] == 'A'):
-                    quant_set[-1][1] = quant_set[-1][1] + var_list  
+                    print quant_set[-1][1]
+                    #print var_list
+                    for i in var_list:
+                        quant_set[-1][1].append(i)
+                        #print quant_set
+                    #quant_set[-1][1] = quant_set[-1][1] + var_list  
                 else:
                     quant_set.append( ( 'A', var_list ) )
             return nnf( e.body(), seen, sign )
@@ -96,12 +108,16 @@ def nnf( e, seen, sign ):
                 index = index + 1
             if sign == True:
                 if (quant_set != [] and quant_set[-1][0] == 'E'):
-                        quant_set[-1][1] = quant_set[-1][1] + var_list  
+                    for i in var_list:
+                        quant_set[-1][1].append(i)
+                     #   quant_set[-1][1] = quant_set[-1][1] + var_list  
                 else:
                     quant_set.append(( 'E', var_list ) )
             else:
                 if (quant_set != [] and quant_set[-1][0] == 'A'):
-                    quant_set[-1][1] = quant_set[-1][1] + var_list  
+                    for i in var_list:
+                        quant_set[-1][1].append(i)
+                    #quant_set[-1][1] = quant_set[-1][1] + var_list  
                 else:
                     quant_set.append( ( 'A', var_list ) )
             return nnf( e.body(), seen, sign )
@@ -138,7 +154,14 @@ def nnf( e, seen, sign ):
                 sign = True
             for i in e.children():
                 return nnf(i, seen, sign) 
-# Handle variables
+
+    # Handle EQ: return And( Implies (e.children(0), e.children(1)) , 
+    #                        Implies (e.children(1), e.children(0) ) 
+        #if(is_eq(e)):
+        #    if sign == False
+         #       return ( 
+
+    # Handle variables
         if (is_var(e)):
             #print 'Can someone gets heres :)'
             if sign == True:
@@ -167,15 +190,82 @@ def create_formula(quant_set, trx):
         else:
             return Exists(i[1], trx )
 
+def is_implies(a):
+    return is_app_of(a, Z3_OP_IMPLIES)
+
+# Handle the case of the EQ:
+def impl_elim( e ):
+    if is_quantifier(e):
+        var_list = []
+        if e.is_forall(): 
+            for i in range( e.num_vars() ):
+                c = Const( e.var_name(i), e.var_sort(i) )
+                var_list.append( c )
+            return ForAll (var_list, impl_elim ( e.body() ) )
+        else:
+            for i in range( e.num_vars() ):
+                c = Const( e.var_name(i), e.var_sort(i) )
+                var_list.append( c )
+            return Exists (var_list, impl_elim ( e.body() ) )
+        
+    # The expression can be an Boolean.
+    if is_bool(e):
+        if (is_and(e)):
+            n = e.num_args()
+            arg_list = []
+            for i in range(n):
+                arg_list.append( impl_elim( e.arg(i) ))
+            return And(arg_list)
+        
+    # Handle And: Return And (Neg(inl), Neg(inr))
+        if (is_or(e)):
+            n = e.num_args()
+            arg_list = []
+            for i in range(n):
+                arg_list.append( impl_elim (e.arg(i)) )
+            return Or(arg_list)
+       
+    # Handle NOT: return Not(Const)
+        if (is_not(e)):
+            for i in e.children():
+                return Not ( impl_elim (i) ) 
+
+    # Handle EQ: return And( Implies (e.children(0), e.children(1)) , 
+    #                        Implies (e.children(1), e.children(0) ) 
+        if(is_eq(e)):
+            #for i in e.children():
+            #    print i
+            chld = e.children()
+            #print children(1)
+            #exit(0)
+            return And( impl_elim ( Implies ( chld[0], chld[1] ) ), 
+                        impl_elim ( Implies ( chld[1], chld[0] ) ) )
+            
+        if(is_implies(e)):
+            chld = e.children()
+            return Or ( Not( impl_elim ( chld[0] ) ), impl_elim ( chld[1] ) )  
+    # Handle variables
+        if (is_var(e)):
+            #print 'Can someone gets here :)'
+            return e
+# Handle the constant case
+        if(is_const(e)):
+            #print 'Mitroon... :)'
+            return e
+
+
 x, y, z = Bools('x y z')
 sign = True
 seen = {}
 quant_set = []
+index = 1
 
+# BIG ASSUMPTION... EVERY VARIABLE IS BOUND ....
 f =  Function('f', BoolSort(), BoolSort(), BoolSort())
-
+fml = ForAll ( x, ForAll ( y , x == y) ) 
+#fml = ForAll (x, ForAll( y, x == y ) )
 #fml = ForAll( x, ForAll ( y, And( x, y) ) )
-fml = ForAll (x, ForAll (y, ForAll (z, Or ( And(x,y), And (y,z)) )))
+#fml = ForAll (x, ForAll (y, ForAll (z, Or ( And(x,y), And (y,z)) )))
 #fml = ForAll (x, Exists (y,  And ( And(x,y), ForAll(z, Or( And(x,y), And(y,z))))))
 
 #g = Goal()
@@ -189,9 +279,11 @@ t3 = Tactic('tseitin-cnf')
 #trx = Then(t1,t3)
 
 # STEP 1: ~SIMPLIFY ND NNF -- IMPLIES ELIM AND NNF PROP
-tr = Tactic('simplify')(fml).as_expr()
+#tr = Tactic('simplify')(fml).as_expr()
 #tr = Then(Tactic('simplify'),Tactic('nnf'))(fml).as_expr()
 #r = tr(fml)
+
+tr = impl_elim( fml )
 print 'Impl_elimd : ' + str(tr)
 #exit(0)
 
@@ -209,6 +301,7 @@ def find_index(i):
 sorted_vars = sorted( nnf_vars, key = find_index, reverse = True ) 
 #print sorted_vars
 
+#print quant_set
 # ADDITIONAL SETUP WHERE EVERY DISTINCT VARIABLES IN A DICTIONARY.
 var_set = []
 for i in quant_set:
@@ -278,6 +371,7 @@ if (len(var_diff) != 0):
 #new_set = var_set 
 # DO IT AFTER ADDING TO A DICTIONARY...
 
+print var_set 
 # ADD ADITIONAL VARIABLES DUE TO TSETING ...
 dict_set = {k : v for k,v in  var_set}
 #dict_set = dict( zip( var_list, index_list))
@@ -321,23 +415,28 @@ with open('myfile.qdimacs', 'r+') as f:
         if is_or(e): 
             n = e.num_args()
             for i in range(n):
-                #print e.arg(i)
-                wvar = var_const_map[e.arg(i)][1]
+                #print e.arg(i).arg(0)
+                #exit(0)
+                #wvar = var_const_map[e.arg(i)][1]
                 if is_not( e.arg(i) ):
+                    wvar = var_const_map[e.arg(i).arg(0)][1]
                     #f.write('-' + str( dict_set[ e.arg(i) ] ) )   
                     f.write('-' + str( wvar ) + ' '  )  
                 else:
+                    wvar = var_const_map[e.arg(i)][1]
                     #f.write( str( dict_set[ e.arg(i) ] ) ) 
                     f.write( str( wvar ) + ' ' ) 
             f.write(str(0) + '\n')
         else:
             #print  var_const_map[e][1]
             #exit(0)
-            wvar = var_const_map[e][1]
+            #wvar = var_const_map[e][1]
             if is_not( e ):
+                wvar = var_const_map[e.arg(0)][1]
                 f.write('-' + str( wvar ) + ' ')
                 #f.write('-' + str( dict_set[ e.arg(i) ] ) ) 
             else:
+                wvar = var_const_map[e][1]
                 f.write( str( wvar ) + ' ') 
                 #f.write( str( dict_set[ e.arg(i) ] ) ) 
             f.write(str(0) + '\n')

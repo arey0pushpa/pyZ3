@@ -1,7 +1,5 @@
 c This is a QDIMACS output 
-p cnf 3 4
-a 1 2 3 0
-1 2 0
-2 0
-1 3 0
-2 3 0
+p cnf 2 2
+a 1 2 0
+-1 2 0
+-2 1 0
