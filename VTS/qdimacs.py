@@ -155,12 +155,6 @@ def nnf( e, seen, sign ):
             for i in e.children():
                 return nnf(i, seen, sign) 
 
-    # Handle EQ: return And( Implies (e.children(0), e.children(1)) , 
-    #                        Implies (e.children(1), e.children(0) ) 
-        #if(is_eq(e)):
-        #    if sign == False
-         #       return ( 
-
     # Handle variables
         if (is_var(e)):
             #print 'Can someone gets heres :)'
@@ -262,8 +256,10 @@ index = 1
 
 # BIG ASSUMPTION... EVERY VARIABLE IS BOUND ....
 f =  Function('f', BoolSort(), BoolSort(), BoolSort())
-fml = ForAll ( x, ForAll ( y , x == y) ) 
-#fml = ForAll (x, ForAll( y, x == y ) )
+#fml = ForAll ( x, ForAll ( y , x == y) ) 
+
+# HANDLE IF SOMETHING VAPOURIZE IN AIR...
+fml = ForAll (x, ForAll( y, ForAll ( z, And ( Or( x, y), Or( x, Not(x), z)) )))
 #fml = ForAll( x, ForAll ( y, And( x, y) ) )
 #fml = ForAll (x, ForAll (y, ForAll (z, Or ( And(x,y), And (y,z)) )))
 #fml = ForAll (x, Exists (y,  And ( And(x,y), ForAll(z, Or( And(x,y), And(y,z))))))
@@ -279,11 +275,11 @@ t3 = Tactic('tseitin-cnf')
 #trx = Then(t1,t3)
 
 # STEP 1: ~SIMPLIFY ND NNF -- IMPLIES ELIM AND NNF PROP
-#tr = Tactic('simplify')(fml).as_expr()
+trx = Tactic('simplify')(fml).as_expr()
 #tr = Then(Tactic('simplify'),Tactic('nnf'))(fml).as_expr()
 #r = tr(fml)
 
-tr = impl_elim( fml )
+tr = impl_elim( trx )
 print 'Impl_elimd : ' + str(tr)
 #exit(0)
 
@@ -349,6 +345,9 @@ print 'cnf_vars : ' + str( cnf_vars )
 
 #print quant_set
 var_diff =  nnf_vars ^ cnf_vars 
+#print var_diff
+#exit(0)
+
 
 var_list = []
 if (len(var_diff) != 0):
@@ -358,7 +357,7 @@ if (len(var_diff) != 0):
     if (quant_set != [] and quant_set[-1][0] == 'E'):
         quant_set[-1][1] = quant_set[-1][1] + var_list  
     else:
-        quant_set.append('E', var_list)
+        quant_set.append( ('E', var_list) )
 
 #print var_const_map
 #for e in var_const_map:
@@ -398,6 +397,8 @@ with open('myfile.qdimacs', 'r+') as f:
     text = 'p' + ' ' +  'cnf'  + ' ' + str(q_var) + ' ' + str(num_clause) + '\n'
     f.write(text)
     bit = True
+    print quant_set
+    #exit(0)
     for q in quant_set:
         if q[0] == 'A':
             f.write('a' + ' ')
@@ -407,7 +408,7 @@ with open('myfile.qdimacs', 'r+') as f:
             f.write(str(0) + '\n')
         else:
             f.write('e' + ' ')
-            for i in range(q[1]):
+            for i in range( len (q[1]) ):
                 f.write( str( dict_set[ q[1][i][0] ] ) + ' ') 
             f.write(str(0) + '\n')
 
