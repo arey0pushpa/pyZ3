@@ -129,7 +129,8 @@ def nnf( e, seen, sign ):
                     #quant_set[-1][1] = quant_set[-1][1] + var_list  
                 else:
                     quant_set.append( ( 'A', var_list ) )
-            return nnf( e.body(), seen, sign )
+            ret_e = nnf( e.body(), seen, sign )
+            return ret_e
         else:
             var_list = []
             for i in range( e.num_vars() ):
@@ -298,11 +299,12 @@ f =  Function('f', BoolSort(), BoolSort(), BoolSort())
 # HANDLE IF SOMETHING VAPOURIZE IN AIR...
 with open ("formula.txt", "r") as myfile:
     fml = myfile.read()
-fml = ForAll (x,  Exists ( y, Or( And( False, x ), And( False, y ) ) ))
+# fml = ForAll (x,  Exists ( y, Or( And( False, x ), And( False, y ) ) ))
 #print fml 
 
 #fml = ForAll (x, ForAll( y, ForAll ( z, And ( Or( x, y), Or( x, Not(x), z)) )))
-#fml = And ( ForAll( x, ForAll ( y, And( x, y) ) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
+fml = And ( ForAll( x, Exists( v, ForAll ( y, And( x, y, v) )) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
+# fml = And ( ForAll( x, ForAll ( y, And( x, y) ) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
 #fml = ForAll (x, ForAll (y, ForAll (z, Or ( And(x,y), And (y,z)) )))
 #fml = ForAll (x, Exists (y,  And ( And(x,y), ForAll(z, Or( And(x,y), And(y,z))))))
 #fml = ForAll(x, ForAll(y , Implies (x, y) ))
@@ -317,7 +319,6 @@ t3 = Tactic('tseitin-cnf')
 
 #tr = Then(t1,t2)
 #trx = Then(t1,t3)
-
 # STEP 1: ~SIMPLIFY ND NNF -- IMPLIES ELIM AND NNF PROP
 trx = Tactic('simplify')(fml).as_expr()
 #tr = Then(Tactic('simplify'),Tactic('nnf'))(fml).as_expr()
