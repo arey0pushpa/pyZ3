@@ -35,18 +35,18 @@ bag.append ('4. Only SNARE-SNARE inhibition on edges.')
 bag.append ('5. Only Boolean function on nodes.')
 bag.append ('6. No regulation at all.')
 
-for i in range(6):
-    if V == i + 1:
-        print ' '
-        print 'Default/choosen vesicular traffic system is regulated by ...',
-        print bag[i]
-        print ' '
-        print 'Use -V option to change the regulated variation.' 
-        for i in bag:
-            print i 
-        print ' '
-        break
-
+#for i in range(6):
+#    if V == i + 1:
+#        print ' '
+#        print 'Default/choosen vesicular traffic system is regulated by ...',
+#        print bag[i]
+#        print ' '
+#        print 'Use -V option to change the regulated variation.' 
+#        for i in bag:
+#            print i 
+#        print ' '
+#        break
+#
 #----------------------------------------------------
 # Constraint generation 
 edge = [ [ [ Bool ("e_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
@@ -403,7 +403,6 @@ for i in range(N):
 R1_steady_state_reachability_defination = And(A_list)
 #print R1_steady_state_reachability_defination
 
-
 # Constraint R2_steady_state_stability ----------------------
 # Encode stability using the reachability variables. 
 # If there is an m-edge between i and j, there is m reachble path from j and i.
@@ -424,7 +423,6 @@ for i in range(N):
             A_list.append(l)
 R2_steady_state_stability = And(A_list)
 #print R2_steady_state_stability
-
 
 #fss = time.time() - st
 #print "Building F0-F3's took...", str(fss)
@@ -471,6 +469,22 @@ for i in range(N):
             d1.append (dump1[i][j][q])
 L = len(d1)
 
+# At least 2
+D1_list = []
+for i in range(L-1):
+    for j in range(i+1,L):
+        D1_list.append( And( d1[i], d1[j]) )
+D1_old = Or(D1_list)
+
+# At least 3
+D1_list = []
+for i in range(L-2):
+    for j in range(i+1,L-1):
+        lhs = And ( d1[i], d1[j])
+        for k in range(j+1,L):
+            D1_list.append( And( lhs,d1[k]))
+D2_old = Or( D1_list ) 
+
 # 2. K drops from the graph.
 oneList = []
 for i in range(L):
@@ -480,8 +494,7 @@ z = zip (d1, oneList)
 
 D2_1_drops_are_k_minus_1 = PbEq (z, C-1)
 
-#print D2
- 
+#print D2 
 #-------------------------------
 # D22 : For second set of variables.
 # For the 4 connected.
@@ -654,7 +667,8 @@ D4_2_some_disconnected = Not( And( D44_list ) )
 
 # K-1 Connectivity constraints. ####### 
 is_reach = Exists( setR1_connectivity, And(D3_1_reachability, D4_1_all_connected) )
-k_min_1_connected = ForAll( setDump1, Implies( D2_1_drops_are_k_minus_1, is_reach ) )
+#k_min_1_connected = ForAll( setDump1, Implies( D2_1_drops_are_k_minus_1, is_reach ) )
+k_min_1_connected = ForAll( setDump1, Implies( And( D1_old, Not(D2_old) ), is_reach ) )
 
 # K disconnectivity constraints. ########
 is_reach = And(D3_2_reachability, D4_2_some_disconnected)
@@ -666,6 +680,8 @@ k_not_connected =  And( D2_2_drops_are_k, D1_2_edge_exists, is_reach)
 # Graph is K connected. ######
 connectivity = And( At_least_k_edges, k_min_1_connected, k_not_connected )
 
+print k_min_1_connected
+exit(0)
 #connectivity = And( At_least_k_edges, k_min_1_connected )
 #print connectivity
 #exit(0)

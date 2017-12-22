@@ -67,34 +67,27 @@ def traverse_cnf( l ):
 def traverse(e):
     r = set()
     def collect(e):
-        #if is_quantifier(e):
-        #    if e.is_forall():
-#                collect(e.body())
-        if ( is_and(e) ):
-            n = e.num_args()
-            for i in range(n):
-                collect( e.arg(i) )
-        if ( is_or(e) ):
-            n = e.num_args()
-            for i in range(n):
-                collect( e.arg(i) )
-        if ( is_not(e) ):
-            collect( e.arg(0) )
+        if e.is_forall():
+            collect(e.body())
+        else:
+            if ( is_and(e) ):
+                n = e.num_args()
+                for i in range(n):
+                    collect( e.arg(i) )
+            if ( is_or(e) ):
+                n = e.num_args()
+                for i in range(n):
+                    collect( e.arg(i) )
+            if ( is_not(e) ):
+                collect( e.arg(0) )
                 #print 'i was here'
                 #for i in e.children():
                 #    return collect( i ) 
-        if ( is_var(e) ):
-            print 'i was here'
-                #print e
-            r.add( e )
+            if ( is_var(e) ):
+                r.add( e )
            # HANDLE ONLY BOUNDED CASE.
-        if( is_const(e) ):
-            #if (e == BoolVal('True') ):
-                #return ''
-            #if (e == BoolVal('False') ):
-                #return ''
-            #print 'i was in jungle'
-            r.add( e )
+            if( is_const(e) ):
+                r.add( e )
     collect(e)
     #print r
     return r
@@ -277,32 +270,19 @@ def impl_elim( e ):
             #print 'Mitroon... :)'
             return e
 
-#----------DEFFINE VARIABLES-------------------------
 v, w, x, y, z = Bools('v w x y z')
 sign = True
 seen = {}
 quant_set = []
 index = 1
-N = 2
-M = 4
-Q = 2
-
-edge = [ [ [ Bool ("e_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
-dump1 = [ [ [Bool ("d1_{}_{}_{}".format(i,j,q)) for q in range(Q)] for j in range(N)] for i in range(N)]
-r1 = [ [Bool ("r1_{}_{}".format(i,j)) for j in range(N)] for i in range(N)]
 
 # BIG ASSUMPTION... EVERY VARIABLE IS BOUND ....
 f =  Function('f', BoolSort(), BoolSort(), BoolSort())
 #fml = ForAll ( x, ForAll ( y , x == y) ) 
 
 # HANDLE IF SOMETHING VAPOURIZE IN AIR...
-with open ("formula.txt", "r") as myfile:
-    fml = myfile.read()
-fml = ForAll (x,  Exists ( y, Or( And( False, x ), And( False, y ) ) ))
-#print fml 
-
 #fml = ForAll (x, ForAll( y, ForAll ( z, And ( Or( x, y), Or( x, Not(x), z)) )))
-#fml = And ( ForAll( x, ForAll ( y, And( x, y) ) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
+fml = And ( ForAll( x, ForAll ( y, And( x, y, v) ) ), ForAll(z,  ForAll( w, And(z, w, v) ) )) 
 #fml = ForAll (x, ForAll (y, ForAll (z, Or ( And(x,y), And (y,z)) )))
 #fml = ForAll (x, Exists (y,  And ( And(x,y), ForAll(z, Or( And(x,y), And(y,z))))))
 #fml = ForAll(x, ForAll(y , Implies (x, y) ))
@@ -323,10 +303,10 @@ trx = Tactic('simplify')(fml).as_expr()
 #tr = Then(Tactic('simplify'),Tactic('nnf'))(fml).as_expr()
 #r = tr(fml)
 
-#wwe = traverse (fml)
+wwe = traverse (fml)
 
-#print wwe
-#exit(0)
+print wwe
+exit(0)
 tr = impl_elim( trx )
 print 'Impl_elimd : ' + str(tr)
 #exit(0)
@@ -337,7 +317,7 @@ print 'NNfd : ' + str(nnf_fml)
 
 nnf_vars = traverse( nnf_fml )
 print 'nnf_vars : '+ str( nnf_vars )
-#exit(0)
+exit(0)
 def find_index(i):
     return get_var_index( i ) 
 sorted_vars = sorted( nnf_vars, key = find_index, reverse = True ) 
