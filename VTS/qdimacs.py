@@ -54,10 +54,16 @@ def traverse_cnf( l ):
             if ( is_not(e) ):
                 collect( e.arg(0) )
             if ( is_var(e) ):
-                r.add( e )
+                if e == True or e == False:
+                    pass
+                else:
+                    r.add( e )
            # HANDLE ONLY BOUNDED CASE.
             if( is_const(e) ):
-                r.add( e )
+                if e == True or e == False:
+                    pass
+                else:
+                    r.add( e )
     for e in l :
         collect(e)
     return r
@@ -76,15 +82,16 @@ def traverse(e):
         if ( is_not(e) ):
             collect( e.arg(0) )
         if ( is_var(e) ):
-            r.add( e )
-           # HANDLE ONLY BOUNDED CASE.
+            if e == True or e == False:
+                pass
+            else:
+                r.add( e )
+        # HANDLE ONLY BOUNDED CASE.
         if( is_const(e) ):
-            #if (e == BoolVal('True') ):
-                #return ''
-            #if (e == BoolVal('False') ):
-                #return ''
-            #print 'i was in jungle'
-            r.add( e )
+            if e == True or e == False:
+                pass
+            else:
+                r.add( e )
     collect(e)
     #print r
     return r
@@ -289,6 +296,7 @@ f =  Function('f', BoolSort(), BoolSort(), BoolSort())
 with open ("formula.txt", "r") as myfile:
     fml = myfile.read()
 
+#fml = And (True, False) 
 #fml = ForAll (x, ForAll( y, ForAll ( z, And ( Or( x, y), Or( x, Not(x), z)) )))
 # fml = And ( ForAll( x, Exists( v, ForAll ( y, And( x, y, v) )) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
 fml = ForAll( x, Exists( v, And( v, ForAll ( y, And( x, y) )) ) )
@@ -327,6 +335,7 @@ print 'NNfd : ' + str(nnf_fml)
 nnf_vars = traverse( nnf_fml )
 print 'nnf_vars : '+ str( nnf_vars )
 #exit(0)
+
 def find_index(i):
     return get_var_index( i ) 
 sorted_vars = sorted( nnf_vars, key = find_index, reverse = True ) 
@@ -368,6 +377,13 @@ for c in subgoal[0]:
 print '\nCNfd : ' + str(cnf_list)
 cnf_vars = traverse_cnf( cnf_list ) 
 print 'cnf_vars : ' + str( cnf_vars ) 
+if cnf_list == [False]:
+    print 'The formula is trivially False'
+    exit(0)
+if cnf_list == [True]:
+    print 'The formula is trivially True'
+    exit(0)
+    
 
 var_diff =  nnf_vars ^ cnf_vars 
 #print var_diff
