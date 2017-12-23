@@ -53,8 +53,6 @@ def traverse_cnf( l ):
                     collect( e.arg(i) )
             if ( is_not(e) ):
                 collect( e.arg(0) )
-                #print e.arg(0)
-                #exit(0)
             if ( is_var(e) ):
                 r.add( e )
            # HANDLE ONLY BOUNDED CASE.
@@ -67,9 +65,6 @@ def traverse_cnf( l ):
 def traverse(e):
     r = set()
     def collect(e):
-        #if is_quantifier(e):
-        #    if e.is_forall():
-#                collect(e.body())
         if ( is_and(e) ):
             n = e.num_args()
             for i in range(n):
@@ -80,12 +75,7 @@ def traverse(e):
                 collect( e.arg(i) )
         if ( is_not(e) ):
             collect( e.arg(0) )
-                #print 'i was here'
-                #for i in e.children():
-                #    return collect( i ) 
         if ( is_var(e) ):
-            #:print 'i was here'
-                #print e
             r.add( e )
            # HANDLE ONLY BOUNDED CASE.
         if( is_const(e) ):
@@ -106,7 +96,6 @@ def nnf( e, seen, sign ):
             var_list = []
             for i in range( e.num_vars() ):
                 c = Const( e.var_name(i), e.var_sort(i) )
-                #print index
                 #exit(0)
                 var_list.append( ( c, index ) )
                 index = index + 1 
@@ -129,7 +118,8 @@ def nnf( e, seen, sign ):
                     #quant_set[-1][1] = quant_set[-1][1] + var_list  
                 else:
                     quant_set.append( ( 'A', var_list ) )
-            return nnf( e.body(), seen, sign )
+            ret_e = nnf( e.body(), seen, sign )
+            return ret_e
         else:
             var_list = []
             for i in range( e.num_vars() ):
@@ -298,11 +288,11 @@ f =  Function('f', BoolSort(), BoolSort(), BoolSort())
 # HANDLE IF SOMETHING VAPOURIZE IN AIR...
 with open ("formula.txt", "r") as myfile:
     fml = myfile.read()
-#fml = ForAll (x,  Exists ( y, Or( And( False, x ), And( False, y ) ) ))
-#print fml 
 
 #fml = ForAll (x, ForAll( y, ForAll ( z, And ( Or( x, y), Or( x, Not(x), z)) )))
-fml = And ( ForAll( x, ForAll ( y, And(x, y) ) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
+# fml = And ( ForAll( x, Exists( v, ForAll ( y, And( x, y, v) )) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
+fml = ForAll( x, Exists( v, And( v, ForAll ( y, And( x, y) )) ) )
+# fml = And ( ForAll( x, ForAll ( y, And( x, y) ) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
 #fml = ForAll (x, ForAll (y, ForAll (z, Or ( And(x,y), And (y,z)) )))
 #fml = ForAll (x, Exists (y,  And ( And(x,y), ForAll(z, Or( And(x,y), And(y,z))))))
 #fml = ForAll(x, ForAll(y , Implies (x, y) ))
@@ -317,7 +307,6 @@ t3 = Tactic('tseitin-cnf')
 
 #tr = Then(t1,t2)
 #trx = Then(t1,t3)
-
 # STEP 1: ~SIMPLIFY ND NNF -- IMPLIES ELIM AND NNF PROP
 trx = Tactic('simplify')(fml).as_expr()
 #tr = Then(Tactic('simplify'),Tactic('nnf'))(fml).as_expr()
