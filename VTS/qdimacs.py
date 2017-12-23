@@ -84,7 +84,7 @@ def traverse(e):
                 #for i in e.children():
                 #    return collect( i ) 
         if ( is_var(e) ):
-            print 'i was here'
+            #:print 'i was here'
                 #print e
             r.add( e )
            # HANDLE ONLY BOUNDED CASE.
@@ -110,7 +110,7 @@ def nnf( e, seen, sign ):
                 #exit(0)
                 var_list.append( ( c, index ) )
                 index = index + 1 
-                print var_list
+                #print var_list
                 #print ' '
             if sign == False:
                 if (quant_set != [] and quant_set[-1][0] == 'E'):
@@ -298,11 +298,11 @@ f =  Function('f', BoolSort(), BoolSort(), BoolSort())
 # HANDLE IF SOMETHING VAPOURIZE IN AIR...
 with open ("formula.txt", "r") as myfile:
     fml = myfile.read()
-fml = ForAll (x,  Exists ( y, Or( And( False, x ), And( False, y ) ) ))
+#fml = ForAll (x,  Exists ( y, Or( And( False, x ), And( False, y ) ) ))
 #print fml 
 
 #fml = ForAll (x, ForAll( y, ForAll ( z, And ( Or( x, y), Or( x, Not(x), z)) )))
-#fml = And ( ForAll( x, ForAll ( y, And( x, y) ) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
+fml = And ( ForAll( x, ForAll ( y, And(x, y) ) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
 #fml = ForAll (x, ForAll (y, ForAll (z, Or ( And(x,y), And (y,z)) )))
 #fml = ForAll (x, Exists (y,  And ( And(x,y), ForAll(z, Or( And(x,y), And(y,z))))))
 #fml = ForAll(x, ForAll(y , Implies (x, y) ))
