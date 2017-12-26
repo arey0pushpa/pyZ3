@@ -52,7 +52,8 @@ def traverse_cnf( l ):
                 for i in range(n):
                     collect( e.arg(i) )
             if ( is_not(e) ):
-                collect( e.arg(0) )
+                collect(e.children[0])
+                #collect( e.arg(0) )
             if ( is_var(e) ):
                 if e == True or e == False:
                     pass
@@ -80,7 +81,8 @@ def traverse(e):
             for i in range(n):
                 collect( e.arg(i) )
         if ( is_not(e) ):
-            collect( e.arg(0) )
+            collect(e.children[0])
+            #collect( e.arg(0) )
         if ( is_var(e) ):
             if e == True or e == False:
                 pass
@@ -179,8 +181,9 @@ def nnf( e, seen, sign ):
                 sign = False
             else: 
                 sign = True
-            for i in e.children():
-                return nnf(i, seen, sign) 
+            return nnf(e.children[0], seen, sign)
+            #for i in e.children():
+            #    return nnf(i, seen, sign) 
 
     # Handle variables
         if (is_var(e)):
@@ -248,8 +251,9 @@ def impl_elim( e ):
        
     # Handle NOT: return Not(Const)
         if (is_not(e)):
-            for i in e.children():
-                return Not ( impl_elim (i) ) 
+            return Not (e.children[0])
+            #for i in e.children():
+                #return Not ( impl_elim (i) ) 
 
     # Handle EQ: return And( Implies (e.children(0), e.children(1)) , 
     #                        Implies (e.children(1), e.children(0) ) 
@@ -298,12 +302,16 @@ with open ("formula.txt", "r") as myfile:
 
 #fml = And (True, False) 
 #fml = ForAll (x, ForAll( y, ForAll ( z, And ( Or( x, y), Or( x, Not(x), z)) )))
+#fml = And ( ForAll( x, Exists( v, ForAll ( y, And( x, y, v) )) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
+#fml = ForAll( x, Exists( v, And( v, ForAll ( y, And( x, y) )) ) )
+fml = And ( ForAll( x, ForAll ( y, And( x, y) ) ), ForAll(z,  Exists( w, And(z, w) ) )) 
 # fml = And ( ForAll( x, Exists( v, ForAll ( y, And( x, y, v) )) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
 fml = ForAll( x, Exists( v, And( v, ForAll ( y, And( x, v, y) )) ) )
 # fml = And ( ForAll( x, ForAll ( y, And( x, y) ) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
 #fml = ForAll (x, ForAll (y, ForAll (z, Or ( And(x,y), And (y,z)) )))
 #fml = ForAll (x, Exists (y,  And ( And(x,y), ForAll(z, Or( And(x,y), And(y,z))))))
 #fml = ForAll(x, ForAll(y , Implies (x, y) ))
+#fml = Implies (x, y) 
 #fml = ForAll( x, ForAll ( y, Exists (z, Or( z == x,  z == y) )))
 #fml = ForAll( x, ForAll ( y, Exists (z, z == Or (x, y) ) ) )
 #g = Goal()
@@ -328,13 +336,57 @@ tr = impl_elim( trx )
 print 'Impl_elimd : ' + str(tr)
 #exit(0)
 
+def check_struc(e):
+    r = {}
+    #r = set()
+    def collect(e):
+        if ( is_and(e) ):
+            n = e.num_args()
+            for i in range(n):
+                collect( e.arg(i) )
+        if ( is_or(e) ):
+            n = e.num_args()
+            for i in range(n):
+                collect( e.arg(i) )
+        if ( is_not(e) ):
+            collect( e.arg(0) )
+        if ( is_var(e) ):
+            if e == True or e == False:
+                pass
+            else:
+                if e in r:
+                    if e.hash() ==  r[e]:
+                        print 'For variable: ' + str(e) + ' The Hash are equal ' + str(e.hash()) +  ' But the variables are diff. \n'
+                print 'The hash value of the variable is: ' + str(e.hash())
+                r[e] = e.hash()
+                #r.append((e,e.hash()) )
+                #r.add( e )
+        # HANDLE ONLY BOUNDED CASE.
+        if( is_const(e) ):
+            if e == True or e == False:
+                pass
+            else:
+                if e in r:
+                    if e.hash() ==  r[e]:
+                        print 'For constant: ' + str(e) + ' The Hash are equal ' + str(e.hash()) +  ' But the variables are diff. \n'
+                print 'The hash value of the constant is: ' + str(e.hash())
+                r[e] = e.hash()
+    collect(e)
+    #print r
+    return r
+
 # NNF DOES: BOTH NNF TRANSFORMTAION AND PULL QUANTIFIERS OUT
 nnf_fml = nnf(tr, seen, sign)
 print 'NNfd : ' + str(nnf_fml)
 
+hash_val_set =  check_struc(nnf_fml)
+#print hash_val_set
+#exit(0)
 nnf_vars = traverse( nnf_fml )
 print 'nnf_vars : '+ str( nnf_vars )
-#exit(0)
+trx = Tactic('simplify')(nnf_fml).as_expr()
+print trx
+exit(0)
 
 def find_index(i):
     return get_var_index( i ) 
