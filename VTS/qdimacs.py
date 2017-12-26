@@ -304,7 +304,7 @@ with open ("formula.txt", "r") as myfile:
 
 #fml = ForAll (x, ForAll( y, ForAll ( z, And ( Or( x, y), Or( x, Not(x), z)) )))
 # fml = And ( ForAll( x, Exists( v, ForAll ( y, And( x, y, v) )) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
-fml = ForAll( x, Exists( v, And( v, ForAll ( y, And( x, y) )) ) )
+fml = ForAll( x, Exists( v, And( v, ForAll ( y, And( x, v, y) )) ) )
 # fml = And ( ForAll( x, ForAll ( y, And( x, y) ) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
 #fml = ForAll (x, ForAll (y, ForAll (z, Or ( And(x,y), And (y,z)) )))
 #fml = ForAll (x, Exists (y,  And ( And(x,y), ForAll(z, Or( And(x,y), And(y,z))))))
