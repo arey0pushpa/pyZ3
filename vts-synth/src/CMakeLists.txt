@@ -82,4 +82,4 @@ add_executable(vts-synth main.cpp)
 
 SET(LIBZ3 z3)
 
-target_link_libraries (vts-synth tarastatic ${LIBZ3} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (vts-synth ${LIBZ3} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
