@@ -53,13 +53,17 @@ def traverse_cnf( l ):
                     collect( e.arg(i) )
             if ( is_not(e) ):
                 collect( e.arg(0) )
-                #print e.arg(0)
-                #exit(0)
             if ( is_var(e) ):
-                r.add( e )
+                if e == True or e == False:
+                    pass
+                else:
+                    r.add( e )
            # HANDLE ONLY BOUNDED CASE.
             if( is_const(e) ):
-                r.add( e )
+                if e == True or e == False:
+                    pass
+                else:
+                    r.add( e )
     for e in l :
         collect(e)
     return r
@@ -67,9 +71,6 @@ def traverse_cnf( l ):
 def traverse(e):
     r = set()
     def collect(e):
-        #if is_quantifier(e):
-        #    if e.is_forall():
-#                collect(e.body())
         if ( is_and(e) ):
             n = e.num_args()
             for i in range(n):
@@ -80,21 +81,17 @@ def traverse(e):
                 collect( e.arg(i) )
         if ( is_not(e) ):
             collect( e.arg(0) )
-                #print 'i was here'
-                #for i in e.children():
-                #    return collect( i ) 
         if ( is_var(e) ):
-            print 'i was here'
-                #print e
-            r.add( e )
-           # HANDLE ONLY BOUNDED CASE.
+            if e == True or e == False:
+                pass
+            else:
+                r.add( e )
+        # HANDLE ONLY BOUNDED CASE.
         if( is_const(e) ):
-            #if (e == BoolVal('True') ):
-                #return ''
-            #if (e == BoolVal('False') ):
-                #return ''
-            #print 'i was in jungle'
-            r.add( e )
+            if e == True or e == False:
+                pass
+            else:
+                r.add( e )
     collect(e)
     #print r
     return r
@@ -106,11 +103,10 @@ def nnf( e, seen, sign ):
             var_list = []
             for i in range( e.num_vars() ):
                 c = Const( e.var_name(i), e.var_sort(i) )
-                #print index
                 #exit(0)
                 var_list.append( ( c, index ) )
                 index = index + 1 
-                print var_list
+                #print var_list
                 #print ' '
             if sign == False:
                 if (quant_set != [] and quant_set[-1][0] == 'E'):
@@ -299,9 +295,8 @@ f =  Function('f', BoolSort(), BoolSort(), BoolSort())
 # HANDLE IF SOMETHING VAPOURIZE IN AIR...
 with open ("formula.txt", "r") as myfile:
     fml = myfile.read()
-# fml = ForAll (x,  Exists ( y, Or( And( False, x ), And( False, y ) ) ))
-#print fml 
 
+#fml = And (True, False) 
 #fml = ForAll (x, ForAll( y, ForAll ( z, And ( Or( x, y), Or( x, Not(x), z)) )))
 # fml = And ( ForAll( x, Exists( v, ForAll ( y, And( x, y, v) )) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
 fml = ForAll( x, Exists( v, And( v, ForAll ( y, And( x, v, y) )) ) )
@@ -340,6 +335,7 @@ print 'NNfd : ' + str(nnf_fml)
 nnf_vars = traverse( nnf_fml )
 print 'nnf_vars : '+ str( nnf_vars )
 #exit(0)
+
 def find_index(i):
     return get_var_index( i ) 
 sorted_vars = sorted( nnf_vars, key = find_index, reverse = True ) 
@@ -381,6 +377,13 @@ for c in subgoal[0]:
 print '\nCNfd : ' + str(cnf_list)
 cnf_vars = traverse_cnf( cnf_list ) 
 print 'cnf_vars : ' + str( cnf_vars ) 
+if cnf_list == [False]:
+    print 'The formula is trivially False'
+    exit(0)
+if cnf_list == [True]:
+    print 'The formula is trivially True'
+    exit(0)
+    
 
 var_diff =  nnf_vars ^ cnf_vars 
 #print var_diff
