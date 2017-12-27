@@ -6,7 +6,6 @@ The complete vesicle fusion process is modelled as a contraint over a labeled gr
 
 We have modelled the VTS using CBMC [C Bounded Model Checker] and python Z3 [Z3 Theorem Prover].
 
-#We have initially modelled the VTS encoded the VTS system with our encoding using CBMC model checker (the code of the same is placed in the cbmc folder). 
 
 <!--### CBMC tool Command :
 #To run the example of the cbmc you need either of two:
@@ -39,4 +38,5 @@ We have modelled the VTS using CBMC [C Bounded Model Checker] and python Z3 [Z3 
 #
 #* : Suitable Natural number.
 #for example `./bio.py -V 1 -M 4 -N 2 -Q 2 `
+#We have initially modelled the VTS encoded the VTS system with our encoding using CBMC model checker (the code of the same is placed in the cbmc folder). 
 -->
