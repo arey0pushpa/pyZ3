@@ -1,6 +1,8 @@
 # Ignore the build and lib dirs
-build
+build/
 lib/*
+vts-synth/build/
+vts-synth/lib/
 vts-synth/build
 vts/formula.txt
 
