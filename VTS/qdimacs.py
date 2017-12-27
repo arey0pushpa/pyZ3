@@ -386,7 +386,7 @@ nnf_vars = traverse( nnf_fml )
 print 'nnf_vars : '+ str( nnf_vars )
 trx = Tactic('simplify')(nnf_fml).as_expr()
 print trx
-exit(0)
+#exit(0)
 
 def find_index(i):
     return get_var_index( i ) 
