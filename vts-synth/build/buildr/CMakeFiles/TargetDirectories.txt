@@ -1,0 +1,3 @@
+/Users/ankit/pyZ3/vts-synth/build/buildr/CMakeFiles/rebuild_cache.dir
+/Users/ankit/pyZ3/vts-synth/build/buildr/CMakeFiles/edit_cache.dir
+/Users/ankit/pyZ3/vts-synth/build/buildr/CMakeFiles/vts-synth.dir
