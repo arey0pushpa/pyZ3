@@ -1,10 +1,10 @@
 # PyZ3
 
-A eukaryotic cell contains multiple membrane-bound compartments. Transport vesicles move cargo between these compartments, just as trucks move cargo between warehouses.
+A Eukaryotic cell contains multiple membrane-bound compartments. Transport vesicles move cargo between these compartments, just as trucks move cargo between warehouses.
 
-The complete vesicle fusion process is modelled as a constraint over a labeled graph. Where node represents compartments and directed edges are vesicles. The whole network is recyclable [molecule moves only in cycles]. We call this labeled network as Vesicle Traffic System (VTS).
+The complete vesicle fusion process is modeled as a constraint over a labeled graph. Where node represents compartments and directed edges are vesicles. The whole network is recyclable [molecule moves only in cycles]. We call this labeled network as Vesicle Traffic System (VTS).
 
-We have modelled the VTS using CBMC [C Bounded Model Checker] and python Z3 [Z3 Theorem Prover].
+We have modeled the VTS using CBMC [C Bounded Model Checker] and python Z3 [Z3 Theorem Prover].
 
 
 <!--### CBMC tool Command :
