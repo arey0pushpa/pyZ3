@@ -65,7 +65,7 @@ if (HB_UNICODE AND NOT WIN32)
   ADD_DEFINITIONS(-DHB_UNICODE)
 ENDIF(HB_UNICODE AND NOT WIN32)
 
-include_directories (${CMAKE_CURRENT_BINARY_DIR} "${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/library" "${PROJECT_BINARY_DIR}/../z3/src/api" "${PROJECT_BINARY_DIR}/../z3/src/api/c++")
+include_directories (${CMAKE_CURRENT_BINARY_DIR} "${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/library" "${PROJECT_BINARY_DIR}/../z3/src/api" "${PROJECT_BINARY_DIR}/../z3/src/" "${PROJECT_BINARY_DIR}/../z3/src/api/c++")
 include_directories(${Boost_INCLUDE_DIRS}) 
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
@@ -78,7 +78,7 @@ LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 # LINK_DIRECTORIES(${LLVM_LIBRARY_DIRS})
 # add_subdirectory("library")
 
-add_executable(vts-synth main.cpp)
+add_executable(vts-synth main.cpp z3-hoister.cpp)
 
 SET(LIBZ3 z3)
 
