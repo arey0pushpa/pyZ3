@@ -39,12 +39,6 @@ patch :
 	mkdir -p $(SRCDIR)/z3-patch
 	cd $(BUILDDIR)/z3; $(git) diff > $(SRCDIR)/z3-patch/z3.patch
 
-# $(BUILDDIR)/z3/README.md : 
-# 	mkdir -p $(BUILDDIR)
-# 	# todo: switch to https; someone may not have ssh access configured
-# 	cd $(BUILDDIR);$(git) clone git@github.com:Z3Prover/z3.git
-# 	cd $(BUILDDIR)/z3;$(git) checkout b8716b333908273ad8e27e325a8bea9be0596be3
-
 
 # NEW_Z3_FILES =  $(SRCDIR)/z3-patch/smt_model_reporter.cpp \
 # 		$(SRCDIR)/z3-patch/special_relations_decl_plugin.cpp \
@@ -54,9 +48,9 @@ patch :
 # 		$(SRCDIR)/z3-patch/api_special_relations.cpp
 
 
-# $(BUILDDIR)/z3/patched : $(SRCDIR)/z3-patch/z3.patch $(BUILDDIR)/z3/README.md
-# 	cd $(BUILDDIR)/z3; $(git) stash clear && $(git) stash save && $(git) apply --whitespace=fix $(SRCDIR)/z3-patch/z3.patch
-# 	touch $(BUILDDIR)/z3/patched
+$(BUILDDIR)/z3/patched : $(SRCDIR)/z3-patch/z3.patch $(BUILDDIR)/z3/README.md
+	cd $(BUILDDIR)/z3; $(git) stash clear && $(git) stash save && $(git) apply --whitespace=fix $(SRCDIR)/z3-patch/z3.patch
+	touch $(BUILDDIR)/z3/patched
 
 # $(BUILDDIR)/z3/newfiles : $(NEW_Z3_FILES) $(BUILDDIR)/z3/README.md
 # 	cd $(BUILDDIR)/z3/src/smt; ln -sf $(SRCDIR)/z3-patch/smt_model_reporter.cpp smt_model_reporter.cpp; ln -sf $(SRCDIR)/z3-patch/theory_special_relations.cpp theory_special_relations.cpp; ln -sf $(SRCDIR)/z3-patch/theory_special_relations.h theory_special_relations.h
@@ -83,25 +77,24 @@ patch :
 
 $(BUILDDIR)/z3/README.md : 
 	mkdir -p $(BUILDDIR)
-	# todo: switch to https; someone may not have ssh access configured
 	cd $(BUILDDIR);$(git) clone git@github.com:Z3Prover/z3.git
-	# cd $(BUILDDIR)/z3;$(git) checkout b8716b333908273ad8e27e325a8bea9be0596be3
+	cd $(BUILDDIR)/z3;$(git) checkout 4c949cdbac761730ea44656b69f66e11a8562393
 
 
-$(BUILDDIR)/z3/buildr/Makefile: $(BUILDDIR)/z3/README.md
+$(BUILDDIR)/z3/buildr/Makefile: $(BUILDDIR)/z3/patched
 	rm -rf $(BUILDDIR)/z3/buildr
 	mkdir -p $(BUILDDIR)/z3/buildr
 	cd $(BUILDDIR)/z3/buildr; cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ../
-	# cd $(BUILDDIR)/z3; python scripts/mk_make.py --staticlib -b buildr
 
 $(BUILDDIR)/z3/buildr/libz3.so : $(BUILDDIR)/z3/buildr/Makefile
 	+make -C $(BUILDDIR)/z3/buildr
 
 $(BUILDDIR)/z3/buildr/libz3.a : $(BUILDDIR)/z3/buildr/libz3.so
 
-$(BUILDDIR)/z3/buildd/Makefile: $(BUILDDIR)/z3/README.md
+$(BUILDDIR)/z3/buildd/Makefile: $(BUILDDIR)/z3/patched
 	rm -rf $(BUILDDIR)/z3/buildd
-	cd $(BUILDDIR)/z3; python scripts/mk_make.py --staticlib -d -b buildd
+	mkdir -p $(BUILDDIR)/z3/buildd
+	cd $(BUILDDIR)/z3/buildd; cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ../
 
 $(BUILDDIR)/z3/buildd/libz3.so : $(BUILDDIR)/z3/buildd/Makefile
 	+make -C $(BUILDDIR)/z3/buildd
