@@ -19,36 +19,43 @@
 #include "ast/rewriter/label_rewriter.h"
 
 
+void filter_vars( qe::pred_abs& m_pred_abs, app_ref_vector const& vars ) {
+  for (unsigned i = 0; i < vars.size(); ++i) {
+    m_pred_abs.fmc()->insert(vars[i]->get_decl());
+  }
+}
 
-void hoist(expr_ref& fml) {
+void hoist(ast_manager& m, expr_ref& fml) {
+
+  qe::pred_abs m_pred_abs(m); //some function on this object must be called???
+  vector<app_ref_vector> m_vars;
+
+  // todo: why this?
   proof_ref pr(m);
   label_rewriter rw(m);
   rw.remove_labels(fml, pr);
+
   quantifier_hoister hoist(m);
   app_ref_vector vars(m);
   bool is_forall = false;        
   m_pred_abs.get_free_vars(fml, vars);
   m_vars.push_back(vars);
   vars.reset();
-  if (m_mode != qsat_sat) {
-    is_forall = true;
-    hoist.pull_quantifier(is_forall, fml, vars);
-    m_vars.push_back(vars);
-    filter_vars(vars);
-  } else {
-    hoist.pull_quantifier(is_forall, fml, vars);
-    m_vars.back().append(vars);
-    filter_vars(vars);
-  }
+  hoist.pull_quantifier(is_forall, fml, vars);
+  m_vars.back().append(vars);
+  filter_vars(m_pred_abs, vars);
+  // }
   do {
     is_forall = !is_forall;
     vars.reset();
     hoist.pull_quantifier(is_forall, fml, vars);
     m_vars.push_back(vars);
-    filter_vars(vars);
+    filter_vars( m_pred_abs, vars );
   }
   while (!vars.empty());
   SASSERT(m_vars.back().empty()); 
-  initialize_levels();
-  TRACE("qe", tout << fml << "\n";);
+
+  // todo: do we need it??
+  // initialize_levels();
+
 }

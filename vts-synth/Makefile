@@ -35,9 +35,9 @@ clean :
 # Z3 fetch and compile
 
 
-# patch :
-# 	mkdir -p $(SRCDIR)/z3-patch
-# 	cd $(BUILDDIR)/z3; $(git) diff > $(SRCDIR)/z3-patch/z3.patch
+patch :
+	mkdir -p $(SRCDIR)/z3-patch
+	cd $(BUILDDIR)/z3; $(git) diff > $(SRCDIR)/z3-patch/z3.patch
 
 # $(BUILDDIR)/z3/README.md : 
 # 	mkdir -p $(BUILDDIR)
@@ -90,7 +90,9 @@ $(BUILDDIR)/z3/README.md :
 
 $(BUILDDIR)/z3/buildr/Makefile: $(BUILDDIR)/z3/README.md
 	rm -rf $(BUILDDIR)/z3/buildr
-	cd $(BUILDDIR)/z3; python scripts/mk_make.py --staticlib -b buildr
+	mkdir -p $(BUILDDIR)/z3/buildr
+	cd $(BUILDDIR)/z3/buildr; cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ../
+	# cd $(BUILDDIR)/z3; python scripts/mk_make.py --staticlib -b buildr
 
 $(BUILDDIR)/z3/buildr/libz3.so : $(BUILDDIR)/z3/buildr/Makefile
 	+make -C $(BUILDDIR)/z3/buildr
