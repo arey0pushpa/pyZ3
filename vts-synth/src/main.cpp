@@ -5,7 +5,7 @@
 #include <z3++.h>
 #include <vector>
 
-// #include "z3-util.h"
+#include "z3-util.h"
 
 // class ast_manager;
 
@@ -161,7 +161,7 @@ int main() {
     z3::expr w = c.bool_const("w");
     z3::expr f = exists( x, forall( z, x && z ) && forall( y, exists( w, y && w ) ) );
 
-    // prenex( f );
+    prenex( f );
 
     ///printf("The Fake value of Ast is: %o \n",m_ast);
     //std::cout << Z3_get_sort (c, f);

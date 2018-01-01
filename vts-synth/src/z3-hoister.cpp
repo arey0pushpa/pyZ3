@@ -19,8 +19,35 @@
 #include "qe/qe.h"
 #include "ast/rewriter/label_rewriter.h"
 #include "api/api_context.h"
+#include "ast/rewriter/expr_safe_replace.h"
 
 #include "z3-util.h"
+
+//----------------------------------------------------------------------------
+// Basic Z3 utils
+
+ast_manager& get_ast_manager( z3::context& c ) {
+  Z3_context z3_ctx = c;
+  ast_manager& m = mk_c(z3_ctx)->m();
+  return m;
+}
+
+ast_manager& get_ast_manager( z3::expr& f ) {
+  auto& c = f.ctx();
+  return get_ast_manager( c );
+}
+
+expr_ref get_z3_internal_expr_ref( z3::expr& f ) {
+  auto& m = get_ast_manager( f );
+  expr* f_expr = to_expr(f);
+  expr_ref   f_ref(m);
+  expr_safe_replace subst(m);
+  subst(f_expr, f_ref);
+  return f_ref;
+}
+
+//----------------------------------------------------------------------------
+// prenex normal form
 
 void filter_vars( qe::pred_abs& m_pred_abs, app_ref_vector const& vars ) {
   for (unsigned i = 0; i < vars.size(); ++i) {
@@ -64,13 +91,10 @@ void hoist(ast_manager& m, expr_ref& fml) {
 }
 
 
+
 void prenex( z3::expr& f ) {
-  auto& c = f.ctx();
-  Z3_context z3_ctx = c;
-  ast_manager& m = mk_c(z3_ctx)->m();
-
-  // expr tp expr_ref
-  expr* f_expr = to_expr(f);
-
-  // hoist( m, f_expr );
+  auto& m = get_ast_manager(f);
+  auto f_ref = get_z3_internal_expr_ref( f );
+  hoist( m, f_ref );
 }
+
