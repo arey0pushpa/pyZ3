@@ -1,4 +1,6 @@
+#define _NO_OMP_
 #define _MP_GMP
+
 
 #include "ast/expr_abstract.h"
 #include "ast/ast_util.h"
