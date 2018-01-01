@@ -78,8 +78,8 @@ LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 # LINK_DIRECTORIES(${LLVM_LIBRARY_DIRS})
 # add_subdirectory("library")
 
-add_executable(vts-synth main.cpp)
-#add_executable(vts-synth main.cpp z3-hoister.cpp)
+# add_executable(vts-synth main.cpp)
+add_executable(vts-synth main.cpp z3-hoister.cpp)
 
 SET(LIBZ3 z3)
 

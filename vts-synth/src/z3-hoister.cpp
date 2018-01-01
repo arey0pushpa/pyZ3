@@ -1,7 +1,6 @@
 #define _NO_OMP_
 #define _MP_GMP
 
-
 #include "ast/expr_abstract.h"
 #include "ast/ast_util.h"
 #include "ast/rewriter/quant_hoist.h"
@@ -19,7 +18,9 @@
 #include "qe/qe_mbp.h"
 #include "qe/qe.h"
 #include "ast/rewriter/label_rewriter.h"
+#include "api/api_context.h"
 
+#include "z3-util.h"
 
 void filter_vars( qe::pred_abs& m_pred_abs, app_ref_vector const& vars ) {
   for (unsigned i = 0; i < vars.size(); ++i) {
@@ -60,4 +61,16 @@ void hoist(ast_manager& m, expr_ref& fml) {
   // todo: do we need it??
   // initialize_levels();
 
+}
+
+
+void prenex( z3::expr& f ) {
+  auto& c = f.ctx();
+  Z3_context z3_ctx = c;
+  ast_manager& m = mk_c(z3_ctx)->m();
+
+  // expr tp expr_ref
+  expr* f_expr = to_expr(f);
+
+  // hoist( m, f_expr );
 }
