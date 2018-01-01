@@ -176,7 +176,7 @@ int main() {
     z3::solver s(c);
     z3::goal g(c);
     g.add( f );
-    std::cout << g << "\n";
+   // std::cout << g << "\n";
 
     // // int num = Z3_get_num_tactics(c);
     // // for( int i = 0 ; i < num; i++ ) {
@@ -187,7 +187,7 @@ int main() {
     // // tactic t2(c, "solve-eqs");
     // tactic t = t1 & t2;
     z3::apply_result r = t1(g);
-    std::cout << r << "\n";
+    //std::cout << r << "\n";
 
 
   return 0;

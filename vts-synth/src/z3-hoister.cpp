@@ -84,10 +84,13 @@ void hoist(ast_manager& m, expr_ref& fml) {
   }
   while (!vars.empty());
   SASSERT(m_vars.back().empty()); 
-
+  std::cout << fml;  
+  //for (int i; i < len(m_var); i++){
+  for(auto& m: m_vars) {
+    std::cout << m;
   // todo: do we need it??
   // initialize_levels();
-
+  }
 }
 
 
