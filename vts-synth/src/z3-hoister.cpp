@@ -61,13 +61,13 @@ z3::expr get_z3_expr_from_internal_expr( z3::context& c, ast* const f ) {
 //----------------------------------------------------------------------------
 // prenex normal form
 
-void filter_vars( qe::pred_abs& m_pred_abs, app_ref_vector const& vars ) {
-  for (unsigned i = 0; i < vars.size(); ++i) {
-    // auto decl = vars[i]->get_decl();
-    // m_pred_abs.fmc()->insert(decl);
-    //std::cout << "The filt vars are: " << vars << "\n" ;
-  }
-}
+// void filter_vars( qe::pred_abs& m_pred_abs, app_ref_vector const& vars ) {
+//   for (unsigned i = 0; i < vars.size(); ++i) {
+//     // auto decl = vars[i]->get_decl();
+//     // m_pred_abs.fmc()->insert(decl);
+//     //std::cout << "The filt vars are: " << vars << "\n" ;
+//   }
+// }
 
 void hoist(ast_manager& m, expr_ref& fml, vector<app_ref_vector>& m_vars) {
 
@@ -99,13 +99,13 @@ void hoist(ast_manager& m, expr_ref& fml, vector<app_ref_vector>& m_vars) {
   }
   while (!vars.empty());
   SASSERT(m_vars.back().empty()); 
-  for( auto& m: m_vars ) {
-    std::cout << m;
-    //std::cout << "The sort of " << m << " is " << Z3_get_sort (c, m); 
-  // todo: do we need it??
-  //initialize_levels();
-  }
-  std::cout << "\n";
+  // for( auto& m: m_vars ) {
+  //   std::cout << m;
+  //   //std::cout << "The sort of " << m << " is " << Z3_get_sort (c, m); 
+  // // todo: do we need it??
+  // //initialize_levels();
+  // }
+  // std::cout << "\n";
 }
 
 z3::expr prenex( z3::expr& f, std::vector<z3::expr_vector>& m_expr_vectors) {
