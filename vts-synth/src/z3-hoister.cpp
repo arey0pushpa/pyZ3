@@ -41,12 +41,14 @@ ast_manager& get_ast_manager( z3::expr& f ) {
 expr_ref get_z3_internal_expr_ref( z3::expr& f ) {
   auto& m = get_ast_manager( f );
   expr* f_expr = to_expr(f);
+  //std::cout << &f_expr << "\n";
   expr_ref   f_ref(m);
   expr_safe_replace subst(m);
   subst(f_expr, f_ref);
   return f_ref;
 }
 
+//z3::expr exp = to_ast(f_ref);
 //----------------------------------------------------------------------------
 // prenex normal form
 
@@ -54,47 +56,53 @@ void filter_vars( qe::pred_abs& m_pred_abs, app_ref_vector const& vars ) {
   for (unsigned i = 0; i < vars.size(); ++i) {
     // auto decl = vars[i]->get_decl();
     // m_pred_abs.fmc()->insert(decl);
+    //std::cout << "The filt vars are: " << vars << "\n" ;
   }
 }
 
 void hoist(ast_manager& m, expr_ref& fml) {
 
-  qe::pred_abs m_pred_abs(m); //some function on this object must be called???
+  //qe::pred_abs m_pred_abs(m); //some function on this object must be called???
   vector<app_ref_vector> m_vars;
 
   // todo: why this?
-  proof_ref pr(m);
-  label_rewriter rw(m);
-  rw.remove_labels(fml, pr);
+  //proof_ref pr(m);
+  //label_rewriter rw(m);
+  //rw.remove_labels(fml, pr);
 
   quantifier_hoister hoist(m);
   app_ref_vector vars(m);
   bool is_forall = false;        
-  m_pred_abs.get_free_vars(fml, vars);
+  //m_pred_abs.get_free_vars(fml, vars);
   m_vars.push_back(vars);
+  //std::cout << "The current vars are: " << vars << "\n" ;  
   vars.reset();
   hoist.pull_quantifier(is_forall, fml, vars);
+  //std::cout << "At the mid run the fml is : " << fml << "\n";
   m_vars.back().append(vars);
-//   filter_vars(m_pred_abs, vars);
-  // }
+  //   filter_vars(m_pred_abs, vars);
   do {
     is_forall = !is_forall;
     vars.reset();
     hoist.pull_quantifier(is_forall, fml, vars);
+    //std::cout << "At the mid run the fml is : " << fml << "\n";
     m_vars.push_back(vars);
-    // filter_vars( m_pred_abs, vars );
+    //filter_vars( m_pred_abs, vars );
   }
   while (!vars.empty());
   SASSERT(m_vars.back().empty()); 
-
+  std::cout << "The resultant formula is: " << fml;  
+  for( auto& m: m_vars ) {
+    std::cout << m;
+    //std::cout << "The sort of " << m << " is " << Z3_get_sort (c, m); 
   // todo: do we need it??
-  // initialize_levels();
-
+  //initialize_levels();
+  }
+  std::cout << "\n";
 }
 
-
-
 void prenex( z3::expr& f ) {
+ // std::cout << "The sort of the formula f is: " << Z3_get_sort_name( c, f);
   auto& m = get_ast_manager(f);
   auto f_ref = get_z3_internal_expr_ref( f );
   hoist( m, f_ref );
