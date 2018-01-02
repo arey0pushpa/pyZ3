@@ -1,5 +1,5 @@
-#define _NO_OMP_
-#define _MP_GMP
+// #define _NO_OMP_
+// #define _MP_GMP
 
 #include <stdio.h>
 #include <z3++.h>

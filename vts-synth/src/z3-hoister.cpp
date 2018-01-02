@@ -1,5 +1,6 @@
 #define _NO_OMP_
-#define _MP_GMP
+#define _MP_INTERNAL
+// #define _MP_GMP
 
 #include "ast/expr_abstract.h"
 #include "ast/ast_util.h"
@@ -51,7 +52,8 @@ expr_ref get_z3_internal_expr_ref( z3::expr& f ) {
 
 void filter_vars( qe::pred_abs& m_pred_abs, app_ref_vector const& vars ) {
   for (unsigned i = 0; i < vars.size(); ++i) {
-    m_pred_abs.fmc()->insert(vars[i]->get_decl());
+    // auto decl = vars[i]->get_decl();
+    // m_pred_abs.fmc()->insert(decl);
   }
 }
 
@@ -73,14 +75,14 @@ void hoist(ast_manager& m, expr_ref& fml) {
   vars.reset();
   hoist.pull_quantifier(is_forall, fml, vars);
   m_vars.back().append(vars);
-  filter_vars(m_pred_abs, vars);
+//   filter_vars(m_pred_abs, vars);
   // }
   do {
     is_forall = !is_forall;
     vars.reset();
     hoist.pull_quantifier(is_forall, fml, vars);
     m_vars.push_back(vars);
-    filter_vars( m_pred_abs, vars );
+    // filter_vars( m_pred_abs, vars );
   }
   while (!vars.empty());
   SASSERT(m_vars.back().empty()); 
