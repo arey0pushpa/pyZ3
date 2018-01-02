@@ -41,11 +41,20 @@ ast_manager& get_ast_manager( z3::expr& f ) {
 expr_ref get_z3_internal_expr_ref( z3::expr& f ) {
   auto& m = get_ast_manager( f );
   expr* f_expr = to_expr(f);
-  //std::cout << &f_expr << "\n";
-  expr_ref   f_ref(m);
+  expr_ref f_ref(m);
   expr_safe_replace subst(m);
   subst(f_expr, f_ref);
   return f_ref;
+}
+
+z3::expr get_z3_expr_from_internal_expr( z3::context& c, expr_ref& f ) {
+  Z3_ast f_middle = of_ast(f);
+  return z3::expr( c, f_middle );
+}
+
+z3::expr get_z3_expr_from_internal_expr( z3::context& c, ast* const f ) {
+  Z3_ast f_middle = of_ast(f);
+  return z3::expr( c, f_middle );
 }
 
 //z3::expr exp = to_ast(f_ref);
@@ -60,10 +69,9 @@ void filter_vars( qe::pred_abs& m_pred_abs, app_ref_vector const& vars ) {
   }
 }
 
-void hoist(ast_manager& m, expr_ref& fml) {
+void hoist(ast_manager& m, expr_ref& fml, vector<app_ref_vector>& m_vars) {
 
   //qe::pred_abs m_pred_abs(m); //some function on this object must be called???
-  vector<app_ref_vector> m_vars;
 
   // todo: why this?
   //proof_ref pr(m);
@@ -91,7 +99,6 @@ void hoist(ast_manager& m, expr_ref& fml) {
   }
   while (!vars.empty());
   SASSERT(m_vars.back().empty()); 
-  std::cout << "The resultant formula is: " << fml;  
   for( auto& m: m_vars ) {
     std::cout << m;
     //std::cout << "The sort of " << m << " is " << Z3_get_sort (c, m); 
@@ -101,10 +108,24 @@ void hoist(ast_manager& m, expr_ref& fml) {
   std::cout << "\n";
 }
 
-void prenex( z3::expr& f ) {
- // std::cout << "The sort of the formula f is: " << Z3_get_sort_name( c, f);
+z3::expr prenex( z3::expr& f, std::vector<z3::expr_vector>& m_expr_vectors) {
+  // std::cout << "The sort of the formula f is: " << Z3_get_sort_name( c, f);
+  auto& c = f.ctx();
   auto& m = get_ast_manager(f);
   auto f_ref = get_z3_internal_expr_ref( f );
-  hoist( m, f_ref );
+  vector<app_ref_vector> m_vars;
+  hoist( m, f_ref, m_vars);
+
+  for( auto& vec : m_vars ) {
+    z3::expr_vector e_vec(c);
+    for( auto& v : vec ) {
+      z3::expr expr_v = get_z3_expr_from_internal_expr( c, v );
+      e_vec.push_back( expr_v );
+    }
+    m_expr_vectors.push_back( e_vec );
+  }
+
+  z3::expr f_ret = get_z3_expr_from_internal_expr( c, f_ref );
+  return f_ret;
 }
 
