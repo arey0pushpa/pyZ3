@@ -1,45 +1,17 @@
-#define _NO_OMP_
-#define _MP_INTERNAL
-
-#include "ast/ast.h"
-#include "ast/ast.cpp"
-#include "ast/expr_abstract.h"
-#include "ast/ast_util.h"
-#include "ast/rewriter/quant_hoist.h"
-#include "ast/ast_pp.h"
-#include "ast/rewriter/th_rewriter.h"
-#include "ast/rewriter/expr_replacer.h"
-#include "model/model_v2_pp.h"
-#include "model/model_evaluator.h"
-#include "smt/smt_kernel.h"
-#include "smt/params/smt_params.h"
-#include "smt/smt_solver.h"
-#include "solver/solver.h"
-#include "solver/mus.h"
-#include "qe/qsat.h"
-#include "qe/qe_mbp.h"
-#include "qe/qe.h"
-#include "ast/rewriter/label_rewriter.h"
-#include "api/api_context.h"
-#include "ast/rewriter/expr_safe_replace.h"
-#include <string>
-#include <sstream>
-#include <iostream>
-#include <stdint.h>
-#include <vector>
-
 #include "z3-util.h"
 
-ast_manager& get_ast_manager( z3::context& c ) {
-  Z3_context z3_ctx = c;
-  ast_manager& m = mk_c(z3_ctx)->m();
-  return m;
-}
+#include <vector>
 
-ast_manager& get_ast_manager( z3::expr& f ) {
-  auto& c = f.ctx();
-  return get_ast_manager( c );
-}
+// ast_manager& get_ast_manager( z3::context& c ) {
+//   Z3_context z3_ctx = c;
+//   ast_manager& m = mk_c(z3_ctx)->m();
+//   return m;
+// }
+
+// ast_manager& get_ast_manager( z3::expr& f ) {
+//   auto& c = f.ctx();
+//   return get_ast_manager( c );
+// }
 
 z3::expr ielim( z3::expr const& e ) {
     if ( e.is_app() ) {
@@ -54,7 +26,7 @@ z3::expr ielim( z3::expr const& e ) {
           } 
           if( f.decl_kind() == Z3_OP_AND) {
             //return and ( sargs );
-            sargs.reset();
+            sargs.clear();
           }
          
          if( f.decl_kind() == Z3_OP_OR) {
@@ -151,18 +123,17 @@ void negform ( z3::context& c, z3::expr& f ){
     //std::cout << "nnf'd formula: " << nfml << "\n"; 
 }
 
-//z3::expr cnf-converter ( z3::context& c, z3::expr& fml, vector<app_ref_vector>& var_lists ) {
-//
-//    z3::expr fml = f;
-//    z3::solver s(c);
-//    z3::goal g(c);
-//    g.add( f );
-//
-//    z3::tactic t1(c, "simplify");
-//    z3::tactic t2(c, "tseitin-cnf");
-//    z3::tactic t = t1 & t2;
-//    z3::apply_result r = t(g);
-//    std::cout << r << "\n";
-//    return r;
-//
-//}
+z3::expr cnf_converter( z3::expr& fml,
+                        std::vector<z3::expr_vector>& var_lists ) {
+
+  z3::context& c = fml.ctx();
+   z3::solver s(c);
+   z3::goal g(c);
+   g.add( fml );
+
+   z3::tactic t1(c, "simplify");
+   z3::tactic t2(c, "tseitin-cnf");
+   z3::tactic t = t1 & t2;
+   z3::apply_result r = t(g);
+   return r[0].as_expr();
+}

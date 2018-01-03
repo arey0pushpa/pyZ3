@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
     z3::expr y = c.bool_const("y");
     z3::expr z = c.bool_const("z");
     z3::expr w = c.bool_const("w");
-    z3::expr f = x && y;
+    z3::expr f =  z || (x && y );
     //z3::expr f = exists( x, forall( z, x && z && forall( y, exists( w, implies( y, w) && x && z) ) ) );
     //z3::expr f = forall(x, exists( y, !(x && y ) ) ) ;
     //z3::expr f = forall( x, exists( w, w && forall ( y,  x&& y ) ) ) ;
@@ -32,6 +32,10 @@ int main(int argc, char* argv[]) {
     auto prenex_f = prenex( f, qs );
 
     std::cout << "Prenexed f : " << prenex_f << "\n";
+
+    auto cnf_f = cnf_converter( prenex_f, qs );
+
+    std::cout << "CNF f : " << cnf_f << "\n";
 
     //bool fall = false;
     //for( auto& q : qs ) {

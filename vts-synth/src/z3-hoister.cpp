@@ -116,14 +116,14 @@ z3::expr prenex( z3::expr& f, std::vector<z3::expr_vector>& m_expr_vectors) {
   vector<app_ref_vector> m_vars;
   hoist( m, f_ref, m_vars);
 
-  //for( auto& vec : m_vars ) {
-  //  z3::expr_vector e_vec(c);
-  //  for( auto& v : vec ) {
-  //    z3::expr expr_v = get_z3_expr_from_internal_expr( c, v );
-  //    e_vec.push_back( expr_v );
-  //  }
-  //  m_expr_vectors.push_back( e_vec );
- // }
+  for( auto& vec : m_vars ) {
+   z3::expr_vector e_vec(c);
+   for( auto& v : vec ) {
+     z3::expr expr_v = get_z3_expr_from_internal_expr( c, v );
+     e_vec.push_back( expr_v );
+   }
+   m_expr_vectors.push_back( e_vec );
+ }
 
   z3::expr f_ret = get_z3_expr_from_internal_expr( c, f_ref );
   return f_ret;
