@@ -2,17 +2,6 @@
 
 #include <vector>
 
-// ast_manager& get_ast_manager( z3::context& c ) {
-//   Z3_context z3_ctx = c;
-//   ast_manager& m = mk_c(z3_ctx)->m();
-//   return m;
-// }
-
-// ast_manager& get_ast_manager( z3::expr& f ) {
-//   auto& c = f.ctx();
-//   return get_ast_manager( c );
-// }
-
 z3::expr ielim( z3::expr const& e ) {
     if ( e.is_app() ) {
       if ( e.is_bool() ) {
@@ -64,24 +53,27 @@ z3::expr ielim( z3::expr const& e ) {
 
 
 void nnf( z3::expr const& e ) {
-    if ( e.is_app() ) {
-      if ( e.is_bool() ) {
-          z3::func_decl f = e.decl();
-          unsigned num = e.num_args();
-          for (unsigned i = 0; i < num; i++) {
-              std::cout << e.arg(i) << "\n";
-              nnf(e.arg(i));
-         }
-         if( f.decl_kind() == Z3_OP_AND) {
-          }
-         
-         if( f.decl_kind() == Z3_OP_OR) {
-          }
-         
-         if( f.decl_kind() == Z3_OP_IMPLIES) {
-          }
-         
-         if( f.decl_kind() == Z3_OP_EQ) {
+  if ( e.is_app() ) {
+    if ( e.is_bool() ) {
+      z3::func_decl f = e.decl();
+      unsigned num = e.num_args();
+      for (unsigned i = 0; i < num; i++) {
+        std::cout << e.arg(i) << "\n";
+        nnf(e.arg(i));
+      }
+      if( f.decl_kind() == Z3_OP_AND ) {
+        // z3::expr ret_f = ctx.bool_val(true);
+        // unsigned num = e.num_args();
+        // for (unsigned i = 0; i < num; i++) {
+        //   std::cout << e.arg(i) << "\n";
+        //   ret_f = ret_f && nnf( e.arg(i) );
+        // }
+      }
+      if( f.decl_kind() == Z3_OP_OR) {
+      }
+      if( f.decl_kind() == Z3_OP_IMPLIES) {
+      }
+      if( f.decl_kind() == Z3_OP_EQ) {
           }
          
          if( f.decl_kind() == Z3_OP_NOT) {
@@ -125,15 +117,29 @@ void negform ( z3::context& c, z3::expr& f ){
 
 z3::expr cnf_converter( z3::expr& fml,
                         std::vector<z3::expr_vector>& var_lists ) {
-
   z3::context& c = fml.ctx();
-   z3::solver s(c);
-   z3::goal g(c);
-   g.add( fml );
+  z3::expr_vector fresh_vars(c);
+  z3::solver s(c);
+  z3::goal g(c);
+  g.add( fml );
 
    z3::tactic t1(c, "simplify");
    z3::tactic t2(c, "tseitin-cnf");
    z3::tactic t = t1 & t2;
    z3::apply_result r = t(g);
+   z3::goal r_g = r[0];
+
+   //todo: get fresh vars
+   
+
+   if( var_lists.size() % 2 == 0 ) {
+     //last row is forall. So, add a new row
+     var_lists.push_back( fresh_vars );
+   }else{
+     //last row is exists. So, push fresh in the same row
+     for( unsigned i = 0; i < fresh_vars.size(); i++ ) {
+       var_lists.back().push_back( fresh_vars[i] );
+     }
+   }
    return r[0].as_expr();
 }
