@@ -6,68 +6,70 @@
 #include <map>
 #include "z3-util.h"
 
-template <template<typename...> class R=std::vector, 
-          typename Top, 
-          typename Sub = typename Top::value_type> 
-   R<typename Sub::value_type> flatten(Top const& all)
-{
-    using std::begin;
-    using std::end;
+// template <template<typename...> class R=std::vector, 
+//           typename Top, 
+//           typename Sub = typename Top::value_type> 
+//    R<typename Sub::value_type> flatten(Top const& all)
+// {
+//     using std::begin;
+//     using std::end;
 
-    R<typename Sub::value_type> accum;
+//     R<typename Sub::value_type> accum;
     
-    for(auto& sub : all)
-        std::copy(begin(sub), end(sub), std::inserter(accum, end(accum)));
+//     for(auto& sub : all)
+//         std::copy(begin(sub), end(sub), std::inserter(accum, end(accum)));
         
-    return accum;
-}
+//     return accum;
+// }
 
-void collect( z3::expr& e , std::vector <z3::expr> r, std::map <z3::expr, int>& var_id_map ) {
+
+void collect( z3::expr e , std::vector<z3::expr>& r, std::map <z3::expr, int>& var_id_map ) {
   if ( e.is_bool() ) {
-      z3::func_decl f = e.decl();
-      if ( f.decl_kind() == Z3_OP_OR) {
-          unsigned num = e.num_args();
-          for (unsigned i = 0; i < num; i++) {
-              collect( e.arg(i) ) 
-           }
+    z3::func_decl f = e.decl();
+    if ( f.decl_kind() == Z3_OP_OR) {
+      unsigned num = e.num_args();
+      for (unsigned i = 0; i < num; i++) {
+        collect(  e.arg(i), r,  var_id_map);
       }
-         
-      if ( f.decl_kind() == Z3_OP_NOT) {
-          collect( e.arg(0) );
+    }
+    if ( f.decl_kind() == Z3_OP_NOT) {
+      collect( e.arg(0), r, var_id_map  );
+    }else{
+      assert(e.is_var());
+      // Check if element present in the list.
+      if( var_id_map.count(e) == 0 ) {
+        var_id_map[e] = var_id_map.size() + 1;
+        r.push_back (e);  // check types
       }
-      else {
-          assert(e.is_var());
-          // Check if element present in the list.
-          if (var_id_map.count() == 0) {
-              var_id_map[e] = var_id_map.size() + 1;
-              r.push_back (e);  // check types
-          }
-      } 
+    }
   }
 }
 
 // todo: check type of second argument?
 std::vector <z3::expr> visit( std::vector <z3::expr>& cnf_fml, std::map <z3::expr, int>& var_id_map ) {
-    
-    //std::set<z3::expr> r;   
+    //std::set<z3::expr> r;
     std::vector <z3::expr> r;
-    
-    for (auto& e : fml) {
+
+    for( auto& e : cnf_fml) {
         collect( e, r , var_id_map);
     }
 
-    return r
+    return r;
 }
 
+
+
 void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
-                        std::vector<z3::expr_vector>& m_vars ) {
-    
+                        VecsExpr& m_vars ) {
+
     std::vector <z3::expr> fresh_vars;
-    auto var_list = flatten( m_vars );   
+    // auto var_list = flatten( m_vars );
+    auto var_list = to_vector( m_vars );
+
     // Create a Map from var to id, var: id
     std::map <z3::expr, int> var_id_map;
-   
-    // Map variable to id in the dictionary. 
+
+    // Map variable to id in the dictionary.
     unsigned int id = 1;
     for (auto& key: var_list) {  // todo: check the type of key
         var_id_map[key] = id++;
@@ -104,7 +106,7 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
           if (!e.empty()) {    
             ofs << "e" << " ";
             for (unsigned int i = 0; i < e.size(); i++) {
-                ofs << var_id_map ( e.at(i) ) << " ";
+              ofs << var_id_map.at( e.at(i) ) << " ";
             } 
           }
           index = index + 1;
@@ -114,13 +116,13 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
           if( index % 2 == 0 ) { 
               ofs << "e" << " ";
               for (unsigned int i = 0; i < e.size(); i++) {
-                  ofs << var_id_map ( e.at(i) ) << " "; 
+                  ofs << var_id_map.at( e.at(i) ) << " "; 
               } 
           }
           else {  // Exists case.
               ofs << "a" << " ";
               for (unsigned int i = 0; i < e.size(); i++) {
-                  ofs << var_id_map ( e.at(i) ) << " "; 
+                  ofs << var_id_map.at( e.at(i) ) << " "; 
               }
           }
           index = index + 1;

@@ -108,7 +108,7 @@ void hoist(ast_manager& m, expr_ref& fml, vector<app_ref_vector>& m_vars) {
   // std::cout << "\n";
 }
 
-z3::expr prenex( z3::expr& f, std::vector<z3::expr_vector>& m_expr_vectors) {
+z3::expr prenex( z3::expr& f, VecsExpr& m_expr_vectors) {
   // std::cout << "The sort of the formula f is: " << Z3_get_sort_name( c, f);
   auto& c = f.ctx();
   auto& m = get_ast_manager(f);
@@ -118,7 +118,7 @@ z3::expr prenex( z3::expr& f, std::vector<z3::expr_vector>& m_expr_vectors) {
 
   bool first_row = true;
   for( auto& vec : m_vars ) {
-   z3::expr_vector e_vec(c);
+    std::vector<z3::expr> e_vec;
    for( auto& v : vec ) {
      z3::expr expr_v = get_z3_expr_from_internal_expr( c, v );
      e_vec.push_back( expr_v );

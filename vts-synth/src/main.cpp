@@ -28,13 +28,15 @@ int main() {
 //  std::cout << "At least this is working \n.";
     //auto fml_f = negform ( c, f ); 
     //negform ( c, f ); 
-    std::vector<z3::expr_vector> qs;
+    VecsExpr qs;
     auto prenex_f = prenex( f, qs );
 
     std::cout << "Prenexed f : " << prenex_f << "\n";
 
     for(auto& q : qs ) {
-      std::cout << q << "\n";
+      for( auto& e : q )
+        std::cout << e << " ";
+      std::cout << "\n";
     }
 
     auto cnf_f = cnf_converter( prenex_f );
