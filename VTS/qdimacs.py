@@ -303,10 +303,10 @@ with open ("formula.txt", "r") as myfile:
 #fml = And (True, False) 
 #fml = ForAll (x, ForAll( y, ForAll ( z, And ( Or( x, y), Or( x, Not(x), z)) )))
 #fml = And ( ForAll( x, Exists( v, ForAll ( y, And( x, y, v) )) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
-#fml = ForAll( x, Exists( v, And( v, ForAll ( y, And( x, y) )) ) )
-fml = And ( ForAll( x, ForAll ( y, And( x, y) ) ), ForAll(z,  Exists( w, And(z, w) ) )) 
+fml = ForAll( x, ForAll ( y, ForAll( v, Or( And ( x, y ) , v)  ) ) )
+#fml = And ( ForAll( x, ForAll ( y, And( x, y) ) ), ForAll(z,  Exists( w, And(z, w) ) )) 
 # fml = And ( ForAll( x, Exists( v, ForAll ( y, And( x, y, v) )) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
-fml = ForAll( x, Exists( v, And( v, ForAll ( y, And( x, v, y) )) ) )
+#fml = ForAll( x, Exists( v, And( v, ForAll ( y, And( x, v, y) )) ) )
 # fml = And ( ForAll( x, ForAll ( y, And( x, y) ) ), ForAll(z,  ForAll( w, And(z, w) ) )) 
 #fml = ForAll (x, ForAll (y, ForAll (z, Or ( And(x,y), And (y,z)) )))
 #fml = ForAll (x, Exists (y,  And ( And(x,y), ForAll(z, Or( And(x,y), And(y,z))))))
@@ -379,7 +379,7 @@ def check_struc(e):
 nnf_fml = nnf(tr, seen, sign)
 print 'NNfd : ' + str(nnf_fml)
 
-hash_val_set =  check_struc(nnf_fml)
+#hash_val_set =  check_struc(nnf_fml)
 #print hash_val_set
 #exit(0)
 nnf_vars = traverse( nnf_fml )
@@ -467,6 +467,8 @@ print 'var const map is : ' + str ( var_const_map )
 #build_formula =  create_formula(quant_set, trx)
 #print build_formula
 
+print "\n The great cnf list is : " +  str( cnf_list ) 
+exit(0)
 # QDIAMAC TRANSFORMATION .... 
 q_var =  len(var_set)
 num_clause = len(cnf_list)
