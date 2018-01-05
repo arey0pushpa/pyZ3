@@ -16,7 +16,7 @@ int main() {
     z3::expr z = c.bool_const("z");
     z3::expr w = c.bool_const("w");
     // z3::expr f =  x && y;
-    z3::expr f = exists( x, forall( z, x && z && forall( y, exists( w, implies( y, w) && x && z) ) ) );
+    z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
     //z3::expr f = forall(x, exists( y, !(x && y ) ) ) ;
     //z3::expr f = forall( x, exists( w, w && forall ( y,  x&& y ) ) ) ;
     //z3::expr f = forall( x, exists ( y,  forall (w, exists (z, x && y && w && z)  )) );
@@ -32,7 +32,7 @@ int main() {
     auto prenex_f = prenex( f, qs );
 
     std::cout << "Prenexed f : " << prenex_f << "\n";
-
+    std::cout << "Quants :\n";
     for(auto& q : qs ) {
       for( auto& e : q )
         std::cout << e << " ";
@@ -40,7 +40,11 @@ int main() {
     }
 
     auto cnf_f = cnf_converter( prenex_f );
-   
+
+    std::cout << "CNF body :\n";
+    for( auto& cl : cnf_f )
+        std::cout << cl << "\n";
+
    // std::cout << "CNF f : " << cnf_f << "\n";
     qdimacs_printer( cnf_f, qs ); 
 
