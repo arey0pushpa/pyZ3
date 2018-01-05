@@ -14,7 +14,7 @@ class vts{
 public:
   vts( z3::context& _ctx,
        unsigned _M, unsigned _N, unsigned _Q, model_type _V, unsigned _C )
-    : ctx(_ctx), m(_M), n(_N), q(_Q), v(_V), c(_C)
+    : ctx(_ctx), mols(_M), nodes(_N), e_arity(_Q), mod(_V), conn(_C)
   {
     init_vts();
   }
@@ -22,20 +22,24 @@ public:
 private:
   z3::context& ctx;
 
-  unsigned m;    // Molecules
-  unsigned n;    // Nodes
-  unsigned q;    // Edge arity
-  model_type v;  // Variation
-  unsigned c;    // connectedness
+  unsigned   mols;    // Molecules
+  unsigned   nodes;    // Nodes
+  unsigned   e_arity;    // Edge arity
+  model_type mod;  // Variation
+  unsigned   conn;    // connectedness
 
   void init_vts();
 
   //variables
   Vec3Expr edges;
-  VecExpr flat_edges;
-
   Vec3Expr dump1;
   Vec2Expr r1;
+  Vec2Expr active_node;
+
+
+  //flat version of variables
+  VecExpr flat_edges;
+  
 
   // Vec3Expr dump2;
 
