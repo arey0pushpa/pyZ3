@@ -4,6 +4,7 @@
 #include <utility>
 #include <iterator>
 #include <fstream>      // std::ofstream
+#include <map>
 
 template <template<typename...> class R=std::vector, 
           typename Top, 
@@ -122,7 +123,7 @@ void qdimacs_printer(std::vector<z3::expr_vector>& cnf_fml,
     // Print quantifier and total claused information.     
     auto q_var = var_id_map.size();
     auto num_clause = cnf_fml.size(); // not correct check plz 
-    ofs << "p" << " cnf " << str(q_var) << str(num_clause) << "\n";
+    ofs << "p" << " cnf " << q_var << num_clause << "\n";
 
     for (auto& e: m_vars){
       if (index == 0){
@@ -155,8 +156,8 @@ void qdimacs_printer(std::vector<z3::expr_vector>& cnf_fml,
     // Last part of cnf to index output.
     for (z3::expr& e: cnf_fml) {
         z3::func_decl f = e.decl();
+        unsigned num = e.num_args();
         if( f.decl_kind() == Z3_OP_OR) {
-            unsigned num = e.num_args();
             for (unsigned i = 0; i < num; i++) {
                 // Just for the var and use else to got not check.
                 if( e.arg(i).is_var() ) {
