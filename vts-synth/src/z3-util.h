@@ -15,9 +15,11 @@ z3::expr prenex(z3::expr& fml, std::vector<z3::expr_vector>& qs );
 
 // Simplify the given z3 formula and convert it into cnf
 
-std::vector<z3::expr_vector> cnf_converter( z3::expr& fml, std::vector<z3::expr_vector>& qs );
+//std::vector<z3::expr_vector> cnf_converter( z3::expr& fml );
+std::vector<z3::expr> cnf_converter( z3::expr& fml );
 
-void qdimacs_printer( z3::expr& fml, std::vector<z3::expr_vector>& m_var );
+//void qdimacs_printer( z3::expr& fml, std::vector<z3::expr_vector>& m_var );
 
+void qdimacs_printer(std::vector<z3::expr>& cnf_fml, std::vector<z3::expr_vector>& m_var );
 
 #endif

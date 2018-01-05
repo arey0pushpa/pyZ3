@@ -4,7 +4,7 @@
 
 #include "z3-util.h"
 
-int main(int argc, char* argv[]){
+int main() {
   try {
     z3::context c;
 
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
     z3::expr z = c.bool_const("z");
     z3::expr w = c.bool_const("w");
     // z3::expr f =  z || (x && y );
-    z3::expr fml = exists( x, forall( z, x && z && forall( y, exists( w, implies( y, w) && x && z) ) ) );
+    z3::expr f = exists( x, forall( z, x && z && forall( y, exists( w, implies( y, w) && x && z) ) ) );
     //z3::expr f = forall(x, exists( y, !(x && y ) ) ) ;
     //z3::expr f = forall( x, exists( w, w && forall ( y,  x&& y ) ) ) ;
     //z3::expr f = forall( x, exists ( y,  forall (w, exists (z, x && y && w && z)  )) );
@@ -29,17 +29,18 @@ int main(int argc, char* argv[]){
     //auto fml_f = negform ( c, f ); 
     //negform ( c, f ); 
     std::vector<z3::expr_vector> qs;
-    auto prenex_fml = prenex( fml, qs );
+    auto prenex_f = prenex( f, qs );
 
-    std::cout << "Prenexed f : " << prenex_fml << "\n";
+    std::cout << "Prenexed f : " << prenex_f << "\n";
 
     for(auto& q : qs ) {
       std::cout << q << "\n";
     }
-    auto cnf_fml = cnf_converter(prenex_fml, qs);
 
-    std::cout << "CNF f : " << cnf_fml << "\n";
-    qdimacs_printer( cnf_fml );
+    auto cnf_f = cnf_converter( prenex_f );
+   
+   // std::cout << "CNF f : " << cnf_f << "\n";
+    qdimacs_printer( cnf_f, qs ); 
 
   }
   
@@ -49,3 +50,5 @@ int main(int argc, char* argv[]){
  
   return 0;
 }
+
+
