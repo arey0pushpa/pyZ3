@@ -4,6 +4,7 @@
 #include <iterator>
 #include <fstream>      
 #include <map>
+
 #include "z3-util.h"
 
 // template <template<typename...> class R=std::vector, 
@@ -32,13 +33,13 @@ void collect( z3::expr e , std::vector<z3::expr>& r, std::map <z3::expr, int>& v
         collect(  e.arg(i), r,  var_id_map);
       }
     }
-    if ( f.decl_kind() == Z3_OP_NOT) {
+    else if ( f.decl_kind() == Z3_OP_NOT) {
       collect( e.arg(0), r, var_id_map  );
     }else{
-      assert(e.is_var());
       // Check if element present in the list.
       if( var_id_map.count(e) == 0 ) {
         var_id_map[e] = var_id_map.size() + 1;
+        std::cout << var_id_map[e];
         r.push_back (e);  // check types
       }
     }
@@ -53,11 +54,9 @@ std::vector <z3::expr> visit( std::vector <z3::expr>& cnf_fml, std::map <z3::exp
     for( auto& e : cnf_fml) {
         collect( e, r , var_id_map);
     }
-
+    
     return r;
 }
-
-
 
 void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
                         VecsExpr& m_vars ) {
@@ -74,6 +73,7 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
     for (auto& key: var_list) {  // todo: check the type of key
         var_id_map[key] = id++;
     }
+    
 
     //todo: get fresh vars
     fresh_vars =  visit( cnf_fml , var_id_map); 
