@@ -32,14 +32,22 @@ private:
 
   //variables
   Vec3Expr edges;
-  Vec3Expr dump1;
-  Vec2Expr r1;
+  Vec2Expr node;
   Vec2Expr active_node;
+  Vec4Expr presence_edge;
+  Vec4Expr active_edge;
 
+  Vec2Expr pairing_m;
+  VecExpr node_funcs;
+  VecExpr edge_funcs;
+
+  Vec4Expr reach;
+  Vec3Expr drop1;
+  Vec2Expr d_reach;
 
   //flat version of variables
   VecExpr flat_edges;
-  
+
 
   // Vec3Expr dump2;
 
