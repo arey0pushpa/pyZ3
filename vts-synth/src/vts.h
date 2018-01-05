@@ -1,12 +1,17 @@
 #ifndef VTS_H
 #define VTS_H
 
+#include <string>
 #include <z3++.h>
 #include <z3-util.h>
 
 enum model_type {
   MODEL_1,
-  MODEL_2
+  MODEL_2,
+  MODEL_3,
+  MODEL_4,
+  MODEL_5,
+  MODEL_6
 };
 
 
@@ -52,6 +57,22 @@ private:
   // Vec3Expr dump2;
 
   //constraints
+
+  void filler1( Vec3Expr& m, unsigned d1 ,
+                std::string& prefix) {
+  }
+
+  void filler2( Vec3Expr& m, unsigned d1 , unsigned d2,
+                std::string& prefix) {
+  }
+
+  void filler3( Vec3Expr& m, unsigned d1 , unsigned d2, unsigned d3,
+                std::string& prefix) {
+  }
+
+  void filler4( Vec3Expr& m, unsigned d1 , unsigned d2, unsigned d3, unsigned d4,
+                std::string& prefix) {
+  }
 
 };
 
