@@ -24,7 +24,11 @@
 // }
 
 
-void collect( z3::expr e , std::vector<z3::expr>& r, std::map <z3::expr, int>& var_id_map ) {
+
+//use Z3_ast
+void collect( z3::expr e ,
+              std::vector<z3::expr>& r,
+              std::map <Z3_ast, int>& var_id_map ) {
   if ( e.is_bool() ) {
     z3::func_decl f = e.decl();
     if ( f.decl_kind() == Z3_OP_OR) {
@@ -32,8 +36,7 @@ void collect( z3::expr e , std::vector<z3::expr>& r, std::map <z3::expr, int>& v
       for (unsigned i = 0; i < num; i++) {
         collect(  e.arg(i), r,  var_id_map);
       }
-    }
-    else if ( f.decl_kind() == Z3_OP_NOT) {
+    }else if ( f.decl_kind() == Z3_OP_NOT) {
       collect( e.arg(0), r, var_id_map  );
     }else{
       // Check if element present in the list.
@@ -47,7 +50,7 @@ void collect( z3::expr e , std::vector<z3::expr>& r, std::map <z3::expr, int>& v
 }
 
 // todo: check type of second argument?
-std::vector <z3::expr> visit( std::vector <z3::expr>& cnf_fml, std::map <z3::expr, int>& var_id_map ) {
+std::vector <z3::expr> visit( std::vector <z3::expr>& cnf_fml, std::map <Z3_ast, int>& var_id_map ) {
     //std::set<z3::expr> r;
     std::vector <z3::expr> r;
 
@@ -66,7 +69,7 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
     auto var_list = to_vector( m_vars );
 
     // Create a Map from var to id, var: id
-    std::map <z3::expr, int> var_id_map;
+    std::map <Z3_ast, int> var_id_map;
 
     // Map variable to id in the dictionary.
     unsigned int id = 1;
@@ -92,14 +95,14 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
     // BEGIN QDIMACS PRINITNG  
     unsigned int index = 0;
     std::ofstream ofs;
-    ofs.open ("myfile.qdimacs", std::ofstream::out | std::ofstream::app);
+    ofs.open ("/tmp/myfile.qdimacs", std::ofstream::out );
     // First part of a comment.
     ofs << "c This is a QDIMACS file output \n";
 
     // Print quantifier and total claused information.     
     auto q_var = var_id_map.size();
     auto num_clause = cnf_fml.size(); // not correct check plz 
-    ofs << "p" << " cnf " << q_var << num_clause << "\n";
+    ofs << "p" << " cnf " << q_var << " "<< num_clause << "\n";
 
     for (auto& e: m_vars ){
       if (index == 0){
