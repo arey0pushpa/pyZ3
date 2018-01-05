@@ -1,5 +1,5 @@
-#ifndef VTS_Z3_UTIL
-#define VTS_Z3_UTIL
+#ifndef VTS_Z3_UTIL_H
+#define VTS_Z3_UTIL_H
 
 #include <vector>
 #include <z3++.h>
@@ -15,6 +15,10 @@ std::vector<T> to_vector( const std::vector<std::vector<T>>& double_vec ) {
 }
 
 typedef std::vector< std::vector<z3::expr> > VecsExpr;
+
+typedef std::vector<z3::expr> VecExpr;
+typedef std::vector< std::vector<z3::expr> > Vec2Expr;
+typedef std::vector< std::vector< std::vector<z3::expr> > > Vec3Expr;
 
 // function returns prenex body
 // and quantified variables in list of list qs.

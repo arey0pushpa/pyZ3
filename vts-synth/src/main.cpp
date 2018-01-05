@@ -4,9 +4,14 @@
 
 #include "z3-util.h"
 
+#include<vts.h>
+
 int main() {
   try {
+
     z3::context c;
+
+    vts(c, 3, 6, 2, MODEL_1, 3 );
 
     z3::expr t = c.bool_val( true  );
     z3::expr fal = c.bool_val( false );
