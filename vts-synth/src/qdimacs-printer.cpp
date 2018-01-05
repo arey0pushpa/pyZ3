@@ -61,6 +61,53 @@ std::vector <z3::expr> visit( std::vector <z3::expr>& cnf_fml, std::map <Z3_ast,
     return r;
 }
 
+
+inline void print_variable( z3::expr& v, std::ofstream& o,
+                            std::map <Z3_ast, int>& vmap ) {
+  if( v.is_app() && v.num_args() == 0 && v.is_bool() ) {
+    o << vmap.at( v ) << " ";
+  }else{
+    assert(false);
+  }
+}
+
+inline void print_variables( std::vector<z3::expr>& vs, std::ofstream& o,
+                             std::map <Z3_ast, int>& vmap ) {
+  for (unsigned int i = 0; i < vs.size(); i++) {
+    z3::expr arg = vs.at(i);
+    print_variable( arg , o, vmap );
+  }
+  o << "0\n";
+}
+
+inline void print_literal( z3::expr& v, std::ofstream& o,
+                    std::map <Z3_ast, int>& vmap ) {
+  z3::func_decl f = v.decl();
+  if ( f.decl_kind() == Z3_OP_NOT) {
+    z3::expr arg = v.arg(0);
+    o << "-";print_variable( arg, o, vmap);
+  }else{
+    print_variable( v, o, vmap);
+  }
+}
+
+
+inline void print_clause( z3::expr& cl, std::ofstream& o,
+                          std::map <Z3_ast, int>& vmap ) {
+  z3::func_decl f = cl.decl();
+  if ( f.decl_kind() == Z3_OP_OR) {
+      for( unsigned i =0; i < cl.num_args(); i++ ) {
+        z3::expr arg = cl.arg(i);
+        print_literal( arg, o, vmap );
+      }
+  }else{
+    print_literal(cl,o,vmap);
+  }
+  o << "0\n";
+}
+
+
+
 void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
                         VecsExpr& m_vars ) {
 
@@ -93,7 +140,6 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
     }
 
     // BEGIN QDIMACS PRINITNG  
-    unsigned int index = 0;
     std::ofstream ofs;
     ofs.open ("/tmp/myfile.qdimacs", std::ofstream::out );
     // First part of a comment.
@@ -104,67 +150,26 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
     auto num_clause = cnf_fml.size(); // not correct check plz 
     ofs << "p" << " cnf " << q_var << " "<< num_clause << "\n";
 
+    unsigned int index = 0;
     for (auto& e: m_vars ){
-      if (index == 0){
-          if (!e.empty()) {    
-            ofs << "e" << " ";
-            for (unsigned int i = 0; i < e.size(); i++) {
-              ofs << var_id_map.at( e.at(i) ) << " ";
-            } 
-          }
-          index = index + 1;
-      }
-      else {
+      if (index == 0) {
+        if (!e.empty()){
+          ofs << "e" << " ";
+          print_variables( e , ofs, var_id_map );
+        }
+      }else{
           // For all quantifier case.
-          if( index % 2 == 0 ) { 
-              ofs << "e" << " ";
-              for (unsigned int i = 0; i < e.size(); i++) {
-                  ofs << var_id_map.at( e.at(i) ) << " "; 
-              } 
-          }
-          else {  // Exists case.
-              ofs << "a" << " ";
-              for (unsigned int i = 0; i < e.size(); i++) {
-                  ofs << var_id_map.at( e.at(i) ) << " "; 
-              }
-          }
-          index = index + 1;
+        std::string q_t = index % 2 == 0 ? "e " : "a ";
+        ofs << q_t;
+        print_variables( e , ofs, var_id_map );
       }
+      index = index + 1;
     }
 
     // Last part of cnf to index output.
     for (auto& e: cnf_fml) {
-        z3::func_decl f = e.decl();
-        unsigned num = e.num_args();
-        if( f.decl_kind() == Z3_OP_OR) {
-            for (unsigned i = 0; i < num; i++) {
-                // Just for the var and use else to got not check.
-                if( e.arg(i).is_var() ) {
-                    auto wvar = var_id_map[e.arg(i)];
-                    ofs << wvar << " ";
-                }
-                else {
-                  // todo: assert tht it has only one children
-                    auto wvar = var_id_map[e.arg(i).arg(0)]; 
-                    ofs << "-" << wvar << " "; 
-                }
-            }
-            ofs << "0" << "\n";
-        } // close the not case.
-        else {
-            for (unsigned i = 0; i < num; i++) {
-                if( e.arg(i).is_var() ) {
-                    auto wvar = var_id_map[e.arg(i)];
-                    ofs << wvar;
-                }
-                else {
-                    auto wvar = var_id_map[e.arg(i).arg(0)]; 
-                    ofs << "-" << wvar << " "; 
-                }
-            }
-            ofs << "0" << "\n";
-        } // close case of only variable  
-      }
+      print_clause( e, ofs, var_id_map );
+    }
     ofs.close();
 }
 
