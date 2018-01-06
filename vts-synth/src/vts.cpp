@@ -81,7 +81,6 @@ void vts::init_vts() {
 //Populate d_reach(i,j)
   popl2 ( d_reach, N , N, "r1" );
 
-
 }
 
 z3::expr vts::is_mol_edge_present( unsigned i, unsigned j, unsigned m ) {
@@ -315,7 +314,7 @@ z3::model vts::get_vts_for_prob1( ) {
   z3::expr r1 = reachability_def();           //R1
   z3::expr r2 = study_state_stability_cond(); //R2
 
-  z3::expr cons = v1 && v2 && v3 && v4 && v5 && v6 && v7 && v8 && r1 && r2;
+  z3::expr cons = v1 && v2 && v3 && v4 && v5 && v6 && v7 && v8 && r1 && r2 && edges[0][1][0];
 
   z3::solver s(ctx);
   s.add( cons );
