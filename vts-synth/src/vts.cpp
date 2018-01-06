@@ -161,6 +161,7 @@ z3::expr vts::edge_modelecues_is_subset_of_node_molecules() { //V4
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for( unsigned m = 0 ; m < M; m++ ) {
           z3::expr e = z3::implies( presence_edge[i][j][q][m], nodes[i][m] && nodes[j][m] );
+          ls.push_back(e);
         }
       }
     }
@@ -290,7 +291,7 @@ z3::expr vts::study_state_stability_cond() { //R2
         z3::expr path_i_j_m = z3::mk_or( path_list );
         //todo: the following is correct most likely
         // z3::expr path_i_j_m = reach[j][i][m][N-2];
-        a_list.push_back( z3::implies( is_mol_edge_present(i,j,m), path_list) );
+        a_list.push_back( z3::implies( is_mol_edge_present(i,j,m), path_i_j_m));
       }
     }
   }
@@ -313,6 +314,9 @@ z3::model vts::get_vts_for_prob1( ) {
 
   z3::expr r1 = reachability_def();           //R1
   z3::expr r2 = study_state_stability_cond(); //R2
+
+  std::cout << r1;
+  std::cout << r2;
 
   z3::expr cons = v1 && v2 && v3 && v4 && v5 && v6 && v7 && v8 && r1 && r2 && edges[0][1][0];
 
