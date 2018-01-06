@@ -17,11 +17,11 @@
 //typedef array_type::index index;
 //array_type A(boost::extents[3][4][2]);
 
+//============================================================================
+// Populates the vectors with z3 variables
 
 void vts::popl1 ( VecExpr& m, unsigned arg1,
-                std::string prefix ) {
-  // Create a 1 dim vector m with dimentions arg1.
-  // m.resize( arg1 );
+                  std::string prefix ) {
   for ( unsigned int i = 0; i < arg1; i++ ) {
     std::string name = prefix + "_" + std::to_string(i);
     m.push_back( make_bool( ctx, name ) );
@@ -30,63 +30,23 @@ void vts::popl1 ( VecExpr& m, unsigned arg1,
 
 void vts::popl2 ( Vec2Expr& m, unsigned arg1, unsigned arg2,
                   std::string prefix) {
-
   m.resize(arg1);
-  // for( auto& a : m) a.resize(arg2);
-
-  // Populate the vector.
-  for ( unsigned int i = 0; i < arg1; i++ ) {
-    for ( unsigned int j = 0; j < arg2; j++ ) {
-        std::string name =  prefix + "_" + std::to_string(i) + "_" + std::to_string(j);
-        m[i].push_back( make_bool( ctx, name ) ); 
-    }
-  }
+  for ( unsigned int i = 0; i < arg1; i++ )
+    popl1( m[i], arg2, prefix+"_"+ std::to_string(i) );
 }
 
 void vts::popl3 ( Vec3Expr& m, unsigned arg1, unsigned arg2,
                   unsigned arg3, std::string prefix) {
   m.resize(arg1);
-  for( auto& a : m) {
-    a.resize(arg2);
-    // for( auto& b : a) {
-    //   b.resize(arg3);
-    // }
-  }
-
-  // Populate the vector.
-  for ( unsigned int i = 0; i < arg1; i++ ) {
-    for ( unsigned int j = 0; j < arg2; j++ ) {
-      for ( unsigned int k = 0; k < arg3; k++) {
-          std::string name =  prefix + "_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k);
-          m[i][j].push_back(  make_bool( ctx, name ) );
-      }
-    }
-  }
+  for ( unsigned int i = 0; i < arg1; i++ )
+    popl2( m[i], arg2, arg3, prefix+"_"+ std::to_string(i) );
 }
 
-void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2, unsigned arg3, unsigned arg4, std::string prefix) {
+void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2,
+                  unsigned arg3, unsigned arg4, std::string prefix) {
   m.resize(arg1);
-  for( auto& a : m) {
-    a.resize(arg2);
-    for( auto& b : a)  {
-      b.resize(arg3);
-  //     for (auto& c: b) {
-  //       c.resize(arg4);
-  //     }
-    }
-  }
-
-  // Populate the vector.
-  for ( unsigned int i = 0; i < arg1; i++ ) {
-    for ( unsigned int j = 0; j < arg2; j++ ) {
-      for ( unsigned int k = 0; k < arg3; k++) {
-        for ( unsigned int w = 0; w < arg4; w++) {
-          std::string  name =  prefix + "_" + std::to_string(i) + "_" +  std::to_string(j) + "_" + std::to_string(k) + std::to_string(w);
-          m[i][j][k].push_back( make_bool( ctx, name ) );
-      }
-     }
-    }
- }
+  for ( unsigned int i = 0; i < arg1; i++ )
+    popl3( m[i], arg2, arg3, arg4, prefix+"_"+ std::to_string(i) );
 }
 
 void vts::init_vts() {
@@ -129,8 +89,7 @@ z3::expr vts::no_self_edges() {                              //V5
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned q = 0 ; q < E_arity; q++ ) {
-      z3::expr neg = !edges[i][i][q];
-      ls.push_back(neg);
+      ls.push_back( !edges[i][i][q] );
     }
   }
   return z3::mk_and( ls );
