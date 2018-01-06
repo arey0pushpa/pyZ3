@@ -70,6 +70,21 @@ private:
   z3::expr always_active_on_edge(); // f_ne
   z3::expr pm_dependent_activity(); //f_se
 
+  // z3::expr node_activity_constraint() {
+  //   switch(V) {
+  //   case MODEL_1: return mk_true(); break;
+  //   case MODEL_2: return always_active_on_node(); break;
+  //   case MODEL_3: return mk_true(); break;
+  //   case MODEL_4: return break;
+  //   case MODEL_5: break;
+  //   case MODEL_6: break;
+  //   }
+  // }
+
+  // z3::expr edge_activity_constraint() {
+    
+  // }
+
   // activity chosing mode
 // Activity_node = True 
 // Activity_edge = True
