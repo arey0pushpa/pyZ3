@@ -92,6 +92,14 @@ z3::expr vts::is_mol_edge_present( unsigned i, unsigned j, unsigned m ) {
   return z3::mk_or( p_list );
 }
 
+z3::expr vts::is_qth_edge_present( unsigned i, unsigned j, unsigned q ) {
+  z3::expr_vector p_list(ctx);
+  for( unsigned m = 0; m < M ; m++ ) {
+    p_list.push_back( presence_edge[i][j][q][m] );
+  }
+  return z3::mk_or( p_list );
+}
+
 z3::expr vts::reachability_def() {
   z3::expr_vector a_list(ctx);
   for( unsigned i = 0; i < N; i++ ) {
@@ -125,11 +133,12 @@ z3::expr vts::molecule_presence_require_for_present_edge() {
       if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
-        z3::expr rhs = ctx.bool_val(false); 
-        for ( unsigned k = 0; k < M; k++ ) {
-          rhs = presence_edge[i][j][q][k] || rhs;
-        }
-        ls.push_back( implies (rhs, edges[i][j][q]) );
+        ls.push_back( implies (is_qth_edge_present(i,j,q ), edges[i][j][q]) );
+        // z3::expr rhs = ctx.bool_val(false); 
+        // for ( unsigned m = 0; m < M; m++ ) {
+        //   rhs = presence_edge[i][j][q][m] || rhs;
+        // }
+        // ls.push_back( implies (rhs, edges[i][j][q]) );
       }
     }
   }
