@@ -40,7 +40,8 @@ void vts::popl2 ( Vec2Expr& m, unsigned arg1, unsigned arg2,
   // Populate the vector.
   for ( unsigned int i = 0; i < arg1; i++ ) {
     for ( unsigned int j = 0; j < arg2; j++ ) {
-        m[i][j]  = prefix + "_" + to_string(arg1) + "_" + to_string(arg2);
+        std::string name =  prefix + "_" + std::to_string(arg1) + "_" + std::to_string(arg2);
+        m[i][j]  = make_bool ( ctx, name ); 
     }
   }
 }
@@ -50,7 +51,9 @@ void vts::popl3 ( Vec3Expr& m, unsigned arg1, unsigned arg2,
   m.resize(arg1);
   for( auto& a : m) {
     a.resize(arg2);
-    for( auto& b : a) b.resize(arg3);
+    for( auto& b : a) {
+      b.resize(arg3);
+    }
   }
 
   // Create a 3 dim vector m  with dimention arg1 arg2 arg3.
@@ -60,27 +63,38 @@ void vts::popl3 ( Vec3Expr& m, unsigned arg1, unsigned arg2,
   for ( unsigned int i = 0; i < arg1; i++ ) {
     for ( unsigned int j = 0; j < arg2; j++ ) {
       for ( unsigned int k = 0; k < arg3; k++) {
-          m[i][j][j]  = prefix + "_" + to_string(arg1) + "_" +
-                              to_string(arg2) + "_" + to_string(arg3);
+          std::string name =  prefix + "_" + std::to_string(arg1) + "_" + std::to_string(arg2) + "_" + std::to_string(arg3);
+          m[i][j][k]  =  make_bool ( ctx, name );
       }
     }
   }
 }
 
-void vts::popl4 ( Vec3Expr& m, unsigned arg1, unsigned arg2,
-                            unsigned arg3, unsigned arg4,
-                            std::string& prefix) {
+void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2, unsigned arg3, unsigned arg4, std::string& prefix) {
   // Create a 4 dim vector m  with dimention arg1 arg2 arg3 arg4.
-  Vec4Expr (arg1, ExprVec3Expr m ( arg2, Vec2Expr ( arg2, VecExpr (arg4) ) );
+  //Vec4Expr (arg1, ExprVec3Expr m ( arg2, Vec2Expr ( arg3, VecExpr (arg4) ) );
+  m.resize(arg1);
+  for( auto& a : m) {
+    a.resize(arg2);
+    for( auto& b : a)  {
+      b.resize(arg3);
+      for (auto& c: b) {
+        c.resize(arg4);
+      }
+    }
+  }
 
   // Populate the vector.
   for ( unsigned int i = 0; i < arg1; i++ ) {
     for ( unsigned int j = 0; j < arg2; j++ ) {
       for ( unsigned int k = 0; k < arg3; k++) {
-          m[i][j][j]  = prefix + "_" + to_string(arg1) + "_" +
-                              to_string(arg2) + "_" + to_string(arg3);
+        for ( unsigned int w = 0; w < arg4; w++) {
+          std::string  name =  prefix + "_" + std::to_string(arg1) + "_" +  std::to_string(arg2) + "_" + std::to_string(arg3) + std::to_string(arg4);
+          m[i][j][k][w]  = make_bool( ctx, name );
       }
-
+     }
+    }
+ }
 }
 
 void vts::init_vts() {
