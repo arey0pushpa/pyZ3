@@ -11,7 +11,9 @@ int main() {
 
     z3::context c;
 
-    vts(c, 3, 6, 2, MODEL_1, 3 );
+    vts  v(c, 3, 6, 2, MODEL_1, 3 );
+
+    std::cout << v.no_self_edges();
 
     z3::expr t = c.bool_val( true  );
     z3::expr fal = c.bool_val( false );

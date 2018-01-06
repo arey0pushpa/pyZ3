@@ -42,4 +42,18 @@ inline z3::expr make_bool(z3::context& c, std::string& name) {
   return c.bool_const( name.c_str() );
 }
 
+inline z3::expr mk_and( z3::context& c, VecExpr& es ) {
+  z3::expr_vector args(c);
+  for (unsigned i = 0; i < es.size(); i++)
+    args.push_back( es[i] );
+  return z3::mk_and( args );
+}
+
+inline z3::expr mk_or( z3::context& c, VecExpr& es ) {
+  z3::expr_vector args(c);
+  for (unsigned i = 0; i < es.size(); i++)
+    args.push_back( es[i] );
+  return z3::mk_or( args );
+}
+
 #endif

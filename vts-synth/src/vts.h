@@ -59,22 +59,25 @@ private:
 
   //constraints
 
-  void popl1( VecExpr&, unsigned,  std::string&);
-  void popl2( Vec2Expr&, unsigned, unsigned, std::string&);
-  void popl3( Vec3Expr&, unsigned, unsigned, unsigned, std::string&);
-  void popl4( Vec4Expr&, unsigned, unsigned, unsigned, unsigned, std::string&);
+  void popl1( VecExpr&, unsigned,  std::string);
+  void popl2( Vec2Expr&, unsigned, unsigned, std::string);
+  void popl3( Vec3Expr&, unsigned, unsigned, unsigned, std::string);
+  void popl4( Vec4Expr&, unsigned, unsigned, unsigned, unsigned, std::string);
 
 
+public:
   //formula makers
   z3::expr always_active_on_node(); // f_nn
   z3::expr always_active_on_edge(); // f_ne
-  z3::expr pm_dependent_activity(); //f_se
+  z3::expr pm_dependent_activity_on_edge(); //f_se
+  z3::expr func_driven_activity_on_node(); //f_bn
+  z3::expr func_driven_activity_on_edge(); //f_be
 
   // z3::expr node_activity_constraint() {
   //   switch(V) {
-  //   case MODEL_1: return mk_true(); break;
+  //   case MODEL_1: return ctx.bool_val(true); break;
   //   case MODEL_2: return always_active_on_node(); break;
-  //   case MODEL_3: return mk_true(); break;
+  //   case MODEL_3: return ctx.bool_val(true); break;
   //   case MODEL_4: return break;
   //   case MODEL_5: break;
   //   case MODEL_6: break;
@@ -82,32 +85,12 @@ private:
   // }
 
   // z3::expr edge_activity_constraint() {
-    
   // }
-
-  // activity chosing mode
-// Activity_node = True 
-// Activity_edge = True
-// if V == 1:
-//     Activity_node = True 
-//     Activity_edge = True
-// elif V == 2:
-//     Activity_node = f_nn()
-// elif V == 3:
-//     Activity_edge = f_se()
-// elif V == 4:
-//     Activity_node = f_nn()
-//     Activity_edge = f_se()
-// elif V == 5:
-//     Activity_edge = f_ne()
-// else:
-//     Activity_node = f_nn()
-//     Activity_edge = f_ne()
 
   z3::expr molecule_presence_require_for_present_edge(); //V1
   z3::expr active_molecule_is_present_on_edge();         //V2
   z3::expr active_molecule_is_present_on_node();         //V3
-  z3::expr edge_modelecues_is_subset_of_node_molecules();//V3
+  z3::expr edge_modelecues_is_subset_of_node_molecules();//V4
   z3::expr no_self_edges();                              //V5
   z3::expr restriction_on_pairing_matrix();              //V6
   z3::expr edge_must_fuse_with_target();                 //V7

@@ -19,68 +19,60 @@
 
 
 void vts::popl1 ( VecExpr& m, unsigned arg1,
-                std::string& prefix ) {
+                std::string prefix ) {
   // Create a 1 dim vector m with dimentions arg1.
-  m.resize( arg1 );
+  // m.resize( arg1 );
   for ( unsigned int i = 0; i < arg1; i++ ) {
-    std::string name = prefix + "_" + std::to_string(arg1);
-    m[i] = make_bool( ctx, name );
+    std::string name = prefix + "_" + std::to_string(i);
+    m.push_back( make_bool( ctx, name ) );
   }
 }
 
 void vts::popl2 ( Vec2Expr& m, unsigned arg1, unsigned arg2,
-                  std::string& prefix) {
+                  std::string prefix) {
 
   m.resize(arg1);
-  for( auto& a : m) a.resize(arg2);
-
-  // Create a 2 dim vector m  with dimentions arg1 arg2.
-  // Vec2Expr m ( arg1, VectExpr ( arg2 ) );
+  // for( auto& a : m) a.resize(arg2);
 
   // Populate the vector.
   for ( unsigned int i = 0; i < arg1; i++ ) {
     for ( unsigned int j = 0; j < arg2; j++ ) {
-        std::string name =  prefix + "_" + std::to_string(arg1) + "_" + std::to_string(arg2);
-        m[i][j]  = make_bool ( ctx, name ); 
+        std::string name =  prefix + "_" + std::to_string(i) + "_" + std::to_string(j);
+        m[i].push_back( make_bool( ctx, name ) ); 
     }
   }
 }
 
 void vts::popl3 ( Vec3Expr& m, unsigned arg1, unsigned arg2,
-                            unsigned arg3, std::string& prefix) {
+                  unsigned arg3, std::string prefix) {
   m.resize(arg1);
   for( auto& a : m) {
     a.resize(arg2);
-    for( auto& b : a) {
-      b.resize(arg3);
-    }
+    // for( auto& b : a) {
+    //   b.resize(arg3);
+    // }
   }
-
-  // Create a 3 dim vector m  with dimention arg1 arg2 arg3.
-  // Vec3Expr m ( arg1, Vec2Expr ( arg2, VecExpr (arg3) ) );
 
   // Populate the vector.
   for ( unsigned int i = 0; i < arg1; i++ ) {
     for ( unsigned int j = 0; j < arg2; j++ ) {
       for ( unsigned int k = 0; k < arg3; k++) {
-          std::string name =  prefix + "_" + std::to_string(arg1) + "_" + std::to_string(arg2) + "_" + std::to_string(arg3);
-          m[i][j][k]  =  make_bool ( ctx, name );
+          std::string name =  prefix + "_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k);
+          m[i][j].push_back(  make_bool( ctx, name ) );
       }
     }
   }
 }
 
-void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2, unsigned arg3, unsigned arg4, std::string& prefix) {
-  // Create a 4 dim vector m  with dimention arg1 arg2 arg3 arg4.
-  //Vec4Expr (arg1, ExprVec3Expr m ( arg2, Vec2Expr ( arg3, VecExpr (arg4) ) );
+void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2, unsigned arg3, unsigned arg4, std::string prefix) {
   m.resize(arg1);
   for( auto& a : m) {
     a.resize(arg2);
     for( auto& b : a)  {
       b.resize(arg3);
-      for (auto& c: b) {
-        c.resize(arg4);
-      }
+  //     for (auto& c: b) {
+  //       c.resize(arg4);
+  //     }
     }
   }
 
@@ -89,8 +81,8 @@ void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2, unsigned arg3, unsi
     for ( unsigned int j = 0; j < arg2; j++ ) {
       for ( unsigned int k = 0; k < arg3; k++) {
         for ( unsigned int w = 0; w < arg4; w++) {
-          std::string  name =  prefix + "_" + std::to_string(arg1) + "_" +  std::to_string(arg2) + "_" + std::to_string(arg3) + std::to_string(arg4);
-          m[i][j][k][w]  = make_bool( ctx, name );
+          std::string  name =  prefix + "_" + std::to_string(i) + "_" +  std::to_string(j) + "_" + std::to_string(k) + std::to_string(w);
+          m[i][j][k].push_back( make_bool( ctx, name ) );
       }
      }
     }
@@ -129,4 +121,18 @@ void vts::init_vts() {
 //Populate d_reach(i,j)
   popl2 ( d_reach, N , N, "r1" );
 
+
 }
+
+
+z3::expr vts::no_self_edges() {                              //V5
+  z3::expr_vector ls(ctx);
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned q = 0 ; q < E_arity; q++ ) {
+      z3::expr neg = !edges[i][i][q];
+      ls.push_back(neg);
+    }
+  }
+  return z3::mk_and( ls );
+}
+
