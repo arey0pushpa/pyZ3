@@ -85,6 +85,75 @@ void vts::init_vts() {
 }
 
 
+//V1: For an edge to exist it should have one molecule present.
+z3::expr molecule_presence_require_for_present_edge() {
+  z3::expr_vector ls(ctx);
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)  
+        continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        z3::expr rhs = c.bool_val(false); 
+        for ( unsigned k = 0; k < M; k++ ) {
+          rhs = presence_edge[i][j][q][k] || rhs;
+        }
+        ls.push_back( implies (rhs, edge[i][j][q]) );
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+// V2: If molecule is active on an edge then it should be present on the edge.
+z3::expr active_molecule_is_present_on_edge() {         //V2
+  z3::expr_vector ls(ctx);
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)  
+        continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        for ( unsigned k = 0; k < M; k++ ) {
+          z3::expr e =  implies( active_edge[i][j][q][k] , presence_edge[i][j][q][k] );
+          ls.push_back( e );
+        }
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+
+// V3: A mmolecule should be present to be active.
+z3::expr active_molecule_is_present_on_node() {         //V3
+  z3::expr_vector ls(ctx);
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned k = 0 ; k < M; k++ ) {
+      z3::expr e = implies ( active_node[i][k], node[i][k]);
+      ls.push_back ( e );
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+// V4: The edge label are subset of the source and target.
+z3::expr edge_modelecues_is_subset_of_node_molecules() { //V4
+  z3::expr_vector ls(ctx);
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)  
+        continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        for( unsigned k = 0 ; k < M; k++ ) {
+          z3::expr e = implies( presence_edge[i][j][q][k], node[i][k] && node[j][k] );
+        }
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+
+// V5 : that no self edges are allowed. 
 z3::expr vts::no_self_edges() {                              //V5
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
@@ -95,3 +164,21 @@ z3::expr vts::no_self_edges() {                              //V5
   return z3::mk_and( ls );
 }
 
+// V6: Only Q R entry has possible non zero entry.  
+
+z3::expr restriction_on_pairing_matrix() {              //V6
+  z3::expr_vector ls(ctx);
+  for( unsigned x = 0 ; x < M; x++ ) {
+    for( unsigned y = 0 ; y < M; y++ ) {
+      if ( ((x < M/2) && (y < M/2)) || ((x>=M/2) && (y >=M/2)) ) {
+        z3::expr e = !p[x][y];
+        ls.push_back( e );
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+
+//z3::expr edge_must_fuse_with_target();                 //V7
+  //z3::expr edge_must_not_fuse_with_noone_else();         //V8
