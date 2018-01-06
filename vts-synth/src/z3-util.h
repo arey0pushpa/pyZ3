@@ -56,4 +56,15 @@ inline z3::expr mk_or( z3::context& c, VecExpr& es ) {
   return z3::mk_or( args );
 }
 
+inline bool is_true( z3::expr e,  z3::model m ) {
+  z3::expr v = m.eval( e );
+  return ( Z3_get_bool_value( v.ctx(), v)  == Z3_L_TRUE );
+}
+
+inline bool is_false( z3::expr e,  z3::model m ) {
+  z3::expr v = m.eval( e );
+  return ( Z3_get_bool_value( v.ctx(), v)  == Z3_L_FALSE );
+}
+
+
 #endif

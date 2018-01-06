@@ -112,6 +112,8 @@ public:
   z3::expr gets_disconnected();                 //
 
 
+  z3::model get_vts_for_prob1();
+
   //helper functions
   z3::expr is_mol_edge_present( unsigned i, unsigned j, unsigned m );
   z3::expr is_qth_edge_present( unsigned i, unsigned j, unsigned q );
