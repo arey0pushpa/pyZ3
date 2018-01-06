@@ -168,7 +168,7 @@ z3::expr active_molecule_is_present_on_node() {         //V3
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned k = 0 ; k < M; k++ ) {
-      z3::expr e = implies ( active_node[i][k], node[i][k]);
+      z3::expr e = implies ( active_node[i][k], nodes[i][k]);
       ls.push_back ( e );
     }
   }
@@ -184,7 +184,7 @@ z3::expr edge_modelecues_is_subset_of_node_molecules() { //V4
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for( unsigned k = 0 ; k < M; k++ ) {
-          z3::expr e = implies( presence_edge[i][j][q][k], node[i][k] && node[j][k] );
+          z3::expr e = implies( presence_edge[i][j][q][k], nodes[i][k] && nodes[j][k] );
         }
       }
     }
@@ -212,7 +212,7 @@ z3::expr restriction_on_pairing_matrix() {              //V6
   for( unsigned x = 0 ; x < M; x++ ) {
     for( unsigned y = 0 ; y < M; y++ ) {
       if ( ((x < M/2) && (y < M/2)) || ((x>=M/2) && (y >=M/2)) ) {
-        z3::expr e = !p[x][y];
+        z3::expr e = !pairing_m[x][y];
         ls.push_back( e );
       }
     }
@@ -221,5 +221,60 @@ z3::expr restriction_on_pairing_matrix() {              //V6
 }
 
 
-//z3::expr edge_must_fuse_with_target();                 //V7
-  //z3::expr edge_must_not_fuse_with_noone_else();         //V8
+// V7 : There should be an active pair corresponding to pairing matrix 
+z3::expr vts::edge_must_fuse_with_target() {                 //V7
+  z3::expr_vector ls(ctx);
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)  
+        continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        z3::expr lhs = c.bool_val(false); 
+        for ( unsigned k = 0; k < M; k++ ) {
+          for ( unsigned k1 = 0; k1 < M; k1++ ) {
+            if (k == k1) 
+              continue;
+            lhs =  ( (active_edge[i][j][q][k] && active_node[j][k1] && p[k][k1]) ||  lhs );
+          }
+        }
+        z3::expr e =  implies ( edge[i][j][q], lhs );
+        ls.push_back( e );
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+//  V8: Edge should not be able to potentially fuse with 
+//      any node other than it's target.
+z3::expr vts::edge_must_not_fuse_with_noone_else() {       //V8
+  z3::expr_vector ls(ctx);
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)  
+        continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        for ( unsigned k = 0; k < M; k++ ) {
+          z3::expr lhs = c.bool_val(false); 
+            for( unsigned j1 = 0 ; j1 < N; j1++ ) {
+              if (j1 == j) 
+                continue;
+              for ( unsigned k11 = 0; k11 < M; k11++ ) {
+              if (k == k11) 
+                continue;
+              lhs =  ( ( active_node[j1][k11] && p[k][k11] ) ||  lhs );
+              }
+            }
+            z3::expr e = implies( active_edge[i][j][q][k], !lhs );
+            ls.push_back( e );
+        }
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+
+
+
+}
