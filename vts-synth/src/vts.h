@@ -27,11 +27,11 @@ public:
 private:
   z3::context& ctx;
 
-  unsigned   mols;    // Molecules
-  unsigned   nodes;    // Nodes
-  unsigned   e_arity;    // Edge arity
-  model_type mod;  // Variation
-  unsigned   conn;    // connectedness
+  unsigned   m;    // Molecules
+  unsigned   n;    // Nodes
+  unsigned   q;    // Edge arity
+  model_type v;  // Variation
+  unsigned   c;    // connectedness
 
   void init_vts();
 
@@ -58,21 +58,6 @@ private:
 
   //constraints
 
-  void filler1( Vec3Expr& m, unsigned d1 ,
-                std::string& prefix) {
-  }
-
-  void filler2( Vec3Expr& m, unsigned d1 , unsigned d2,
-                std::string& prefix) {
-  }
-
-  void filler3( Vec3Expr& m, unsigned d1 , unsigned d2, unsigned d3,
-                std::string& prefix) {
-  }
-
-  void filler4( Vec3Expr& m, unsigned d1 , unsigned d2, unsigned d3, unsigned d4,
-                std::string& prefix) {
-  }
 
 };
 
