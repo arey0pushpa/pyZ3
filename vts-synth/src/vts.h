@@ -63,6 +63,56 @@ private:
   void popl2( Vec2Expr&, unsigned, unsigned, std::string&);
   void popl3( Vec3Expr&, unsigned, unsigned, unsigned, std::string&);
   void popl4( Vec4Expr&, unsigned, unsigned, unsigned, unsigned, std::string&);
+
+
+  //formula makers
+  z3::expr always_active_on_node(); // f_nn
+  z3::expr always_active_on_edge(); // f_ne
+  z3::expr pm_dependent_activity(); //f_se
+
+  // activity chosing mode
+// Activity_node = True 
+// Activity_edge = True
+// if V == 1:
+//     Activity_node = True 
+//     Activity_edge = True
+// elif V == 2:
+//     Activity_node = f_nn()
+// elif V == 3:
+//     Activity_edge = f_se()
+// elif V == 4:
+//     Activity_node = f_nn()
+//     Activity_edge = f_se()
+// elif V == 5:
+//     Activity_edge = f_ne()
+// else:
+//     Activity_node = f_nn()
+//     Activity_edge = f_ne()
+
+  z3::expr molecule_presence_require_for_present_edge(); //V1
+  z3::expr active_molecule_is_present_on_edge();         //V2
+  z3::expr active_molecule_is_present_on_node();         //V3
+  z3::expr edge_modelecues_is_subset_of_node_molecules();//V3
+  z3::expr no_self_edges();                              //V5
+  z3::expr restriction_on_pairing_matrix();              //V6
+  z3::expr edge_must_fuse_with_target();                 //V7
+  z3::expr edge_must_not_fuse_with_noone_else();         //V8
+
+  //study state
+  z3::expr reachability_def();           //R1
+  z3::expr study_state_stability_cond(); //R2
+
+  //
+  // connectivity constraints
+  // todo: variables are needed to be parametrized
+  z3::expr only_present_edges_can_be_dropped(); //
+  z3::expr atleast_k_drops(unsigned k);         //
+  z3::expr atmost_k_drops(unsigned k);          //
+  z3::expr exactly_k_drops(unsigned k);         //
+  z3::expr reachability_under_drop_def();       //
+  z3::expr remains_connected();                 //
+  z3::expr gets_disconnected();                 //
+
 };
 
 #endif
