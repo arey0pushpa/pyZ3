@@ -220,15 +220,15 @@ z3::expr vts::edge_must_fuse_with_target() {                 //V7
       if (j == i)  
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
-        z3::expr lhs = c.bool_val(false); 
+        z3::expr lhs = ctx.bool_val(false); 
         for ( unsigned k = 0; k < M; k++ ) {
           for ( unsigned k1 = 0; k1 < M; k1++ ) {
             if (k == k1) 
               continue;
-            lhs =  ( (active_edge[i][j][q][k] && active_node[j][k1] && p[k][k1]) ||  lhs );
+            lhs =  ( (active_edge[i][j][q][k] && active_node[j][k1] && pairing_m[k][k1]) ||  lhs );
           }
         }
-        z3::expr e =  implies ( edge[i][j][q], lhs );
+        z3::expr e =  implies ( edges[i][j][q], lhs );
         ls.push_back( e );
       }
     }
@@ -246,14 +246,14 @@ z3::expr vts::edge_must_not_fuse_with_noone_else() {       //V8
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned k = 0; k < M; k++ ) {
-          z3::expr lhs = c.bool_val(false); 
+          z3::expr lhs = ctx.bool_val(false); 
             for( unsigned j1 = 0 ; j1 < N; j1++ ) {
               if (j1 == j) 
                 continue;
               for ( unsigned k11 = 0; k11 < M; k11++ ) {
               if (k == k11) 
                 continue;
-              lhs =  ( ( active_node[j1][k11] && p[k][k11] ) ||  lhs );
+              lhs =  ( ( active_node[j1][k11] && pairing_m[k][k11] ) ||  lhs );
               }
             }
             z3::expr e = implies( active_edge[i][j][q][k], !lhs );
@@ -266,6 +266,3 @@ z3::expr vts::edge_must_not_fuse_with_noone_else() {       //V8
 }
 
 
-
-
-}
