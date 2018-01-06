@@ -81,7 +81,6 @@ void vts::init_vts() {
 //Populate d_reach(i,j)
   popl2 ( d_reach, N , N, "r1" );
 
-
 }
 
 z3::expr vts::is_mol_edge_present( unsigned i, unsigned j, unsigned m ) {
