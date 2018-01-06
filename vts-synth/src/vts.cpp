@@ -84,20 +84,52 @@ void vts::init_vts() {
 
 }
 
+z3::expr vts::is_mol_edge_present( unsigned i, unsigned j, unsigned m ) {
+  z3::expr_vector p_list(ctx);
+  for( unsigned q = 0; q < E_arity ; q++ ) {
+    p_list.push_back( presence_edge[i][j][q][m] );
+  }
+  return z3::mk_or( p_list );
+}
+
+z3::expr vts::reachability_def() {
+  z3::expr_vector a_list(ctx);
+  for( unsigned i = 0; i < N; i++ ) {
+    for( unsigned j = 0; j < N; j++ ) {
+      if( i == j ) continue;
+      for( unsigned m = 0; m < M; m++ ) {
+        for( unsigned z = 0; z < N-1; z++ ) {
+          if( z ==0 ) {
+            a_list.push_back( z3::implies( reach[i][j][m][0], is_mol_edge_present(i,j,m)) );
+          }else{
+            z3::expr_vector rhs_list(ctx);
+            for( unsigned l = 0; l < N; l++ ) {
+              if( l == i || l == j ) continue;
+              rhs_list.push_back( reach[l][j][m][z-1] && is_mol_edge_present(i,l,m) );
+            }
+            auto rhs = z3::mk_or( rhs_list );
+            a_list.push_back( z3::implies( reach[i][j][m][z], rhs ) );
+          }
+        }
+      }
+    }
+  }
+  return z3::mk_and( a_list );
+}
 
 //V1: For an edge to exist it should have one molecule present.
-z3::expr molecule_presence_require_for_present_edge() {
+z3::expr vts::molecule_presence_require_for_present_edge() {
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i)  
+      if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
-        z3::expr rhs = c.bool_val(false); 
+        z3::expr rhs = ctx.bool_val(false); 
         for ( unsigned k = 0; k < M; k++ ) {
           rhs = presence_edge[i][j][q][k] || rhs;
         }
-        ls.push_back( implies (rhs, edge[i][j][q]) );
+        ls.push_back( implies (rhs, edges[i][j][q]) );
       }
     }
   }
@@ -105,7 +137,7 @@ z3::expr molecule_presence_require_for_present_edge() {
 }
 
 // V2: If molecule is active on an edge then it should be present on the edge.
-z3::expr active_molecule_is_present_on_edge() {         //V2
+z3::expr vts::active_molecule_is_present_on_edge() {         //V2
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
@@ -124,11 +156,11 @@ z3::expr active_molecule_is_present_on_edge() {         //V2
 
 
 // V3: A mmolecule should be present to be active.
-z3::expr active_molecule_is_present_on_node() {         //V3
+z3::expr vts::active_molecule_is_present_on_node() {         //V3
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned k = 0 ; k < M; k++ ) {
-      z3::expr e = implies ( active_node[i][k], node[i][k]);
+      z3::expr e = z3::implies( active_node[i][k], nodes[i][k] );
       ls.push_back ( e );
     }
   }
@@ -136,7 +168,7 @@ z3::expr active_molecule_is_present_on_node() {         //V3
 }
 
 // V4: The edge label are subset of the source and target.
-z3::expr edge_modelecues_is_subset_of_node_molecules() { //V4
+z3::expr vts::edge_modelecues_is_subset_of_node_molecules() { //V4
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
@@ -144,7 +176,7 @@ z3::expr edge_modelecues_is_subset_of_node_molecules() { //V4
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for( unsigned k = 0 ; k < M; k++ ) {
-          z3::expr e = implies( presence_edge[i][j][q][k], node[i][k] && node[j][k] );
+          z3::expr e = z3::implies( presence_edge[i][j][q][k], nodes[i][k] && nodes[j][k] );
         }
       }
     }
@@ -166,12 +198,12 @@ z3::expr vts::no_self_edges() {                              //V5
 
 // V6: Only Q R entry has possible non zero entry.  
 
-z3::expr restriction_on_pairing_matrix() {              //V6
+z3::expr vts::restriction_on_pairing_matrix() {              //V6
   z3::expr_vector ls(ctx);
   for( unsigned x = 0 ; x < M; x++ ) {
     for( unsigned y = 0 ; y < M; y++ ) {
       if ( ((x < M/2) && (y < M/2)) || ((x>=M/2) && (y >=M/2)) ) {
-        z3::expr e = !p[x][y];
+        z3::expr e = !pairing_m[x][y];
         ls.push_back( e );
       }
     }

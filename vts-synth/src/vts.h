@@ -111,33 +111,10 @@ public:
   z3::expr remains_connected();                 //
   z3::expr gets_disconnected();                 //
 
+
+  //helper functions
+  z3::expr is_mol_edge_present( unsigned i, unsigned j, unsigned m );
 };
 
-// z3::expr vts::reachability_def() {
-//   z3::expr_vector a_list;
-//   for( unsigned i = 0; i < N; i++ ) {
-//     for( unsigned j = 0; j < N; j++ ) {
-//       if( i != j ) continue;
-//       for( unsigned k = 0; k < M; k++ ) {
-//         for( unsigned z = 0; z < N-1; z++ ) {
-//           if( z ==0 ) {
-//             z3::expr_vector p_list;
-//             for( unsigned q1 = 0; q1 < E_arity ; q1++ ) {
-//               p_list.push_back( presence_edge[i][j][q1][k] )
-//             }
-//             z3::expr pe = z3::mk_or( p_list );
-//             a_list.push_back( z3::implies( reach[i][j][k][0], pe) );
-//           }else{
-//             z3::expr_vector rhs_list;
-//             for( unsigned l = 0; l < N; l++ ) {
-//               rhs_list.push_back( );
-//             }
-//             rhs = z3::mk_or( rhs_list );
-//             a_list.push_back( z3::implies( reach[i][j][k][z], rhs ) )
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
+
 #endif
