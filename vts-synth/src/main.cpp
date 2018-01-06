@@ -7,13 +7,15 @@
 #include<vts.h>
 
 int main() {
-  try {
 
     z3::context c;
 
     vts  v(c, 3, 6, 2, MODEL_1, 3 );
 
-    std::cout << v.no_self_edges();
+    std::cout << v.get_vts_for_prob1();
+
+  try {
+
 
     z3::expr t = c.bool_val( true  );
     z3::expr fal = c.bool_val( false );

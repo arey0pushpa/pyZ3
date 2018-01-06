@@ -300,3 +300,31 @@ z3::expr vts::study_state_stability_cond() { //R2
 
 //----------------------------------------------------------------------------
 //
+
+z3::model vts::get_vts_for_prob1( ) {
+
+  z3::expr v1 = molecule_presence_require_for_present_edge(); //V1
+  z3::expr v2 = active_molecule_is_present_on_edge();         //V2
+  z3::expr v3 = active_molecule_is_present_on_node();         //V3
+  z3::expr v4 = edge_modelecues_is_subset_of_node_molecules();//V4
+  z3::expr v5 = no_self_edges();                              //V5
+  z3::expr v6 = restriction_on_pairing_matrix();              //V6
+  z3::expr v7 = edge_must_fuse_with_target();                 //V7
+  z3::expr v8 = edge_must_not_fuse_with_noone_else();         //V8
+
+  z3::expr r1 = reachability_def();           //R1
+  z3::expr r2 = study_state_stability_cond(); //R2
+
+  z3::expr cons = v1 && v2 && v3 & v4 && v5 && v6 && v7 && v8 && r1 && r2;
+
+  z3::solver s(ctx);
+  s.add( cons );
+  if( s.check() == z3::unsat ) {
+    z3::model m = s.get_model();
+    return m;
+  }else{
+    std::cout << "model is not feasible!";
+    assert(false);
+  }
+  return s.get_model(); //dummy call
+}
