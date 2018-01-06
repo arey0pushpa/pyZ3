@@ -17,11 +17,11 @@
 //typedef array_type::index index;
 //array_type A(boost::extents[3][4][2]);
 
+//============================================================================
+// Populates the vectors with z3 variables
 
 void vts::popl1 ( VecExpr& m, unsigned arg1,
-                std::string prefix ) {
-  // Create a 1 dim vector m with dimentions arg1.
-  // m.resize( arg1 );
+                  std::string prefix ) {
   for ( unsigned int i = 0; i < arg1; i++ ) {
     std::string name = prefix + "_" + std::to_string(i);
     m.push_back( make_bool( ctx, name ) );
@@ -30,63 +30,23 @@ void vts::popl1 ( VecExpr& m, unsigned arg1,
 
 void vts::popl2 ( Vec2Expr& m, unsigned arg1, unsigned arg2,
                   std::string prefix) {
-
   m.resize(arg1);
-  // for( auto& a : m) a.resize(arg2);
-
-  // Populate the vector.
-  for ( unsigned int i = 0; i < arg1; i++ ) {
-    for ( unsigned int j = 0; j < arg2; j++ ) {
-        std::string name =  prefix + "_" + std::to_string(i) + "_" + std::to_string(j);
-        m[i].push_back( make_bool( ctx, name ) ); 
-    }
-  }
+  for ( unsigned int i = 0; i < arg1; i++ )
+    popl1( m[i], arg2, prefix+"_"+ std::to_string(i) );
 }
 
 void vts::popl3 ( Vec3Expr& m, unsigned arg1, unsigned arg2,
                   unsigned arg3, std::string prefix) {
   m.resize(arg1);
-  for( auto& a : m) {
-    a.resize(arg2);
-    // for( auto& b : a) {
-    //   b.resize(arg3);
-    // }
-  }
-
-  // Populate the vector.
-  for ( unsigned int i = 0; i < arg1; i++ ) {
-    for ( unsigned int j = 0; j < arg2; j++ ) {
-      for ( unsigned int k = 0; k < arg3; k++) {
-          std::string name =  prefix + "_" + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k);
-          m[i][j].push_back(  make_bool( ctx, name ) );
-      }
-    }
-  }
+  for ( unsigned int i = 0; i < arg1; i++ )
+    popl2( m[i], arg2, arg3, prefix+"_"+ std::to_string(i) );
 }
 
-void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2, unsigned arg3, unsigned arg4, std::string prefix) {
+void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2,
+                  unsigned arg3, unsigned arg4, std::string prefix) {
   m.resize(arg1);
-  for( auto& a : m) {
-    a.resize(arg2);
-    for( auto& b : a)  {
-      b.resize(arg3);
-  //     for (auto& c: b) {
-  //       c.resize(arg4);
-  //     }
-    }
-  }
-
-  // Populate the vector.
-  for ( unsigned int i = 0; i < arg1; i++ ) {
-    for ( unsigned int j = 0; j < arg2; j++ ) {
-      for ( unsigned int k = 0; k < arg3; k++) {
-        for ( unsigned int w = 0; w < arg4; w++) {
-          std::string  name =  prefix + "_" + std::to_string(i) + "_" +  std::to_string(j) + "_" + std::to_string(k) + std::to_string(w);
-          m[i][j][k].push_back( make_bool( ctx, name ) );
-      }
-     }
-    }
- }
+  for ( unsigned int i = 0; i < arg1; i++ )
+    popl3( m[i], arg2, arg3, arg4, prefix+"_"+ std::to_string(i) );
 }
 
 void vts::init_vts() {
@@ -124,20 +84,52 @@ void vts::init_vts() {
 
 }
 
+z3::expr vts::is_mol_edge_present( unsigned i, unsigned j, unsigned m ) {
+  z3::expr_vector p_list(ctx);
+  for( unsigned q = 0; q < E_arity ; q++ ) {
+    p_list.push_back( presence_edge[i][j][q][m] );
+  }
+  return z3::mk_or( p_list );
+}
+
+z3::expr vts::reachability_def() {
+  z3::expr_vector a_list(ctx);
+  for( unsigned i = 0; i < N; i++ ) {
+    for( unsigned j = 0; j < N; j++ ) {
+      if( i == j ) continue;
+      for( unsigned m = 0; m < M; m++ ) {
+        for( unsigned z = 0; z < N-1; z++ ) {
+          if( z ==0 ) {
+            a_list.push_back( z3::implies( reach[i][j][m][0], is_mol_edge_present(i,j,m)) );
+          }else{
+            z3::expr_vector rhs_list(ctx);
+            for( unsigned l = 0; l < N; l++ ) {
+              if( l == i || l == j ) continue;
+              rhs_list.push_back( reach[l][j][m][z-1] && is_mol_edge_present(i,l,m) );
+            }
+            auto rhs = z3::mk_or( rhs_list );
+            a_list.push_back( z3::implies( reach[i][j][m][z], rhs ) );
+          }
+        }
+      }
+    }
+  }
+  return z3::mk_and( a_list );
+}
 
 //V1: For an edge to exist it should have one molecule present.
-z3::expr molecule_presence_require_for_present_edge() {
+z3::expr vts::molecule_presence_require_for_present_edge() {
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i)  
+      if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
-        z3::expr rhs = c.bool_val(false); 
+        z3::expr rhs = ctx.bool_val(false); 
         for ( unsigned k = 0; k < M; k++ ) {
           rhs = presence_edge[i][j][q][k] || rhs;
         }
-        ls.push_back( implies (rhs, edge[i][j][q]) );
+        ls.push_back( implies (rhs, edges[i][j][q]) );
       }
     }
   }
@@ -145,7 +137,7 @@ z3::expr molecule_presence_require_for_present_edge() {
 }
 
 // V2: If molecule is active on an edge then it should be present on the edge.
-z3::expr active_molecule_is_present_on_edge() {         //V2
+z3::expr vts::active_molecule_is_present_on_edge() {         //V2
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
@@ -164,11 +156,11 @@ z3::expr active_molecule_is_present_on_edge() {         //V2
 
 
 // V3: A mmolecule should be present to be active.
-z3::expr active_molecule_is_present_on_node() {         //V3
+z3::expr vts::active_molecule_is_present_on_node() {         //V3
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned k = 0 ; k < M; k++ ) {
-      z3::expr e = implies ( active_node[i][k], nodes[i][k]);
+      z3::expr e = z3::implies( active_node[i][k], nodes[i][k] );
       ls.push_back ( e );
     }
   }
@@ -176,7 +168,7 @@ z3::expr active_molecule_is_present_on_node() {         //V3
 }
 
 // V4: The edge label are subset of the source and target.
-z3::expr edge_modelecues_is_subset_of_node_molecules() { //V4
+z3::expr vts::edge_modelecues_is_subset_of_node_molecules() { //V4
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
@@ -184,7 +176,7 @@ z3::expr edge_modelecues_is_subset_of_node_molecules() { //V4
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for( unsigned k = 0 ; k < M; k++ ) {
-          z3::expr e = implies( presence_edge[i][j][q][k], nodes[i][k] && nodes[j][k] );
+          z3::expr e = z3::implies( presence_edge[i][j][q][k], nodes[i][k] && nodes[j][k] );
         }
       }
     }
@@ -198,8 +190,7 @@ z3::expr vts::no_self_edges() {                              //V5
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned q = 0 ; q < E_arity; q++ ) {
-      z3::expr neg = !edges[i][i][q];
-      ls.push_back(neg);
+      ls.push_back( !edges[i][i][q] );
     }
   }
   return z3::mk_and( ls );
@@ -207,7 +198,7 @@ z3::expr vts::no_self_edges() {                              //V5
 
 // V6: Only Q R entry has possible non zero entry.  
 
-z3::expr restriction_on_pairing_matrix() {              //V6
+z3::expr vts::restriction_on_pairing_matrix() {              //V6
   z3::expr_vector ls(ctx);
   for( unsigned x = 0 ; x < M; x++ ) {
     for( unsigned y = 0 ; y < M; y++ ) {

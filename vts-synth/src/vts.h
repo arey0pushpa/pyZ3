@@ -111,6 +111,10 @@ public:
   z3::expr remains_connected();                 //
   z3::expr gets_disconnected();                 //
 
+
+  //helper functions
+  z3::expr is_mol_edge_present( unsigned i, unsigned j, unsigned m );
 };
+
 
 #endif
