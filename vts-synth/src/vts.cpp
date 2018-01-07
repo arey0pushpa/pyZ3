@@ -191,8 +191,8 @@ z3::expr vts::func_driven_activity_on_node() { //f_bn
   z3::expr_vector ls (ctx);
   z3::expr_vector s (ctx);
   z3::expr lhs(ctx);
-  auto f(ctx);
-  auto f_app(ctx);
+  VecExpr f(ctx);
+  VecExpr f_app(ctx);
  // todo : type f, f_app; 
   for ( unsigned m = 0; m < M; m++ ) {
     f = node_funcs[m];
