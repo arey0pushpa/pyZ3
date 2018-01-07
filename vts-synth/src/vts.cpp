@@ -100,6 +100,126 @@ z3::expr vts::is_qth_edge_present( unsigned i, unsigned j, unsigned q ) {
 }
 
 
+/* Activity Contraints ------ */
+
+// Regulation : No regulation on the node.
+// The present molecules at nodes are all active.
+z3::expr always_active_on_node() { // f_nn
+  z3::expr_vector ls(ctx);
+  z3::expr lhs;
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned m = 0 ; m < M; m++ ) {
+        lhs = ( nodes[i][m] == active_node[i][m] );
+        ls.push_back( lhs );
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+// Regulation : No regulation on the edge.
+// The present molecules on the edge are all active.
+z3::expr always_active_on_edge() { // f_ne
+  z3::expr_vector ls(ctx);
+  z3::expr lhs;
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)  
+        continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        for ( unsigned m = 0; m < M; m++ ) {
+          lhs = ( presence_edge[i][j][q][m] == active_edge[i][j][q][m] );
+          ls.push_back( lhs );
+        }
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+// Regulation : SNARE-SNARE Inhibition. 
+z3::expr pm_dependent_activity_on_edge() { //f_se
+  z3::expr_vector ls(ctx);
+  z3::expr lhs;
+  z3::expr l1; 
+  z3::expr l2;
+  z3::expr x1; 
+  z3::expr x2;
+
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)  
+        continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        for ( unsigned m = 0; m < M; m++ ) {
+          lhs = presence_edge[i][j][q][m];
+          l1 = ctx.bool_val(false);
+          l2 = ctx.bool_val(true); 
+          for ( unsigned m1 = 0; m1 < M; m1++ ) {
+            if (j == i)  
+              continue;
+            l1 = ( pairing_m[m][m1] || l1);
+            l2 = ( implies( p[m][m1], presence_edge[i][j][q][m1]) &&  l2);
+          }
+          x1 = implies ( ( lhs && l1 && l2 ), !active_edge[i][j][q][m] );
+          x2 = implies ( lhs && !( l1 && l2 ) , active_edge[i][j][q][m] );
+          ls.push_back( x1 && x2 );
+        }
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+
+z3::expr func_driven_activity_on_node() { //f_bn
+  z3::expr_vector ls (ctx);
+  z3::expr_vector s (ctx);
+  z3::expr lhs;
+  
+  for ( unsigned m = 0; m < M; m++ ) {
+    f = f_n[m];
+    for( unsigned i = 0 ; i < N; i++ ) {
+      for ( unsigned m1 = 0; m1 < M; m1++ ) {
+        if (j == i)  
+          continue;
+        s.push_back( nodes[i][m1] );
+      }
+      f_app = f(s)
+      lhs = implies( nodes[i][m], active_node[i][m] == f_app );
+      ls.push_back( lhs );
+    }
+  }
+  return z3::mk_and( ls );
+
+}
+
+// f_be: BOolean function on edge.
+z3::expr func_driven_activity_on_edge() { //f_be
+  z3::expr_vector ls(ctx);
+  z3::expr_vector s (ctx);
+  z3::expr lhs;
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)
+        continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        for ( unsigned m1 = 0; m1 < M; m1++ ) {
+          f = f_e[m];
+          for ( unsigned m1 = 0; m1 < M; m1++ ) {
+            if (j == i)  
+              continue;
+            s.push_back ( presence_edge[i][j][q][k1]);
+          }
+          lhs = implies( presence_edge[i][j][q][m], active_edge[i][j][q][m] == f(s)) ;
+          ls.push_back (lhs );
+        }
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+/* Basic Constraints ... V1-V8.*/
 //V1: For an edge to exist it should have one molecule present.
 z3::expr vts::molecule_presence_require_for_present_edge() {
   z3::expr_vector ls(ctx);
@@ -184,10 +304,11 @@ z3::expr vts::no_self_edges() {                              //V5
 
 z3::expr vts::restriction_on_pairing_matrix() {              //V6
   z3::expr_vector ls(ctx);
+  z3::expr e;
   for( unsigned x = 0 ; x < M; x++ ) {
     for( unsigned y = 0 ; y < M; y++ ) {
       if ( ((x < M/2) && (y < M/2)) || ((x>=M/2) && (y >=M/2)) ) {
-        z3::expr e = !pairing_m[x][y];
+        e = !pairing_m[x][y];
         ls.push_back( e );
       }
     }
@@ -199,12 +320,13 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
 // V7 : There should be an active pair corresponding to pairing matrix 
 z3::expr vts::edge_must_fuse_with_target() {                 //V7
   z3::expr_vector ls(ctx);
+  z3::expr lhs;
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)  
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
-        z3::expr lhs = ctx.bool_val(false); 
+        lhs = ctx.bool_val(false); 
         for ( unsigned m = 0; m < M; m++ ) {
           for ( unsigned m1 = 0; m1 < M; m1++ ) {
             if (m == m1) 
@@ -224,13 +346,14 @@ z3::expr vts::edge_must_fuse_with_target() {                 //V7
 //      any node other than it's target.
 z3::expr vts::edge_must_not_fuse_with_noone_else() {       //V8
   z3::expr_vector ls(ctx);
+  z3::expr lhs;
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)  
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned m = 0; m < M; m++ ) {
-          z3::expr lhs = ctx.bool_val(false); 
+          lhs = ctx.bool_val(false); 
             for( unsigned j1 = 0 ; j1 < N; j1++ ) {
               if (j1 == j) 
                 continue;
@@ -296,6 +419,35 @@ z3::expr vts::study_state_stability_cond() { //R2
   }
   return z3::mk_and( a_list );
 }
+
+//-------------------------------
+/// Connectivity  ----------------------------
+//------------------------
+
+// Constraint D1 -------------
+// D1: Only present edges can be dropped.
+z3::expr only_present_edges_can_be_dropped() { //
+  z3::expr_vector ls(ctx);
+  z3::expr lhs;
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)  
+        continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        ls.push_back ( implies (dump1[i][j][q], edge[i][j][q]) );
+      }
+    }
+  }
+  return z3::mk_and( a_list );
+}
+
+// D2: Flattening the array. Avoid i == j. 
+
+//z3::expr atleast_k_drops(unsigned k);         //
+//  z3::expr atmost_k_drops(unsigned k);          //
+//  z3::expr exactly_k_drops(unsigned k);         //
+
+//z3::expr reachability_under_drop_def();       //
 
 //----------------------------------------------------------------------------
 //
