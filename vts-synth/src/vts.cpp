@@ -51,13 +51,14 @@ void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2,
 
 void vts::make_func ( std::vector<z3::func_decl>& fs, std::string prefix ) {
   // It should be an array.
-  std::vector<z3::sort> sorts;
+  z3::sort_vector sorts(ctx);
+  // std::vector<z3::sort> sorts;
   for ( unsigned int m = 0; m < M; m++ ) {
-    sorts.push_back ( ctx.bool_sort() ); //not sure
+    sorts.push_back(ctx.bool_sort()); //not sure
   }
   for ( unsigned int m = 0; m < M; m++ ) {
     std::string name = prefix + "_" + std::to_string(m);
-    z3::func_decl f = function (name, *sorts );
+    z3::func_decl f = ctx.function( name.c_str(), sorts, ctx.bool_sort() );
     fs.push_back( f );
   }
 }
@@ -192,19 +193,22 @@ z3::expr vts::func_driven_activity_on_node() { //f_bn
   z3::expr_vector ls (ctx);
   z3::expr_vector s (ctx);
   z3::expr lhs(ctx);
+<<<<<<< HEAD
  // todo : type f, f_app; 
   auto f(ctx);
   auto f_app(ctx);
  // todo : type f, f_app;
+=======
+>>>>>>> 9303b01d8c970b86b7e1544e6c719600fba8ec80
   for ( unsigned m = 0; m < M; m++ ) {
-    f = node_funcs[m];
+    auto f = node_funcs[m];
     for( unsigned i = 0 ; i < N; i++ ) {
       for ( unsigned m1 = 0; m1 < M; m1++ ) {
         if (m1 == i)
           continue;
         s.push_back( nodes[i][m1] );
       }
-      f_app = f(s);
+      auto f_app = f(s);
       lhs = implies( nodes[i][m], active_node[i][m] == f_app );
       ls.push_back( lhs );
     }
@@ -218,9 +222,9 @@ z3::expr vts::func_driven_activity_on_edge() { //f_be
   z3::expr_vector ls(ctx);
   z3::expr_vector s (ctx);
   z3::expr lhs(ctx);
-  auto f(ctx);
-  auto f_app(ctx);
- // todo : type f, f_app;
+ //  auto f(ctx);
+ //  auto f_app(ctx);
+ // // todo : type f, f_app;
 
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
@@ -228,7 +232,7 @@ z3::expr vts::func_driven_activity_on_edge() { //f_be
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned m = 0; m < M; m++ ) {
-          f = edge_funcs[m];
+          auto f = edge_funcs[m];
           for ( unsigned m1 = 0; m1 < M; m1++ ) {
             if (j == i)
               continue;

@@ -64,7 +64,7 @@ private:
   void popl3( Vec3Expr&, unsigned, unsigned, unsigned, std::string);
   void popl4( Vec4Expr&, unsigned, unsigned, unsigned, unsigned, std::string);
 
-  void make_func ( std::vector<z3::func_decl>, std::string);
+  void make_func ( std::vector<z3::func_decl>&, std::string);
 
 
 public:
