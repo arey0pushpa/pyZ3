@@ -193,13 +193,8 @@ z3::expr vts::func_driven_activity_on_node() { //f_bn
   z3::expr_vector ls (ctx);
   z3::expr_vector s (ctx);
   z3::expr lhs(ctx);
-<<<<<<< HEAD
  // todo : type f, f_app; 
-  auto f(ctx);
-  auto f_app(ctx);
  // todo : type f, f_app;
-=======
->>>>>>> 9303b01d8c970b86b7e1544e6c719600fba8ec80
   for ( unsigned m = 0; m < M; m++ ) {
     auto f = node_funcs[m];
     for( unsigned i = 0 ; i < N; i++ ) {
@@ -214,7 +209,6 @@ z3::expr vts::func_driven_activity_on_node() { //f_bn
     }
   }
   return z3::mk_and( ls );
-
 }
 
 // f_be: BOolean function on edge.
@@ -222,10 +216,7 @@ z3::expr vts::func_driven_activity_on_edge() { //f_be
   z3::expr_vector ls(ctx);
   z3::expr_vector s (ctx);
   z3::expr lhs(ctx);
- //  auto f(ctx);
- //  auto f_app(ctx);
  // // todo : type f, f_app;
-
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)
@@ -471,15 +462,15 @@ z3::expr vts::only_present_edges_can_be_dropped() { //
 }
 
 
-z3::expr d1(ctx);
+//z3::expr d1(ctx);
 //z3::expr atleast_k_drops(unsigned k) {        //
 //z3::expr atmost_k_drops(unsigned k) {          //
 
 
 // Use PbEq for exactly k.
-z3::expr exactly_k_drops( unsigned C ) {         //
+z3::expr vts::exactly_k_drops( unsigned C ) {         //
   // D2: Flattening the array. Avoid i == j.
-  Vec3Expr d1(ctx); 
+  VecExpr d1; 
   for ( unsigned int i = 0; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)
@@ -490,12 +481,12 @@ z3::expr exactly_k_drops( unsigned C ) {         //
     }
   }
 
-  auto expr;
-  tt = ctx.bool_val(true);
+  z3::expr expr(ctx);
+  auto tt = ctx.bool_val(true);
   for (auto& i: d1) {
-    expr = expr + ( i? 1: 0);
+    expr = expr + z3::ite( i, ctx.int_val(1), ctx.int_val(0) ) ;
   }
-  return (tt && expr == C) 
+  return (tt && (expr == ctx.int_val(C)) ); 
 }
 
 //z3::expr reachability_under_drop_def();       //
