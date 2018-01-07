@@ -117,6 +117,7 @@ public:
   //helper functions
   z3::expr is_mol_edge_present( unsigned i, unsigned j, unsigned m );
   z3::expr is_qth_edge_present( unsigned i, unsigned j, unsigned q );
+  void dump_dot( std::string filename, z3::model mdl);
 };
 
 
