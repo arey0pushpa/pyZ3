@@ -51,13 +51,15 @@ void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2,
 
 void vts::make_func ( std::vector<z3::func_decl>& fs, std::string prefix ) {
   // It should be an array.
-  std::vector<z3::sort> sorts;
+  z3::array<z3::sort> sorts(M);
+  // std::vector<z3::sort> sorts;
   for ( unsigned int m = 0; m < M; m++ ) {
-    sorts.push_back ( ctx.bool_sort() ); //not sure
+    sorts[m] = ctx.bool_sort(); //not sure
   }
   for ( unsigned int m = 0; m < M; m++ ) {
     std::string name = prefix + "_" + std::to_string(m);
-    z3::func_decl f = function (name, *sorts );
+    z3::symbol symb = ctx.str_symbol( name.c_str() );
+    z3::func_decl f = z3::function( symb, M, sorts.ptr(), ctx.bool_sort() );
     fs.push_back( f );
   }
 }
