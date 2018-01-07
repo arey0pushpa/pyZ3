@@ -192,15 +192,10 @@ z3::expr vts::func_driven_activity_on_node() { //f_bn
   z3::expr_vector ls (ctx);
   z3::expr_vector s (ctx);
   z3::expr lhs(ctx);
-<<<<<<< HEAD
-  VecExpr f(ctx);
-  VecExpr f_app(ctx);
  // todo : type f, f_app; 
-=======
   auto f(ctx);
   auto f_app(ctx);
  // todo : type f, f_app;
->>>>>>> d13681e7410f8200d6ae34dbd6170f4874fc99ce
   for ( unsigned m = 0; m < M; m++ ) {
     f = node_funcs[m];
     for( unsigned i = 0 ; i < N; i++ ) {
@@ -471,11 +466,33 @@ z3::expr vts::only_present_edges_can_be_dropped() { //
   return z3::mk_and( ls );
 }
 
-// D2: Flattening the array. Avoid i == j.
 
-//z3::expr atleast_k_drops(unsigned k);         //
-//  z3::expr atmost_k_drops(unsigned k);          //
-//  z3::expr exactly_k_drops(unsigned k);         //
+z3::expr d1(ctx);
+//z3::expr atleast_k_drops(unsigned k) {        //
+//z3::expr atmost_k_drops(unsigned k) {          //
+
+
+// Use PbEq for exactly k.
+z3::expr exactly_k_drops( unsigned C ) {         //
+  // D2: Flattening the array. Avoid i == j.
+  Vec3Expr d1(ctx); 
+  for ( unsigned int i = 0; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)
+        continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        d1.push_back( drop1[i][j][q] );
+     }
+    }
+  }
+
+  auto expr;
+  tt = ctx.bool_val(true);
+  for (auto& i: d1) {
+    expr = expr + ( i? 1: 0);
+  }
+  return (tt && expr == C) 
+}
 
 //z3::expr reachability_under_drop_def();       //
 
