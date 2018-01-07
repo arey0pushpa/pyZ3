@@ -37,9 +37,10 @@ private:
   void init_vts();
 
   //variables
-  Vec3Expr edges;
   Vec2Expr nodes;
   Vec2Expr active_node;
+
+  Vec3Expr edges;
   Vec4Expr presence_edge;
   Vec4Expr active_edge;
 
@@ -52,7 +53,13 @@ private:
   Vec2Expr d_reach;
 
   //flat version of variables
-  VecExpr flat_edges;
+  // VecExpr flat_nodes;
+  // VecExpr flat_active_node;
+
+  // VecExpr flat_edges;
+  // VecExpr flat_presence_edge;
+  // VecExpr flat_active_edge;
+
 
 
   // Vec3Expr dump2;
@@ -69,25 +76,15 @@ private:
 
 public:
   //formula makers
-  z3::expr always_active_on_node(); // f_nn
-  z3::expr always_active_on_edge(); // f_ne
-  z3::expr pm_dependent_activity_on_edge(); //f_se
-  z3::expr func_driven_activity_on_node(); //f_bn
-  z3::expr func_driven_activity_on_edge(); //f_be
+  z3::expr always_active_on_node();        // f_nn
+  z3::expr always_active_on_edge();        // f_ne
+  z3::expr pm_dependent_activity_on_edge();// f_se
+  z3::expr func_driven_activity_on_node(); // f_bn
+  z3::expr func_driven_activity_on_edge(); // f_be
 
-  // z3::expr node_activity_constraint() {
-  //   switch(V) {
-  //   case MODEL_1: return ctx.bool_val(true); break;
-  //   case MODEL_2: return always_active_on_node(); break;
-  //   case MODEL_3: return ctx.bool_val(true); break;
-  //   case MODEL_4: return break;
-  //   case MODEL_5: break;
-  //   case MODEL_6: break;
-  //   }
-  // }
+  z3::expr node_activity_constraint();
+  z3::expr edge_activity_constraint();
 
-  // z3::expr edge_activity_constraint() {
-  // }
 
   z3::expr molecule_presence_require_for_present_edge(); //V1
   z3::expr active_molecule_is_present_on_edge();         //V2
@@ -96,7 +93,7 @@ public:
   z3::expr no_self_edges();                              //V5
   z3::expr restriction_on_pairing_matrix();              //V6
   z3::expr edge_must_fuse_with_target();                 //V7
-  z3::expr edge_must_not_fuse_with_noone_else();         //V8
+  z3::expr edge_must_fuse_with_noone_else();             //V8
 
   //study state
   z3::expr reachability_def();           //R1
@@ -105,13 +102,15 @@ public:
   //
   // connectivity constraints
   // todo: variables are needed to be parametrized
-  z3::expr only_present_edges_can_be_dropped(); //
+  z3::expr only_present_edges_can_be_dropped( Vec3Expr& dump ); //
   z3::expr atleast_k_drops(unsigned k);         //
   z3::expr atmost_k_drops(unsigned k);          //
-  z3::expr exactly_k_drops(unsigned k);         //
-  z3::expr reachability_under_drop_def();       //
-  z3::expr remains_connected();                 //
-  z3::expr gets_disconnected();                 //
+  z3::expr exactly_k_drops(unsigned k, Vec3Expr& dump);         //
+  z3::expr reachability_under_drop_def(Vec2Expr& r_varas, Vec3Expr& dump1);//
+  z3::expr remains_connected( Vec2Expr& r_varas );                 //
+  z3::expr gets_disconnected( Vec2Expr& r_varas );                 //
+
+  z3::expr not_k_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
 
 
   z3::model get_vts_for_prob1();
@@ -119,6 +118,7 @@ public:
   //helper functions
   z3::expr is_mol_edge_present( unsigned i, unsigned j, unsigned m );
   z3::expr is_qth_edge_present( unsigned i, unsigned j, unsigned q );
+  z3::expr is_undirected_dumped_edge(unsigned i, unsigned j, Vec3Expr& dump1);
   void dump_dot( std::string filename, z3::model mdl);
 };
 
