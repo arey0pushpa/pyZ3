@@ -49,6 +49,17 @@ void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2,
     popl3( m[i], arg2, arg3, arg4, prefix+"_"+ std::to_string(i) );
 }
 
+void vts::make_func ( VecExpr& m, std::string prefix ) { 
+  VecExpr sorts(ctx);
+  for ( unsigned int m = 0; m < M; m++ ) {
+    sorts.push_back ( Z3_mk_bool_sort (ctx) ); //not sure
+  }
+  for ( unsigned int m = 0; m < M; m++ ) {  
+    std::string name = prefix + "_" + std::to_string(m);
+    m.push_back( function (name, *sorts ) );   
+  }
+}
+
 void vts::init_vts() {
 
 // Populate edges: e(i,j,q)
@@ -70,13 +81,17 @@ void vts::init_vts() {
   popl2 ( pairing_m, M, M, "p" );
 
 // Populate node_funcs : Currently not handled.
+  
+  make_func ( node_funcs, "an" ); 
+
 // Populate edge_funcs : Currently not handled.
+  make_func ( edge_funcs, "en" ); 
 
 // Populate reach(i,j,k,z)
   popl4 ( reach, N, N, M, N-1, "r" );
 
 // Populate drop1(i,j,q)
-  popl3 ( drop1, N, N, E_arity, "d1");
+  popl3 ( drop1, N, N, E_arity, "d1" );
 
 //Populate d_reach(i,j)
   popl2 ( d_reach, N , N, "r1" );
@@ -104,9 +119,9 @@ z3::expr vts::is_qth_edge_present( unsigned i, unsigned j, unsigned q ) {
 
 // Regulation : No regulation on the node.
 // The present molecules at nodes are all active.
-z3::expr always_active_on_node() { // f_nn
+z3::expr vts::always_active_on_node() { // f_nn
   z3::expr_vector ls(ctx);
-  z3::expr lhs;
+  z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned m = 0 ; m < M; m++ ) {
         lhs = ( nodes[i][m] == active_node[i][m] );
@@ -118,9 +133,9 @@ z3::expr always_active_on_node() { // f_nn
 
 // Regulation : No regulation on the edge.
 // The present molecules on the edge are all active.
-z3::expr always_active_on_edge() { // f_ne
+z3::expr vts::always_active_on_edge() { // f_ne
   z3::expr_vector ls(ctx);
-  z3::expr lhs;
+  z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)  
@@ -137,13 +152,13 @@ z3::expr always_active_on_edge() { // f_ne
 }
 
 // Regulation : SNARE-SNARE Inhibition. 
-z3::expr pm_dependent_activity_on_edge() { //f_se
+z3::expr vts::pm_dependent_activity_on_edge() { //f_se
   z3::expr_vector ls(ctx);
-  z3::expr lhs;
-  z3::expr l1; 
-  z3::expr l2;
-  z3::expr x1; 
-  z3::expr x2;
+  z3::expr lhs(ctx);
+  z3::expr l1(ctx); 
+  z3::expr l2(ctx);
+  z3::expr x1(ctx); 
+  z3::expr x2(ctx);
 
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
@@ -171,20 +186,20 @@ z3::expr pm_dependent_activity_on_edge() { //f_se
 }
 
 
-z3::expr func_driven_activity_on_node() { //f_bn
+z3::expr vts::func_driven_activity_on_node() { //f_bn
   z3::expr_vector ls (ctx);
   z3::expr_vector s (ctx);
-  z3::expr lhs;
-  
+  z3::expr lhs(ctx);
+ // todo : type f, f_app; 
   for ( unsigned m = 0; m < M; m++ ) {
-    f = f_n[m];
+    f = node_funcs[m];
     for( unsigned i = 0 ; i < N; i++ ) {
       for ( unsigned m1 = 0; m1 < M; m1++ ) {
-        if (j == i)  
+        if (m1 == i)  
           continue;
         s.push_back( nodes[i][m1] );
       }
-      f_app = f(s)
+      f_app = f(s);
       lhs = implies( nodes[i][m], active_node[i][m] == f_app );
       ls.push_back( lhs );
     }
@@ -194,24 +209,26 @@ z3::expr func_driven_activity_on_node() { //f_bn
 }
 
 // f_be: BOolean function on edge.
-z3::expr func_driven_activity_on_edge() { //f_be
+z3::expr vts::func_driven_activity_on_edge() { //f_be
   z3::expr_vector ls(ctx);
   z3::expr_vector s (ctx);
-  z3::expr lhs;
+  z3::expr lhs(ctx);
+ // todo : type f, f_app; 
+ 
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
-        for ( unsigned m1 = 0; m1 < M; m1++ ) {
-          f = f_e[m];
+        for ( unsigned m = 0; m < M; m++ ) {
+          f = edge_funcs[m];
           for ( unsigned m1 = 0; m1 < M; m1++ ) {
             if (j == i)  
               continue;
-            s.push_back ( presence_edge[i][j][q][k1]);
+            s.push_back ( presence_edge[i][j][q][k1] );
           }
-          lhs = implies( presence_edge[i][j][q][m], active_edge[i][j][q][m] == f(s)) ;
-          ls.push_back (lhs );
+          lhs = implies( presence_edge[i][j][q][m], active_edge[i][j][q][m] == f(s) ) ;
+          ls.push_back ( lhs );
         }
       }
     }
@@ -305,7 +322,7 @@ z3::expr vts::no_self_edges() {                              //V5
 
 z3::expr vts::restriction_on_pairing_matrix() {              //V6
   z3::expr_vector ls(ctx);
-  z3::expr e;
+  z3::expr e(ctx);
   for( unsigned x = 0 ; x < M; x++ ) {
     for( unsigned y = 0 ; y < M; y++ ) {
       if ( ((x < M/2) && (y < M/2)) || ((x>=M/2) && (y >=M/2)) ) {
@@ -321,7 +338,7 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
 // V7 : There should be an active pair corresponding to pairing matrix 
 z3::expr vts::edge_must_fuse_with_target() {                 //V7
   z3::expr_vector ls(ctx);
-  z3::expr lhs;
+  z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)  
@@ -347,7 +364,7 @@ z3::expr vts::edge_must_fuse_with_target() {                 //V7
 //      any node other than it's target.
 z3::expr vts::edge_must_not_fuse_with_noone_else() {       //V8
   z3::expr_vector ls(ctx);
-  z3::expr lhs;
+  z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)  
@@ -427,19 +444,19 @@ z3::expr vts::study_state_stability_cond() { //R2
 
 // Constraint D1 -------------
 // D1: Only present edges can be dropped.
-z3::expr only_present_edges_can_be_dropped() { //
+z3::expr vts::only_present_edges_can_be_dropped() { //
   z3::expr_vector ls(ctx);
-  z3::expr lhs;
+  z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)  
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
-        ls.push_back ( implies (dump1[i][j][q], edge[i][j][q]) );
+        ls.push_back ( implies (drop1[i][j][q], edges[i][j][q]) );
       }
     }
   }
-  return z3::mk_and( a_list );
+  return z3::mk_and( ls );
 }
 
 // D2: Flattening the array. Avoid i == j. 

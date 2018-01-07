@@ -63,6 +63,8 @@ private:
   void popl2( Vec2Expr&, unsigned, unsigned, std::string);
   void popl3( Vec3Expr&, unsigned, unsigned, unsigned, std::string);
   void popl4( Vec4Expr&, unsigned, unsigned, unsigned, unsigned, std::string);
+  
+  void make_func ( VecExpr&, std::string);
 
 
 public:
