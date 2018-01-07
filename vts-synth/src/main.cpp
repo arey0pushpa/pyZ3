@@ -10,7 +10,7 @@ int main() {
 
     z3::context c;
 
-    vts  v(c, 2, 3, 1, MODEL_1, 3 );
+    vts  v(c, 3, 4, 2, MODEL_1, 3 );
 
     z3::model mdl = v.get_vts_for_prob1();
 
