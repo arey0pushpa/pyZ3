@@ -461,11 +461,9 @@ z3::expr vts::only_present_edges_can_be_dropped() { //
   return z3::mk_and( ls );
 }
 
-
 //z3::expr d1(ctx);
 //z3::expr atleast_k_drops(unsigned k) {        //
 //z3::expr atmost_k_drops(unsigned k) {          //
-
 
 // Use PbEq for exactly k.
 z3::expr vts::exactly_k_drops( unsigned C ) {         //
