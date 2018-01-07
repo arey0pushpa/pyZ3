@@ -44,8 +44,8 @@ private:
   Vec4Expr active_edge;
 
   Vec2Expr pairing_m;
-  VecExpr node_funcs;
-  VecExpr edge_funcs;
+  std::vector<z3::func_decl> node_funcs;
+  std::vector<z3::func_decl> edge_funcs;
 
   Vec4Expr reach;
   Vec3Expr drop1;
@@ -63,8 +63,8 @@ private:
   void popl2( Vec2Expr&, unsigned, unsigned, std::string);
   void popl3( Vec3Expr&, unsigned, unsigned, unsigned, std::string);
   void popl4( Vec4Expr&, unsigned, unsigned, unsigned, unsigned, std::string);
-  
-  void make_func ( VecExpr&, std::string);
+
+  void make_func ( std::vector<z3::func_decl>, std::string);
 
 
 public:

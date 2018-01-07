@@ -49,15 +49,16 @@ void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2,
     popl3( m[i], arg2, arg3, arg4, prefix+"_"+ std::to_string(i) );
 }
 
-void vts::make_func ( VecExpr& m, std::string prefix ) { 
+void vts::make_func ( std::vector<z3::func_decl>& fs, std::string prefix ) {
   // It should be an array.
-  VecExpr& sorts();
+  std::vector<z3::sort> sorts;
   for ( unsigned int m = 0; m < M; m++ ) {
-    sorts.push_back ( Z3_mk_bool_sort (ctx) ); //not sure
+    sorts.push_back ( ctx.bool_sort() ); //not sure
   }
-  for ( unsigned int m = 0; m < M; m++ ) {  
+  for ( unsigned int m = 0; m < M; m++ ) {
     std::string name = prefix + "_" + std::to_string(m);
-    m.push_back( function (name, *sorts ) );   
+    z3::func_decl f = function (name, *sorts );
+    fs.push_back( f );
   }
 }
 
@@ -82,11 +83,11 @@ void vts::init_vts() {
   popl2 ( pairing_m, M, M, "p" );
 
 // Populate node_funcs : Currently not handled.
-  
-  make_func ( node_funcs, "an" ); 
+
+  make_func( node_funcs, "an" );
 
 // Populate edge_funcs : Currently not handled.
-  make_func ( edge_funcs, "en" ); 
+  make_func ( edge_funcs, "en" );
 
 // Populate reach(i,j,k,z)
   popl4 ( reach, N, N, M, N-1, "r" );
@@ -139,7 +140,7 @@ z3::expr vts::always_active_on_edge() { // f_ne
   z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i)  
+      if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned m = 0; m < M; m++ ) {
@@ -152,26 +153,26 @@ z3::expr vts::always_active_on_edge() { // f_ne
   return z3::mk_and( ls );
 }
 
-// Regulation : SNARE-SNARE Inhibition. 
+// Regulation : SNARE-SNARE Inhibition.
 z3::expr vts::pm_dependent_activity_on_edge() { //f_se
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
-  z3::expr l1(ctx); 
+  z3::expr l1(ctx);
   z3::expr l2(ctx);
-  z3::expr x1(ctx); 
+  z3::expr x1(ctx);
   z3::expr x2(ctx);
 
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i)  
+      if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned m = 0; m < M; m++ ) {
           lhs = presence_edge[i][j][q][m];
           l1 = ctx.bool_val(false);
-          l2 = ctx.bool_val(true); 
+          l2 = ctx.bool_val(true);
           for ( unsigned m1 = 0; m1 < M; m1++ ) {
-            if (j == i)  
+            if (j == i)
               continue;
             l1 = ( pairing_m[m][m1] || l1);
             l2 = ( implies( pairing_m[m][m1], presence_edge[i][j][q][m1]) &&  l2);
@@ -191,14 +192,20 @@ z3::expr vts::func_driven_activity_on_node() { //f_bn
   z3::expr_vector ls (ctx);
   z3::expr_vector s (ctx);
   z3::expr lhs(ctx);
+<<<<<<< HEAD
   VecExpr f(ctx);
   VecExpr f_app(ctx);
  // todo : type f, f_app; 
+=======
+  auto f(ctx);
+  auto f_app(ctx);
+ // todo : type f, f_app;
+>>>>>>> d13681e7410f8200d6ae34dbd6170f4874fc99ce
   for ( unsigned m = 0; m < M; m++ ) {
     f = node_funcs[m];
     for( unsigned i = 0 ; i < N; i++ ) {
       for ( unsigned m1 = 0; m1 < M; m1++ ) {
-        if (m1 == i)  
+        if (m1 == i)
           continue;
         s.push_back( nodes[i][m1] );
       }
@@ -218,8 +225,8 @@ z3::expr vts::func_driven_activity_on_edge() { //f_be
   z3::expr lhs(ctx);
   auto f(ctx);
   auto f_app(ctx);
- // todo : type f, f_app; 
- 
+ // todo : type f, f_app;
+
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)
@@ -228,7 +235,7 @@ z3::expr vts::func_driven_activity_on_edge() { //f_be
         for ( unsigned m = 0; m < M; m++ ) {
           f = edge_funcs[m];
           for ( unsigned m1 = 0; m1 < M; m1++ ) {
-            if (j == i)  
+            if (j == i)
               continue;
             s.push_back ( presence_edge[i][j][q][m1] );
           }
@@ -251,7 +258,7 @@ z3::expr vts::molecule_presence_require_for_present_edge() {
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         ls.push_back( implies (is_qth_edge_present(i,j,q ), edges[i][j][q]) );
-        // z3::expr rhs = ctx.bool_val(false); 
+        // z3::expr rhs = ctx.bool_val(false);
         // for ( unsigned m = 0; m < M; m++ ) {
         //   rhs = presence_edge[i][j][q][m] || rhs;
         // }
@@ -267,7 +274,7 @@ z3::expr vts::active_molecule_is_present_on_edge() {         //V2
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i)  
+      if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned m = 0; m < M; m++ ) {
@@ -298,7 +305,7 @@ z3::expr vts::edge_modelecues_is_subset_of_node_molecules() { //V4
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i)  
+      if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for( unsigned m = 0 ; m < M; m++ ) {
@@ -312,7 +319,7 @@ z3::expr vts::edge_modelecues_is_subset_of_node_molecules() { //V4
 }
 
 
-// V5 : that no self edges are allowed. 
+// V5 : that no self edges are allowed.
 z3::expr vts::no_self_edges() {                              //V5
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
@@ -323,7 +330,7 @@ z3::expr vts::no_self_edges() {                              //V5
   return z3::mk_and( ls );
 }
 
-// V6: Only Q R entry has possible non zero entry.  
+// V6: Only Q R entry has possible non zero entry.
 
 z3::expr vts::restriction_on_pairing_matrix() {              //V6
   z3::expr_vector ls(ctx);
@@ -340,19 +347,19 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
 }
 
 
-// V7 : There should be an active pair corresponding to pairing matrix 
+// V7 : There should be an active pair corresponding to pairing matrix
 z3::expr vts::edge_must_fuse_with_target() {                 //V7
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i)  
+      if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
-        lhs = ctx.bool_val(false); 
+        lhs = ctx.bool_val(false);
         for ( unsigned m = 0; m < M; m++ ) {
           for ( unsigned m1 = 0; m1 < M; m1++ ) {
-            if (m == m1) 
+            if (m == m1)
               continue;
             lhs =  ( (active_edge[i][j][q][m] && active_node[j][m1] && pairing_m[m][m1]) ||  lhs );
           }
@@ -365,23 +372,23 @@ z3::expr vts::edge_must_fuse_with_target() {                 //V7
   return z3::mk_and( ls );
 }
 
-//  V8: Edge should not be able to potentially fuse with 
+//  V8: Edge should not be able to potentially fuse with
 //      any node other than it's target.
 z3::expr vts::edge_must_not_fuse_with_noone_else() {       //V8
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i)  
+      if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned m = 0; m < M; m++ ) {
-          lhs = ctx.bool_val(false); 
+          lhs = ctx.bool_val(false);
             for( unsigned j1 = 0 ; j1 < N; j1++ ) {
-              if (j1 == j) 
+              if (j1 == j)
                 continue;
               for ( unsigned m11 = 0; m11 < M; m11++ ) {
-              if (m == m11) 
+              if (m == m11)
                 continue;
               lhs =  ( ( active_node[j1][m11] && pairing_m[m][m11] ) ||  lhs );
               }
@@ -454,7 +461,7 @@ z3::expr vts::only_present_edges_can_be_dropped() { //
   z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i)  
+      if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         ls.push_back ( implies (drop1[i][j][q], edges[i][j][q]) );
@@ -464,7 +471,7 @@ z3::expr vts::only_present_edges_can_be_dropped() { //
   return z3::mk_and( ls );
 }
 
-// D2: Flattening the array. Avoid i == j. 
+// D2: Flattening the array. Avoid i == j.
 
 //z3::expr atleast_k_drops(unsigned k);         //
 //  z3::expr atmost_k_drops(unsigned k);          //
