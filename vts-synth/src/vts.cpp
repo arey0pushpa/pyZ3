@@ -395,7 +395,7 @@ z3::expr vts::edge_must_fuse_with_target() {                 //V7
 
 //  V8: Edge should not be able to potentially fuse with
 //      any node other than it's target.
-z3::expr vts::edge_must_not_fuse_with_noone_else() {       //V8
+z3::expr vts::edge_must_fuse_with_noone_else() {       //V8
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
@@ -534,8 +534,8 @@ z3::expr vts::reachability_under_drop_def( Vec2Expr& r_vars,
                                            Vec3Expr& dump ) { //
   z3::expr_vector cond_list(ctx);
   for ( unsigned i = 0; i < N; i++ ) {
-    for( unsigned j = i+1 ; j < N; j++ ) {
-      // if (j == i) continue;
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i) continue;
       z3::expr ud_i_j = is_undirected_dumped_edge( i, j, dump );
       z3::expr_vector paths_list(ctx);
       for( unsigned l = 0; l < N; l++ ) {
@@ -553,7 +553,8 @@ z3::expr vts::reachability_under_drop_def( Vec2Expr& r_vars,
 z3::expr vts::remains_connected( Vec2Expr& r_varas ){                 //
   z3::expr_vector cond_list(ctx);
   for ( unsigned i = 0; i < N; i++ ) {
-    for( unsigned j = i+1 ; j < N; j++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i) continue;
       cond_list.push_back( r_varas[i][j] );
     }
   }
@@ -563,7 +564,8 @@ z3::expr vts::remains_connected( Vec2Expr& r_varas ){                 //
 z3::expr vts::gets_disconnected( Vec2Expr& r_varas ){                 //
   z3::expr_vector cond_list(ctx);
   for ( unsigned i = 0; i < N; i++ ) {
-    for( unsigned j = i+1 ; j < N; j++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i) continue;
       cond_list.push_back( !r_varas[i][j] );
     }
   }
@@ -593,7 +595,7 @@ z3::model vts::get_vts_for_prob1( ) {
   z3::expr v5 = no_self_edges();                              //V5
   z3::expr v6 = restriction_on_pairing_matrix();              //V6
   z3::expr v7 = edge_must_fuse_with_target();                 //V7
-  z3::expr v8 = edge_must_not_fuse_with_noone_else();         //V8
+  z3::expr v8 = edge_must_fuse_with_noone_else();         //V8
 
   z3::expr base_cons = a1 && a2 && v1 && v2 && v3 && v4 && v5 && v6 && v7 && v8;
 

@@ -93,7 +93,7 @@ public:
   z3::expr no_self_edges();                              //V5
   z3::expr restriction_on_pairing_matrix();              //V6
   z3::expr edge_must_fuse_with_target();                 //V7
-  z3::expr edge_must_not_fuse_with_noone_else();         //V8
+  z3::expr edge_must_fuse_with_noone_else();             //V8
 
   //study state
   z3::expr reachability_def();           //R1
