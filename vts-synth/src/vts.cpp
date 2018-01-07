@@ -50,7 +50,8 @@ void vts::popl4 ( Vec4Expr& m, unsigned arg1, unsigned arg2,
 }
 
 void vts::make_func ( VecExpr& m, std::string prefix ) { 
-  VecExpr sorts(ctx);
+  // It should be an array.
+  VecExpr& sorts();
   for ( unsigned int m = 0; m < M; m++ ) {
     sorts.push_back ( Z3_mk_bool_sort (ctx) ); //not sure
   }
@@ -173,7 +174,7 @@ z3::expr vts::pm_dependent_activity_on_edge() { //f_se
             if (j == i)  
               continue;
             l1 = ( pairing_m[m][m1] || l1);
-            l2 = ( implies( p[m][m1], presence_edge[i][j][q][m1]) &&  l2);
+            l2 = ( implies( pairing_m[m][m1], presence_edge[i][j][q][m1]) &&  l2);
           }
           x1 = implies ( ( lhs && l1 && l2 ), !active_edge[i][j][q][m] );
           x2 = implies ( lhs && !( l1 && l2 ) , active_edge[i][j][q][m] );
@@ -190,6 +191,8 @@ z3::expr vts::func_driven_activity_on_node() { //f_bn
   z3::expr_vector ls (ctx);
   z3::expr_vector s (ctx);
   z3::expr lhs(ctx);
+  auto f(ctx);
+  auto f_app(ctx);
  // todo : type f, f_app; 
   for ( unsigned m = 0; m < M; m++ ) {
     f = node_funcs[m];
@@ -213,6 +216,8 @@ z3::expr vts::func_driven_activity_on_edge() { //f_be
   z3::expr_vector ls(ctx);
   z3::expr_vector s (ctx);
   z3::expr lhs(ctx);
+  auto f(ctx);
+  auto f_app(ctx);
  // todo : type f, f_app; 
  
   for( unsigned i = 0 ; i < N; i++ ) {
@@ -225,7 +230,7 @@ z3::expr vts::func_driven_activity_on_edge() { //f_be
           for ( unsigned m1 = 0; m1 < M; m1++ ) {
             if (j == i)  
               continue;
-            s.push_back ( presence_edge[i][j][q][k1] );
+            s.push_back ( presence_edge[i][j][q][m1] );
           }
           lhs = implies( presence_edge[i][j][q][m], active_edge[i][j][q][m] == f(s) ) ;
           ls.push_back ( lhs );
