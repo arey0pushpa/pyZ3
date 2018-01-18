@@ -4,6 +4,44 @@
 #include <vts.h>
 #include <z3-util.h>
 
+// Print the graph with coloured edges ##
+//void print_graph( z3::model mdl, unsigned int qval ) {
+//  for( unsigned q = 0; q < E_arity; q++ ) {
+//    if ( qval == 0 ) {
+//	    std::string clr1 = "black";
+//	    std::string clr2 = "green";
+//	    std::string clr3 = "red";
+//    } else {
+//	    std::string clr1 = "yellow";
+//	    std::string clr2 = "pink";
+//	    std::string clr3 = "blue";
+//    }
+//
+//    for( unsigned m = 0; m < M; m++ ) {
+//      style = "solid";
+//      std::string label = std::to_string( m );
+//      if( is_true( presence_edge[i][j][q][m], mdl ) ) {
+//	// if( is_true( edges[i][j][q], mdl ) ) {
+//        color = clr1;
+//	if( is_true( active_edge[i][j][q][m], mdl ) ) {
+//	  color = clr2;
+//          for( unsigned m1 = 0; m1 < M; m1++ ) {
+//            if( is_true( active_node[j][m1], mdl ) and
+//                is_true( pairing_m[m][m1], mdl ) ) {
+//                color = clr3;
+//                break;
+//             }
+//          }
+//        }
+//        ofs << std::to_string(i) << "-> " << std::to_string(j)
+//            <<  "[label="  << label << ",color=" << color
+//            << ",style=" << style << "]\n";
+//        }
+//     }
+//        
+//   }
+//}
+
 // Printing the Graph ##########
 void vts::dump_dot( std::string filename, z3::model mdl) {
     std::string style = "solid";
@@ -36,6 +74,7 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
         if (i == j)
           continue;
         for( unsigned q = 0; q < E_arity; q++ ) {
+	if ( q == 0 ) {
           for( unsigned m = 0; m < M; m++ ) {
             style = "solid";
             std::string label = std::to_string( m );
@@ -57,9 +96,36 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
                   << ",style=" << style << "]\n";
             }
           }
-        }
-      }
-    }
+        
+	  }
+
+	if ( q == 1 ) {
+          for( unsigned m = 0; m < M; m++ ) {
+            style = "solid";
+            std::string label = std::to_string( m );
+            if( is_true( presence_edge[i][j][q][m], mdl ) ) {
+            // if( is_true( edges[i][j][q], mdl ) ) {
+              color = "yellow";
+              if( is_true( active_edge[i][j][q][m], mdl ) ) {
+                color = "pink";
+                for( unsigned m1 = 0; m1 < M; m1++ ) {
+                  if( is_true( active_node[j][m1], mdl ) and
+                      is_true( pairing_m[m][m1], mdl ) ) {
+                    color = "blue";
+                    break;
+                  }
+                }
+              }
+              ofs << std::to_string(i) << "-> " << std::to_string(j)
+                  <<  "[label="  << label << ",color=" << color
+                  << ",style=" << style << "]\n";
+            }
+          }
+        }	  
+	  } // end q
+      } // end j
+    } // end i
+
     ofs << "}\n";
 
 } //end function

@@ -243,11 +243,14 @@ z3::expr vts::func_driven_activity_on_edge() { //f_be
 
 z3::expr vts::node_activity_constraint() {
     switch(V) {
-    case MODEL_1: return ctx.bool_val(true); break;
-    case MODEL_2: return always_active_on_node(); break;
-    case MODEL_3: return ctx.bool_val(true); break;
+    case MODEL_1: return always_active_on_node(); break;
+    //case MODEL_2: return func_driven_activity_on_node(); break;
+    case MODEL_2: return ctx.bool_val(true); break;
+    case MODEL_3: return always_active_on_node(); break;
+    //case MODEL_4: return func_driven_activity_on_node(); break;
     case MODEL_4: return ctx.bool_val(true); break;
-    case MODEL_5: return ctx.bool_val(true); break;
+    case MODEL_5: return always_active_on_node(); break;
+    //case MODEL_6: return func_driven_activity_on_node(); break;
     case MODEL_6: return ctx.bool_val(true); break;
     default:
       return ctx.bool_val(true);
@@ -256,12 +259,14 @@ z3::expr vts::node_activity_constraint() {
 
 z3::expr vts::edge_activity_constraint() {
   switch(V) {
-  case MODEL_1: return ctx.bool_val(true); break;
-  case MODEL_2: return always_active_on_node(); break;
+  case MODEL_1: return always_active_on_edge(); break;
+  case MODEL_2: return always_active_on_edge(); break;
+  //case MODEL_3: return func_driven_activity_on_edge(); break;
   case MODEL_3: return ctx.bool_val(true); break;
+  //case MODEL_4: return func_driven_activity_on_edge(); break;
   case MODEL_4: return ctx.bool_val(true); break;
-  case MODEL_5: return ctx.bool_val(true); break;
-  case MODEL_6: return ctx.bool_val(true); break;
+  case MODEL_5: return pm_dependent_activity_on_edge(); break;
+  case MODEL_6: return pm_dependent_activity_on_edge(); break;
   default:
     return ctx.bool_val(true);
   }
