@@ -487,7 +487,7 @@ z3::expr vts::only_present_edges_can_be_dropped( Vec3Expr& dump ) { //
   z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i)
+      if ( i == j )
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         ls.push_back ( implies (dump[i][j][q], edges[i][j][q]) );
@@ -514,20 +514,29 @@ z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
      }
     }
   }
+   
+  // Print the flattern arrar.
+  //for ( auto& i: d1 ) {
+ //	  std::cout << i  << "\n";
+ // }
+ // exit(0);
 
   z3::expr expr = ctx.int_val(0);
   auto tt = ctx.bool_val(true);
   for (auto& i: d1) {
     expr = expr + z3::ite( i, ctx.int_val(1), ctx.int_val(0) ) ;
   }
+  //std::cout << "The total count is : " << expr;  
   return (tt && (expr == ctx.int_val(drop_count)) );
 }
 
 z3::expr vts::is_undirected_dumped_edge( unsigned i, unsigned j,
                                          Vec3Expr& dump ) { //
   z3::expr_vector p_list(ctx);
+
+  //p_list.push_back ( ctx.bool_val(false) );
   for( unsigned q = 0; q < E_arity ; q++ ) {
-    p_list.push_back( edges[i][j][q] && !dump[i][j][q] );
+    p_list.push_back(  (edges[i][j][q] && !dump[i][j][q]) ||  (edges[j][i][q] && !dump[j][i][q])  ); 
   }
   return z3::mk_or( p_list );
 }
@@ -546,17 +555,20 @@ z3::expr vts::reachability_under_drop_def( Vec2Expr& r_vars,
         paths_list.push_back( is_undirected_dumped_edge(i,l,dump)
                               && r_vars[l][j] );
       }
-      auto cond =z3::implies( r_vars[i][j], ud_i_j || z3::mk_or( paths_list ) );
+      //auto cond = z3::implies( r_vars[i][j], ud_i_j || z3::mk_or( paths_list ) );
+      auto cond = z3::implies( ud_i_j || z3::mk_or( paths_list ), r_vars[i][j] );
       cond_list.push_back( cond );
     }
   }
+  std::cout << z3::mk_and( cond_list );
+  //exit(0);
   return z3::mk_and( cond_list );
 }
 
 z3::expr vts::remains_connected( Vec2Expr& r_varas ){                 //
   z3::expr_vector cond_list(ctx);
   for ( unsigned i = 0; i < N; i++ ) {
-    for( unsigned j = 0 ; j < N; j++ ) {
+    for( unsigned j = i+1 ; j < N; j++ ) {
       if (j == i) continue;
       cond_list.push_back( r_varas[i][j] );
     }
@@ -566,19 +578,26 @@ z3::expr vts::remains_connected( Vec2Expr& r_varas ){                 //
 
 z3::expr vts::gets_disconnected( Vec2Expr& r_varas ){                 //
   z3::expr_vector cond_list(ctx);
+  // Might not be neccessary
+  cond_list.push_back ( ctx.bool_val(false) );
   for ( unsigned i = 0; i < N; i++ ) {
-    for( unsigned j = 0 ; j < N; j++ ) {
+    for( unsigned j = i+1; j < N; j++ ) {
       if (j == i) continue;
+
       cond_list.push_back( !r_varas[i][j] );
+      //cond_list.push_back( r_varas[i][j] );
     }
   }
+  //std::cout << z3::mk_or( cond_list );
+  //exit(0);
   return z3::mk_or( cond_list );
+  //return ! (z3::mk_and( cond_list ) );
 }
 
 z3::expr vts::not_k_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump ) {
   return only_present_edges_can_be_dropped( dump )
-    && exactly_k_drops( k, dump)
-    && reachability_under_drop_def( r_varas, dump)
+    && exactly_k_drops( k, dump )
+    && reachability_under_drop_def( r_varas, dump )
     && gets_disconnected( r_varas );
 }
 
@@ -610,9 +629,9 @@ z3::model vts::get_vts_for_prob1( ) {
   // std::cout << r1;
   // std::cout << r2;
 
-  z3::expr not_connected = not_k_connected( C, d_reach, drop1);
+  z3::expr not_connected = not_k_connected( C, d_reach, drop1 );
 
-  std::cout << not_connected << "\n";
+  //std::cout << not_connected << "\n";
 
   z3::expr cons =  base_cons && study && edges[0][1][0] && not_connected;
 
@@ -620,6 +639,7 @@ z3::model vts::get_vts_for_prob1( ) {
   s.add( cons );
   if( s.check() == z3::sat ) {
     z3::model m = s.get_model();
+    std::cout << m << "\n";
     return m;
   }else{
     std::cout << "model is not feasible!";

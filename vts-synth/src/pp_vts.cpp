@@ -81,16 +81,20 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
             if( is_true( presence_edge[i][j][q][m], mdl ) ) {
             // if( is_true( edges[i][j][q], mdl ) ) {
               color = "black";
-              if( is_true( active_edge[i][j][q][m], mdl ) ) {
-                color = "green";
-                for( unsigned m1 = 0; m1 < M; m1++ ) {
-                  if( is_true( active_node[j][m1], mdl ) and
-                      is_true( pairing_m[m][m1], mdl ) ) {
-                    color = "red";
-                    break;
-                  }
-                }
-              }
+              //if( is_true( active_edge[i][j][q][m], mdl ) ) {
+               // color = "green";
+		if ( is_true( drop1[i][j][q], mdl ) ) {
+			color = "red";
+		}
+                //for( unsigned m1 = 0; m1 < M; m1++ ) {
+                //  if( is_true( active_node[j][m1], mdl ) and
+                 //     is_true( pairing_m[m][m1], mdl ) ) {
+                  //  color = "red";
+
+                   // break;
+                 // }
+                //}
+             // }
               ofs << std::to_string(i) << "-> " << std::to_string(j)
                   <<  "[label="  << label << ",color=" << color
                   << ",style=" << style << "]\n";
@@ -106,16 +110,19 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
             if( is_true( presence_edge[i][j][q][m], mdl ) ) {
             // if( is_true( edges[i][j][q], mdl ) ) {
               color = "yellow";
-              if( is_true( active_edge[i][j][q][m], mdl ) ) {
-                color = "pink";
-                for( unsigned m1 = 0; m1 < M; m1++ ) {
-                  if( is_true( active_node[j][m1], mdl ) and
-                      is_true( pairing_m[m][m1], mdl ) ) {
-                    color = "blue";
-                    break;
-                  }
-                }
-              }
+             // if( is_true( active_edge[i][j][q][m], mdl ) ) {
+              //  color = "pink";
+		if ( is_true( drop1[i][j][q], mdl ) ) {
+			color = "blue";
+		}
+               // for( unsigned m1 = 0; m1 < M; m1++ ) {
+                //  if( is_true( active_node[j][m1], mdl ) and
+                 //     is_true( pairing_m[m][m1], mdl ) ) {
+                  //  color = "blue";
+                  //  break;
+                 // }
+               // }
+             // }
               ofs << std::to_string(i) << "-> " << std::to_string(j)
                   <<  "[label="  << label << ",color=" << color
                   << ",style=" << style << "]\n";

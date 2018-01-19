@@ -10,7 +10,7 @@ int main() {
 
     z3::context c;
 
-    vts  v( c, 4, 2, 2, MODEL_6, 2 );
+    vts  v( c, 4, 3, 2, MODEL_4, 2 );
 
     z3::model mdl = v.get_vts_for_prob1();
 
@@ -42,8 +42,10 @@ int main() {
     VecsExpr qs;
     auto prenex_f = prenex( f, qs );
 
-    std::cout << "Prenexed f : " << prenex_f << "\n";
-    std::cout << "Quants :\n";
+    /*
+    // std::cout << "Prenexed f : " << prenex_f << "\n";
+    // std::cout << "Quants :\n";
+    
     for(auto& q : qs ) {
       for( auto& e : q )
         std::cout << e << " ";
@@ -58,7 +60,7 @@ int main() {
 
    // std::cout << "CNF f : " << cnf_f << "\n";
     qdimacs_printer( cnf_f, qs ); 
-
+*/
   }
   
   catch (z3::exception & ex) {
