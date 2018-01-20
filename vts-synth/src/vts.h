@@ -103,8 +103,8 @@ public:
   z3::expr study_state_stability_cond(); //R2
   
   // Falttenign of the 3 d array
-  VecExpr flattern_2d ( VecExpr d1, Vec2Expr& dump );
-  VecExpr flattern_3d ( VecExpr d1, Vec3Expr& dump );
+  VecExpr flattern_2d ( Vec2Expr& dump );
+  VecExpr flattern_3d ( Vec3Expr& dump );
 
   // connectivity constraints
   // todo: variables are needed to be parametrized

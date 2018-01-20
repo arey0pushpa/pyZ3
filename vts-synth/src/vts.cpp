@@ -505,7 +505,8 @@ z3::expr vts::only_present_edges_can_be_dropped( Vec3Expr& dump ) { //
 
 // falttening the array's 
 
-VecExpr vts::flattern_2d ( VecExpr d1, Vec2Expr& dump ) {
+VecExpr vts::flattern_2d ( Vec2Expr& dump ) {
+  VecExpr d1;
   for ( unsigned int i = 0; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)
@@ -516,7 +517,8 @@ VecExpr vts::flattern_2d ( VecExpr d1, Vec2Expr& dump ) {
   return d1;
 }
 
-VecExpr vts::flattern_3d ( VecExpr d1, Vec3Expr& dump ) {
+VecExpr vts::flattern_3d ( Vec3Expr& dump ) {
+  VecExpr d1;
   for ( unsigned int i = 0; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)
@@ -536,8 +538,7 @@ VecExpr vts::flattern_3d ( VecExpr d1, Vec3Expr& dump ) {
 // Use PbEq for exactly k.
 z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
   // D2: Flattening the array. Avoid i == j.
-  VecExpr d1; 
-  d1 = flattern_3d( d1, dump );
+  VecExpr d1 = flattern_3d( dump );
   // Print the flattern arrar.
   //for ( auto& i: d1 ) {
  //	  std::cout << i  << "\n";
@@ -667,12 +668,10 @@ z3::model vts::get_vts_for_prob1( ) {
   // std::cout << r2;
 
   // Create:  Exists (setR1, reach_d1 && d1_all-conn )
-  VecExpr d1;
-  //d1 = flattern_2d ( d1, d_reach );
-  //z3::expr is_reach = z3::exists( d1,   reachability_under_drop_def( d_reach , drop1, 0 ) && remains_connected( d_reach ) );
+  VecExpr d1 = flattern_2d ( d_reach );
+  z3::expr is_reach = exists( d1, only_present_edges_can_be_dropped (drop1) && reachability_under_drop_def( d_reach , drop1, 0 ) && remains_connected( d_reach )  );
 
-  VecExpr d2;
- // z3::expr k_1_connected = only_present_edges_can_be_dropped (drop1) &&  z3::forall ( flattern_3d( d2, drop1 ), z3::implies ( exactly_k_drops ( C-1, drop1 ) ) );
+  z3::expr k_1_connected = forall ( flattern_3d( drop1 ), z3::implies ( exactly_k_drops ( C-1, drop1 ), is_reach ) );
 
   // THIS IS EXCATLY WE NEED FOR THE NOT-K-CONNECTED
   z3::expr not_connected = not_k_connected( C, d_reach2, drop2 );
@@ -687,9 +686,9 @@ z3::model vts::get_vts_for_prob1( ) {
   //z3::expr cons =  base_cons && study && not_connected;
   // YOU NEED ONE MORE INGREDIANT: AT LEAST K EDGES !
   
-  z3::expr cons =  base_cons && study && connected && not_connected;
+  //z3::expr cons =  base_cons && study && connected && not_connected;
   
-  //z3::expr cons =  base_cons && study && k_1_connected && not_connected;
+  z3::expr cons =  base_cons && study && k_1_connected && not_connected;
 
   z3::solver s(ctx);
   s.add( cons );
