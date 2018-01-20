@@ -99,6 +99,11 @@ void vts::init_vts() {
 //Populate d_reach(i,j)
   popl2 ( d_reach, N , N, "r1" );
 
+// Populate drop2(i,j,q)
+  popl3 ( drop2, N, N, E_arity, "d2" );
+
+//Populate d_reach(i,j)
+  popl2 ( d_reach2, N , N, "r2" );
 }
 
 z3::expr vts::is_mol_edge_present( unsigned i, unsigned j, unsigned m ) {
@@ -497,14 +502,21 @@ z3::expr vts::only_present_edges_can_be_dropped( Vec3Expr& dump ) { //
   return z3::mk_and( ls );
 }
 
-//z3::expr d1(ctx);
-//z3::expr atleast_k_drops(unsigned k) {        //
-//z3::expr atmost_k_drops(unsigned k) {          //
 
-// Use PbEq for exactly k.
-z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
-  // D2: Flattening the array. Avoid i == j.
-  VecExpr d1; 
+// falttening the array's 
+
+VecExpr vts::flattern_2d ( VecExpr d1, Vec2Expr& dump ) {
+  for ( unsigned int i = 0; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)
+        continue;
+        d1.push_back( dump[i][j] );
+     }
+    }
+  return d1;
+}
+
+VecExpr vts::flattern_3d ( VecExpr d1, Vec3Expr& dump ) {
   for ( unsigned int i = 0; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)
@@ -514,7 +526,18 @@ z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
      }
     }
   }
-   
+  return d1;
+}
+
+//z3::expr d1(ctx);
+//z3::expr atleast_k_drops(unsigned k) {        //
+//z3::expr atmost_k_drops(unsigned k) {          //
+
+// Use PbEq for exactly k.
+z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
+  // D2: Flattening the array. Avoid i == j.
+  VecExpr d1; 
+  d1 = flattern_3d( d1, dump );
   // Print the flattern arrar.
   //for ( auto& i: d1 ) {
  //	  std::cout << i  << "\n";
@@ -543,7 +566,7 @@ z3::expr vts::is_undirected_dumped_edge( unsigned i, unsigned j,
 
 // undirected reachability
 z3::expr vts::reachability_under_drop_def( Vec2Expr& r_vars,
-                                           Vec3Expr& dump ) { //
+                                           Vec3Expr& dump, unsigned conn_or_not ) { //
   z3::expr_vector cond_list(ctx);
   for ( unsigned i = 0; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
@@ -556,8 +579,14 @@ z3::expr vts::reachability_under_drop_def( Vec2Expr& r_vars,
                               && r_vars[l][j] );
       }
       //auto cond = z3::implies( r_vars[i][j], ud_i_j || z3::mk_or( paths_list ) );
+      if (conn_or_not == 0) {
+      auto cond = z3::implies( r_vars[i][j], ud_i_j || z3::mk_or( paths_list ) );
+      cond_list.push_back( cond );
+      } else {
       auto cond = z3::implies( ud_i_j || z3::mk_or( paths_list ), r_vars[i][j] );
       cond_list.push_back( cond );
+      }
+
     }
   }
   std::cout << z3::mk_and( cond_list );
@@ -597,8 +626,16 @@ z3::expr vts::gets_disconnected( Vec2Expr& r_varas ){                 //
 z3::expr vts::not_k_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump ) {
   return only_present_edges_can_be_dropped( dump )
     && exactly_k_drops( k, dump )
-    && reachability_under_drop_def( r_varas, dump )
+    && reachability_under_drop_def( r_varas, dump, 1 )
     && gets_disconnected( r_varas );
+    //&& remains_connected( r_varas );
+}
+
+z3::expr vts::k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump ) {
+  return only_present_edges_can_be_dropped( dump )
+    && exactly_k_drops( k, dump )
+    && reachability_under_drop_def( r_varas, dump, 0 )
+    && remains_connected( r_varas );
 }
 
 
@@ -629,11 +666,30 @@ z3::model vts::get_vts_for_prob1( ) {
   // std::cout << r1;
   // std::cout << r2;
 
-  z3::expr not_connected = not_k_connected( C, d_reach, drop1 );
+  // Create:  Exists (setR1, reach_d1 && d1_all-conn )
+  VecExpr d1;
+  //d1 = flattern_2d ( d1, d_reach );
+  //z3::expr is_reach = z3::exists( d1,   reachability_under_drop_def( d_reach , drop1, 0 ) && remains_connected( d_reach ) );
+
+  VecExpr d2;
+ // z3::expr k_1_connected = only_present_edges_can_be_dropped (drop1) &&  z3::forall ( flattern_3d( d2, drop1 ), z3::implies ( exactly_k_drops ( C-1, drop1 ) ) );
+
+  // THIS IS EXCATLY WE NEED FOR THE NOT-K-CONNECTED
+  z3::expr not_connected = not_k_connected( C, d_reach2, drop2 );
+  // ADD QUANTIFIERS TO THIS 
+  z3::expr connected = k_min_1_connected( C-1, d_reach, drop1 );  
+
+  // Get array flatterns 
 
   //std::cout << not_connected << "\n";
 
-  z3::expr cons =  base_cons && study && edges[0][1][0] && not_connected;
+  //z3::expr cons =  base_cons && study && edges[0][1][0] && not_connected;
+  //z3::expr cons =  base_cons && study && not_connected;
+  // YOU NEED ONE MORE INGREDIANT: AT LEAST K EDGES !
+  
+  z3::expr cons =  base_cons && study && connected && not_connected;
+  
+  //z3::expr cons =  base_cons && study && k_1_connected && not_connected;
 
   z3::solver s(ctx);
   s.add( cons );

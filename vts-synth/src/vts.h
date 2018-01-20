@@ -51,6 +51,9 @@ private:
   Vec4Expr reach;
   Vec3Expr drop1;
   Vec2Expr d_reach;
+  Vec3Expr drop2;
+  Vec2Expr d_reach2;
+
 
   //flat version of variables
   // VecExpr flat_nodes;
@@ -98,19 +101,23 @@ public:
   //study state
   z3::expr reachability_def();           //R1
   z3::expr study_state_stability_cond(); //R2
+  
+  // Falttenign of the 3 d array
+  VecExpr flattern_2d ( VecExpr d1, Vec2Expr& dump );
+  VecExpr flattern_3d ( VecExpr d1, Vec3Expr& dump );
 
-  //
   // connectivity constraints
   // todo: variables are needed to be parametrized
   z3::expr only_present_edges_can_be_dropped( Vec3Expr& dump ); //
   z3::expr atleast_k_drops(unsigned k);         //
   z3::expr atmost_k_drops(unsigned k);          //
   z3::expr exactly_k_drops(unsigned k, Vec3Expr& dump);         //
-  z3::expr reachability_under_drop_def(Vec2Expr& r_varas, Vec3Expr& dump1);//
+  z3::expr reachability_under_drop_def(Vec2Expr& r_varas, Vec3Expr& dump1, unsigned conn_or_not);//
   z3::expr remains_connected( Vec2Expr& r_varas );                 //
   z3::expr gets_disconnected( Vec2Expr& r_varas );                 //
 
   z3::expr not_k_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
+  z3::expr k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
 
 
   z3::model get_vts_for_prob1();
