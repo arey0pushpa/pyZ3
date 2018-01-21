@@ -16,7 +16,7 @@ std::vector<T> to_vector( const std::vector<std::vector<T>>& double_vec ) {
 
 typedef std::vector< std::vector<z3::expr> > VecsExpr;
 
-typedef std::vector<z3::expr> VecExpr;
+typedef std::vector< z3::expr > VecExpr;
 typedef std::vector< VecExpr > Vec2Expr;
 typedef std::vector< Vec2Expr > Vec3Expr;
 typedef std::vector< Vec3Expr > Vec4Expr;

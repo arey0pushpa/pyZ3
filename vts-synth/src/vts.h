@@ -119,7 +119,8 @@ public:
   z3::expr not_k_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
   z3::expr k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
 
-
+  z3::model get_vts_for_qbf();
+  z3::expr get_basic_constraints();
   z3::model get_vts_for_prob1();
 
   //helper functions

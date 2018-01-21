@@ -643,8 +643,7 @@ z3::expr vts::k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump )
 //----------------------------------------------------------------------------
 //
 
-z3::model vts::get_vts_for_prob1( ) {
-
+z3::expr vts::get_basic_constraints () {
   z3::expr a1 = node_activity_constraint();
   z3::expr a2 = edge_activity_constraint();
 
@@ -664,31 +663,23 @@ z3::model vts::get_vts_for_prob1( ) {
 
   z3::expr study = r1 && r2;
 
-  // std::cout << r1;
-  // std::cout << r2;
+  //std::cout <<  base_cons && study;
+  return base_cons && study;
+}
 
-  // Create:  Exists (setR1, reach_d1 && d1_all-conn )
-  VecExpr d1 = flattern_2d ( d_reach );
-  z3::expr is_reach = exists( d1, only_present_edges_can_be_dropped (drop1) && reachability_under_drop_def( d_reach , drop1, 0 ) && remains_connected( d_reach )  );
-
-  z3::expr k_1_connected = forall ( flattern_3d( drop1 ), z3::implies ( exactly_k_drops ( C-1, drop1 ), is_reach ) );
+z3::model vts::get_vts_for_prob1( ) {
+  z3::expr basic_constraints_with_stability = get_basic_constraints();
 
   // THIS IS EXCATLY WE NEED FOR THE NOT-K-CONNECTED
   z3::expr not_connected = not_k_connected( C, d_reach2, drop2 );
   // ADD QUANTIFIERS TO THIS 
-  z3::expr connected = k_min_1_connected( C-1, d_reach, drop1 );  
-
-  // Get array flatterns 
-
-  //std::cout << not_connected << "\n";
+  //z3::expr connected = k_min_1_connected( C-1, d_reach, drop1 );  
 
   //z3::expr cons =  base_cons && study && edges[0][1][0] && not_connected;
-  //z3::expr cons =  base_cons && study && not_connected;
-  // YOU NEED ONE MORE INGREDIANT: AT LEAST K EDGES !
-  
   //z3::expr cons =  base_cons && study && connected && not_connected;
-  
-  z3::expr cons =  base_cons && study && k_1_connected && not_connected;
+  //z3::expr cons =  base_cons && study && k_1_connected && not_connected;
+
+  z3::expr cons =  basic_constraints_with_stability && edges[0][1][0] && not_connected;
 
   z3::solver s(ctx);
   s.add( cons );
