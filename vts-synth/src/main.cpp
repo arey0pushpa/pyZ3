@@ -3,8 +3,7 @@
 #include <vector>
 
 #include "z3-util.h"
-
-#include<vts.h>
+#include <vts.h>
 
 int main() {
 
@@ -13,10 +12,10 @@ int main() {
     vts  v( c, 4, 2, 2, MODEL_4, 3 );
 
     //z3::model mdl = v.get_vts_for_prob1();
-    z3::model qbf_mdl = v.get_vts_for_qbf();
+    //z3::model qbf_mdl = v.get_vts_for_qbf();
 
     //v.dump_dot("/tmp/vts.dot", mdl );
-    v.dump_dot("/tmp/vts.dot", qbf_mdl );
+    //v.dump_dot("/tmp/vts.dot", qbf_mdl );
 
   try {
 
@@ -27,24 +26,27 @@ int main() {
     z3::expr y = c.bool_const("y");
     z3::expr z = c.bool_const("z");
     z3::expr w = c.bool_const("w");
-    // z3::expr f =  x && y;
-    z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
+    z3::expr f = v.get_qbf_formula();
+   
+    //std::cout << f;
+   // z3::expr f =  x && y;
+   // z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
     //z3::expr f = forall(x, exists( y, !(x && y ) ) ) ;
     //z3::expr f = forall( x, exists( w, w && forall ( y,  x&& y ) ) ) ;
     //z3::expr f = forall( x, exists ( y,  forall (w, exists (z, x && y && w && z)  )) );
     // z3::expr f =  t;
-   //z3::expr f = forall( x, forall ( y, exists (z,  z == x||  z == y) )) ; 
+   //z3::expr f = forall( x, forall ( y, exists (z,  z == x ||  z == y) )) ; 
     //std::cout << "The sort of the formula f is: " << Z3_get_sort( c, f ) << "\n";
     //exit(0);
 
 //  std::cout << "At least this is working \n.";
     //auto fml_f = negform ( c, f ); 
     //negform ( c, f ); 
+    
     VecsExpr qs;
     auto prenex_f = prenex( f, qs );
 
-    /*
-    // std::cout << "Prenexed f : " << prenex_f << "\n";
+    std::cout << "Prenexed f : " << prenex_f << "\n";
     // std::cout << "Quants :\n";
     
     for(auto& q : qs ) {
@@ -61,7 +63,6 @@ int main() {
 
    // std::cout << "CNF f : " << cnf_f << "\n";
     qdimacs_printer( cnf_f, qs ); 
-*/
   }
   
   catch (z3::exception & ex) {
