@@ -50,7 +50,7 @@ z3::model vts::get_vts_for_qbf() {
   z3::expr cons = at_least_k_edges && not_connected && k_1_connected;
 
   z3::solver s(ctx);
-  s.add( at_least_k_edges );
+  s.add( cons );
   
  if( s.check() == z3::sat ) {
    z3::model m = s.get_model();
