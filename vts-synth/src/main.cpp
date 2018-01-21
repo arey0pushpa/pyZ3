@@ -12,11 +12,11 @@ int main() {
 
     vts  v( c, 4, 2, 2, MODEL_4, 3 );
 
-    z3::model mdl = v.get_vts_for_prob1();
-    //z3::model qbf_mdl = v.get_vts_for_qbf();
+    //z3::model mdl = v.get_vts_for_prob1();
+    z3::model qbf_mdl = v.get_vts_for_qbf();
 
-    v.dump_dot("/tmp/vts.dot", mdl );
-    //v.dump_dot("/tmp/vts.dot", qbf_mdl );
+    //v.dump_dot("/tmp/vts.dot", mdl );
+    v.dump_dot("/tmp/vts.dot", qbf_mdl );
 
   try {
 
