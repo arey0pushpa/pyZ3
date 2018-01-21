@@ -42,7 +42,7 @@ void collect( z3::expr e ,
       // Check if element present in the list.
       if( var_id_map.count(e) == 0 ) {
         var_id_map[e] = var_id_map.size() + 1;
-        std::cout << var_id_map[e];
+        //std::cout << var_id_map[e];
         r.push_back (e);  // check types
       }
     }

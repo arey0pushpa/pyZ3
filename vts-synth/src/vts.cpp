@@ -96,8 +96,8 @@ void vts::init_vts() {
 // Populate drop1(i,j,q)
   popl3 ( drop1, N, N, E_arity, "d1" );
 
-//Populate d_reach(i,j)
-  popl2 ( d_reach, N , N, "r1" );
+//Populate d_reach1(i,j)
+  popl2 ( d_reach1, N , N, "r1" );
 
 // Populate drop2(i,j,q)
   popl3 ( drop2, N, N, E_arity, "d2" );
@@ -539,12 +539,27 @@ VecExpr vts::flattern_3d ( Vec3Expr& dump ) {
 z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
   // D2: Flattening the array. Avoid i == j.
   VecExpr d1 = flattern_3d( dump );
+  
   // Print the flattern arrar.
   //for ( auto& i: d1 ) {
  //	  std::cout << i  << "\n";
  // }
  // exit(0);
 
+  unsigned int L = d1.size();
+  
+  // Only have support for exactly 2 and 3.
+  if (drop_count == 2) {
+    z3::expr al = at_least_two( d1, L ); 
+    z3::expr am = at_least_three( d1, L ); 
+    return ( al && !am );
+  } else if (drop_count == 3) {
+    z3::expr al = at_least_three( d1, L ); 
+    z3::expr am = at_least_four( d1, L ); 
+    return ( al && !am );
+  }
+
+  /* ite exactly 3 Implementation.
   z3::expr expr = ctx.int_val(0);
   auto tt = ctx.bool_val(true);
   for (auto& i: d1) {
@@ -552,6 +567,7 @@ z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
   }
   //std::cout << "The total count is : " << expr;  
   return (tt && (expr == ctx.int_val(drop_count)) );
+  */
 }
 
 z3::expr vts::is_undirected_dumped_edge( unsigned i, unsigned j,
