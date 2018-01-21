@@ -505,17 +505,17 @@ z3::expr vts::only_present_edges_can_be_dropped( Vec3Expr& dump ) { //
 
 // falttening the array's 
 
-VecExpr vts::flattern_2d ( Vec2Expr& dump ) {
-  VecExpr d1;
-  for ( unsigned int i = 0; i < N; i++ ) {
-    for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i)
-        continue;
-        d1.push_back( dump[i][j] );
-     }
-    }
-  return d1;
-}
+//VecExpr vts::flattern_2d ( Vec2Expr& dump ) {
+//  VecExpr d1;
+//  for ( unsigned int i = 0; i < N; i++ ) {
+//    for( unsigned j = 0 ; j < N; j++ ) {
+//      if (j == i)
+//        continue;
+//        d1.push_back( dump[i][j] );
+//     }
+//    }
+//  return d1;
+//}
 
 VecExpr vts::flattern_3d ( Vec3Expr& dump ) {
   VecExpr d1;
