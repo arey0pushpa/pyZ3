@@ -557,8 +557,11 @@ z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
     z3::expr al = at_least_three( d1, L ); 
     z3::expr am = at_least_four( d1, L ); 
     return ( al && !am );
-  }
-
+ } else { // todo : fill the right code 
+    z3::expr al = at_least_two( d1, L ); 
+    z3::expr am = at_least_three( d1, L ); 
+    return ( al && !am );
+ }
   /* ite exactly 3 Implementation.
   z3::expr expr = ctx.int_val(0);
   auto tt = ctx.bool_val(true);

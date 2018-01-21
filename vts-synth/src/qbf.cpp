@@ -54,6 +54,7 @@ z3::expr vts::at_least_three ( VecExpr dump, unsigned L ) {
 }
 
 
+// At least 4. 
 z3::expr vts::at_least_four ( VecExpr dump, unsigned L ) {
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
