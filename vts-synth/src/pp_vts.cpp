@@ -78,64 +78,23 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
 	  if ( is_true(edges[i][j][q], mdl ) ) {
 	    style = "solid";
 	    color = "black";
-          for( unsigned m = 0; m < M; m++ ) {
-            style = "solid";
-            std::string label = std::to_string( m );
-            if( is_true( presence_edge[i][j][q][m], mdl ) ) {
-            // if( is_true( edges[i][j][q], mdl ) ) {
-              color = "black";
-              if( is_true( active_edge[i][j][q][m], mdl ) ) {
-                color = "green";
-		//if ( is_true( drop1[i][j][q], mdl ) ) {
-		//	style = "dashed";
-                for( unsigned m1 = 0; m1 < M; m1++ ) {
-                  if( is_true( active_node[j][m1], mdl ) and
-                      is_true( pairing_m[m][m1], mdl ) ) {
-                    color = "red";
-
-                    break;
-                  }
-                }
-              }
-	//	}
-              ofs << std::to_string(i) << "-> " << std::to_string(j)
+	    
+	    std::string label = "m";
+	    ofs << std::to_string(i) << "-> " << std::to_string(j)
                   <<  "[label="  << label << ",color=" << color
                   << ",style=" << style << "]\n";
             }
-	  }
-          }
-        
 	  }
 
 	if ( q == 1 ) {
 	  if ( is_true( edges[i][j][q], mdl ) ) {
 	    style = "solid";
 	    color = "yellow";
-          for( unsigned m = 0; m < M; m++ ) {
-            style = "solid";
-            std::string label = std::to_string( m );
-            if( is_true( presence_edge[i][j][q][m], mdl ) ) {
-            // if( is_true( edges[i][j][q], mdl ) ) {
-              color = "yellow";
-             if( is_true( active_edge[i][j][q][m], mdl ) ) {
-                color = "pink";
-	//	if ( is_true( drop1[i][j][q], mdl ) ) {
-	//		style  = "dashed";
-	//	}
-                for( unsigned m1 = 0; m1 < M; m1++ ) {
-                  if( is_true( active_node[j][m1], mdl ) and
-                      is_true( pairing_m[m][m1], mdl ) ) {
-                    color = "blue";
-                    break;
-                  }
-                }
-              }
+	    std::string label =  "m" ;
               ofs << std::to_string(i) << "-> " << std::to_string(j)
                   <<  "[label="  << label << ",color=" << color
                   << ",style=" << style << "]\n";
 	  }
-            }
-          }
         }	  
 	  } // end q
       } // end j
