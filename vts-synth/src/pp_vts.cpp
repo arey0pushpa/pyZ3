@@ -75,6 +75,9 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
           continue;
         for( unsigned q = 0; q < E_arity; q++ ) {
 	if ( q == 0 ) {
+	  if ( is_true(edges[i][j][q], mdl ) ) {
+	    style = "solid";
+	    color = "black";
           for( unsigned m = 0; m < M; m++ ) {
             style = "solid";
             std::string label = std::to_string( m );
@@ -99,11 +102,15 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
                   <<  "[label="  << label << ",color=" << color
                   << ",style=" << style << "]\n";
             }
+	  }
           }
         
 	  }
 
 	if ( q == 1 ) {
+	  if ( is_true( edges[i][j][q], mdl ) ) {
+	    style = "solid";
+	    color = "yellow";
           for( unsigned m = 0; m < M; m++ ) {
             style = "solid";
             std::string label = std::to_string( m );
@@ -126,6 +133,7 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
               ofs << std::to_string(i) << "-> " << std::to_string(j)
                   <<  "[label="  << label << ",color=" << color
                   << ",style=" << style << "]\n";
+	  }
             }
           }
         }	  

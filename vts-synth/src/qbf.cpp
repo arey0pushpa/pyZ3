@@ -33,18 +33,24 @@ z3::model vts::get_vts_for_qbf() {
 
   z3::expr not_connected = not_k_connected( C, d_reach2, drop2 );
 
+  z3::expr_vector set_edges = flattern3d ( edges );
+
   //z3::expr_vector d1 = flattern_2d ( d_reach );
   // Create:  Exists (setR1, reach_d1 && d1_all-conn )
-  z3::expr is_reach = exists( flattern_2d( d_reach ), only_present_edges_can_be_dropped (drop1) && reachability_under_drop_def( d_reach , drop1, 0 ) && remains_connected( d_reach )  );
+  z3::expr is_reach = exists( flattern_2d( d_reach ), reachability_under_drop_def( d_reach , drop1, 0 ) && remains_connected( d_reach )  );
   
   //z3::expr_vector d2 = flattern3d ( drop1 );
-  z3::expr k_1_connected = forall (  flattern3d (drop1), implies ( exactly_k_drops ( C-1, drop1 ), is_reach ) );
+  z3::expr k_1_connected = forall (  flattern3d (drop1), implies 
+		  (  (exactly_k_drops ( C-1, drop1 ) && only_present_edges_can_be_dropped ( drop1 )), is_reach ) );
  
   //z3::expr cons = basic_constraints_with_stability && not_connected && k_1_connected;
-  z3::expr cons = not_connected && k_1_connected;
+  z3::expr at_least_k_edges = atleast( set_edges, 3);
+  std::cout << at_least_k_edges;
+  //exit(0);
+  z3::expr cons = at_least_k_edges && not_connected && k_1_connected;
 
   z3::solver s(ctx);
-  s.add( cons );
+  s.add( at_least_k_edges );
   
  if( s.check() == z3::sat ) {
    z3::model m = s.get_model();

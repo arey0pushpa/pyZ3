@@ -590,7 +590,7 @@ z3::expr vts::reachability_under_drop_def( Vec2Expr& r_vars,
 
     }
   }
-  std::cout << z3::mk_and( cond_list );
+  //std::cout << z3::mk_and( cond_list );
   //exit(0);
   return z3::mk_and( cond_list );
 }
