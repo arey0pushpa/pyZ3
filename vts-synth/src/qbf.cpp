@@ -86,7 +86,7 @@ z3::expr vts::get_qbf_formula(){
   // Create:  Exists (setR1, reach_d1 && d1_all-conn )
   z3::expr is_reach1 = exists( flattern_2d( d_reach1 ), reachability_under_drop_def( d_reach1 , drop1, 0 ) && remains_connected( d_reach1 )  );
   
-  z3::expr is_reach2 = exists( flattern_2d( d_reach2 ), reachability_under_drop_def( d_reach2 , drop2, 1 ) && remains_connected( d_reach2 )  );
+  z3::expr is_reach2 = exists( flattern_2d( d_reach2 ), reachability_under_drop_def( d_reach2 , drop2, 1 ) && gets_disconnected( d_reach2 )  );
   
   //z3::expr_vector d2 = flattern3d ( drop1 );
   z3::expr k_min_1_connected = forall (  flattern3d (drop1), implies 
