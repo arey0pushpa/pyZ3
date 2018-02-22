@@ -62,7 +62,10 @@ int main() {
         std::cout << cl << "\n";
 
    // std::cout << "CNF f : " << cnf_f << "\n";
+    std::cout << "Printing qdimacs at /tmp/myfile.qdimacs \n";
     qdimacs_printer( cnf_f, qs ); 
+    std::cout << "Creating depqbf input file at /tmp/depqbf.c \n";
+    depqbf_file_creator();
   }
   
   catch (z3::exception & ex) {

@@ -175,6 +175,39 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
 }
 
 
+void depqbf_file_creator() {
+
+  // Begin the printing basic structure
+  std::ofstream ofs;
+  ofs.open( "/tmp/depqbf.c", std::ofstream::out );
+
+  ofs << "#include <string.h>\n";
+  ofs << "#include <stdlib.h>\n";
+  ofs << "#include <stdio.h>\n";
+  ofs << "#include <assert.h>\n";
+  ofs << "#include \"../qdpll.h\"\n";
+
+    /* Create solver instance. */
+  ofs << "QDPLL *depqbf = qdpll_create ();\n";
+
+  /* Use the linear ordering of the quantifier prefix. */
+  ofs << "qdpll_configure (depqbf, \"--dep-man=simple\");\n";
+  /* Enable incremental solving. */
+    ofs << "qdpll_configure (depqbf, \"--incremental-use\");\n";
+
+  
+  //Open the qdimacs file.
+  //std::ifstream infile("/tmp/myfile.qdimacs");
+  std::ifstream input( "/tmp/myfile.qdimacs" );
+  for( std::string line; getline( input, line ); )
+   {
+     ofs <<  line << "\n";
+   }
+    ofs.close();
+
+}
+
+
 /*
  Example :
   p cnf 4 2
