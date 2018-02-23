@@ -45,22 +45,24 @@ int main() {
     
     VecsExpr qs;
     auto prenex_f = prenex( f, qs );
-
-    std::cout << "Prenexed f : " << prenex_f << "\n";
+    /* Print the formaula in pcnf  Avoid printing now ! */
+    // std::cout << "Prenexed f : " << prenex_f << "\n";
     // std::cout << "Quants :\n";
-    
+   
+   /* Avoid printing now !
     for(auto& q : qs ) {
       for( auto& e : q )
         std::cout << e << " ";
       std::cout << "\n";
     }
-
+*/
     auto cnf_f = cnf_converter( prenex_f );
 
+    /* Avoid printing for now! 
     std::cout << "CNF body :\n";
     for( auto& cl : cnf_f )
         std::cout << cl << "\n";
-
+*/
    // std::cout << "CNF f : " << cnf_f << "\n";
     std::cout << "Printing qdimacs at /tmp/myfile.qdimacs \n";
     qdimacs_printer( cnf_f, qs ); 

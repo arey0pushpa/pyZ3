@@ -177,12 +177,17 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
     ofs.close();
 }
 
-void add_vars( auto iss ) {
+void add_vars( std::string s, std::ofstream& ofs) {
+  std::stringstream iss(s);
   do 
   {
     std::string subs;
     iss >> subs;
-    ofs << "qdpll_add (depqbf," + subs + ");\n"; 
+    ofs << "qdpll_add (depqbf," << subs << ");\n"; 
+    if ( subs == "0" ) {
+      ofs << "\n";
+      break;
+    }
   } while (iss);
   /* Open scope will be closed automatically as the last number is 0 */
 }
@@ -197,44 +202,75 @@ void depqbf_file_creator() {
   ofs << "#include <stdlib.h>\n";
   ofs << "#include <stdio.h>\n";
   ofs << "#include <assert.h>\n";
-  ofs << "#include \"../qdpll.h\"\n";
+  ofs << "#include \"../qdpll.h\"\n\n";
 
-    /* Create solver instance. */
+  ofs << "int main (int argc, char** argv) \n";
+  ofs << "{ \n";
+
+  ofs << "/* Create solver instance. */\n";
   ofs << "QDPLL *depqbf = qdpll_create ();\n";
 
-  /* Use the linear ordering of the quantifier prefix. */
+  ofs << "/* Use the linear ordering of the quantifier prefix. */\n";
   ofs << "qdpll_configure (depqbf, \"--dep-man=simple\");\n";
-  /* Enable incremental solving. */
-    ofs << "qdpll_configure (depqbf, \"--incremental-use\");\n";
+  ofs << "/* Enable incremental solving. */\n";
+  ofs << "qdpll_configure (depqbf, \"--incremental-use\");\n\n";
 
   //Open the qdimacs file.
   //std::ifstream infile("/tmp/myfile.qdimacs");
-  std::ifstream input( "/tmp/myfile.qdimacs" );
+  std::ifstream file( "/tmp/myfile.qdimacs" );
   unsigned int qid = 1;
-  for( std::string line; getline( input, line ); )
-   {
-      ofs <<  line << "\n";
-      // Create a stream var for iterating over sentence
-      std::istringstream iss(line);
-      std::string s1 = line.substr(0, line.find(' '));
-      if ( s1 == "c" || s1 == "p" ) {
-        break;
+  std::string line;
+  while( std::getline( file , line ) ) 
+  {
+    std::string s1 = line.substr(0, line.find(' '));
+    //std::cout << "The valuse of s1 is : " << s1 << "\n";
+    if ( s1 == "c" || s1 == "p" ) {
+      continue;
+    }
+    if ( s1 == "e" || s1 == "a" ) {
+      std::string quant;
+      if ( s1 == "e" ) { 
+        ofs << "// Add a new leftmost existential quantifier at nested level " << qid << "\n"; 
+        ofs << "qdpll_new_scope_at_nesting (depqbf, QDPLL_QTYPE_EXISTS," << qid << ");\n";
+        quant = "existential";
       }
-      else if ( s1 == "e" ) {
-        ofs << "qdpll_new_scope_at_nesting (depqbf, QDPLL_QTYPE_EXISTS, qid); \n";
-        std::string::size_type n = 0;
-          //n = sentence.find_first_not_of( " \t", n );
-        n = line.find_first_of( " \t", n );
-        // Erase the first 
-        line.erase( 0,  line.find_first_not_of( " \t", n ) );
-        //std::cout << line.substr(line.find_first_of(" \t")+1);
-        
-        // Add variables 
-        add_vars( line );
-        qid += 1;
+      else {
+        ofs << "// Add a new leftmost universal quantifier at nested level " << qid << "\n"; 
+        ofs << "qdpll_new_scope_at_nesting (depqbf, QDPLL_QTYPE_FORALL," << qid << "); \n";
+        quant = "universal";
       }
-   }
-    ofs.close();
+      // Remove e for the line.
+      std::string::size_type n = 0;
+      n = line.find_first_of( " \t", n );
+      line.erase( 0,  line.find_first_not_of( " \t", n ) );
+      ofs << "/* Add fresh variables to " + quant + " quantifier. \n"; 
+      ofs << "\t \t" << line << " */ \n";
+      add_vars(line, ofs);
+      qid += 1;
+    }
+    else {
+      ofs << "// Add clause: " << line << "\n"; 
+      add_vars(line, ofs);
+    }
+  }
+  // Print "print formula"
+  ofs <<  "/* Print formula. */ \n" <<  "qdpll_print (depqbf, stdout);\n";
+  ofs << "QDPLLResult res = qdpll_sat (depqbf);\n";
+  ofs << "/* Expecting that the formula is satisfiable. */\n";
+  ofs << "assert (res == QDPLL_RESULT_SAT);\n";
+  ofs << "/* res == 10 means satisfiable, res == 20 means unsatisfiable. */\n";
+
+  ofs << "printf (\"result is: %d\", res);\n";
+
+  // Get a countermodel
+
+
+  // Delete Solver and end main
+  ofs << "/* Delete solver instance. */\n";
+  ofs << "qdpll_delete (depqbf);\n";
+  ofs << "\n} //End main";
+
+  ofs.close();
 }
 
 
