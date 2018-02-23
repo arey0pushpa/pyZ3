@@ -5,6 +5,9 @@
 #include <fstream>      
 #include <map>
 
+#include <iostream>
+#include <sstream>
+#include <string>
 #include "z3-util.h"
 
 // template <template<typename...> class R=std::vector, 
@@ -174,6 +177,15 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
     ofs.close();
 }
 
+void add_vars( auto iss ) {
+  do 
+  {
+    std::string subs;
+    iss >> subs;
+    ofs << "qdpll_add (depqbf," + subs + ");\n"; 
+  } while (iss);
+  /* Open scope will be closed automatically as the last number is 0 */
+}
 
 void depqbf_file_creator() {
 
@@ -195,16 +207,34 @@ void depqbf_file_creator() {
   /* Enable incremental solving. */
     ofs << "qdpll_configure (depqbf, \"--incremental-use\");\n";
 
-  
   //Open the qdimacs file.
   //std::ifstream infile("/tmp/myfile.qdimacs");
   std::ifstream input( "/tmp/myfile.qdimacs" );
+  unsigned int qid = 1;
   for( std::string line; getline( input, line ); )
    {
-     ofs <<  line << "\n";
+      ofs <<  line << "\n";
+      // Create a stream var for iterating over sentence
+      std::istringstream iss(line);
+      std::string s1 = line.substr(0, line.find(' '));
+      if ( s1 == "c" || s1 == "p" ) {
+        break;
+      }
+      else if ( s1 == "e" ) {
+        ofs << "qdpll_new_scope_at_nesting (depqbf, QDPLL_QTYPE_EXISTS, qid); \n";
+        std::string::size_type n = 0;
+          //n = sentence.find_first_not_of( " \t", n );
+        n = line.find_first_of( " \t", n );
+        // Erase the first 
+        line.erase( 0,  line.find_first_not_of( " \t", n ) );
+        //std::cout << line.substr(line.find_first_of(" \t")+1);
+        
+        // Add variables 
+        add_vars( line );
+        qid += 1;
+      }
    }
     ofs.close();
-
 }
 
 
