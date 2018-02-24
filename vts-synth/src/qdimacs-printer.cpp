@@ -189,7 +189,6 @@ void add_vars( std::string s, std::ofstream& ofs) {
       break;
     }
   } while (iss);
-  /* Open scope will be closed automatically as the last number is 0 */
 }
 
 void depqbf_file_creator() {
@@ -219,7 +218,9 @@ void depqbf_file_creator() {
   //std::ifstream infile("/tmp/myfile.qdimacs");
   std::ifstream file( "/tmp/myfile.qdimacs" );
   unsigned int qid = 1;
+  unsigned int oquant = 0;
   std::string line;
+  std::string outquantvar;
   while( std::getline( file , line ) ) 
   {
     std::string s1 = line.substr(0, line.find(' '));
@@ -233,22 +234,26 @@ void depqbf_file_creator() {
         ofs << "// Add a new leftmost existential quantifier at nested level " << qid << "\n"; 
         ofs << "qdpll_new_scope_at_nesting (depqbf, QDPLL_QTYPE_EXISTS," << qid << ");\n";
         quant = "existential";
+        oquant = 5;
       }
       else {
         ofs << "// Add a new leftmost universal quantifier at nested level " << qid << "\n"; 
         ofs << "qdpll_new_scope_at_nesting (depqbf, QDPLL_QTYPE_FORALL," << qid << "); \n";
         quant = "universal";
+        oquant = 1;
       }
       // Remove e for the line.
       std::string::size_type n = 0;
       n = line.find_first_of( " \t", n );
       line.erase( 0,  line.find_first_not_of( " \t", n ) );
+      outquantvar = line;
       ofs << "/* Add fresh variables to " + quant + " quantifier. \n"; 
       ofs << "\t \t" << line << " */ \n";
       add_vars(line, ofs);
       qid += 1;
     }
     else {
+      // We don't care abt outtermost quant variabl...
       ofs << "// Add clause: " << line << "\n"; 
       add_vars(line, ofs);
     }
@@ -261,9 +266,29 @@ void depqbf_file_creator() {
   ofs << "/* res == 10 means satisfiable, res == 20 means unsatisfiable. */\n";
 
   ofs << "printf (\"result is: %d\", res);\n";
-
+  ofs << "printf (\"\\n\");\n";
   // Get a countermodel
+  if ( oquant == 5 ) {
+    // give the assignments to the variables.
+    std::stringstream s(outquantvar);
+    std::string word;
+    std::string var;
 
+    ofs << "\n // Printing the assignments \n";
+    for (int i = 0; s >> word; i++) {
+      if (word == "0") {
+        break;
+      }
+      var = "a" + std::to_string(i);
+      ofs << "QDPLLAssignment " << var << " = qdpll_get_value (depqbf," << word <<");\n";
+      ofs << "printf (\"partial countermodel - value of " << word << " : %s\\n\", " << var << " == QDPLL_ASSIGNMENT_UNDEF ? \"undef\" : " << " (" << var << " == QDPLL_ASSIGNMENT_FALSE ? \"false\" : \"true\")); \n\n";
+    }
+    
+    std::cout << outquantvar << "\n";
+  }
+  else {
+    std::cout << "Sorry! OuterMost Quantifier is Not Exists. No Assignments.\n";
+  }
 
   // Delete Solver and end main
   ofs << "/* Delete solver instance. */\n";
