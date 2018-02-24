@@ -281,7 +281,7 @@ void depqbf_file_creator() {
       }
       var = "a" + std::to_string(i);
       ofs << "QDPLLAssignment " << var << " = qdpll_get_value (depqbf," << word <<");\n";
-      ofs << "printf (\"partial countermodel - value of " << word << " : %s\\n\", " << var << " == QDPLL_ASSIGNMENT_UNDEF ? \"undef\" : " << " (" << var << " == QDPLL_ASSIGNMENT_FALSE ? \"false\" : \"true\")); \n\n";
+      ofs << "printf (\"partial model - value of " << word << " : %s\\n\", " << var << " == QDPLL_ASSIGNMENT_UNDEF ? \"undef\" : " << " (" << var << " == QDPLL_ASSIGNMENT_FALSE ? \"false\" : \"true\")); \n\n";
     }
     
     std::cout << outquantvar << "\n";
