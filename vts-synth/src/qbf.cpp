@@ -103,6 +103,8 @@ z3::expr vts::get_qbf_formula(){
   //z3::expr cons = exists ( set_edges, at_least_k_edges && not_connected && k_1_connected );
   z3::expr_vector set_edges = flattern3d ( edges );
   z3::expr cons = exists ( set_edges, at_least_k_edges && k_min_1_connected && k_not_connected );
+  std::cout << "Expected first level quant: " << set_edges << "\n";
+  //std::cout << cons << "\n";
   return cons;
 
 }
