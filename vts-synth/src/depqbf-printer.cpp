@@ -1,10 +1,4 @@
-#include <vector>
-#include <numeric>
-#include <utility>
-#include <iterator>
 #include <fstream>      
-#include <map>
-
 #include <iostream>
 #include <sstream>
 #include <string>
