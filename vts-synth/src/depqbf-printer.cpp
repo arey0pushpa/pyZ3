@@ -71,8 +71,10 @@ void depqbf_file_creator() {
         quant = "universal";
       }
       std::string::size_type n = 0;
-      n = line.find_first_not_of( " \t", n );
+      //n = line.find_first_not_of( " \t", n );
+      n = line.find_first_of( " \t", n );
       line.erase( 0,  line.find_first_not_of( " \t", n ) );
+      //std::cout << " The edited tail(line) = [ "  << line << "] \n";
       qid == 1 ? outquantvar = line : "true";
       ofs << "/* Add fresh variables to " + quant + " quantifier. \n"; 
       ofs << "\t \t" << line << " */ \n";

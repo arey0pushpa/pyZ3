@@ -81,6 +81,10 @@ z3::expr vts::get_qbf_formula(){
   //z3::expr not_connected = not_k_connected( C, d_reach2, drop2 );
 
   VecExpr ee_set = flattern_3d ( edges );
+    //for(auto& ee : ee_set ) {
+     // std::cout << ee << "\n";
+    //}
+  //std::cout << " ee_set : " << ee_set << "\n";
 
   //z3::expr_vector d1 = flattern_2d ( d_reach );
   // Create:  Exists (setR1, reach_d1 && d1_all-conn )
@@ -89,6 +93,7 @@ z3::expr vts::get_qbf_formula(){
   z3::expr is_reach2 = exists( flattern_2d( d_reach2 ), reachability_under_drop_def( d_reach2 , drop2, 1 ) && gets_disconnected( d_reach2 )  );
   
   //z3::expr_vector d2 = flattern3d ( drop1 );
+  //std::cout << "drop 1 is = " << d2 << "\n";
   z3::expr k_min_1_connected = forall (  flattern3d (drop1), implies 
 		  (  (exactly_k_drops ( C-1, drop1 ) && only_present_edges_can_be_dropped ( drop1 )), is_reach1 ) );
  
@@ -111,6 +116,7 @@ z3::expr vts::get_qbf_formula(){
 
 z3::model vts::get_vts_for_qbf() {
   z3::expr cons = get_qbf_formula ();
+  //std::cout << cons << "\n";
   z3::solver s(ctx);
   s.add( cons );
   

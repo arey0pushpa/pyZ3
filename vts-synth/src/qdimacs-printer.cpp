@@ -117,6 +117,7 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
     std::vector <z3::expr> fresh_vars;
     // auto var_list = flatten( m_vars );
     auto var_list = to_vector( m_vars );
+    //std::cout << m_vars << "\n";
 
     // Create a Map from var to id, var: id
     std::map <Z3_ast, int> var_id_map;
