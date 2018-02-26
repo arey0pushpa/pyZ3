@@ -8,11 +8,11 @@ all : release
 
 .PHONY : release debug run clean patch test
 
-release : $(BUILDDIR)/buildr/Makefile
+release : $(BUILDDIR)/buildr/Makefile $(BUILDDIR)/depqbf/depqbf
 	+make -C $(BUILDDIR)/buildr
 	cp -f $(BUILDDIR)/buildr/vts-synth vts-synth
 
-debug : $(BUILDDIR)/buildd/Makefile
+debug : $(BUILDDIR)/buildd/Makefile $(BUILDDIR)/depqbf/depqbf
 	+make -C $(BUILDDIR)/buildd
 	cp -f $(BUILDDIR)/buildd/vts-synth vts-synth
 
@@ -77,7 +77,6 @@ $(BUILDDIR)/z3/patched : $(SRCDIR)/z3-patch/z3.patch $(BUILDDIR)/z3/README.md
 
 $(BUILDDIR)/z3/README.md : 
 	mkdir -p $(BUILDDIR)
-	cd $(BUILDDIR);$(git) clone git@github.com:lonsing/depqbf.git
 	cd $(BUILDDIR);$(git) clone git@github.com:Z3Prover/z3.git
 	cd $(BUILDDIR)/z3;$(git) checkout 4c949cdbac761730ea44656b69f66e11a8562393
 
@@ -100,6 +99,10 @@ $(BUILDDIR)/z3/buildd/Makefile: $(BUILDDIR)/z3/patched
 $(BUILDDIR)/z3/buildd/libz3.so : $(BUILDDIR)/z3/buildd/Makefile
 	+make -C $(BUILDDIR)/z3/buildd
 
+
+$(BUILDDIR)/depqbf/depqbf : 
+	cd $(BUILDDIR);$(git) clone git@github.com:lonsing/depqbf.git	
+	cd $(BUILDDIR)/depqbf;./compile.sh
 
 #---------------------------------------------------------------------------
 # runtest:
