@@ -142,6 +142,7 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
     // BEGIN QDIMACS PRINITNG  
     std::ofstream ofs;
     ofs.open ("/tmp/myfile.qdimacs", std::ofstream::out );
+    //ofs.open ("myfile.qdimacs", std::ofstream::out );
     // First part of a comment.
     ofs << "c This is a QDIMACS file output \n";
 

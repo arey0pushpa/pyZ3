@@ -26,10 +26,10 @@ z3::expr_vector vts::flattern3d ( Vec3Expr& dump ) {
  return d1;
 }
 
-
-z3::model vts::get_vts_for_qbf() {
+z3::expr vts::get_qbf_formula(){
 
   z3::expr basic_constraints_with_stability = get_basic_constraints();
+  //std::cout << basic_constraints_with_stability;
 
   z3::expr not_connected = not_k_connected( C, d_reach2, drop2 );
 
@@ -47,8 +47,14 @@ z3::model vts::get_vts_for_qbf() {
   z3::expr at_least_k_edges = atleast( set_edges, 3);
   std::cout << at_least_k_edges;
   //exit(0);
+  
   z3::expr cons = at_least_k_edges && not_connected && k_1_connected;
+  return cons;
 
+}
+
+z3::model vts::get_vts_for_qbf() {
+  z3::expr cons = get_qbf_formula ();
   z3::solver s(ctx);
   s.add( cons );
   
