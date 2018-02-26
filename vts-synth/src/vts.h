@@ -50,7 +50,7 @@ private:
 
   Vec4Expr reach;
   Vec3Expr drop1;
-  Vec2Expr d_reach;
+  Vec2Expr d_reach1;
   Vec3Expr drop2;
   Vec2Expr d_reach2;
 
@@ -108,6 +108,11 @@ public:
   VecExpr flattern_3d ( Vec3Expr& dump );
 
   // connectivity constraints
+  // At least at most
+  z3::expr at_least_two( VecExpr dump, unsigned L );
+  z3::expr at_least_three( VecExpr dump, unsigned L );
+  z3::expr at_least_four( VecExpr dump, unsigned L );
+  
   // todo: variables are needed to be parametrized
   z3::expr only_present_edges_can_be_dropped( Vec3Expr& dump ); //
   z3::expr atleast_k_drops(unsigned k);         //

@@ -5,6 +5,9 @@
 #include <fstream>      
 #include <map>
 
+#include <iostream>
+#include <sstream>
+#include <string>
 #include "z3-util.h"
 
 // template <template<typename...> class R=std::vector, 
@@ -42,7 +45,7 @@ void collect( z3::expr e ,
       // Check if element present in the list.
       if( var_id_map.count(e) == 0 ) {
         var_id_map[e] = var_id_map.size() + 1;
-        std::cout << var_id_map[e];
+        //std::cout << var_id_map[e];
         r.push_back (e);  // check types
       }
     }
@@ -114,6 +117,7 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
     std::vector <z3::expr> fresh_vars;
     // auto var_list = flatten( m_vars );
     auto var_list = to_vector( m_vars );
+    //std::cout << m_vars << "\n";
 
     // Create a Map from var to id, var: id
     std::map <Z3_ast, int> var_id_map;
@@ -172,6 +176,16 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
       print_clause( e, ofs, var_id_map );
     }
     ofs.close();
+}
+
+
+// Remove a word from the line.
+std::string tail( std::string line ) {
+  std::string::size_type n = 0;
+  n = line.find_first_of( " \t", n );
+  line.erase( 0,  line.find_first_not_of( " \t", n ) );
+  return line;
+
 }
 
 

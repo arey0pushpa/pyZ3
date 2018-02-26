@@ -8,8 +8,9 @@
 int main() {
 
     z3::context c;
-
-    vts  v( c, 4, 2, 2, MODEL_4, 3 );
+    
+    // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity ]
+    vts  v( c, 2, 2, 2, MODEL_4, 3 );
 
     //z3::model mdl = v.get_vts_for_prob1();
     //z3::model qbf_mdl = v.get_vts_for_qbf();
@@ -27,8 +28,8 @@ int main() {
     z3::expr z = c.bool_const("z");
     z3::expr w = c.bool_const("w");
     z3::expr f = v.get_qbf_formula();
-   
-    //std::cout << f;
+     
+    //std::cout << f << "\n";
    // z3::expr f =  x && y;
    // z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
     //z3::expr f = forall(x, exists( y, !(x && y ) ) ) ;
@@ -45,24 +46,29 @@ int main() {
     
     VecsExpr qs;
     auto prenex_f = prenex( f, qs );
-
-    std::cout << "Prenexed f : " << prenex_f << "\n";
+    /* Print the formaula in pcnf  Avoid printing now ! */
+    //std::cout << "Prenexed f : " << prenex_f << "\n";
     // std::cout << "Quants :\n";
-    
+   
+   /* Avoid printing now !
     for(auto& q : qs ) {
       for( auto& e : q )
         std::cout << e << " ";
       std::cout << "\n";
     }
-
+*/
     auto cnf_f = cnf_converter( prenex_f );
 
+    /* Avoid printing for now! 
     std::cout << "CNF body :\n";
     for( auto& cl : cnf_f )
         std::cout << cl << "\n";
-
+*/
    // std::cout << "CNF f : " << cnf_f << "\n";
+    std::cout << "Printing qdimacs at /tmp/myfile.qdimacs \n";
     qdimacs_printer( cnf_f, qs ); 
+    std::cout << "Creating depqbf input file at /tmp/depqbf.c \n";
+    depqbf_file_creator();
   }
   
   catch (z3::exception & ex) {
