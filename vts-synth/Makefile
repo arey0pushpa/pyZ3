@@ -77,6 +77,7 @@ $(BUILDDIR)/z3/patched : $(SRCDIR)/z3-patch/z3.patch $(BUILDDIR)/z3/README.md
 
 $(BUILDDIR)/z3/README.md : 
 	mkdir -p $(BUILDDIR)
+	cd $(BUILDDIR);$(git) clone git@github.com:lonsing/depqbf.git
 	cd $(BUILDDIR);$(git) clone git@github.com:Z3Prover/z3.git
 	cd $(BUILDDIR)/z3;$(git) checkout 4c949cdbac761730ea44656b69f66e11a8562393
 
