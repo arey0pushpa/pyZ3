@@ -104,6 +104,11 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
 
 } //end function
 
-//void vts::print_graph( std::string filename, VecExpr& edgeQuant) {
+// Helper function to assign values to edge varables
+void preprocess ( VecExpr edgeQuant ) {
 
-//} //end function
+}
+// Print depqbf Graph
+void vts::print_graph( std::string filename, VecExpr& edgeQuant) {
+
+} //end function

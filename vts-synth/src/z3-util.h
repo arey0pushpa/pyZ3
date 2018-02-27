@@ -41,6 +41,9 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml, VecsExpr& m_var );
 // Add function for the depqbf file creator.
 void depqbf_file_creator(VecExpr& edgeQuant);
 
+// Add function for DepQbf run
+int depqbf_run_with_timeout();
+
 inline z3::expr make_bool(z3::context& c, std::string& name) {
   return c.bool_const( name.c_str() );
 }

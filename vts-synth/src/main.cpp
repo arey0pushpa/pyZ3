@@ -3,6 +3,8 @@
 #include <vector>
 #include <stdlib.h>
 
+#include <iostream>
+
 #include "z3-util.h"
 #include <vts.h>
 
@@ -31,8 +33,6 @@ int main() {
     z3::expr w = c.bool_const("w");
     z3::expr f = v.get_qbf_formula( edgeQuant );
 
-
-     
     //std::cout << f << "\n";
    // z3::expr f =  x && y;
    // z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
@@ -42,7 +42,6 @@ int main() {
     // z3::expr f =  t;
    //z3::expr f = forall( x, forall ( y, exists (z,  z == x ||  z == y) )) ; 
     //std::cout << "The sort of the formula f is: " << Z3_get_sort( c, f ) << "\n";
-    //exit(0);
 
 //  std::cout << "At least this is working \n.";
     //auto fml_f = negform ( c, f ); 
@@ -74,14 +73,30 @@ int main() {
     //std::cout << "Creating depqbf input file at /tmp/depqbf.c \n";
     std::cout << "Creating depqbf input file at ./build/depqbf/examples/depqbf.c  \n";
     depqbf_file_creator(edgeQuant);
-    
-   // Call Bash script to run depqbf 
-    int systemRet = system("./src/bash_script.sh");
-    if(systemRet == -1){
-      std::cout << "SYTEM ERROR !!!\n"; 
+
+    bool timedout = false;
+
+    try {
+      depqbf_run_with_timeout (); 
     }
+    catch(std::runtime_error& e) {
+      std::cout << e.what() << std::endl;
+      timedout = true;
+    }
+
+    if(!timedout)
+      std::cout << "Success" << std::endl;
+
+    // Call Bash script to run depqbf 
+    //int systemRet = system("./src/bash_script.sh");
+    //if(ret == -1){
+    //  std::cout << "SYTEM ERROR !!!\n"; 
+    //}
     //system("./src/bash_script.sh");
-    //run_command();
+    
+    // Get graph for depqbf-file
+    //v.print_graph( "/tmp/dep_vts.dot", edgeQuant ); 
+    //std::cout << "\nPrinting depqbf graph at /tmp/dep_vts.dot \n";
   }
   
   catch (z3::exception & ex) {
