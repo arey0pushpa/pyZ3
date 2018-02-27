@@ -73,7 +73,7 @@ z3::expr vts::at_least_four ( VecExpr dump, unsigned L ) {
   return z3::mk_or( ls );
 }
 
-z3::expr vts::get_qbf_formula(){
+z3::expr vts::get_qbf_formula (VecExpr& edgeQuant){
 
   z3::expr basic_constraints_with_stability = get_basic_constraints();
   //std::cout << basic_constraints_with_stability;
@@ -81,6 +81,7 @@ z3::expr vts::get_qbf_formula(){
   //z3::expr not_connected = not_k_connected( C, d_reach2, drop2 );
 
   VecExpr ee_set = flattern_3d ( edges );
+  edgeQuant = ee_set;
     //for(auto& ee : ee_set ) {
      // std::cout << ee << "\n";
     //}
@@ -108,14 +109,15 @@ z3::expr vts::get_qbf_formula(){
   //z3::expr cons = exists ( set_edges, at_least_k_edges && not_connected && k_1_connected );
   z3::expr_vector set_edges = flattern3d ( edges );
   z3::expr cons = exists ( set_edges, at_least_k_edges && k_min_1_connected && k_not_connected );
-  std::cout << "Expected first level quant: " << set_edges << "\n";
+ // std::cout << "Expected first level quant: " << set_edges << "\n";
   //std::cout << cons << "\n";
   return cons;
 
 }
 
 z3::model vts::get_vts_for_qbf() {
-  z3::expr cons = get_qbf_formula ();
+  VecExpr edgeQuant;
+  z3::expr cons = get_qbf_formula ( edgeQuant );
   //std::cout << cons << "\n";
   z3::solver s(ctx);
   s.add( cons );

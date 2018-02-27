@@ -20,11 +20,12 @@ void add_vars( std::string s, std::ofstream& ofs) {
   } while (iss);
 }
 
-void depqbf_file_creator() {
+void depqbf_file_creator(VecExpr& edgeQuant) {
 
   // Begin the printing basic structure
   std::ofstream ofs;
-  ofs.open( "/tmp/depqbf.c", std::ofstream::out );
+  //ofs.open( "/tmp/depqbf.c", std::ofstream::out );
+  ofs.open( "./build/depqbf/examples/depqbf.c", std::ofstream::out );
 
   ofs << "#include <string.h>\n";
   ofs << "#include <stdlib.h>\n";
@@ -42,6 +43,10 @@ void depqbf_file_creator() {
   ofs << "qdpll_configure (depqbf, \"--dep-man=simple\");\n";
   ofs << "/* Enable incremental solving. */\n";
   ofs << "qdpll_configure (depqbf, \"--incremental-use\");\n\n";
+
+  ofs << "/* Enable solution. */\n";
+  ofs << "qdpll_configure (depqbf, \"--qdo\");\n\n";
+
 
   //Open the qdimacs file.
   //std::ifstream infile("/tmp/myfile.qdimacs");
@@ -88,33 +93,37 @@ void depqbf_file_creator() {
     }
   }
   // Print "print formula"
-  ofs <<  "/* Print formula. */ \n" <<  "qdpll_print (depqbf, stdout);\n";
+ // ofs <<  "/* Print formula. */ \n" <<  "qdpll_print (depqbf, stdout);\n";
   ofs << "QDPLLResult res = qdpll_sat (depqbf);\n";
   ofs << "/* Expecting that the formula is satisfiable. */\n";
   ofs << "assert (res == QDPLL_RESULT_SAT);\n";
   ofs << "/* res == 10 means satisfiable, res == 20 means unsatisfiable. */\n";
 
-  ofs << "printf (\"result is: %d\", res);\n";
+  ofs << "\nprintf (\"Result is [10 SAT, 20 UNSAT] : %d\", res);\n";
   ofs << "printf (\"\\n\");\n";
   //std::cout << oquant << "\n";
   // Get a countermodel
   if ( oquant == 5 ) {
     // give the assignments to the variables.
     std::stringstream s(outquantvar);
-    std::string word;
+    unsigned int word = 0;
     std::string var;
 
     ofs << "\n // Printing the assignments \n";
-    for (int i = 0; s >> word; i++) {
-      if (word == "0") {
-        break;
-      }
-      var = "a" + std::to_string(i);
-      ofs << "QDPLLAssignment " << var << " = qdpll_get_value (depqbf," << word <<");\n";
-      ofs << "printf (\"partial model - value of " << word << " : %s\\n\", " << var << " == QDPLL_ASSIGNMENT_UNDEF ? \"undef\" : " << " (" << var << " == QDPLL_ASSIGNMENT_FALSE ? \"false\" : \"true\")); \n\n";
-    }
     
-   std::cout << "First Level existential variables are: " << outquantvar << "\n";
+    for ( auto& var : edgeQuant ) {
+      word = word + 1;
+    //for (int i = 0; s >> word; i++) {
+    //  if (word == "0") {
+     //   break;
+      //}
+      //var = edgeQuant[i];
+      //var = "a" + std::to_string(i);
+      ofs << "QDPLLAssignment " << var << " = qdpll_get_value (depqbf," << word <<");\n";
+      ofs << "printf (\"Value of " << var << " = %s\\n\", " << var << " == QDPLL_ASSIGNMENT_UNDEF ? \"undef\" : " << " (" << var << " == QDPLL_ASSIGNMENT_FALSE ? \"false\" : \"true\")); \n\n";
+    }
+    std::cout << "\nRunning DepQbf wait ... \n\n"; 
+   //std::cout << "First Level existential variables are: " << outquantvar << "\n";
   }
   else {
     std::cout << "Sorry! OuterMost Quantifier is Not Exists. No Assignments.\n";
@@ -128,3 +137,6 @@ void depqbf_file_creator() {
   ofs.close();
 }
 
+//void run_command () {
+// eval $printf("Hi")
+//}

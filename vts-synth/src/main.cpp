@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <z3++.h>
 #include <vector>
+#include <stdlib.h>
 
 #include "z3-util.h"
 #include <vts.h>
@@ -10,7 +11,7 @@ int main() {
     z3::context c;
     
     // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity ]
-    vts  v( c, 2, 2, 2, MODEL_4, 3 );
+    vts  v( c, 2, 3, 2, MODEL_4, 3 );
 
     //z3::model mdl = v.get_vts_for_prob1();
     //z3::model qbf_mdl = v.get_vts_for_qbf();
@@ -22,12 +23,15 @@ int main() {
 
     z3::expr t = c.bool_val( true  );
     z3::expr fal = c.bool_val( false );
+    VecExpr edgeQuant;
 
     z3::expr x = c.bool_const("x");
     z3::expr y = c.bool_const("y");
     z3::expr z = c.bool_const("z");
     z3::expr w = c.bool_const("w");
-    z3::expr f = v.get_qbf_formula();
+    z3::expr f = v.get_qbf_formula( edgeQuant );
+
+
      
     //std::cout << f << "\n";
    // z3::expr f =  x && y;
@@ -67,8 +71,17 @@ int main() {
    // std::cout << "CNF f : " << cnf_f << "\n";
     std::cout << "Printing qdimacs at /tmp/myfile.qdimacs \n";
     qdimacs_printer( cnf_f, qs ); 
-    std::cout << "Creating depqbf input file at /tmp/depqbf.c \n";
-    depqbf_file_creator();
+    //std::cout << "Creating depqbf input file at /tmp/depqbf.c \n";
+    std::cout << "Creating depqbf input file at ./build/depqbf/examples/depqbf.c  \n";
+    depqbf_file_creator(edgeQuant);
+    
+   // Call Bash script to run depqbf 
+    int systemRet = system("./src/bash_script.sh");
+    if(systemRet == -1){
+      std::cout << "SYTEM ERROR !!!\n"; 
+    }
+    //system("./src/bash_script.sh");
+    //run_command();
   }
   
   catch (z3::exception & ex) {
