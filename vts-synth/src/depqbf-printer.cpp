@@ -25,7 +25,7 @@ void depqbf_file_creator(VecExpr& edgeQuant) {
   // Begin the printing basic structure
   std::ofstream ofs;
   //ofs.open( "/tmp/depqbf.c", std::ofstream::out );
-  ofs.open( "./build/depqbf/examples/depqbf.c", std::ofstream::out );
+  ofs.open( "./build/depqbf/examples/depqbf-file.c", std::ofstream::out );
 
   ofs << "#include <string.h>\n";
   ofs << "#include <stdlib.h>\n";
