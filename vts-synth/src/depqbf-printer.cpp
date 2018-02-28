@@ -42,7 +42,7 @@ void depqbf_file_creator(VecExpr& edgeQuant, unsigned int equant_len) {
   ofs << "unsigned int index = 0; \n"; 
   ofs << "int num;\n";
   ofs << "FILE *fptr;\n";
-  ofs << "fptr = fopen ( \"\/tmp\/out.txt\",\"w\");\n";
+  ofs << "fptr = fopen ( \"/tmp/out.txt\",\"w\");\n";
   ofs << "if(fptr == NULL) { \n";
   ofs << "  printf(\"Error!\");\n";   
   ofs << "  exit(1);\n } \n";             
@@ -131,11 +131,14 @@ void depqbf_file_creator(VecExpr& edgeQuant, unsigned int equant_len) {
       //var = edgeQuant[i];
       //var = "a" + std::to_string(i);
       ofs << "QDPLLAssignment " << var << " = qdpll_get_value (depqbf," << word <<");\n";
-      ofs << "if ( " << var << " == QDPLL_ASSIGNMENT_TRUE )  { \n" << "printf (\"Value of " << var << " == True \\n\"); \n" << "interpretation[ index ] == 1;" << " \n index = index + 1; \n  fprintf(fptr,\"%d \\n\", 1); \n  } \n";    
+      ofs << "if ( " << var << " == QDPLL_ASSIGNMENT_TRUE )  { \n" << "printf (\"Value of " << var << " == True \\n\"); \n" << "fprintf(fptr,\"%d \\n\", 1); \n  } \n";    
+        //"interpretation[ index ] == 1;" << " \n index = index + 1; \n 
 
-      ofs << "else if ( " << var << " == QDPLL_ASSIGNMENT_FALSE )  { \n" << "printf (\"Value of " << var << " == False \\n\"); \n" << "interpretation[ index ] == 0;" << " \n index = index + 1; \n fprintf(fptr,\"%d \\n\", 0); \n } \n";    
+      ofs << "else if ( " << var << " == QDPLL_ASSIGNMENT_FALSE )  { \n" << "printf (\"Value of " << var << " == False \\n\"); \n" << "fprintf(fptr,\"%d \\n\", 0); \n } \n";    
+        // "interpretation[ index ] == 0;" << " \n index = index + 1; \n 
       
-      ofs << "else { printf(\"Undef \\n\"); \n" << "interpretation[ index ] == 0;" << " \n index = index + 1;\n fprintf(fptr,\"%d \\n\", 0); }\n";
+      ofs << "else { printf(\"Undef \\n\"); \n" << "fprintf(fptr,\"%d \\n\", 0); }\n";
+       // "interpretation[ index ] == 0;" << " \n index = index + 1;\n 
 
 //      ofs << "printf (\"Value of " << var << " = %s\\n\", " << var << " == QDPLL_ASSIGNMENT_UNDEF ? \"undef\" : " << " (" << var << " == QDPLL_ASSIGNMENT_FALSE ? \"false\" : \"true\")); \n\n";
     }

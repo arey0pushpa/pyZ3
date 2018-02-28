@@ -109,7 +109,7 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
 } //end function
 
 // Helper function to assign values to edge varables
-void preprocess ( VecExpr edgeQuant ) {
+//void preprocess ( VecExpr edgeQuant ) {
   //for (auto& var : edgeQuant ) {
     //unsigned int step = 0;
   //  unsigned int i=0, j=0, q=0, val=0;
@@ -126,7 +126,7 @@ void preprocess ( VecExpr edgeQuant ) {
     // Define interpretation
     //edge[i][j][k] = interpretation [var];
  // }
-}
+//}
 
 // Print depqbf Graph
 void vts::print_graph( std::string filename, VecExpr& edgeQuant, unsigned int denotation[] ) {
