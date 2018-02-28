@@ -5,6 +5,9 @@
 #include <z3-util.h>
 #include <vector>
 
+#define toDigit(c) (c-'0')
+
+
 // Print the graph with coloured edges ##
 //void print_graph( z3::model mdl, unsigned int qval ) {
 //  for( unsigned q = 0; q < E_arity; q++ ) {
@@ -146,10 +149,10 @@ void vts::print_graph( std::string filename, VecExpr& edgeQuant, unsigned int de
     }
     
     for (auto& var : edgeQuant ) {
-      vecElem.push_back(std::to_string (var) );
+      vecElem.push_back( Z3_ast_to_string ( ctx,  var ));
     }
 
-   // for (unsigned int i = 0; i < vecElem.size(); i++ ) {
+   //for (unsigned int i = 0; i < vecElem.size(); i++ ) {
     //  std::cout << vecElem[i] << "\n";
    // }
 
@@ -157,31 +160,32 @@ void vts::print_graph( std::string filename, VecExpr& edgeQuant, unsigned int de
     std::string line;
     if ( myfile ) {
       while (std::getline( myfile, line )) {
-        std::cout << "The current denotation is " << line << "\n";
-        if ( line == "1" ) {
-          std::cout << "HIIIIIIIIIII.... \n";
+        //std::cout << "The current denotation is " << line << "\n";
+        if ( line == "1 " ) {
           unsigned int dstep = 0;
           unsigned int x=0, y=0;
-          //std::string var = std::to_string( vecElem[step] ); 
-          for( char c : vecElem[step] ) {
+          std::string var = vecElem[step]; 
+          //std::cout << "The value of var = " << var << "\n"; 
+          for( char c : var ) {
             if ( c == '_' || c == 'e' )  {
              continue;
             }
             else {
-              auto val = int(c); 
-              dstep == 0 ? x = val : y = val; 
-              step += 1;
+              //std::cout << "The value of c = " << c << "\n";
+              auto val = toDigit(c); 
+              //std::cout << "The value of val = " << val << "\n";
+              dstep == 0 ? x = val : (dstep == 1 ? y = val: true) ; 
+              dstep += 1;
             }
           }
-          std::cout << "Value of x = " << x << "\nValue of y = " << y << "\n";  
-          std::string label = "";
+          //std::cout << "Value of x = " << x << "\nValue of y = " << y << "\n";  
+          std::string label = "M";
           ofs << std::to_string(x) << "-> " << std::to_string(y)
                     <<  "[label="  << label << ",color=" << color
                     << ",style=" << style << "]\n";
           step += 1;
         }
         else { 
-          //std::cout << "HEEEEEEEE.... \n";
           step += 1;
         }
       }
