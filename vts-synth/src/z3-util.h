@@ -39,7 +39,7 @@ std::vector<z3::expr> cnf_converter( z3::expr& fml );
 void qdimacs_printer(std::vector<z3::expr>& cnf_fml, VecsExpr& m_var );
 
 // Add function for the depqbf file creator.
-void depqbf_file_creator(VecExpr& edgeQuant);
+void depqbf_file_creator(VecExpr& edgeQuant, unsigned int equant_len);
 
 // Add function for DepQbf run
 int depqbf_run_with_timeout();

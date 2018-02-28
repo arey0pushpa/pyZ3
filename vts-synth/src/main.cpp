@@ -4,6 +4,8 @@
 #include <stdlib.h>
 
 #include <iostream>
+#include <chrono>
+#include <ctime>
 
 #include "z3-util.h"
 #include <vts.h>
@@ -13,7 +15,11 @@ int main() {
     z3::context c;
     
     // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity ]
-    vts  v( c, 2, 3, 2, MODEL_4, 3 );
+    unsigned int N = 2;
+    unsigned int M = 2;
+    unsigned int Q = 2;
+
+    vts  v( c, M, N, Q, MODEL_4, 3 );
 
     //z3::model mdl = v.get_vts_for_prob1();
     //z3::model qbf_mdl = v.get_vts_for_qbf();
@@ -26,6 +32,8 @@ int main() {
     z3::expr t = c.bool_val( true  );
     z3::expr fal = c.bool_val( false );
     VecExpr edgeQuant;
+    unsigned int equant_len = N * (N - 1) * Q;
+    unsigned int denotation[equant_len];
 
     z3::expr x = c.bool_const("x");
     z3::expr y = c.bool_const("y");
@@ -72,7 +80,7 @@ int main() {
     qdimacs_printer( cnf_f, qs ); 
     //std::cout << "Creating depqbf input file at /tmp/depqbf.c \n";
     std::cout << "Creating depqbf input file at ./build/depqbf/examples/depqbf.c  \n";
-    depqbf_file_creator(edgeQuant);
+    depqbf_file_creator(edgeQuant, equant_len);
 
     bool timedout = false;
 
@@ -82,6 +90,8 @@ int main() {
     catch(std::runtime_error& e) {
       std::cout << e.what() << std::endl;
       timedout = true;
+      return 0;
+      //exit(0);
     }
 
     if(!timedout)
@@ -95,7 +105,7 @@ int main() {
     //system("./src/bash_script.sh");
     
     // Get graph for depqbf-file
-    //v.print_graph( "/tmp/dep_vts.dot", edgeQuant ); 
+    v.print_graph( "/tmp/dep_vts.dot", edgeQuant, denotation); 
     //std::cout << "\nPrinting depqbf graph at /tmp/dep_vts.dot \n";
   }
   

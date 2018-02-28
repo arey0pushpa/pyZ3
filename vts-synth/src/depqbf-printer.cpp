@@ -5,6 +5,7 @@
 #include "z3-util.h"
 
 
+
 // Adds all the var to the depqbf file. 
 void add_vars( std::string s, std::ofstream& ofs) {
   std::stringstream iss(s);
@@ -20,7 +21,7 @@ void add_vars( std::string s, std::ofstream& ofs) {
   } while (iss);
 }
 
-void depqbf_file_creator(VecExpr& edgeQuant) {
+void depqbf_file_creator(VecExpr& edgeQuant, unsigned int equant_len) {
 
   // Begin the printing basic structure
   std::ofstream ofs;
@@ -32,10 +33,20 @@ void depqbf_file_creator(VecExpr& edgeQuant) {
   ofs << "#include <stdio.h>\n";
   ofs << "#include <assert.h>\n";
   ofs << "#include \"../qdpll.h\"\n\n";
+  //ofs << "#include <map>"
 
   ofs << "int main (int argc, char** argv) \n";
   ofs << "{ \n";
 
+  ofs << "unsigned int interpretation[" << equant_len << "];\n";
+  ofs << "unsigned int index = 0; \n"; 
+  ofs << "int num;\n";
+  ofs << "FILE *fptr;\n";
+  ofs << "fptr = fopen ( \"\/tmp\/out.txt\",\"w\");\n";
+  ofs << "if(fptr == NULL) { \n";
+  ofs << "  printf(\"Error!\");\n";   
+  ofs << "  exit(1);\n } \n";             
+  //ofs << "std::map<VecExpr,bool> interpretation;"; 
   ofs << "/* Create solver instance. */\n";
   ofs << "QDPLL *depqbf = qdpll_create ();\n";
 
@@ -120,8 +131,16 @@ void depqbf_file_creator(VecExpr& edgeQuant) {
       //var = edgeQuant[i];
       //var = "a" + std::to_string(i);
       ofs << "QDPLLAssignment " << var << " = qdpll_get_value (depqbf," << word <<");\n";
-      ofs << "printf (\"Value of " << var << " = %s\\n\", " << var << " == QDPLL_ASSIGNMENT_UNDEF ? \"undef\" : " << " (" << var << " == QDPLL_ASSIGNMENT_FALSE ? \"false\" : \"true\")); \n\n";
+      ofs << "if ( " << var << " == QDPLL_ASSIGNMENT_TRUE )  { \n" << "printf (\"Value of " << var << " == True \\n\"); \n" << "interpretation[ index ] == 1;" << " \n index = index + 1; \n  fprintf(fptr,\"%d \\n\", 1); \n  } \n";    
+
+      ofs << "else if ( " << var << " == QDPLL_ASSIGNMENT_FALSE )  { \n" << "printf (\"Value of " << var << " == False \\n\"); \n" << "interpretation[ index ] == 0;" << " \n index = index + 1; \n fprintf(fptr,\"%d \\n\", 0); \n } \n";    
+      
+      ofs << "else { printf(\"Undef \\n\"); \n" << "interpretation[ index ] == 0;" << " \n index = index + 1;\n fprintf(fptr,\"%d \\n\", 0); }\n";
+
+//      ofs << "printf (\"Value of " << var << " = %s\\n\", " << var << " == QDPLL_ASSIGNMENT_UNDEF ? \"undef\" : " << " (" << var << " == QDPLL_ASSIGNMENT_FALSE ? \"false\" : \"true\")); \n\n";
     }
+    ofs << "printf(\"\\n\"); \n";
+    ofs << "fclose(fptr);\n";
     std::cout << "\nRunning DepQbf wait ... \n\n"; 
    //std::cout << "First Level existential variables are: " << outquantvar << "\n";
   }

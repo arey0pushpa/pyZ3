@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vts.h>
 #include <z3-util.h>
+#include <vector>
 
 // Print the graph with coloured edges ##
 //void print_graph( z3::model mdl, unsigned int qval ) {
@@ -106,9 +107,91 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
 
 // Helper function to assign values to edge varables
 void preprocess ( VecExpr edgeQuant ) {
-
+  //for (auto& var : edgeQuant ) {
+    //unsigned int step = 0;
+  //  unsigned int i=0, j=0, q=0, val=0;
+//    for( char c : var ) {
+//       if ( c == "_" || c == "e" )  {
+//         continue;
+//       }
+//       else {
+//         val = int(c); 
+//         step == 0 ? i = val : (step == 1? j = val : q = val); 
+//         step += 1;
+//       }
+//    }
+    // Define interpretation
+    //edge[i][j][k] = interpretation [var];
+ // }
 }
-// Print depqbf Graph
-void vts::print_graph( std::string filename, VecExpr& edgeQuant) {
 
+// Print depqbf Graph
+void vts::print_graph( std::string filename, VecExpr& edgeQuant, unsigned int denotation[] ) {
+    std::string style = "solid";
+    std::string color = "blue";
+    std::string node_vec; 
+    std::vector<std::string> vecElem;
+    unsigned int step = 0;
+
+    std::cout << "dumping dot file: " << filename << "\n";
+
+    std::ofstream ofs;
+    ofs.open ( filename, std::ofstream::out );
+
+    ofs << "digraph prog {\n";
+    for( unsigned i = 0 ; i < N; i++ ) {
+      node_vec = std::to_string(i);
+      //node_vec = node_vec ;
+      ofs << std::to_string(i) << "[label=\"" << node_vec << "\"]\n";
+    }
+    
+    for (auto& var : edgeQuant ) {
+      vecElem.push_back(std::to_string (var) );
+    }
+
+   // for (unsigned int i = 0; i < vecElem.size(); i++ ) {
+    //  std::cout << vecElem[i] << "\n";
+   // }
+
+    std::ifstream myfile ( "/tmp/out.txt" );
+    std::string line;
+    if ( myfile ) {
+      while (std::getline( myfile, line )) {
+        std::cout << "The current denotation is " << line << "\n";
+        if ( line == "1" ) {
+          std::cout << "HIIIIIIIIIII.... \n";
+          unsigned int dstep = 0;
+          unsigned int x=0, y=0;
+          //std::string var = std::to_string( vecElem[step] ); 
+          for( char c : vecElem[step] ) {
+            if ( c == '_' || c == 'e' )  {
+             continue;
+            }
+            else {
+              auto val = int(c); 
+              dstep == 0 ? x = val : y = val; 
+              step += 1;
+            }
+          }
+          std::cout << "Value of x = " << x << "\nValue of y = " << y << "\n";  
+          std::string label = "";
+          ofs << std::to_string(x) << "-> " << std::to_string(y)
+                    <<  "[label="  << label << ",color=" << color
+                    << ",style=" << style << "]\n";
+          step += 1;
+        }
+        else { 
+          //std::cout << "HEEEEEEEE.... \n";
+          step += 1;
+        }
+      }
+      
+      myfile.close();
+    }
+    else {
+      std::cout << "No file named out.txt in temp folder... \n" << std::endl;
+    }
+
+    ofs << "}\n";
+    
 } //end function

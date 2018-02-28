@@ -135,7 +135,7 @@ public:
   z3::expr is_qth_edge_present( unsigned i, unsigned j, unsigned q );
   z3::expr is_undirected_dumped_edge(unsigned i, unsigned j, Vec3Expr& dump1);
   void dump_dot( std::string filename, z3::model mdl);
-  void print_graph( std::string filename, VecExpr& edgeQuant );
+  void print_graph( std::string filename, VecExpr& edgeQuant, unsigned int denotation[] );
 };
 
 

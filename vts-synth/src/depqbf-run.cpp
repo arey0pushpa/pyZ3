@@ -3,11 +3,15 @@
 #include <mutex>
 #include <condition_variable>
 #include <chrono>
+#include <ctime>
+
 
 
 int depqbf_run_with_timeout()
 {
-    std::chrono::milliseconds span (100);
+    auto start = std::chrono::system_clock::now();
+
+    std::chrono::milliseconds span (10000);
     std::mutex m;
     std::condition_variable cv;
     int retValue;
@@ -22,8 +26,12 @@ int depqbf_run_with_timeout()
     
     {
         std::unique_lock<std::mutex> l(m);
-        if(cv.wait_for(l, span) == std::cv_status::timeout) 
+        if(cv.wait_for(l, span) == std::cv_status::timeout) { 
+            auto end = std::chrono::system_clock::now();
+            std::chrono::duration<double> elapsed_seconds = end-start;
+            std::cout << elapsed_seconds.count() << "\n";
             throw std::runtime_error("Timeout");
+        }
     }
    
     if(retValue == -1){
@@ -31,5 +39,8 @@ int depqbf_run_with_timeout()
      }
 
  //   std::cout << "Return Value is : " << retValue << "\n";
+ //   auto end = std::chrono::system_clock::now();
+    //std::chrono::duration<double> elapsed_seconds = end-start;
+//    std::cout << end - start << "\n";
     return retValue;    
 }
