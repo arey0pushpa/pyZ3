@@ -91,14 +91,16 @@ int main() {
         //system("./src/bash_script.sh");
     }); 
     
-    std::cout << "Running depqbf ... " << "\n";
+    //std::cout << "Running depqbf ... " << "\n";
     std::future_status status;
 
     status = future.wait_for(std::chrono::seconds(10));
 
     if ( status == std::future_status::timeout ) { 
       std::cout << "TimeOut! \n";
+      exit(0);
       std::terminate();
+      return 1;
     }
     if ( status == std::future_status::ready ) 
       std::cout << "Sucess! \n";
