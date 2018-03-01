@@ -2,6 +2,7 @@
 #include <z3++.h>
 #include <vector>
 #include <stdlib.h>
+#include <future>
 
 #include <iostream>
 #include <chrono>
@@ -82,21 +83,41 @@ int main() {
     std::cout << "Creating depqbf input file at ./build/depqbf/examples/depqbf.c  \n";
     depqbf_file_creator(edgeQuant, equant_len);
 
-    bool timedout = false;
+    //bool timedout = false;
+    std::future<int> future = std::async(std::launch::async, [](){ 
+        auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
+        //std::this_thread::sleep_for(std::chrono::seconds(3));
+        return retVal;  
+        //system("./src/bash_script.sh");
+    }); 
+    
+    std::cout << "Running depqbf ... " << "\n";
+    std::future_status status;
 
+    status = future.wait_for(std::chrono::seconds(10));
+
+    if ( status == std::future_status::timeout ) { 
+      std::cout << "TimeOut! \n";
+      std::terminate();
+    }
+    if ( status == std::future_status::ready ) 
+      std::cout << "Sucess! \n";
+    /*
     try {
       depqbf_run_with_timeout (); 
     }
     catch(std::runtime_error& e) {
       std::cout << e.what() << std::endl;
       timedout = true;
-      return 0;
+      //std::terminate();
+      //return 0;
       //exit(0);
     }
 
     if(!timedout)
       std::cout << "Success" << std::endl;
-
+    //std::terminate();
+*/
     // Call Bash script to run depqbf 
     //int systemRet = system("./src/bash_script.sh");
     //if(ret == -1){
