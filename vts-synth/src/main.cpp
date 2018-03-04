@@ -5,18 +5,87 @@
 #include <future>
 
 #include <iostream>
+#include <unistd.h>
 #include <chrono>
 #include <ctime>
+//#include <boost>
 
 #include "z3-util.h"
 #include <vts.h>
 
-int main() {
+/*
+// use Boost to parse command line option
+namespace po = boost::program_options;
+// Declare the supported options.
+po::options_description desc("Allowed options");
+desc.add_options()
+    ("help", "produce help message")
+    ("compression", po::value<std::string>(), "Specify option to run depqbf")
+;
 
+po::variables_map vm;
+po::store(po::parse_command_line(ac, av, desc), vm);
+po::notify(vm);    
+
+if (vm.count("help")) {
+    cout << desc << "\n";
+    return 1;
+}
+
+if (vm.count("use-qdimacs")) {
+    cout << "Use Qdimacs File for getting the Model " 
+ << vm["use-qdimacs"].as<std::string>() << ".\n";
+} else {
+    cout << "No Option given.\n";
+}
+
+*/
+
+//int main() {
+int main(int argc, char** argv) {
+
+    int opt;
+    std::string input = "";
+    bool flagA = false;
+    bool flagB = false;
+
+    // Retrieve the (non-option) argument:
+    if ( (argc <= 1) || (argv[argc-1] == NULL) || (argv[argc-1][0] == '-') ) {  // there is NO input...
+        std::cerr << "No argument provided!" << std::endl;
+        //return 1;
+    }
+    else {  // there is an input...
+        input = argv[argc-1];
+    }
+
+    //std::cout << "input = " << input << std::endl;
+
+    // Shut GetOpt error messages down (return '?'): 
+    opterr = 0;
+
+    // Retrieve the options:
+    while ( (opt = getopt(argc, argv, "qb")) != -1 ) {  // for each option...
+        switch ( opt ) {
+            case 'q':
+                    flagA = true;
+                break;
+            case 'b':
+                    flagB = true;
+                break;
+            case '?':  // unknown option...
+                std::cerr << "Unknown option: '" << char(optopt) << "'!" << std::endl;
+                break;
+        }
+    }
+
+    //std::cout << "flagA = " << flagA << std::endl;
+    //std::cout << "flagB = " << flagB << std::endl;
+ 
+    //if (flagA == true) 
     z3::context c;
     
     // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity ]
-    unsigned int N = 2;
+    unsigned int N = 3;
     unsigned int M = 2;
     unsigned int Q = 2;
 
@@ -85,8 +154,12 @@ int main() {
 
     //bool timedout = false;
     std::future<int> future = std::async(std::launch::async, [](){ 
+
+        auto retVal  = system ("cd ./build/depqbf/examples; ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
+       /* 
         auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
         //std::this_thread::sleep_for(std::chrono::seconds(3));
+        */
         return retVal;  
         //system("./src/bash_script.sh");
     }); 
@@ -128,7 +201,13 @@ int main() {
     //system("./src/bash_script.sh");
     
     // Get graph for depqbf-file
-    v.print_graph( "/tmp/dep_vts.dot", edgeQuant, denotation); 
+    if (flagA == true || flagB == true) { 
+      v.print_graph( "/tmp/dep_vts.dot", edgeQuant, denotation); 
+      auto retVal = system("xdot /tmp/dep_vts.dot");
+      if(retVal == -1) 
+        std::cout << "SYTEM ERROR !!!\n"; 
+    }
+
     //std::cout << "\nPrinting depqbf graph at /tmp/dep_vts.dot \n";
   }
   

@@ -4,6 +4,8 @@
 #include <vts.h>
 #include <z3-util.h>
 #include <vector>
+#include <utility>      // std::pair, std::make_pair
+
 
 #define toDigit(c) (c-'0')
 
@@ -78,8 +80,8 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
         if (i == j)
           continue;
         for( unsigned q = 0; q < E_arity; q++ ) {
-	if ( q == 0 ) {
-	  if ( is_true(edges[i][j][q], mdl ) ) {
+	  if ( q == 0 ) {
+	    if ( is_true(edges[i][j][q], mdl ) ) {
 	    style = "solid";
 	    color = "black";
 	    
@@ -128,6 +130,13 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
  // }
 //}
 
+
+// Get xy 
+std::pair<int, int> getxy (std::string var) {
+  std::pair<int, int> p2( toDigit(var[2]) , toDigit(var[4]) );
+  return p2;
+}
+
 // Print depqbf Graph
 void vts::print_graph( std::string filename, VecExpr& edgeQuant, unsigned int denotation[] ) {
     std::string style = "solid";
@@ -158,9 +167,36 @@ void vts::print_graph( std::string filename, VecExpr& edgeQuant, unsigned int de
 
     std::ifstream myfile ( "/tmp/out.txt" );
     std::string line;
+    unsigned int x=0, y=0;
     if ( myfile ) {
       while (std::getline( myfile, line )) {
         //std::cout << "The current denotation is " << line << "\n";
+        
+        if (step == 0) { 
+          step += 1;
+          continue;
+        }
+        else if ( step >= vecElem.size() ){
+          break;
+        }
+        else {
+          // lit = parse second string in a line() // return integer;
+          unsigned int lit = toDigit ( line.at(1) ); 
+          if ( lit >= 0 ) {
+            std::pair<int, int> pr =  getxy( vecElem[step - 1] );
+            x = pr.first; 
+            y = pr.second;
+            //std::cout << "Value of x = " << x << "\nValue of y = " << y << "\n";  
+            std::string label = "M";
+            ofs << std::to_string(x) << "-> " << std::to_string(y)
+                      <<  "[label="  << label << ",color=" << color
+                      << ",style=" << style << "]\n";
+          }
+
+          step += 1;
+        }
+
+        /* Old code By using C Front end 
         if ( line == "1 " ) {
           unsigned int dstep = 0;
           unsigned int x=0, y=0;
@@ -188,7 +224,9 @@ void vts::print_graph( std::string filename, VecExpr& edgeQuant, unsigned int de
         else { 
           step += 1;
         }
+      */
       }
+
       
       myfile.close();
     }
