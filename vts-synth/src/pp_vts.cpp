@@ -5,10 +5,9 @@
 #include <z3-util.h>
 #include <vector>
 #include <utility>      // std::pair, std::make_pair
-
+#include <map>
 
 #define toDigit(c) (c-'0')
-
 
 // Print the graph with coloured edges ##
 //void print_graph( z3::model mdl, unsigned int qval ) {
@@ -80,28 +79,28 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
         if (i == j)
           continue;
         for( unsigned q = 0; q < E_arity; q++ ) {
-	  if ( q == 0 ) {
-	    if ( is_true(edges[i][j][q], mdl ) ) {
-	    style = "solid";
-	    color = "black";
-	    
-	    std::string label = "m";
-	    ofs << std::to_string(i) << "-> " << std::to_string(j)
-                  <<  "[label="  << label << ",color=" << color
-                  << ",style=" << style << "]\n";
+          if ( q == 0 ) {
+            if ( is_true(edges[i][j][q], mdl ) ) {
+            style = "solid";
+            color = "black";
+            
+            std::string label = "m";
+            ofs << std::to_string(i) << "-> " << std::to_string(j)
+                        <<  "[label="  << label << ",color=" << color
+                        << ",style=" << style << "]\n";
             }
-	  }
+          }
 
-	if ( q == 1 ) {
-	  if ( is_true( edges[i][j][q], mdl ) ) {
-	    style = "solid";
-	    color = "yellow";
-	    std::string label =  "m" ;
-              ofs << std::to_string(i) << "-> " << std::to_string(j)
-                  <<  "[label="  << label << ",color=" << color
-                  << ",style=" << style << "]\n";
-	  }
-        }	  
+        if ( q == 1 ) {
+          if ( is_true( edges[i][j][q], mdl ) ) {
+            style = "solid";
+            color = "yellow";
+            std::string label =  "m" ;
+                    ofs << std::to_string(i) << "-> " << std::to_string(j)
+                        <<  "[label="  << label << ",color=" << color
+                        << ",style=" << style << "]\n";
+          }
+            }	  
 	  } // end q
       } // end j
     } // end i
@@ -110,26 +109,6 @@ void vts::dump_dot( std::string filename, z3::model mdl) {
 
 } //end function
 
-// Helper function to assign values to edge varables
-//void preprocess ( VecExpr edgeQuant ) {
-  //for (auto& var : edgeQuant ) {
-    //unsigned int step = 0;
-  //  unsigned int i=0, j=0, q=0, val=0;
-//    for( char c : var ) {
-//       if ( c == "_" || c == "e" )  {
-//         continue;
-//       }
-//       else {
-//         val = int(c); 
-//         step == 0 ? i = val : (step == 1? j = val : q = val); 
-//         step += 1;
-//       }
-//    }
-    // Define interpretation
-    //edge[i][j][k] = interpretation [var];
- // }
-//}
-
 
 // Get xy 
 std::pair<int, int> getxy (std::string var) {
@@ -137,103 +116,154 @@ std::pair<int, int> getxy (std::string var) {
   return p2;
 }
 
+void print_denotation_console ( std::map<std::string,int> denotation_map ) {
+  for (auto& t : denotation_map) {
+    std::string val;  
+    t.second >= 0 ? val = "True" : val = "False";
+    std::cout << t.first << " = " << val << "\n";
+  }
+}
+
+void create_map ( std::map<std::string,int>& denotation_map, std::vector<std::string> vecElem, std::string& depqbfRun, std::vector< std::pair <int,int> >& xyPair  ) {
+    unsigned int step = 0;
+    std::ifstream myfile ( "/tmp/out.txt" );
+    std::string line;
+    if ( myfile ) {
+      while (std::getline( myfile, line )) {
+        //std::stringstream  stream(line);
+        //std::string  word;
+        if (step == 0) { 
+          int lit = toDigit ( line.at(6) ); 
+          if ( lit == 0 ) {
+            depqbfRun = "Formula is UNSAT";
+            break;
+          }else {
+            depqbfRun = "Formula is SAT";
+          }
+          step += 1;
+          continue;
+        }
+        else if ( step > vecElem.size() ){
+          break;
+        }
+        else {
+          std::stringstream  stream(line);
+          std::string  word;
+          stream >> word; stream >> word;
+          int lit = std::stoi( word ); 
+          //std::cout << lit << "\n";
+          //std::cout << line.at(1) << "\n";
+          std::string var = vecElem[step - 1]; 
+          denotation_map [ var ] = lit; 
+          // Can be avoided by checking only if negative.
+          xyPair.push_back( std::make_pair( toDigit (var[2]) , toDigit(var[4]) ) );
+          step += 1;
+        }
+      }
+      
+      myfile.close();
+    }else {
+        std::cout << "No file named out.txt in temp folder... \n" << std::endl;
+  }
+  myfile.close();
+}
+
 // Print depqbf Graph
-void vts::print_graph( std::string filename, VecExpr& edgeQuant, unsigned int denotation[] ) {
+void vts::print_graph( std::string filename, VecExpr& edgeQuant, bool flagB, bool flagC ) {
     std::string style = "solid";
     std::string color = "blue";
     std::string node_vec; 
     std::vector<std::string> vecElem;
-    unsigned int step = 0;
+    std::map<std::string,int> denotation_map;
+    std::string depqbfRun;
+    unsigned int dstep = 0;
 
-    std::cout << "dumping dot file: " << filename << "\n";
-
-    std::ofstream ofs;
-    ofs.open ( filename, std::ofstream::out );
-
-    ofs << "digraph prog {\n";
-    for( unsigned i = 0 ; i < N; i++ ) {
-      node_vec = std::to_string(i);
-      //node_vec = node_vec ;
-      ofs << std::to_string(i) << "[label=\"" << node_vec << "\"]\n";
-    }
-    
     for (auto& var : edgeQuant ) {
       vecElem.push_back( Z3_ast_to_string ( ctx,  var ));
     }
 
-   //for (unsigned int i = 0; i < vecElem.size(); i++ ) {
-    //  std::cout << vecElem[i] << "\n";
-   // }
+    //for ( auto& var: vecElem ) {
+    //  std::cout << var << "\n";
+    //}
+    
+    std::vector< std::pair <int, int> > xyPair;
+    
+    create_map ( denotation_map, vecElem , depqbfRun, xyPair );
 
-    std::ifstream myfile ( "/tmp/out.txt" );
-    std::string line;
-    unsigned int x=0, y=0;
-    if ( myfile ) {
-      while (std::getline( myfile, line )) {
-        //std::cout << "The current denotation is " << line << "\n";
-        
-        if (step == 0) { 
-          step += 1;
-          continue;
-        }
-        else if ( step >= vecElem.size() ){
-          break;
-        }
-        else {
-          // lit = parse second string in a line() // return integer;
-          unsigned int lit = toDigit ( line.at(1) ); 
-          if ( lit >= 0 ) {
-            std::pair<int, int> pr =  getxy( vecElem[step - 1] );
-            x = pr.first; 
-            y = pr.second;
-            //std::cout << "Value of x = " << x << "\nValue of y = " << y << "\n";  
-            std::string label = "M";
-            ofs << std::to_string(x) << "-> " << std::to_string(y)
-                      <<  "[label="  << label << ",color=" << color
-                      << ",style=" << style << "]\n";
-          }
+    std::cout << depqbfRun << "\n"; 
 
-          step += 1;
-        }
+    //for (auto& var: denotation_map ) {
+    //  std::cout << "<" <<  var.first << "," << var.second  << ">" <<"\n" ;
+    //}
+    //for (auto& var: xyPair ) {
+    //  std::cout << "<" <<  var.first << "," << var.second  << ">" <<"\n" ;
+    //}
 
-        /* Old code By using C Front end 
-        if ( line == "1 " ) {
-          unsigned int dstep = 0;
-          unsigned int x=0, y=0;
-          std::string var = vecElem[step]; 
-          //std::cout << "The value of var = " << var << "\n"; 
-          for( char c : var ) {
-            if ( c == '_' || c == 'e' )  {
-             continue;
-            }
-            else {
-              //std::cout << "The value of c = " << c << "\n";
-              auto val = toDigit(c); 
-              //std::cout << "The value of val = " << val << "\n";
-              dstep == 0 ? x = val : (dstep == 1 ? y = val: true) ; 
-              dstep += 1;
-            }
-          }
-          //std::cout << "Value of x = " << x << "\nValue of y = " << y << "\n";  
-          std::string label = "M";
-          ofs << std::to_string(x) << "-> " << std::to_string(y)
-                    <<  "[label="  << label << ",color=" << color
-                    << ",style=" << style << "]\n";
-          step += 1;
-        }
-        else { 
-          step += 1;
-        }
-      */
+    if ( flagC == true ) {
+      print_denotation_console ( denotation_map );
+    }
+
+    if (flagB == true) {
+      std::cout << "dumping dot file: " << filename << "\n";
+
+      std::ofstream ofs;
+      ofs.open ( filename, std::ofstream::out );
+
+      ofs << "digraph prog {\n";
+      for( unsigned i = 0 ; i < N; i++ ) {
+        node_vec = std::to_string(i);
+        ofs << std::to_string(i) << "[label=\"" << node_vec << "\"]\n";
       }
 
-      
-      myfile.close();
+      for ( auto& val: denotation_map) {
+        auto sign = val.second;
+        //auto y = pr.second;
+        //std::cout << y << "\n";
+        if ( sign >= 0 ) {
+          auto x = xyPair[dstep].first; 
+          auto y = xyPair[dstep].second; 
+          //auto x = pr.first; 
+          //std::cout << "Value of x = " << x << "\nValue of y = " << y << "\n";  
+          std::string label = "M";
+          ofs << std::to_string (x) << "-> " <<  std::to_string (y)
+              <<  "[label="  << label << ",color=" << color
+              << ",style=" << style << "]\n";
+          dstep += 1;
+        }
+      }
+      ofs << "}\n";
     }
-    else {
-      std::cout << "No file named out.txt in temp folder... \n" << std::endl;
-    }
-
-    ofs << "}\n";
     
 } //end function
+
+
+
+/* Code of graph printing using C Front end 
+if ( line == "1 " ) {
+  unsigned int dstep = 0;
+  unsigned int x=0, y=0;
+  std::string var = vecElem[step]; 
+  //std::cout << "The value of var = " << var << "\n"; 
+  for( char c : var ) {
+    if ( c == '_' || c == 'e' )  {
+     continue;
+    }
+    else {
+      //std::cout << "The value of c = " << c << "\n";
+      auto val = toDigit(c); 
+      //std::cout << "The value of val = " << val << "\n";
+      dstep == 0 ? x = val : (dstep == 1 ? y = val: true) ; 
+      dstep += 1;
+    }
+  }
+  //std::cout << "Value of x = " << x << "\nValue of y = " << y << "\n";  
+  std::string label = "M";
+  ofs << std::to_string(x) << "-> " << std::to_string(y)
+            <<  "[label="  << label << ",color=" << color
+            << ",style=" << style << "]\n";
+  step += 1;
+}
+else { 
+  step += 1;
+}
+*/

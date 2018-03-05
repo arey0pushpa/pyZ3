@@ -4,6 +4,9 @@
 #include <vector>
 #include <z3++.h>
 
+//#define toDigit(c) (c-'0')
+
+
 template <class T>
 inline
 std::vector<T> to_vector( const std::vector<std::vector<T>>& double_vec ) {

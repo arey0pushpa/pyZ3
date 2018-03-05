@@ -4,11 +4,13 @@
 #include <stdlib.h>
 #include <future>
 
+
 #include <iostream>
+#include <fstream>
+
 #include <unistd.h>
 #include <chrono>
 #include <ctime>
-//#include <boost>
 
 #include "z3-util.h"
 #include <vts.h>
@@ -41,13 +43,13 @@ if (vm.count("use-qdimacs")) {
 
 */
 
-//int main() {
 int main(int argc, char** argv) {
 
     int opt;
     std::string input = "";
     bool flagA = false;
     bool flagB = false;
+    bool flagC = false;
 
     // Retrieve the (non-option) argument:
     if ( (argc <= 1) || (argv[argc-1] == NULL) || (argv[argc-1][0] == '-') ) {  // there is NO input...
@@ -64,28 +66,30 @@ int main(int argc, char** argv) {
     opterr = 0;
 
     // Retrieve the options:
-    while ( (opt = getopt(argc, argv, "qb")) != -1 ) {  // for each option...
+    while ( (opt = getopt(argc, argv, "fgp")) != -1 ) {  // for each option...
         switch ( opt ) {
-            case 'q':
+            case 'f':
                     flagA = true;
                 break;
-            case 'b':
+            case 'g':
                     flagB = true;
+                break;
+            case 'p':
+                    flagC = true;
                 break;
             case '?':  // unknown option...
                 std::cerr << "Unknown option: '" << char(optopt) << "'!" << std::endl;
                 break;
         }
     }
-
-    //std::cout << "flagA = " << flagA << std::endl;
-    //std::cout << "flagB = " << flagB << std::endl;
- 
+    
+    //std::cout << flagB << "\n";
+    //std::cout << flagC << "\n";
     //if (flagA == true) 
     z3::context c;
     
     // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity ]
-    unsigned int N = 3;
+    unsigned int N = 2;
     unsigned int M = 2;
     unsigned int Q = 2;
 
@@ -103,7 +107,7 @@ int main(int argc, char** argv) {
     z3::expr fal = c.bool_val( false );
     VecExpr edgeQuant;
     unsigned int equant_len = N * (N - 1) * Q;
-    unsigned int denotation[equant_len];
+    //unsigned int denotation[equant_len];
 
     z3::expr x = c.bool_const("x");
     z3::expr y = c.bool_const("y");
@@ -112,21 +116,19 @@ int main(int argc, char** argv) {
     z3::expr f = v.get_qbf_formula( edgeQuant );
 
     //std::cout << f << "\n";
-   // z3::expr f =  x && y;
    // z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
     //z3::expr f = forall(x, exists( y, !(x && y ) ) ) ;
     //z3::expr f = forall( x, exists( w, w && forall ( y,  x&& y ) ) ) ;
     //z3::expr f = forall( x, exists ( y,  forall (w, exists (z, x && y && w && z)  )) );
-    // z3::expr f =  t;
    //z3::expr f = forall( x, forall ( y, exists (z,  z == x ||  z == y) )) ; 
     //std::cout << "The sort of the formula f is: " << Z3_get_sort( c, f ) << "\n";
 
-//  std::cout << "At least this is working \n.";
     //auto fml_f = negform ( c, f ); 
     //negform ( c, f ); 
     
     VecsExpr qs;
     auto prenex_f = prenex( f, qs );
+    
     /* Print the formaula in pcnf  Avoid printing now ! */
     //std::cout << "Prenexed f : " << prenex_f << "\n";
     // std::cout << "Quants :\n";
@@ -137,14 +139,16 @@ int main(int argc, char** argv) {
         std::cout << e << " ";
       std::cout << "\n";
     }
-*/
+    */
+
     auto cnf_f = cnf_converter( prenex_f );
 
     /* Avoid printing for now! 
     std::cout << "CNF body :\n";
     for( auto& cl : cnf_f )
         std::cout << cl << "\n";
-*/
+   */
+
    // std::cout << "CNF f : " << cnf_f << "\n";
     std::cout << "Printing qdimacs at /tmp/myfile.qdimacs \n";
     qdimacs_printer( cnf_f, qs ); 
@@ -154,12 +158,11 @@ int main(int argc, char** argv) {
 
     //bool timedout = false;
     std::future<int> future = std::async(std::launch::async, [](){ 
-
+   //   if ( flagA == false ) {
         auto retVal  = system ("cd ./build/depqbf/examples; ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
-       /* 
-        auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
-        //std::this_thread::sleep_for(std::chrono::seconds(3));
-        */
+    //  } else {
+      //    auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
+      //    }
         return retVal;  
         //system("./src/bash_script.sh");
     }); 
@@ -167,7 +170,7 @@ int main(int argc, char** argv) {
     //std::cout << "Running depqbf ... " << "\n";
     std::future_status status;
 
-    status = future.wait_for(std::chrono::seconds(10));
+    status = future.wait_for(std::chrono::seconds(100));
 
     if ( status == std::future_status::timeout ) { 
       std::cout << "TimeOut! \n";
@@ -175,40 +178,33 @@ int main(int argc, char** argv) {
       std::terminate();
       return 1;
     }
-    if ( status == std::future_status::ready ) 
-      std::cout << "Sucess! \n";
-    /*
-    try {
-      depqbf_run_with_timeout (); 
+    if ( status == std::future_status::ready ) { 
+      std::cout << "Sucess! ";
     }
-    catch(std::runtime_error& e) {
-      std::cout << e.what() << std::endl;
-      timedout = true;
-      //std::terminate();
-      //return 0;
-      //exit(0);
-    }
-
-    if(!timedout)
-      std::cout << "Success" << std::endl;
-    //std::terminate();
-*/
-    // Call Bash script to run depqbf 
-    //int systemRet = system("./src/bash_script.sh");
-    //if(ret == -1){
-    //  std::cout << "SYTEM ERROR !!!\n"; 
-    //}
-    //system("./src/bash_script.sh");
-    
-    // Get graph for depqbf-file
-    if (flagA == true || flagB == true) { 
-      v.print_graph( "/tmp/dep_vts.dot", edgeQuant, denotation); 
+   
+    v.print_graph( "/tmp/dep_vts.dot", edgeQuant, flagB, flagC); 
+    if (flagB == true ) { 
       auto retVal = system("xdot /tmp/dep_vts.dot");
       if(retVal == -1) 
-        std::cout << "SYTEM ERROR !!!\n"; 
+       std::cout << "SYTEM ERROR !!!\n"; 
     }
+  
+    //  }
+    /*
+    else {
+      std::ifstream myfile ( "/tmp/out.txt" );
+      std::string line;
+      if ( myfile ) {
+        std::string line;
+        auto firstLine = std::getline( myfile, line );
+        //firstLine[1]  == "1" ? std::cout << "THE FORMULA IS SAT" << "\n" : std::cout << "THE FORMULA IS UNSAT" << "\n";
+        std::cout << firstLine << "\n";
+    }
+    */
 
     //std::cout << "\nPrinting depqbf graph at /tmp/dep_vts.dot \n";
+  // }
+  
   }
   
   catch (z3::exception & ex) {
