@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
 
     int opt;
     std::string input = "";
-    bool flagA = false;
+   // bool flagA = false;
     bool flagB = false;
     bool flagC = false;
 
@@ -66,11 +66,13 @@ int main(int argc, char** argv) {
     opterr = 0;
 
     // Retrieve the options:
-    while ( (opt = getopt(argc, argv, "fgp")) != -1 ) {  // for each option...
+    while ( (opt = getopt(argc, argv, "gp")) != -1 ) {  // for each option...
         switch ( opt ) {
+          /*
             case 'f':
                     flagA = true;
                 break;
+          */
             case 'g':
                     flagB = true;
                 break;
