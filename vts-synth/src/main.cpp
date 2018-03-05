@@ -52,11 +52,12 @@ int main(int argc, char** argv) {
     bool flagC = false;
 
     // Retrieve the (non-option) argument:
-    if ( (argc <= 1) || (argv[argc-1] == NULL) || (argv[argc-1][0] == '-') ) {  // there is NO input...
-        std::cerr << "No argument provided!" << std::endl;
+    if ( (argc <= 1) || argv[argc-1] == NULL ) {  // NO input...
+    //if ( (argc <= 1) || (argv[argc-1] == NULL) || (argv[argc-1][0] == '-') ) {  
+        std::cerr << "No argument [-p |-g] provided! \n" << std::endl;
         //return 1;
     }
-    else {  // there is an input...
+    else { 
         input = argv[argc-1];
     }
 
