@@ -1,31 +1,47 @@
 #include<vts.h>
 #include<z3-util.h>
+#include <vector>
+#include <iterator>
 
 
-z3::expr_vector vts::flattern_2d ( Vec2Expr& dump ) {
+z3::expr_vector vts::flattern2d ( Vec2Expr& dump, unsigned s1, unsigned s2, bool eq ) {
   z3::expr_vector d1(ctx);
-  for ( unsigned int i = 0; i < N; i++ ) {
-    for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i) continue;
+  for ( unsigned i = 0; i < s1; i++ ) {
+    for( unsigned j = 0 ; j < s2; j++ ) {
+      if ( eq == true && j == i) continue;
       d1.push_back( dump[i][j] );
     }	    
   }
   return d1;
 }
 
-z3::expr_vector vts::flattern3d ( Vec3Expr& dump ) {
+z3::expr_vector vts::flattern3d ( Vec3Expr& dump, unsigned s1, unsigned s2, unsigned s3, bool eq) {
   z3::expr_vector  d1(ctx);
-  for ( unsigned int i = 0; i < N; i++ ) {
-    for( unsigned j = 0 ; j < N; j++ ) {
-      if (j == i) continue;
-	for ( unsigned q = 0; q < E_arity; q++ ) {
-	  d1.push_back( dump[i][j][q] );	
-	}		       
+  for ( unsigned i = 0; i < s1; i++ ) {
+    for( unsigned j = 0 ; j < s2; j++ ) {
+      if ( eq == true && j == i) continue;
+      for ( unsigned q = 0; q < s3; q++ ) {
+        d1.push_back( dump[i][j][q] );	
+      }		       
     }
   }
  return d1;
 }
 
+z3::expr_vector vts::flattern4d ( Vec4Expr& dump, unsigned s1, unsigned s2, unsigned s3, unsigned s4, bool eq ) {
+  z3::expr_vector  d1(ctx);
+  for ( unsigned i = 0; i < s1; i++ ) {
+    for( unsigned j = 0 ; j < s2; j++ ) {
+      if ( eq == true && j == i) continue;
+      for ( unsigned q = 0; q < s3; q++ ) {
+        for ( unsigned k = 0; k < s4; k++ ) {
+          d1.push_back( dump[i][j][q][k] );	
+        }
+      }		       
+    }
+  }
+ return d1;
+}
 
 // At least 2 
 z3::expr vts::at_least_two ( VecExpr dump, unsigned L ) {
@@ -65,7 +81,7 @@ z3::expr vts::at_least_four ( VecExpr dump, unsigned L ) {
       for ( unsigned k = j+1; k < L-1; k++) {
         lhs1 = (lhs && dump[k]);
         for ( unsigned x = k+1; x < L; x++) {
-	  ls.push_back ( lhs1 && dump[x] );
+	        ls.push_back ( lhs1 && dump[x] );
      }
     }
    }
@@ -73,49 +89,97 @@ z3::expr vts::at_least_four ( VecExpr dump, unsigned L ) {
   return z3::mk_or( ls );
 }
 
-z3::expr vts::get_qbf_formula (VecExpr& edgeQuant){
+z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant ) {
 
-  z3::expr basic_constraints_with_stability = get_basic_constraints();
-  //std::cout << basic_constraints_with_stability;
+  /* Build Constrint Of the Form := [[1]] && [[2]] && [[3]]
+   * [[1]] :: Connectivity Constraint : kConnected Graph
+   * [[2]] :: V5 Constraint : Self edge not allowed
+   * [[3]] :: No Function Possible Constraint : No Boolean func exists 
+   */
 
+  //z3::expr basic_constraints_with_stability = get_basic_constraints();
   //z3::expr not_connected = not_k_connected( C, d_reach2, drop2 );
 
+  /***** Building [[1]] ****/
   VecExpr ee_set = flattern_3d ( edges );
   edgeQuant = ee_set;
-    //for(auto& ee : ee_set ) {
-     // std::cout << ee << "\n";
-    //}
-  //std::cout << " ee_set : " << ee_set << "\n";
 
-  //z3::expr_vector d1 = flattern_2d ( d_reach );
+  z3::expr_vector setR1 = flattern2d ( d_reach1, N, N, true );
+  z3::expr_vector setR2 = flattern2d ( d_reach2, N, N, true );
+  
   // Create:  Exists (setR1, reach_d1 && d1_all-conn )
-  z3::expr is_reach1 = exists( flattern_2d( d_reach1 ), reachability_under_drop_def( d_reach1 , drop1, 0 ) && remains_connected( d_reach1 )  );
+  z3::expr is_reach1 = exists( setR1, reachability_under_drop_def( d_reach1 , drop1, 0 ) && remains_connected( d_reach1 )  ); 
+  z3::expr is_reach2 = exists( setR2, reachability_under_drop_def( d_reach2 , drop2, 1 ) && gets_disconnected( d_reach2 )  );
   
-  z3::expr is_reach2 = exists( flattern_2d( d_reach2 ), reachability_under_drop_def( d_reach2 , drop2, 1 ) && gets_disconnected( d_reach2 )  );
+  z3::expr_vector setD1 = flattern3d ( drop1, N, N, E_arity, true );
+  z3::expr_vector setD2 = flattern3d ( drop2, N, N, E_arity, true );
   
-  //z3::expr_vector d2 = flattern3d ( drop1 );
-  //std::cout << "drop 1 is = " << d2 << "\n";
-  z3::expr k_min_1_connected = forall (  flattern3d (drop1), implies 
+  z3::expr k_min_1_connected = forall (  setD1, implies 
 		  (  (exactly_k_drops ( C-1, drop1 ) && only_present_edges_can_be_dropped ( drop1 )), is_reach1 ) );
  
-  z3::expr k_not_connected = exists (  flattern3d (drop2), implies 
+  z3::expr k_not_connected = exists (  setD2, implies 
 		  (  (exactly_k_drops ( C, drop2 ) && only_present_edges_can_be_dropped ( drop2 )), is_reach2 ) );
  
-  //z3::expr cons = basic_constraints_with_stability && not_connected && k_1_connected;
   z3::expr at_least_k_edges = at_least_three( ee_set, ee_set.size() );
-  //std::cout << at_least_k_edges;
-  //exit(0);
   
-  //z3::expr cons = exists ( set_edges, at_least_k_edges && not_connected && k_1_connected );
-  z3::expr_vector set_edges = flattern3d ( edges );
-  z3::expr cons = exists ( set_edges, at_least_k_edges && k_min_1_connected && k_not_connected );
- // std::cout << "Expected first level quant: " << set_edges << "\n";
+  
+  // [[1]] : K Connected Graph 
+  // EXISTS [ setE, kedges && k-1Conn && knotConn ]
+  z3::expr_vector setE = flattern3d ( edges, N, N, E_arity, true );
+  z3::expr kconnectedConstraint = exists ( setE, at_least_k_edges && k_min_1_connected && k_not_connected );
+
+  /***** Building [[2]] ****/
+  // [[2]] : V5  
+  z3::expr V5 = no_self_edges();                              
+    
+  /***** Building [[3]] ****/
+  z3::expr_vector setN = flattern2d ( nodes, N, M, false);
+  z3::expr_vector setActiveN = flattern2d ( active_node, N, M, false );
+  z3::expr_vector setPresentE = flattern4d ( presence_edge, N, N, E_arity, M, true );
+  z3::expr_vector setActiveE = flattern4d ( active_edge, N, N, E_arity, M, true );  
+  // Pairing constraint ensures (i,i) pair not allowed. ToDo: Check the effect of this. 
+  z3::expr_vector setPairingM = flattern2d ( pairing_m, M, M, true );
+  z3::expr_vector setReach = flattern4d ( reach, N, N, M, N-1, true );
+
+  /*
+  z3::expr_vector qvarQbf( ctx ); 
+
+  qvarQbf.reserve( setN.size() + setActiveN.size() + setPresentE.size() + setActiveE.size() + setPairingM.size() + setReach.size() ); // preallocate memory
+  
+  qvarQbf.insert( qvarQbf.end(), setN.begin(), setN.end() );
+  qvarQbf.insert( qvarQbf.end(), setActiveN.begin(), setActiveN.end() );
+  qvarQbf.insert( qvarQbf.end(), setPresentE.begin(), setPresentE.end() );
+  qvarQbf.insert( qvarQbf.end(), setActiveE.begin(), setActiveE.end() );
+  qvarQbf.insert( qvarQbf.end(), setPairingM.begin(), setPairingM.end() );
+  qvarQbf.insert( qvarQbf.end(), setReach.begin(), setReach.end() );
+  
+  */
+  //for (const auto&& vect : setN ) {
+  //  std::cout << vect << "\n";
+  //}
+  
+  // Basic Constraints with stability excluding V5 :: self edge
+  z3::expr basicConstraintsWithStab = get_basic_constraints();
+
+  // Not a function constraint.
+  z3::expr notaFunction = not_a_function( nodes, active_node );
+
+  // No function possible constraint [[3]]
+  // FORALL [ qvars, basicConst => notafunc ]
+  z3::expr noFunctionPossible = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach , implies ( basicConstraintsWithStab, notaFunction ) )))))))))) );
+
+  /* Final Qbf Constraint: [[1]] && [[2]] && [[3]] */
+  z3::expr qbfCons = kconnectedConstraint && V5 && notaFunction;   
+  
+  // std::cout << "Expected first level quant: " << set_edges << "\n";
   //std::cout << cons << "\n";
-  return cons;
+  
+  return qbfCons;
 
 }
 
 z3::model vts::get_vts_for_qbf() {
+
   VecExpr edgeQuant;
   z3::expr cons = get_qbf_formula ( edgeQuant );
   //std::cout << cons << "\n";

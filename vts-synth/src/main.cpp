@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <future>
 
-
 #include <iostream>
 #include <fstream>
 
@@ -62,7 +61,6 @@ int main(int argc, char** argv) {
     }
 
     //std::cout << "input = " << input << std::endl;
-
     // Shut GetOpt error messages down (return '?'): 
     opterr = 0;
 
@@ -90,6 +88,8 @@ int main(int argc, char** argv) {
     //std::cout << flagC << "\n";
     //if (flagA == true) 
     z3::context c;
+    //std::atomic_bool run;
+    //run = true;
     
     // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity ]
     unsigned int N = 2;
@@ -136,12 +136,12 @@ int main(int argc, char** argv) {
     //std::cout << "Prenexed f : " << prenex_f << "\n";
     // std::cout << "Quants :\n";
    
-   /* Avoid printing now !
+    /* Avoid printing now !
     for(auto& q : qs ) {
       for( auto& e : q )
         std::cout << e << " ";
       std::cout << "\n";
-    }
+     }
     */
 
     auto cnf_f = cnf_converter( prenex_f );
@@ -150,9 +150,9 @@ int main(int argc, char** argv) {
     std::cout << "CNF body :\n";
     for( auto& cl : cnf_f )
         std::cout << cl << "\n";
-   */
+    */
 
-   // std::cout << "CNF f : " << cnf_f << "\n";
+    // std::cout << "CNF f : " << cnf_f << "\n";
     std::cout << "Printing qdimacs at /tmp/myfile.qdimacs \n";
     qdimacs_printer( cnf_f, qs ); 
     //std::cout << "Creating depqbf input file at /tmp/depqbf.c \n";
@@ -161,22 +161,23 @@ int main(int argc, char** argv) {
 
     //bool timedout = false;
     std::future<int> future = std::async(std::launch::async, [](){ 
-   //   if ( flagA == false ) {
+        // if ( flagA == false ) {
         auto retVal  = system ("cd ./build/depqbf/examples; ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
-    //  } else {
-      //    auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
-      //    }
+        //  } else {
+        // auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
+        //    }
         return retVal;  
         //system("./src/bash_script.sh");
-    }); 
+      }); 
     
-    //std::cout << "Running depqbf ... " << "\n";
-    std::future_status status;
+     //std::cout << "Running depqbf ... " << "\n";
+     std::future_status status;
 
     status = future.wait_for(std::chrono::seconds(100));
 
     if ( status == std::future_status::timeout ) { 
       std::cout << "TimeOut! \n";
+      //future.join();
       exit(0);
       std::terminate();
       return 1;
@@ -184,7 +185,7 @@ int main(int argc, char** argv) {
     if ( status == std::future_status::ready ) { 
       std::cout << "Sucess! ";
     }
-   
+
     v.print_graph( "/tmp/dep_vts.dot", edgeQuant, flagB, flagC); 
     if (flagB == true ) { 
       auto retVal = system("xdot /tmp/dep_vts.dot");
@@ -194,19 +195,19 @@ int main(int argc, char** argv) {
   
     //  }
     /*
-    else {
-      std::ifstream myfile ( "/tmp/out.txt" );
-      std::string line;
-      if ( myfile ) {
-        std::string line;
-        auto firstLine = std::getline( myfile, line );
-        //firstLine[1]  == "1" ? std::cout << "THE FORMULA IS SAT" << "\n" : std::cout << "THE FORMULA IS UNSAT" << "\n";
-        std::cout << firstLine << "\n";
-    }
-    */
+     else {
+       std::ifstream myfile ( "/tmp/out.txt" );
+       std::string line;
+       if ( myfile ) {
+         std::string line;
+         auto firstLine = std::getline( myfile, line );
+         //firstLine[1]  == "1" ? std::cout << "THE FORMULA IS SAT" << "\n" : std::cout << "THE FORMULA IS UNSAT" << "\n";
+         std::cout << firstLine << "\n";
+      }
+     */
 
     //std::cout << "\nPrinting depqbf graph at /tmp/dep_vts.dot \n";
-  // }
+    // }
   
   }
   

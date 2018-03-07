@@ -102,9 +102,14 @@ public:
   z3::expr reachability_def();           //R1
   z3::expr study_state_stability_cond(); //R2
   
-  // Falttenign of the 3 d array
-  z3::expr_vector flattern_2d ( Vec2Expr& dump );
-  z3::expr_vector flattern3d ( Vec3Expr& dump );
+  // Falttenign of the x-d Vectors.
+  //z3::expr_vector flattern2d ( Vec2Expr& dump );
+  z3::expr_vector flattern2d ( Vec2Expr& dump, unsigned s1, unsigned s2, bool eq );
+
+  z3::expr_vector flattern3d ( Vec3Expr& dump, unsigned s1, unsigned s2, unsigned s3, bool eq);
+
+  z3::expr_vector flattern4d ( Vec4Expr& dump, unsigned s1, unsigned s2, unsigned s3, unsigned s4, bool eq );
+  
   VecExpr flattern_3d ( Vec3Expr& dump );
 
   // connectivity constraints
@@ -124,6 +129,10 @@ public:
 
   z3::expr not_k_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
   z3::expr k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
+  
+  z3::expr not_a_function( Vec2Expr& nodes, Vec2Expr& active_node);
+
+
 
   z3::model get_vts_for_qbf();
   z3::expr get_basic_constraints();

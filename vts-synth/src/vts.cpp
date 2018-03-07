@@ -658,10 +658,31 @@ z3::expr vts::k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump )
     && remains_connected( r_varas );
 }
 
+// Not a Function
+z3::expr vts::not_a_function( Vec2Expr& nodes, Vec2Expr& active_node) {
+  z3::expr_vector cond_list(ctx);
+  
+  for ( unsigned i = 0; i < N; i++ ) {
+    for( unsigned j = i+1 ; j < N; j++ ) {
+      z3::expr_vector node_eq(ctx);
+      z3::expr_vector actv_node_eq(ctx);
+      for ( unsigned int k = 0; k < M; k ++ ) {
+        node_eq.push_back( nodes[i][k] == nodes[j][k] );
+        actv_node_eq.push_back( active_node[i][k] == active_node[j][k] );
+      }
+      auto cond = z3::implies( z3::mk_and (node_eq), z3::mk_and (actv_node_eq)  );
+      cond_list.push_back( cond );
+    }
+  }
+ 
+  // use Not after implment
+  //return (z3::mk_not (z3::mk_and (cond_list) ) );
+  return (! (z3::mk_and (cond_list) ));
+}
 
 //----------------------------------------------------------------------------
 //
-
+// Exclude V5 add it as additional constraint
 z3::expr vts::get_basic_constraints () {
   z3::expr a1 = node_activity_constraint();
   z3::expr a2 = edge_activity_constraint();
@@ -670,12 +691,13 @@ z3::expr vts::get_basic_constraints () {
   z3::expr v2 = active_molecule_is_present_on_edge();         //V2
   z3::expr v3 = active_molecule_is_present_on_node();         //V3
   z3::expr v4 = edge_modelecues_is_subset_of_node_molecules();//V4
-  z3::expr v5 = no_self_edges();                              //V5
+  //z3::expr v5 = no_self_edges();                              //V5
   z3::expr v6 = restriction_on_pairing_matrix();              //V6
   z3::expr v7 = edge_must_fuse_with_target();                 //V7
   z3::expr v8 = edge_must_fuse_with_noone_else();         //V8
 
-  z3::expr base_cons = a1 && a2 && v1 && v2 && v3 && v4 && v5 && v6 && v7 && v8;
+  z3::expr base_cons = a1 && a2 && v1 && v2 && v3 && v4 && v6 && v7 && v8;
+  //z3::expr base_cons = a1 && a2 && v1 && v2 && v3 && v4 && v5 && v6 && v7 && v8;
 
   z3::expr r1 = reachability_def();           //R1
   z3::expr r2 = study_state_stability_cond(); //R2
@@ -687,7 +709,8 @@ z3::expr vts::get_basic_constraints () {
 }
 
 z3::model vts::get_vts_for_prob1( ) {
-  z3::expr basic_constraints_with_stability = get_basic_constraints();
+  z3::expr v5 = no_self_edges();                              //V5
+  z3::expr basic_constraints_with_stability = get_basic_constraints() && v5;
 
   // THIS IS EXCATLY WE NEED FOR THE NOT-K-CONNECTED
   z3::expr not_connected = not_k_connected( C, d_reach2, drop2 );
