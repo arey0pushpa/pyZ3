@@ -127,6 +127,7 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant ) {
   // EXISTS [ setE, kedges && k-1Conn && knotConn ]
   z3::expr_vector setE = flattern3d ( edges, N, N, E_arity, true );
   z3::expr kconnectedConstraint = exists ( setE, at_least_k_edges && k_min_1_connected && k_not_connected );
+  //z3::expr kconnectedConstraint = at_least_k_edges && k_min_1_connected && k_not_connected;
 
   /***** Building [[2]] ****/
   // [[2]] : V5  
@@ -170,6 +171,7 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant ) {
 
   /* Final Qbf Constraint: [[1]] && [[2]] && [[3]] */
   z3::expr qbfCons = kconnectedConstraint && V5 && notaFunction;   
+  //z3::expr qbfCons = exists ( setE, kconnectedConstraint && V5 && notaFunction );   
   
   // std::cout << "Expected first level quant: " << set_edges << "\n";
   //std::cout << cons << "\n";

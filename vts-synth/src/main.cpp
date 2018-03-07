@@ -162,7 +162,8 @@ int main(int argc, char** argv) {
     //bool timedout = false;
     std::future<int> future = std::async(std::launch::async, [](){ 
         // if ( flagA == false ) {
-        auto retVal  = system ("cd ./build/depqbf/examples; ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
+        auto retVal  = system ("cd ./build/depqbf/examples;timeout 10s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
+       // std::cout << retVal << "\n";
         //  } else {
         // auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
         //    }
@@ -173,7 +174,7 @@ int main(int argc, char** argv) {
      //std::cout << "Running depqbf ... " << "\n";
      std::future_status status;
 
-    status = future.wait_for(std::chrono::seconds(100));
+    status = future.wait_for(std::chrono::seconds(10));
 
     if ( status == std::future_status::timeout ) { 
       std::cout << "TimeOut! \n";
