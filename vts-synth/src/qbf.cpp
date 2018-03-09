@@ -117,7 +117,7 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant ) {
   z3::expr k_min_1_connected = forall (  setD1, implies 
 		  (  (exactly_k_drops ( C-1, drop1 ) && only_present_edges_can_be_dropped ( drop1 )), is_reach1 ) );
  
-  z3::expr k_not_connected = exists (  setD2, implies 
+  z3::expr k_not_connected = exists ( setD2, implies 
 		  (  (exactly_k_drops ( C, drop2 ) && only_present_edges_can_be_dropped ( drop2 )), is_reach2 ) );
  
   z3::expr at_least_k_edges = at_least_three( ee_set, ee_set.size() );
@@ -175,6 +175,10 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant ) {
   
   // std::cout << "Expected first level quant: " << set_edges << "\n";
   //std::cout << cons << "\n";
+  
+  // CNF function 
+  // z3::expr setSvar = flattern2 ( s_var, N, M, false );
+  // z3::expr cnfCons =  
   
   return qbfCons;
 

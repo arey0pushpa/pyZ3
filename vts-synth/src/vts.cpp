@@ -83,8 +83,13 @@ void vts::init_vts() {
 // Populate pairing_m(k,k1)
   popl2 ( pairing_m, M, M, "p" );
 
-// Populate node_funcs : Currently not handled.
+// Populate xtra var s_var : var for node function
+  popl2 ( s_var, M-1, J, "s" );
 
+// Populate xtra var t_var : var for node function 
+  popl2 ( t_var, M-1, J, "t" );
+
+// Populate node_funcs : Currently not handled.
   make_func( node_funcs, "an" );
 
 // Populate edge_funcs : Currently not handled.
@@ -678,6 +683,87 @@ z3::expr vts::not_a_function( Vec2Expr& nodes, Vec2Expr& active_node) {
   // use Not after implment
   //return (z3::mk_not (z3::mk_and (cond_list) ) );
   return (! (z3::mk_and (cond_list) ));
+}
+
+/*
+  for ( unsigned x = 0; x < M-2; x++ ) {
+    z3::expr_vector inner_list(ctx);
+    // Run it three times
+      for ( unsigned y > x; y < M-1; y++ ) {
+        for ( unsigned z = 0; z < M; z++ ) {
+          inner_list.push_back (p[x][j][ node[i][k1] ] || p[y][j][ node[i][k1]] || p[z][j][node[i][k1]] );   
+        }
+      }
+    }
+*/
+
+// Node cnf building function
+//z3::expr vts::node_cnf ( Vec2Expr& s, Vec2Expr& active_node ) {
+z3::expr vts::node_cnf ( Vec2Expr& s ) {
+  z3::expr_vector main_list(ctx);
+  for ( unsigned i = 0; i < N; i++ ) {
+    for ( unsigned k = 0; k < M; k++ ) {
+      //for ( unsigned k1 = 0; k1 < M; k1++ ) { 
+      //  if (k == k1)  continue;
+        z3::expr_vector outer_list(ctx);
+        // This much time
+        for ( unsigned z = 0; z < J; z++ ) {
+          z3::expr_vector inner_list(ctx);
+          for ( unsigned x = 0; x < M; x++ ) {
+            if (x == k)  continue;
+            inner_list.push_back( (s[x][z] && nodes[i][x] ) || ( s[x][z] && !nodes[i][x] ) );
+          }
+          auto cons = mk_or ( inner_list ); 
+          outer_list.push_back( cons );
+        }
+        auto cons = mk_and (outer_list );
+        main_list.push_back ( (active_node[i][k] == cons) );  
+      }
+   //  }
+  }
+  auto constraint = mk_and ( main_list );
+  return constraint;
+}
+
+
+// Node cnf building function
+//z3::expr vts::edge_cnf ( Vec3Expr& t, Vec4Expr& active_edge ) {
+z3::expr vts::edge_cnf ( Vec2Expr& t ) {
+  z3::expr_vector main_list(ctx);
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if ( i == j ) continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        for ( unsigned k = 0; k < M; k++ ) { 
+          z3::expr_vector outer_list(ctx);
+          for ( unsigned z = 0; z < J; z++ ) {
+            z3::expr_vector inner_list(ctx);
+            for ( unsigned x = 0; x < M; x++ ) {
+              if ( x == k ) continue;
+              inner_list.push_back( ( t[x][z] && presence_edge[i][j][q][x] ) || ( t[x][z] && !presence_edge[i][j][q][x] ) );
+            }
+            auto cons = mk_or ( inner_list ); 
+            outer_list.push_back( cons );
+          }
+          auto cons = mk_and (outer_list );
+          main_list.push_back ( (active_edge[i][j][q][k] == cons) );  
+        }
+      }
+    }
+  }
+  auto constraint = mk_and ( main_list );
+  return constraint;
+}
+
+// Function has a restricted form with Three CNF  
+z3::expr vts::cnf_function ( Vec2Expr& s_var, Vec2Expr& t_var ) { 
+  //auto ctx = z3::context& ctx;
+  auto nodeCnf = node_cnf ( s_var );
+  //auto nodeCnf = node_cnf (Vec2Expr& s_var, ctx);
+  //auto edgeCnf = edge_cnf ( Vec4Expr& t_var, ctx ); 
+  auto edgeCnf = edge_cnf ( t_var ); 
+  auto cons = nodeCnf && edgeCnf;
+  return cons;
 }
 
 //----------------------------------------------------------------------------

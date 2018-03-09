@@ -95,8 +95,9 @@ int main(int argc, char** argv) {
     unsigned int N = 2;
     unsigned int M = 2;
     unsigned int Q = 2;
+    unsigned int J = 2;
 
-    vts  v( c, M, N, Q, MODEL_4, 3 );
+    vts  v( c, M, N, Q, MODEL_4, 3, J);
 
     //z3::model mdl = v.get_vts_for_prob1();
     //z3::model qbf_mdl = v.get_vts_for_qbf();

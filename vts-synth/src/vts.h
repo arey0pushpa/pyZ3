@@ -18,9 +18,9 @@ enum model_version {
 class vts{
 public:
   vts( z3::context& _ctx,
-       unsigned _M, unsigned _N, unsigned _Q, model_version _V, unsigned _C )
+       unsigned _M, unsigned _N, unsigned _Q, model_version _V, unsigned _C, unsigned _J )
     : ctx(_ctx), M(_M), N(_N), E_arity(_Q),
-      V(_V), C(_C)
+      V(_V), C(_C), J(_J)
   {
     init_vts();
   }
@@ -33,12 +33,16 @@ private:
   unsigned   E_arity;    // Edge arity
   model_version V;  // Variation
   unsigned   C;    // connectedness
+  unsigned J; // CNF function basis
 
   void init_vts();
 
   //variables
   Vec2Expr nodes;
   Vec2Expr active_node;
+
+  Vec2Expr s_var;
+  Vec2Expr t_var;
 
   Vec3Expr edges;
   Vec4Expr presence_edge;
@@ -131,8 +135,10 @@ public:
   z3::expr k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
   
   z3::expr not_a_function( Vec2Expr& nodes, Vec2Expr& active_node);
+  z3::expr cnf_function ( Vec2Expr& p_var, Vec2Expr& s_var );
 
-
+  z3::expr node_cnf ( Vec2Expr& s );
+  z3::expr edge_cnf ( Vec2Expr& t );
 
   z3::model get_vts_for_qbf();
   z3::expr get_basic_constraints();
