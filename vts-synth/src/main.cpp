@@ -117,6 +117,7 @@ int main(int argc, char** argv) {
     z3::expr y = c.bool_const("y");
     z3::expr z = c.bool_const("z");
     z3::expr w = c.bool_const("w");
+    z3::expr ww = c.bool_const("ww");
     z3::expr f = v.get_qbf_formula( edgeQuant );
 
     /* First Order Formula to test basic functionality  */
@@ -128,8 +129,11 @@ int main(int argc, char** argv) {
     //z3::expr f = forall( x, forall ( y, exists (z,  z == x ||  z == y) )) ; 
     //std::cout << "The sort of the formula f is: " << Z3_get_sort( c, f ) << "\n";
     
-    // UNSAT Check
+    // UNSAT Check: sat, Unsat check passed
     //z3::expr f = forall ( x, exists (y, (x || !y) && (!x || y) && (x || y) ));   
+    
+    // Losing example : QDIMACS working fine
+    //z3::expr f = exists (x, exists (y, exists (z, forall(w, exists (ww, ( (!x || ww) && (y || w || !ww) && (z || !w || !ww) && (!y || !z) ))))));  
 
     //auto fml_f = negform ( c, f ); 
     //negform ( c, f ); 
