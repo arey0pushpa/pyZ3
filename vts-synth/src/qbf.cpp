@@ -176,9 +176,10 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant ) {
   // std::cout << "Expected first level quant: " << set_edges << "\n";
   //std::cout << cons << "\n";
   
-  // CNF function 
+  // N-CNF function 
   // z3::expr setSvar = flattern2 ( s_var, N, M, false );
-  // z3::expr cnfCons =  
+  // z3::expr cnfCons = at_least_three ( setSvar, setSvar.size() ); 
+  // z3::expr qbfCnfCons  = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach,  basicConstraintsWithStab && qbfCnfCos  )))))))))) );
   
   return qbfCons;
 

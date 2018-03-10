@@ -218,7 +218,7 @@ void vts::print_graph( std::string filename, VecExpr& edgeQuant, bool flagB, boo
       for ( auto& val: denotation_map) {
         auto sign = val.second;
         //auto y = pr.second;
-        //std::cout << y << "\n";
+        //std::cout << sign << "\n";
         if ( sign >= 0 ) {
           auto x = xyPair[dstep].first; 
           auto y = xyPair[dstep].second; 
@@ -228,6 +228,9 @@ void vts::print_graph( std::string filename, VecExpr& edgeQuant, bool flagB, boo
           ofs << std::to_string (x) << "-> " <<  std::to_string (y)
               <<  "[label="  << label << ",color=" << color
               << ",style=" << style << "]\n";
+          dstep += 1;
+        }
+        else {
           dstep += 1;
         }
       }

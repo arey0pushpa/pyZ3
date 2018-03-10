@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
     //run = true;
     
     // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity ]
-    unsigned int N = 2;
+    unsigned int N = 3;
     unsigned int M = 2;
     unsigned int Q = 2;
     unsigned int J = 2;
@@ -119,13 +119,17 @@ int main(int argc, char** argv) {
     z3::expr w = c.bool_const("w");
     z3::expr f = v.get_qbf_formula( edgeQuant );
 
+    /* First Order Formula to test basic functionality  */
     //std::cout << f << "\n";
-   // z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
+    // z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
     //z3::expr f = forall(x, exists( y, !(x && y ) ) ) ;
     //z3::expr f = forall( x, exists( w, w && forall ( y,  x&& y ) ) ) ;
     //z3::expr f = forall( x, exists ( y,  forall (w, exists (z, x && y && w && z)  )) );
-   //z3::expr f = forall( x, forall ( y, exists (z,  z == x ||  z == y) )) ; 
+    //z3::expr f = forall( x, forall ( y, exists (z,  z == x ||  z == y) )) ; 
     //std::cout << "The sort of the formula f is: " << Z3_get_sort( c, f ) << "\n";
+    
+    // UNSAT Check
+    //z3::expr f = forall ( x, exists (y, (x || !y) && (!x || y) && (x || y) ));   
 
     //auto fml_f = negform ( c, f ); 
     //negform ( c, f ); 
@@ -185,7 +189,7 @@ int main(int argc, char** argv) {
       return 1;
     }
     if ( status == std::future_status::ready ) { 
-      std::cout << "Sucess! ";
+      std::cout << "Program run Sucess! ";
     }
 
     v.print_graph( "/tmp/dep_vts.dot", edgeQuant, flagB, flagC); 

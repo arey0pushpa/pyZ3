@@ -84,10 +84,10 @@ void vts::init_vts() {
   popl2 ( pairing_m, M, M, "p" );
 
 // Populate xtra var s_var : var for node function
-  popl2 ( s_var, M-1, J, "s" );
+  popl2 ( s_var, 2 * (M-1), J, "s" );
 
 // Populate xtra var t_var : var for node function 
-  popl2 ( t_var, M-1, J, "t" );
+  popl2 ( t_var, 2 * (M-1), J, "t" );
 
 // Populate node_funcs : Currently not handled.
   make_func( node_funcs, "an" );
@@ -711,7 +711,7 @@ z3::expr vts::node_cnf ( Vec2Expr& s ) {
           z3::expr_vector inner_list(ctx);
           for ( unsigned x = 0; x < M; x++ ) {
             if (x == k)  continue;
-            inner_list.push_back( (s[x][z] && nodes[i][x] ) || ( s[x][z] && !nodes[i][x] ) );
+            inner_list.push_back( (s[x][z] && nodes[i][x] ) || ( s[x][z+M] && !nodes[i][x] ) );
           }
           auto cons = mk_or ( inner_list ); 
           outer_list.push_back( cons );
@@ -740,7 +740,7 @@ z3::expr vts::edge_cnf ( Vec2Expr& t ) {
             z3::expr_vector inner_list(ctx);
             for ( unsigned x = 0; x < M; x++ ) {
               if ( x == k ) continue;
-              inner_list.push_back( ( t[x][z] && presence_edge[i][j][q][x] ) || ( t[x][z] && !presence_edge[i][j][q][x] ) );
+              inner_list.push_back( ( t[x][z] && presence_edge[i][j][q][x] ) || ( t[x][M+z] && !presence_edge[i][j][q][x] ) );
             }
             auto cons = mk_or ( inner_list ); 
             outer_list.push_back( cons );
