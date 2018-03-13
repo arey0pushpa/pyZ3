@@ -181,7 +181,8 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant ) {
   // z3::expr cnfCons = at_least_three ( setSvar, setSvar.size() ); 
   // z3::expr qbfCnfCons  = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach,  basicConstraintsWithStab && qbfCnfCos  )))))))))) );
   
-  return qbfCons;
+  return kconnectedConstraint;
+  //return qbfCons;
 
 }
 
