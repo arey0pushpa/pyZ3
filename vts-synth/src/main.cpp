@@ -119,7 +119,6 @@ int main(int argc, char** argv) {
     z3::expr w = c.bool_const("w");
     z3::expr ww = c.bool_const("ww");
     z3::expr f = v.get_qbf_formula( edgeQuant );
-
     /* First Order Formula to test basic functionality  */
     //std::cout << f << "\n";
     // z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
