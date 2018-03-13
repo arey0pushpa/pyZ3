@@ -47,13 +47,15 @@ int main(int argc, char** argv) {
     int opt;
     std::string input = "";
    // bool flagA = false;
-    bool flagB = false;
-    bool flagC = false;
+    bool flagG = false;
+    bool flagP = false;
+    bool flagZ = false;
+    //bool flagD = false;
 
     // Retrieve the (non-option) argument:
     if ( (argc <= 1) || argv[argc-1] == NULL ) {  // NO input...
     //if ( (argc <= 1) || (argv[argc-1] == NULL) || (argv[argc-1][0] == '-') ) {  
-        std::cerr << "No argument [-p |-g] provided! \n" << std::endl;
+        std::cerr << "No argument [-p |-g |-z] provided to [print_graph, create_graph, run_z3_on_qbf] ! \n" << std::endl;
         //return 1;
     }
     else { 
@@ -65,18 +67,24 @@ int main(int argc, char** argv) {
     opterr = 0;
 
     // Retrieve the options:
-    while ( (opt = getopt(argc, argv, "gp")) != -1 ) {  // for each option...
+    while ( (opt = getopt(argc, argv, "gpz")) != -1 ) {  // for each option...
         switch ( opt ) {
           /*
             case 'f':
                     flagA = true;
                 break;
+            case 'd':
+                    flagZ = true;
+                break;
           */
             case 'g':
-                    flagB = true;
+                    flagG = true;
                 break;
             case 'p':
-                    flagC = true;
+                    flagP = true;
+                break;
+            case 'z':
+                    flagZ = true;
                 break;
             case '?':  // unknown option...
                 std::cerr << "Unknown option: '" << char(optopt) << "'!" << std::endl;
@@ -84,8 +92,8 @@ int main(int argc, char** argv) {
         }
     }
     
-    //std::cout << flagB << "\n";
-    //std::cout << flagC << "\n";
+    //std::cout << flagG << "\n";
+    //std::cout << flagP << "\n";
     //if (flagA == true) 
     z3::context c;
     //std::atomic_bool run;
@@ -120,6 +128,7 @@ int main(int argc, char** argv) {
     //z3::expr ww = c.bool_const("ww");
     z3::expr f = v.get_qbf_formula( edgeQuant );
 
+
     /* First Order Formula to test basic functionality  */
     //std::cout << f << "\n";
     // z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
@@ -138,70 +147,76 @@ int main(int argc, char** argv) {
     //auto fml_f = negform ( c, f ); 
     //negform ( c, f ); 
     
-    VecsExpr qs;
-    auto prenex_f = prenex( f, qs );
+    if (flagZ == true) {
+      // Get model for basic VTS
+      // v.get_vts_for_prob1( );
+      // Get model for Quantifed VTS
+      v.get_vts_for_qbf(f);
+    } else {
+      VecsExpr qs;
+      auto prenex_f = prenex( f, qs );
     
-    /* Print the formaula in pcnf  Avoid printing now ! */
-    //std::cout << "Prenexed f : " << prenex_f << "\n";
-    // std::cout << "Quants :\n";
-   
-    /* Avoid printing now !
-    for(auto& q : qs ) {
-      for( auto& e : q )
-        std::cout << e << " ";
-      std::cout << "\n";
-     }
-    */
+      /* Print the formaula in pcnf  Avoid printing now ! */
+      //std::cout << "Prenexed f : " << prenex_f << "\n";
+      // std::cout << "Quants :\n";
+     
+      /* Avoid printing now !
+      for(auto& q : qs ) {
+        for( auto& e : q )
+          std::cout << e << " ";
+        std::cout << "\n";
+       }
+      */
 
-    auto cnf_f = cnf_converter( prenex_f );
+      auto cnf_f = cnf_converter( prenex_f );
 
-    /* Avoid printing for now! 
-    std::cout << "CNF body :\n";
-    for( auto& cl : cnf_f )
-        std::cout << cl << "\n";
-    */
+      /* Avoid printing for now! 
+      std::cout << "CNF body :\n";
+      for( auto& cl : cnf_f )
+          std::cout << cl << "\n";
+      */
 
-    // std::cout << "CNF f : " << cnf_f << "\n";
-    std::cout << "Printing qdimacs at /tmp/myfile.qdimacs \n";
-    qdimacs_printer( cnf_f, qs ); 
-    //std::cout << "Creating depqbf input file at /tmp/depqbf.c \n";
-    std::cout << "Creating depqbf input file at ./build/depqbf/examples/depqbf.c  \n";
-    depqbf_file_creator(edgeQuant, equant_len);
+      // std::cout << "CNF f : " << cnf_f << "\n";
+      std::cout << "Printing qdimacs at /tmp/myfile.qdimacs \n";
+      qdimacs_printer( cnf_f, qs ); 
+      //std::cout << "Creating depqbf input file at /tmp/depqbf.c \n";
+      std::cout << "Creating depqbf input file at ./build/depqbf/examples/depqbf.c  \n";
+      depqbf_file_creator(edgeQuant, equant_len);
 
-    //bool timedout = false;
-    std::future<int> future = std::async(std::launch::async, [](){ 
-        // if ( flagA == false ) {
-        auto retVal  = system ("cd ./build/depqbf/examples;timeout 10s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
-       // std::cout << retVal << "\n";
-        //  } else {
-        // auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
-        //    }
-        return retVal;  
-        //system("./src/bash_script.sh");
-      }); 
-    
-     //std::cout << "Running depqbf ... " << "\n";
-     std::future_status status;
+      //bool timedout = false;
+      std::future<int> future = std::async(std::launch::async, [](){ 
+          // if ( flagA == false ) {
+          auto retVal  = system ("cd ./build/depqbf/examples;timeout 10s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
+         // std::cout << retVal << "\n";
+          //  } else {
+          // auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
+          //    }
+          return retVal;  
+          //system("./src/bash_script.sh");
+        }); 
+      
+       //std::cout << "Running depqbf ... " << "\n";
+       std::future_status status;
 
-    status = future.wait_for(std::chrono::seconds(10));
+        status = future.wait_for(std::chrono::seconds(10));
 
-    if ( status == std::future_status::timeout ) { 
-      std::cout << "TimeOut! \n";
-      //future.join();
-      exit(0);
-      std::terminate();
-      return 1;
-    }
-    if ( status == std::future_status::ready ) { 
-      std::cout << "Program run Sucess! ";
-    }
+        if ( status == std::future_status::timeout ) { 
+          std::cout << "TimeOut! \n";
+          //future.join();
+          exit(0);
+          std::terminate();
+          return 1;
+      }
+        if ( status == std::future_status::ready ) { 
+        std::cout << "Program run Sucess! ";
+      }
 
-    v.print_graph( "/tmp/dep_vts.dot", edgeQuant, flagB, flagC); 
-    if (flagB == true ) { 
-      auto retVal = system("xdot /tmp/dep_vts.dot");
-      if(retVal == -1) 
-       std::cout << "SYTEM ERROR !!!\n"; 
-    }
+      v.print_graph( "/tmp/dep_vts.dot", edgeQuant, flagG, flagP); 
+      if (flagG == true ) { 
+        auto retVal = system("xdot /tmp/dep_vts.dot");
+        if(retVal == -1) 
+         std::cout << "SYTEM ERROR !!!\n"; 
+      }
   
     //  }
     /*
@@ -218,8 +233,10 @@ int main(int argc, char** argv) {
 
     //std::cout << "\nPrinting depqbf graph at /tmp/dep_vts.dot \n";
     // }
-  
+    
   }
+  
+ }
   
   catch (z3::exception & ex) {
         std::cout << "Nuclear Missles are launched ----> " << ex << "\n";

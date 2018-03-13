@@ -62,7 +62,7 @@ z3::expr vts::at_least_three ( VecExpr dump, unsigned L ) {
     for ( unsigned j = i+1; j < L-1; j++) {
       lhs =  ( dump[i] && dump[j] );  
       for ( unsigned k = j+1; k < L; k++) {
-	ls.push_back ( lhs && dump[k] );
+	      ls.push_back ( lhs && dump[k] );
     }
    }
   }
@@ -117,8 +117,8 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant ) {
   z3::expr k_min_1_connected = forall (  setD1, implies 
 		  (  (exactly_k_drops ( C-1, drop1 ) && only_present_edges_can_be_dropped ( drop1 )), is_reach1 ) );
  
-  z3::expr k_not_connected = exists ( setD2, implies 
-		  (  (exactly_k_drops ( C, drop2 ) && only_present_edges_can_be_dropped ( drop2 )), is_reach2 ) );
+  z3::expr k_not_connected = exists ( setD2,  
+		    (exactly_k_drops ( C, drop2 ) && only_present_edges_can_be_dropped ( drop2 )) && is_reach2 ) ;
  
   z3::expr at_least_k_edges = at_least_three( ee_set, ee_set.size() );
   
@@ -181,28 +181,32 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant ) {
   // z3::expr cnfCons = at_least_three ( setSvar, setSvar.size() ); 
   // z3::expr qbfCnfCons  = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach,  basicConstraintsWithStab && qbfCnfCos  )))))))))) );
   
-  return kconnectedConstraint;
-  //return qbfCons;
+  //return kconnectedConstraint;
+  return qbfCons;
 
 }
 
-z3::model vts::get_vts_for_qbf() {
+z3::model vts::get_vts_for_qbf( z3::expr cons) {
 
-  VecExpr edgeQuant;
-  z3::expr cons = get_qbf_formula ( edgeQuant );
-  //std::cout << cons << "\n";
+  // Print the input formula.
+  // std::cout << cons << "\n";
   z3::solver s(ctx);
+
+  // making sure model based quantifier instantiation is enabled.
+  z3::params p(ctx);
+  p.set("mbqi", true);
+  s.set(p);
+
   s.add( cons );
   
  if( s.check() == z3::sat ) {
    z3::model m = s.get_model();
-   std::cout << m << "\n";
+   //std::cout << m << "\n";
+   std::cout << s.get_model() << "\n";
    return m;
   }else{
     std::cout << "model is not feasible!";
     assert(false);
  }
-
   return s.get_model();
-
 }
