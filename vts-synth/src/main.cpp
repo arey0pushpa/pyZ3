@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
     z3::expr y = c.bool_const("y");
     z3::expr z = c.bool_const("z");
     z3::expr w = c.bool_const("w");
-    z3::expr ww = c.bool_const("ww");
+    //z3::expr ww = c.bool_const("ww");
     z3::expr f = v.get_qbf_formula( edgeQuant );
 
     /* First Order Formula to test basic functionality  */
