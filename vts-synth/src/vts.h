@@ -122,6 +122,9 @@ public:
   z3::expr at_least_three( VecExpr dump, unsigned L );
   z3::expr at_least_four( VecExpr dump, unsigned L );
   
+  // Overloaded function
+  z3::expr at_least_four( z3::expr_vector  dump, unsigned L );
+  
   // todo: variables are needed to be parametrized
   z3::expr only_present_edges_can_be_dropped( Vec3Expr& dump ); //
   z3::expr atleast_k_drops(unsigned k);         //
@@ -134,6 +137,8 @@ public:
   z3::expr not_k_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
   z3::expr k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
   
+  z3::expr literal_cnf (Vec2Expr s, unsigned i, unsigned k, bool e, unsigned n, unsigned q);
+
   z3::expr not_a_function( Vec2Expr& nodes, Vec2Expr& active_node);
   z3::expr cnf_function ( Vec2Expr& p_var, Vec2Expr& s_var );
 
@@ -143,7 +148,7 @@ public:
   z3::model get_vts_for_qbf(z3::expr cons);
   z3::expr get_basic_constraints();
   z3::model get_vts_for_prob1();
-  z3::expr get_qbf_formula(VecExpr& edgeQuant);
+  z3::expr get_qbf_formula(VecExpr& edgeQuant, bool flagC);
 
   //helper functions
   z3::expr is_mol_edge_present( unsigned i, unsigned j, unsigned m );

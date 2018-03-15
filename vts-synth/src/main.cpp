@@ -14,74 +14,39 @@
 #include "z3-util.h"
 #include <vts.h>
 
-/*
-// use Boost to parse command line option
-namespace po = boost::program_options;
-// Declare the supported options.
-po::options_description desc("Allowed options");
-desc.add_options()
-    ("help", "produce help message")
-    ("compression", po::value<std::string>(), "Specify option to run depqbf")
-;
-
-po::variables_map vm;
-po::store(po::parse_command_line(ac, av, desc), vm);
-po::notify(vm);    
-
-if (vm.count("help")) {
-    cout << desc << "\n";
-    return 1;
-}
-
-if (vm.count("use-qdimacs")) {
-    cout << "Use Qdimacs File for getting the Model " 
- << vm["use-qdimacs"].as<std::string>() << ".\n";
-} else {
-    cout << "No Option given.\n";
-}
-
-*/
-
 int main(int argc, char** argv) {
 
     int opt;
     std::string input = "";
-   // bool flagA = false;
     bool flagG = false;
+    bool flagC = false;
     bool flagP = false;
     bool flagZ = false;
-    //bool flagD = false;
 
     // Retrieve the (non-option) argument:
     if ( (argc <= 1) || argv[argc-1] == NULL ) {  // NO input...
-    //if ( (argc <= 1) || (argv[argc-1] == NULL) || (argv[argc-1][0] == '-') ) {  
-        std::cerr << "No argument [-p |-g |-z] provided to [print_graph, create_graph, run_z3_on_qbf] ! \n" << std::endl;
+        std::cerr << "No argument [-p |-g |-c | -z] :: [print_graph, create_graph, cnf_func, run_z3_on_qbf] ! \n" << std::endl;
         //return 1;
     }
     else { 
         input = argv[argc-1];
     }
 
-    //std::cout << "input = " << input << std::endl;
     // Shut GetOpt error messages down (return '?'): 
     opterr = 0;
 
     // Retrieve the options:
-    while ( (opt = getopt(argc, argv, "gpz")) != -1 ) {  // for each option...
+    // [g: print graph, p: output assigt, c: use 3cnf as func, z: use z3 solver for qbf solving] 
+    while ( (opt = getopt(argc, argv, "gpcz")) != -1 ) {  // for each option...
         switch ( opt ) {
-          /*
-            case 'f':
-                    flagA = true;
-                break;
-            case 'd':
-                    flagZ = true;
-                break;
-          */
             case 'g':
                     flagG = true;
                 break;
             case 'p':
                     flagP = true;
+                break;
+            case 'c':
+                    flagC = true;
                 break;
             case 'z':
                     flagZ = true;
@@ -92,20 +57,16 @@ int main(int argc, char** argv) {
         }
     }
     
-    //std::cout << flagG << "\n";
-    //std::cout << flagP << "\n";
-    //if (flagA == true) 
     z3::context c;
-    //std::atomic_bool run;
-    //run = true;
     
     // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity ]
-    unsigned int N = 3;
+    unsigned int N = 2;
     unsigned int M = 2;
     unsigned int Q = 2;
     unsigned int J = 2;
+    
 
-    vts  v( c, M, N, Q, MODEL_4, 3, J);
+    vts  v( c, M, N, Q, MODEL_4, 3, J );
 
     //z3::model mdl = v.get_vts_for_prob1();
     //z3::model qbf_mdl = v.get_vts_for_qbf();
@@ -126,12 +87,8 @@ int main(int argc, char** argv) {
     z3::expr z = c.bool_const("z");
     z3::expr w = c.bool_const("w");
     //z3::expr ww = c.bool_const("ww");
-    z3::expr f = v.get_qbf_formula( edgeQuant );
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 419623df921b1049cc71f2e9a48bab0307e034aa
+    z3::expr f = v.get_qbf_formula( edgeQuant, flagC );
+    
     /* First Order Formula to test basic functionality  */
     //std::cout << f << "\n";
     // z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
@@ -151,9 +108,8 @@ int main(int argc, char** argv) {
     //negform ( c, f ); 
     
     if (flagZ == true) {
-      // Get model for basic VTS
-      // v.get_vts_for_prob1( );
-      // Get model for Quantifed VTS
+      std::cout << "Please wait for implementation\n";
+      // Run Z3 QBF solver
       v.get_vts_for_qbf(f);
     } else {
       VecsExpr qs;
