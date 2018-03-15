@@ -52,43 +52,45 @@ int main(int argc, char** argv) {
                     flagZ = true;
                 break;
             case '?':  // unknown option...
-                std::cerr << "Unknown option: '" << char(optopt) << "'!" << std::endl;
-                break;
-        }
-    }
-    
-    z3::context c;
-    
-    // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity ]
-    unsigned int N = 2;
-    unsigned int M = 2;
-    unsigned int Q = 2;
-    unsigned int J = 2;
-    
+                  std::cerr << "Unknown option: '" << char(optopt) << "'!" << std::endl;
+                  break;
+          }
+      }
+      
+      z3::context c;
+      
+      // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity ]
+      unsigned int N = 2;
+      unsigned int M = 2;
+      unsigned int Q = 2;
+      unsigned int J = 2;
+      
 
-    vts  v( c, M, N, Q, MODEL_4, 3, J );
+      vts  v( c, M, N, Q, MODEL_4, 3, J );
 
-    //z3::model mdl = v.get_vts_for_prob1();
-    //z3::model qbf_mdl = v.get_vts_for_qbf();
+      //z3::model mdl = v.get_vts_for_prob1();
+      //z3::model qbf_mdl = v.get_vts_for_qbf();
 
-    //v.dump_dot("/tmp/vts.dot", mdl );
-    //v.dump_dot("/tmp/vts.dot", qbf_mdl );
+      //v.dump_dot("/tmp/vts.dot", mdl );
+      //v.dump_dot("/tmp/vts.dot", qbf_mdl );
 
-  try {
+    try {
 
-    z3::expr t = c.bool_val( true  );
-    z3::expr fal = c.bool_val( false );
-    VecExpr edgeQuant;
-    unsigned int equant_len = N * (N - 1) * Q;
-    //unsigned int denotation[equant_len];
+      z3::expr t = c.bool_val( true  );
+      z3::expr fal = c.bool_val( false );
+      VecExpr edgeQuant;
+      unsigned int equant_len = N * (N - 1) * Q;
+      //unsigned int denotation[equant_len];
 
-    z3::expr x = c.bool_const("x");
-    z3::expr y = c.bool_const("y");
-    z3::expr z = c.bool_const("z");
-    z3::expr w = c.bool_const("w");
-    //z3::expr ww = c.bool_const("ww");
-    z3::expr f = v.get_qbf_formula( edgeQuant, flagC );
-    
+      z3::expr x = c.bool_const("x");
+      z3::expr y = c.bool_const("y");
+      z3::expr z = c.bool_const("z");
+      z3::expr w = c.bool_const("w");
+      //z3::expr ww = c.bool_const("ww");
+      
+      z3::expr f = v.get_qbf_formula( edgeQuant, flagC );
+      
+
     /* First Order Formula to test basic functionality  */
     //std::cout << f << "\n";
     // z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
