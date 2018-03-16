@@ -84,10 +84,12 @@ void vts::init_vts() {
   popl2 ( pairing_m, M, M, "p" );
 
 // Populate xtra var s_var : var for node function
-  popl2 ( s_var, 2 * (M-1), J, "s" );
+  //popl2 ( s_var, 2 * (M-1), J, "s" );
+  popl2 ( s_var, 2 * M, J, "s" );
 
 // Populate xtra var t_var : var for node function 
-  popl2 ( t_var, 2 * (M-1), J, "t" );
+  //popl2 ( t_var, 2 * (M-1), J, "t" );
+  popl2 ( t_var, 2 * M, J, "t" );
 
 // Populate node_funcs : Currently not handled.
   make_func( node_funcs, "an" );
@@ -624,12 +626,23 @@ z3::expr vts::not_a_function( Vec2Expr& nodes, Vec2Expr& active_node) {
   return (! (z3::mk_and (cond_list) ));
 }
 
+/*********   N [here = 3] CNF  Encoding *************************************
+ *
+ *   lit_list ::= a1 C1 || a2 C2 || ... || an Cn 
+ *   cl_list  ::= a1 + a2 + a3 + ... + an <= N
+ *   il_list  ::= ! ( Coeff (C1) && Coeff (C2) )
+ *   
+ *   outer_list ::=  Sum_i [lit_list] && Sum_i [cl_list && il_list] 
+ * 
+ * * **************************************************************/
+
 // Bool e :: edge or not (node) : [arg_list_2d, N, M, 0/1, N, E_arity]
 z3::expr vts::literal_cnf (Vec2Expr s, unsigned i, unsigned k, bool e, unsigned n = 0, unsigned q = 0) {
   z3::expr_vector outer_list(ctx);
   z3::expr_vector lit_list(ctx);
   for ( unsigned j = 0; j < J; j++ ) {
     z3::expr_vector il_list(ctx);
+    z3::expr_vector cl_list(ctx);
     z3::expr_vector inner_list(ctx);
     for ( unsigned x = 0; x < M; x++ ) {
       if (x == k)  continue;
@@ -637,18 +650,21 @@ z3::expr vts::literal_cnf (Vec2Expr s, unsigned i, unsigned k, bool e, unsigned 
         inner_list.push_back( ( s[x][j] && presence_edge[i][n][q][x] ) || ( s[x+M][j] && !presence_edge[i][n][q][x] ) );
       else 
         inner_list.push_back( (s[x][j] && nodes[i][j] ) || ( s[x+M][j] && !nodes[i][j] ) );
+      cl_list.push_back( s[x][j] );
+      cl_list.push_back ( s[x+M][j] );
       il_list.push_back( !(s[x][j] && s[x+M][j]) );
     }
-    // At Most 3; return a constraint on the list
-    auto lConst =  ! (at_least_four ( il_list, il_list.size() ) );
-    lit_list.push_back( lConst );
+    auto cConst =  ! (at_least_two ( cl_list, cl_list.size() ) );
+    auto lConst = mk_and ( il_list );
+    lit_list.push_back( lConst && cConst );
     auto cons = mk_or ( inner_list ); 
     outer_list.push_back( cons );
   }
-  auto cons = mk_and (outer_list)  && mk_and (lit_list);
+  auto cons = mk_and ( outer_list )  && mk_and ( lit_list );
   return cons;
 }
 
+/*** Node activity constraint: a[i][k]  ***/
 z3::expr vts::node_cnf ( Vec2Expr& s ) {
   z3::expr_vector main_list(ctx);
   for ( unsigned i = 0; i < N; i++ ) {
@@ -661,6 +677,7 @@ z3::expr vts::node_cnf ( Vec2Expr& s ) {
   return constraint;
 }
 
+/*** Edge activity constraint: b[i][j][q][k]  ***/
 z3::expr vts::edge_cnf ( Vec2Expr& t ) {
   z3::expr_vector main_list(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
@@ -679,7 +696,7 @@ z3::expr vts::edge_cnf ( Vec2Expr& t ) {
   return constraint;
 }
 
-// Function has a restricted form with Three CNF  
+/** Function has a restricted form with Three CNF  **/ 
 z3::expr vts::cnf_function ( Vec2Expr& s_var, Vec2Expr& t_var ) { 
   z3::expr nodeCnf = node_cnf ( s_var );
   z3::expr edgeCnf = edge_cnf ( t_var ); 
@@ -689,7 +706,7 @@ z3::expr vts::cnf_function ( Vec2Expr& s_var, Vec2Expr& t_var ) {
 
 //----------------------------------------------------------------------------
 
-// Exclude V5 add it as additional constraint
+/** Exclude V5 add it as additional constraint **/
 z3::expr vts::get_basic_constraints () {
   z3::expr a1 = node_activity_constraint();
   z3::expr a2 = edge_activity_constraint();
@@ -719,11 +736,9 @@ z3::model vts::get_vts_for_prob1( ) {
   z3::expr v5 = no_self_edges();                              //V5
   z3::expr basic_constraints_with_stability = get_basic_constraints() && v5;
 
-  // THIS IS EXCATLY WE NEED FOR THE NOT-K-CONNECTED
   z3::expr not_connected = not_k_connected( C, d_reach2, drop2 );
-  // ADD QUANTIFIERS TO THIS 
+  
   //z3::expr connected = k_min_1_connected( C-1, d_reach, drop1 );  
-
   //z3::expr cons =  base_cons && study && edges[0][1][0] && not_connected;
   //z3::expr cons =  base_cons && study && connected && not_connected;
   //z3::expr cons =  base_cons && study && k_1_connected && not_connected;

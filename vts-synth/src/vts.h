@@ -123,6 +123,7 @@ public:
   z3::expr at_least_four( VecExpr dump, unsigned L );
   
   // Overloaded function
+  z3::expr at_least_two ( z3::expr_vector dump, unsigned L );
   z3::expr at_least_four( z3::expr_vector  dump, unsigned L );
   
   // todo: variables are needed to be parametrized

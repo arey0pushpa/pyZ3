@@ -79,8 +79,11 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant, bool flagC ) {
   z3::expr notaFunction = not_a_function( nodes, active_node );
 
   // [3]: N-CNF function 
-  auto setSvar = flattern2d ( s_var, N, M, false );
-  auto setTvar = flattern2d ( t_var, N, M, false );
+  auto setSvar = flattern2d ( s_var, 2*M, J, false );
+  auto setTvar = flattern2d ( t_var, 2*M, J, false );
+  
+ // z3::expr_vector setXvar =  flattern2d ( s_var, N, M, false );
+  
   
   /* Final Qbf Constraint: [[1]] && [[2]] && [[3]] */
   if ( flagC == true ) {

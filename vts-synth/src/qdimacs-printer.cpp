@@ -10,23 +10,6 @@
 #include <string>
 #include "z3-util.h"
 
-// template <template<typename...> class R=std::vector, 
-//           typename Top, 
-//           typename Sub = typename Top::value_type> 
-//    R<typename Sub::value_type> flatten(Top const& all)
-// {
-//     using std::begin;
-//     using std::end;
-
-//     R<typename Sub::value_type> accum;
-    
-//     for(auto& sub : all)
-//         std::copy(begin(sub), end(sub), std::inserter(accum, end(accum)));
-        
-//     return accum;
-// }
-
-
 
 //use Z3_ast
 void collect( z3::expr e ,
@@ -99,7 +82,7 @@ inline void print_clause( z3::expr& cl, std::ofstream& o,
                           std::map <Z3_ast, int>& vmap ) {
   z3::func_decl f = cl.decl();
   if ( f.decl_kind() == Z3_OP_OR) {
-      for( unsigned i =0; i < cl.num_args(); i++ ) {
+      for( unsigned i = 0; i < cl.num_args(); i++ ) {
         z3::expr arg = cl.arg(i);
         print_literal( arg, o, vmap );
       }
@@ -108,7 +91,6 @@ inline void print_clause( z3::expr& cl, std::ofstream& o,
   }
   o << "0\n";
 }
-
 
 
 void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
@@ -124,9 +106,16 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
 
     // Map variable to id in the dictionary.
     unsigned int id = 1;
-    for (auto& key: var_list) {  // todo: check the type of key
-        var_id_map[key] = id++;
+    for (auto& key: var_list) {  
+      //std::cout << key << "\n";
+      var_id_map[key] = id++;
     }
+    
+    /*** Print var id map **
+    for ( auto& e : var_id_map ) {
+      std::cout << "[" << e.first << ", " << e.second << "] \n";
+    }
+    * */
     
 
     //todo: get fresh vars
@@ -143,7 +132,7 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
       }
     }
 
-    // BEGIN QDIMACS PRINITNG  
+    // Begin QDIMACS printing 
     std::ofstream ofs;
     ofs.open ("/tmp/myfile.qdimacs", std::ofstream::out );
     //ofs.open ("myfile.qdimacs", std::ofstream::out );

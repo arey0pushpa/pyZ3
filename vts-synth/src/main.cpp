@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 
     // Retrieve the (non-option) argument:
     if ( (argc <= 1) || argv[argc-1] == NULL ) {  // NO input...
-        std::cerr << "No argument [-p |-g |-c | -z] :: [print_graph, create_graph, cnf_func, run_z3_on_qbf] ! \n" << std::endl;
+        std::cerr << "No argument [-p |-g |-c |-z] :: [print_edges, create_graph, cnf_func, run_z3_on_qbf] ! \n" << std::endl;
         //return 1;
     }
     else { 
@@ -89,7 +89,6 @@ int main(int argc, char** argv) {
       //z3::expr ww = c.bool_const("ww");
       
       z3::expr f = v.get_qbf_formula( edgeQuant, flagC );
-      
 
     /* First Order Formula to test basic functionality  */
     //std::cout << f << "\n";
@@ -110,7 +109,7 @@ int main(int argc, char** argv) {
     //negform ( c, f ); 
     
     if (flagZ == true) {
-      std::cout << "Please wait for implementation\n";
+      std::cout << "Please wait for an implementation\n";
       // Run Z3 QBF solver
       v.get_vts_for_qbf(f);
     } else {

@@ -83,6 +83,10 @@ void hoist(ast_manager& m, expr_ref& fml, vector<app_ref_vector>& m_vars) {
   bool is_forall = false;        
   //m_pred_abs.get_free_vars(fml, vars);
   m_vars.push_back(vars);
+  //for (auto& x : m_vars ) { 
+  //  std::cout << x << "\n";
+    //std::cout << "Hi" << "\n";
+  // }
   //std::cout << "The current vars are: " << vars << "\n" ;  
   vars.reset();
   hoist.pull_quantifier(is_forall, fml, vars);

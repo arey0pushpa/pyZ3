@@ -65,6 +65,7 @@ z3::expr_vector vts::flattern2d ( Vec2Expr& dump, unsigned s1, unsigned s2, bool
     for( unsigned j = 0 ; j < s2; j++ ) {
       if ( eq == true && j == i) continue;
       d1.push_back( dump[i][j] );
+      //std::cout << dump[i][j] << "\n";
     }	    
   }
   return d1;
@@ -143,6 +144,20 @@ z3::expr vts::at_least_four ( VecExpr dump, unsigned L ) {
   }
   return z3::mk_or( ls );
 }
+/** Overloaded z3::expr **/
+
+
+// At least 2 
+z3::expr vts::at_least_two ( z3::expr_vector dump, unsigned L ) {
+  z3::expr_vector ls(ctx);
+  for ( unsigned i = 0; i < L-1; i++ ) {
+    for ( unsigned j = i+1; j < L; j++) {
+      ls.push_back ( dump[i] && dump[j] );  
+    }
+  }
+  return z3::mk_or( ls );
+}
+
 
 // At least 4. 
 z3::expr vts::at_least_four ( z3::expr_vector dump, unsigned L ) {
