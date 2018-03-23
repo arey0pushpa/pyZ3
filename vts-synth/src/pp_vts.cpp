@@ -124,10 +124,11 @@ void print_denotation_console ( std::map<std::string,int> denotation_map ) {
   }
 }
 
-void create_map ( std::map<std::string,int>& denotation_map, std::vector<std::string> vecElem, std::string& depqbfRun, std::vector< std::pair <int,int> >& xyPair  ) {
+void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std::vector<std::string> vecElem, std::string& depqbfRun, std::vector< std::pair <int,int> >& xyPair, VecsExpr qs  ) {
     unsigned int step = 0;
     std::ifstream myfile ( "/tmp/out.txt" );
     std::string line;
+    auto firstLvlQuant = qs[0];
     if ( myfile ) {
       while (std::getline( myfile, line )) {
         //std::stringstream  stream(line);
@@ -143,17 +144,19 @@ void create_map ( std::map<std::string,int>& denotation_map, std::vector<std::st
           step += 1;
           continue;
         }
-        else if ( step > vecElem.size() ){
-          break;
-        }
+        //else if ( step > vecElem.size() ){
+         // break;
+        //}
         else {
           std::stringstream  stream(line);
           std::string  word;
           stream >> word; stream >> word;
           int lit = std::stoi( word ); 
-          //std::cout << lit << "\n";
-          //std::cout << line.at(1) << "\n";
-          std::string var = vecElem[step - 1]; 
+          //std::cout << "LINE IS : "  << lit << "\n";
+          //std::cout << "AT line : " << line.at(1) << "\n";
+          
+          std::string var = Z3_ast_to_string  ( c, firstLvlQuant [step - 1] );
+          //std ::cout << "Var is " << var << "\n";
           denotation_map [ var ] = lit; 
           // Can be avoided by checking only if negative.
           xyPair.push_back( std::make_pair( toDigit (var[2]) , toDigit(var[4]) ) );
@@ -169,7 +172,7 @@ void create_map ( std::map<std::string,int>& denotation_map, std::vector<std::st
 }
 
 // Print depqbf Graph
-void vts::print_graph( std::string filename, VecExpr& edgeQuant, bool flagB, bool flagC ) {
+void vts::print_graph( z3::context& c, std::string filename, VecExpr& edgeQuant, VecsExpr qs, bool flagG, bool flagP ) {
     std::string style = "solid";
     std::string color = "blue";
     std::string node_vec; 
@@ -188,7 +191,7 @@ void vts::print_graph( std::string filename, VecExpr& edgeQuant, bool flagB, boo
     
     std::vector< std::pair <int, int> > xyPair;
     
-    create_map ( denotation_map, vecElem , depqbfRun, xyPair );
+    create_map ( c, denotation_map, vecElem , depqbfRun, xyPair, qs);
 
     std::cout << depqbfRun << "\n"; 
 
@@ -196,14 +199,14 @@ void vts::print_graph( std::string filename, VecExpr& edgeQuant, bool flagB, boo
     //  std::cout << "<" <<  var.first << "," << var.second  << ">" <<"\n" ;
     //}
     //for (auto& var: xyPair ) {
-    //  std::cout << "<" <<  var.first << "," << var.second  << ">" <<"\n" ;
+     // std::cout << "<" <<  var.first << "," << var.second  << ">" <<"\n" ;
     //}
 
-    if ( flagC == true ) {
+    if ( flagP == true ) {
       print_denotation_console ( denotation_map );
     }
 
-    if (flagB == true) {
+    if (flagG == true) {
       std::cout << "dumping dot file: " << filename << "\n";
 
       std::ofstream ofs;

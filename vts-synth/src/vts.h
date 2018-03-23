@@ -18,9 +18,9 @@ enum model_version {
 class vts{
 public:
   vts( z3::context& _ctx,
-       unsigned _M, unsigned _N, unsigned _Q, model_version _V, unsigned _C, unsigned _J )
+       unsigned _M, unsigned _N, unsigned _Q, model_version _V, unsigned _C, unsigned _D )
     : ctx(_ctx), M(_M), N(_N), E_arity(_Q),
-      V(_V), C(_C), J(_J)
+      V(_V), C(_C), D(_D)
   {
     init_vts();
   }
@@ -28,12 +28,12 @@ public:
 private:
   z3::context& ctx;
 
-  unsigned   M;    // Molecules
-  unsigned   N;    // Nodes
+  unsigned   M;        // Molecules
+  unsigned   N;       // Nodes
   unsigned   E_arity;    // Edge arity
-  model_version V;  // Variation
-  unsigned   C;    // connectedness
-  unsigned J; // CNF function basis
+  model_version V;   // Variation
+  unsigned   C;     // connectedness
+  unsigned D;      // CNF conjunction depth 
 
   void init_vts();
 
@@ -41,8 +41,8 @@ private:
   Vec2Expr nodes;
   Vec2Expr active_node;
 
-  Vec2Expr s_var;
-  Vec2Expr t_var;
+  Vec3Expr s_var;
+  Vec3Expr t_var;
 
   Vec3Expr edges;
   Vec4Expr presence_edge;
@@ -138,13 +138,13 @@ public:
   z3::expr not_k_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
   z3::expr k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
   
-  z3::expr literal_cnf (Vec2Expr s, unsigned i, unsigned k, bool e, unsigned n, unsigned q);
+  z3::expr literal_cnf (Vec3Expr s, unsigned i, unsigned k, bool e, unsigned n, unsigned q);
 
   z3::expr not_a_function( Vec2Expr& nodes, Vec2Expr& active_node);
-  z3::expr cnf_function ( Vec2Expr& p_var, Vec2Expr& s_var );
+  z3::expr cnf_function ( Vec3Expr& p_var, Vec3Expr& s_var );
 
-  z3::expr node_cnf ( Vec2Expr& s );
-  z3::expr edge_cnf ( Vec2Expr& t );
+  z3::expr node_cnf ( Vec3Expr& s );
+  z3::expr edge_cnf ( Vec3Expr& t );
 
   z3::model get_vts_for_qbf(z3::expr cons);
   z3::expr get_basic_constraints();
@@ -156,7 +156,7 @@ public:
   z3::expr is_qth_edge_present( unsigned i, unsigned j, unsigned q );
   z3::expr is_undirected_dumped_edge(unsigned i, unsigned j, Vec3Expr& dump1);
   void dump_dot( std::string filename, z3::model mdl);
-  void print_graph( std::string filename, VecExpr& edgeQuant, bool flagB, bool flagC );
+  void print_graph( z3::context& c ,std::string filename, VecExpr& edgeQuant, VecsExpr qs, bool flagB, bool flagC );
 };
 
 

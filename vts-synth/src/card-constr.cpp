@@ -18,7 +18,6 @@ VecExpr vts::flattern_3d ( Vec3Expr& dump ) {
 }
 
 
-
 // Use PbEq for exactly k.
 z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
   // D2: Flattening the array. Avoid i == j.
@@ -102,6 +101,10 @@ z3::expr_vector vts::flattern4d ( Vec4Expr& dump, unsigned s1, unsigned s2, unsi
 // At least 2 
 z3::expr vts::at_least_two ( VecExpr dump, unsigned L ) {
   z3::expr_vector ls(ctx);
+  if ( L < 2 ) {
+    std::cout << "Less than 2 vectors: at_least_two Not possible";
+    exit(0);
+  }
   for ( unsigned i = 0; i < L-1; i++ ) {
     for ( unsigned j = i+1; j < L; j++) {
       ls.push_back ( dump[i] && dump[j] );  
@@ -112,6 +115,10 @@ z3::expr vts::at_least_two ( VecExpr dump, unsigned L ) {
 
 // At least 3
 z3::expr vts::at_least_three ( VecExpr dump, unsigned L ) {
+  if ( L < 3 ) {
+    std::cout << "Less than 2 vectors: at_least_two Not possible";
+    exit(0);
+  }
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
   for ( unsigned i = 0; i < L-2; i++ ) {

@@ -99,7 +99,8 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
     std::vector <z3::expr> fresh_vars;
     // auto var_list = flatten( m_vars );
     auto var_list = to_vector( m_vars );
-    //std::cout << m_vars << "\n";
+    //auto firstLvlQuant = m_vars[0]; 
+    //std::cout << firstLvlQuant.size() << "\n";
 
     // Create a Map from var to id, var: id
     std::map <Z3_ast, int> var_id_map;
@@ -110,6 +111,12 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
       //std::cout << key << "\n";
       var_id_map[key] = id++;
     }
+
+    /*
+    for ( auto& i : m_vars[0] ) {
+      std::cout << "<" << i << ", " << var_id_map[i] << ">" <<"\n";
+    }
+    */
     
     /*** Print var id map **
     for ( auto& e : var_id_map ) {

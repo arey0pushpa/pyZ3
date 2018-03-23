@@ -35,7 +35,6 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant, bool flagC ) {
  
   z3::expr at_least_k_edges = at_least_three( ee_set, ee_set.size() );
   
-  
   // [[1]] : K Connected Graph 
   // EXISTS [ setE, kedges && k-1Conn && knotConn ]
   z3::expr_vector setE = flattern3d ( edges, N, N, E_arity, true );
@@ -77,16 +76,18 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant, bool flagC ) {
 
   // [3]: Not a function constraint.
   z3::expr notaFunction = not_a_function( nodes, active_node );
-
-  // [3]: N-CNF function 
-  auto setSvar = flattern2d ( s_var, 2*M, J, false );
-  auto setTvar = flattern2d ( t_var, 2*M, J, false );
-  
- // z3::expr_vector setXvar =  flattern2d ( s_var, N, M, false );
-  
   
   /* Final Qbf Constraint: [[1]] && [[2]] && [[3]] */
   if ( flagC == true ) {
+    // Populate xtra var s_var : var for node function
+    popl3 ( s_var, M, 2 * M, D, "s" );
+    // Populate xtra var t_var : var for node function 
+    popl3 ( t_var, M, 2 * M, D, "t" );
+  
+    // [3]: N-CNF function 
+    auto setSvar = flattern3d ( s_var, M, 2*M, D, false );
+    auto setTvar = flattern3d ( t_var, M, 2*M, D, false );
+  
     z3::expr cnfCons = cnf_function( s_var, t_var );
 
     //z3::expr qbfCons  = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach,  basicConstraintsWithStab && qbfCnfCos  )))))))))) );
@@ -98,6 +99,7 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant, bool flagC ) {
     // No function possible constraint [[3]]
     // FORALL [ qvars, basicConst => notafunc ]
     z3::expr noFunctionPossible = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach , implies ( basicConstraintsWithStab, notaFunction ) )))))))))) );
+
     z3::expr qbfCons = exists ( setE, kconnectedConstraint && V5 && noFunctionPossible );   
     return qbfCons;
   } 

@@ -83,10 +83,6 @@ void hoist(ast_manager& m, expr_ref& fml, vector<app_ref_vector>& m_vars) {
   bool is_forall = false;        
   //m_pred_abs.get_free_vars(fml, vars);
   m_vars.push_back(vars);
-  //for (auto& x : m_vars ) { 
-  //  std::cout << x << "\n";
-    //std::cout << "Hi" << "\n";
-  // }
   //std::cout << "The current vars are: " << vars << "\n" ;  
   vars.reset();
   hoist.pull_quantifier(is_forall, fml, vars);
@@ -103,6 +99,11 @@ void hoist(ast_manager& m, expr_ref& fml, vector<app_ref_vector>& m_vars) {
   }
   while (!vars.empty());
   SASSERT(m_vars.back().empty()); 
+  /* Print m_var content
+  for (auto& x : m_vars ) { 
+    std::cout << x << "\n";
+    //std::cout << "Hi" << "\n";
+  }*/
   // for( auto& m: m_vars ) {
   //   std::cout << m;
   //   //std::cout << "The sort of " << m << " is " << Z3_get_sort (c, m); 

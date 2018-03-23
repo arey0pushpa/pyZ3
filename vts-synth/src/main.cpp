@@ -59,14 +59,15 @@ int main(int argc, char** argv) {
       
       z3::context c;
       
-      // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity ]
+      // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
       unsigned int N = 2;
       unsigned int M = 2;
       unsigned int Q = 2;
-      unsigned int J = 2;
+      // depth of cnf
+      unsigned int D = 2;
       
 
-      vts  v( c, M, N, Q, MODEL_4, 3, J );
+      vts  v( c, M, N, Q, MODEL_4, 3, D );
 
       //z3::model mdl = v.get_vts_for_prob1();
       //z3::model qbf_mdl = v.get_vts_for_qbf();
@@ -86,9 +87,10 @@ int main(int argc, char** argv) {
       z3::expr y = c.bool_const("y");
       z3::expr z = c.bool_const("z");
       z3::expr w = c.bool_const("w");
-      //z3::expr ww = c.bool_const("ww");
       
       z3::expr f = v.get_qbf_formula( edgeQuant, flagC );
+      //std::cout << f << "\n";
+
 
     /* First Order Formula to test basic functionality  */
     //std::cout << f << "\n";
@@ -115,6 +117,18 @@ int main(int argc, char** argv) {
     } else {
       VecsExpr qs;
       auto prenex_f = prenex( f, qs );
+
+      //for (auto& i : qs[0] ) {
+      //    std::cout << i << "\n";
+      //}
+      /*
+      for (auto& i : qs ) {
+        for ( auto& j : i ) {
+          std::cout << j << "\n";
+        }
+        std::cout << "\n";
+      }
+      */
     
       /* Print the formaula in pcnf  Avoid printing now ! */
       //std::cout << "Prenexed f : " << prenex_f << "\n";
@@ -171,7 +185,7 @@ int main(int argc, char** argv) {
         std::cout << "Program run Sucess! ";
       }
 
-      v.print_graph( "/tmp/dep_vts.dot", edgeQuant, flagG, flagP); 
+      v.print_graph( c, "/tmp/dep_vts.dot", edgeQuant, qs, flagG, flagP); 
       if (flagG == true ) { 
         auto retVal = system("xdot /tmp/dep_vts.dot");
         if(retVal == -1) 
