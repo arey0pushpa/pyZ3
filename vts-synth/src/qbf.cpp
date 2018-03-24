@@ -3,7 +3,7 @@
 //#include <vector>
 //#include <iterator>
 
-z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant, bool flagC ) {
+z3::expr vts::get_qbf_formula ( bool flagC ) {
 
   /* Build Constrint Of the Form := [[1]] && [[2]] && [[3]]
    * [[1]] :: Connectivity Constraint : kConnected Graph
@@ -15,7 +15,7 @@ z3::expr vts::get_qbf_formula ( VecExpr& edgeQuant, bool flagC ) {
 
   /***** Building [[1]] ****/
   VecExpr ee_set = flattern_3d ( edges );
-  edgeQuant = ee_set;
+  //edgeQuant = ee_set;
 
   z3::expr_vector setR1 = flattern2d ( d_reach1, N, N, true );
   z3::expr_vector setR2 = flattern2d ( d_reach2, N, N, true );

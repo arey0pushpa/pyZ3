@@ -149,14 +149,14 @@ public:
   z3::model get_vts_for_qbf(z3::expr cons);
   z3::expr get_basic_constraints();
   z3::model get_vts_for_prob1();
-  z3::expr get_qbf_formula(VecExpr& edgeQuant, bool flagC);
+  z3::expr get_qbf_formula( bool flagC );
 
   //helper functions
   z3::expr is_mol_edge_present( unsigned i, unsigned j, unsigned m );
   z3::expr is_qth_edge_present( unsigned i, unsigned j, unsigned q );
   z3::expr is_undirected_dumped_edge(unsigned i, unsigned j, Vec3Expr& dump1);
   void dump_dot( std::string filename, z3::model mdl);
-  void print_graph( z3::context& c ,std::string filename, VecExpr& edgeQuant, VecsExpr qs, bool flagB, bool flagC );
+  void print_graph( z3::context& c ,std::string filename, VecsExpr qs, bool flagB, bool flagC );
 };
 
 

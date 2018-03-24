@@ -79,16 +79,12 @@ int main(int argc, char** argv) {
 
       z3::expr t = c.bool_val( true  );
       z3::expr fal = c.bool_val( false );
-      VecExpr edgeQuant;
-      unsigned int equant_len = N * (N - 1) * Q;
-      //unsigned int denotation[equant_len];
-
       z3::expr x = c.bool_const("x");
       z3::expr y = c.bool_const("y");
       z3::expr z = c.bool_const("z");
       z3::expr w = c.bool_const("w");
       
-      z3::expr f = v.get_qbf_formula( edgeQuant, flagC );
+      z3::expr f = v.get_qbf_formula( flagC );
       //std::cout << f << "\n";
 
 
@@ -118,18 +114,6 @@ int main(int argc, char** argv) {
       VecsExpr qs;
       auto prenex_f = prenex( f, qs );
 
-      //for (auto& i : qs[0] ) {
-      //    std::cout << i << "\n";
-      //}
-      /*
-      for (auto& i : qs ) {
-        for ( auto& j : i ) {
-          std::cout << j << "\n";
-        }
-        std::cout << "\n";
-      }
-      */
-    
       /* Print the formaula in pcnf  Avoid printing now ! */
       //std::cout << "Prenexed f : " << prenex_f << "\n";
       // std::cout << "Quants :\n";
@@ -155,7 +139,7 @@ int main(int argc, char** argv) {
       qdimacs_printer( cnf_f, qs ); 
       //std::cout << "Creating depqbf input file at /tmp/depqbf.c \n";
       std::cout << "Creating depqbf input file at ./build/depqbf/examples/depqbf.c  \n";
-      depqbf_file_creator(edgeQuant, equant_len);
+      //depqbf_file_creator(edgeQuant, equant_len);
 
       //bool timedout = false;
       std::future<int> future = std::async(std::launch::async, [](){ 
@@ -185,7 +169,7 @@ int main(int argc, char** argv) {
         std::cout << "Program run Sucess! ";
       }
 
-      v.print_graph( c, "/tmp/dep_vts.dot", edgeQuant, qs, flagG, flagP); 
+      v.print_graph( c, "/tmp/dep_vts.dot", qs, flagG, flagP); 
       if (flagG == true ) { 
         auto retVal = system("xdot /tmp/dep_vts.dot");
         if(retVal == -1) 
