@@ -106,10 +106,10 @@ int main(int argc, char** argv) {
     //auto fml_f = negform ( c, f ); 
     //negform ( c, f ); 
     
+    /* Run Z3 home made QBF solver or DepQbf */
     if (flagZ == true) {
-      std::cout << "Please wait for an implementation\n";
       // Run Z3 QBF solver
-      v.get_vts_for_qbf(f);
+      v.use_z3_qbf_solver( f );
     } else {
       VecsExpr qs;
       auto prenex_f = prenex( f, qs );

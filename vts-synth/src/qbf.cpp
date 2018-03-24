@@ -114,10 +114,11 @@ z3::expr vts::get_qbf_formula ( bool flagC ) {
 }
 
 // Z3 home made QBf solver and return model
-z3::model vts::get_vts_for_qbf( z3::expr cons) {
+void vts::use_z3_qbf_solver ( z3::expr cons ) {
 
   // Print the input formula.
   // std::cout << cons << "\n";
+  
   z3::solver s(ctx);
 
   // making sure model based quantifier instantiation is enabled.
@@ -128,13 +129,14 @@ z3::model vts::get_vts_for_qbf( z3::expr cons) {
   s.add( cons );
   
  if( s.check() == z3::sat ) {
+   std::cout << "The formula is SAT \n";
    z3::model m = s.get_model();
    //std::cout << m << "\n";
-   std::cout << s.get_model() << "\n";
-   return m;
+   std::cout << m << "\n";
+   //return m;
   }else{
     std::cout << "model is not feasible!";
     assert(false);
  }
-  return s.get_model();
+  //return s.get_model();
 }

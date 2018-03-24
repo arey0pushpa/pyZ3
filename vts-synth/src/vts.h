@@ -146,7 +146,7 @@ public:
   z3::expr node_cnf ( Vec3Expr& s );
   z3::expr edge_cnf ( Vec3Expr& t );
 
-  z3::model get_vts_for_qbf(z3::expr cons);
+  void use_z3_qbf_solver ( z3::expr cons );
   z3::expr get_basic_constraints();
   z3::model get_vts_for_prob1();
   z3::expr get_qbf_formula( bool flagC );
