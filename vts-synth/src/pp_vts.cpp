@@ -144,9 +144,6 @@ void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std
           step += 1;
           continue;
         }
-        //else if ( step > vecElem.size() ){
-         // break;
-        //}
         else {
           std::stringstream  stream(line);
           std::string  word;
@@ -154,12 +151,15 @@ void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std
           int lit = std::stoi( word ); 
           //std::cout << "LINE IS : "  << lit << "\n";
           //std::cout << "AT line : " << line.at(1) << "\n";
-          
           std::string var = Z3_ast_to_string  ( c, firstLvlQuant [step - 1] );
           //std ::cout << "Var is " << var << "\n";
           denotation_map [ var ] = lit; 
-          // Can be avoided by checking only if negative.
-          xyPair.push_back( std::make_pair( toDigit (var[2]) , toDigit(var[4]) ) );
+          
+          //todo : Can be avoided by checking only if negative.
+          if ( var[0] == 'e' && var[1] == '_' && lit > 0) {
+            //std::cout << "Var2 = " << toDigit(var[2]) << "\t Var4 = " << toDigit( var[4] ) << "\n";
+            xyPair.push_back( std::make_pair( toDigit (var[2]) , toDigit(var[4]) ) );
+          }
           step += 1;
         }
       }
@@ -177,6 +177,7 @@ void vts::print_graph( z3::context& c, std::string filename, VecExpr& edgeQuant,
     std::string color = "blue";
     std::string node_vec; 
     std::vector<std::string> vecElem;
+    // denotation_map: print the variable assignment
     std::map<std::string,int> denotation_map;
     std::string depqbfRun;
     unsigned int dstep = 0;
@@ -189,6 +190,7 @@ void vts::print_graph( z3::context& c, std::string filename, VecExpr& edgeQuant,
     //  std::cout << var << "\n";
     //}
     
+    // xyPair: print graph 
     std::vector< std::pair <int, int> > xyPair;
     
     create_map ( c, denotation_map, vecElem , depqbfRun, xyPair, qs);
@@ -199,7 +201,7 @@ void vts::print_graph( z3::context& c, std::string filename, VecExpr& edgeQuant,
     //  std::cout << "<" <<  var.first << "," << var.second  << ">" <<"\n" ;
     //}
     //for (auto& var: xyPair ) {
-     // std::cout << "<" <<  var.first << "," << var.second  << ">" <<"\n" ;
+    //  std::cout << "<" <<  var.first << "," << var.second  << ">" <<"\n" ;
     //}
 
     if ( flagP == true ) {
@@ -218,24 +220,15 @@ void vts::print_graph( z3::context& c, std::string filename, VecExpr& edgeQuant,
         ofs << std::to_string(i) << "[label=\"" << node_vec << "\"]\n";
       }
 
-      for ( auto& val: denotation_map) {
-        auto sign = val.second;
-        //auto y = pr.second;
-        //std::cout << sign << "\n";
-        if ( sign >= 0 ) {
-          auto x = xyPair[dstep].first; 
-          auto y = xyPair[dstep].second; 
-          //auto x = pr.first; 
-          //std::cout << "Value of x = " << x << "\nValue of y = " << y << "\n";  
-          std::string label = "M";
-          ofs << std::to_string (x) << "-> " <<  std::to_string (y)
-              <<  "[label="  << label << ",color=" << color
-              << ",style=" << style << "]\n";
-          dstep += 1;
-        }
-        else {
-          dstep += 1;
-        }
+      for ( auto& val: xyPair ) {
+        auto x = xyPair[dstep].first; 
+        auto y = xyPair[dstep].second; 
+        //std::cout << "Value of x = " << x << "\nValue of y = " << y << "\n";  
+        std::string label = "M";
+        ofs << std::to_string (x) << "-> " <<  std::to_string (y)
+            <<  "[label="  << label << ",color=" << color
+            << ",style=" << style << "]\n";
+        dstep += 1;
       }
       ofs << "}\n";
     }
