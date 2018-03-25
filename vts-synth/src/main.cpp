@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
       unsigned int D = 2;
       
 
-      vts  v( c, M, N, Q, MODEL_4, 2, D );
+      vts  v( c, M, N, Q, MODEL_4, 3, D );
 
       //z3::model mdl = v.get_vts_for_prob1();
       //z3::model qbf_mdl = v.get_vts_for_qbf();
