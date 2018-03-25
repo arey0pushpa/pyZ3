@@ -27,7 +27,7 @@ z3::expr vts::get_qbf_formula ( bool flagC ) {
   z3::expr_vector setD1 = flattern3d ( drop1, N, N, E_arity, true );
   z3::expr_vector setD2 = flattern3d ( drop2, N, N, E_arity, true );
   
-  z3::expr k_min_1_connected = forall (  setD1, implies 
+  z3::expr k_min_1_connected = forall ( setD1, implies 
 		  (  (exactly_k_drops ( C-1, drop1 ) && only_present_edges_can_be_dropped ( drop1 )), is_reach1 ) );
  
   z3::expr k_not_connected = exists ( setD2,  

@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 
     // Retrieve the (non-option) argument:
     if ( (argc <= 1) || argv[argc-1] == NULL ) {  // NO input...
-        std::cerr << "No argument [-p |-g |-c |-z] :: [print_edges, create_graph, cnf_func, run_z3_on_qbf] ! \n" << std::endl;
+        std::cerr << "No argument [-p |-g |-c |-z] :: [print_model, show_graph, cnf_func, run_z3_on_qbf] ! \n" << std::endl;
         //return 1;
     }
     else { 
@@ -60,11 +60,11 @@ int main(int argc, char** argv) {
       z3::context c;
       
       // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
-      unsigned int N = 3;
+      unsigned int N = 2;
       unsigned int M = 2;
       unsigned int Q = 2;
       // depth of cnf
-      unsigned int D = 2;
+      unsigned int D = 1;
       
 
       vts  v( c, M, N, Q, MODEL_4, 3, D );
