@@ -39,11 +39,15 @@ z3::expr vts::get_qbf_formula ( bool flagC ) {
   // EXISTS [ setE, kedges && k-1Conn && knotConn ]
   z3::expr_vector setE = flattern3d ( edges, N, N, E_arity, true );
   //z3::expr kconnectedConstraint = exists ( setE, at_least_k_edges && k_min_1_connected && k_not_connected );
-  z3::expr kconnectedConstraint = at_least_k_edges && k_min_1_connected && k_not_connected;
+  //z3::expr kconnectedConstraint = at_least_k_edges && k_min_1_connected && k_not_connected;
 
   /***** Building [[2]] ****/
   // [[2]] : V5  
   z3::expr V5 = no_self_edges();                              
+
+  /*** Return K connected Graph ***/
+  z3::expr kconnectedConstraint = exists ( setE, at_least_k_edges && k_min_1_connected && k_not_connected && V5 );
+  return kconnectedConstraint; 
     
   /***** Building [[3]] ****/
   z3::expr_vector setN = flattern2d ( nodes, N, M, false);

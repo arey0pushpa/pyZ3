@@ -136,12 +136,12 @@ public:
   z3::expr remains_connected( Vec2Expr& r_varas );                 //
   z3::expr gets_disconnected( Vec2Expr& r_varas );                 //
 
-  z3::expr not_k_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
-  z3::expr k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump);
+  z3::expr not_k_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump );
+  z3::expr k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump );
   
   z3::expr literal_cnf (Vec3Expr s, unsigned i, unsigned k, bool e, unsigned n, unsigned q);
 
-  z3::expr not_a_function( Vec2Expr& nodes, Vec2Expr& active_node);
+  z3::expr not_a_function( Vec2Expr& nodes, Vec2Expr& active_node );
   z3::expr cnf_function ( Vec3Expr& p_var, Vec3Expr& s_var );
 
   z3::expr node_cnf ( Vec3Expr& s );
@@ -155,8 +155,8 @@ public:
   //helper functions
   z3::expr is_mol_edge_present( unsigned i, unsigned j, unsigned m );
   z3::expr is_qth_edge_present( unsigned i, unsigned j, unsigned q );
-  z3::expr is_undirected_dumped_edge(unsigned i, unsigned j, Vec3Expr& dump1);
-  void dump_dot( std::string filename, z3::model mdl);
+  z3::expr is_undirected_dumped_edge( unsigned i, unsigned j, Vec3Expr& dump1 );
+  void dump_dot( std::string filename, z3::model mdl );
   void print_graph( z3::context& c ,std::string filename, VecsExpr qs, bool flagB, bool flagC );
 };
 
