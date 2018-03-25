@@ -32,6 +32,11 @@ z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
   unsigned int L = d1.size();
   
   // Only have support for exactly 2 and 3.
+  if ( drop_count == 1 ) {
+    z3::expr al = at_least_one ( d1, L );
+    z3::expr am = at_least_two ( d1, L );
+    return ( al && !am );
+  }
   if (drop_count == 2) {
     z3::expr al = at_least_two( d1, L ); 
     z3::expr am = at_least_three( d1, L ); 
@@ -40,6 +45,9 @@ z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
     z3::expr al = at_least_three( d1, L ); 
     z3::expr am = at_least_four( d1, L ); 
     return ( al && !am );
+  } else if (drop_count == 4) {
+    z3::expr al = at_least_four( d1, L ); 
+    z3::expr am = at_least_five( d1, L ); 
  } else { // todo : fill the right code 
     z3::expr al = at_least_two( d1, L ); 
     z3::expr am = at_least_three( d1, L ); 
@@ -54,6 +62,8 @@ z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
   //std::cout << "The total count is : " << expr;  
   return (tt && (expr == ctx.int_val(drop_count)) );
   */
+  
+  return ctx.bool_val(true);
 }
 
 /* Different type of Flattern */
@@ -96,6 +106,15 @@ z3::expr_vector vts::flattern4d ( Vec4Expr& dump, unsigned s1, unsigned s2, unsi
     }
   }
  return d1;
+}
+
+// At least 1
+z3::expr vts::at_least_one ( VecExpr dump, unsigned L ) {
+  z3::expr_vector ls(ctx);
+  for ( unsigned i = 0; i < L; i++ ) {
+    ls.push_back( dump [i] );
+  }
+  return z3::mk_or ( ls );
 }
 
 // At least 2 
@@ -143,11 +162,11 @@ z3::expr vts::at_least_four ( VecExpr dump, unsigned L ) {
   z3::expr lhs(ctx);
   z3::expr lhs1(ctx);
   for ( unsigned i = 0; i < L-3; i++ ) {
-    for ( unsigned j = i+1; j < L-2; j++) {
+    for ( unsigned j = i+1; j < L-2; j++ ) {
       lhs =  ( dump[i] && dump[j] );  
-      for ( unsigned k = j+1; k < L-1; k++) {
+      for ( unsigned k = j+1; k < L-1; k++ ) {
         lhs1 = (lhs && dump[k]);
-        for ( unsigned x = k+1; x < L; x++) {
+        for ( unsigned x = k+1; x < L; x++ ) {
 	        ls.push_back ( lhs1 && dump[x] );
      }
     }
@@ -156,6 +175,33 @@ z3::expr vts::at_least_four ( VecExpr dump, unsigned L ) {
   return z3::mk_or( ls );
 }
 /** Overloaded z3::expr **/
+
+// At least 5 
+z3::expr vts::at_least_five ( VecExpr dump, unsigned L ) {
+  if ( L < 5 ) {
+    std::cout << "Less than 4 vectors: at_least_five Not possible";
+    exit(0);
+  }
+  z3::expr_vector ls(ctx);
+  z3::expr lhs(ctx);
+  z3::expr lhs1(ctx);
+  z3::expr lhs2(ctx);
+  for ( unsigned i = 0; i < L-4; i++ ) {
+    for ( unsigned j = i+1; j < L-3; j++ ) {
+      lhs =  ( dump[i] && dump[j] );  
+      for ( unsigned k = j+1; k < L-2; k++ ) {
+        lhs1 = (lhs && dump[k]);
+        for ( unsigned x = k+1; x < L-1; x++ ) {
+          lhs2 = (lhs1 && dump[x]);
+          for ( unsigned z = x + 1; z < L; z++ ) {
+            ls.push_back ( lhs2 && dump[z] );
+          }
+        }
+      }
+    }
+  } 
+  return z3::mk_or( ls );
+}
 
 // At least 2 
 z3::expr vts::at_least_two ( z3::expr_vector dump, unsigned L ) {

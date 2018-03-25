@@ -118,9 +118,11 @@ public:
 
   // connectivity constraints
   // At least at most
+  z3::expr at_least_one( VecExpr dump, unsigned L );
   z3::expr at_least_two( VecExpr dump, unsigned L );
   z3::expr at_least_three( VecExpr dump, unsigned L );
   z3::expr at_least_four( VecExpr dump, unsigned L );
+  z3::expr at_least_five( VecExpr dump, unsigned L );
   
   // Overloaded function
   z3::expr at_least_two ( z3::expr_vector dump, unsigned L );
