@@ -52,8 +52,8 @@ z3::expr vts::node_cnf ( Vec3Expr& s ) {
       main_list.push_back ( cnf ); 
     }
   }
-  auto constraint = mk_and ( main_list );
-  return constraint;
+  auto cons = mk_and ( main_list );
+  return cons;
 }
 
 /*** Edge activity constraint: b[i][j][q][k]  ***/
@@ -71,8 +71,8 @@ z3::expr vts::edge_cnf ( Vec3Expr& t ) {
       }
     }
   }
-  auto constraint = mk_and ( main_list );
-  return constraint;
+  auto cons = mk_and ( main_list );
+  return cons;
 }
 
 /** Function has a restricted form with Three CNF  **/ 

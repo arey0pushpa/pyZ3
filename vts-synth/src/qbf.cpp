@@ -78,7 +78,7 @@ z3::expr vts::create_qbf_formula ( bool flagC ) {
   
   // Basic constraints with stability excluding V5 :: self edge
   z3::expr vtsBasicStability = vts_basic_constraints() && vts_stability_constraint();
-  z3::expr vtsFusion = vts_fusion_constraint(); 
+  z3::expr vtsFusion = ! ( vts_fusion_constraint() ); 
 
   // [3]: Not a function constraint.
   z3::expr notaFunction = not_a_function( nodes, active_node );

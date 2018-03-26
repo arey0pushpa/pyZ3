@@ -146,6 +146,12 @@ public:
   z3::expr node_cnf ( Vec3Expr& s );
   z3::expr edge_cnf ( Vec3Expr& t );
 
+  /** Gates constraint **/
+  z3::expr logic_gates ();
+  z3::expr edge_gate_fml (); 
+  z3::expr node_gate_fml (); 
+  z3::expr gate_fml (unsigned i, unsigned k, bool e, unsigned j, unsigned q );
+
   /** Build constraint and model **/
   void use_z3_qbf_solver ( z3::expr cons );
   z3::expr vts_activity_constraint();
