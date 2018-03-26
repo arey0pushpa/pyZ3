@@ -60,14 +60,14 @@ int main(int argc, char** argv) {
       z3::context c;
       
       // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
-      unsigned int N = 2;
+      unsigned int N = 4;
       unsigned int M = 4;
       unsigned int Q = 2;
       // depth of cnf
       unsigned int D = 2;
       
 
-      vts  v( c, M, N, Q, MODEL_4, 3, D );
+      vts  v( c, M, N, Q, MODEL_4, 2, D );
 
       //z3::model mdl = v.get_vts_for_prob1();
       //z3::model qbf_mdl = v.get_vts_for_qbf();
