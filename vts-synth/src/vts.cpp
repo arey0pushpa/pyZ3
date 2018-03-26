@@ -340,7 +340,7 @@ z3::expr vts::active_molecule_is_present_on_node() {         //V3
 }
 
 // V4: The edge label are subset of the source and target.
-z3::expr vts::edge_modelecues_is_subset_of_node_molecules() { //V4
+z3::expr vts::edge_label_subset_of_node_label() { //V4
   z3::expr_vector ls(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
@@ -413,7 +413,7 @@ z3::expr vts::edge_must_fuse_with_target() {                 //V7
 
 //  V8: Edge should not be able to potentially fuse with
 //      any node other than it's target.
-z3::expr vts::edge_must_fuse_with_noone_else() {       //V8
+z3::expr vts::edge_fuse_only_with_target() {       //V8
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
@@ -441,9 +441,7 @@ z3::expr vts::edge_must_fuse_with_noone_else() {       //V8
   return z3::mk_and( ls );
 }
 
-//----------------------------------------------------------------------------
-// reachability
-
+/*** Reachability  Definition ***/
 z3::expr vts::reachability_def() {
   z3::expr_vector a_list(ctx);
   for( unsigned i = 0; i < N; i++ ) {
@@ -469,7 +467,7 @@ z3::expr vts::reachability_def() {
   return z3::mk_and( a_list );
 }
 
-z3::expr vts::study_state_stability_cond() { //R2
+z3::expr vts::steady_state_stability_cond() { //R2
   z3::expr_vector a_list(ctx);
   for( unsigned i = 0; i < N; i++ ) {
     for( unsigned j = 0; j < N; j++ ) {
@@ -627,137 +625,70 @@ z3::expr vts::not_a_function( Vec2Expr& nodes, Vec2Expr& active_node) {
   return (! (z3::mk_and (cond_list) ));
 }
 
-/*********   N [here = 3] CNF  Encoding *************************************
+/** Create constraint formula for vts **
  *
- *   lit_list ::= a1 C1 || a2 C2 || ... || an Cn 
- *   cl_list  ::= a1 + a2 + a3 + ... + an <= N
- *   il_list  ::= !Coeff (C1) || !Coeff (C2) 
- *   
- *   outer_list ::=  Sum_i { [lit_list] && [cl_list] && [il_list] } 
- * 
- * * *************************************************************************/
-
-// Bool e :: edge or not (node) : [arg_list_2d, N, M, 0/1, N, E_arity]
-z3::expr vts::literal_cnf ( Vec3Expr s, unsigned i, unsigned k, bool e, unsigned j = 0, unsigned q = 0 ) {
-  z3::expr_vector outer_list(ctx);
-  z3::expr_vector lit_listC(ctx);
-  z3::expr_vector lit_listI(ctx);
-  // d :: conjunction level/depth
-  for ( unsigned d = 0; d < D; d++ ) {
-    z3::expr_vector il_list(ctx);
-    z3::expr_vector cl_list(ctx);
-    z3::expr_vector inner_list(ctx);
-    for ( unsigned k1 = 0; k1 < M; k1++ ) {
-      if ( k1 == k )  continue;
-      if ( e == true ) 
-        inner_list.push_back( ( s[k][k1][d] && presence_edge[i][j][q][k1] ) || ( s[k][k1+M][d] && !presence_edge[i][j][q][k1] ) );
-      else 
-        inner_list.push_back( ( s[k][k1][d] && nodes[i][k1] ) || ( s[k][k1+M][d] && !nodes[i][k1] ) );
-      cl_list.push_back( s[k][k1][d] );
-      cl_list.push_back( s[k][k1+M][d] );
-      il_list.push_back( !s[k][k1][d] || !s[k][k1+M][d] ) ;
-    }
-    // At most 2 
-    auto cConst =  ! (at_least_two ( cl_list, cl_list.size() ) );
-    lit_listC.push_back( cConst );
-    auto iConst = mk_and ( il_list );
-    lit_listI.push_back( iConst  );
-    auto cons = mk_or ( inner_list ); 
-    outer_list.push_back( cons && iConst && cConst );
-  }
-  auto cons = mk_and ( outer_list );
-  return cons;
-}
-
-/*** Node activity constraint: a[i][k]  ***/
-z3::expr vts::node_cnf ( Vec3Expr& s ) {
-  z3::expr_vector main_list(ctx);
-  for ( unsigned i = 0; i < N; i++ ) {
-    for ( unsigned k = 0; k < M; k++ ) {
-      auto cnf = (active_node[i][k] == literal_cnf (s, i, k, false) );
-      main_list.push_back ( cnf ); 
-    }
-  }
-  auto constraint = mk_and ( main_list );
-  return constraint;
-}
-
-/*** Edge activity constraint: b[i][j][q][k]  ***/
-z3::expr vts::edge_cnf ( Vec3Expr& t ) {
-  z3::expr_vector main_list(ctx);
-  for( unsigned i = 0 ; i < N; i++ ) {
-    for( unsigned j = 0 ; j < N; j++ ) {
-      if ( i == j )  continue;
-      for ( unsigned q = 0; q < E_arity; q++ ) {
-        for ( unsigned k = 0; k < M; k++ ) { 
-          z3::expr_vector outer_list(ctx);
-          auto cnf =  ( active_edge[i][j][q][k] == literal_cnf (t, i, k, true, j, q) ) ;  
-          main_list.push_back ( cnf ); 
-        }
-      }
-    }
-  }
-  auto constraint = mk_and ( main_list );
-  return constraint;
-}
-
-/** Function has a restricted form with Three CNF  **/ 
-z3::expr vts::cnf_function ( Vec3Expr& s_var, Vec3Expr& t_var ) { 
-  z3::expr nodeCnf = node_cnf ( s_var );
-  std::cout << nodeCnf << "\n";
-  z3::expr edgeCnf = edge_cnf ( t_var ); 
-  std::cout << edgeCnf << "\n";
-  auto cons = nodeCnf && edgeCnf;
-  return cons;
-}
-
-
-/******* Boolean Gates Implementation **********************************
- * L := a G L | a          a : Bool_var   G : gate
- * G == AND | OR 
+ * 1. Basic constraints : (V1...V6) - V5 
+ * 2. Self edge disallowed : V5
+ * 3. Stability : R1, R2  
+ * 4. Fusion : V7, V8
+ * Create_vts_constraint = 1 + 2 + 3 + 4
  *
- ***********************************************************************/
+ */
 
-//----------------------------------------------------------------------------
-
-/** Exclude V5 add it as additional constraint **/
-z3::expr vts::get_basic_constraints () {
+z3::expr vts::vts_activity_constraint () {
   z3::expr a1 = node_activity_constraint();
   z3::expr a2 = edge_activity_constraint();
+  auto cons = a1 && a2;
+  return cons;
+}
 
+z3::expr vts::vts_basic_constraints () {  
   z3::expr v1 = molecule_presence_require_for_present_edge(); //V1
   z3::expr v2 = active_molecule_is_present_on_edge();         //V2
   z3::expr v3 = active_molecule_is_present_on_node();         //V3
-  z3::expr v4 = edge_modelecues_is_subset_of_node_molecules();//V4
-  //z3::expr v5 = no_self_edges();                              //V5
+  z3::expr v4 = edge_label_subset_of_node_label();            //V4
   z3::expr v6 = restriction_on_pairing_matrix();              //V6
-  z3::expr v7 = edge_must_fuse_with_target();                 //V7
-  z3::expr v8 = edge_must_fuse_with_noone_else();         //V8
-
-  z3::expr base_cons = a1 && a2 && v1 && v2 && v3 && v4 && v6 && v7 && v8;
-  //z3::expr base_cons = a1 && a2 && v1 && v2 && v3 && v4 && v5 && v6 && v7 && v8;
-
-  z3::expr r1 = reachability_def();           //R1
-  z3::expr r2 = study_state_stability_cond(); //R2
-
-  z3::expr study = r1 && r2;
-
-  //std::cout <<  base_cons && study;
-  return base_cons && study;
+  
+  z3::expr base_cons = v1 && v2 && v3 && v4 && v6;
+  return base_cons;
 }
 
+z3::expr vts::vts_self_edges_constraint () {
+  z3::expr v5 = no_self_edges();                      //V5
+  return v5;
+}
+  
+z3::expr vts::vts_stability_constraint () {
+  z3::expr r1 = reachability_def();                   //R1
+  z3::expr r2 = steady_state_stability_cond();        //R2
+  z3::expr stab = r1 && r2;
+  return stab;
+}
+
+z3::expr vts::vts_fusion_constraint () {
+  z3::expr v7 = edge_must_fuse_with_target();         //V7
+  z3::expr v8 = edge_fuse_only_with_target();         //V8
+  auto cons = v7 && v8;
+  return cons;
+}
+
+z3::expr vts::create_vts_constraint () {
+  auto cons = vts_basic_constraints() && vts_activity_constraint() 
+                                    && vts_self_edges_constraint()
+                                    && vts_stability_constraint()
+                                    && vts_fusion_constraint();
+  return cons;
+}
+
+
+/**
+ * z3 model by solving built vts constraints
+ */
 z3::model vts::get_vts_for_prob1( ) {
   z3::expr v5 = no_self_edges();                              //V5
-  z3::expr basic_constraints_with_stability = get_basic_constraints() && v5;
-
-  z3::expr not_connected = not_k_connected( C, d_reach2, drop2 );
-  
-  //z3::expr connected = k_min_1_connected( C-1, d_reach, drop1 );  
-  //z3::expr cons =  base_cons && study && edges[0][1][0] && not_connected;
-  //z3::expr cons =  base_cons && study && connected && not_connected;
-  //z3::expr cons =  base_cons && study && k_1_connected && not_connected;
-
-  z3::expr cons =  basic_constraints_with_stability && edges[0][1][0] && not_connected;
+  z3::expr basic_constraints_with_stability = create_vts_constraint();
+  //z3::expr cons =  basic_constraints_with_stability && edges[0][1][0] && not_k_connected();
+  z3::expr cons =  basic_constraints_with_stability && edges[0][1][0];
 
   z3::solver s(ctx);
   s.add( cons );

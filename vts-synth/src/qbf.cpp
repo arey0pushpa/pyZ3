@@ -3,9 +3,9 @@
 //#include <vector>
 //#include <iterator>
 
-z3::expr vts::get_qbf_formula ( bool flagC ) {
+z3::expr vts::create_qbf_formula ( bool flagC ) {
 
-  /* Build Constrint Of the Form := [[1]] && [[2]] && [[3]]
+  /** Build Constrint Of the Form := [[1]] && [[2]] && [[3]]
    * [[1]] :: Connectivity Constraint : kConnected Graph
    * [[2]] :: V5 Constraint : Self edge not allowed
    * [[3]] :: Function Requirements :
@@ -76,8 +76,9 @@ z3::expr vts::get_qbf_formula ( bool flagC ) {
   //  std::cout << vect << "\n";
   //}
   
-  // Basic Constraints with stability excluding V5 :: self edge
-  z3::expr basicConstraintsWithStab = get_basic_constraints();
+  // Basic constraints with stability excluding V5 :: self edge
+  z3::expr vtsBasicStability = vts_basic_constraints() && vts_stability_constraint();
+  z3::expr vtsFusion = vts_fusion_constraint(); 
 
   // [3]: Not a function constraint.
   z3::expr notaFunction = not_a_function( nodes, active_node );
@@ -95,15 +96,16 @@ z3::expr vts::get_qbf_formula ( bool flagC ) {
   
     z3::expr cnfCons = cnf_function( s_var, t_var );
 
-    //z3::expr qbfCons  = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach,  basicConstraintsWithStab && qbfCnfCos  )))))))))) );
-    z3::expr func3cnf  = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach,  basicConstraintsWithStab && cnfCons )))))))))) );
-    z3::expr qbfCons = exists ( setTvar, exists (setSvar, (exists (setE, ( kconnectedConstraint && V5 && func3cnf )))) );  
+    z3::expr func3cnf  = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach, implies ( vtsBasicStability && cnfCons, vtsFusion ))))))))))) );
+
+    z3::expr qbfCons = exists ( setTvar, exists (setSvar, (exists (setE, kconnectedConstraint && V5 && func3cnf )))  );  
+   // z3::expr qbfCons = exists ( setTvar, exists (setSvar, (exists (setE, ( V5 && func3cnf )))) );  
     return qbfCons;
   }
   else {
     // No function possible constraint [[3]]
     // FORALL [ qvars, basicConst => notafunc ]
-    z3::expr noFunctionPossible = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach , implies ( basicConstraintsWithStab, notaFunction ) )))))))))) );
+    z3::expr noFunctionPossible = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach , implies ( vtsBasicStability &&  vtsFusion, notaFunction ) )))))))))) );
 
     z3::expr qbfCons = exists ( setE, kconnectedConstraint && V5 && noFunctionPossible );   
     return qbfCons;
