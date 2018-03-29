@@ -43,6 +43,8 @@ private:
 
   Vec3Expr s_var;
   Vec3Expr t_var;
+  Vec2Expr u_var;
+  Vec2Expr v_var;
 
   Vec3Expr edges;
   Vec4Expr presence_edge;
@@ -108,7 +110,7 @@ public:
   
   /** Flattening of the x-d Vectors. **/
   z3::expr_vector flattern2d ( Vec2Expr& dump, unsigned s1, unsigned s2, bool eq );
-  z3::expr_vector flattern3d ( Vec3Expr& dump, unsigned s1, unsigned s2, unsigned s3, bool eq);
+  z3::expr_vector flattern3d ( Vec3Expr& dump, unsigned s1, unsigned s2, unsigned s3, bool eq );
   z3::expr_vector flattern4d ( Vec4Expr& dump, unsigned s1, unsigned s2, unsigned s3, unsigned s4, bool eq );
   
   VecExpr flattern_3d ( Vec3Expr& dump );
@@ -122,6 +124,7 @@ public:
   z3::expr at_least_five( VecExpr dump, unsigned L );
   
   // Overloaded function
+  z3::expr at_least_one( z3::expr_vector dump, unsigned L );
   z3::expr at_least_two ( z3::expr_vector dump, unsigned L );
   z3::expr at_least_three ( z3::expr_vector dump, unsigned L );
   z3::expr at_least_four( z3::expr_vector  dump, unsigned L );
@@ -147,10 +150,12 @@ public:
   z3::expr edge_cnf ( Vec3Expr& t );
 
   /** Gates constraint **/
-  z3::expr logic_gates ();
-  z3::expr edge_gate_fml (); 
-  z3::expr node_gate_fml (); 
-  z3::expr gate_fml (unsigned i, unsigned k, bool e, unsigned j, unsigned q );
+  z3::expr gates( Vec2Expr u, z3::expr x, z3::expr y, unsigned k, unsigned k2 );
+  z3::expr process_fml ( Vec3Expr s, Vec2Expr u, unsigned i, unsigned k, bool e, unsigned j, unsigned q );
+  z3::expr gate_fml (Vec3Expr s, unsigned i, unsigned k, unsigned k2, bool e, unsigned j, unsigned q );
+  z3::expr node_gate_fml ( Vec3Expr s, Vec2Expr u );
+  z3::expr edge_gate_fml ( Vec3Expr t, Vec2Expr v );
+  z3::expr logic_gates ( Vec3Expr s_var, Vec3Expr t_var, Vec2Expr u_var, Vec2Expr v_var );
 
   /** Build constraint and model **/
   void use_z3_qbf_solver ( z3::expr cons );
@@ -161,7 +166,7 @@ public:
   z3::expr vts_basic_constraints();
   z3::expr create_vts_constraint();
   z3::model get_vts_for_prob1();
-  z3::expr create_qbf_formula( bool flagC );
+  z3::expr create_qbf_formula( bool flagC, bool flagD );
 
   //helper functions
   z3::expr is_mol_edge_present( unsigned i, unsigned j, unsigned m );

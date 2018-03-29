@@ -203,6 +203,15 @@ z3::expr vts::at_least_five ( VecExpr dump, unsigned L ) {
   return z3::mk_or( ls );
 }
 
+// At least 1
+z3::expr vts::at_least_one ( z3::expr_vector dump, unsigned L ) {
+  z3::expr_vector ls(ctx);
+  for ( unsigned i = 0; i < L; i++ ) {
+    ls.push_back( dump [i] );
+  }
+  return z3::mk_or ( ls );
+}
+
 // At least 2 
 z3::expr vts::at_least_two ( z3::expr_vector dump, unsigned L ) {
   z3::expr_vector ls(ctx);

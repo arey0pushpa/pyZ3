@@ -22,10 +22,11 @@ int main(int argc, char** argv) {
     bool flagC = false;
     bool flagP = false;
     bool flagZ = false;
+    bool flagD = false;
 
     // Retrieve the (non-option) argument:
     if ( (argc <= 1) || argv[argc-1] == NULL ) {  // NO input...
-        std::cerr << "No argument [-p |-g |-c |-z] :: [print_model, show_graph, cnf_func, run_z3_on_qbf] ! \n" << std::endl;
+        std::cerr << "No argument [-p |-g |-c |-d | -z] :: [print_model, show_graph, cnf_func, gates_func , run_z3_on_qbf] ! \n" << std::endl;
         //return 1;
     }
     else { 
@@ -37,7 +38,7 @@ int main(int argc, char** argv) {
 
     // Retrieve the options:
     // [g: print graph, p: output assigt, c: use 3cnf as func, z: use z3 solver for qbf solving] 
-    while ( (opt = getopt(argc, argv, "gpcz")) != -1 ) {  // for each option...
+    while ( (opt = getopt(argc, argv, "gpcdz")) != -1 ) {  // for each option...
         switch ( opt ) {
             case 'g':
                     flagG = true;
@@ -51,6 +52,9 @@ int main(int argc, char** argv) {
             case 'z':
                     flagZ = true;
                 break;
+            case 'd':
+                    flagD = true;
+                break;
             case '?':  // unknown option...
                   std::cerr << "Unknown option: '" << char(optopt) << "'!" << std::endl;
                   break;
@@ -60,14 +64,13 @@ int main(int argc, char** argv) {
       z3::context c;
       
       // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
-      unsigned int N = 4;
+      unsigned int N = 2;
       unsigned int M = 4;
       unsigned int Q = 2;
       // depth of cnf
       unsigned int D = 2;
-      
 
-      vts  v( c, M, N, Q, MODEL_4, 2, D );
+      vts  v( c, M, N, Q, MODEL_4, 3, D );
 
       //z3::model mdl = v.get_vts_for_prob1();
       //z3::model qbf_mdl = v.get_vts_for_qbf();
@@ -84,7 +87,7 @@ int main(int argc, char** argv) {
       z3::expr z = c.bool_const("z");
       z3::expr w = c.bool_const("w");
       
-      z3::expr f = v.create_qbf_formula( flagC );
+      z3::expr f = v.create_qbf_formula( flagC, flagD );
       //std::cout << f << "\n";
 
 
