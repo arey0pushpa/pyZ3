@@ -3,7 +3,7 @@
 //#include <vector>
 //#include <iterator>
 
-z3::expr vts::create_qbf_formula ( bool flagC, bool flagD ) {
+z3::expr vts::create_qbf_formula ( int funcType ) {
 
   /** Build Constrint Of the Form := [[1]] && [[2]] && [[3]]
    * [[1]] :: Connectivity Constraint : kConnected Graph
@@ -84,7 +84,7 @@ z3::expr vts::create_qbf_formula ( bool flagC, bool flagD ) {
   z3::expr notaFunction = not_a_function( nodes, active_node );
   
   /* Final Qbf Constraint: [[1]] && [[2]] && [[3]] */
-  if ( flagC == true ) {
+  if ( funcType == 1 ) {
     // Populate xtra var s_var : var for node function
     popl3 ( s_var, M, 2 * M, D, "s" );
     // Populate xtra var t_var : var for node function 
@@ -102,7 +102,7 @@ z3::expr vts::create_qbf_formula ( bool flagC, bool flagD ) {
    // z3::expr qbfCons = exists ( setTvar, exists (setSvar, (exists (setE, ( V5 && func3cnf )))) );  
     return qbfCons;
   }
-  else if ( flagD == true ) {
+  else if ( funcType == 2 ) {
     // Populate xtra var s_var : var for node function
     popl3 ( s_var, M, M - 2, (2 * M) + 2, "s" );
     // Populate xtra var t_var : var for node function 

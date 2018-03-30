@@ -166,14 +166,14 @@ public:
   z3::expr vts_basic_constraints();
   z3::expr create_vts_constraint();
   z3::model get_vts_for_prob1();
-  z3::expr create_qbf_formula( bool flagC, bool flagD );
+  z3::expr create_qbf_formula( int funcType);
 
   //helper functions
   z3::expr is_mol_edge_present( unsigned i, unsigned j, unsigned m );
   z3::expr is_qth_edge_present( unsigned i, unsigned j, unsigned q );
   z3::expr is_undirected_dumped_edge( unsigned i, unsigned j, Vec3Expr& dump1 );
   void dump_dot( std::string filename, z3::model mdl );
-  void print_graph( z3::context& c ,std::string filename, VecsExpr qs, bool flagB, bool flagC );
+  void print_graph( z3::context& c ,std::string filename, VecsExpr qs, bool printModel, bool displayGraph );
 };
 
 

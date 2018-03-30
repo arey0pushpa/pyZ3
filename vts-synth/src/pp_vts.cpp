@@ -172,7 +172,7 @@ void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std
 }
 
 // Print depqbf Graph
-void vts::print_graph( z3::context& c, std::string filename, VecsExpr qs, bool flagG, bool flagP ) {
+void vts::print_graph( z3::context& c, std::string filename, VecsExpr qs, bool printModel, bool displayGraph ) {
     std::string style = "solid";
     std::string color = "blue";
     std::string node_vec; 
@@ -194,11 +194,11 @@ void vts::print_graph( z3::context& c, std::string filename, VecsExpr qs, bool f
     //  std::cout << "<" <<  var.first << "," << var.second  << ">" <<"\n" ;
     //}
 
-    if ( flagP == true ) {
+    if ( printModel == true ) {
       print_denotation_console ( denotation_map );
     }
 
-    if (flagG == true) {
+    if ( displayGraph == true ) {
       std::cout << "dumping dot file: " << filename << "\n";
 
       std::ofstream ofs;
