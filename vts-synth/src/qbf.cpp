@@ -104,13 +104,13 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
   }
   else if ( funcType == 2 ) {
     // Populate xtra var s_var : var for node function
-    popl3 ( s_var, M, M - 2, (2 * M) + 2, "s" );
+    popl3 ( s_var, M, M - 1, (2 * M) + 2, "s" );
     // Populate xtra var t_var : var for node function 
-    popl3 ( t_var, M, M - 2, (2 * M) + 2, "t" );
+    popl3 ( t_var, M, M, (2 * M) + 2, "t" );
     // Populate parameter var
-    popl2 ( u_var, M, M-2, "u" );
+    popl2 ( u_var, M, M, "u" );
     // Populate parameter var
-    popl2 ( v_var, M, M-2, "v" );
+    popl2 ( v_var, M, M, "v" );
     
     // [3]: Boolean gates  function 
     auto setSvar = flattern3d ( s_var, M, M - 2, 2*M + 2, false );

@@ -64,7 +64,7 @@ z3::expr vts::edge_cnf ( Vec3Expr& t ) {
       if ( i == j )  continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned k = 0; k < M; k++ ) { 
-          z3::expr_vector outer_list(ctx);
+          //z3::expr_vector outer_list(ctx);
           auto cnf =  ( active_edge[i][j][q][k] == literal_cnf (t, i, k, true, j, q) ) ;  
           main_list.push_back ( cnf ); 
         }

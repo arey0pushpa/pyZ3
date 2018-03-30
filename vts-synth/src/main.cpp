@@ -62,7 +62,7 @@ int main(int ac, char* av[])
 
     // Declare an options description instance which will be shown
     // to the user
-    options_description visible("VTS-Synth [version 0.0.1]. (C) Copyright 2017-2018 TIFR Mumbai. \nUsage: ./vts-synth [--func-type arg] [--options] ");
+    options_description visible("VTS-Synth [version 0.0.1]. (C) Copyright 2017-2018 TIFR Mumbai. \nUsage: ./vts-synth [--options] [--func-type arg] \n\nFunction types:\n  0. Arbitrary Boolean func: ackermannization. [default] \n  1. K-cnf with depth D. \n  2. Logic-gates AND OR. \n  3. Logic gate with unique arguments.");
     visible.add(general).add(variation);
 
 
@@ -117,7 +117,7 @@ int main(int ac, char* av[])
   z3::context c;
 
   // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
-  unsigned int N = 2;
+  unsigned int N = 3;
   unsigned int M = 4;
   unsigned int Q = 2;
   // depth of cnf

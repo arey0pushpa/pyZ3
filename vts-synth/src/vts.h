@@ -150,9 +150,9 @@ public:
   z3::expr edge_cnf ( Vec3Expr& t );
 
   /** Gates constraint **/
-  z3::expr gates( Vec2Expr u, z3::expr x, z3::expr y, unsigned k, unsigned k2 );
+  z3::expr gates( Vec2Expr u, z3::expr x, z3::expr y, unsigned k, unsigned g );
   z3::expr process_fml ( Vec3Expr s, Vec2Expr u, unsigned i, unsigned k, bool e, unsigned j, unsigned q );
-  z3::expr gate_fml (Vec3Expr s, unsigned i, unsigned k, unsigned k2, bool e, unsigned j, unsigned q );
+  z3::expr gate_fml (Vec3Expr s, unsigned i, unsigned k, unsigned g, bool e, unsigned j, unsigned q );
   z3::expr node_gate_fml ( Vec3Expr s, Vec2Expr u );
   z3::expr edge_gate_fml ( Vec3Expr t, Vec2Expr v );
   z3::expr logic_gates ( Vec3Expr s_var, Vec3Expr t_var, Vec2Expr u_var, Vec2Expr v_var );
