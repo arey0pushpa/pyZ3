@@ -80,7 +80,7 @@ LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
 # add_executable(vts-synth main.cpp)
 #add_executable(vts-synth main.cpp z3-hoister.cpp)
-add_executable( vts-synth main.cpp z3-hoister.cpp card-constr.cpp  normal-form.cpp qdimacs-printer.cpp depqbf-printer.cpp vts.cpp pp_vts.cpp qbf.cpp gates-encoding.cpp kcnf-encoding.cpp graph-connectivity.cpp ) 
+add_executable( vts-synth main.cpp z3-hoister.cpp card-constr.cpp  normal-form.cpp qdimacs-printer.cpp depqbf-printer.cpp vts.cpp pp_vts.cpp qbf.cpp gates-encoding.cpp kcnf-encoding.cpp graph-connectivity.cpp vts-synthesis.cpp ) 
 
 SET(LIBZ3 z3)
 

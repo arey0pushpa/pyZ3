@@ -256,3 +256,34 @@ z3::expr vts::at_least_four ( z3::expr_vector dump, unsigned L ) {
   }
   return z3::mk_or( ls );
 }
+
+
+
+z3::expr_vector vts::node_set() {
+    return flattern2d ( nodes, N, M, false);
+}
+
+z3::expr_vector vts::active_node_set() {
+    return flattern2d ( active_node, N, M, false );
+}
+
+z3::expr_vector vts::presence_edge_set() {
+    return flattern4d ( presence_edge, N, N, E_arity, M, true );
+}
+
+z3::expr_vector vts::active_edge_set() {
+    return flattern4d ( active_edge, N, N, E_arity, M, true );
+}
+
+z3::expr_vector vts::pairing_m_set() {
+    return flattern2d ( pairing_m, M, M, true );
+}
+
+z3::expr_vector vts::reach_set() {
+    return flattern4d ( reach, N, N, M, N-1, true );
+}
+
+z3::expr_vector vts::edge_set() {
+    return flattern3d ( edges, N, N, E_arity, true );
+}
+

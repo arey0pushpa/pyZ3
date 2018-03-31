@@ -28,6 +28,7 @@ int main(int ac, char* av[])
 {
   try {
     int funcType = -1;
+    int synthVar = -1;
     bool useZ3 = false;
     bool displayGraph = false;
     bool printModel = false;
@@ -49,6 +50,7 @@ int main(int ac, char* av[])
     options_description variation("Variation options");
     variation.add_options()
       ("func-type", value<int>(), "fix a function type for vts")
+      ("synth-var", value<int>(), "fix a synthesis variation for vts")
       ("use-z3", "Use z3 for QBF solving")
       ("print-model", "print QBF vts model")
       ("display-graph", "display the vts as graph")
@@ -62,7 +64,7 @@ int main(int ac, char* av[])
 
     // Declare an options description instance which will be shown
     // to the user
-    options_description visible("VTS-Synth [version 0.0.1]. (C) Copyright 2017-2018 TIFR Mumbai. \nUsage: ./vts-synth [--options] [--func-type arg] \n\nFunction types:\n  0. Arbitrary Boolean func: ackermannization. [default] \n  1. K-cnf with depth D. \n  2. Logic-gates AND OR. \n  3. Logic gate with unique arguments.");
+    options_description visible("VTS-Synth [version 0.0.1]. (C) Copyright 2017-2018 TIFR Mumbai. \nUsage: ./vts-synth [--options] [--func-type arg] \n\nFunction types:\n  0. Arbitrary Boolean func: ackermannization. [default] \n  1. K-cnf with depth D. \n  2. Logic-gates AND OR. \n  3. Logic gate with unique arguments. \n\nSynthesis variation:\n  0. Default. \n  1.Edge synthesis.\n  2.Molecule synthesis.\n ");
     visible.add(general).add(variation);
 
 
@@ -92,6 +94,12 @@ int main(int ac, char* av[])
       std::cout << "The 'function type' chosen is: "
         << vm["func-type"].as<int>() << "\n";            
       funcType  =  vm["func-type"].as<int>();            
+    }                           
+    
+    if (vm.count("synth-var")) {
+      std::cout << "The 'synthesis variation' chosen is: "
+        << vm["synth-var"].as<int>() << "\n";            
+      synthVar  =  vm["synth-var"].as<int>();            
     }                           
     if (vm.count("use-z3")) {
       //std::cout << "The 'use-Z3' options was set to "
@@ -137,8 +145,17 @@ int main(int ac, char* av[])
     z3::expr y = c.bool_const("y");
     z3::expr z = c.bool_const("z");
     z3::expr w = c.bool_const("w");
-
-    z3::expr f = v.create_qbf_formula( funcType );
+      
+    // represent z3 vts formula
+    z3::expr f( c );
+      
+    if( funcType != -1 ) {
+      f = v.create_qbf_formula( funcType );
+    } else if( synthVar != -1 ) {
+      f = v.vts_synthesis( synthVar );
+    }else {
+      f = v.create_qbf_formula( 0 );
+    }
     //std::cout << f << "\n";
 
 

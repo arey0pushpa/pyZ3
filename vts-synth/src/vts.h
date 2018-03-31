@@ -143,7 +143,7 @@ public:
   z3::expr k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump );
   
   // K conectivity function
-  z3::expr k_connected_graph_constraint ( bool eQuantVar );
+  z3::expr k_connected_graph_constraint ( unsigned K, bool eQuantVar );
 
   /** Cnf encoding constraints **/
   z3::expr literal_cnf (Vec3Expr s, unsigned i, unsigned k, bool e, unsigned n, unsigned q);
@@ -161,6 +161,9 @@ public:
   z3::expr edge_gate_fml ( Vec3Expr t, Vec2Expr v );
   z3::expr logic_gates ( Vec3Expr s_var, Vec3Expr t_var, Vec2Expr u_var, Vec2Expr v_var );
 
+  /** Synthesis constraints**/
+  z3::expr vts_synthesis ( unsigned variation );
+
   /** Build constraint and model **/
   void use_z3_qbf_solver ( z3::expr cons );
   z3::expr vts_activity_constraint();
@@ -172,13 +175,23 @@ public:
   z3::model get_vts_for_prob1();
   z3::expr create_qbf_formula( int funcType );
 
-  //helper functions
+  // Helper 
+  z3::expr_vector node_set();
+  z3::expr_vector active_node_set();
+  z3::expr_vector presence_edge_set();
+  z3::expr_vector active_edge_set();
+  z3::expr_vector pairing_m_set();
+  z3::expr_vector reach_set();
+  z3::expr_vector edge_set();
+  
+   //helper functions
   z3::expr is_mol_edge_present( unsigned i, unsigned j, unsigned m );
   z3::expr is_qth_edge_present( unsigned i, unsigned j, unsigned q );
   z3::expr is_undirected_dumped_edge( unsigned i, unsigned j, Vec3Expr& dump1 );
   void dump_dot( std::string filename, z3::model mdl );
   void print_graph( z3::context& c ,std::string filename, VecsExpr qs, bool printModel, bool displayGraph );
 };
+
 
 
 #endif

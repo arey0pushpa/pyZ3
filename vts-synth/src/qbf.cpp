@@ -16,10 +16,10 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
 
   /***** Building [[1]] ****/
   VecExpr ee_set = flattern_3d ( edges );
-  z3::expr_vector setE = flattern3d ( edges, N, N, E_arity, true );
+  z3::expr_vector setE = edge_set();
 
   // Arg true -> u need edge quantified outside.
-  z3::expr kconnectedConstraint = k_connected_graph_constraint ( false );
+  z3::expr kconnectedConstraint = k_connected_graph_constraint ( C, false );
 
   /***** Building [[2]] ****/
   // [[2]] : V5  
@@ -30,13 +30,12 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
   */
     
   /***** Building [[3]] ****/
-  z3::expr_vector setN = flattern2d ( nodes, N, M, false);
-  z3::expr_vector setActiveN = flattern2d ( active_node, N, M, false );
-  z3::expr_vector setPresentE = flattern4d ( presence_edge, N, N, E_arity, M, true );
-  z3::expr_vector setActiveE = flattern4d ( active_edge, N, N, E_arity, M, true );  
-  // Pairing constraint ensures (i,i) pair not allowed. ToDo: Check the effect of this. 
-  z3::expr_vector setPairingM = flattern2d ( pairing_m, M, M, true );
-  z3::expr_vector setReach = flattern4d ( reach, N, N, M, N-1, true );
+  z3::expr_vector setN = node_set();
+  z3::expr_vector setActiveN = active_node_set(); 
+  z3::expr_vector setPresentE = presence_edge_set();
+  z3::expr_vector setActiveE = active_edge_set();
+  z3::expr_vector setPairingM = pairing_m_set();
+  z3::expr_vector setReach = reach_set();
 
   /*
   z3::expr_vector qvarQbf( ctx ); 

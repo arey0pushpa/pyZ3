@@ -74,9 +74,4 @@ inline bool is_false( z3::expr e,  z3::model m ) {
   z3::expr v = m.eval( e );
   return ( Z3_get_bool_value( v.ctx(), v)  == Z3_L_FALSE );
 }
-
-inline void debug_print( z3::expr f ) {
-  std::cerr << f ;
-}
-
 #endif
