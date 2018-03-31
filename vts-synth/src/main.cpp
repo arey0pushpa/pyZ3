@@ -117,7 +117,7 @@ int main(int ac, char* av[])
   z3::context c;
 
   // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
-  unsigned int N = 3;
+  unsigned int N = 2;
   unsigned int M = 4;
   unsigned int Q = 2;
   // depth of cnf
@@ -131,7 +131,7 @@ int main(int ac, char* av[])
   //v.dump_dot("/tmp/vts.dot", mdl );
   //v.dump_dot("/tmp/vts.dot", qbf_mdl );
 
-    z3::expr t = c.bool_val( true  );
+    z3::expr t = c.bool_val( true );
     z3::expr fal = c.bool_val( false );
     z3::expr x = c.bool_const("x");
     z3::expr y = c.bool_const("y");

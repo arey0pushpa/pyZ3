@@ -113,13 +113,17 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
     popl2 ( v_var, M, M, "v" );
     
     // [3]: Boolean gates  function 
-    auto setSvar = flattern3d ( s_var, M, M - 2, 2*M + 2, false );
-    auto setTvar = flattern3d ( t_var, M, M - 2, 2*M + 2, false );
-    auto setUvar = flattern2d ( u_var, M, M - 2, false );
-    auto setVvar = flattern2d ( v_var, M, M - 2, false );
+    auto setSvar = flattern3d ( s_var, M, M - 1, 2*M + 2, false );
+    auto setTvar = flattern3d ( t_var, M, M - 1, 2*M + 2, false );
+    auto setUvar = flattern2d ( u_var, M, M, false );
+    auto setVvar = flattern2d ( v_var, M, M, false );
   
     z3::expr gateCons = logic_gates ( s_var, t_var, u_var, v_var );
-    return gateCons;
+    
+    z3::expr funcGate  = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach, forall (setSvar, forall (setTvar,  forall (setUvar, forall ( setVvar, implies ( vtsBasicStability && gateCons, vtsFusion ))))))))))) ))) ));
+
+    z3::expr cons = (exists (setE, kconnectedConstraint && V5 && funcGate ));  
+    return cons;
   }
   else {
     // No function possible constraint [[3]]
