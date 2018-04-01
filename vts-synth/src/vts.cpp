@@ -66,7 +66,7 @@ void vts::make_func ( std::vector<z3::func_decl>& fs, std::string prefix ) {
 void vts::init_vts() {
 
 // Populate edges: e(i,j,q)
-  popl3( edges, N, N, E_arity, "e" );
+  popl3( edges, N, N, E_arity, "z" );
 
 // Populate nodes: n(i,j)
   popl2 ( nodes, N, M, "n" );
@@ -82,7 +82,6 @@ void vts::init_vts() {
 
 // Populate pairing_m(k,k1)
   popl2 ( pairing_m, M, M, "p" );
-
 /*
 // Populate xtra var s_var : var for node function
   //popl2 ( s_var, 2 * (M-1), J, "s" );

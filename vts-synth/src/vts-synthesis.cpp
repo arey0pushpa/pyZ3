@@ -15,7 +15,7 @@
 void create_edges () {
 }
 
-void vts::annotate_graph () {
+z3::expr vts::annotate_graph () {
   /** Example taken from PLOS paper
    * N = 2, M = 6 
    * model 3: Arb on edge, Nothing on node
@@ -23,14 +23,41 @@ void vts::annotate_graph () {
 
   /** node: n[i][k] : below.  a[i][k] : use Model_3 **/
   // Node 0 : [111 110]  
-  auto node_cons = !nodes[0][0] && nodes[0][1] && nodes[0][2] && nodes[0][3] && nodes[0][4] && nodes[0][5]; 
+  z3::expr node_cons = !nodes[0][0] && nodes[0][1] && nodes[0][2] && nodes[0][3] && nodes[0][4] && nodes[0][5]; 
 
   /** edge: e[i][j][q], e[i][j][q][k]: below, b[i][j][q][k]: Model_3 **/
   //auto edge_cons1 = edges[0][1][0] && edges[1][0][0] && edges[1][0][1];
-  auto edge_cons1 = edges[0][1][0] && edges[1][0][0];
-  auto edge_cons2_1 = presence_edge[0][1][0][2] && presence_edge[0][1][0][3] && presence_edge[0][1][0][5]; 
-  auto edge_cons2_2 = presence_edge[1][0][0][2] && presence_edge[1][0][0][3];
-  auto edge_cons = edge_cons1 && edge_cons2_1 && edge_cons2_2;; 
+  z3::expr edge_cons1 = edges[0][1][0] && edges[1][0][0];
+  z3::expr edge_cons2_1 = presence_edge[0][1][0][2] && presence_edge[0][1][0][3] && presence_edge[0][1][0][5]; 
+  z3::expr edge_cons2_2 = presence_edge[1][0][0][2] && presence_edge[1][0][0][3];
+  z3::expr edge_cons = edge_cons1 && edge_cons2_1 && edge_cons2_2; 
+
+  /** Pairing Matrix Constraints **/
+  z3::expr pairing_cons_1 = pairing_m[5][1] && pairing_m[3][0] && pairing_m[2][4]; 
+
+  /*
+  std::vector<z3::expr> vec;
+  vec.push_back( pairing_m[2][4] ); 
+  vec.push_back( pairing_m[3][0] ); 
+  vec.push_back( pairing_m[5][1] );
+
+  z3::expr pairing_cons_0 ( ctx );
+  for (unsigned k = 0; k < M; k++ ) {
+    for (unsigned k1 = 0; k1 < M; k1++) {
+      auto expr = pairing_m[k][k1];
+      if(std::find(vec.begin(), vec.end(), expr) == vec.end()) {
+        pairing_cons_0 = pairing_cons_0 && expr;
+      }
+    }
+  }
+
+  std::cout << pairing_cons_0;
+  exit(0);
+
+  z3::expr pairing_cons = pairing_cons_1 && pairing_cons_0;
+*/
+  auto cons = edge_cons && node_cons && pairing_cons_1;
+  return cons;
 }
 
 z3::expr vts::vts_synthesis ( unsigned variation ) {
@@ -51,8 +78,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
   if ( variation == 1 ) {
     //create_edges ();
-    annotate_graph();
-    auto qvtsCons = exists ( setN, exists (setActiveN, (exists (setPresentE,  (exists (setActiveE, (exists ( setPairingM, (exists (setReach , vtsCons ))))))))));   
+    z3::expr inputCons = annotate_graph();
+    auto qvtsCons = exists ( setN, exists (setActiveN, (exists (setPresentE,  (exists (setActiveE, (exists ( setPairingM, (exists (setReach , vtsCons && inputCons ))))))))));   
 
     auto cons = exists( setE, qvtsCons && V5 && kConnCons ); 
     return cons;

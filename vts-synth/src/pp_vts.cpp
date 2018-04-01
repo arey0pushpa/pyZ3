@@ -156,7 +156,7 @@ void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std
           denotation_map [ var ] = lit; 
           
           // Variable is e and denotation(e) is True.
-          if ( var[0] == 'e' && var[1] == '_' && lit > 0) {
+          if ( var[0] == 'z' && var[1] == '_' && lit > 0) {
             //std::cout << "Var2 = " << toDigit(var[2]) << "\t Var4 = " << toDigit( var[4] ) << "\n";
             xyPair.push_back( std::make_pair( toDigit (var[2]) , toDigit(var[4]) ) );
           }
