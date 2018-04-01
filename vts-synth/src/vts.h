@@ -163,6 +163,7 @@ public:
 
   /** Synthesis constraints**/
   z3::expr vts_synthesis ( unsigned variation );
+  void annotate_graph ();
 
   /** Build constraint and model **/
   void use_z3_qbf_solver ( z3::expr cons );
