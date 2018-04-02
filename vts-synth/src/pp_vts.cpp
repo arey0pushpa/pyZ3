@@ -223,35 +223,3 @@ void vts::print_graph( z3::context& c, std::string filename, VecsExpr qs, bool p
     }
     
 } //end function
-
-
-
-/* Code of graph printing using C Front end 
-if ( line == "1 " ) {
-  unsigned int dstep = 0;
-  unsigned int x=0, y=0;
-  std::string var = vecElem[step]; 
-  //std::cout << "The value of var = " << var << "\n"; 
-  for( char c : var ) {
-    if ( c == '_' || c == 'e' )  {
-     continue;
-    }
-    else {
-      //std::cout << "The value of c = " << c << "\n";
-      auto val = toDigit(c); 
-      //std::cout << "The value of val = " << val << "\n";
-      dstep == 0 ? x = val : (dstep == 1 ? y = val: true) ; 
-      dstep += 1;
-    }
-  }
-  //std::cout << "Value of x = " << x << "\nValue of y = " << y << "\n";  
-  std::string label = "M";
-  ofs << std::to_string(x) << "-> " << std::to_string(y)
-            <<  "[label="  << label << ",color=" << color
-            << ",style=" << style << "]\n";
-  step += 1;
-}
-else { 
-  step += 1;
-}
-*/
