@@ -24,6 +24,12 @@ typedef std::vector< VecExpr > Vec2Expr;
 typedef std::vector< Vec2Expr > Vec3Expr;
 typedef std::vector< Vec3Expr > Vec4Expr;
 
+
+// Create typedef for tuples 
+typedef std::vector< std::tuple<int,int> > Tup2Expr;
+typedef std::vector< std::tuple<int,int,int> > Tup3Expr;
+typedef std::vector< std::tuple<int,int,int,int> > Tup4Expr;
+
 // function returns prenex body
 // and quantified variables in list of list qs.
 // The first entry in qs is for exists

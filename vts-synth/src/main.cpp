@@ -49,10 +49,14 @@ int main(int ac, char* av[])
    */
     options_description variation("Variation options");
     variation.add_options()
-      ("func-type", value<int>(), "fix a function type for vts")
+      ("func-type", value<int>(), "fix a function type for QBF")
       ("synth-var", value<int>(), "fix a synthesis variation for vts")
-      ("use-z3", "Use z3 for QBF solving")
-      ("print-model", "print QBF vts model")
+      ;
+    
+    options_description options("Available options");
+    options.add_options()
+      ("use-z3", "use z3 for QBF solving")
+      ("print-model", "print vts model")
       ("display-graph", "display the vts as graph")
       ;
 
@@ -60,12 +64,12 @@ int main(int ac, char* av[])
     // all the options
     options_description all("Allowed options");
     //all.add(general).add(gui).add(variation);
-    all.add(general).add(variation);
+    all.add(general).add(variation).add(options);
 
     // Declare an options description instance which will be shown
     // to the user
-    options_description visible("VTS-Synth [version 0.0.1]. (C) Copyright 2017-2018 TIFR Mumbai. \nUsage: ./vts-synth [--options] [--func-type arg] \n\nFunction types:\n  0. Arbitrary Boolean func: ackermannization. [default] \n  1. K-cnf with depth D. \n  2. Logic-gates AND OR. \n  3. Logic gate with unique arguments. \n\nSynthesis variation:\n  0. Default. \n  1.Edge synthesis.\n  2.Molecule synthesis.\n ");
-    visible.add(general).add(variation);
+    options_description visible("VTS-Synth [version 0.0.1]. (C) Copyright 2017-2018 TIFR Mumbai. \nUsage: ./vts-synth [--options] [--variation arg] \n\nFunction types:\n  0. Arbitrary Boolean func: ackermannization. [default] \n  1. K-cnf with depth D. \n  2. Logic-gates AND OR. \n  3. Logic gate with unique arguments. \n\nSynthesis variation:\n  0. Default. \n  1. Edge synthesis.\n  2. Molecule synthesis.\n  3. K-Cnf.\n  4. Logic gates.\n  5. Activate-deactivate");
+    visible.add(general).add(variation).add(options);
 
 
     variables_map vm;
@@ -83,13 +87,16 @@ int main(int ac, char* av[])
      // } else
       if (s == "variation") {
         std::cout << variation;
-      } else {
+      } else if (s == "options") {
+        std::cout << options;
+      }else {
         std::cout << "Unknown module '" 
           << s << "' in the --help-module option\n";
         return 1;
       }
       return 0;
     }
+
     if (vm.count("func-type")) {
       std::cout << "The 'function type' chosen is: "
         << vm["func-type"].as<int>() << "\n";            
