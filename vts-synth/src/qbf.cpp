@@ -24,11 +24,7 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
   /***** Building [[2]] ****/
   // [[2]] : V5  
   z3::expr V5 = no_self_edges();                              
-  /*** Return K connected Graph **
-  z3::expr kconnectedConstraint = exists ( setE, at_least_k_edges && k_min_1_connected && k_not_connected && V5 );
-  return kconnectedConstraint; 
-  */
-    
+  
   /***** Building [[3]] ****/
   z3::expr_vector setN = node_set();
   z3::expr_vector setActiveN = active_node_set(); 
@@ -37,7 +33,7 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
   z3::expr_vector setPairingM = pairing_m_set();
   z3::expr_vector setReach = reach_set();
 
-  /*
+  /* Avoid writing forall( x, forall( y, .... ))
   z3::expr_vector qvarQbf( ctx ); 
 
   qvarQbf.reserve( setN.size() + setActiveN.size() + setPresentE.size() + setActiveE.size() + setPairingM.size() + setReach.size() ); // preallocate memory
@@ -63,8 +59,10 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
   
   /* Final Qbf Constraint: [[1]] && [[2]] && [[3]] */
   if ( funcType == 1 ) {
+    
     // Populate xtra var s_var : var for node function
     popl3 ( s_var, M, 2 * M, D, "s" );
+    
     // Populate xtra var t_var : var for node function 
     popl3 ( t_var, M, 2 * M, D, "t" );
   
@@ -74,19 +72,35 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
   
     z3::expr cnfCons = cnf_function( s_var, t_var );
 
-    z3::expr func3cnf  = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach, forall (setSvar, forall (setTvar,  implies ( vtsBasicStability && cnfCons, vtsFusion ))))))))))) )));
+    z3::expr func3cnf  = forall( setN, 
+                         forall( setActiveN, 
+                         forall( setPresentE, 
+                         forall( setActiveE, 
+                         forall( setPairingM, 
+                         forall( setReach, 
+                         forall( setSvar, 
+                         forall( setTvar,  
+                                 implies( vtsBasicStability && cnfCons, vtsFusion )))))))));
 
-    z3::expr qbfCons = (exists (setE, kconnectedConstraint && V5 && func3cnf ));  
+    z3::expr qbfCons = exists( setE, 
+                               kconnectedConstraint && V5 && func3cnf );  
+
    // z3::expr qbfCons = exists ( setTvar, exists (setSvar, (exists (setE, ( V5 && func3cnf )))) );  
+   
     return qbfCons;
+
   }
   else if ( funcType == 2 ) {
+    
     // Populate xtra var s_var : var for node function
     popl3 ( s_var, M, M - 1, (2 * M) + 2, "s" );
+   
     // Populate xtra var t_var : var for node function 
     popl3 ( t_var, M, M, (2 * M) + 2, "t" );
+    
     // Populate parameter var
     popl2 ( u_var, M, M, "u" );
+    
     // Populate parameter var
     popl2 ( v_var, M, M, "v" );
     
@@ -98,17 +112,37 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
   
     z3::expr gateCons = logic_gates ( s_var, t_var, u_var, v_var );
     
-    z3::expr funcGate  = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach, forall (setSvar, forall (setTvar,  forall (setUvar, forall ( setVvar, implies ( vtsBasicStability && gateCons, vtsFusion ))))))))))) ))) ));
+    z3::expr funcGate  = forall( setN, 
+                         forall( setActiveN, 
+                         forall( setPresentE, 
+                         forall( setActiveE, 
+                         forall( setPairingM, 
+                         forall( setReach, 
+                         forall( setSvar, 
+                         forall( setTvar,  
+                         forall( setUvar, 
+                         forall( setVvar, 
+                                 implies ( vtsBasicStability && gateCons, vtsFusion )))))))))));
 
-    z3::expr cons = (exists (setE, kconnectedConstraint && V5 && funcGate ));  
+    z3::expr cons = exists( setE, 
+                            kconnectedConstraint && V5 && funcGate );  
+
     return cons;
-  }
-  else {
+
+  }else {
+    
     // No function possible constraint [[3]]
     // FORALL [ qvars, basicConst => notafunc ]
-    z3::expr noFunctionPossible = forall ( setN, (forall (setActiveN, ( forall (setPresentE, (forall ( setActiveE, (forall (setPairingM, (forall ( setReach , implies ( vtsBasicStability &&  vtsFusion, notaFunction ) )))))))))) );
+    z3::expr noFunctionPossible = forall( setN, 
+                                  forall( setActiveN, 
+                                  forall( setPresentE, 
+                                  forall( setActiveE, 
+                                  forall( setPairingM, 
+                                  forall( setReach , 
+                                          implies( vtsBasicStability && vtsFusion, notaFunction )))))));
 
-    z3::expr qbfCons = exists ( setE, kconnectedConstraint && V5 && noFunctionPossible );   
+    z3::expr qbfCons = exists( setE, 
+                               kconnectedConstraint && V5 && noFunctionPossible );   
     return qbfCons;
   } 
   

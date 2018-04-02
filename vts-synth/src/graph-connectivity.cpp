@@ -23,7 +23,7 @@ z3::expr vts::k_connected_graph_constraint ( unsigned K, bool eQuantVar ) {
   z3::expr k_not_connected = exists ( setD2,  
 		    (exactly_k_drops ( K, drop2 ) && only_present_edges_can_be_dropped ( drop2 )) && is_reach2 ) ;
  
-  z3::expr at_least_k_edges = at_least_three( ee_set, ee_set.size() );
+  z3::expr at_least_k_edges = at_least_three( ee_set );
   
   // [[1]] : K Connected Graph 
   // EXISTS [ setE, kedges && k-1Conn && knotConn ]

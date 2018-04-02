@@ -672,8 +672,7 @@ z3::expr vts::vts_fusion_constraint () {
 }
 
 z3::expr vts::create_vts_constraint () {
-  auto cons = vts_basic_constraints() && vts_activity_constraint() 
-                                    && vts_self_edges_constraint()
+  auto cons = vts_basic_constraints() && vts_self_edges_constraint()
                                     && vts_stability_constraint()
                                     && vts_fusion_constraint();
   return cons;

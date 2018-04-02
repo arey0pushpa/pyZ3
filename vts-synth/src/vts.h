@@ -117,17 +117,17 @@ public:
 
   /*** connectivity constraints ***/
   // At least at most
-  z3::expr at_least_one( VecExpr dump, unsigned L );
-  z3::expr at_least_two( VecExpr dump, unsigned L );
-  z3::expr at_least_three( VecExpr dump, unsigned L );
-  z3::expr at_least_four( VecExpr dump, unsigned L );
-  z3::expr at_least_five( VecExpr dump, unsigned L );
+  z3::expr at_least_one( VecExpr dump );
+  z3::expr at_least_two( VecExpr dump );
+  z3::expr at_least_three( VecExpr dump );
+  z3::expr at_least_four( VecExpr dump );
+  z3::expr at_least_five( VecExpr dump  );
   
   // Overloaded function
-  z3::expr at_least_one( z3::expr_vector dump, unsigned L );
-  z3::expr at_least_two ( z3::expr_vector dump, unsigned L );
-  z3::expr at_least_three ( z3::expr_vector dump, unsigned L );
-  z3::expr at_least_four( z3::expr_vector  dump, unsigned L );
+  z3::expr at_least_one( z3::expr_vector dump  );
+  z3::expr at_least_two ( z3::expr_vector dump );
+  z3::expr at_least_three ( z3::expr_vector dump  );
+  z3::expr at_least_four( z3::expr_vector dump  );
   
   /** connectivity costraints **/
   // todo: variables are needed to be parametrized
