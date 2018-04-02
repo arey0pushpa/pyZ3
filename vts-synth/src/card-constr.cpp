@@ -37,18 +37,25 @@ z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //
     z3::expr am = at_least_two ( d1 );
     return ( al && !am );
   }
+
   if (drop_count == 2) {
     z3::expr al = at_least_two( d1 ); 
     z3::expr am = at_least_three( d1 ); 
     return ( al && !am );
-  } else if (drop_count == 3) {
+  }
+  
+  else if (drop_count == 3) {
     z3::expr al = at_least_three( d1 ); 
     z3::expr am = at_least_four( d1 ); 
     return ( al && !am );
-  } else if (drop_count == 4) {
+  } 
+  
+  else if (drop_count == 4) {
     z3::expr al = at_least_four( d1 ); 
     z3::expr am = at_least_five( d1 ); 
- } else { // todo : fill the right code 
+  } 
+  
+  else { // todo : fill the right code 
     z3::expr al = at_least_two( d1 ); 
     z3::expr am = at_least_three( d1 ); 
     return ( al && !am );
@@ -191,6 +198,7 @@ z3::expr vts::at_least_five ( VecExpr dump ) {
   z3::expr lhs(ctx);
   z3::expr lhs1(ctx);
   z3::expr lhs2(ctx);
+
   for ( unsigned i = 0; i < L-4; i++ ) {
     for ( unsigned j = i+1; j < L-3; j++ ) {
       lhs =  ( dump[i] && dump[j] );  
@@ -259,6 +267,7 @@ z3::expr vts::at_least_four ( z3::expr_vector dump ) {
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
   z3::expr lhs1(ctx);
+
   for ( unsigned i = 0; i < L-3; i++ ) {
     for ( unsigned j = i+1; j < L-2; j++) {
       lhs =  ( dump[i] && dump[j] );  
