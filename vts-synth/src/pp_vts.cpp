@@ -126,7 +126,7 @@ void print_denotation_console ( std::map<std::string,int> denotation_map ) {
   }
 }
 
-void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std::string& depqbfRun, Tup2Expr& nodeT, Tup2Expr& activeNodeT, Tup3Expr& edgeT, Tup4Expr& presenceEdgeT, Tup4Expr& activeEdgeT, VecsExpr qs  ) {
+void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std::string& depqbfRun, Tup3Expr& nodeT, Tup3Expr& activeNodeT, Tup3Expr& edgeT, Tup4Expr& presenceEdgeT, Tup4Expr& activeEdgeT, VecsExpr qs  ) {
   unsigned int step = 0;
   std::ifstream myfile ( "/tmp/out.txt" );
   std::string line;
@@ -171,12 +171,20 @@ void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std
         //std::cout << "Var2 = " << toDigit(var[2]) << "\t Var4 = " << toDigit( var[4] ) << "\n";
         // Variable is e and denotation(e) is True.
 
-        if ( var[0] == 'n' && var[1] == '_' && lit > 0) {
-          nodeT.emplace_back( toDigit( var[2] ), toDigit( var[4] ) );
+        if ( var[0] == 'n' && var[1] == '_' ) {
+          unsigned active = 0;
+          if (lit > 0) {
+            active = 1; 
+          } 
+          nodeT.emplace_back( toDigit( var[2] ), toDigit( var[4] ), active );
         }
 
-        else if ( var[0] == 'a' && var[1] == '_' && lit > 0) {
-          activeNodeT.emplace_back( toDigit( var[2] ), toDigit( var[4] ) );
+        else if ( var[0] == 'a' && var[1] == '_' ) {
+          unsigned active = 0;
+          if (lit > 0) {
+            active = 1; 
+          } 
+          activeNodeT.emplace_back( toDigit( var[2] ), toDigit( var[4] ), active );
         }
 
         else if ( var[0] == 'z' && var[1] == '_' && lit > 0) {
@@ -222,9 +230,9 @@ void vts::print_graph( z3::context& c, std::string filename, VecsExpr qs, bool p
   // active edge tuple
   Tup4Expr activeEdgeT;
   // active node tuple
-  Tup2Expr activeNodeT;
+  Tup3Expr activeNodeT;
   // presence node tuple
-  Tup2Expr nodeT;
+  Tup3Expr nodeT;
 
   create_map ( c, denotation_map, depqbfRun, nodeT, activeNodeT, edgeT, presenceEdgeT, activeEdgeT, qs);
 
@@ -249,19 +257,37 @@ void vts::print_graph( z3::context& c, std::string filename, VecsExpr qs, bool p
 
     ofs << "digraph prog {\n";
 
-    /*
-       if ( !activeNodeT.empty() ) {
-       for (unsigned i = 0; i < activeNodeT.size(); i++ ) {
-       auto x = std::get<0>( activeNodeT(step[i]) ); 
-       auto x = std::get<1>( activeNodeT(step[i]) ); 
-       std::string label = "M";
-       }
-       }
-       */
+    unsigned node_id = 0;
+    node_vec = std::to_string(0) + ":";
 
-    for( unsigned i = 0 ; i < N; i++ ) {
-      node_vec = std::to_string(i);
-      ofs << std::to_string(i) << "[label=\"" << node_vec << "\"]\n";
+    if ( !activeNodeT.empty() ) { 
+      for ( unsigned i = 0; i < activeNodeT.size(); i++ ) {
+        unsigned x = std::get<0>( activeNodeT[i] ); 
+        //auto y = std::get<1>( activeNodeT[i] ); 
+        unsigned z = std::get<2>( activeNodeT[i] ); 
+
+        if ( x != node_id ) {
+          ofs << std::to_string(node_id) << "[label=\"" << node_vec << "\"]\n";
+          node_vec = std::to_string(x) + ":";
+          node_id = x;  
+        }
+
+        if ( z == 0 ) {
+          if  ( (std::get<2> (nodeT[i]) )  == 0) 
+            node_vec = node_vec + "0"; 
+          else  
+            node_vec = node_vec + "1";
+        } else {
+          node_vec = node_vec + "1" + "-";
+        }
+      }
+      ofs << std::to_string(node_id) << "[label=\"" << node_vec << "\"]\n";
+
+    } else {
+      for( unsigned i = 0 ; i < N; i++ ) {
+        node_vec = std::to_string(i);
+        ofs << std::to_string(i) << "[label=\"" << node_vec << "\"]\n";
+      }
     }
 
     if ( !activeEdgeT.empty() ) {
@@ -270,13 +296,13 @@ void vts::print_graph( z3::context& c, std::string filename, VecsExpr qs, bool p
         auto y = std::get<1>( i ); 
         auto q = std::get<2>( i ); 
         auto k = std::get<3>( i ); 
-        
+
         if ( q == 0 ) {
-            color = "green";
+          color = "green";
         } else {
-            color = "pink";
+          color = "pink";
         }
-          
+
         std::string label = std::to_string(k);
 
         ofs << std::to_string (x) << "-> " <<  std::to_string (y)
@@ -294,13 +320,13 @@ void vts::print_graph( z3::context& c, std::string filename, VecsExpr qs, bool p
         if ( std::find( activeEdgeT.begin(), activeEdgeT.end(), i ) != activeEdgeT.end() ) { 
 
           if ( q == 0 ) {
-              color = "black";
+            color = "black";
           } else {
-              color = "yellow";
+            color = "yellow";
           }
-            
+
           std::string label = std::to_string(k);
-          
+
           ofs << std::to_string (x) << "-> " <<  std::to_string (y)
             <<  "[label="  << label << ",color=" << color
             << ",style=" << style << "]\n";
