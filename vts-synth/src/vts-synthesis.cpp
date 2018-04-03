@@ -19,6 +19,8 @@ void create_edges () {
 }
 
 z3::expr vts::annotate_graph () {
+
+z3::expr vts::annotate_graph_2 () {
   /** Example taken from PLOS paper
    * N = 2, M = 6 
    * model 3: Arb on edge, Nothing on node

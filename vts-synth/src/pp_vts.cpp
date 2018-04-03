@@ -211,7 +211,8 @@ void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std
 }
 
 // Print depqbf Graph
-void vts::print_graph( z3::context& c, std::string filename, VecsExpr qs, bool printModel, bool displayGraph ) {
+void vts::print_graph( z3::context& c, std::string filename, 
+                       VecsExpr qs, bool printModel, bool displayGraph ) {
   std::string style = "solid";
   std::string color = "blue";
   std::string node_vec; 
@@ -234,7 +235,8 @@ void vts::print_graph( z3::context& c, std::string filename, VecsExpr qs, bool p
   // presence node tuple
   Tup3Expr nodeT;
 
-  create_map ( c, denotation_map, depqbfRun, nodeT, activeNodeT, edgeT, presenceEdgeT, activeEdgeT, qs);
+  create_map ( c, denotation_map, depqbfRun, nodeT, 
+                  activeNodeT, edgeT, presenceEdgeT, activeEdgeT, qs);
 
   std::cout << depqbfRun << "\n"; 
 

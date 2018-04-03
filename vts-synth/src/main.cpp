@@ -132,7 +132,7 @@ int main(int ac, char* av[])
   z3::context c;
 
   // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
-  unsigned int N = 2;
+  unsigned int N = 7;
   unsigned int M = 6;
   unsigned int Q = 2;
   // depth of cnf
