@@ -16,6 +16,7 @@
 #include <boost/program_options/variables_map.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/token_functions.hpp>
+
 using namespace boost;
 using namespace boost::program_options;
 
@@ -132,9 +133,9 @@ int main(int ac, char* av[])
   z3::context c;
 
   // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
-  unsigned int N = 2;
-  unsigned int M = 6;
-  unsigned int Q = 2;
+  unsigned int N = 3;
+  unsigned int M = 14;
+  unsigned int Q = 1;
   // depth of cnf
   unsigned int D = 2;
 

@@ -163,7 +163,8 @@ public:
 
   /** Synthesis constraints**/
   z3::expr vts_synthesis ( unsigned variation );
-  z3::expr annotate_graph ();
+  z3::expr annotate_plos_graph();
+  z3::expr annotate_mukund_graph();
 
   /** Build constraint and model **/
   void use_z3_qbf_solver ( z3::expr cons );

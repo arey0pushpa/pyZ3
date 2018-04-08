@@ -16,11 +16,79 @@
  */
 
 void create_edges () {
+
 }
 
-//z3::expr vts::annotate_graph () {
+z3::expr vts::annotate_mukund_graph () {
 
-z3::expr vts::annotate_graph () {
+  /* M = 14, Molecules subgraph of Mukunds VTS`
+   * [ Qa2, Qa5, Qa7, Qa8 ] ::> [ M0, M1, M2, M3 ]
+   * [ Qb8 ] ::> [ M4 ]
+   * [ Qc7, Qc8 ] ::> [ M5, M6 ]
+   * [ Qbc2, Qbc2/3, Qbc7 ] ::> [ M7, M8, M9 ]
+   * [ R2, R3, R7, R8 ] ::> [ M10, M11, M12, R13 ]
+   * 
+   * Nodes: N = 3
+   *        EE :: 0
+   *        LE :: 1
+   *        PM :: 2
+   */
+
+  // Fix nodes of the graph
+  z3::expr n0_cons = nodes[0][0]
+                   && nodes[0][8];
+
+  z3::expr n1_cons = nodes[1][3]
+                   && nodes[1][4]
+                   && nodes[1][6];
+
+  z3::expr n2_cons = nodes[2][1]
+                   && nodes[2][2]
+                   && nodes[2][7]
+                   && nodes[2][9];
+
+  auto nodes_cons = n0_cons && n1_cons && n2_cons; 
+
+  // Fix edges of the graph 
+  z3::expr e_cons = edges[0][1][0] 
+                  && edges[1][2][0] 
+                  && edges[2][0][0] 
+                  && edges[2][0][1];
+
+  // Fix edge labels of the graph 
+  z3::expr e_label_01 = presence_edge[0][1][0][2]    
+                      && presence_edge[0][1][0][9]    
+                      && presence_edge[0][1][0][12]    
+                      && presence_edge[0][1][0][13];    
+  
+  z3::expr e_label_02 = presence_edge[2][0][0][11];    
+
+  z3::expr e_label_12 = presence_edge[1][2][0][9];    
+  
+  z3::expr e_label_20 = presence_edge[2][0][0][0]   
+                        && presence_edge[2][0][0][2]    
+                        && presence_edge[2][0][0][9]    
+                        && presence_edge[2][0][0][10]    
+                        && presence_edge[2][0][0][12];    
+
+
+  auto edgel_cons = e_label_01 && e_label_02 && e_label_12 && e_label_20;
+
+  auto cons = nodes_cons && e_cons && edgel_cons;
+  return cons;
+
+  /* 21 Molecules subgraph of Mukunds VTS' 
+   * [ Qa2, Qa4, Qa5, Qa6, Qa7 ] ::> [ M0, M1, M2, M3, M4 ]
+   * [ Qb1, Qb6 ] ::> [ M5, M6 ]
+   * [ Qc4, Qc5 ] ::> [ M7, M8 ]
+   * [ Qbc2, Qbc3, Qbc7 ] ::> [ M9, M10, M11 ] 
+   * [ Qbc2, Qbc2/3, Qbc7 ] ::> [ M12, M13, M14 ]
+   * [ R2, R3, R4, R6, R7, R8 ] ::> [ M15, M16, M17, M18, M19, M20 ]
+   * */
+
+}
+
+z3::expr vts::annotate_plos_graph () {
   /** Example taken from PLOS paper
    * N = 2, M = 6 
    * model 3: Arb on edge, Nothing on node
@@ -48,12 +116,12 @@ z3::expr vts::annotate_graph () {
 
      z3::expr pairing_cons_0 ( ctx );
      for (unsigned k = 0; k < M; k++ ) {
-     for (unsigned k1 = 0; k1 < M; k1++) {
-     auto expr = pairing_m[k][k1];
-     if(std::find(vec.begin(), vec.end(), expr) == vec.end()) {
-     pairing_cons_0 = pairing_cons_0 && expr;
-     }
-     }
+       for (unsigned k1 = 0; k1 < M; k1++) {
+         auto expr = pairing_m[k][k1];
+         if(std::find(vec.begin(), vec.end(), expr) == vec.end()) {
+         pairing_cons_0 = pairing_cons_0 && expr;
+       }
+      }
      }
 
      std::cout << pairing_cons_0;
@@ -69,7 +137,10 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   /** Basic Constraints **/
   z3::expr vtsCons = create_vts_constraint();  
   z3::expr vtsActivity = vts_activity_constraint();
-  z3::expr inputCons =  annotate_graph ();
+  
+  /** Annotate graph : fix graph input variables **/
+  //z3::expr inputCons =  annotate_graph ();
+  z3::expr inputCons =  annotate_mukund_graph ();
 
   z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
   z3::expr V5 = no_self_edges();
@@ -103,7 +174,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
   // 2. Add flow of molecules to fix fusion. 
   else if ( variation == 2 )  {
-    z3::expr inputCons = annotate_graph();
+  //z3::expr inputCons = annotate_plos_graph();
+  z3::expr inputCons =  annotate_mukund_graph ();
 
     z3::expr qvtsCons = exists( setN, 
                         exists( setActiveN, 
