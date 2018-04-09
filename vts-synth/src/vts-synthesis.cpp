@@ -53,7 +53,7 @@ z3::expr vts::annotate_mukund_graph () {
   z3::expr e_cons = edges[0][1][0] 
                   && edges[1][2][0] 
                   && edges[2][0][0] 
-                  && edges[2][0][1];
+                  && edges[0][2][0];
 
   // Fix edge labels of the graph 
   z3::expr e_label_01 = presence_edge[0][1][0][2]    
@@ -174,8 +174,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
   // 2. Add flow of molecules to fix fusion. 
   else if ( variation == 2 )  {
-  //z3::expr inputCons = annotate_plos_graph();
-  z3::expr inputCons =  annotate_mukund_graph ();
 
     z3::expr qvtsCons = exists( setN, 
                         exists( setActiveN, 

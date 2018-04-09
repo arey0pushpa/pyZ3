@@ -9,6 +9,9 @@
 #include <tuple>
 #include <algorithm>
 
+#include <boost/algorithm/string.hpp>
+ 
+
 #define toDigit(c) (c-'0')
 
 // Print the graph with coloured edges ##
@@ -126,6 +129,16 @@ void print_denotation_console ( std::map<std::string,int> denotation_map ) {
   }
 }
 
+// Use Boost for delimiter
+std::vector<std::string> get_coordinates ( std::string text ) {
+
+  std::vector<std::string> results;
+  boost::split(results, text, [](char c){ return c == '_'; });
+
+  return results;
+}
+
+
 void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std::string& depqbfRun, Tup3Expr& nodeT, Tup3Expr& activeNodeT, Tup3Expr& edgeT, Tup4Expr& presenceEdgeT, Tup4Expr& activeEdgeT, VecsExpr qs  ) {
   unsigned int step = 0;
   std::ifstream myfile ( "/tmp/out.txt" );
@@ -171,6 +184,7 @@ void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std
         //std::cout << "Var2 = " << toDigit(var[2]) << "\t Var4 = " << toDigit( var[4] ) << "\n";
         // Variable is e and denotation(e) is True.
 
+        unsigned x, y, k, q;
         if ( var[0] == 'n' && var[1] == '_' ) {
           unsigned active = 0;
           if (lit > 0) {
@@ -187,16 +201,26 @@ void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std
           activeNodeT.emplace_back( toDigit( var[2] ), toDigit( var[4] ), active );
         }
 
-        else if ( var[0] == 'z' && var[1] == '_' && lit > 0) {
+        else if ( var[0] == 'z' && var[1] == '_' && lit > 0 ) {
           edgeT.emplace_back( toDigit(var[2]), toDigit(var[4]), toDigit(var[6]) );
         }
 
-        else if ( var[0] == 'e' && var[1] == '_' && lit > 0) {
-          presenceEdgeT.emplace_back( toDigit( var[2] ), toDigit( var[4] ), toDigit( var[6] ), toDigit( var[8] ) );
+        else if ( var[0] == 'e' && var[1] == '_' && lit > 0 ) {
+          auto coord = get_coordinates( var );
+          x = std::stoi( coord[1] );
+          y = std::stoi( coord[2] );
+          q = std::stoi( coord[3] );
+          k = std::stoi( coord[4] );
+          presenceEdgeT.emplace_back( x, y, q, k );
         }
 
-        else if ( var[0] == 'b' && var[1] == '_' && lit > 0) {
-          activeEdgeT.emplace_back( toDigit( var[2] ), toDigit( var[4] ), toDigit( var[6] ), toDigit( var[8] ) );
+        else if ( var[0] == 'b' && var[1] == '_' && lit > 0 ) {
+          auto coord = get_coordinates( var );
+          x = std::stoi( coord[1] );
+          y = std::stoi( coord[2] );
+          q = std::stoi( coord[3] );
+          k = std::stoi( coord[4] );
+          activeEdgeT.emplace_back( x, y, q, k );
         }
 
         step += 1;
@@ -298,6 +322,7 @@ void vts::print_graph( z3::context& c, std::string filename,
         auto y = std::get<1>( i ); 
         auto q = std::get<2>( i ); 
         auto k = std::get<3>( i ); 
+        //std::cout << " [ " << x << ", " << y << ", " << q << ", " << k << " ]\n";  
 
         if ( q == 0 ) {
           color = "green";
@@ -312,15 +337,18 @@ void vts::print_graph( z3::context& c, std::string filename,
           << ",style=" << style << "]\n";
 
       }
-    } else if ( !presenceEdgeT.empty() ) {
+    } 
+    if ( !presenceEdgeT.empty() ) {
       for (auto& i : presenceEdgeT ) {
         auto x = std::get<0>( i ); 
         auto y = std::get<1>( i ); 
         auto q = std::get<2>( i ); 
         auto k = std::get<3>( i ); 
+        
 
         if ( std::find( activeEdgeT.begin(), activeEdgeT.end(), i ) != activeEdgeT.end() ) { 
-
+          continue;
+        }else {
           if ( q == 0 ) {
             color = "black";
           } else {

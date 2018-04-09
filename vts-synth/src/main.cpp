@@ -139,7 +139,7 @@ int main(int ac, char* av[])
   // depth of cnf
   unsigned int D = 2;
 
-  vts  v( c, M, N, Q, MODEL_3, 3, D );
+  vts  v( c, M, N, Q, MODEL_4, 3, D );
 
   //z3::model mdl = v.get_vts_for_prob1();
   //z3::model qbf_mdl = v.get_vts_for_qbf();
@@ -153,6 +153,7 @@ int main(int ac, char* av[])
     z3::expr y = c.bool_const("y");
     z3::expr z = c.bool_const("z");
     z3::expr w = c.bool_const("w");
+    
       
     // represent z3 vts formula
     z3::expr f( c );
