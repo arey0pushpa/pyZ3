@@ -139,8 +139,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr vtsActivity = vts_activity_constraint();
   
   /** Annotate graph : fix graph input variables **/
-  z3::expr inputCons =  annotate_plos_graph ();
-  //z3::expr inputCons =  annotate_mukund_graph ();
+  //z3::expr inputCons =  annotate_plos_graph ();
+  z3::expr inputCons =  annotate_mukund_graph ();
 
   z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
   z3::expr V5 = no_self_edges();
@@ -245,7 +245,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     z3::expr cons = exists( setSvar, 
                     exists( setTvar, 
                     exists( setUvar, 
-                    exists( setUvar, 
+                    exists( setVvar, 
                     exists( setE, 
                             kConnCons && V5 && inputCons && funcGate )))));
 

@@ -133,13 +133,13 @@ int main(int ac, char* av[])
   z3::context c;
 
   // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
-  unsigned int N = 2;
-  unsigned int M = 6;
-  unsigned int Q = 2;
+  unsigned int N = 3;
+  unsigned int M = 21;
+  unsigned int Q = 1;
   // depth of cnf
   unsigned int D = 2;
 
-  vts  v( c, M, N, Q, MODEL_3, 3, D );
+  vts  v( c, M, N, Q, MODEL_4, 3, D );
 
   //z3::model mdl = v.get_vts_for_prob1();
   //z3::model qbf_mdl = v.get_vts_for_qbf();
@@ -223,7 +223,7 @@ int main(int ac, char* av[])
     //bool timedout = false;
     std::future<int> future = std::async(std::launch::async, [](){ 
         // if ( flagA == false ) {
-        auto retVal  = system ("cd ./build/depqbf/examples;timeout 20s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
+        auto retVal  = system ("cd ./build/depqbf/examples;timeout 60s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
         // std::cout << retVal << "\n";
         //  } else {
         // auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
@@ -235,7 +235,7 @@ int main(int ac, char* av[])
     //std::cout << "Running depqbf ... " << "\n";
     std::future_status status;
 
-    status = future.wait_for( std::chrono::seconds(20) );
+    status = future.wait_for( std::chrono::seconds(60) );
 
     if ( status == std::future_status::timeout ) { 
       std::cout << "TimeOut! \n";
