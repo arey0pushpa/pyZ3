@@ -15,10 +15,6 @@
  *  - Deactivate
  */
 
-void create_edges () {
-
-}
-
 z3::expr vts::annotate_mukund_graph () {
 
   /* M = 14, Molecules subgraph of Mukunds VTS`
@@ -112,49 +108,6 @@ z3::expr vts::annotate_plos_graph () {
      std::vector<z3::expr> vec;
      vec.push_back( pairing_m[2][4] ); 
      vec.push_back( pairing_m[3][0] ); 
-  fixPresenceE.push_back(e9);
-  fixPresenceE.push_back(e10);
-
-
-  auto edgel_cons = z3::mk_and ( fixPresenceE );
-
-  auto cons = nodes_cons && edge_cons && edgel_cons;
-  return cons;
-
-  /* 21 Molecules subgraph of Mukunds VTS' 
-   * [ Qa2, Qa4, Qa5, Qa6, Qa7 ] ::> [ M0, M1, M2, M3, M4 ]
-   * [ Qb1, Qb6 ] ::> [ M5, M6 ]
-   * [ Qc4, Qc5 ] ::> [ M7, M8 ]
-   * [ Qbc2, Qbc3, Qbc7 ] ::> [ M9, M10, M11 ] 
-   * [ Qbc2, Qbc2/3, Qbc7 ] ::> [ M12, M13, M14 ]
-   * [ R2, R3, R4, R6, R7, R8 ] ::> [ M15, M16, M17, M18, M19, M20 ]
-   * */
-}
-
-z3::expr vts::annotate_plos_graph () {
-  /** Example taken from PLOS paper
-   * N = 2, M = 6 
-   * model 3: Arb on edge, Nothing on node
-   */
-
-  /** node: n[i][k] : below.  a[i][k] : use Model_3 **/
-  // Node 0 : [111 110]  
-  z3::expr node_cons = !nodes[0][0] && nodes[0][1] && nodes[0][2] && nodes[0][3] && nodes[0][4] && nodes[0][5]; 
-
-  /** edge: e[i][j][q], e[i][j][q][k]: below, b[i][j][q][k]: Model_3 **/
-  //auto edge_cons1 = edges[0][1][0] && edges[1][0][0] && edges[1][0][1];
-  z3::expr edge_cons1 = edges[0][1][0] && edges[1][0][0];
-  z3::expr edge_cons2_1 = presence_edge[0][1][0][2] && presence_edge[0][1][0][3] && presence_edge[0][1][0][5]; 
-  z3::expr edge_cons2_2 = presence_edge[1][0][0][2] && presence_edge[1][0][0][3];
-  z3::expr edge_cons = edge_cons1 && edge_cons2_1 && edge_cons2_2; 
-
-  /** Pairing Matrix Constraints **/
-  z3::expr pairing_cons_1 = pairing_m[5][1] && pairing_m[3][0] && pairing_m[2][4]; 
-
-  /*
-     std::vector<z3::expr> vec;
-     vec.push_back( pairing_m[2][4] ); 
-     vec.push_back( pairing_m[3][0] ); 
      vec.push_back( pairing_m[5][1] );
 
      z3::expr pairing_cons_0 ( ctx );
@@ -176,18 +129,6 @@ z3::expr vts::annotate_plos_graph () {
   return cons;
 }
 
-/*
-
-void unassigned_bits ( z3::expr_vector& setZ, z3::expr_vector& fixZ, z3::expr_vector& openZ ) {
-  for ( auto& i : setZ ) {
-    if ( std::find( fixZ.begin(), fixZ.end(), i ) != fixZ.end() ) 
-      continue;
-    else 
-      openZ.push_back( i );
-  }
-}
-
-*/
 
 z3::expr vts::vts_synthesis ( unsigned variation ) {
   /** Basic Constraints **/
@@ -291,7 +232,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     z3::expr func3cnf  = exists( setN, 
                          exists( setActiveN, 
-                         exists( setPresentE, 
+                         exists( setPresenceE, 
                          exists( setActiveE, 
                          exists( setPairingM, 
                          exists( setReach, 
@@ -324,7 +265,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     
     z3::expr funcGate  = exists( setN, 
                          exists( setActiveN, 
-                         exists( setPresentE, 
+                         exists( setPresenceE, 
                          exists( setActiveE, 
                          exists( setPairingM, 
                          exists( setReach, 
