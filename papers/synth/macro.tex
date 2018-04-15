@@ -1,0 +1,185 @@
+\usepackage{mathtools}
+\usepackage{makecell}
+\usepackage{graphicx}
+% \usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+
+% I ADDED FOR THE CHANGE IN ENUMERATE TO ALPHABBETICAL
+\usepackage{enumitem}
+
+
+% amsmath and amssymb packages, useful for mathematical formulas and symbols
+\usepackage{amsmath,amssymb}
+
+\renewcommand{\figurename}{Fig.{}}
+
+% Use adjustwidth environment to exceed column width (see example table in text)
+\usepackage{changepage}
+
+% Use Unicode characters when possible
+\usepackage[utf8x]{inputenc}
+
+% textcomp package and marvosym package for additional characters
+\usepackage{textcomp,marvosym}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+% Use nameref to cite supporting information files (see Supporting Information section for more info)
+\usepackage{nameref,hyperref}
+
+% line numbers
+\usepackage[right]{lineno}
+
+% ligatures disabled
+\usepackage{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+
+% color can be used to apply background shading to table cells only
+\usepackage[table]{xcolor}
+
+\usepackage{todonotes}
+
+% array package and thick rules for tables
+\usepackage{array}
+
+% Use package Listing to add code in our Manuscript
+\usepackage{listings} 
+
+% Added for the sub-pictures
+\usepackage{subcaption}
+
+% Added for the multi-column 
+\usepackage[british]{babel}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage[figurename=Fig]{caption}
+
+%ADEDED BY ANKIT
+\usepackage{tkz-orm}
+\usepackage{lineno}
+\linenumbers
+%%%<
+%\usepackage[active,tightpage]{preview}
+%\PreviewEnvironment{tikzpicture}
+
+\usepackage{verbatim}
+\usepackage{pgfplots}
+\newcommand*{\equal}{=}
+ \usepackage{tikz}
+ \usepackage{xparse}
+\usetikzlibrary{matrix,backgrounds}
+\pgfdeclarelayer{myback}
+\pgfsetlayers{myback,background,main}
+
+\tikzset{mycolor/.style = {line width=1bp,color=#1}}%
+\tikzset{myfillcolor/.style = {draw,fill=#1}}%
+
+
+\NewDocumentCommand{\highlight}{O{blue!40} m m}{%
+\draw[mycolor=#1] (#2.north west)rectangle (#3.south east);
+}
+
+\NewDocumentCommand{\fhighlight}{O{blue!40} m m}{%
+\draw[myfillcolor=#1] (#2.north west)rectangle (#3.south east);
+}
+ \usetikzlibrary{matrix,decorations.pathreplacing, calc, positioning}
+
+
+
+% create "+" rule type for thick vertical lines
+\newcolumntype{+}{!{\vrule width 2pt}}
+\renewcommand{\thesubfigure}{\Alph{subfigure}}
+
+% create \thickcline for thick horizontal lines of variable length
+\newlength\savedwidth
+\newcommand\thickcline[1]{%
+  \noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
+  \cline{#1}%
+  \noalign{\vskip\arrayrulewidth}%
+  \noalign{\global\arrayrulewidth\savedwidth}%
+}
+
+
+% Remove comment for double spacing
+%\usepackage{setspace} 
+%\doublespacing
+
+% Text layout
+% \raggedright
+% \setlength{\parindent}{0.5cm}
+% \textwidth 5.25in 
+% \textheight 8.75in
+% create "+" rule type for thick vertical lines
+% \newcolumntype{+}{!{\vrule width 2pt}}
+\renewcommand{\thesubfigure}{\Alph{subfigure}}
+
+% \thickhline command for thick horizontal lines that span the table
+\newcommand\thickhline{\noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
+\hline
+\noalign{\global\arrayrulewidth\savedwidth}}
+
+% \raggedright
+% \setlength{\parindent}{0.5cm}
+% \textwidth 5.25in 
+% \textheight 8.75in
+
+
+% \usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
+% \renewcommand{\figurename}{Fig}
+% \usepackage{epstopdf}
+% \AppendGraphicsExtensions{.tif}
+
+\newcommand{\booleans}{\mathbb{B}}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\ordinals}{\mathbb{O}}
+\newcommand{\numarals}{\mathbb{I}}
+
+\newcommand{\maps}{\rightarrow}
+
+\newcommand{\union}{{\cup} }
+\newcommand{\Union}{{\bigcup} }
+\newcommand{\powerset}[1]{2^{#1}}
+\newcommand{\intersection}{{\cap} }
+\newcommand{\Intersection}{{\bigcap} }
+\newcommand{\compose}{{\circ} }
+
+
+\newcommand{\ltrue}{\mathbf{tt}}
+\newcommand{\lfalse}{\mathbf{ff}}
+\newcommand{\limplies}{\Rightarrow}
+\newcommand{\lxor}{\oplus}
+\newcommand{\Land}{\bigwedge}
+\newcommand{\Lor}{\bigvee}
+\newcommand{\Lxor}{\bigoplus}
+\newcommand{\lequiv}{\Leftrightarrow}
+\newcommand{\landplus}{\mathrel{:\hspace{-3pt}\land\hspace{-3pt}=}}
+\newcommand{\lorplus}{\mathrel{:\hspace{-3pt}\lor\hspace{-3pt}=}}
+
+\newcommand{\nodes}{N}
+\newcommand{\mols}{M}
+\newcommand{\nlabel}{L}
+\newcommand{\edges}{E}
+\newcommand{\pairs}{P}
+\newcommand{\nodef}{f}
+\newcommand{\edgef}{g}
+
+
+\newcommand{\lorem}{{\bf LOREM}}
+\newcommand{\ipsum}{{\bf IPSUM}}
+
+\newcommand{\zthree}{\textsc{Z3}}
+
+\newcommand{\ashu}[1]{ {\textcolor{magenta} {Ashutosh: #1}} }
+\newcommand{\mukund}[1]{ {\textcolor{red} {Mukund: #1}} }
+\newcommand{\srivas}[1]{ {\textcolor{blue} {Srivas: #1}} }
+\newcommand{\ankit}[1]{ {\textcolor{green!50!black}{Ankit: #1}} }
+
+\newtheorem{df}{Definition}
+
+%--------------------- DO NOT ERASE BELOW THIS LINE --------------------------
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
