@@ -117,13 +117,13 @@ int main(int ac, char* av[])
     if (vm.count("display-graph")) {
       //std::cout << "The 'display' options was set to "
       //  << vm["display-graph"].as<unsigned>() << "\n";            
-      displayGraph =  true;            
+      displayGraph = true;            
     }                           
     if (vm.count("print-model")) {
       //std::cout << "The 'print model' options was set to "
       //  << vm["print-model"].as<unsigned>() << "\n";            
       //printModel =  vm["print-model"].as<unsigned>();            
-      printModel =  true;            
+      printModel = true;            
     }                           
   
   //std::cout << useZ3;
@@ -223,7 +223,7 @@ int main(int ac, char* av[])
     //bool timedout = false;
     std::future<int> future = std::async(std::launch::async, [](){ 
         // if ( flagA == false ) {
-        auto retVal  = system ("cd ./build/depqbf/examples;timeout 60s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
+        auto retVal  = system ("cd ./build/depqbf/examples;timeout 260s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
         // std::cout << retVal << "\n";
         //  } else {
         // auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
@@ -235,7 +235,7 @@ int main(int ac, char* av[])
     //std::cout << "Running depqbf ... " << "\n";
     std::future_status status;
 
-    status = future.wait_for( std::chrono::seconds(60) );
+    status = future.wait_for( std::chrono::seconds(260) );
 
     if ( status == std::future_status::timeout ) { 
       std::cout << "TimeOut! \n";

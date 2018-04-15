@@ -166,6 +166,9 @@ public:
   z3::expr annotate_plos_graph();
   z3::expr annotate_mukund_graph();
 
+  /* */
+  z3::expr annotate_mukund_graph ( z3::expr_vector& fixN, z3::expr_vector& fixactiveN, z3::expr_vector& fixE, z3::expr_vector& fixpresenceE, z3::expr_vector& fixactiveE, z3::expr_vector& fixpairingP );
+
   /** Build constraint and model **/
   void use_z3_qbf_solver ( z3::expr cons );
   z3::expr vts_activity_constraint();
