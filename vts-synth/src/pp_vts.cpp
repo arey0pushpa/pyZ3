@@ -121,21 +121,101 @@ std::pair<int, int> getxy (std::string var) {
   return p2;
 }
 
-void print_denotation_console ( std::map<std::string,int> denotation_map ) {
-  for (auto& t : denotation_map) {
-    std::string val;  
-    t.second >= 0 ? val = "True" : val = "False";
-    std::cout << t.first << " = " << val << "\n";
+// Use Boost for delimiter
+std::vector<std::string> get_coordinates ( std::string text ) {
+  std::vector<std::string> results;
+  boost::split(results, text, [](char c){ return c == '_'; });
+  return results;
+}
+
+
+void print_func_node ( unsigned int M, std::vector < std::vector< std::vector <int> > >  tVarStr, int D ) {
+  //std::vector < std::vector<int> > node_func_arg( M, std::vector<int>( M ));
+  std::vector < std::vector< std::vector <int> > > node_func_arg( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
+  // Fix values of node_func
+  for ( unsigned m = 0; m < M; m++ ) {
+    for ( unsigned k = 0; k < M; k++ ) { 
+      for ( int d = 0; d < D; d ++ ) { 
+        if ( tVarStr[m][k][d] == 1 ) { 
+          node_func_arg[m][k][d] = 1;
+        } else if ( tVarStr[m][k+M][d] == 1 ) {
+          node_func_arg[m][k][d] = -1;
+        }
+      }
+    }
+  }
+  
+  // Printing: todo: check if the sVar needs [M, 2M, D] or [M, D, 2M] 
+  for ( unsigned m = 0; m < M; m ++ )  {
+    std::string func_val;
+    for ( int d = 0; d < D; d ++ ) {
+      std::string depth_var;
+      for ( unsigned k = 0; k < M; k++ ) {
+        auto var = node_func_arg[m][k][d]; 
+        if ( var == 1 ) {
+          if ( k == M-1 ) { 
+            depth_var = depth_var + "arg" + std::to_string (k);
+          }
+          else { 
+            depth_var = depth_var + "arg" + std::to_string (k) + " || ";
+          }
+        }
+        else if ( var == -1 ) {
+          if ( k == M-1 ) {
+            depth_var = depth_var + "!arg" + std::to_string (k);
+          }
+          else { 
+            depth_var = depth_var + "!arg" + std::to_string (k) + " || ";
+          }
+        }
+      }
+      if ( d == D-1 ) 
+        func_val = func_val + "[" + depth_var + "]";
+      else 
+        func_val = func_val + "[" + depth_var + "] && ";
+    }
+    std::cout <<  "a_fun" + std::to_string (m) << " = " << "func ( " + func_val + " ) \n";
   }
 }
 
-// Use Boost for delimiter
-std::vector<std::string> get_coordinates ( std::string text ) {
+void print_denotation_console ( std::map<std::string,int> denotation_map, unsigned M, int D ) {
 
-  std::vector<std::string> results;
-  boost::split(results, text, [](char c){ return c == '_'; });
-
-  return results;
+  std::vector < std::vector< std::vector <int> > > tVarStr( M, std::vector< std::vector <int> > ( 2*M, std::vector<int>( D ) ) );
+  std::vector < std::vector< std::vector <int> > > sVarStr( M, std::vector< std::vector <int> > ( 2*M, std::vector<int>( D ) ) );
+  //std::vector < std::vector<int> > sVarStr( M, std::vector<int>( 2*M ));
+  //  std::vector < std::vector<int> > tVarStr( M, std::vector<int>( 2*M ));
+   
+  for ( auto& dm : denotation_map ) {
+    std::string val;  
+    dm.second >= 0 ? val = "True" : val = "False";
+    // todo: problem here
+    //std::cout << "< " << dm.first << ", " << dm.second << " > \n";
+    std::cout << dm.first << " = " << val << "\n";
+    if ( dm.first[0] == 't' ) {
+      auto coord = get_coordinates( dm.first );
+      auto func_mol = std::stoi( coord[1] );
+      auto dept_mol = std::stoi( coord[2] );
+      auto depth_id = std::stoi( coord[3] );
+      if ( dm.second > 0 ) {
+        tVarStr[func_mol][dept_mol][depth_id] = 1;
+      } else {
+        tVarStr[func_mol][dept_mol][depth_id] = -1;
+      }
+    }else if ( dm.first[0] == 's' ) {
+      auto coord = get_coordinates( dm.first );
+      auto func_mol = std::stoi( coord[1] );
+      auto dept_mol = std::stoi( coord[2] );
+      auto depth_id = std::stoi( coord[3] );
+      if ( dm.second > 0 ) {
+        sVarStr[func_mol][dept_mol][depth_id] = 1;
+      } else {
+        sVarStr[func_mol][dept_mol][depth_id] = -1;
+      }
+    }
+  }
+  
+  print_func_node( M, sVarStr, D );
+  //print_func_edge( M );
 }
 
 
@@ -272,7 +352,7 @@ void vts::print_graph( z3::context& c, std::string filename,
   //}
 
   if ( printModel == true ) {
-    print_denotation_console ( denotation_map );
+    print_denotation_console ( denotation_map, M, D );
   }
 
   if ( displayGraph == true ) {

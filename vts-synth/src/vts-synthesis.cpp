@@ -223,21 +223,27 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr_vector setPairingM = pairing_m_set(); 
   z3::expr_vector setReach = reach_set();
 
-            
+  /*          
   unassigned_bits ( setN, fixN, openN ); 
   unassigned_bits ( setActiveN, fixActiveN, openActiveN ); 
   unassigned_bits ( setE, fixE, openE ); 
   unassigned_bits ( setPresenceE, fixPresenceE, openPresenceE ); 
   unassigned_bits ( setActiveE, fixActiveE, openActiveE ); 
+  */
 
   // 1. Add edge to achieve graph stability and k connected. 
   if ( variation == 1 ) {
     
+    /*
     auto nodeC = ! at_least_four ( openN );
     auto nodeActivityC = ! at_least_two ( openActiveE );
+
+    // If allowed the different variation => only edges with
+    // the allowed should cause the activation/ rest should be off.
     auto edgeC = ! at_least_three ( openE );
     auto edgeActivityC = ! at_least_three ( openActiveE );
     auto edgePresenceC = ! at_least_three ( openPresenceE );
+    */
 
     auto qvtsCons = exists( setN, 
                     exists( setActiveN, 
