@@ -15,7 +15,8 @@
  *  - Deactivate
  */
 
-z3::expr vts::annotate_mukund_graph () {
+
+z3::expr vts::annotate_mukund_graph ( z3::expr_vector& fixN, z3::expr_vector& fixActiveN, z3::expr_vector& fixE, z3::expr_vector& fixPresenceE, z3::expr_vector& fixActiveE, z3::expr_vector& fixPairingP )  {
 
   /* M = 14, Molecules subgraph of Mukunds VTS`
    * [ Qa2, Qa5, Qa7, Qa8 ] ::> [ M0, M1, M2, M3 ]
@@ -30,47 +31,88 @@ z3::expr vts::annotate_mukund_graph () {
    *        PM :: 2
    */
 
+  /*
+  // Straighten out few things.
+  z3::expr_vector setE = edge_set();
+  z3::expr_vector setN = node_set();
+  z3::expr_vector setActiveN = active_node_set();
+  z3::expr_vector setPresenceE = presence_edge_set();
+  z3::expr_vector setActiveE = active_edge_set();
+  z3::expr_vector setPairingM = pairing_m_set();
+  z3::expr_vector setReach = reach_set();
+  */
+
   // Fix nodes of the graph
-  z3::expr n0_cons = nodes[0][0]
-                   && nodes[0][8];
 
-  z3::expr n1_cons = nodes[1][3]
-                   && nodes[1][4]
-                   && nodes[1][6];
+  auto n0 = nodes[0][0];
+  auto n1 = nodes[0][8];
 
-  z3::expr n2_cons = nodes[2][1]
-                   && nodes[2][2]
-                   && nodes[2][7]
-                   && nodes[2][9];
+  auto n2 = nodes[1][3];
+  auto n3 = nodes[1][4];
+  auto n4 = nodes[1][6];
+  
+  auto n5 = nodes[2][1];
+  auto n6 = nodes[2][2];
+  auto n7 = nodes[2][7];
+  auto n8 = nodes[2][9];
 
-  auto nodes_cons = n0_cons && n1_cons && n2_cons; 
+  fixN.push_back(n0);
+  fixN.push_back(n1);
+  fixN.push_back(n2);
+  fixN.push_back(n3);
+  fixN.push_back(n4);
+  fixN.push_back(n5);
+  fixN.push_back(n6);
+  fixN.push_back(n7);
+  fixN.push_back(n8);
+
+  z3::expr nodes_cons = z3::mk_and( fixN ); 
 
   // Fix edges of the graph 
-  z3::expr e_cons = edges[0][1][0] 
-                  && edges[1][2][0] 
-                  && edges[2][0][0] 
-                  && edges[2][0][1];
+  auto e0 = edges[0][1][0]; 
+  auto e1 = edges[1][2][0]; 
+  auto e2 = edges[2][0][0];
+  auto e3 = edges[0][2][0];
+  
+  fixE.push_back(e0);
+  fixE.push_back(e1);
+  fixE.push_back(e2);
+  fixE.push_back(e3);
+
+  z3::expr edge_cons = z3::mk_and ( fixE );
 
   // Fix edge labels of the graph 
-  z3::expr e_label_01 = presence_edge[0][1][0][2]    
-                      && presence_edge[0][1][0][9]    
-                      && presence_edge[0][1][0][12]    
-                      && presence_edge[0][1][0][13];    
+  e0 = presence_edge[0][1][0][2];
+  e1 = presence_edge[0][1][0][9];   
+  e2 = presence_edge[0][1][0][12];    
+  e3 = presence_edge[0][1][0][13];    
+
+  auto e4 = presence_edge[0][2][0][11];    
+
+  auto e5 = presence_edge[1][2][0][9];    
   
-  z3::expr e_label_02 = presence_edge[2][0][0][11];    
-
-  z3::expr e_label_12 = presence_edge[1][2][0][9];    
+  auto e6 = presence_edge[2][0][0][0];
+  auto e7 = presence_edge[2][0][0][2];
+  auto e8 = presence_edge[2][0][0][9];   
+  auto e9 = presence_edge[2][0][0][10];    
+  auto e10 = presence_edge[2][0][0][12];    
   
-  z3::expr e_label_20 = presence_edge[2][0][0][0]   
-                        && presence_edge[2][0][0][2]    
-                        && presence_edge[2][0][0][9]    
-                        && presence_edge[2][0][0][10]    
-                        && presence_edge[2][0][0][12];    
+  fixPresenceE.push_back(e0);
+  fixPresenceE.push_back(e1);
+  fixPresenceE.push_back(e2);
+  fixPresenceE.push_back(e3);
+  fixPresenceE.push_back(e4);
+  fixPresenceE.push_back(e5);
+  fixPresenceE.push_back(e6);
+  fixPresenceE.push_back(e7);
+  fixPresenceE.push_back(e8);
+  fixPresenceE.push_back(e9);
+  fixPresenceE.push_back(e10);
 
 
-  auto edgel_cons = e_label_01 && e_label_02 && e_label_12 && e_label_20;
+  auto edgel_cons = z3::mk_and ( fixPresenceE );
 
-  auto cons = nodes_cons && e_cons && edgel_cons;
+  auto cons = nodes_cons && edge_cons && edgel_cons;
   return cons;
 
   /* 21 Molecules subgraph of Mukunds VTS' 
@@ -81,7 +123,6 @@ z3::expr vts::annotate_mukund_graph () {
    * [ Qbc2, Qbc2/3, Qbc7 ] ::> [ M12, M13, M14 ]
    * [ R2, R3, R4, R6, R7, R8 ] ::> [ M15, M16, M17, M18, M19, M20 ]
    * */
-
 }
 
 z3::expr vts::annotate_plos_graph () {
@@ -129,6 +170,18 @@ z3::expr vts::annotate_plos_graph () {
   return cons;
 }
 
+/*
+
+void unassigned_bits ( z3::expr_vector& setZ, z3::expr_vector& fixZ, z3::expr_vector& openZ ) {
+  for ( auto& i : setZ ) {
+    if ( std::find( fixZ.begin(), fixZ.end(), i ) != fixZ.end() ) 
+      continue;
+    else 
+      openZ.push_back( i );
+  }
+}
+
+*/
 
 z3::expr vts::vts_synthesis ( unsigned variation ) {
   /** Basic Constraints **/
@@ -163,7 +216,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr_vector setPairingM = pairing_m_set(); 
   z3::expr_vector setReach = reach_set();
 
-  /*          
+            
+  /*
   unassigned_bits ( setN, fixN, openN ); 
   unassigned_bits ( setActiveN, fixActiveN, openActiveN ); 
   unassigned_bits ( setE, fixE, openE ); 
@@ -174,16 +228,11 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   // 1. Add edge to achieve graph stability and k connected. 
   if ( variation == 1 ) {
     
-    /*
     auto nodeC = ! at_least_four ( openN );
     auto nodeActivityC = ! at_least_two ( openActiveE );
-
-    // If allowed the different variation => only edges with
-    // the allowed should cause the activation/ rest should be off.
     auto edgeC = ! at_least_three ( openE );
     auto edgeActivityC = ! at_least_three ( openActiveE );
     auto edgePresenceC = ! at_least_three ( openPresenceE );
-    */
 
     auto qvtsCons = exists( setN, 
                     exists( setActiveN, 
@@ -216,8 +265,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     return cons;
   }
-  
-// 3. KCnf  4. Cnf with low depth circuit
+  // 3. KCnf  4. Cnf with low depth circuit
   else if ( variation == 3 ) {
 
     //Populate xtra var s_var : var for node function
@@ -274,7 +322,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     z3::expr cons = exists( setSvar, 
                     exists( setTvar, 
                     exists( setUvar, 
-                    exists( setUvar, 
+                    exists( setVvar, 
                     exists( setE, 
                             kConnCons && V5 && inputCons && funcGate )))));
 
