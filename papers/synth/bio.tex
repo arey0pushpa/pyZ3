@@ -1,3 +1,87 @@
+In this section, we will present the model of VTS from~\cite{PloS,SASB}.
+%
+We will also present the constrains and properties on the VTSs.   
+%
+We model a VTS as labelled graph along with assisting pairing matrices and
+activating functions.
+
+\begin{df}
+  A VTS $G$ is a tuple $(\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$, where
+  \begin{itemize}
+  \item $\nodes$ is a set of nodes representing compartments in the VTS,
+  \item $\mols$ is the set of molecules flowing in the system, 
+  \item $\edges \subseteq \nodes \times (\powerset{\mols}-\emptyset) \times \nodes$ is the
+    set of edges with molecule sets as labels,
+  \item $\nlabel : \nodes \maps \powerset{\mols}$ defines the molecules present in the nodes,
+  \item $\pairs \subseteq \mols \times \mols$ is pairing relation,
+  \item $\nodef : \mols \maps \powerset{\mols} \maps \booleans$ is activity maps for nodes, and
+  \item $\edgef : \mols \maps \powerset{\mols} \maps \booleans $ is activity maps for edges.
+  \end{itemize}
+\end{df}
+$\pairs$ defines which molecules can fuse with which molecules.
+%
+Let $\pairs(M')$ denote $\{m|(m,m') \in P \text{ and } m' \in M'\}$.
+%
+$\nodef$ and $\edgef$ are used to define activity of molecules on
+nodes and edges respectively.
+%
+A molecule $k$ is {\em active} at node $n$ if $k \in \nlabel(n)$ and
+$\nodef(k,\nlabel(n))$ is true.
+%
+A molecule $k$ is {\em active} at edges $(n,M',n')$ if $k \in M'$ and
+$\edgef(k,M')$ is true.
+%
+We call $G$ {\em well-structured} if molecules $M$ is divided into
+two equal-sized partitions $M_1$ and $M_2$ such that
+$P \subseteq M_1 \times M_2$, and
+for each $(n,M',n') \in \edges$, $n \neq n'$, 
+$M' \subseteq \nlabel(n) \intersection \nlabel(n')$.
+%
+In other words, a well-structured VTS has no self loops, and 
+each edge carry only those molecules that are present in its source
+and destination nodes. 
+
+% We will also consider several variations of the model.
+% %
+% For example, unique edge between two nodes, activity of molecules is
+% not constrained by $\nodef$ and $\edgef$, etc.
+%
+
+A {\em path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes 
+such that $(n_i,\_,n_{i+1}) \in \edges$ for each $ 0 < i < \ell$.
+%
+For a molecule $m \in M$,
+an {\em $m$-path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes 
+such that $(n_i,M',n_{i+1}) \in \edges$ and $m \in M'$ for
+each $ 0 < i < \ell$.
+%
+A node $n'$ is {\em ($m$-)reachable} from node $n$ in $G$ if there is a ($m$-)path
+$n,...,n'$ in $G$.
+%
+% A node $n'$ is {\em $m$-reachable} from node $n$ in $G$ if there is a
+% $m$-path $n,...,n'$ in $G$.
+%
+We call $G$ {\em stable} if for each $(n,M',n') \in \edges$ and $m \in M'$,
+$n$ is $m$-reachable from $n'$.
+%
+An edge $(n,M',n') \in \edges$ {\em fuses} with its destination node $n'$
+if there are molecules $m,m' \in \mols$ such that $m$ is active in
+$(n,M',n')$, $m'$ is active in $n'$, and $(m,m') \in \pairs$.
+%
+We call $G$ {\em well-fused} if each edge $(n,M',n') \in \edges$ fuses
+with non-empty fusing molecules $M'' \subseteq M'$
+and $\pairs(M'')$ are not active in any other node.
+%
+We call $G$ {\em connected} if for each $n,n' \in \nodes$,
+$n'$ is reachable from $n$ in $G$.
+%
+We call $G$ $k$-connected if for each $\edges' \subseteq \edges$ and $|\edges'| < k$,
+VTS $(\nodes,\mols,\edges-E',\nlabel,\pairs,\edgef,\nodef)$ is connected.
+%
+In the definition, we do not care about the paths to be $m$-connected for some $m$.  
+%
+A variant of the definition may be sensitive to the $m$-connectedness, but
+we are not considering the variation.
 
 %%% Local Variables:
 %%% mode: latex
