@@ -133,7 +133,7 @@ int main(int ac, char* av[])
 
   z3::context c;
 
-  // load_vts ld(c,"/home/agupta/tmp/t.vts"); ld.load(); return 0;
+  load_vts ld(c,"/home/agupta/tmp/t.vts"); ld.load(); return 0;
 
   // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
   unsigned int N = 3;
