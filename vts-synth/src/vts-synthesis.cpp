@@ -1,6 +1,7 @@
 #include<vts.h>
 #include<z3-util.h>
-
+#include<algorithm>
+#include<vector>
 /** Synthesis Variations 
  * 1. Add edge to achieve graph stability and k connected. 
  * 2. Add flow of molecules to fix fusion. 
@@ -10,13 +11,16 @@
  *   - Low depth circuit
  * 4. Gates: And Or  
  *   - Function dependence with var occuring once
- * 5. Biological Operations
+ * 5. VTS repair.
+ * 6. Biological Operations
  *  - Activate
  *  - Deactivate
  */
 
 
-z3::expr vts::annotate_mukund_graph ( z3::expr_vector& fixN, z3::expr_vector& fixActiveN, z3::expr_vector& fixE, z3::expr_vector& fixPresenceE, z3::expr_vector& fixActiveE, z3::expr_vector& fixPairingP )  {
+z3::expr vts::annotate_mukund_graph ( z3::expr_vector& fixN, z3::expr_vector& fixActiveN, 
+                                      z3::expr_vector& fixE, z3::expr_vector& fixPresenceE,
+                                      z3::expr_vector& fixActiveE, z3::expr_vector& fixPairingP )  {
 
   /* M = 14, Molecules subgraph of Mukunds VTS`
    * [ Qa2, Qa5, Qa7, Qa8 ] ::> [ M0, M1, M2, M3 ]
@@ -165,23 +169,27 @@ z3::expr vts::annotate_plos_graph () {
      exit(0);
 
      z3::expr pairing_cons = pairing_cons_1 && pairing_cons_0;
-     */
+ */
+
   auto cons = edge_cons && node_cons && pairing_cons_1;
   return cons;
 }
 
-/*
 
-void unassigned_bits ( z3::expr_vector& setZ, z3::expr_vector& fixZ, z3::expr_vector& openZ ) {
-  for ( auto& i : setZ ) {
-    if ( std::find( fixZ.begin(), fixZ.end(), i ) != fixZ.end() ) 
+void unassigned_bits ( z3::expr_vector& setZ,
+                       z3::expr_vector fixZ,
+                       z3::expr_vector& openZ ) {
+  for ( unsigned i = 0; i < setZ.size(); i++ ) {
+   // auto var = setZ[i];
+   /*
+    if ( std::find( fixZ.begin(), fixZ.end(), var ) != fixZ.end() ) 
       continue;
     else 
-      openZ.push_back( i );
+      openZ.push_back( var );
   }
-}
+  */
+} }
 
-*/
 
 z3::expr vts::vts_synthesis ( unsigned variation ) {
   /** Basic Constraints **/
@@ -216,23 +224,25 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr_vector setPairingM = pairing_m_set(); 
   z3::expr_vector setReach = reach_set();
 
-            
-  /*
   unassigned_bits ( setN, fixN, openN ); 
   unassigned_bits ( setActiveN, fixActiveN, openActiveN ); 
   unassigned_bits ( setE, fixE, openE ); 
   unassigned_bits ( setPresenceE, fixPresenceE, openPresenceE ); 
   unassigned_bits ( setActiveE, fixActiveE, openActiveE ); 
-  */
 
   // 1. Add edge to achieve graph stability and k connected. 
   if ( variation == 1 ) {
     
-    auto nodeC = ! at_least_four ( openN );
-    auto nodeActivityC = ! at_least_two ( openActiveE );
+    //auto nodeC = ! at_least_two ( openN );
+    //auto nodeActivityC = ! at_least_two ( openActiveE );
     auto edgeC = ! at_least_three ( openE );
-    auto edgeActivityC = ! at_least_three ( openActiveE );
-    auto edgePresenceC = ! at_least_three ( openPresenceE );
+    auto edgeActivityC = ! at_least_two ( openActiveE );
+    auto edgePresenceC = ! at_least_two ( openPresenceE );
+    
+    // Fix rest of them to zero.
+    auto fixVar0 = ! z3::mk_or ( openN )  && ! z3::mk_or ( openActiveN );
+    
+    auto addConstraints = edgeC && edgeActivityC && edgePresenceC  && fixVar0;
 
     auto qvtsCons = exists( setN, 
                     exists( setActiveN, 
@@ -240,24 +250,31 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( setActiveE, 
                     exists( setPairingM, 
                     exists( setReach, 
-                            vtsCons && vtsActivity && inputCons ))))));   
+                            vtsCons && vtsActivity && inputCons && addConstraints ))))));   
 
     auto cons = exists( setE, 
                         qvtsCons && V5 && kConnCons ); 
-
     return cons;
 
   }
 
   // 2. Add flow of molecules to fix fusion. 
   else if ( variation == 2 )  {
+    
+    auto edgeActivityC = ! at_least_two ( openActiveE );
+    auto edgePresenceC = ! at_least_two ( openPresenceE );
 
+    auto fixVar0 = ! z3::mk_or ( openN )  && ! z3::mk_or ( openActiveN ) && !z3::mk_or ( openE );
+
+    auto addConstraints = edgeActivityC && edgePresenceC && fixVar0;
+    
+    // fix rest of them to 0.
     z3::expr qvtsCons = exists( setN, 
                         exists( setActiveN, 
                         exists( setActiveE, 
                         exists( setPairingM, 
                         exists( setReach, 
-                                vtsCons && vtsActivity )))));
+                                vtsCons && vtsActivity && addConstraints )))));
 
     auto cons = exists( setPresenceE, 
                 exists( setE, 
@@ -265,9 +282,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     return cons;
   }
+
   // 3. KCnf  4. Cnf with low depth circuit
   else if ( variation == 3 ) {
-
     //Populate xtra var s_var : var for node function
     popl3 ( s_var, M, 2 * M, D, "s" );
     // Populate xtra var t_var : var for node function 
@@ -294,21 +311,24 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     return cons;
   }
   else if ( variation == 4 ) {
-    //Populate xtra var s_var : var for node function
-      popl3 ( s_var, M, M - 1, (2 * M) + 2, "s" );
-    // Populate xtra var t_var : var for node function 
+    unsigned gateTypes = 2;
+    //Populate xtra var s_var : var for node function 
+    // [Molecules, Total M molecule to pick, Picking options: All molecules + True + False ]
+    popl3 ( s_var, M, M, (2 * M) + 2, "s" );
+    // Populate xtra var t_var : var for edge function 
     popl3 ( t_var, M, M, (2 * M) + 2, "t" );
+    // Populate parameter var [ Molecules , No.Of gate to pick ]
+    popl3 ( u_var, M, M-1, gateTypes, "u" );
     // Populate parameter var
-    popl2 ( u_var, M, M, "u" );
-    // Populate parameter var
-    popl2 ( v_var, M, M, "v" );
+    popl3 ( v_var, M, M-1, gateTypes, "v" );
 
-    // [3]: Boolean gates  function 
-    auto setSvar = flattern3d ( s_var, M, M - 1, 2*M + 2, false );
-    auto setTvar = flattern3d ( t_var, M, M - 1, 2*M + 2, false );
-    auto setUvar = flattern2d ( u_var, M, M, false );
-    auto setVvar = flattern2d ( v_var, M, M, false );
+    // Boolean gates  function 
 
+    auto setSvar = flattern3d ( s_var, M, M, 2*M + 2, false );
+    auto setTvar = flattern3d ( t_var, M, M, 2*M + 2, false );
+    auto setUvar = flattern3d ( u_var, M, M-1, gateTypes, false );
+    auto setVvar = flattern3d ( v_var, M, M-1, gateTypes, false ); 
+    
     z3::expr gateCons = logic_gates ( s_var, t_var, u_var, v_var );
     
     z3::expr funcGate  = exists( setN, 
@@ -328,7 +348,52 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     return cons;
 
-  }else {
+  } else if ( variation == 5 ) {
+    // Add deletion logic
+    /*
+// Populate edges: e(i,j,q)
+  popl3( Xedges, N, N, E_arity, "xz" );
+
+// Populate nodes: n(i,j)
+  popl2 ( Xnodes, N, M, "xn" );
+
+// Populate active_node (i, k)
+  popl2 ( Xactive_node, N, M, "xa" );
+
+// Populate presence_edge(i,j,q,k)
+  popl4 ( Xpresence_edge, N, N, E_arity, M, "xe" );
+
+// Populate active_edge(i,j,q,k)
+  popl4 ( Xactive_edge, N, N, E_arity, M, "xb" );
+
+// Populate pairing_m(k,k1)
+  popl2 ( Xpairing_m, M, M, "xp" );
+  */
+    auto nodeC = ! at_least_three ( openN );
+    auto nodeActivityC = ! at_least_two ( openActiveE );     
+    auto edgeC = ! at_least_three ( openE );
+    auto edgeActivityC = ! at_least_two ( openActiveE );
+    auto edgePresenceC = ! at_least_two ( openPresenceE );
+    
+    // Fix rest of them to zero.
+    auto fixVar0 = ! z3::mk_or ( openN )  && ! z3::mk_or ( openActiveN );
+    
+    auto addConstraints = edgeC && edgeActivityC && edgePresenceC  && fixVar0;
+
+    auto qvtsCons = exists( setN, 
+                    exists( setActiveN, 
+                    exists( setPresenceE,  
+                    exists( setActiveE, 
+                    exists( setPairingM, 
+                    exists( setReach, 
+                            vtsCons && vtsActivity && inputCons && addConstraints ))))));   
+
+    auto cons = exists( setE, 
+                        qvtsCons && V5 && kConnCons ); 
+    return cons;
+    
+  } else {
     return ctx.bool_val(true);
   }
 }
+

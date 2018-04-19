@@ -106,9 +106,9 @@ void qdimacs_printer(std::vector<z3::expr>& cnf_fml,
     std::map <Z3_ast, int> var_id_map;
 
     // Map variable to id in the dictionary.
+    // We have started with 1 rather than a 0 because the 0 represents the ending of a CNF file and the solver won't be able to distinguish whether it's a variable or a line delmiter.
     unsigned int id = 1;
     for (auto& key: var_list) {  
-      //std::cout << key << "\n";
       var_id_map[key] = id++;
     }
 

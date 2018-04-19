@@ -4,6 +4,7 @@
 #include <string>
 #include <z3++.h>
 #include <z3-util.h>
+#include <map>
 
 enum model_version {
   MODEL_1,
@@ -43,8 +44,8 @@ private:
 
   Vec3Expr s_var;
   Vec3Expr t_var;
-  Vec2Expr u_var;
-  Vec2Expr v_var;
+  Vec3Expr u_var;
+  Vec3Expr v_var;
 
   Vec3Expr edges;
   Vec4Expr presence_edge;
@@ -154,13 +155,15 @@ public:
   z3::expr edge_cnf ( Vec3Expr& t );
 
   /** Gates constraint **/
-  z3::expr gates( Vec2Expr u, z3::expr x, z3::expr y, unsigned k, unsigned g );
-  z3::expr process_fml ( Vec3Expr s, Vec2Expr u, unsigned i, unsigned k, bool e, unsigned j, unsigned q );
-  z3::expr gate_fml (Vec3Expr s, unsigned i, unsigned k, unsigned g, bool e, unsigned j, unsigned q );
-  z3::expr node_gate_fml ( Vec3Expr s, Vec2Expr u );
-  z3::expr edge_gate_fml ( Vec3Expr t, Vec2Expr v );
-  z3::expr logic_gates ( Vec3Expr s_var, Vec3Expr t_var, Vec2Expr u_var, Vec2Expr v_var );
+  z3::expr gates( Vec3Expr u, z3::expr x, z3::expr y, unsigned k, unsigned g );
+  z3::expr build_rhs_fml ( Vec3Expr s, Vec3Expr u, unsigned i, unsigned k, bool e, unsigned j, unsigned q );
+  //z3::expr var_fml (Vec3Expr s, unsigned i, unsigned k, unsigned g, bool e, unsigned j, unsigned q );
+  z3::expr var_fml (Vec3Expr s, unsigned i, unsigned k, unsigned m, bool e, unsigned j, unsigned q );
 
+  z3::expr node_gate_fml ( Vec3Expr s, Vec3Expr u );
+  z3::expr edge_gate_fml ( Vec3Expr t, Vec3Expr v );
+  z3::expr logic_gates ( Vec3Expr s_var, Vec3Expr t_var, Vec3Expr u_var, Vec3Expr v_var );
+  z3::expr_vector reduce_fml ( z3::context& ctx, z3::expr_vector& main_list,  unsigned mLen, Vec3Expr u, unsigned k, unsigned& gateVar );
   /** Synthesis constraints**/
   z3::expr vts_synthesis ( unsigned variation );
   z3::expr annotate_plos_graph();
@@ -169,6 +172,11 @@ public:
   /* */
   z3::expr annotate_mukund_graph ( z3::expr_vector& fixN, z3::expr_vector& fixactiveN, z3::expr_vector& fixE, z3::expr_vector& fixpresenceE, z3::expr_vector& fixactiveE, z3::expr_vector& fixpairingP );
 
+  // Synthesis helper
+  // void print_func_node ( std::vector < std::vector< std::vector <int> > >  tVarStr );
+  void print_denotation_console ( std::map<std::string,int> denotation_map, int  synthVar );
+  void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std::string& depqbfRun, Tup3Expr& nodeT, Tup3Expr& activeNodeT, Tup3Expr& edgeT, Tup4Expr& presenceEdgeT, Tup4Expr& activeEdgeT, VecsExpr qs  );
+  
   /** Build constraint and model **/
   void use_z3_qbf_solver ( z3::expr cons );
   z3::expr vts_activity_constraint();
@@ -194,7 +202,7 @@ public:
   z3::expr is_qth_edge_present( unsigned i, unsigned j, unsigned q );
   z3::expr is_undirected_dumped_edge( unsigned i, unsigned j, Vec3Expr& dump1 );
   void dump_dot( std::string filename, z3::model mdl );
-  void print_graph( z3::context& c ,std::string filename, VecsExpr qs, bool printModel, bool displayGraph );
+  void print_graph( z3::context& c ,std::string filename, VecsExpr qs, bool printModel, bool displayGraph, int synthVar );
 };
 
 

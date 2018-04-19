@@ -93,22 +93,28 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
   else if ( funcType == 2 ) {
     
     // Populate xtra var s_var : var for node function
-    popl3 ( s_var, M, M - 1, (2 * M) + 2, "s" );
+    popl3 ( s_var, M, M, (2 * M) + 2, "s" );
    
     // Populate xtra var t_var : var for node function 
     popl3 ( t_var, M, M, (2 * M) + 2, "t" );
     
     // Populate parameter var
-    popl2 ( u_var, M, M, "u" );
+    popl3 ( u_var, M, M-1, 2, "u" );
     
     // Populate parameter var
-    popl2 ( v_var, M, M, "v" );
+    popl3 ( v_var, M, M-1, 2, "v" );
     
     // [3]: Boolean gates  function 
-    auto setSvar = flattern3d ( s_var, M, M - 1, 2*M + 2, false );
+    /*
+     * auto setSvar = flattern3d ( s_var, M, M - 1, 2*M + 2, false );
     auto setTvar = flattern3d ( t_var, M, M - 1, 2*M + 2, false );
     auto setUvar = flattern2d ( u_var, M, M, false );
     auto setVvar = flattern2d ( v_var, M, M, false );
+     */
+    auto setSvar = flattern3d ( s_var, M, M, 2*M + 2, false );
+    auto setTvar = flattern3d ( t_var, M, M, 2*M + 2, false );
+    auto setUvar = flattern3d ( u_var, M, M-1, 2, false );
+    auto setVvar = flattern3d ( v_var, M, M-1, 2, false );
   
     z3::expr gateCons = logic_gates ( s_var, t_var, u_var, v_var );
     

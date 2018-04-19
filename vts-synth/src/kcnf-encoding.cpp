@@ -4,7 +4,7 @@
 /*********   N [here = 3] CNF  Encoding *************************************
  *
  *   lit_list ::= a1 C1 || a2 C2 || ... || an Cn 
- *   cl_list  ::= a1 + a2 + a3 + ... + an <= N
+ *   cl_list  ::= a1 + a2 + a3 + ... + an == N (here 3)
  *   il_list  ::= !Coeff (C1) || !Coeff (C2) 
  *   
  *   outer_list ::=  Sum_i { [lit_list] && [cl_list] && [il_list] } 
@@ -35,11 +35,12 @@ z3::expr vts::literal_cnf ( Vec3Expr s, unsigned i, unsigned k, bool e, unsigned
       cl_list.push_back( s[k][k1][d] );
       cl_list.push_back( s[k][k1+M][d] );
       il_list.push_back( !s[k][k1][d] || !s[k][k1+M][d] ) ;
-
     }
 
-    // At most 2 
-    auto cConst =  ! at_least_two( cl_list );
+    // Exactly three : 3 CNF 
+    // auto cConst =  at_least_three ( cl_list) && ! at_least_four( cl_list );
+    // To make compuational challenge easy lets fix at_most_one`
+    auto cConst = !at_least_two( cl_list ); 
     lit_listC.push_back( cConst );
     
     auto iConst = mk_and ( il_list );
@@ -102,5 +103,6 @@ z3::expr vts::cnf_function ( Vec3Expr& s_var, Vec3Expr& t_var ) {
   //std::cout << edgeCnf << "\n";
   
   auto cons = nodeCnf && edgeCnf;
+  //std::cout << cons;
   return cons;
 }

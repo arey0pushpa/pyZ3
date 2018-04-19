@@ -69,7 +69,7 @@ int main(int ac, char* av[])
 
     // Declare an options description instance which will be shown
     // to the user
-    options_description visible("VTS-Synth [version 0.0.1]. (C) Copyright 2017-2018 TIFR Mumbai. \nUsage: ./vts-synth [--options] [--variation arg] \n\nFunction types:\n  0. Arbitrary Boolean func: ackermannization. [default] \n  1. K-cnf with depth D. \n  2. Logic-gates AND OR. \n  3. Logic gate with unique arguments. \n\nSynthesis variation:\n  0. Default. \n  1. Edge synthesis.\n  2. Molecule synthesis.\n  3. K-Cnf.\n  4. Logic gates.\n  5. Activate-deactivate");
+    options_description visible("VTS-Synth [version 0.0.1]. (C) Copyright 2017-2018 TIFR Mumbai. \nUsage: ./vts-synth [--options] [--variation arg] \n\nFunction types:\n  0. Arbitrary Boolean func: ackermannization. [default] \n  1. K-cnf with depth D. \n  2. Logic-gates AND OR. \n  3. Logic gate with unique arguments. \n\nSynthesis variation:\n  0. Default. \n  1. Edge synthesis.\n  2. Molecule synthesis.\n  3. K-Cnf.\n  4. Logic gates.\n  5. VTS repair.\n 6. Activate-deactivate");
     visible.add(general).add(variation).add(options);
 
 
@@ -217,7 +217,7 @@ int main(int ac, char* av[])
     std::cout << "Printing qdimacs at /tmp/myfile.qdimacs \n";
     qdimacs_printer( cnf_f, qs ); 
     //std::cout << "Creating depqbf input file at /tmp/depqbf.c \n";
-    std::cout << "Creating depqbf input file at ./build/depqbf/examples/depqbf.c  \n";
+    //std::cout << "Creating depqbf input file at ./build/depqbf/examples/depqbf.c  \n";
     //depqbf_file_creator(edgeQuant, equant_len);
 
     //bool timedout = false;
@@ -248,7 +248,7 @@ int main(int ac, char* av[])
       std::cout << "Program run was sucessful! ";
     }
 
-    v.print_graph( c, "/tmp/dep_vts.dot", qs, printModel, displayGraph ); 
+    v.print_graph( c, "/tmp/dep_vts.dot", qs, printModel, displayGraph, synthVar ); 
     if ( displayGraph == true ) { 
       auto retVal = system("xdot /tmp/dep_vts.dot");
       if(retVal == -1) 
