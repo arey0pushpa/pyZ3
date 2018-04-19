@@ -29,7 +29,11 @@ void vts::add_known_pairing( unsigned m1, unsigned m2 ) {
 
 }
 
-void vts::add_known_activity_function( unsigned m, z3::expr f ) {
+void vts::add_known_activity_node_function( unsigned m, z3::expr f ) {
+  
+}
+
+void vts::add_known_activity_edge_function( unsigned m, z3::expr f ) {
   
 }
 
