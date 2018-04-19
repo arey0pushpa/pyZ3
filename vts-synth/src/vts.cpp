@@ -17,6 +17,22 @@
 //typedef array_type::index index;
 //array_type A(boost::extents[3][4][2]);
 
+void vts::add_known_edge( unsigned n1, unsigned n2,
+                          std::vector<unsigned>& mols, std::vector<bool>& act) {
+
+}
+void vts::add_known_node( unsigned n,
+                          std::vector<unsigned>& mols, std::vector<bool>& act) {
+}
+
+void vts::add_known_pairing( unsigned m1, unsigned m2 ) {
+
+}
+
+void vts::add_known_activity_function( unsigned m, z3::expr f ) {
+  
+}
+
 //============================================================================
 // Populates the vectors with z3 variables
 

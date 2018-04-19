@@ -13,7 +13,7 @@
 
 #define toDigit(c) (c-'0')
 
-// Printing the Graph ##########
+// Printing the Graph
 void vts::dump_dot( std::string filename, z3::model mdl) {
   std::string style = "solid";
   std::string color = "blue";
