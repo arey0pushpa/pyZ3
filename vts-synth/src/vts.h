@@ -177,7 +177,7 @@ public:
   /** Synthesis constraints**/
   z3::expr vts_synthesis ( unsigned variation );
   z3::expr annotate_plos_graph();
-  z3::expr annotate_mukund_graph();
+ // z3::expr annotate_mukund_graph();
 
   /* */
   z3::expr annotate_mukund_graph ( z3::expr_vector& fixN, z3::expr_vector& fixactiveN, z3::expr_vector& fixE, z3::expr_vector& fixpresenceE, z3::expr_vector& fixactiveE, z3::expr_vector& fixpairingP );
@@ -186,7 +186,8 @@ public:
   // void print_func_node ( std::vector < std::vector< std::vector <int> > >  tVarStr );
   void print_denotation_console ( std::map<std::string,int> denotation_map, int  synthVar );
   void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std::string& depqbfRun, Tup3Expr& nodeT, Tup3Expr& activeNodeT, Tup3Expr& edgeT, Tup4Expr& presenceEdgeT, Tup4Expr& activeEdgeT, VecsExpr qs  );
-  
+  //bool equality_check( z3::expr_vector fixZ, z3::expr var );
+
   /** Build constraint and model **/
   void use_z3_qbf_solver ( z3::expr cons );
   z3::expr vts_activity_constraint();
