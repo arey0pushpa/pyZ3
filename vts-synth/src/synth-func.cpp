@@ -217,11 +217,11 @@ void vts::print_denotation_console ( std::map<std::string,int> denotation_map, i
     std::vector < std::vector< std::vector <int> > > vVarStr ( M, std::vector< std::vector <int> > ( M-1, std::vector<int>( typeOfGates ) ) );
     
     for ( auto& dm : denotation_map ) {
-      std::cout << " dm is : [" << dm.first << ", " << dm.second << "]\n";
+      //std::cout << " dm is : [" << dm.first << ", " << dm.second << "]\n";
       std::string val;  
       dm.second >= 0 ? val = "True" : val = "False";
 
-      /* std::cout << dm.first << " = " << val << "\n"; */ 
+      std::cout << dm.first << " = " << val << "\n";  
 
       if ( synthVar == 3 ) {
         if ( dm.first[0] == 't' ) {

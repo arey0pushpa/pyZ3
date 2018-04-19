@@ -190,7 +190,6 @@ void vts::print_graph( z3::context& c, std::string filename,
         auto q = std::get<2>( i ); 
         auto k = std::get<3>( i ); 
         
-
         if ( std::find( activeEdgeT.begin(), activeEdgeT.end(), i ) != activeEdgeT.end() ) { 
           continue;
         }else {
