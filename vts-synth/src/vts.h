@@ -2,10 +2,12 @@
 #define VTS_H
 
 #include <string>
+#include <memory>
 #include <z3++.h>
 #include <z3-util.h>
 
 enum model_version {
+  UN_INIT,
   MODEL_1,
   MODEL_2,
   MODEL_3,
@@ -84,6 +86,13 @@ private:
 
 
 public:
+
+  // adding known parts
+  void add_known_edge( unsigned, unsigned, std::vector<unsigned>&, std::vector<bool>& );
+  void add_known_node( unsigned, std::vector<unsigned>&, std::vector<bool>& );
+  void add_known_pairing( unsigned, unsigned );
+  void add_known_activity_function( unsigned, z3::expr );
+
   //formula makers
   z3::expr always_active_on_node();        // f_nn
   z3::expr always_active_on_edge();        // f_ne
@@ -197,6 +206,6 @@ public:
   void print_graph( z3::context& c ,std::string filename, VecsExpr qs, bool printModel, bool displayGraph );
 };
 
-
+typedef std::shared_ptr<vts> vts_ptr;
 
 #endif

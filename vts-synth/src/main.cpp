@@ -24,6 +24,7 @@ using namespace boost::program_options;
 
 #include "z3-util.h"
 #include <vts.h>
+#include <load-vts.h>
 
 int main(int ac, char* av[])
 {
@@ -131,6 +132,8 @@ int main(int ac, char* av[])
   //exit(0);
 
   z3::context c;
+
+  // load_vts ld(c,"/home/agupta/tmp/t.vts"); ld.load(); return 0;
 
   // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
   unsigned int N = 3;
