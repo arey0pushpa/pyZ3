@@ -24,6 +24,7 @@ private:
   unsigned int  Q = 0;
   model_version V = UN_INIT;
   unsigned int  D = 0;
+  std::vector< std::string > mol_vars;
 
   char peek_skip_space();
   unsigned read_num_line();

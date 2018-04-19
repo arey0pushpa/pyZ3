@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <z3++.h>
+// #include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
 
 //#define toDigit(c) (c-'0')
 
@@ -81,4 +83,18 @@ inline bool is_false( z3::expr e,  z3::model m ) {
   z3::expr v = m.eval( e );
   return ( Z3_get_bool_value( v.ctx(), v)  == Z3_L_FALSE );
 }
+
+inline std::string sanitise_string(std::string str) {
+  boost::trim(str);
+  while (str[0]=='(' && str[str.length()-1]==')') {
+    str[0] = ' ';
+    str[str.length()-1] = ' ';
+    boost::trim(str);
+  }
+  return str;
+}
+
+z3::expr parseFormula( z3::context& c, std::string str,
+                       const std::vector< std::string >& names );
+
 #endif
