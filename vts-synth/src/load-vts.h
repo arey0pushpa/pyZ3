@@ -41,12 +41,14 @@ private:
   void get_node();
   void get_edge();
   void get_pairing();
-  void get_function();
+  void get_node_function();
+  void get_edge_function();
 public:
   load_vts( z3::context& c_, std::string file_name_ )
     : c(c_)
     , file_name(file_name_) {}
   void load();
+  inline vts_ptr get_vts() { return v; };
 };
 
 #endif

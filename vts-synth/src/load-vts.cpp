@@ -147,14 +147,24 @@ void load_vts::get_pairing() {
   v->add_known_pairing( m1, m2 );
 }
 
-void load_vts::get_function() {
+void load_vts::get_node_function() {
   unsigned m;
   in >> m;
   std::string f_line;
   std::getline( in, f_line );
   z3::expr e = c.bool_val(true);
   parseFormula( c, f_line, mol_vars);
-  v->add_known_activity_function( m, e );
+  v->add_known_activity_node_function( m, e );
+}
+
+void load_vts::get_edge_function() {
+  unsigned m;
+  in >> m;
+  std::string f_line;
+  std::getline( in, f_line );
+  z3::expr e = c.bool_val(true);
+  parseFormula( c, f_line, mol_vars);
+  v->add_known_activity_edge_function( m, e );
 }
 
 void load_vts::load() {
@@ -172,7 +182,8 @@ void load_vts::load() {
       case 'T': get_model_version(); break;
       case 'n': get_node(); break;
       case 'e': get_edge(); break;
-      case 'f': get_function(); break;
+      case 'f': get_node_function(); break;
+      case 'g': get_edge_function(); break;
       case 'p': get_pairing(); break;
       default:
         load_error( "expecting a command at line", line_num );
