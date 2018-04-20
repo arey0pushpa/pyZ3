@@ -48,51 +48,53 @@ z3::expr create_ast () {
 */
 
 // The expression can take any gates. gth gate.
-z3::expr vts::gates( Vec3Expr& u, z3::expr x, z3::expr y, unsigned k, unsigned g ) {
-
-  z3::expr_vector g_list(ctx);
-  z3::expr_vector c_list (ctx);
+z3::expr vts::gates( VecExpr& u, z3::expr x, z3::expr y ) {
+  assert( u.size() == 1 );
 
   //std::cout << "iG list is " << g_list;
-  auto g1 = x && y;  
+  auto g1 = x && y;
   auto g2 = x || y;
+
+  return ( u[0] && g1 )  ||  ( !u[0] && g2 );
 
   //auto g3 = ctx.bool_val(true);
   //auto g4 = x;
   //auto g5 = y;
-    
-  c_list.push_back( u[k][g][0] );
-  c_list.push_back( u[k][g][1] );
-  
-  // Exactly One
-  auto cSum = at_least_one( c_list ) && !at_least_two( c_list ); 
-    
-  auto lsCons =  ( u[k][g][0] && g1 )  ||  ( u[k][g][1] && g2 );
+  // z3::expr_vector g_list(ctx);
+  // z3::expr_vector c_list (ctx);
 
-  auto cons = cSum && lsCons;
-  return cons;
+  // c_list.push_back( u[0] );
+  // c_list.push_back( u[1] );
+
+  // // Exactly One
+  // auto cSum = at_least_one( c_list ) && !at_least_two( c_list );
+
+  // auto lsCons =  ( u[k][g][0] && g1 )  ||  ( u[k][g][1] && g2 );
+
+  // auto cons = cSum && lsCons;
+  // return cons;
 }
 
-z3::expr vts::var_fml (VecExpr& chooseVar, unsigned i, unsigned k, bool e, unsigned j = 0, unsigned q = 0 ) {
+z3::expr vts::var_fml ( VecExpr& chooseVar, unsigned i, unsigned m, bool e,
+                        unsigned j = 0, unsigned q = 0 ) {
   // auto& chooseVar = chooseVars[k][m];
   z3::expr_vector ls(ctx);
   z3::expr_vector cl_list(ctx);
   z3::expr_vector il_list(ctx);
 
-  for ( unsigned k1 = 0; k1 < M; k1++ ) {
-    if ( k1 == k )  continue;
-    if ( e == true ) { 
-       ls.push_back(    ( chooseVar[k1] && presence_edge [i][j][q][k1] ) 
-                     || ( chooseVar[k1+M] && !presence_edge[i][j][q][k1] ) );
-    }
-    else {  
-       ls.push_back(   ( chooseVar[k1] && nodes[i][k1] )  
-                    || ( chooseVar[k1+M] && !nodes[i][k1] ) ); 
+  for ( unsigned m1 = 0; m1 < M; m1++ ) {
+    if ( m1 == m )  continue;
+    if ( e == true ) {
+       ls.push_back(    ( chooseVar[m1] && presence_edge [i][j][q][m1] ) 
+                     || ( chooseVar[m1+M] && !presence_edge[i][j][q][m1] ) );
+    } else{
+       ls.push_back(   ( chooseVar[m1] && nodes[i][m1] )  
+                    || ( chooseVar[m1+M] && !nodes[i][m1] ) ); 
     }
 
-    cl_list.push_back( chooseVar[k1] );
-    cl_list.push_back( chooseVar[k1+M] );
-    il_list.push_back( !chooseVar[k1] || !chooseVar[k1+M] ) ;
+    cl_list.push_back( chooseVar[m1] );
+    cl_list.push_back( chooseVar[m1+M] );
+    il_list.push_back( !chooseVar[m1] || !chooseVar[m1+M] ) ;
 
   }
 
@@ -100,7 +102,7 @@ z3::expr vts::var_fml (VecExpr& chooseVar, unsigned i, unsigned k, bool e, unsig
   ls.push_back( chooseVar[(2*M) + 1] && false );
   cl_list.push_back( chooseVar[2*M] );
   cl_list.push_back( chooseVar[(2*M) + 1] );
-  
+
   auto coeffSum = at_least_one( cl_list ) && !at_least_two ( cl_list ); 
   auto varList = mk_or( ls );
   auto litList = mk_and ( il_list );
@@ -124,7 +126,7 @@ z3::expr_vector vts::reduce_fml ( z3::context& ctx, z3::expr_vector& main_list, 
       auto fml1 = main_list[x];
       auto fml2 = main_list[x+1];
 
-      fml = gates ( u, fml1, fml2, k, gateVar );
+      fml = gates ( u[k][gateVar], fml1, fml2 );
       cons_list.push_back ( fml );
       gateVar += 1;
     } 
@@ -141,66 +143,82 @@ z3::expr_vector vts::reduce_fml ( z3::context& ctx, z3::expr_vector& main_list, 
 // j : target node
 // q : edge idx
 z3::expr vts::build_rhs_fml ( Vec3Expr& chooseVars, Vec3Expr& chooseGates,
-                              unsigned i, unsigned m1,
+                              unsigned i, unsigned m,
                               bool isEdge,
                               unsigned j = 0, unsigned q = 0 ) {
   
   z3::expr_vector ls(ctx);
   z3::expr gfml(ctx);
   
-  unsigned step = 0;
+  // unsigned step = 0;
   unsigned gateVar = 0;
     
   z3::expr_vector n_list( ctx );
   z3::expr_vector main_list ( ctx );
-    
-  // first pass. create paired expression of form: a G a | a
-  for ( unsigned m = 0; m < M; m++ ) {
-    if ( m == m1 )  continue;
-    z3::expr vfml ( ctx );
 
-    if ( isEdge == true ) 
-      n_list.push_back ( var_fml( chooseVars[m1][m], i, m1, isEdge, j, q ) );
-    else 
-      n_list.push_back ( var_fml( chooseVars[m1][m], i, m1, isEdge ) );        
+  unsigned leaf_number = 4;
 
-    // if ( isEdge == true ) 
-    //   n_list.push_back ( var_fml( chooseVars, i, m1, m, isEdge, j, q ) );
-    // else 
-    //   n_list.push_back ( var_fml( chooseVars, i, m1, m, isEdge ) );        
-      
-    step += 1; 
-    
-    if ( step == 2 ) {
-     
-      main_list.push_back( gates ( chooseGates, n_list[0], n_list[1], m1, gateVar ) );
-      step = 0;
-      gateVar += 1;
-      
-      n_list.resize ( 0 );
-    }
-      
-    if ( step == 1 && m == M - 1 ) {
-      main_list.push_back( n_list[0] );
-    }
+  for( unsigned l = 0; l < leaf_number; l++ ) {
+    if ( isEdge == true )
+      n_list.push_back( var_fml( chooseVars[m][l], i, m, isEdge, j, q ) );
+    else
+      n_list.push_back( var_fml( chooseVars[m][l], i, m, isEdge ) );
   }
-
-    // second pass. create complete formula.
-    auto mLen = main_list.size();
-    
-    if ( mLen == 1 ) {
-      return main_list[0];
-    }
-    
-    for ( unsigned h = 0; h < ((mLen / 2) + 1); h++ ) {
-      main_list = reduce_fml ( ctx, main_list, main_list.size(), chooseGates, m1, gateVar );
-      //std::cout << "List size dec to " << main_list.size() << "\n";
-      if ( main_list.size() == 1 ) {
-        return main_list[0];
+  unsigned local_leaf_num = leaf_number;
+  unsigned gate_counter = 0;
+  while( local_leaf_num > 1 ) {
+    for( unsigned l = 0; l < local_leaf_num; l = l + 2 ) {
+      if( l == leaf_number - 1 ) {
+        n_list[l>>1] = n_list[l];
+      }else{
+        n_list[l>>1] = gates( chooseGates[m][gateVar],
+                              n_list[l], n_list[l+1] );
+        gate_counter++;
       }
     }
+    local_leaf_num = (local_leaf_num+1) >> 1;
+  }
+  assert( local_leaf_num == 1);
+  return n_list[0];
+
+  // // first pass. create paired expression of form: a G a | a
+  // for( unsigned m = 0; m < M; m++ ) {
+  //   if ( m == m1 )  continue;
+  //   z3::expr vfml ( ctx );
+
+  //   if ( isEdge == true )
+  //     n_list.push_back ( var_fml( chooseVars[m1][m], i, m1, isEdge, j, q ) );
+  //   else
+  //     n_list.push_back ( var_fml( chooseVars[m1][m], i, m1, isEdge ) );
+  //   step += 1;
+  //   if ( step == 2 ) {
+  //     main_list.push_back( gates ( chooseGates, n_list[0], n_list[1], m1, gateVar ) );
+  //     step = 0;
+  //     gateVar += 1;
+
+  //     n_list.resize ( 0 );
+  //   }
+  //   if ( step == 1 && m == M - 1 ) {
+  //     main_list.push_back( n_list[0] );
+  //   }
+  // }
+
+  //   // second pass. create complete formula.
+  //   auto mLen = main_list.size();
     
-    return main_list[0];
+  //   if ( mLen == 1 ) {
+  //     return main_list[0];
+  //   }
+    
+  //   for ( unsigned h = 0; h < ((mLen / 2) + 1); h++ ) {
+  //     main_list = reduce_fml ( ctx, main_list, main_list.size(), chooseGates, m1, gateVar );
+  //     //std::cout << "List size dec to " << main_list.size() << "\n";
+  //     if ( main_list.size() == 1 ) {
+  //       return main_list[0];
+  //     }
+  //   }
+    
+  //   return main_list[0];
      
     /*
     if ( gateVar != M - 1 ) {
