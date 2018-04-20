@@ -291,6 +291,7 @@ void vts::create_map ( z3::context& c, std::map<std::string,int>& denotation_map
         int lit = toDigit ( line.at(6) ); 
         if ( lit == 0 ) {
           depqbfRun = "Formula is UNSAT";
+          exit(0);
           break;
         }else {
           depqbfRun = "Formula is SAT";

@@ -165,21 +165,19 @@ public:
   z3::expr edge_cnf ( Vec3Expr& t );
 
   /** Gates constraint **/
-  z3::expr gates( Vec3Expr u, z3::expr x, z3::expr y, unsigned k, unsigned g );
+  z3::expr gates( Vec3Expr& u, z3::expr x, z3::expr y, unsigned k, unsigned g );
   z3::expr build_rhs_fml ( Vec3Expr& s, Vec3Expr& u, unsigned i, unsigned k, bool e, unsigned j, unsigned q );
   //z3::expr var_fml (Vec3Expr s, unsigned i, unsigned k, unsigned g, bool e, unsigned j, unsigned q );
   z3::expr var_fml (VecExpr& s, unsigned i,  unsigned k, bool e, unsigned j, unsigned q );
 
-  z3::expr node_gate_fml ( Vec3Expr s, Vec3Expr u );
-  z3::expr edge_gate_fml ( Vec3Expr t, Vec3Expr v );
-  z3::expr logic_gates ( Vec3Expr s_var, Vec3Expr t_var, Vec3Expr u_var, Vec3Expr v_var );
-  z3::expr_vector reduce_fml ( z3::context& ctx, z3::expr_vector& main_list,  unsigned mLen, Vec3Expr u, unsigned k, unsigned& gateVar );
+  z3::expr node_gate_fml ( Vec3Expr& s, Vec3Expr& u );
+  z3::expr edge_gate_fml ( Vec3Expr& t, Vec3Expr& v );
+  z3::expr logic_gates ( Vec3Expr& s_var, Vec3Expr& t_var, Vec3Expr& u_var, Vec3Expr& v_var );
+  z3::expr_vector reduce_fml ( z3::context& ctx, z3::expr_vector& main_list,  unsigned mLen, Vec3Expr& u, unsigned k, unsigned& gateVar );
+  
   /** Synthesis constraints**/
   z3::expr vts_synthesis ( unsigned variation );
   z3::expr annotate_plos_graph();
- // z3::expr annotate_mukund_graph();
-
-  /* */
   z3::expr annotate_mukund_graph ( z3::expr_vector& fixN, z3::expr_vector& fixactiveN, z3::expr_vector& fixE, z3::expr_vector& fixpresenceE, z3::expr_vector& fixactiveE, z3::expr_vector& fixpairingP );
 
   // Synthesis helper

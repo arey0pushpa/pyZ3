@@ -133,8 +133,9 @@ int main(int ac, char* av[])
 
   z3::context c;
 
-  // load_vts ld(c,"/home/agupta/tmp/t.vts"); ld.load();
- // vts_ptr v1 = ld.get_vts(); return 0;
+   //if ( ) {
+   load_vts ld(c,"/tmp/t.vts"); ld.load();
+   vts_ptr v1 = ld.get_vts(); return 0;
 
   // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
   unsigned int N = 3;
@@ -227,7 +228,7 @@ int main(int ac, char* av[])
     //bool timedout = false;
     std::future<int> future = std::async(std::launch::async, [](){ 
         // if ( flagA == false ) {
-        auto retVal  = system ("cd ./build/depqbf/examples;timeout 260s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
+        auto retVal  = system ("cd ./build/depqbf/examples;timeout 2s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
         // std::cout << retVal << "\n";
         //  } else {
         // auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
@@ -239,7 +240,7 @@ int main(int ac, char* av[])
     //std::cout << "Running depqbf ... " << "\n";
     std::future_status status;
 
-    status = future.wait_for( std::chrono::seconds(260) );
+    status = future.wait_for( std::chrono::seconds(2) );
 
     if ( status == std::future_status::timeout ) { 
       std::cout << "TimeOut! \n";
@@ -252,6 +253,7 @@ int main(int ac, char* av[])
       std::cout << "Program run was sucessful! ";
     }
 
+    
     v.print_graph( c, "/tmp/dep_vts.dot", qs, printModel, displayGraph, synthVar ); 
     if ( displayGraph == true ) { 
       auto retVal = system("xdot /tmp/dep_vts.dot");

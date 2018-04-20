@@ -19,10 +19,15 @@
 
 void vts::add_known_edge( unsigned n1, unsigned n2,
                           std::vector<unsigned>& mols, std::vector<bool>& act) {
-
+  
 }
 void vts::add_known_node( unsigned n,
                           std::vector<unsigned>& mols, std::vector<bool>& act) {
+
+  //for ( unsigned i = 0; i < mols.size(); i++ ) {
+  //  nodes[n][mols[i]]
+  //} 
+    
 }
 
 void vts::add_known_pairing( unsigned m1, unsigned m2 ) {

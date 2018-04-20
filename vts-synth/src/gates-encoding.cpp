@@ -48,7 +48,7 @@ z3::expr create_ast () {
 */
 
 // The expression can take any gates. gth gate.
-z3::expr vts::gates( Vec3Expr u, z3::expr x, z3::expr y, unsigned k, unsigned g ) {
+z3::expr vts::gates( Vec3Expr& u, z3::expr x, z3::expr y, unsigned k, unsigned g ) {
 
   z3::expr_vector g_list(ctx);
   z3::expr_vector c_list (ctx);
@@ -111,7 +111,7 @@ z3::expr vts::var_fml (VecExpr& chooseVar, unsigned i, unsigned k, bool e, unsig
   return cons;
 }
 
-z3::expr_vector vts::reduce_fml ( z3::context& ctx, z3::expr_vector& main_list, unsigned mLen, Vec3Expr u, unsigned k, unsigned& gateVar ) {
+z3::expr_vector vts::reduce_fml ( z3::context& ctx, z3::expr_vector& main_list, unsigned mLen, Vec3Expr& u, unsigned k, unsigned& gateVar ) {
   
   z3::expr_vector cons_list ( ctx ); 
   z3::expr fml( ctx );
@@ -177,15 +177,6 @@ z3::expr vts::build_rhs_fml ( Vec3Expr& chooseVars, Vec3Expr& chooseGates,
       step = 0;
       gateVar += 1;
       
-      /*
-      std::cout << "size is: " << n_list.size() << "\n";
-      std::cout << "gateVar: " << gateVar << "\n";
-      std::cout << "m: " << m << "\n";
-      std::cout << "M: " << M << "\n";
-      std::cout << "Steo: "<< step << "\n";
-      std::cout << "K: " << m1 << "\n";      
-      std::cout << "E: " << isEdge << "\n\n";
-      */
       n_list.resize ( 0 );
     }
       
@@ -219,7 +210,7 @@ z3::expr vts::build_rhs_fml ( Vec3Expr& chooseVars, Vec3Expr& chooseGates,
     */
 }
 
-z3::expr vts::node_gate_fml ( Vec3Expr s, Vec3Expr u ) {
+z3::expr vts::node_gate_fml ( Vec3Expr& s, Vec3Expr& u ) {
   z3::expr_vector n_list(ctx);
   
   for( unsigned i = 0; i < N; i++ ) {
@@ -236,7 +227,7 @@ z3::expr vts::node_gate_fml ( Vec3Expr s, Vec3Expr u ) {
   return cons;
 }
 
-z3::expr vts::edge_gate_fml ( Vec3Expr t, Vec3Expr v ) {
+z3::expr vts::edge_gate_fml ( Vec3Expr& t, Vec3Expr& v ) {
   z3::expr_vector e_list(ctx);
  
   for( unsigned i = 0 ; i < N; i++ ) {
@@ -258,8 +249,10 @@ z3::expr vts::edge_gate_fml ( Vec3Expr t, Vec3Expr v ) {
   return cons;
 }
 
-z3::expr vts::logic_gates ( Vec3Expr s_var, Vec3Expr t_var, Vec3Expr u_var, Vec3Expr v_var ) {
+z3::expr vts::logic_gates ( Vec3Expr& s_var, Vec3Expr& t_var, Vec3Expr& u_var, Vec3Expr& v_var ) {
 
+  //for ( 
+  //auto chooseVarVector =    
   auto nodeGate = node_gate_fml ( s_var, u_var );
   //std::cout << nodeGate << "\n";
   

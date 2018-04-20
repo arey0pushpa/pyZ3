@@ -15,6 +15,92 @@ We will consider several variations of the problem.
 \item Adding
 \end{itemize}
 
+%Types of questions we are trying to solve.
+
+The missing information can be in any of these combinations parts of VTS. For example existence of some undiscovered edges or nodes, or insufficient knowledge about the presence of molecules in some part of the VTS (either on the node or on the edge). To cover most of the likely variations of this missing information we have encoded the following variants of VTS synthesis.
+%
+%
+\begin{enumerate}[label=\Alph*]
+\item  Add new edges to the given VTS to achieve graph stability, fusion and k connected. 
+\item  Modify the flow of molecules on the nodes and on the edges.
+  \begin{enumerate}
+  	\item use available set of molecules.
+    \item allow new molecule type to be added.     
+  \end{enumerate}        
+\item Learning meaningful activity function. 
+  \begin{enumerate}
+    \item kcnf: low depth circuit.
+    \item Boolean gates: And, Or.
+    \item Boolean gates with linear combination.  
+  % - Function dependence with var occurring once.
+\item  VTS repair. [Allow both delete and add to the system]
+\end{enumerate}
+
+\subsection{Encoding edge addition}
+One of the source of incomplete information in the given VTS system is knowledge of all the edges it contain. If this information is missing our tool will suggest a few modification to the given VTS by adding additional edges to fill the missing information that is compatible with the rules of the VTS.
+
+
+\begin{align}
+  \exists n_{i_k} \, a_{i_k} \, e_{i_j_q_k} \, b_{i_j_q_k} \, p_{k_k^{\dash}} \,  r_{i_j} \, 
+               ( basic_vts_constraints \land  vts\_activity\_constraint \land  given\_vts\_information \land  restriction\_on\_modification )   
+  \tag{E1}\label{eq:addedge1}
+\end{align}
+
+The basic_vts_constraints and vts_activity_constraint are same as the previous sections, describing stability of the graph and fusion of the edge into the node and the molecular activity describing the active state of a molecule. The given_vts_information is encoded using a front end input language. The user provides the information of the VTS with a partial information using this front end. Our tool then converts these inputs into the constraints over the given VTS. 
+
+We encode the restriction_on_modification by putting the constraints on the unassigned edges and edge labels. The constraint of allowing only certain number of addition to the given VTS is encoded as at_most_k() function over the unassigned edges and label.
+
+\begin{align}
+    constraint on edge = atmost\_k\_allowed ( unassigned edges in VTS )
+    
+    constraints of the molecular activity on the edge = at\_most\_k ( unassigned activity labels in VTS edges )
+    constraints of the molecule presence on the edge = at\_most\_k ( unassigned molecule labels in VTS edges )\label{eq:addedge2}
+\end{align}
+
+Put \ref{eq:addedge2} in symbolic form and explain it in a couple of lines.
+
+In order to decrease the search space we do not allow any modification in the node label and activity on the nodes. This constraint can be encoded as the fixing all the unassigned bits to false. 
+    
+%    // Fix rest of them to zero.
+%    auto fixVar0 = ! z3::mk_or ( openN )  && ! z3::mk_or ( openActiveN );
+
+\begin{align}
+ \exists e_{i_j_q} ( connectivity\_constraint && self\_edge\_restriction && \ref{eq:addedge1} )    
+  \tag{E1}\label{eq:addedge2}
+\end{align}
+
+
+The connectivity_constraint && self_edge_restriction are same as the previous sections, describing the graph to be a k but not k+1 connected and self edges are not allowed in the VTS. addedge1 is the constraint of \ref{eq:addedge1}.
+
+%{i,j,m,p} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
+
+    
+    auto addConstraints = edgeC && edgeActivityC && edgePresenceC  && fixVar0;
+
+    auto qvtsCons = exists( setN, 
+                    exists( setActiveN, 
+                    exists( setPresenceE,  
+                    exists( setActiveE, 
+                    exists( setPairingM, 
+                    exists( setReach, 
+                            vtsCons && vtsActivity && inputCons && addConstraints ))))));   
+
+ 
+\subsection{Encoding molecules presence}
+
+\subsection{Encoding low depth cnf circuits}
+
+\subsection{Encoding boolean gates}
+
+\subsection{Encoding vts repair}
+The repair of the VTS requires both the addition and the deletion of the present molecules, node molecules pairing matrix and activity of the molecules. We have encoded the vts repair in our tool using the dummy xor bits.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
+
 
 \subsection{QBF encodings}
 
