@@ -28,13 +28,37 @@ We model a VTS as a labelled graph.
 Each compartment of VTS is a node of the graph and and the
 transport channels between the nodes is an edge.
 %
-The set of chemicals present in a compartment is the label of of
+The set of molecules present in a compartment is the label of
 the compartment.
-%
-Similarly, the set of transported chemicals carried by an edge is the label
+% 
+Similarly, the set of transported molecules carried by an edge is the label
 on the edge.
 %
+A molecule in a node or edge may be active or inactive. 
 %
+The constraints discussed on the VTSs that allow a VTS to be feasible
+are combinatorial in nature, for example stability or 3-connectedness.
+%
+The problem of synthesizing parts of a VTS that are unobserved such that 
+the modified VTS 
+
+It is appropriate that we translate 
+We turn the problem of synthesizing parts of 
+%
+We consider several versions of the synthesis problem involving different
+parts of VTSs that can be synthesized, such as modifying labels,
+adding/deleting edges, learning activity functions, and adding nodes.
+%
+In order to synthesize the parts of a VTS such that it satisfies the constraints, 
+we encode the synthesis problem into a satisfiability of QBF with uninterpreted
+Boolean functions. 
+
+
+
+
+Since an available, 
+
+on the labels.
 
 
 There are several constraints that limits 
