@@ -73,8 +73,8 @@ z3::expr vts::gates( Vec3Expr u, z3::expr x, z3::expr y, unsigned k, unsigned g 
   return cons;
 }
 
-z3::expr vts::var_fml (Vec3Expr s, unsigned i, unsigned k, unsigned m, bool e, unsigned j = 0, unsigned q = 0 ) {
-
+z3::expr vts::var_fml (VecExpr& chooseVar, unsigned i, unsigned k, bool e, unsigned j = 0, unsigned q = 0 ) {
+  // auto& chooseVar = chooseVars[k][m];
   z3::expr_vector ls(ctx);
   z3::expr_vector cl_list(ctx);
   z3::expr_vector il_list(ctx);
@@ -82,24 +82,24 @@ z3::expr vts::var_fml (Vec3Expr s, unsigned i, unsigned k, unsigned m, bool e, u
   for ( unsigned k1 = 0; k1 < M; k1++ ) {
     if ( k1 == k )  continue;
     if ( e == true ) { 
-       ls.push_back(    ( s[k][m][k1] && presence_edge [i][j][q][k1] ) 
-                     || ( s[k][m][k1+M] && !presence_edge[i][j][q][k1] ) );
+       ls.push_back(    ( chooseVar[k1] && presence_edge [i][j][q][k1] ) 
+                     || ( chooseVar[k1+M] && !presence_edge[i][j][q][k1] ) );
     }
     else {  
-       ls.push_back(   ( s[k][m][k1] && nodes[i][k1] )  
-                    || ( s[k][m][k1+M] && !nodes[i][k1] ) ); 
+       ls.push_back(   ( chooseVar[k1] && nodes[i][k1] )  
+                    || ( chooseVar[k1+M] && !nodes[i][k1] ) ); 
     }
 
-    cl_list.push_back( s[k][m][k1] );
-    cl_list.push_back( s[k][m][k1+M] );
-    il_list.push_back( !s[k][q][k1] || !s[k][m][k1+M] ) ;
+    cl_list.push_back( chooseVar[k1] );
+    cl_list.push_back( chooseVar[k1+M] );
+    il_list.push_back( !chooseVar[k1] || !chooseVar[k1+M] ) ;
 
   }
 
-  ls.push_back( s[k][m][2*M] && true );
-  ls.push_back( s[k][m][(2*M) + 1] && false );
-  cl_list.push_back( s[k][m][2*M] );
-  cl_list.push_back( s[k][m][(2*M) + 1] );
+  ls.push_back( chooseVar[2*M] && true );
+  ls.push_back( chooseVar[(2*M) + 1] && false );
+  cl_list.push_back( chooseVar[2*M] );
+  cl_list.push_back( chooseVar[(2*M) + 1] );
   
   auto coeffSum = at_least_one( cl_list ) && !at_least_two ( cl_list ); 
   auto varList = mk_or( ls );
@@ -133,7 +133,17 @@ z3::expr_vector vts::reduce_fml ( z3::context& ctx, z3::expr_vector& main_list, 
 }
 
 
-z3::expr vts::build_rhs_fml ( Vec3Expr s, Vec3Expr u, unsigned i, unsigned k, bool e, unsigned j = 0, unsigned q = 0 ) {
+// chooseVars : params for selecting variables at the leaf of functions
+// chooseGates : params for selecting gates at the internal nodes of functions
+// i : node number
+// m1 : molecule
+// isEdge : edge Or Node
+// j : target node
+// q : edge idx
+z3::expr vts::build_rhs_fml ( Vec3Expr& chooseVars, Vec3Expr& chooseGates,
+                              unsigned i, unsigned m1,
+                              bool isEdge,
+                              unsigned j = 0, unsigned q = 0 ) {
   
   z3::expr_vector ls(ctx);
   z3::expr gfml(ctx);
@@ -146,19 +156,24 @@ z3::expr vts::build_rhs_fml ( Vec3Expr s, Vec3Expr u, unsigned i, unsigned k, bo
     
   // first pass. create paired expression of form: a G a | a
   for ( unsigned m = 0; m < M; m++ ) {
-    if ( m == k )  continue;
+    if ( m == m1 )  continue;
     z3::expr vfml ( ctx );
-  
-    if ( e == true ) 
-      n_list.push_back ( var_fml( s, i, k, m, e, j, q ) );
+
+    if ( isEdge == true ) 
+      n_list.push_back ( var_fml( chooseVars[m1][m], i, m1, isEdge, j, q ) );
     else 
-      n_list.push_back ( var_fml( s, i, k, m, e ) );        
+      n_list.push_back ( var_fml( chooseVars[m1][m], i, m1, isEdge ) );        
+
+    // if ( isEdge == true ) 
+    //   n_list.push_back ( var_fml( chooseVars, i, m1, m, isEdge, j, q ) );
+    // else 
+    //   n_list.push_back ( var_fml( chooseVars, i, m1, m, isEdge ) );        
       
     step += 1; 
     
     if ( step == 2 ) {
      
-      main_list.push_back( gates ( u, n_list[0], n_list[1], k, gateVar ) );
+      main_list.push_back( gates ( chooseGates, n_list[0], n_list[1], m1, gateVar ) );
       step = 0;
       gateVar += 1;
       
@@ -168,8 +183,8 @@ z3::expr vts::build_rhs_fml ( Vec3Expr s, Vec3Expr u, unsigned i, unsigned k, bo
       std::cout << "m: " << m << "\n";
       std::cout << "M: " << M << "\n";
       std::cout << "Steo: "<< step << "\n";
-      std::cout << "K: " << k << "\n";      
-      std::cout << "E: " << e << "\n\n";
+      std::cout << "K: " << m1 << "\n";      
+      std::cout << "E: " << isEdge << "\n\n";
       */
       n_list.resize ( 0 );
     }
@@ -187,7 +202,7 @@ z3::expr vts::build_rhs_fml ( Vec3Expr s, Vec3Expr u, unsigned i, unsigned k, bo
     }
     
     for ( unsigned h = 0; h < ((mLen / 2) + 1); h++ ) {
-      main_list = reduce_fml ( ctx, main_list, main_list.size(), u, k, gateVar );
+      main_list = reduce_fml ( ctx, main_list, main_list.size(), chooseGates, m1, gateVar );
       //std::cout << "List size dec to " << main_list.size() << "\n";
       if ( main_list.size() == 1 ) {
         return main_list[0];
@@ -208,10 +223,10 @@ z3::expr vts::node_gate_fml ( Vec3Expr s, Vec3Expr u ) {
   z3::expr_vector n_list(ctx);
   
   for( unsigned i = 0; i < N; i++ ) {
-    for( unsigned k = 0; k < M; k++ ) {
+    for( unsigned m = 0; m < M; m++ ) {
       
-      auto nfml = build_rhs_fml( s, u, i, k, false );
-      auto fml = ( active_node[i][k] == nfml ); 
+      auto nfml = build_rhs_fml( s, u, i, m, false );
+      auto fml = ( active_node[i][m] == nfml ); 
       
       n_list.push_back ( fml );
     }
