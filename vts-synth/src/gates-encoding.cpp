@@ -142,7 +142,7 @@ z3::expr_vector vts::reduce_fml ( z3::context& ctx, z3::expr_vector& main_list, 
 // isEdge : edge Or Node
 // j : target node
 // q : edge idx
-z3::expr vts::build_rhs_fml ( Vec3Expr& chooseVars, Vec3Expr& chooseGates,
+z3::expr vts::build_rhs_fml ( Vec2Expr& chooseVars, Vec2Expr& chooseGates,
                               unsigned i, unsigned m,
                               bool isEdge,
                               unsigned j = 0, unsigned q = 0 ) {
@@ -160,9 +160,9 @@ z3::expr vts::build_rhs_fml ( Vec3Expr& chooseVars, Vec3Expr& chooseGates,
 
   for( unsigned l = 0; l < leaf_number; l++ ) {
     if ( isEdge == true )
-      n_list.push_back( var_fml( chooseVars[m][l], i, m, isEdge, j, q ) );
+      n_list.push_back( var_fml( chooseVars[l], i, m, isEdge, j, q ) );
     else
-      n_list.push_back( var_fml( chooseVars[m][l], i, m, isEdge ) );
+      n_list.push_back( var_fml( chooseVars[l], i, m, isEdge ) );
   }
   unsigned local_leaf_num = leaf_number;
   unsigned gate_counter = 0;
@@ -171,7 +171,7 @@ z3::expr vts::build_rhs_fml ( Vec3Expr& chooseVars, Vec3Expr& chooseGates,
       if( l == leaf_number - 1 ) {
         n_list[l>>1] = n_list[l];
       }else{
-        n_list[l>>1] = gates( chooseGates[m][gateVar],
+        n_list[l>>1] = gates( chooseGates[gateVar],
                               n_list[l], n_list[l+1] );
         gate_counter++;
       }
@@ -228,15 +228,12 @@ z3::expr vts::build_rhs_fml ( Vec3Expr& chooseVars, Vec3Expr& chooseGates,
     */
 }
 
-z3::expr vts::node_gate_fml ( Vec3Expr& s, Vec3Expr& u ) {
+z3::expr vts::node_gate_fml ( Vec3Expr& chooseVars, Vec3Expr& chooseGates ) {
   z3::expr_vector n_list(ctx);
-  
   for( unsigned i = 0; i < N; i++ ) {
     for( unsigned m = 0; m < M; m++ ) {
-      
-      auto nfml = build_rhs_fml( s, u, i, m, false );
-      auto fml = ( active_node[i][m] == nfml ); 
-      
+      auto nfml = build_rhs_fml( chooseVars[m], chooseGates[m], i, m, false );
+      auto fml = ( active_node[i][m] == nfml );
       n_list.push_back ( fml );
     }
   }
@@ -253,10 +250,10 @@ z3::expr vts::edge_gate_fml ( Vec3Expr& t, Vec3Expr& v ) {
       if ( i == j )  continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned k = 0; k < M; k++ ) {
-          
-          auto efml = build_rhs_fml ( t, v, i, k, true, j, q );
+
+          auto efml = build_rhs_fml ( t[k], v[k], i, k, true, j, q );
           auto fml = ( active_edge[i][j][q][k] == efml ); 
-          
+
           e_list.push_back ( fml );
         }
       }

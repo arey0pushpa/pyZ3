@@ -166,7 +166,7 @@ public:
 
   /** Gates constraint **/
   z3::expr gates( VecExpr& u, z3::expr x, z3::expr y );
-  z3::expr build_rhs_fml ( Vec3Expr& s, Vec3Expr& u, unsigned i, unsigned k, bool e, unsigned j, unsigned q );
+  z3::expr build_rhs_fml ( Vec2Expr& s, Vec2Expr& u, unsigned i, unsigned k, bool e, unsigned j, unsigned q );
   //z3::expr var_fml (Vec3Expr s, unsigned i, unsigned k, unsigned g, bool e, unsigned j, unsigned q );
   z3::expr var_fml (VecExpr& s, unsigned i,  unsigned k, bool e, unsigned j, unsigned q );
 
