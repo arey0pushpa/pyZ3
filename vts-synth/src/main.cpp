@@ -140,39 +140,24 @@ int main(int ac, char* av[])
       inputFile = true;
     }
     
+  z3::context c;
+
   //std::cout << useZ3;
   //std::cout << vm["func-model"].as<int>() << "\n";            
   //exit(0);
 
-  z3::context c;
-  z3::expr_vector knownNodes(c);
-  z3::expr_vector knownActiveNodes(c);
-  z3::expr_vector knownEdges(c);
-  z3::expr_vector knownPresenceEdges(c);
-  z3::expr_vector knownActiveEdges(c);
-  z3::expr_vector knownPairingMatrix(c);
-    
-  if ( synthVar == true ) {
-    if ( inputFile == true ) {
-      load_vts ld( c, inputFilename[0]); ld.load( knownNodes, knownActiveNodes, knownEdges,
-                                                  knownPresenceEdges, knownActiveEdges, knownPairingMatrix );
-      vts_ptr v1 = ld.get_vts(); return 0;
-    } else {
-      std::cout << "Loading default file for synthesis ..." << "\n";
-      load_vts ld(c,"./t.vts"); ld.load( knownNodes, knownActiveNodes, knownEdges, knownPresenceEdges,
-                                        knownActiveEdges, knownPairingMatrix ) ;                                                 
-      vts_ptr v1 = ld.get_vts(); return 0;
-   }
-  } else {
-   // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
-    unsigned int N = 2;
-    unsigned int M = 4;
-    unsigned int Q = 2;
-    // depth of cnf
-    unsigned int D = 2;
+   load_vts ld(c,"/tmp/t.vts"); ld.load();
+   vts_ptr v1 = ld.get_vts(); return 0;
 
-    vts  v( c, M, N, Q, MODEL_4, 3, D );
-  }
+  // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
+  unsigned int N = 3;
+  unsigned int M = 21;
+  unsigned int Q = 1;
+  // depth of cnf
+  unsigned int D = 2;
+
+  vts  v( c, M, N, Q, MODEL_4, 3, D );
+
   //z3::model mdl = v.get_vts_for_prob1();
   //z3::model qbf_mdl = v.get_vts_for_qbf();
 
@@ -193,9 +178,7 @@ int main(int ac, char* av[])
     if( funcType != -1 ) {
       f = v.create_qbf_formula( funcType );
     } else if( synthVar != -1 ) {
-      f = v.vts_synthesis( synthVar, knownNodes, knownActiveNodes, 
-                           knownEdges, knownPresenceEdges, knownActiveEdges, 
-                           knownPairingMatrix ); 
+      f = v.vts_synthesis( synthVar ); 
     }else {
       f = v.create_qbf_formula( 0 );
     }

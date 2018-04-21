@@ -197,12 +197,17 @@ void unassigned_bits ( z3::expr_vector& listZ,
 }
 
 
-z3::expr vts::vts_synthesis ( unsigned variation, z3::expr_vector& knownNodes, z3::expr_vector& knownActiveNodes, 
-                                      z3::expr_vector& knownEdges, z3::expr_vector& knownPresenceEdges,
-                                      z3::expr_vector& knownActiveEdges, z3::expr_vector& knownPairingMatrix ) {
+z3::expr vts::vts_synthesis ( unsigned variation ) {
   /** Basic Constraints **/
   z3::expr vtsCons = create_vts_constraint();  
   z3::expr vtsActivity = vts_activity_constraint();
+  
+  z3::expr_vector knownNodes( ctx );
+  z3::expr_vector knownActiveNodes( ctx );
+  z3::expr_vector knownEdges( ctx );
+  z3::expr_vector knownPresenceEdges ( ctx );
+  z3::expr_vector knownActiveEdges( ctx );
+  z3::expr_vector knownPairingP( ctx );
   
   z3::expr_vector unknownN( ctx );
   z3::expr_vector unknownActiveN( ctx );

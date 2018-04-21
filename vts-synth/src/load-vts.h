@@ -38,19 +38,16 @@ private:
   void get_max_edge_num();
   void get_model_version();
 
-  void get_node(z3::expr_vector& knownNodes);
-  void get_edge(z3::expr_vector& knownEdges, z3::expr_vector& knownPresenceEdges, z3::expr_vector& knownActiveEdges);
-  void get_pairing(z3::expr_vector& knownPairingMatrix);
+  void get_node();
+  void get_edge();
+  void get_pairing();
   void get_node_function();
   void get_edge_function();
 public:
   load_vts( z3::context& c_, std::string file_name_ )
     : c(c_)
     , file_name(file_name_) {}
-    
-//  void load();
-  void load(  z3::expr_vector& knownNodes,  z3::expr_vector& knownActiveNodes,  z3::expr_vector& knownEdges,
-                                                 z3::expr_vector&  knownPresenceEdges,  z3::expr_vector& knownActiveEdges, z3::expr_vector& knownPairingMatrix ) ;
+  void load();
   inline vts_ptr get_vts() { return v; };
 };
 

@@ -18,24 +18,22 @@
 //array_type A(boost::extents[3][4][2]);
 
 void vts::add_known_edge( unsigned n1, unsigned n2, unsigned q,
-                          std::vector<unsigned>& mols, std::vector<bool>& act, 
-                          z3::expr_vector& inputEdges, z3::expr_vector& inputPresenceEdges, 
-                          z3::expr_vector& inputActiveEdges ) {
-  inputEdges.push_back( edges[n1][n2][q] );
+                          std::vector<unsigned>& mols, std::vector<bool>& act ) {
+  //edges[n1][n2][q] = true;
   for ( unsigned i = 0; i < mols.size(); i++ ) {
-    inputPresenceEdges.push_back( presence_edge[n1][n2][q][mols[i]] );
+     //presence_edge[n1][n2][q][mols[i]] = true;
   }
 }
 
 void vts::add_known_node( unsigned n,
-                          std::vector<unsigned>& mols, std::vector<bool>& act, z3::expr_vector& inputNodes ) {
+                          std::vector<unsigned>& mols, std::vector<bool>& act ) {
   for ( unsigned i = 0; i < mols.size(); i++ ) {
-    inputNodes.push_back( nodes[n][mols[i]] );
+    //nodes[n][mols[i]] = true;
   } 
 }
 
-void vts::add_known_pairing( unsigned m1, unsigned m2, z3::expr_vector& inputPairingMatrix ) {
-  inputPairingMatrix.push_back( pairing_m[m1][m2] );
+void vts::add_known_pairing( unsigned m1, unsigned m2 ) {
+  //pairing_m[m1][m2] = true;
 }
 
 void vts::add_known_activity_node_function( unsigned m, z3::expr f ) {
