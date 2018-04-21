@@ -19,6 +19,11 @@ std::pair<int, int> getxy (std::string var) {
   return p2;
 }
 
+std::vector<std::string> get_coordinates ( std::string text ) {
+  std::vector<std::string> results;
+  boost::split(results, text, [](char c){ return c == '_'; });
+  return results;
+}
 /*
 // Use Boost for delimiter
 std::vector<std::string> vts::get_coordinates ( std::string text ) {
