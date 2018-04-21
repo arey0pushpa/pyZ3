@@ -23,12 +23,13 @@ public:
   vts( z3::context& _ctx,
        unsigned _M, unsigned _N, unsigned _Q, model_version _V, unsigned _C, unsigned _D )
     : ctx(_ctx), M(_M), N(_N), E_arity(_Q),
-      V(_V), C(_C), D(_D), knownEdges(_ctx),
+      V(_V), C(_C), D(_D),
+      knownEdges(_ctx),
+      knownActiveNodes( _ctx),
       knownPresenceEdges( _ctx ),
       knownActiveEdges( _ctx ),
       knownNodes( _ctx ),
-      knownPairingMatrix( _ctx ),
-      knownActiveNodes( _ctx)
+      knownPairingMatrix( _ctx )
   {
     init_vts();
   }
