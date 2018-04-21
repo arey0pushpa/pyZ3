@@ -1,40 +1,78 @@
 #include<vts.h>
 #include<z3-util.h>
+#include <tuple>        // std::tuple
 
 // define n dimentional vectors
 //#include "boost/multi_array.hpp"
 //#include <cassert>
 
-// Define the value of the num_nodes, total_molecules etc.
-// #define n 2    // num of nodes.
-// #define m 2    // num of molecules.
-// #define q 1    // num of parellel edges.
-// #define v 1    // model variation.
-// #define c 2    // connectivity.
-
-// Create a 3D array that is 3 x 4 x 2
-//typedef boost::multi_array<z3::expr, 3> array_type;
-//typedef array_type::index index;
-//array_type A(boost::extents[3][4][2]);
+/*
+// Functor to compare by the Mth element
+template<int M, template<typename> class F = std::less>
+struct TupleCompare
+{
+    template<typename T>
+    bool operator()(T const &t1, T const &t2)
+    {
+        return F<typename tuple_element<M, T>::type>()(std::get<M>(t1), std::get<M>(t2));
+    }
+};
+*/
 
 void vts::add_known_edge( unsigned n1, unsigned n2, unsigned q,
                           std::vector<unsigned>& mols, std::vector<bool>& act ) {
-  //edges[n1][n2][q] = true;
+  //std::vector < std::tuple <unsigned, unsigned> > knownEdgesTuple;
+  //std::vector < std::tuple <unsigned, unsigned, unsigned, unsigned> > knownPresenceEdgesTuple;
+  //std::vector < std::tuple <unsigned, unsigned, unsigned, unsigned> > knownActiveEdgesTuple;
+  
+  
   for ( unsigned i = 0; i < mols.size(); i++ ) {
-     //presence_edge[n1][n2][q][mols[i]] = true;
+     knownEdges.push_back( edges[n1][n2][mols[i]] );
+     knownPresenceEdges.push_back( presence_edge[n1][n2][q][mols[i]] );
+     knownActiveEdges.push_back( presence_edge[n1][n2][q][mols[i]] );
   }
+  
+  /*
+  for ( unsigned i = 0; i < mols.size(); i++ ) {
+     knownPresenceEdgesTuple.push_back( std::make_tuple (n1, n2, q, i ) );
+     knownEdgesTuple.push_back( std::make_tuple( n1, n2 ) ); 
+  }
+  std::sort(begin(knownPresenceEdgesTuple), end(knownPresenceEdgesTuple), TupleCompare<0>());
+  std::sort(begin(knownEdgesTuple), end(knownEdgesTuple), TupleCompare<0>());
+
+  for ( auto i& : knownPresenceEdgesTuple ) {
+  }
+  **/
+
 }
 
 void vts::add_known_node( unsigned n,
                           std::vector<unsigned>& mols, std::vector<bool>& act ) {
+
   for ( unsigned i = 0; i < mols.size(); i++ ) {
-    //nodes[n][mols[i]] = true;
-  } 
+     knownNodes.push_back( nodes[n][mols[i]] );
+  }
+    
+  /*
+  std::vector < std::tuple <unsigned, unsigned> > knownNodesTuple;
+  for ( unsigned i = 0; i < mols.size(); i++ ) {
+     knownNodesTuple.push_back ( std::make_tuple( n, i ) );
+  }
+ std::sort(begin(knownNodesTuple), end(knownNodesTuple), TupleCompare<0>());
+ */
 }
 
 void vts::add_known_pairing( unsigned m1, unsigned m2 ) {
-  //pairing_m[m1][m2] = true;
-}
+  
+  //for ( unsigned i = 0; i < mols.size(); i++ ) {
+   knownPairingMatrix.push_back( pairing_m[m1][m2] );
+  }
+  
+  /*
+  std::vector < std::tuple <unsigned, unsigned> > knownPairingTuple;
+  knownPairingTuple.push_back ( std::make_tuple( m1, m2 ) );
+  std::sort(begin(knownPairingTuple), end(knownPairingTuple), TupleCompare<0>());
+  */
 
 void vts::add_known_activity_node_function( unsigned m, z3::expr f ) {
   

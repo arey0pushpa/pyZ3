@@ -184,31 +184,92 @@ bool equality_check( z3::expr_vector fixZ, z3::expr var ) {
   return false;
 }
 
+
+
+/*
+void unassigned_2d_bits ( z3::expr_vector& flatternListN,
+                       std::vector < std::tuple <unsigned, unsigned> >& knownTuple,
+                       z3::expr_vector& unassignedVector ) {
+  auto var = knownTuple.begin();
+  for ( unsigned i = 0; i < flatternListN.size(); i++ ) {
+    auto coord = get_coordinates( Z3_ast_to_string(ctx(), flatternListN[i] );
+    if ( var[0] != coord[0] || var[1] != coord[1] ){
+      unassignedVector.push_back( var );
+      // if ( equality_check( fixZ, var ) ) 
+      //  continue;
+    } else 
+      var = std::next(var);
+  }
+}
+
+void unassigned_3d_bits ( z3::expr_vector& flatternListN,
+                       std::vector < std::tuple <unsigned, unsigned, unsigned> >& knownTuple,
+                       z3::expr_vector& unassignedVector ) {
+  auto var = knownTuple.begin();
+  for ( unsigned i = 0; i < flatternListN.size(); i++ ) {
+    auto coord = get_coordinates( Z3_ast_to_string(ctx(), flatternListN[i] );
+    if ( var[0] != coord[0] || var[1] != coord[1] || var[2] != coord[2] ){
+      unassignedVector.push_back( var );
+    } else 
+      var = std::next(var);
+  }
+}
+
+void unassigned_4d_bits ( z3::expr_vector& flatternListN,
+                       std::vector < std::tuple <unsigned, unsigned, unsigned, unsigned> >& knownTuple,
+                       z3::expr_vector& unassignedVector ) {
+  auto var = knownTuple.begin();
+  for ( unsigned i = 0; i < flatternListN.size(); i++ ) {
+    auto coord = get_coordinates( Z3_ast_to_string(ctx(), flatternListN[i] );
+    if ( var[0] != coord[0] || var[1] != coord[1] || var[2] != coord[2] || coord[3] != coord[3] ){
+      unassignedVector.push_back( var );
+    } else 
+      var = std::next(var);
+  }
+}
+*/
+
+/*
+void unassigned_2d_bits ( std::vector < std::tuple <unsigned, unsigned> >& knownTuple,
+                          z3::expr_vector& unassignedVector, Vec2Expr& n, unsigned arg1, unsigned arg2 ) {
+    auto var = knownTuple.begin();
+    for ( unsigned i = 0; i < arg1; i++ ) {
+      for ( unsigned j = 0; j < arg2; j++ ) {
+        if ( i != var[0] || j != var[1] ) {
+            unassignedVector.push_back ( n[i][j] );
+        } else {
+          var = std::next(var);
+        } 
+      }
+    }
+}
+
+*/
+
 void unassigned_bits ( z3::expr_vector& listZ,
-                       z3::expr_vector fixZ,
+                       z3::expr_vector& knownZ,
                        z3::expr_vector& unknownZ ) {
   for ( unsigned i = 0; i < listZ.size(); i++ ) {
    auto var = listZ[i];
-   if ( equality_check( fixZ, var ) ) 
+   if ( equality_check( knownZ, var ) ) 
       continue;
    else 
       unknownZ.push_back( var );
   }
 }
-
-
 z3::expr vts::vts_synthesis ( unsigned variation ) {
   /** Basic Constraints **/
   z3::expr vtsCons = create_vts_constraint();  
   z3::expr vtsActivity = vts_activity_constraint();
   
+  /*
   z3::expr_vector knownNodes( ctx );
   z3::expr_vector knownActiveNodes( ctx );
   z3::expr_vector knownEdges( ctx );
   z3::expr_vector knownPresenceEdges ( ctx );
   z3::expr_vector knownActiveEdges( ctx );
   z3::expr_vector knownPairingP( ctx );
-  
+  */
   z3::expr_vector unknownN( ctx );
   z3::expr_vector unknownActiveN( ctx );
   z3::expr_vector unknownE( ctx );
@@ -216,13 +277,10 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr_vector unknownActiveE( ctx );
   
   /** Annotate graph : fix graph known variables **/
-  //z3::expr knownCons =  annotate_plos_graph ();
-  // Find knownActiveNodes ?
-  //z3::expr knownCons =  annotate_mukund_graph ( knownActiveNodes, fixActiveN, fixE, fixPresenceE, fixActiveE, fixPairingP );
-
   z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
   z3::expr V5 = no_self_edges();
 
+  
   z3::expr_vector listN = node_list();
   z3::expr_vector listActiveN = active_node_list();
   z3::expr_vector listE = edge_list(); 
@@ -230,18 +288,19 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr_vector listActiveE = active_edge_list(); 
   z3::expr_vector listPairingM = pairing_m_list(); 
   z3::expr_vector listReach = reach_list();
-
-  unassigned_bits ( listN, knownNodes, unknownN ); 
-  unassigned_bits ( listActiveN, knownActiveNodes, unknownActiveN ); 
-  unassigned_bits ( listE, knownEdges, unknownE ); 
-  unassigned_bits ( listPresenceE, knownPresenceEdges, unknownPresenceE ); 
-  unassigned_bits ( listActiveE, knownActiveEdges, unknownActiveE ); 
+  
+  
+  unassigned_bits ( listN, v->knownNodes, unknownN ); 
+  unassigned_bits ( listActiveN, v->knownActiveNodes, unknownActiveN ); 
+  unassigned_bits ( listE, v->knownEdges, unknownE ); 
+  unassigned_bits ( listPresenceE, v->knownPresenceEdges, unknownPresenceE ); 
+  unassigned_bits ( listActiveE, v->knownActiveEdges, unknownActiveE  ); 
 
   // 1. Add edge to achieve graph stability and k connected. 
   if ( variation == 1 ) {
-    
-    //auto nodeC = ! at_least_two ( unknownN );
-    //auto nodeActivityC = ! at_least_two ( unknownActiveE );
+  
+  
+  
     auto edgeC = ! at_least_four ( unknownE );
     auto edgeActivityC = ! at_least_three ( unknownActiveE );
     auto edgePresenceC = ! at_least_three ( unknownPresenceE );

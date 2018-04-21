@@ -63,6 +63,11 @@ private:
   Vec3Expr drop2;
   Vec2Expr d_reach2;
 
+  z3::expr_vector knownEdges;
+  z3::expr_vector knownPresenceEdges;
+  z3::expr_vector knownActiveEdges;
+  z3::expr_vector knownNodes;
+  z3::expr_vector knownPairingMatrix;
 
   //flat version of variables
   // VecExpr flat_nodes;
@@ -182,6 +187,7 @@ public:
 
   // Synthesis helper
   // void print_func_node ( std::vector < std::vector< std::vector <int> > >  tVarStr );
+  std::vector<std::string> get_coordinates ( std::string text );
   void print_denotation_console ( std::map<std::string,int> denotation_map, int  synthVar );
   void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std::string& depqbfRun, Tup3Expr& nodeT, Tup3Expr& activeNodeT, Tup3Expr& edgeT, Tup4Expr& presenceEdgeT, Tup4Expr& activeEdgeT, VecsExpr qs  );
   //bool equality_check( z3::expr_vector fixZ, z3::expr var );

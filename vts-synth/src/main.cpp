@@ -175,7 +175,7 @@ int main(int ac, char* av[])
     
       
     // represent z3 vts formula
-    z3::expr f( c );
+    z3::expr f(c);
       
     if( funcType != -1 ) {
       f = v->create_qbf_formula( funcType );

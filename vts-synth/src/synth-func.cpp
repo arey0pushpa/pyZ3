@@ -9,7 +9,7 @@
 #include <tuple>
 #include <algorithm>
 
-#include <boost/algorithm/string.hpp>
+//#include <boost/algorithm/string.hpp>
 
 #define toDigit(c) (c-'0')
 
@@ -19,13 +19,14 @@ std::pair<int, int> getxy (std::string var) {
   return p2;
 }
 
+/*
 // Use Boost for delimiter
-std::vector<std::string> get_coordinates ( std::string text ) {
+std::vector<std::string> vts::get_coordinates ( std::string text ) {
   std::vector<std::string> results;
   boost::split(results, text, [](char c){ return c == '_'; });
   return results;
 }
-
+*/
 void dVar_update ( unsigned k1, unsigned M, std::string& depth_var, bool lit, bool g ) {
   std::string var;
   if ( lit == true ) 

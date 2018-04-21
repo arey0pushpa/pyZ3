@@ -97,4 +97,11 @@ inline std::string sanitise_string(std::string str) {
 z3::expr parseFormula( z3::context& c, std::string str,
                        const std::vector< std::string >& names );
 
+// Use Boost for delimiter
+std::vector<std::string> get_coordinates ( std::string text ) {
+  std::vector<std::string> results;
+  boost::split(results, text, [](char c){ return c == '_'; });
+  return results;
+}
+
 #endif
