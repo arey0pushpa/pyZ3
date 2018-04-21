@@ -27,7 +27,8 @@ public:
       knownPresenceEdges( _ctx ),
       knownActiveEdges( _ctx ),
       knownNodes( _ctx ),
-      knownPairingMatrix( _ctx )
+      knownPairingMatrix( _ctx ),
+      knownActiveNodes( _ctx)
   {
     init_vts();
   }
@@ -66,13 +67,14 @@ private:
   Vec2Expr d_reach1;
   Vec3Expr drop2;
   Vec2Expr d_reach2;
-
+ 
+  z3::expr_vector knownNodes;
+  z3::expr_vector knownActiveNodes;
+  z3::expr_vector knownPairingMatrix;
   z3::expr_vector knownEdges;
   z3::expr_vector knownPresenceEdges;
   z3::expr_vector knownActiveEdges;
-  z3::expr_vector knownNodes;
-  z3::expr_vector knownPairingMatrix;
-
+  
   //flat version of variables
   // VecExpr flat_nodes;
   // VecExpr flat_active_node;
