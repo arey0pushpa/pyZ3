@@ -38,13 +38,13 @@ z3::expr vts::annotate_mukund_graph ( z3::expr_vector& fixN, z3::expr_vector& fi
 
   /*
   // Straighten out few things.
-  z3::expr_vector setE = edge_set();
-  z3::expr_vector setN = node_set();
-  z3::expr_vector setActiveN = active_node_set();
-  z3::expr_vector setPresenceE = presence_edge_set();
-  z3::expr_vector setActiveE = active_edge_set();
-  z3::expr_vector setPairingM = pairing_m_set();
-  z3::expr_vector setReach = reach_set();
+  z3::expr_vector listE = edge_list();
+  z3::expr_vector listN = node_list();
+  z3::expr_vector listActiveN = active_node_list();
+  z3::expr_vector listPresenceE = presence_edge_list();
+  z3::expr_vector listActiveE = active_edge_list();
+  z3::expr_vector listPairingM = pairing_m_list();
+  z3::expr_vector listReach = reach_list();
   */
 
   // Fix nodes of the graph
@@ -184,81 +184,78 @@ bool equality_check( z3::expr_vector fixZ, z3::expr var ) {
   return false;
 }
 
-void unassigned_bits ( z3::expr_vector& setZ,
+void unassigned_bits ( z3::expr_vector& listZ,
                        z3::expr_vector fixZ,
-                       z3::expr_vector& openZ ) {
-  for ( unsigned i = 0; i < setZ.size(); i++ ) {
-   auto var = setZ[i];
+                       z3::expr_vector& unknownZ ) {
+  for ( unsigned i = 0; i < listZ.size(); i++ ) {
+   auto var = listZ[i];
    if ( equality_check( fixZ, var ) ) 
       continue;
    else 
-      openZ.push_back( var );
+      unknownZ.push_back( var );
   }
 }
 
 
-z3::expr vts::vts_synthesis ( unsigned variation ) {
+z3::expr vts::vts_synthesis ( unsigned variation, z3::expr_vector& knownNodes, z3::expr_vector& knownActiveNodes, 
+                                      z3::expr_vector& knownEdges, z3::expr_vector& knownPresenceEdges,
+                                      z3::expr_vector& knownActiveEdges, z3::expr_vector& knownPairingMatrix ) {
   /** Basic Constraints **/
   z3::expr vtsCons = create_vts_constraint();  
   z3::expr vtsActivity = vts_activity_constraint();
   
-  z3::expr_vector fixN( ctx );
-  z3::expr_vector fixActiveN( ctx );
-  z3::expr_vector fixE( ctx );
-  z3::expr_vector fixPresenceE ( ctx );
-  z3::expr_vector fixActiveE( ctx );
-  z3::expr_vector fixPairingP( ctx );
+  z3::expr_vector unknownN( ctx );
+  z3::expr_vector unknownActiveN( ctx );
+  z3::expr_vector unknownE( ctx );
+  z3::expr_vector unknownPresenceE( ctx );
+  z3::expr_vector unknownActiveE( ctx );
   
-  z3::expr_vector openN( ctx );
-  z3::expr_vector openActiveN( ctx );
-  z3::expr_vector openE( ctx );
-  z3::expr_vector openPresenceE( ctx );
-  z3::expr_vector openActiveE( ctx );
-  
-  /** Annotate graph : fix graph input variables **/
-  //z3::expr inputCons =  annotate_plos_graph ();
-  z3::expr inputCons =  annotate_mukund_graph ( fixN, fixActiveN, fixE, fixPresenceE, fixActiveE, fixPairingP );
+  /** Annotate graph : fix graph known variables **/
+  //z3::expr knownCons =  annotate_plos_graph ();
+  // Find knownActiveNodes ?
+  //z3::expr knownCons =  annotate_mukund_graph ( knownActiveNodes, fixActiveN, fixE, fixPresenceE, fixActiveE, fixPairingP );
 
   z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
   z3::expr V5 = no_self_edges();
 
-  z3::expr_vector setN = node_set();
-  z3::expr_vector setActiveN = active_node_set();
-  z3::expr_vector setE = edge_set(); 
-  z3::expr_vector setPresenceE = presence_edge_set();
-  z3::expr_vector setActiveE = active_edge_set(); 
-  z3::expr_vector setPairingM = pairing_m_set(); 
-  z3::expr_vector setReach = reach_set();
+  z3::expr_vector listN = node_list();
+  z3::expr_vector listActiveN = active_node_list();
+  z3::expr_vector listE = edge_list(); 
+  z3::expr_vector listPresenceE = presence_edge_list();
+  z3::expr_vector listActiveE = active_edge_list(); 
+  z3::expr_vector listPairingM = pairing_m_list(); 
+  z3::expr_vector listReach = reach_list();
 
-  unassigned_bits ( setN, fixN, openN ); 
-  unassigned_bits ( setActiveN, fixActiveN, openActiveN ); 
-  unassigned_bits ( setE, fixE, openE ); 
-  unassigned_bits ( setPresenceE, fixPresenceE, openPresenceE ); 
-  unassigned_bits ( setActiveE, fixActiveE, openActiveE ); 
+  unassigned_bits ( listN, knownNodes, unknownN ); 
+  unassigned_bits ( listActiveN, knownActiveNodes, unknownActiveN ); 
+  unassigned_bits ( listE, knownEdges, unknownE ); 
+  unassigned_bits ( listPresenceE, knownPresenceEdges, unknownPresenceE ); 
+  unassigned_bits ( listActiveE, knownActiveEdges, unknownActiveE ); 
 
   // 1. Add edge to achieve graph stability and k connected. 
   if ( variation == 1 ) {
     
-    //auto nodeC = ! at_least_two ( openN );
-    //auto nodeActivityC = ! at_least_two ( openActiveE );
-    auto edgeC = ! at_least_four ( openE );
-    auto edgeActivityC = ! at_least_three ( openActiveE );
-    auto edgePresenceC = ! at_least_three ( openPresenceE );
+    //auto nodeC = ! at_least_two ( unknownN );
+    //auto nodeActivityC = ! at_least_two ( unknownActiveE );
+    auto edgeC = ! at_least_four ( unknownE );
+    auto edgeActivityC = ! at_least_three ( unknownActiveE );
+    auto edgePresenceC = ! at_least_three ( unknownPresenceE );
     
     // Fix rest of them to zero.
-    auto fixVar0 = ! z3::mk_or ( openN )  && ! z3::mk_or ( openActiveN );
+    auto setUnknownVariablesFalse = ! z3::mk_or ( unknownN )  && ! z3::mk_or ( unknownActiveN );
     
-    auto addConstraints = edgeC && edgeActivityC && edgePresenceC  && fixVar0;
+    auto addConstraints = edgeC && edgeActivityC && edgePresenceC  && setUnknownVariablesFalse;
 
-    auto qvtsCons = exists( setN, 
-                    exists( setActiveN, 
-                    exists( setPresenceE,  
-                    exists( setActiveE, 
-                    exists( setPairingM, 
-                    exists( setReach, 
-                            vtsCons && vtsActivity && inputCons && addConstraints ))))));   
+    auto qvtsCons = exists( listN, 
+                    exists( listActiveN, 
+                    exists( listPresenceE,  
+                    exists( listActiveE, 
+                    exists( listPairingM, 
+                    exists( listReach, 
+                            vtsCons && vtsActivity && addConstraints ))))));   
+//                            vtsCons && vtsActivity && inputCons && addConstraints ))))));   
 
-    auto cons = exists( setE, 
+    auto cons = exists( listE, 
                         qvtsCons && V5 && kConnCons ); 
     return cons;
 
@@ -267,25 +264,25 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   // 2. Add flow of molecules to fix fusion. 
   else if ( variation == 2 )  {
     
-    auto edgeActivityC = ! at_least_three ( openActiveE );
-    auto edgePresenceC = ! at_least_three ( openPresenceE );
+    auto edgeActivityC = ! at_least_three ( unknownActiveE );
+    auto edgePresenceC = ! at_least_three ( unknownPresenceE );
 
-//    auto fixVar0 = ! z3::mk_or ( openN )  && ! z3::mk_or ( openActiveN ) && !z3::mk_or ( openE );
-    auto fixVar0 =  ! z3::mk_or ( openActiveN ) && !z3::mk_or ( openE );
+//    auto setUnknownVariablesFalse = ! z3::mk_or ( unknownN )  && ! z3::mk_or ( unknownActiveN ) && !z3::mk_or ( unknownE );
+    auto setUnknownVariablesFalse =  ! z3::mk_or ( unknownActiveN ) && !z3::mk_or ( unknownE );
     
     auto addConstraints = edgeActivityC && edgePresenceC;
     
     // fix rest of them to 0.
-    z3::expr qvtsCons = exists( setN, 
-                        exists( setActiveN, 
-                        exists( setActiveE, 
-                        exists( setPairingM, 
-                        exists( setReach, 
+    z3::expr qvtsCons = exists( listN, 
+                        exists( listActiveN, 
+                        exists( listActiveE, 
+                        exists( listPairingM, 
+                        exists( listReach, 
                                 vtsCons && vtsActivity && addConstraints )))));
 
-    auto cons = exists( setPresenceE, 
-                exists( setE, 
-                        qvtsCons && V5 && inputCons && kConnCons )); 
+    auto cons = exists( listPresenceE, 
+                exists( listE, 
+                        qvtsCons && V5 && kConnCons )); 
 
     return cons;
   }
@@ -297,24 +294,25 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     // Populate xtra var t_var : var for node function 
     popl3 ( t_var, M, 2 * M, D, "t" );
     // [3]: N-CNF function 
-    auto setSvar = flattern3d ( s_var, M, 2*M, D, false );
-    auto setTvar = flattern3d ( t_var, M, 2*M, D, false );
+    auto listSvar = flattern3d ( s_var, M, 2*M, D, false );
+    auto listTvar = flattern3d ( t_var, M, 2*M, D, false );
 
     z3::expr cnfCons = cnf_function( s_var, t_var );
 
-    z3::expr func3cnf  = exists( setN, 
-                         exists( setActiveN, 
-                         exists( setPresenceE, 
-                         exists( setActiveE, 
-                         exists( setPairingM, 
-                         exists( setReach, 
+    z3::expr func3cnf  = exists( listN, 
+                         exists( listActiveN, 
+                         exists( listPresenceE, 
+                         exists( listActiveE, 
+                         exists( listPairingM, 
+                         exists( listReach, 
                                  cnfCons && vtsCons )))))) ;
 
-    z3::expr cons = exists( setSvar, 
-                    exists( setTvar, 
-                    exists( setE, 
-                            kConnCons && V5 && inputCons && func3cnf )));
-
+    z3::expr cons = exists( listSvar, 
+                    exists( listTvar, 
+                    exists( listE, 
+                            kConnCons && V5 && func3cnf )));
+                            //kConnCons && V5 && inputCons && func3cnf )));
+//
     return cons;
   }
   else if ( variation == 4 ) {
@@ -329,35 +327,35 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     // Populate parameter var
     popl3 ( v_var, M, M-1, gateTypes, "v" );
     
-    auto fixVar0 =  !z3::mk_or( openN )  
-                 && !z3::mk_or( openActiveN ) 
-                 && !z3::mk_or( openE )
-                 && !z3::mk_or( openPresenceE )
-                 && !z3::mk_or( openActiveE );
+    auto setUnknownVariablesFalse =  !z3::mk_or( unknownN )  
+                 && !z3::mk_or( unknownActiveN ) 
+                 && !z3::mk_or( unknownE )
+                 && !z3::mk_or( unknownPresenceE )
+                 && !z3::mk_or( unknownActiveE );
     
     // Boolean gates  function 
 
-    auto setSvar = flattern3d ( s_var, M, M, 2*M + 2, false );
-    auto setTvar = flattern3d ( t_var, M, M, 2*M + 2, false );
-    auto setUvar = flattern3d ( u_var, M, M-1, gateTypes, false );
-    auto setVvar = flattern3d ( v_var, M, M-1, gateTypes, false ); 
+    auto listSvar = flattern3d ( s_var, M, M, 2*M + 2, false );
+    auto listTvar = flattern3d ( t_var, M, M, 2*M + 2, false );
+    auto listUvar = flattern3d ( u_var, M, M-1, gateTypes, false );
+    auto listVvar = flattern3d ( v_var, M, M-1, gateTypes, false ); 
     
     z3::expr gateCons = logic_gates ( s_var, t_var, u_var, v_var );
     
-    z3::expr funcGate  = exists( setN, 
-                         exists( setActiveN, 
-                         exists( setPresenceE, 
-                         exists( setActiveE, 
-                         exists( setPairingM, 
-                         exists( setReach, 
-                                 gateCons && vtsCons && fixVar0 ))))));
+    z3::expr funcGate  = exists( listN, 
+                         exists( listActiveN, 
+                         exists( listPresenceE, 
+                         exists( listActiveE, 
+                         exists( listPairingM, 
+                         exists( listReach, 
+                                 gateCons && vtsCons && setUnknownVariablesFalse ))))));
 
-    z3::expr cons = exists( setSvar, 
-                    exists( setTvar, 
-                    exists( setUvar, 
-                    exists( setVvar, 
-                    exists( setE, 
-                            kConnCons && V5 && inputCons && funcGate )))));
+    z3::expr cons = exists( listSvar, 
+                    exists( listTvar, 
+                    exists( listUvar, 
+                    exists( listVvar, 
+                    exists( listE, 
+                            kConnCons && V5 && funcGate )))));
 
     return cons;
 
@@ -390,26 +388,26 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     // Populate pairing_m(k,k1)
     popl2 ( Xpairing_m, M, M, "xp" );
   
-    auto nodeC = ! at_least_three ( openN );
-    auto nodeActivityC = ! at_least_two ( openActiveE );     
-    auto edgeC = ! at_least_three ( openE );
-    auto edgeActivityC = ! at_least_two ( openActiveE );
-    auto edgePresenceC = ! at_least_two ( openPresenceE );
+    auto nodeC = ! at_least_three ( unknownN );
+    auto nodeActivityC = ! at_least_two ( unknownActiveE );     
+    auto edgeC = ! at_least_three ( unknownE );
+    auto edgeActivityC = ! at_least_two ( unknownActiveE );
+    auto edgePresenceC = ! at_least_two ( unknownPresenceE );
     
     // Fix rest of them to zero.
-    auto fixVar0 = ! z3::mk_or ( openN )  && ! z3::mk_or ( openActiveN );
+    auto setUnknownVariablesFalse = ! z3::mk_or ( unknownN )  && ! z3::mk_or ( unknownActiveN );
     
-    auto addConstraints = edgeC && edgeActivityC && edgePresenceC  && fixVar0;
+    auto addConstraints = edgeC && edgeActivityC && edgePresenceC  && setUnknownVariablesFalse;
 
-    auto qvtsCons = exists( setN, 
-                    exists( setActiveN, 
-                    exists( setPresenceE,  
-                    exists( setActiveE, 
-                    exists( setPairingM, 
-                    exists( setReach, 
-                            vtsCons && vtsActivity && inputCons && addConstraints ))))));   
+    auto qvtsCons = exists( listN, 
+                    exists( listActiveN, 
+                    exists( listPresenceE,  
+                    exists( listActiveE, 
+                    exists( listPairingM, 
+                    exists( listReach, 
+                            vtsCons && vtsActivity && addConstraints ))))));   
 
-    auto cons = exists( setE, 
+    auto cons = exists( listE, 
                         qvtsCons && V5 && kConnCons ); 
     return cons;
     

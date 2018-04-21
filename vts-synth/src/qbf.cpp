@@ -15,8 +15,8 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
    */
 
   /***** Building [[1]] ****/
-  VecExpr ee_set = flattern_3d ( edges );
-  z3::expr_vector setE = edge_set();
+  VecExpr ee_list = flattern_3d ( edges );
+  z3::expr_vector listE = edge_list();
 
   // Arg true -> u need edge quantified outside.
   z3::expr kconnectedConstraint = k_connected_graph_constraint ( C, false );
@@ -26,27 +26,27 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
   z3::expr V5 = no_self_edges();                              
   
   /***** Building [[3]] ****/
-  z3::expr_vector setN = node_set();
-  z3::expr_vector setActiveN = active_node_set(); 
-  z3::expr_vector setPresentE = presence_edge_set();
-  z3::expr_vector setActiveE = active_edge_set();
-  z3::expr_vector setPairingM = pairing_m_set();
-  z3::expr_vector setReach = reach_set();
+  z3::expr_vector listN = node_list();
+  z3::expr_vector listActiveN = active_node_list(); 
+  z3::expr_vector listPresentE = presence_edge_list();
+  z3::expr_vector listActiveE = active_edge_list();
+  z3::expr_vector listPairingM = pairing_m_list();
+  z3::expr_vector listReach = reach_list();
 
   /* Avoid writing forall( x, forall( y, .... ))
   z3::expr_vector qvarQbf( ctx ); 
 
-  qvarQbf.reserve( setN.size() + setActiveN.size() + setPresentE.size() + setActiveE.size() + setPairingM.size() + setReach.size() ); // preallocate memory
+  qvarQbf.reserve( listN.size() + listActiveN.size() + listPresentE.size() + listActiveE.size() + listPairingM.size() + listReach.size() ); // preallocate memory
   
-  qvarQbf.insert( qvarQbf.end(), setN.begin(), setN.end() );
-  qvarQbf.insert( qvarQbf.end(), setActiveN.begin(), setActiveN.end() );
-  qvarQbf.insert( qvarQbf.end(), setPresentE.begin(), setPresentE.end() );
-  qvarQbf.insert( qvarQbf.end(), setActiveE.begin(), setActiveE.end() );
-  qvarQbf.insert( qvarQbf.end(), setPairingM.begin(), setPairingM.end() );
-  qvarQbf.insert( qvarQbf.end(), setReach.begin(), setReach.end() );
+  qvarQbf.insert( qvarQbf.end(), listN.begin(), listN.end() );
+  qvarQbf.insert( qvarQbf.end(), listActiveN.begin(), listActiveN.end() );
+  qvarQbf.insert( qvarQbf.end(), listPresentE.begin(), listPresentE.end() );
+  qvarQbf.insert( qvarQbf.end(), listActiveE.begin(), listActiveE.end() );
+  qvarQbf.insert( qvarQbf.end(), listPairingM.begin(), listPairingM.end() );
+  qvarQbf.insert( qvarQbf.end(), listReach.begin(), listReach.end() );
   
   */
-  //for (const auto&& vect : setN ) {
+  //for (const auto&& vect : listN ) {
   //  std::cout << vect << "\n";
   //}
   
@@ -67,25 +67,25 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
     popl3 ( t_var, M, 2 * M, D, "t" );
   
     // [3]: N-CNF function 
-    auto setSvar = flattern3d ( s_var, M, 2*M, D, false );
-    auto setTvar = flattern3d ( t_var, M, 2*M, D, false );
+    auto listSvar = flattern3d ( s_var, M, 2*M, D, false );
+    auto listTvar = flattern3d ( t_var, M, 2*M, D, false );
   
     z3::expr cnfCons = cnf_function( s_var, t_var );
 
-    z3::expr func3cnf  = forall( setN, 
-                         forall( setActiveN, 
-                         forall( setPresentE, 
-                         forall( setActiveE, 
-                         forall( setPairingM, 
-                         forall( setReach, 
-                         forall( setSvar, 
-                         forall( setTvar,  
+    z3::expr func3cnf  = forall( listN, 
+                         forall( listActiveN, 
+                         forall( listPresentE, 
+                         forall( listActiveE, 
+                         forall( listPairingM, 
+                         forall( listReach, 
+                         forall( listSvar, 
+                         forall( listTvar,  
                                  implies( vtsBasicStability && cnfCons, vtsFusion )))))))));
 
-    z3::expr qbfCons = exists( setE, 
+    z3::expr qbfCons = exists( listE, 
                                kconnectedConstraint && V5 && func3cnf );  
 
-   // z3::expr qbfCons = exists ( setTvar, exists (setSvar, (exists (setE, ( V5 && func3cnf )))) );  
+   // z3::expr qbfCons = exists ( listTvar, exists (listSvar, (exists (listE, ( V5 && func3cnf )))) );  
    
     return qbfCons;
 
@@ -106,31 +106,31 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
     
     // [3]: Boolean gates  function 
     /*
-     * auto setSvar = flattern3d ( s_var, M, M - 1, 2*M + 2, false );
-    auto setTvar = flattern3d ( t_var, M, M - 1, 2*M + 2, false );
-    auto setUvar = flattern2d ( u_var, M, M, false );
-    auto setVvar = flattern2d ( v_var, M, M, false );
+     * auto listSvar = flattern3d ( s_var, M, M - 1, 2*M + 2, false );
+    auto listTvar = flattern3d ( t_var, M, M - 1, 2*M + 2, false );
+    auto listUvar = flattern2d ( u_var, M, M, false );
+    auto listVvar = flattern2d ( v_var, M, M, false );
      */
-    auto setSvar = flattern3d ( s_var, M, M, 2*M + 2, false );
-    auto setTvar = flattern3d ( t_var, M, M, 2*M + 2, false );
-    auto setUvar = flattern3d ( u_var, M, M-1, 2, false );
-    auto setVvar = flattern3d ( v_var, M, M-1, 2, false );
+    auto listSvar = flattern3d ( s_var, M, M, 2*M + 2, false );
+    auto listTvar = flattern3d ( t_var, M, M, 2*M + 2, false );
+    auto listUvar = flattern3d ( u_var, M, M-1, 2, false );
+    auto listVvar = flattern3d ( v_var, M, M-1, 2, false );
   
     z3::expr gateCons = logic_gates ( s_var, t_var, u_var, v_var );
     
-    z3::expr funcGate  = forall( setN, 
-                         forall( setActiveN, 
-                         forall( setPresentE, 
-                         forall( setActiveE, 
-                         forall( setPairingM, 
-                         forall( setReach, 
-                         forall( setSvar, 
-                         forall( setTvar,  
-                         forall( setUvar, 
-                         forall( setVvar, 
+    z3::expr funcGate  = forall( listN, 
+                         forall( listActiveN, 
+                         forall( listPresentE, 
+                         forall( listActiveE, 
+                         forall( listPairingM, 
+                         forall( listReach, 
+                         forall( listSvar, 
+                         forall( listTvar,  
+                         forall( listUvar, 
+                         forall( listVvar, 
                                  implies ( vtsBasicStability && gateCons, vtsFusion )))))))))));
 
-    z3::expr cons = exists( setE, 
+    z3::expr cons = exists( listE, 
                             kconnectedConstraint && V5 && funcGate );  
 
     return cons;
@@ -139,20 +139,20 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
     
     // No function possible constraint [[3]]
     // FORALL [ qvars, basicConst => notafunc ]
-    z3::expr noFunctionPossible = forall( setN, 
-                                  forall( setActiveN, 
-                                  forall( setPresentE, 
-                                  forall( setActiveE, 
-                                  forall( setPairingM, 
-                                  forall( setReach , 
+    z3::expr noFunctionPossible = forall( listN, 
+                                  forall( listActiveN, 
+                                  forall( listPresentE, 
+                                  forall( listActiveE, 
+                                  forall( listPairingM, 
+                                  forall( listReach , 
                                           implies( vtsBasicStability && vtsFusion, notaFunction )))))));
 
-    z3::expr qbfCons = exists( setE, 
+    z3::expr qbfCons = exists( listE, 
                                kconnectedConstraint && V5 && noFunctionPossible );   
     return qbfCons;
   } 
   
-  /*** Print the set of built edges and the formula ***/
+  /*** Print the list of built edges and the formula ***/
   // std::cout << "Expected first level quant: " << set_edges << "\n";
   //std::cout << cons << "\n";
   //return kconnectedConstraint;

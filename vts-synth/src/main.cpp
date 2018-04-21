@@ -34,7 +34,9 @@ int main(int ac, char* av[])
     bool useZ3 = false;
     bool displayGraph = false;
     bool printModel = false;
-
+    bool inputFile = false;
+    std::vector<std::string> inputFilename;
+    
     options_description general("General options");
     general.add_options()
       ("help", "produce a help message")
@@ -49,6 +51,7 @@ int main(int ac, char* av[])
       ("display", value<std::string>(), "display to use")
       ;
    */
+   
     options_description variation("Variation options");
     variation.add_options()
       ("func-type", value<int>(), "fix a function type for QBF")
@@ -60,7 +63,8 @@ int main(int ac, char* av[])
       ("use-z3", "use z3 for QBF solving")
       ("print-model", "print vts model")
       ("display-graph", "display the vts as graph")
-      ;
+      ("input-file,i", value< std::vector<std::string> >(),
+     "Specifies input file.");
 
     // Declare an options description instance which will include
     // all the options
@@ -77,6 +81,9 @@ int main(int ac, char* av[])
     variables_map vm;
     store(parse_command_line(ac, av, all), vm);
 
+    positional_options_description p;
+    p.add("input-file", -1);
+    
     if (vm.count("help")) 
     {
       std::cout << visible;
@@ -125,27 +132,47 @@ int main(int ac, char* av[])
       //  << vm["print-model"].as<unsigned>() << "\n";            
       //printModel =  vm["print-model"].as<unsigned>();            
       printModel = true;            
-    }                           
-  
+    } 
+    if (vm.count("input-file")) {
+      inputFilename = vm["input-file"].as< std::vector<std::string> >();
+      std::cout << "Input file is = "
+                << inputFilename[0] << "\n";
+      inputFile = true;
+    }
+    
   //std::cout << useZ3;
   //std::cout << vm["func-model"].as<int>() << "\n";            
   //exit(0);
 
   z3::context c;
+  z3::expr_vector knownNodes(c);
+  z3::expr_vector knownActiveNodes(c);
+  z3::expr_vector knownEdges(c);
+  z3::expr_vector knownPresenceEdges(c);
+  z3::expr_vector knownActiveEdges(c);
+  z3::expr_vector knownPairingMatrix(c);
+    
+  if ( synthVar == true ) {
+    if ( inputFile == true ) {
+      load_vts ld( c, inputFilename[0]); ld.load( knownNodes, knownActiveNodes, knownEdges,
+                                                  knownPresenceEdges, knownActiveEdges, knownPairingMatrix );
+      vts_ptr v1 = ld.get_vts(); return 0;
+    } else {
+      std::cout << "Loading default file for synthesis ..." << "\n";
+      load_vts ld(c,"./t.vts"); ld.load( knownNodes, knownActiveNodes, knownEdges, knownPresenceEdges,
+                                        knownActiveEdges, knownPairingMatrix ) ;                                                 
+      vts_ptr v1 = ld.get_vts(); return 0;
+   }
+  } else {
+   // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
+    unsigned int N = 2;
+    unsigned int M = 4;
+    unsigned int Q = 2;
+    // depth of cnf
+    unsigned int D = 2;
 
-   //if ( ) {
-   load_vts ld(c,"/tmp/t.vts"); ld.load();
-   vts_ptr v1 = ld.get_vts(); return 0;
-
-  // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
-  unsigned int N = 3;
-  unsigned int M = 21;
-  unsigned int Q = 1;
-  // depth of cnf
-  unsigned int D = 2;
-
-  vts  v( c, M, N, Q, MODEL_4, 3, D );
-
+    vts  v( c, M, N, Q, MODEL_4, 3, D );
+  }
   //z3::model mdl = v.get_vts_for_prob1();
   //z3::model qbf_mdl = v.get_vts_for_qbf();
 
@@ -166,7 +193,9 @@ int main(int ac, char* av[])
     if( funcType != -1 ) {
       f = v.create_qbf_formula( funcType );
     } else if( synthVar != -1 ) {
-      f = v.vts_synthesis( synthVar );
+      f = v.vts_synthesis( synthVar, knownNodes, knownActiveNodes, 
+                           knownEdges, knownPresenceEdges, knownActiveEdges, 
+                           knownPairingMatrix ); 
     }else {
       f = v.create_qbf_formula( 0 );
     }
@@ -228,7 +257,7 @@ int main(int ac, char* av[])
     //bool timedout = false;
     std::future<int> future = std::async(std::launch::async, [](){ 
         // if ( flagA == false ) {
-        auto retVal  = system ("cd ./build/depqbf/examples;timeout 2s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
+        auto retVal  = system ("cd ./build/depqbf/examples;timeout 222s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
         // std::cout << retVal << "\n";
         //  } else {
         // auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
@@ -240,7 +269,7 @@ int main(int ac, char* av[])
     //std::cout << "Running depqbf ... " << "\n";
     std::future_status status;
 
-    status = future.wait_for( std::chrono::seconds(2) );
+    status = future.wait_for( std::chrono::seconds(222) );
 
     if ( status == std::future_status::timeout ) { 
       std::cout << "TimeOut! \n";

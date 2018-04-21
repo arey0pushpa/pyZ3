@@ -89,9 +89,11 @@ private:
 public:
 
   // adding known parts
-  void add_known_edge( unsigned, unsigned, std::vector<unsigned>&, std::vector<bool>& );
-  void add_known_node( unsigned, std::vector<unsigned>&, std::vector<bool>& );
-  void add_known_pairing( unsigned, unsigned );
+  void add_known_edge( unsigned, unsigned, unsigned, std::vector<unsigned>&,
+                       std::vector<bool>&, z3::expr_vector&, z3::expr_vector& , 
+                       z3::expr_vector& );
+  void add_known_node( unsigned, std::vector<unsigned>&, std::vector<bool>&, z3::expr_vector& );
+  void add_known_pairing( unsigned, unsigned, z3::expr_vector& );
   void add_known_activity_node_function( unsigned, z3::expr );
   void add_known_activity_edge_function( unsigned, z3::expr );
 
@@ -176,7 +178,10 @@ public:
   z3::expr_vector reduce_fml ( z3::context& ctx, z3::expr_vector& main_list,  unsigned mLen, Vec3Expr& u, unsigned k, unsigned& gateVar );
   
   /** Synthesis constraints**/
-  z3::expr vts_synthesis ( unsigned variation );
+  //z3::expr vts_synthesis ( unsigned variation );
+  z3::expr vts_synthesis ( unsigned variation, z3::expr_vector&, z3::expr_vector&, 
+                                      z3::expr_vector&, z3::expr_vector&,
+                                      z3::expr_vector&, z3::expr_vector& );
   z3::expr annotate_plos_graph();
   z3::expr annotate_mukund_graph ( z3::expr_vector& fixN, z3::expr_vector& fixactiveN, z3::expr_vector& fixE, z3::expr_vector& fixpresenceE, z3::expr_vector& fixactiveE, z3::expr_vector& fixpairingP );
 
@@ -198,13 +203,13 @@ public:
   z3::expr create_qbf_formula( int funcType );
 
   // Helper 
-  z3::expr_vector node_set();
-  z3::expr_vector active_node_set();
-  z3::expr_vector presence_edge_set();
-  z3::expr_vector active_edge_set();
-  z3::expr_vector pairing_m_set();
-  z3::expr_vector reach_set();
-  z3::expr_vector edge_set();
+  z3::expr_vector node_list();
+  z3::expr_vector active_node_list();
+  z3::expr_vector presence_edge_list();
+  z3::expr_vector active_edge_list();
+  z3::expr_vector pairing_m_list();
+  z3::expr_vector reach_list();
+  z3::expr_vector edge_list();
   
    //helper functions
   z3::expr is_mol_edge_present( unsigned i, unsigned j, unsigned m );

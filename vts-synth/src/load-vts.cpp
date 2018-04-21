@@ -106,7 +106,7 @@ void load_vts::get_label( std::vector<unsigned>& mols,
   load_error( "bad label!", line_num );
 }
 
-void load_vts::get_node() {
+void load_vts::get_node(z3::expr_vector& knownNodes) {
   std::vector<unsigned> mols;
   std::vector<bool> activity;
   unsigned n ;
@@ -118,17 +118,18 @@ void load_vts::get_node() {
     load_error( "bad node!", line_num );
   }
   assert( v );
-  v->add_known_node( n, mols, activity );
+  v->add_known_node( n, mols, activity, knownNodes );
   line_num++;
   return;
 }
 
-void load_vts::get_edge() {
+void load_vts::get_edge(z3::expr_vector& knownEdges, z3::expr_vector& knownPresenceEdges, z3::expr_vector& knownActiveEdges) {
   std::vector<unsigned> mols;
   std::vector<bool> activity;
   unsigned n1;
   unsigned n2;
-  in >> n1 >> n2;
+  unsigned q;
+  in >> n1 >> n2 >> q;
   char next = peek_skip_space();
   if( next == '|' ) {
     get_label( mols, activity );
@@ -136,15 +137,15 @@ void load_vts::get_edge() {
     load_error( "bad edge!", line_num );
   }
   assert( v );
-  v->add_known_edge( n1, n2, mols, activity );
+  v->add_known_edge( n1, n2, q, mols, activity, knownEdges, knownPresenceEdges, knownActiveEdges );
   line_num++;
   return;
 }
 
-void load_vts::get_pairing() {
+void load_vts::get_pairing(z3::expr_vector& knownPairingMatrix) {
   unsigned m1,m2;
   in >> m1 >> m2;
-  v->add_known_pairing( m1, m2 );
+  v->add_known_pairing( m1, m2, knownPairingMatrix );
 }
 
 void load_vts::get_node_function() {
@@ -167,24 +168,27 @@ void load_vts::get_edge_function() {
   v->add_known_activity_edge_function( m, e );
 }
 
-void load_vts::load() {
+void load_vts::load( z3::expr_vector& knownNodes, z3::expr_vector& knownActiveNodes, 
+                                      z3::expr_vector& knownEdges, z3::expr_vector& knownPresenceEdges,
+                                      z3::expr_vector& knownActiveEdges, z3::expr_vector& knownPairingMatrix ) {
   in.open( file_name );
   line_num = 0;
+  
   if( in.is_open() ) {
     while( !in.eof() ) {
       char cmd = get_command();
       switch( cmd ) {
-      case 0  :
+      case 0 :
       case '-': break;
       case 'M': get_mol_num(); break;
       case 'N': get_node_num(); break;
       case 'Q': get_max_edge_num(); break;
       case 'T': get_model_version(); break;
-      case 'n': get_node(); break;
-      case 'e': get_edge(); break;
+      case 'n': get_node(knownNodes); break;
+      case 'e': get_edge(knownEdges, knownPresenceEdges, knownActiveEdges); break;
       case 'f': get_node_function(); break;
       case 'g': get_edge_function(); break;
-      case 'p': get_pairing(); break;
+      case 'p': get_pairing(knownPairingMatrix); break;
       default:
         load_error( "expecting a command at line", line_num );
       }
