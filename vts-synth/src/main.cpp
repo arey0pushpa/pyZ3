@@ -145,24 +145,26 @@ int main(int ac, char* av[])
   //std::cout << useZ3;
   //std::cout << vm["func-model"].as<int>() << "\n";            
   //exit(0);
-
-   load_vts ld(c,"/tmp/t.vts"); ld.load();
-   vts_ptr v1 = ld.get_vts(); return 0;
-
+  
+  vts_ptr v = nullptr;
+  if( inputFile == true ) {
+   load_vts ld(c, inputFilename[0] ); ld.load();
+   v = ld.get_vts(); return 0;
+  }else{
   // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
-  unsigned int N = 3;
-  unsigned int M = 21;
-  unsigned int Q = 1;
-  // depth of cnf
-  unsigned int D = 2;
+    unsigned int N = 3;
+    unsigned int M = 21;
+    unsigned int Q = 1;
+    // depth of cnf
+    unsigned int D = 2;
+    v = std::shared_ptr<vts>(new vts(c, M, N, Q, MODEL_4, 3, D ));
+  }
+  
+  //z3::model mdl = v->get_vts_for_prob1();
+  //z3::model qbf_mdl = v->get_vts_for_qbf();
 
-  vts  v( c, M, N, Q, MODEL_4, 3, D );
-
-  //z3::model mdl = v.get_vts_for_prob1();
-  //z3::model qbf_mdl = v.get_vts_for_qbf();
-
-  //v.dump_dot("/tmp/vts.dot", mdl );
-  //v.dump_dot("/tmp/vts.dot", qbf_mdl );
+  //v->dump_dot("/tmp/vts.dot", mdl );
+  //v->dump_dot("/tmp/vts.dot", qbf_mdl );
 
     z3::expr t = c.bool_val( true );
     z3::expr fal = c.bool_val( false );
@@ -176,11 +178,11 @@ int main(int ac, char* av[])
     z3::expr f( c );
       
     if( funcType != -1 ) {
-      f = v.create_qbf_formula( funcType );
+      f = v->create_qbf_formula( funcType );
     } else if( synthVar != -1 ) {
-      f = v.vts_synthesis( synthVar ); 
+      f = v->vts_synthesis( synthVar ); 
     }else {
-      f = v.create_qbf_formula( 0 );
+      f = v->create_qbf_formula( 0 );
     }
     //std::cout << f << "\n";
 
@@ -205,7 +207,7 @@ int main(int ac, char* av[])
 
     /* Run Z3 home made QBF solver or DepQbf */
     if ( useZ3 == true ) { 
-      v.use_z3_qbf_solver( f );
+      v->use_z3_qbf_solver( f );
     }
     VecsExpr qs;
     auto prenex_f = prenex( f, qs );
@@ -266,7 +268,7 @@ int main(int ac, char* av[])
     }
 
     
-    v.print_graph( c, "/tmp/dep_vts.dot", qs, printModel, displayGraph, synthVar ); 
+    v->print_graph( c, "/tmp/dep_vts.dot", qs, printModel, displayGraph, synthVar ); 
     if ( displayGraph == true ) { 
       auto retVal = system("xdot /tmp/dep_vts.dot");
       if(retVal == -1) 
