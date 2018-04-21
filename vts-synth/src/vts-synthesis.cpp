@@ -290,11 +290,11 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr_vector listReach = reach_list();
   
   
-  unassigned_bits ( listN, v->knownNodes, unknownN ); 
-  unassigned_bits ( listActiveN, v->knownActiveNodes, unknownActiveN ); 
-  unassigned_bits ( listE, v->knownEdges, unknownE ); 
-  unassigned_bits ( listPresenceE, v->knownPresenceEdges, unknownPresenceE ); 
-  unassigned_bits ( listActiveE, v->knownActiveEdges, unknownActiveE  ); 
+  unassigned_bits ( listN, knownNodes, unknownN ); 
+  unassigned_bits ( listActiveN, knownActiveNodes, unknownActiveN ); 
+  unassigned_bits ( listE, knownEdges, unknownE ); 
+  unassigned_bits ( listPresenceE, knownPresenceEdges, unknownPresenceE ); 
+  unassigned_bits ( listActiveE, knownActiveEdges, unknownActiveE  ); 
 
   // 1. Add edge to achieve graph stability and k connected. 
   if ( variation == 1 ) {
