@@ -277,8 +277,8 @@ void vts::print_denotation_console ( std::map<std::string,int> denotation_map, i
     }
 }
 
-void vts::create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std::string& depqbfRun, 
-                       Tup3Expr& nodeT, Tup3Expr& activeNodeT, Tup3Expr& edgeT, 
+void vts::create_map ( z3::context& c, std::map<std::string,int>& denotation_map, 
+                       std::string& depqbfRun,  Tup3Expr& nodeT, Tup3Expr& activeNodeT, Tup3Expr& edgeT, 
                        Tup4Expr& presenceEdgeT, Tup4Expr& activeEdgeT, VecsExpr qs  ) {
                          
   unsigned int step = 0;
@@ -302,6 +302,7 @@ void vts::create_map ( z3::context& c, std::map<std::string,int>& denotation_map
         int lit = toDigit ( line.at(6) ); 
         if ( lit == 0 ) {
           depqbfRun = "Formula is UNSAT";
+          std::cout << depqbfRun << "\n";
           exit(0);
           break;
         }else {
