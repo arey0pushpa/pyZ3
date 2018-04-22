@@ -101,8 +101,8 @@ void load_vts::get_label( std::vector<unsigned>& mols,
     unsigned m_idx;
     in >> m_idx;
     mols.push_back( m_idx );
-    // if( peek_skip_space() == '\n') goto ERROR;
-    if( peek_num_or_eol() ) {
+    peek_skip_space();
+    if( !peek_num_or_eol() ) {
       char act;
       in >> act;
       switch( act ) {
@@ -203,10 +203,12 @@ void load_vts::load() {
         load_error( "expecting a command at line", line_num );
       }
       if( !initialized_vts ) {
-        D = 2;
-        if( M != 0 && N != 0 && Q != 0 && D != 0 && V != UN_INIT ) {
+        V = UN_INIT;
+        unsigned C = 3;
+        D = 0;
+        if( M != 0 && N != 0 && Q != 0 ) {
           initialized_vts = true;
-          v = std::shared_ptr<vts>(new vts(c, M, N, Q, V, 3, D ));
+          v = std::shared_ptr<vts>(new vts(c, M, N, Q, V, C, D ));
         }
       }
     }
