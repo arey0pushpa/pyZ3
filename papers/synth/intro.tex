@@ -1,9 +1,80 @@
-Vesicle Traffic Systems(VTS) are the material transport mechanisms
-among the compartments inside the biological cells~\cite{vtsIntro}.
+%Motivate VTS
+Eukaryotic cells, including human cells, consists of multiple compartments.
 %
-\ashu{Describe VTS in detail}
+Vesicle Traffic Systems(VTSs) are the material transport mechanisms
+among the compartments inside the eukaryotic cells~\cite{vtsIntro}.
 %
-Vesicle Traffic Systems are the transport mechanisms inside the cells.
+Almost all subsystems of eukaryotic cells depend on VTSs.
+%
+Therefore, understanding how VTSs functions is one of the key
+questions of cell biology.
+%
+In this paper, we are looking at the computational questions 
+arise from the VTSs.
+%
+In the following, we use the model of VTSs that has been presented
+in~\cite{VTS}.
+%
+Please look at appendix~\ref{sec:model}
+for the detailed discussion on pros and cons of the model.
+
+% Describe VTS in detail
+While molecules are transported by VTSs, VTSs are also
+regulated by the molecules.
+%
+Each compartment contains a set of molecules.
+%
+The molecules are transported to the other compartments via
+unidirectional channels.  
+%
+The molecules in a compartment may be active or not active.
+%
+Similarly, a molecule can be active along in a channel. 
+%
+The active molecules are the regulators of the channels.
+%
+A channel is enabled by a pair of molecules
+such that one occurs in the channel and the other
+occurs in the destination compartment.
+%
+Both the molecules must be active in the channel
+and compartment respectively.
+%
+The pairs are called {\em fusing} molecules and analogously
+the channel is considered to be {\em fused} with the
+compartment.
+%
+Not all the pairs of molecules can participate in the fusion, it is
+usually determined by wet experiments the potential fusion pairs.
+%
+To ensure effective regulation, the fusing molecule pairs must be
+unique for each fused channel-compartment pair.
+%
+Since a molecule has to be active in order to participate in fusion,
+the molecule may be present in the other places without being active
+and does not interfere with regulation of the other fused
+channel-compartment pairs.
+%
+The activity of molecules is regulated by the other molecules, i.e.,
+the presence and absence of the other molecule in a compartment or
+channel may make the active or inactive.
+%
+We call this regulation {\em activity functions}.
+
+
+Although the VTSs are very important, our understanding 
+
+
+In the VTS model, we assume that the system is in study state and
+the concentration of molecules does not change over time.
+%
+Therefore, there is no aspect of 
+
+%
+They are known 
+
+Some of the molecules that are pre
+%
 %
 Different compartments are viewed as nodes and transport channels are
 nodes between the graphs.

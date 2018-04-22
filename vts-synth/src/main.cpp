@@ -155,7 +155,7 @@ int main(int ac, char* av[])
     } else{
     //v = std::shared_ptr<vts>(new vts(c, M, N, Q, MODEL_4, 3, D ));
        std::cout << "Using default file [t.vts] in current folder... \n";
-       load_vts ld(c, "./t.vts" ); ld.load();
+       load_vts ld(c, "./examples/t.vts" ); ld.load();
        v = ld.get_vts(); return 0;
     }
   } else{

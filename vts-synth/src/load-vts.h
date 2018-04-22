@@ -27,6 +27,7 @@ private:
   std::vector< std::string > mol_vars;
 
   char peek_skip_space();
+  bool peek_num_or_eol();
   unsigned read_num_line();
   char read_char_line();
   std::string read_string_line();

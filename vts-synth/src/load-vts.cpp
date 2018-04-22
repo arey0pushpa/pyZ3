@@ -21,6 +21,13 @@ char load_vts::peek_skip_space() {
   return in.peek();
 }
 
+bool load_vts::peek_num_or_eol() {
+  char ch = in.peek();
+  if( ch == '\n') return true;
+  if( ch >= '0' && ch <= '9' ) return true;
+  return false;
+}
+
 unsigned load_vts::read_num_line() {
   std::string line;
   std::getline ( in, line);
@@ -83,8 +90,10 @@ void load_vts::get_model_version() {
   }
 }
 
+// activity may conatain dummy expressions
 void load_vts::get_label( std::vector<unsigned>& mols,
                           std::vector<bool>& activity) {
+  z3::expr dummy(c);
   char ch;
   in >> ch;
   if( ch != '|' ) load_error( "no | at start of label!", line_num );
@@ -92,13 +101,17 @@ void load_vts::get_label( std::vector<unsigned>& mols,
     unsigned m_idx;
     in >> m_idx;
     mols.push_back( m_idx );
-    if( peek_skip_space() == '\n') goto ERROR;
-    char act;
-    in >> act;
-    switch( act ) {
-    case '+': activity.push_back(true); break;
-    case '-': activity.push_back(false); break;
-    default: goto ERROR;
+    // if( peek_skip_space() == '\n') goto ERROR;
+    if( peek_num_or_eol() ) {
+      char act;
+      in >> act;
+      switch( act ) {
+      case '+': activity.push_back(true); break;
+      case '-': activity.push_back(false); break;
+      default: goto ERROR;
+      }
+    }else{
+      activity.push_back( dummy );
     }
   }
   return;
