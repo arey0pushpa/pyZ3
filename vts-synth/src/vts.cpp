@@ -60,6 +60,11 @@ void vts::add_known_node( unsigned n,
 
   for ( unsigned i = 0; i < mols.size(); i++ ) {
      knownNodes.push_back( nodes[n][mols[i]] );
+     if( act[i] == 0 ) {
+      knownActiveNodes.push_back( !active_node[n][mols[i]] );
+    } else if( act[i] == 1 ) {
+      knownActiveNodes.push_back( active_node[n][mols[i]] );
+    }
   }
     
   /*
