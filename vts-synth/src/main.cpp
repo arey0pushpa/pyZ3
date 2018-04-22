@@ -153,11 +153,6 @@ int main(int ac, char* av[])
       load_vts ld(c, inputFilename[0] ); ld.load();
       v = ld.get_vts(); return 0;
     } else{
-    unsigned int N = 3;
-    unsigned int M = 21;
-    unsigned int Q = 1;
-    // depth of cnf
-    unsigned int D = 2;
     //v = std::shared_ptr<vts>(new vts(c, M, N, Q, MODEL_4, 3, D ));
        std::cout << "Using default file [t.vts] in current folder... \n";
        load_vts ld(c, "./t.vts" ); ld.load();
