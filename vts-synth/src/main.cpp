@@ -55,13 +55,13 @@ int main(int ac, char* av[])
     options_description variation("Variation options");
     variation.add_options()
       ("func-type", value<int>(), "fix a function type for QBF")
-      ("synth-var", value<int>(), "fix a synthesis variation for vts")
+      ("synth-var,s", value<int>(), "fix a synthesis variation for vts")
       ;
     
     options_description options("Available options");
     options.add_options()
       ("use-z3", "use z3 for QBF solving")
-      ("print-model", "print vts model")
+      ("print-model,p", "print vts model")
       ("display-graph", "display the vts as graph")
       ("input-file,i", value< std::vector<std::string> >(),
      "Specifies input file.");

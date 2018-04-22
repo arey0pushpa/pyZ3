@@ -47,6 +47,7 @@ void vts::add_known_edge( unsigned n1, unsigned n2, unsigned q,
   }
   std::sort(begin(knownPresenceEdgesTuple), end(knownPresenceEdgesTuple), TupleCompare<0>());
   std::sort(begin(knownEdgesTuple), end(knownEdgesTuple), TupleCompare<0>());
+    std::cout << "\nMama mia ..\n";
 
   for ( auto i& : knownPresenceEdgesTuple ) {
   }

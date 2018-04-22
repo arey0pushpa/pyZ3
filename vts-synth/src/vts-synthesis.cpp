@@ -255,8 +255,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr_vector unknownActiveE( ctx );
   
   /** Annotate graph : fix graph known variables **/
-  z3::expr inputCons =  annotate_mukund_graph ( knownNodes, knownActiveNodes, knownEdges, 
-                        knownPresenceEdges, knownActiveEdges, knownPairingMatrix );
+  //z3::expr inputCons =  annotate_mukund_graph ( knownNodes, knownActiveNodes, knownEdges, knownPresenceEdges, knownActiveEdges, knownPairingMatrix );
+
+  z3::expr inputCons (ctx);
 
   z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
   z3::expr V5 = no_self_edges();
@@ -370,15 +371,16 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   }
   else if ( variation == 4 ) {
     unsigned gateTypes = 2;
+    unsigned noOfgates = 3;
     //Populate xtra var node_parameter_var : var for node function 
     // [Molecules, Total M molecule to pick, Picking options: All molecules + True + False ]
     popl3 ( node_parameter_var, M, M, (2 * M) + 2, "s" );
     // Populate xtra var edge_parameter_var : var for edge function 
     popl3 ( edge_parameter_var, M, M, (2 * M) + 2, "t" );
     // Populate parameter var [ Molecules , No.Of gate to pick ]
-    popl3 ( u_var, M, M-1, gateTypes, "u" );
+    popl3 ( gate_selector_var_node, M, noOfgates, gateTypes, "u" );
     // Populate parameter var
-    popl3 ( v_var, M, M-1, gateTypes, "v" );
+    popl3 ( gate_selector_var_edge, M, noOfgates, gateTypes, "v" );
     
     auto setUnknownVariablesFalse =  !z3::mk_or( unknownN )  
                  && !z3::mk_or( unknownActiveN ) 
@@ -390,10 +392,10 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     auto listSvar = flattern3d ( node_parameter_var, M, M, 2*M + 2, false );
     auto listTvar = flattern3d ( edge_parameter_var, M, M, 2*M + 2, false );
-    auto listUvar = flattern3d ( u_var, M, M-1, gateTypes, false );
-    auto listVvar = flattern3d ( v_var, M, M-1, gateTypes, false ); 
+    auto listUvar = flattern3d ( gate_selector_var_node, M, noOfgates, gateTypes, false );
+    auto listVvar = flattern3d ( gate_selector_var_edge, M, noOfgates, gateTypes, false ); 
     
-    z3::expr gateCons = logic_gates ( node_parameter_var, edge_parameter_var, u_var, v_var );
+    z3::expr gateCons = logic_gates ( node_parameter_var, edge_parameter_var, gate_selector_var_node, gate_selector_var_edge );
     
     z3::expr funcGate  = exists( listN, 
                          exists( listActiveN, 
@@ -408,7 +410,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listUvar, 
                     exists( listVvar, 
                     exists( listE, 
-                            kConnCons && V5 && funcGate && inputCons )))));
+                            kConnCons && V5 && funcGate )))));
+                            //kConnCons && V5 && funcGate && inputCons )))));
 
     return cons;
 

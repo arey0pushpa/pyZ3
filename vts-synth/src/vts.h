@@ -52,8 +52,8 @@ private:
 
   Vec3Expr node_parameter_var;
   Vec3Expr edge_parameter_var;
-  Vec3Expr u_var;
-  Vec3Expr v_var;
+  Vec3Expr gate_selector_var_node;
+  Vec3Expr gate_selector_var_edge;
 
   Vec3Expr edges;
   Vec4Expr presence_edge;
@@ -186,7 +186,7 @@ public:
 
   z3::expr node_gate_fml ( Vec3Expr& s, Vec3Expr& u );
   z3::expr edge_gate_fml ( Vec3Expr& t, Vec3Expr& v );
-  z3::expr logic_gates ( Vec3Expr& s_var, Vec3Expr& t_var, Vec3Expr& u_var, Vec3Expr& v_var );
+  z3::expr logic_gates ( Vec3Expr& s_var, Vec3Expr& t_var, Vec3Expr& gate_selector_var_node, Vec3Expr& gate_selector_var_edge );
   z3::expr_vector reduce_fml ( z3::context& ctx, z3::expr_vector& main_list,  unsigned mLen, Vec3Expr& u, unsigned k, unsigned& gateVar );
   
   /** Synthesis constraints**/
