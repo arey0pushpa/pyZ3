@@ -151,12 +151,12 @@ int main(int ac, char* av[])
   if( synthVar != 0 ) {
     if( inputFile == true ) {
       load_vts ld(c, inputFilename[0] ); ld.load();
-      v = ld.get_vts(); return 0;
+      v = ld.get_vts();
     } else{
     //v = std::shared_ptr<vts>(new vts(c, M, N, Q, MODEL_4, 3, D ));
        std::cout << "Using default file [t.vts] in current folder... \n";
        load_vts ld(c, "./examples/t.vts" ); ld.load();
-       v = ld.get_vts(); return 0;
+       v = ld.get_vts(); 
     }
   } else{
   
@@ -276,7 +276,6 @@ int main(int ac, char* av[])
       std::cout << "Program run was sucessful! ";
     }
 
-    
     v->print_graph( c, "/tmp/dep_vts.dot", qs, printModel, displayGraph, synthVar ); 
     if ( displayGraph == true ) { 
       auto retVal = system("xdot /tmp/dep_vts.dot");
