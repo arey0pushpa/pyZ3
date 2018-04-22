@@ -50,8 +50,8 @@ private:
   Vec2Expr nodes;
   Vec2Expr active_node;
 
-  Vec3Expr s_var;
-  Vec3Expr t_var;
+  Vec3Expr node_parameter_var;
+  Vec3Expr edge_parameter_var;
   Vec3Expr u_var;
   Vec3Expr v_var;
 

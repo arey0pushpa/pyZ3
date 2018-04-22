@@ -198,7 +198,7 @@ void model_map_3 ( std::vector < std::vector< std::vector <int> > >& wVarStr, st
   auto dept_mol = std::stoi( coord[2] );
   auto depth_id = std::stoi( coord[3] );
   
-  std::cout << "[" << func_mol << ", " << dept_mol << ", " << depth_id << "] \n"; 
+  std::cout << "[" << func_mol << ", " << dept_mol << ", " << depth_id << "] -> " <<  snd << "\n\n"; 
   if ( snd > 0 ) {
     // Maping from depqbf model to new variables.
     // Mapping with < M, 2M, D > 
@@ -212,20 +212,22 @@ void model_map_3 ( std::vector < std::vector< std::vector <int> > >& wVarStr, st
 }
  
 void vts::print_denotation_console ( std::map<std::string,int> denotation_map, int synthVar ) {
- 
+     
+     std::cout << "Lakan ayenge \n";
     unsigned typeOfGates = 2;
+    unsigned noOfLeaves = 4;
 
     std::vector < std::vector< std::vector <int> > > sVarStr( M, std::vector< std::vector <int> > ( 2*M, std::vector<int>( D ) ) );
     std::vector < std::vector< std::vector <int> > > tVarStr( M, std::vector< std::vector <int> > ( 2*M, std::vector<int>( D ) ) );  
-    std::vector < std::vector< std::vector <int> > > sGVarStr( M, std::vector< std::vector <int> > ( M, std::vector<int>( 2 * M ) ) );
-    std::vector < std::vector< std::vector <int> > > tGVarStr( M, std::vector< std::vector <int> > ( M, std::vector<int>( 2 * M ) ) ); 
-    std::vector < std::vector< std::vector <int> > > uVarStr ( M, std::vector< std::vector <int> > ( M-1, std::vector<int>( typeOfGates ) ) );
-    std::vector < std::vector< std::vector <int> > > vVarStr ( M, std::vector< std::vector <int> > ( M-1, std::vector<int>( typeOfGates ) ) );
+    std::vector < std::vector< std::vector <int> > > sGVarStr( M, std::vector< std::vector <int> > ( M, std::vector<int>( (2 * M) + 2 ) ) );
+    std::vector < std::vector< std::vector <int> > > tGVarStr( M, std::vector< std::vector <int> > ( M, std::vector<int>( (2 * M ) + 2 ) ) ); 
+    std::vector < std::vector< std::vector <int> > > uVarStr ( M, std::vector< std::vector <int> > ( noOfLeaves, std::vector<int>( typeOfGates ) ) );
+    std::vector < std::vector< std::vector <int> > > vVarStr ( M, std::vector< std::vector <int> > ( noOfLeaves, std::vector<int>( typeOfGates ) ) );
     
     for ( auto& dm : denotation_map ) {
-      //std::cout << " dm is : [" << dm.first << ", " << dm.second << "]\n";
+      //std::cout << " dm is : [" << dm.first << ", " << dm.second << "]\n\n";
       std::string val;  
-      dm.second >= 0 ? val = "True" : val = "False";
+      dm.second > 0 ? val = "True" : val = "False";
 
       std::cout << dm.first << " = " << val << "\n";  
 
@@ -255,27 +257,30 @@ void vts::print_denotation_console ( std::map<std::string,int> denotation_map, i
    
     if ( synthVar == 3 ) {
       
-      std::vector < std::vector< std::vector <int> > > func_arg_n ( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
-      final_map ( M, M, D, sVarStr, func_arg_n, false, synthVar );
-      print_func_cnf ( M, D, func_arg_n, false );
+      std::vector < std::vector< std::vector <int> > > func_para_n ( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
+      final_map ( M, M, D, sVarStr, func_para_n, false, synthVar );
+      print_func_cnf ( M, D, func_para_n, false );
       
-      std::vector < std::vector< std::vector <int> > > func_arg_e ( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
-      final_map ( M, M, D, tVarStr, func_arg_e, true, synthVar );
-      print_func_cnf ( M, D, func_arg_e, true );
+      std::vector < std::vector< std::vector <int> > > func_para_e ( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
+      final_map ( M, M, D, tVarStr, func_para_e, true, synthVar );
+      print_func_cnf ( M, D, func_para_e, true );
     }
     else if ( synthVar == 4 ){
 
-      std::vector < std::vector< std::vector <int> > > func_arg_n ( M, std::vector< std::vector <int> > ( M, std::vector<int>( M + 2 ) ) );
-      final_map ( M, M, M+2, sGVarStr, func_arg_n, false, synthVar );
-      print_func_gates ( M, M, M+2, func_arg_n, sGVarStr, uVarStr, false );
+      std::vector < std::vector< std::vector <int> > > func_para_n ( M, std::vector< std::vector <int> > ( M, std::vector<int>( M + 2 ) ) );
+      final_map ( M, M, M+2, sGVarStr, func_para_n, false, synthVar );
+      print_func_gates ( M, M, M+2, func_para_n, sGVarStr, uVarStr, false );
       
-      std::vector < std::vector< std::vector <int> > > func_arg_e ( M, std::vector< std::vector <int> > ( M, std::vector<int>( M + 2 ) ) );
-      final_map ( M, M, M+2, tGVarStr, func_arg_e, true, synthVar );
-      print_func_gates ( M, M, M+2, func_arg_e, tGVarStr, vVarStr, true );
+      std::vector < std::vector< std::vector <int> > > func_para_e ( M, std::vector< std::vector <int> > ( M, std::vector<int>( M + 2 ) ) );
+      final_map ( M, M, M+2, tGVarStr, func_para_e, true, synthVar );
+      print_func_gates ( M, M, M+2, func_para_e, tGVarStr, vVarStr, true );
     }
 }
 
-void vts::create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std::string& depqbfRun, Tup3Expr& nodeT, Tup3Expr& activeNodeT, Tup3Expr& edgeT, Tup4Expr& presenceEdgeT, Tup4Expr& activeEdgeT, VecsExpr qs  ) {
+void vts::create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std::string& depqbfRun, 
+                       Tup3Expr& nodeT, Tup3Expr& activeNodeT, Tup3Expr& edgeT, 
+                       Tup4Expr& presenceEdgeT, Tup4Expr& activeEdgeT, VecsExpr qs  ) {
+                         
   unsigned int step = 0;
   std::ifstream myfile ( "/tmp/out.txt" );
   std::string line;
@@ -304,15 +309,17 @@ void vts::create_map ( z3::context& c, std::map<std::string,int>& denotation_map
         }
         step += 1;
         continue;
-      }
-      else {
+      } else {
         std::stringstream  stream(line);
         std::string  word;
         stream >> word; stream >> word;
-        int lit = std::stoi( word ); 
+        int lit = std::stoi( word );
+        
+        // The output of Depqbf run giving model to variables. 
         //std::cout << "LINE IS : "  << lit << "\n";
         //std::cout << "AT line : " << line.at(1) << "\n";
-
+ 
+        // OuterMost Variable in first level quantifier.
         std::string var = Z3_ast_to_string  ( c, firstLvlQuant [step - 1] );
         //std ::cout << "Var is " << var << "\n";
 

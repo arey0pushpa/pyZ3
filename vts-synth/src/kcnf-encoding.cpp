@@ -51,19 +51,21 @@ z3::expr vts::literal_cnf ( Vec3Expr s, unsigned i, unsigned k, bool e, unsigned
 
   }
 
-  auto cons = mk_and ( outer_list );
-  return cons;
+  auto constr = mk_and ( outer_list );
+  return constr;
 }
 
 /*** Node activity constraint: a[i][k]  ***/
-z3::expr vts::node_cnf ( Vec3Expr& s ) {
+z3::expr vts::node_cnf ( Vec3Expr& node_parameter_var ) {
 
   z3::expr_vector main_list(ctx);
 
   for ( unsigned i = 0; i < N; i++ ) {
     for ( unsigned k = 0; k < M; k++ ) {
-      auto cnf = (active_node[i][k] == literal_cnf (s, i, k, false) );
+      auto cnf = (active_node[i][k] == literal_cnf( node_parameter_var, i, k, false ) );
       main_list.push_back ( cnf ); 
+     // std::cout << cnf << "\n";
+      //exit(0);
     }
   }
 
@@ -72,7 +74,7 @@ z3::expr vts::node_cnf ( Vec3Expr& s ) {
 }
 
 /*** Edge activity constraint: b[i][j][q][k]  ***/
-z3::expr vts::edge_cnf ( Vec3Expr& t ) {
+z3::expr vts::edge_cnf ( Vec3Expr& edge_parameter_var ) {
 
   z3::expr_vector main_list(ctx);
 
@@ -82,7 +84,7 @@ z3::expr vts::edge_cnf ( Vec3Expr& t ) {
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned k = 0; k < M; k++ ) { 
           //z3::expr_vector outer_list(ctx);
-          auto cnf =  ( active_edge[i][j][q][k] == literal_cnf (t, i, k, true, j, q) ) ;  
+          auto cnf =  ( active_edge[i][j][q][k] == literal_cnf( edge_parameter_var, i, k, true, j, q ) ) ;  
           main_list.push_back ( cnf ); 
         }
       }
@@ -94,12 +96,12 @@ z3::expr vts::edge_cnf ( Vec3Expr& t ) {
 }
 
 /** Function has a restricted form with Three CNF  **/ 
-z3::expr vts::cnf_function ( Vec3Expr& s_var, Vec3Expr& t_var ) { 
+z3::expr vts::cnf_function ( Vec3Expr& node_parameter_var, Vec3Expr& edge_parameter_var ) { 
 
-  z3::expr nodeCnf = node_cnf ( s_var );
+  z3::expr nodeCnf = node_cnf ( node_parameter_var );
   //std::cout << nodeCnf << "\n";
   
-  z3::expr edgeCnf = edge_cnf ( t_var ); 
+  z3::expr edgeCnf = edge_cnf ( edge_parameter_var ); 
   //std::cout << edgeCnf << "\n";
   
   auto cons = nodeCnf && edgeCnf;

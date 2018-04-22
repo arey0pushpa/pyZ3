@@ -157,10 +157,10 @@ void vts::init_vts() {
   popl2 ( t_var, 2 * M, J, "t" );
 */
 // Populate node_funcs : Currently not handled.
-  make_func( node_funcs, "an" );
+  make_func( node_funcs, "yn" );
 
 // Populate edge_funcs : Currently not handled.
-  make_func ( edge_funcs, "en" );
+  make_func ( edge_funcs, "yn" );
 
 // Populate reach(i,j,k,z)
   popl4 ( reach, N, N, M, N-1, "r" );

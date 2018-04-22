@@ -60,17 +60,17 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
   /* Final Qbf Constraint: [[1]] && [[2]] && [[3]] */
   if ( funcType == 1 ) {
     
-    // Populate xtra var s_var : var for node function
-    popl3 ( s_var, M, 2 * M, D, "s" );
+    // Populate xtra var node_parameter_var : var for node function
+    popl3 ( node_parameter_var, M, 2 * M, D, "s" );
     
-    // Populate xtra var t_var : var for node function 
-    popl3 ( t_var, M, 2 * M, D, "t" );
+    // Populate xtra var edge_parameter_var : var for node function 
+    popl3 ( edge_parameter_var, M, 2 * M, D, "t" );
   
     // [3]: N-CNF function 
-    auto listSvar = flattern3d ( s_var, M, 2*M, D, false );
-    auto listTvar = flattern3d ( t_var, M, 2*M, D, false );
+    auto listSvar = flattern3d ( node_parameter_var, M, 2*M, D, false );
+    auto listTvar = flattern3d ( edge_parameter_var, M, 2*M, D, false );
   
-    z3::expr cnfCons = cnf_function( s_var, t_var );
+    z3::expr cnfCons = cnf_function( node_parameter_var, edge_parameter_var );
 
     z3::expr func3cnf  = forall( listN, 
                          forall( listActiveN, 
@@ -92,11 +92,11 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
   }
   else if ( funcType == 2 ) {
     
-    // Populate xtra var s_var : var for node function
-    popl3 ( s_var, M, M, (2 * M) + 2, "s" );
+    // Populate xtra var node_parameter_var : var for node function
+    popl3 ( node_parameter_var, M, M, (2 * M) + 2, "s" );
    
-    // Populate xtra var t_var : var for node function 
-    popl3 ( t_var, M, M, (2 * M) + 2, "t" );
+    // Populate xtra var edge_parameter_var : var for node function 
+    popl3 ( edge_parameter_var, M, M, (2 * M) + 2, "t" );
     
     // Populate parameter var
     popl3 ( u_var, M, M-1, 2, "u" );
@@ -106,17 +106,17 @@ z3::expr vts::create_qbf_formula ( int funcType ) {
     
     // [3]: Boolean gates  function 
     /*
-     * auto listSvar = flattern3d ( s_var, M, M - 1, 2*M + 2, false );
-    auto listTvar = flattern3d ( t_var, M, M - 1, 2*M + 2, false );
+     * auto listSvar = flattern3d ( node_parameter_var, M, M - 1, 2*M + 2, false );
+    auto listTvar = flattern3d ( edge_parameter_var, M, M - 1, 2*M + 2, false );
     auto listUvar = flattern2d ( u_var, M, M, false );
     auto listVvar = flattern2d ( v_var, M, M, false );
      */
-    auto listSvar = flattern3d ( s_var, M, M, 2*M + 2, false );
-    auto listTvar = flattern3d ( t_var, M, M, 2*M + 2, false );
+    auto listSvar = flattern3d ( node_parameter_var, M, M, 2*M + 2, false );
+    auto listTvar = flattern3d ( edge_parameter_var, M, M, 2*M + 2, false );
     auto listUvar = flattern3d ( u_var, M, M-1, 2, false );
     auto listVvar = flattern3d ( v_var, M, M-1, 2, false );
   
-    z3::expr gateCons = logic_gates ( s_var, t_var, u_var, v_var );
+    z3::expr gateCons = logic_gates ( node_parameter_var, edge_parameter_var, u_var, v_var );
     
     z3::expr funcGate  = forall( listN, 
                          forall( listActiveN, 
