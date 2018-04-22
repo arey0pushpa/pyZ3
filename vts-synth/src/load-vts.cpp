@@ -92,8 +92,7 @@ void load_vts::get_model_version() {
 
 // activity may conatain dummy expressions
 void load_vts::get_label( std::vector<unsigned>& mols,
-                          std::vector<bool>& activity) {
-  z3::expr dummy(c);
+                          std::vector<unsigned>& activity) {
   char ch;
   in >> ch;
   if( ch != '|' ) load_error( "no | at start of label!", line_num );
@@ -106,12 +105,12 @@ void load_vts::get_label( std::vector<unsigned>& mols,
       char act;
       in >> act;
       switch( act ) {
-      case '+': activity.push_back(true); break;
-      case '-': activity.push_back(false); break;
+      case '+': activity.push_back(1); break;
+      case '-': activity.push_back(0); break;
       default: goto ERROR;
       }
     }else{
-      activity.push_back( dummy );
+      activity.push_back(2); // unknown
     }
   }
   return;
@@ -121,7 +120,7 @@ void load_vts::get_label( std::vector<unsigned>& mols,
 
 void load_vts::get_node() {
   std::vector<unsigned> mols;
-  std::vector<bool> activity;
+  std::vector<unsigned> activity;
   unsigned n ;
   in >> n;
   unsigned next = peek_skip_space();
@@ -138,7 +137,7 @@ void load_vts::get_node() {
 
 void load_vts::get_edge() {
   std::vector<unsigned> mols;
-  std::vector<bool> activity;
+  std::vector<unsigned> activity;
   unsigned n1;
   unsigned n2;
   unsigned q;

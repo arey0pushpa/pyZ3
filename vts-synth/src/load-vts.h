@@ -33,7 +33,7 @@ private:
   std::string read_string_line();
   char get_command();
   void get_label( std::vector<unsigned>& mols,
-                            std::vector<bool>& activity);
+                  std::vector<unsigned>& activity);
   void get_mol_num();
   void get_node_num();
   void get_max_edge_num();

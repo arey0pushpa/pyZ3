@@ -101,8 +101,10 @@ private:
 public:
 
   // adding known parts
-  void add_known_edge( unsigned, unsigned, unsigned, std::vector<unsigned>&, std::vector<bool>&);
-  void add_known_node( unsigned, std::vector<unsigned>&, std::vector<bool>&);
+  void add_known_edge( unsigned, unsigned, unsigned, std::vector<unsigned>&,
+                       std::vector<unsigned>&);
+  void add_known_node( unsigned, std::vector<unsigned>&,
+                       std::vector<unsigned>&);
   void add_known_pairing( unsigned, unsigned );
   void add_known_activity_node_function( unsigned, z3::expr );
   void add_known_activity_edge_function( unsigned, z3::expr );

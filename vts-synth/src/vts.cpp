@@ -20,16 +20,24 @@ struct TupleCompare
 */
 
 void vts::add_known_edge( unsigned n1, unsigned n2, unsigned q,
-                          std::vector<unsigned>& mols, std::vector<bool>& act ) {
+                          std::vector<unsigned>& mols,
+                          std::vector<unsigned>& act ) {
   //std::vector < std::tuple <unsigned, unsigned> > knownEdgesTuple;
   //std::vector < std::tuple <unsigned, unsigned, unsigned, unsigned> > knownPresenceEdgesTuple;
   //std::vector < std::tuple <unsigned, unsigned, unsigned, unsigned> > knownActiveEdgesTuple;
-  
-  
+  assert( n1 < N );
+  assert( n2 < N );
+  assert( q < E_arity );
+
   for ( unsigned i = 0; i < mols.size(); i++ ) {
-     knownEdges.push_back( edges[n1][n2][mols[i]] );
-     knownPresenceEdges.push_back( presence_edge[n1][n2][q][mols[i]] );
-     knownActiveEdges.push_back( presence_edge[n1][n2][q][mols[i]] );
+    assert( mols[i] < M );
+    knownEdges.push_back( edges[n1][n2][q] );
+    knownPresenceEdges.push_back( presence_edge[n1][n2][q][mols[i]] );
+    if( act[i] == 0 ) {
+      knownActiveEdges.push_back( !active_edge[n1][n2][q][mols[i]] );
+    } else if( act[i] == 1 ) {
+      knownActiveEdges.push_back( active_edge[n1][n2][q][mols[i]] );
+    }
   }
   
   /*
@@ -47,7 +55,8 @@ void vts::add_known_edge( unsigned n1, unsigned n2, unsigned q,
 }
 
 void vts::add_known_node( unsigned n,
-                          std::vector<unsigned>& mols, std::vector<bool>& act ) {
+                          std::vector<unsigned>& mols,
+                          std::vector<unsigned>& act ) {
 
   for ( unsigned i = 0; i < mols.size(); i++ ) {
      knownNodes.push_back( nodes[n][mols[i]] );
