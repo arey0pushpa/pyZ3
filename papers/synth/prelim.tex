@@ -77,11 +77,50 @@ $n'$ is reachable from $n$ in $G$.
 %
 We call $G$ $k$-connected if for each $\edges' \subseteq \edges$ and $|\edges'| < k$,
 VTS $(\nodes,\mols,\edges-E',\nlabel,\pairs,\edgef,\nodef)$ is connected.
+
 %
-In the definition, we do not care about the paths to be $m$-connected for some $m$.  
+% In the definition, we do not care about the paths to be $m$-connected for some $m$.  
+% %
+% A variant of the definition may be sensitive to the $m$-connectedness, but
+% we are not considering the variation.
+
+
+\subsection{Encoding VTS}
+
+The conditions on the VTSs for a given size can be encoded as a QBF formula
+with uninterpreted functions.
 %
-A variant of the definition may be sensitive to the $m$-connectedness, but
-we are not considering the variation.
+To encode the constraints, we need needs variables for each aspect of
+VTS.
+%
+Let us suppose that the size of the graph is $\nu$ and number of
+molecules is $\mu$.
+%
+Furthermore, we also limit the maximum number $\pi$ of edges present
+between two nodes.
+%
+Here, we list the Boolean variables and uninterpreted function symbols
+that encode the VTSs.
+\begin{enumerate}
+
+\item Boolean variable $n_{i,m}$ indicates if $m \in \nlabel(i)$
+\item Boolean variable $e_{i,j,q}$ indicates if $q$th edge exists between $i$ and $j$.
+\item Boolean variable $e_{i,j,q,m}$ indicates if $q$th edge between $i$ and $j$ contains $m$.
+\item Boolean variable $p_{m,m'}$ indicates if $(m,m') \in \pairs$
+\item uninterpreted Boolean functions $\nodef_m : \booleans^\mu \maps \booleans$
+encoding $\nodef(m)$ map
+\item uninterpreted Boolean functions $\edgef_m : \booleans^\mu \maps \booleans$
+encoding $\edgef(m)$ map
+\end{enumerate}
+
+
+
+\subsection{Solvers}
+Due the combinatorial nature of the graphs, the search space is huge
+and often hard to enumerate naively.
+%
+We need sophisticated solvers 
+
 
 %%% Local Variables:
 %%% mode: latex

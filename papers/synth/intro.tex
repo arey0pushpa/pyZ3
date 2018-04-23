@@ -2,9 +2,9 @@
 Eukaryotic cells, including human cells, consists of multiple compartments.
 %
 Vesicle Traffic Systems(VTSs) are the material transport mechanisms
-among the compartments inside the eukaryotic cells~\cite{vtsIntro}.
+among the compartments inside the cells~\cite{vtsIntro}.
 %
-Almost all subsystems of eukaryotic cells depend on VTSs.
+Almost all subsystems of the cells depend on VTSs.
 %
 Therefore, understanding how VTSs functions is one of the key
 questions of cell biology.
@@ -19,7 +19,7 @@ Please look at appendix~\ref{sec:model}
 for the detailed discussion on pros and cons of the model.
 
 % Describe VTS in detail
-While molecules are transported by VTSs, VTSs are also
+While VTSs transports molecules, VTSs are also
 regulated by the molecules.
 %
 Each compartment contains a set of molecules.
@@ -29,7 +29,7 @@ unidirectional channels.
 %
 The molecules in a compartment may be active or not active.
 %
-Similarly, a molecule can be active along in a channel. 
+Similarly, a molecule can be active in a channel. 
 %
 The active molecules are the regulators of the channels.
 %
@@ -42,7 +42,7 @@ and compartment respectively.
 %
 The pairs are called {\em fusing} molecules and analogously
 the channel is considered to be {\em fused} with the
-compartment.
+destination compartment.
 %
 Not all the pairs of molecules can participate in the fusion, it is
 usually determined by wet experiments the potential fusion pairs.
@@ -50,10 +50,10 @@ usually determined by wet experiments the potential fusion pairs.
 To ensure effective regulation, the fusing molecule pairs must be
 unique for each fused channel-compartment pair.
 %
-Since a molecule has to be active in order to participate in fusion,
-the molecule may be present in the other places without being active
-and does not interfere with regulation of the other fused
-channel-compartment pairs.
+A molecule that have participated in a fusion must not interfere
+with fusion at different compartments or channels.
+%
+Therefore, the molecule must be inactive in appropriate compartments.
 %
 The activity of molecules is regulated by the other molecules, i.e.,
 the presence and absence of the other molecule in a compartment or
@@ -64,9 +64,7 @@ We call this regulation as {\em activity functions}.
 % Defending our model
 %
 In the VTS model, we assume that the system is in study state and
-the concentrations of the molecules do not change over time.
-%
-Therefore, the system only has aspects of a network or a graph.
+the concentrations of the molecules in the compartments do not change over time.
 %
 We model the system as a labelled graph, where compartments are nodes and
 transport channels are edges.
@@ -87,7 +85,7 @@ We call this property of VTS as {\em stability}.
 %
 Although the VTSs are important, our understanding of VTSs are partial.
 %
-It largely means patch work of wet experiments~\cite{model} for
+It largely means the patch work of wet experiments~\cite{model} for
 identifying the compartments, channels, molecules, their activity, and
 regulatory control.
 %
@@ -96,66 +94,58 @@ Often the information is scattered around in several publications.
 Even after with some effort we may collate all the known information about
 a VTS, we may still have unknown pieces of the system.
 %
-The search for the unknown pieces may be {\em assisted} by computation on
+%{Speculative: Make a case for completing partial parts of VTSs!!}
+%
+For example, we may suspect that some edges are missing in a VTS that
+does not satisfy the stability condition.
+%
+The synthesis for the unknown pieces may be {\em assisted} by computation on
 the graph model of VTSs.
 %
-For example, we suspect that some edges are missing from the graph, since
-we expect the must satisfy stability.
+
+In this paper, we consider several versions of the synthesis problem
+involving different parts of VTSs that can be synthesized, such as
+modifying labels, adding/deleting edges, learning activity functions,
+and adding nodes.
 %
-Due the combinatorial nature of graphs, the search space is huge and often
-hard to enumerate naively.
-%
-We need specialized methods to perform the search.
-
-%
-We may translate the problem into a synthesis question, in which 
-we have a partial system  and a given property that
-the system needs to satisfy.
-%
-The synthesis method completes the system such that the property
-is satisfied by it.
-%
-
-
-In synthesis, we may have a partial
-
-\ashu{Make a case for expected properties!!}
-Furthermore, it is a matter of debate what properties the VTSs should
-have, such as stability, i.e., every chemical that is leaving a
-compartment comes back.
-
-
-\ashu{Speculative: Make a case for completing partial parts of VTSs!!}
-
-The constraints discussed on the VTSs that allow a VTS to be feasible
-are combinatorial in nature, for example stability or 3-connectedness.
-%
-The problem of synthesizing parts of a VTS that are unobserved such that 
-the modified VTS 
-
-It is appropriate that we translate 
-We turn the problem of synthesizing parts of 
-%
-We consider several versions of the synthesis problem involving different
-parts of VTSs that can be synthesized, such as modifying labels,
-adding/deleting edges, learning activity functions, and adding nodes.
+We also consider variation on the properties against which we do synthesis,
+namely stability, and $k$-connectedness that states
+that VTS remains connected after removing any $k-1$ edges.
 %
 In order to synthesize the parts of a VTS such that it satisfies the
 constraints, we encode the synthesis problem into a satisfiability of
-QBF with uninterpreted Boolean functions. 
+quantified Boolean formulas(QBFs). 
+%
 
+We have implemented the encoding in a highly flexible tool,
+which can handle a wide range of synthesis query.
+%
+We have applied our tool on two found-in-nature VTSs, namely
+M1~\cite{} and S1~\cite{}.
+%
+We have also applied our tool on various synthetic examples to
+demonstrate that our tool scale upto the graph size ??, which
+is the size of typical VTSs in a eukaryotic cell.
 
-Since an available, 
+The following are the contributions of this work:
+\begin{itemize}
+\item We have identified an interesting application of
+  the synthesis technology.
+\item We have developed encoding of the synthesis problem in QBF.
+\item A user friendly and scalable tool based on well known SMT solver Z3
+\end{itemize}
 
-on the labels.
-
-
-There are several constraints that limits 
-
-There are several constraints that encode the interaction.
-
-
-The labels on the nodes 
+The rest of the paper is organized as follows.
+%
+In section~\ref{sec:prelim}, we present the graph model of VTSs and encoding of several
+constraints on VTSs.
+%
+In section~\ref{sec:prelim}, we present the synthesis problems and their
+encoding into QBF satisfiability.
+%
+In section~\ref{sec:experiments}, we present our implementation and experimental results.
+%
+We discuss related work in~\ref{sec:related} and conclude in section~\ref{sec:conclusion}.
 
 
 
