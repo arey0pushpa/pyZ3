@@ -49,7 +49,7 @@ z3::expr create_ast () {
 
 // The expression can take any gates. gth gate.
 z3::expr vts::gates( VecExpr& u, z3::expr x, z3::expr y ) {
-//  assert( u.size() == 1 );
+  assert( u.size() == 1 );
 
   //std::cout << "iG list is " << g_list;
   auto g1 = x && y;
