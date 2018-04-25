@@ -1,23 +1,33 @@
-In this section we will present a list of problems that may arise from
-synthesis of VTSs from partial available information.
+In this section, we will present a list of problems that may arise from
+synthesis of VTSs from partial available information
+and our method for completing the missing parts.
 
 \subsection{Problem Statements}
 
+We will assume that we are given a VTS, whose all components
+are not specified.
+%
+Our objective is to find the missing parts.
+%
+The missing information can be in any of these combinations parts of
+VTS. For example existence of some undiscovered edges or nodes, or
+insufficient knowledge about the presence of molecules in some part of
+the VTS (either on the node or on the edge).
+%
+To cover most of the likely variations of this missing information we
+have encoded the following variants of VTS synthesis.
 
-Our objective is to find missing parts of a partially known VTSs.
-%
-We will consider several variations of the problem.
-%
-\begin{itemize}
-\item Learning activity functions
-\item Modifying labels of the nodes and edges
-\item Adding missing edges
-\item Adding
-\end{itemize}
+% % We will consider several variations of the problem.
+% %
+% \begin{itemize}
+% \item Learning activity functions
+% \item Modifying labels of the nodes and edges
+% \item Adding missing edges
+% \item Adding 
+% \end{itemize}
 
 %Types of questions we are trying to solve.
 
-The missing information can be in any of these combinations parts of VTS. For example existence of some undiscovered edges or nodes, or insufficient knowledge about the presence of molecules in some part of the VTS (either on the node or on the edge). To cover most of the likely variations of this missing information we have encoded the following variants of VTS synthesis.
 %
 %
 \begin{enumerate}[label=\Alph*]
@@ -27,7 +37,8 @@ The missing information can be in any of these combinations parts of VTS. For ex
   	\item use available set of molecules.
     \item allow new molecule type to be added.     
   \end{enumerate}        
-\item Learning meaningful activity function. 
+\item Learning meaningful activity functions from a given language of
+  propositional formulas
   \begin{enumerate}
     \item kcnf: low depth circuit.
     \item Boolean gates: And, Or.
@@ -37,14 +48,28 @@ The missing information can be in any of these combinations parts of VTS. For ex
 \item  VTS repair. [Allow both delete and add to the system]
 \end{enumerate}
 
-
 \begin{align}
-  \exists n_{i_k} \, a_{i_k} \, e_{ijqk} \, b_{ijqk} \, p_{k_{k^{-}}} \,  r_{i_j} \, 
-               ( basic_vts_constraints \land  vts\_activity\_constraint \land  given\_vts\_information \land  restriction\_on\_modification )   
+  \exists n, a, e, b, p, r, p,
+  ( \texttt{Consistancy}\land \texttt{ActiveNode} \land 
+  \texttt{ActiveEdge} \land \texttt{GivenCons} \land
+  \texttt{ModifyCons} )   
   \tag{E1}\label{eq:addedge1}
 \end{align}
 
-The basicvtsconstraints and vtsactivityconstraint are same as the previous sections, describing stability of the graph and fusion of the edge into the node and the molecular activity describing the active state of a molecule. The givenvtsinformation is encoded using a front end input language. The user provides the information of the VTS with a partial information using this front end. Our tool then converts these inputs into the constraints over the given VTS. 
+
+% \begin{align}
+%   \exists n_{i_k} \, a_{i_k} \, e_{ijqk} \, b_{ijqk} \, p_{k_{k^{-}}} \,  r_{i_j} \, 
+%                ( basic_vts_constraints \land  vts\_activity\_constraint \land  given\_vts\_information \land  restriction\_on\_modification )   
+%   \tag{E1}\label{eq:addedge1}
+% \end{align}
+
+The basicvtsconstraints and vtsactivityconstraint are same as the
+previous sections, describing stability of the graph and fusion of the
+edge into the node and the molecular activity describing the active
+state of a molecule. The givenvtsinformation is encoded using a front
+end input language. The user provides the information of the VTS with
+a partial information using this front end. Our tool then converts
+these inputs into the constraints over the given VTS. 
 
 We encode the restriction\_on\_modification by putting the constraints on the unassigned edges and edge labels. The constraint of allowing only certain number of addition to the given VTS is encoded as at\_most\_k() function over the unassigned edges and label.
 
