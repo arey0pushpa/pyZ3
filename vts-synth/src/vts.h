@@ -68,7 +68,7 @@ private:
   Vec2Expr d_reach1;
   Vec3Expr drop2;
   Vec2Expr d_reach2;
- 
+
   z3::expr_vector knownEdges;
   z3::expr_vector knownActiveNodes;
   z3::expr_vector knownPresenceEdges;
