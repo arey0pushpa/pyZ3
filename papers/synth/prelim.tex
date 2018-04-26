@@ -179,20 +179,27 @@ via nodes or via edges, but not both.
 \texttt{Consistancy} is the conjunction of all of the above.
 
 \paragraph{Activity functions}
-%
-The following constraints encode that
+We also need to encode that encode that
 the activity of the molecules are controlled by activity functions.
 %
+However, the encoding functions can be given to us many different ways,
+for example as a lookup table, or  a concise Boolean formula.
+%
+In the following constraints, we assume the appropriate encoding is
+used for the functions.
 %
 \begin{align}
 \bigwedge\limits_{i,m} n_{i,m} \limplies a_{i,m} =  \nodef_m (n_{i,1},\dots,n_{i,\mu}) 
 \tag{\texttt{ActiveNode}}\label{eq:anb}\\
-   \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies b_{i,j,q,m} = \edgef_k(e_{i,j,q,1}, .., e_{i,j,q,\mu} )
+   \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu} )
   \tag{\texttt{ActiveEdge}}\label{eq:aeb}
 \end{align}
 %
-Later we will be synthesizing missing activity functions and replace the
-above constraints with parameterized constraints.
+Later we will be synthesizing missing activity functions and 
+replace the above constraints with parameterized constraints that
+encode a space of candidate functions.
+
+\subsection{VTS properties}
 
 For synthesis of incomplete systems,
 we need properties properties against which we synthesize the missing parts.
@@ -211,12 +218,13 @@ We use $m$-reachability to encode the stability condition in VTSs.
 The following constraint recursively encodes that node $j$ is $m$-reachable from node $i$ in less than $p$ steps.
 %
 Subsequently, we encode stability condition using the reachability variables.
-\begin{align}
-  \bigwedge\limits_{\mathclap{i,j,m,p}} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
-  \tag{R1}\label{eq:reach1}\\
- \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,\nu}
-  \tag{R2}\label{eq:reach2}
-\end{align}
+\begin{align*}
+  \texttt{paths}(r) &= \bigwedge\limits_{\mathclap{i,j,m,p}} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
+  \\
+  \texttt{loop}(r) &= \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,\nu}
+  \\
+  \texttt{stability} &= \exists r. \; \texttt{paths}(r) \land \texttt{loop}(r)
+\end{align*}
 
 \paragraph{$k$-connected property}
 %
@@ -249,19 +257,21 @@ other node.
   \texttt{Drop}(d,k) = & 
   \bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \land 
   \sum_{i,j,q} d_{i,j,q} = k-1\\
-  \texttt{Reach}(d,r') = &
+  \texttt{ReachAbove}(d,r') = &
   \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}_{i,j}\\
+  \texttt{ReachBelow}(d,r') = &
+   \bigwedge\limits_{i,j}  r^{\prime}_{i,j} \limplies [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ]\\
   \texttt{Connected}(r') = & \Land\limits_{i,j} (r^{\prime}_{i,j} \lor r^{\prime}_{j,i})
 \end{align*}
 We will be synthesizing for both connected any disconnected graphs.
 %
 We also define the following macros. 
 \begin{align*}
-  \texttt{Connectedness}(k) = & \forall d.\;
-          (\texttt{Drop}(d,k) \limplies \exists r'.\;\texttt{Reach}(d,r')
+  \texttt{Connected}(k) = & \forall d.\;
+          (\texttt{Drop}(d,k) \limplies \exists r'.\;\texttt{ReachBelow}(d,r')
                                 \land \texttt{Connected}(r'))\\
-  \texttt{Disconnectedness}(k) = & \exists d.\;
-          (\texttt{Drop}(d,k) \land \exists r'.\;\texttt{Reach}(d,r')
+  \texttt{Disconnected}(k) = & \exists d.\;
+          (\texttt{Drop}(d,k) \land \exists r'.\;\texttt{ReachAbove}(d,r')
                                 \land \lnot \texttt{Connected}(r'))
 \end{align*}
 Since the free variables in $\texttt{Connectedness}(k)$ are universally

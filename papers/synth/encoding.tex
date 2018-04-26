@@ -48,13 +48,56 @@ have encoded the following variants of VTS synthesis.
 \item  VTS repair. [Allow both delete and add to the system]
 \end{enumerate}
 
+
+\subsection{Encoding Incomplete VTS}
+
+In our synthesis algorithm, we take a VTS $G =
+(\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ as input.
+%
+We allow activity functions not to be specified, i.e., vectors
+$\edgef$ and $\nodef$ may contain uninterpreted Boolean functions.
+%
+We construct the following constraints to encode the available information
+about $G$.
+%
+\begin{align*}
+  \texttt{KnownE} &= \land \{e_{i,j,q,m}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land q \leq q' \land m \in M_q \}\\
+  \texttt{KnownN} &= \land \{n_{i,m}| m \in \nlabel(i) \land i \in \nodes \}\\
+  \texttt{KnownP} &= \land \{p_{i,j}| (i,j) \in \pairs \} \\
+  \texttt{KnownActiveN} &= \land \{ a_{i,m} = \nodef_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is defined.} \} \\
+  \texttt{KnownActiveE} &= \land \{ b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
+                   | \edgef_m \text{ is defined.} \} \\
+  \texttt{KnownCons} & = \texttt{KnownE} \land \texttt{KnownN} \land 
+                      \texttt{KnownP} \land \texttt{KnownActiveE} \land \texttt{KnownActiveN}
+\end{align*}
+We will do synthesis against the following property that says the VTS is stable and  3-connected,
+but not 4-connected.
+%
+The property is designed to balance the search space such that the synthesis procedure does not
+succeed with simply adding too many edges. 
+%
+\begin{align*}
+  \texttt{Property} =  \texttt{Stability} \land \texttt{Connected}(3) \land \texttt{DisConnected}(4)
+\end{align*}
+
+
+Now we will consider the constraints for synthesis for the above
+listed problems.
+\begin{align*}
+  \texttt{UnknownE} &= \{e_{i,j,q}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land 
+                      q' < q \leq \pi \}\\
+  \texttt{SynthE} &= \Sigma \texttt{UnknownE} \leq 3 \\
+\end{align*}
+
+
 \begin{align}
-  \exists n, a, e, b, p, r, p,
-  ( \texttt{Consistancy}\land \texttt{ActiveNode} \land 
-  \texttt{ActiveEdge} \land \texttt{GivenCons} \land
-  \texttt{ModifyCons} )   
+  \exists n, a, e, b, p
+  ( \texttt{Consistancy}\land \texttt{Property} \land
+  \texttt{KnownCons} \land \texttt{SynthCons} )
   \tag{E1}\label{eq:addedge1}
 \end{align}
+
+
 
 
 % \begin{align}
@@ -63,15 +106,18 @@ have encoded the following variants of VTS synthesis.
 %   \tag{E1}\label{eq:addedge1}
 % \end{align}
 
-The basicvtsconstraints and vtsactivityconstraint are same as the
-previous sections, describing stability of the graph and fusion of the
-edge into the node and the molecular activity describing the active
-state of a molecule. The givenvtsinformation is encoded using a front
-end input language. The user provides the information of the VTS with
-a partial information using this front end. Our tool then converts
-these inputs into the constraints over the given VTS. 
+% The basicvtsconstraints and vtsactivityconstraint are same as the
+% previous sections, describing stability of the graph and fusion of the
+% edge into the node and the molecular activity describing the active
+% state of a molecule.The givenvtsinformation is encoded using a front
+% end input language. The user provides the information of the VTS with
+% a partial information using this front end. Our tool then converts
+% these inputs into the constraints over the given VTS. 
 
-We encode the restriction\_on\_modification by putting the constraints on the unassigned edges and edge labels. The constraint of allowing only certain number of addition to the given VTS is encoded as at\_most\_k() function over the unassigned edges and label.
+We encode the restriction\_on\_modification by putting the constraints
+on the unassigned edges and edge labels. The constraint of allowing
+only certain number of addition to the given VTS is encoded as
+at\_most\_k() function over the unassigned edges and label.
 
 \begin{align}
     constraint on edge = atmost\_k\_allowed ( unassigned edges in VTS )    
