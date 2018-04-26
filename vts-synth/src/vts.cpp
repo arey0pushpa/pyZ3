@@ -98,17 +98,14 @@ void vts::add_known_node( unsigned n,
 }
 
 void vts::add_known_pairing( unsigned m1, unsigned m2 ) {
-  
+    knownPairingMatrix.push_back( pairing_m[m1][m2] );
   /*
-  //for ( unsigned i = 0; i < mols.size(); i++ ) {
-   knownPairingMatrix.push_back( pairing_m[m1][m2] );
-  }
   std::vector < std::tuple <unsigned, unsigned> > knownPairingTuple;
   knownPairingTuple.push_back ( std::make_tuple( m1, m2 ) );
   std::sort(begin(knownPairingTuple), end(knownPairingTuple), TupleCompare<0>()); 
   */
-  
 }
+
 void vts::add_known_activity_node_function( unsigned m, z3::expr f ) {
   
 }
