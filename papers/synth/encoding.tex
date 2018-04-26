@@ -31,7 +31,7 @@ have encoded the following variants of VTS synthesis.
 %
 %
 \begin{enumerate}[label=\Alph*]
-\item  Add new edges to the given VTS to achieve graph stability, fusion and k connected. 
+\item  Add new edges to the given VTS to achieve k-connectivity, graph stability and fusion. 
 \item  Modify the flow of molecules on the nodes and on the edges.
   \begin{enumerate}
   	\item use available set of molecules.
@@ -45,7 +45,7 @@ have encoded the following variants of VTS synthesis.
     \item Boolean gates with linear combination.  
     \end{enumerate}        
   % - Function dependence with var occurring once.
-\item  VTS repair. [Allow both delete and add to the system]
+\item  VTS repair. Allow both delete and add to the system.
 \end{enumerate}
 
 \begin{align}
@@ -63,21 +63,34 @@ have encoded the following variants of VTS synthesis.
 %   \tag{E1}\label{eq:addedge1}
 % \end{align}
 
-The basicvtsconstraints and vtsactivityconstraint are same as the
-previous sections, describing stability of the graph and fusion of the
+%The basicvtsconstraints and vtsactivityconstraint are same as the
+The \texttt{Consistancy} describing stability of the graph and fusion of the
 edge into the node and the molecular activity describing the active
-state of a molecule. The givenvtsinformation is encoded using a front
+state of a molecule. The \texttt{GivenCons} is encoded using a front
 end input language. The user provides the information of the VTS with
 a partial information using this front end. Our tool then converts
 these inputs into the constraints over the given VTS. 
 
-We encode the restriction\_on\_modification by putting the constraints on the unassigned edges and edge labels. The constraint of allowing only certain number of addition to the given VTS is encoded as at\_most\_k() function over the unassigned edges and label.
+We encode the \texttt{ModifyCons} by putting the constraints on the unassigned edges and edge labels. The constraint of allowing only certain number of addition to the given VTS is encoded as \texttt{AtMostK} function over the unassigned edges and label.
+
+%\[Unassigned Edges\]}
+%\[Unassigned Activity Labels\]} 
+%\[Unassigned Molecule Labels\]
+\begin{align}
+   \texttt{EdgeConstraint} = \texttt{AtMostk} \, [ \texttt{unassigned\_edges} ]  
+   \tag{E2}\label{eq:addedge2}
+\end{align}
+\begin{align}
+   \texttt{EdgeActivity} = \texttt{AtMostK} \, [ \texttt{activity\_labels} ]
+   \tag{E3}\label{eq:addedge3}
+\end{align}
 
 \begin{align}
-    constraint on edge = atmost\_k\_allowed ( unassigned edges in VTS )    
-    constraints of the molecular activity on the edge = at\_most\_k ( unassigned activity labels in VTS edges )
-    constraints of the molecule presence on the edge = at\_most\_k ( unassigned molecule labels in VTS edges )\label{eq:addedge2}
+   \texttt{EdgePresence} = \texttt{AtMostK} \, [ \texttt{unassigned\_molecule\_labels} ]  
+   \tag{E4}\label{eq:addedge4}
 \end{align}
+
+
 
 Put \ref{eq:addedge2} in symbolic form and explain it in a couple of lines.
 
@@ -87,25 +100,26 @@ In order to decrease the search space we do not allow any modification in the no
 %    auto fixVar0 = ! z3::mk_or ( openN )  && ! z3::mk_or ( openActiveN );
 
 \begin{align}
- \exists e_{ijq} ( connectivity\_constraint && self\_edge\_restriction && \ref{eq:addedge1} )    
-  \tag{E1}\label{eq:addedge2}
+  \exists i, j, q \,
+  ( \texttt{KConnectivity}  \land \texttt{NoSelfEdge} \land \ref{eq:addedge1} )    
+  \tag{E5}\label{eq:addedge5}
 \end{align}
 
 
-The connectivity\_constraint \&\& self\_edge\_restriction are same as the previous sections, describing the graph to be a k but not k+1 connected and self edges are not allowed in the VTS. addedge1 is the constraint of \ref{eq:addedge1}.
+The \texttt{KConnectivity} and \texttt{NoSelfEdge} are same as the previous section, describing the graph to be a k but not k+1 connected and self edges are not allowed in the VTS. addedge1 is the constraint of \ref{eq:addedge1}.
 
 %{i,j,m,p} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
 
     
-    auto addConstraints = edgeC \&\& edgeActivityC \&\& edgePresenceC  \&\& fixVar0;
+ %   auto addConstraints = edgeC \&\& edgeActivityC \&\& edgePresenceC  \&\& fixVar0;
 
-    auto qvtsCons = exists( setN, 
-                    exists( setActiveN, 
-                    exists( setPresenceE,  
-                    exists( setActiveE, 
-                    exists( setPairingM, 
-                    exists( setReach, 
-                            vtsCons \&\& vtsActivity \&\& inputCons \&\& addConstraints ))))));   
+% %   auto qvtsCons = exists( setN, 
+%                    exists( setActiveN, 
+%                    exists( setPresenceE,  
+%                    exists( setActiveE, 
+%                    exists( setPairingM, 
+%                    exists( setReach, 
+%                            vtsCons \&\& vtsActivity \&\& inputCons \&\& addConstraints ))))));   
 
  
 \subsection{Encoding molecules presence}
