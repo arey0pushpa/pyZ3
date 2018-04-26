@@ -8,6 +8,20 @@
 #include <ostream>
 #include <sstream>
 
+#include <vector>
+// #include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+
+inline std::vector<std::string> get_coordinates ( std::string text, bool splitOnUnder ) {
+  std::vector<std::string> results;
+  if ( splitOnUnder == false ) {
+    boost::split(results, text, [](char c){ return c == '['; });
+  } else {
+    boost::split(results, text, [](char c){ return c == '_'; });
+  }
+  return results;
+}
+
 class vts_exception : public std::runtime_error
 {
 public:

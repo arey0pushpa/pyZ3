@@ -24,12 +24,22 @@ public:
        unsigned _M, unsigned _N, unsigned _Q, model_version _V, unsigned _C, unsigned _D )
     : ctx(_ctx), M(_M), N(_N), E_arity(_Q),
       V(_V), C(_C), D(_D),
-      knownEdges(_ctx),
+      knownNodes( _ctx ),
       knownActiveNodes( _ctx),
+      knownEdges(_ctx),
       knownPresenceEdges( _ctx ),
       knownActiveEdges( _ctx ),
-      knownNodes( _ctx ),
       knownPairingMatrix( _ctx )
+      
+      /** vector version *
+      knownNodesTuple(),
+      knownActiveNodesTuple(),
+      knownEdgesTuple(),
+      knownPresenceEdgesTuple(),
+      knownActiveEdgesTuple(),
+      knownPairingMatrixTuple()
+      */
+      
   {
     init_vts();
   }
@@ -69,13 +79,23 @@ private:
   Vec3Expr drop2;
   Vec2Expr d_reach2;
 
-  z3::expr_vector knownEdges;
+  /* 
+  // Tuple version
+  Tup2Expr knownNodesTuple;
+  Tup2Expr knownActiveNodesTuple;
+  Tup3Expr knownEdgesTuple;
+  Tup4Expr knownPresenceEdgesTuple;
+  Tup4SignedExpr knownActiveEdgesTuple;
+  Tup2Expr knownPairingMatrixTuple;
+  */
+  
+  z3::expr_vector knownNodes; 
   z3::expr_vector knownActiveNodes;
+  z3::expr_vector knownEdges;
   z3::expr_vector knownPresenceEdges;
   z3::expr_vector knownActiveEdges;
-  z3::expr_vector knownNodes;
   z3::expr_vector knownPairingMatrix;
-
+  
   //flat version of variables
   // VecExpr flat_nodes;
   // VecExpr flat_active_node;
@@ -83,9 +103,6 @@ private:
   // VecExpr flat_edges;
   // VecExpr flat_presence_edge;
   // VecExpr flat_active_edge;
-
-
-
   // Vec3Expr dump2;
 
   //constraints
@@ -200,6 +217,7 @@ public:
   void print_denotation_console ( std::map<std::string,int> denotation_map, int  synthVar );
   void create_map ( z3::context& c, std::map<std::string,int>& denotation_map, std::string& depqbfRun, Tup3Expr& nodeT, Tup3Expr& activeNodeT, Tup3Expr& edgeT, Tup4Expr& presenceEdgeT, Tup4Expr& activeEdgeT, VecsExpr qs  );
   //bool equality_check( z3::expr_vector fixZ, z3::expr var );
+  //std::vector<std::string> get_coordinates ( std::string text, bool splitOnUnder );
 
   /** Build constraint and model **/
   void use_z3_qbf_solver ( z3::expr cons );
