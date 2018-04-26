@@ -300,7 +300,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr_vector listPairingM = pairing_m_list(); 
   z3::expr_vector listReach = reach_list();
   
- 
   z3::expr knownVarConstraint( ctx );
 
   /*
@@ -353,14 +352,14 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
   // 1. Add edge to achieve graph stability and k connected. 
   if ( variation == 1 ) {   
-    //auto edgeC = ! at_least_four ( unknownE );
-    //auto edgeActivityC = ! at_least_three ( unknownActiveE );
-    //auto edgePresenceC = ! at_least_three ( unknownPresenceE );
+    auto edgeC = ! at_least_four ( unknownE );
+    auto edgeActivityC = ! at_least_three ( unknownActiveE );
+    auto edgePresenceC = ! at_least_three ( unknownPresenceE );
     
     // Fix rest of them to zero.
-    //auto setUnknownVariablesFalse = ! z3::mk_or ( unknownN )  && ! z3::mk_or ( unknownActiveN );
+   // auto setUnknownVariablesFalse = ! z3::mk_or ( unknownN )  && ! z3::mk_or ( unknownActiveN );
     
-    //auto addConstraints = edgeC && edgeActivityC && edgePresenceC  && setUnknownVariablesFalse;
+    auto addConstraints = edgeC && edgeActivityC && edgePresenceC;
 
     auto qvtsCons = exists( listN, 
                     exists( listActiveN, 
@@ -369,7 +368,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listPairingM, 
                     exists( listReach, 
                             vtsCons && vtsActivity && knownVarConstraint ))))));   
-                    //       vtsCons && vtsActivity && inputCons && addConstraints ))))));   
 
     auto cons = exists( listE, 
                         qvtsCons && V5 && kConnCons ); 
@@ -380,13 +378,13 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   // 2. Add flow of molecules to fix fusion. 
   else if ( variation == 2 )  {
     
-    //auto edgeActivityC = ! at_least_three ( unknownActiveE );
-    //auto edgePresenceC = ! at_least_three ( unknownPresenceE );
+    auto edgeActivityC = ! at_least_three ( unknownActiveE );
+    auto edgePresenceC = ! at_least_three ( unknownPresenceE );
 
 //    auto setUnknownVariablesFalse = ! z3::mk_or ( unknownN )  && ! z3::mk_or ( unknownActiveN ) && !z3::mk_or ( unknownE );
     //auto setUnknownVariablesFalse =  ! z3::mk_or ( unknownActiveN ) && !z3::mk_or ( unknownE );
     
-    //auto addConstraints = edgeActivityC && edgePresenceC;
+    auto addConstraints = edgeActivityC && edgePresenceC;
     
     // fix rest of them to 0.
     z3::expr qvtsCons = exists( listN, 
@@ -395,7 +393,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                         exists( listPairingM, 
                         exists( listReach, 
                                 vtsCons && vtsActivity && knownVarConstraint )))));
-                              //  vtsCons && vtsActivity && addConstraints )))));
 
     auto cons = exists( listPresenceE, 
                 exists( listE, 
@@ -427,6 +424,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                                  cnfCons && vtsCons && knownVarConstraint )))))) ;
 
     std::cout << "The added constraints is " << knownVarConstraint << "\n";
+  
     z3::expr cons = exists( listSvar, 
                     exists( listTvar, 
                     exists( listE, 
@@ -463,7 +461,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     auto listUvar = flattern3d ( gate_selector_var_node, M, noOfgates, gateTypes, false );
     auto listVvar = flattern3d ( gate_selector_var_edge, M, noOfgates, gateTypes, false ); 
     
-    z3::expr gateCons = logic_gates ( node_parameter_var, edge_parameter_var, gate_selector_var_node, gate_selector_var_edge );
+    z3::expr gateCons = logic_gates( node_parameter_var, edge_parameter_var, gate_selector_var_node, gate_selector_var_edge );
     
     z3::expr funcGate  = exists( listN, 
                          exists( listActiveN, 

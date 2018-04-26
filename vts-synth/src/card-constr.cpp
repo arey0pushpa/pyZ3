@@ -118,6 +118,10 @@ z3::expr_vector vts::flattern4d ( Vec4Expr& dump, unsigned s1, unsigned s2, unsi
 // At least 1
 z3::expr vts::at_least_one ( VecExpr dump ) {
   unsigned L = dump.size(); 
+  if ( L < 1 ) {
+    return ctx.bool_val(false);
+   // return false;
+   }
   z3::expr_vector ls(ctx);
   for ( unsigned i = 0; i < L; i++ ) {
     ls.push_back( dump [i] );
@@ -130,8 +134,8 @@ z3::expr vts::at_least_two ( VecExpr dump ) {
   unsigned L = dump.size(); 
   z3::expr_vector ls(ctx);
   if ( L < 2 ) {
-    std::cout << "Less than 2 vectors: at_least_two Not possible";
-    exit(0);
+    return ctx.bool_val(false);
+   // return false;
   }
   for ( unsigned i = 0; i < L-1; i++ ) {
     for ( unsigned j = i+1; j < L; j++) {
@@ -145,8 +149,8 @@ z3::expr vts::at_least_two ( VecExpr dump ) {
 z3::expr vts::at_least_three ( VecExpr dump ) {
   unsigned L = dump.size(); 
   if ( L < 3 ) {
-    std::cout << "Less than 3 vectors: at_least_three Not possible";
-    exit(0);
+    return ctx.bool_val(false);
+    //return false;
   }
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
@@ -166,8 +170,8 @@ z3::expr vts::at_least_three ( VecExpr dump ) {
 z3::expr vts::at_least_four ( VecExpr dump ) {
   unsigned L = dump.size(); 
   if ( L < 4 ) {
-    std::cout << "Less than 4 vectors: at_least_four Not possible";
-    exit(0);
+    return ctx.bool_val(false);
+    //return false;
   }
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
@@ -191,8 +195,8 @@ z3::expr vts::at_least_four ( VecExpr dump ) {
 z3::expr vts::at_least_five ( VecExpr dump ) {
   unsigned L = dump.size(); 
   if ( L < 5 ) {
-    std::cout << "Less than 4 vectors: at_least_five Not possible";
-    exit(0);
+    return ctx.bool_val(false);
+    //return false;
   }
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
@@ -230,6 +234,10 @@ z3::expr vts::at_least_one ( z3::expr_vector dump ) {
 z3::expr vts::at_least_two ( z3::expr_vector dump ) {
 
   unsigned L = dump.size(); 
+  if ( L < 2 ) {
+    return ctx.bool_val(false);
+    //return false;
+  }
   z3::expr_vector ls(ctx);
 
   for ( unsigned i = 0; i < L-1; i++ ) {
@@ -245,6 +253,10 @@ z3::expr vts::at_least_two ( z3::expr_vector dump ) {
 z3::expr vts::at_least_three ( z3::expr_vector dump ) { 
 
   unsigned L = dump.size(); 
+  if ( L < 3 ) {
+    return ctx.bool_val(false);
+    //return true;
+  }
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
  
@@ -263,6 +275,10 @@ z3::expr vts::at_least_three ( z3::expr_vector dump ) {
 // At least 4. 
 z3::expr vts::at_least_four ( z3::expr_vector dump ) {
   unsigned L = dump.size(); 
+  if ( L < 4 ) {
+    return ctx.bool_val(false);
+    //return false;
+  }
 
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
