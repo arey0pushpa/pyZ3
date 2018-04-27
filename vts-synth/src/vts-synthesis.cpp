@@ -271,15 +271,16 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
   z3::expr V5 = no_self_edges();
   
-  z3::expr inputCons = ctx.bool_val(true);
+  //z3::expr inputCons = ctx.bool_val(true);
 
-  /** Known and Unknown Bit variables */
+  /** Known and Unknown Bit variables 
   z3::expr_vector knownNodes( ctx );
   z3::expr_vector knownActiveNodes( ctx );
   z3::expr_vector knownEdges( ctx );
   z3::expr_vector knownPresenceEdges ( ctx );
   z3::expr_vector knownActiveEdges( ctx );
   z3::expr_vector knownPairingMatrix( ctx );
+  */
   
   z3::expr_vector unknownN( ctx );
   z3::expr_vector unknownActiveN( ctx );
@@ -342,6 +343,13 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                               && z3::mk_and( knownActiveEdges ) 
                               && z3::mk_and( knownNodes ) 
                               && z3::mk_and( knownPairingMatrix ); 
+  
+    /*
+    for( unsigned i = 0; i < knownNodes.size(); i++  ) {
+      std::cout << "Nodes is " << knownNodes[i] << "\n" ;
+    }
+    */
+
   }  
 
   // 1. Add edge to achieve graph stability and k connected. 
@@ -421,21 +429,25 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     z3::expr cons = exists( listSvar, 
                     exists( listTvar, 
                     exists( listE, 
-                            kConnCons && V5 && inputCons && func3cnf )));
+                            kConnCons && V5 && func3cnf )));
     return cons;
   }
   else if ( variation == 4 ) {
-    unsigned gateTypes = 2;
+    // For gateType == 2 using only 1 place. so use fakegateType
+    // unsigned gateTypes = 2; 
+    unsigned fakeGateType = 1;
     unsigned noOfgates = 3;
+    unsigned noOfLeaves = 4;
     //Populate xtra var node_parameter_var : var for node function 
     // [Molecules, Total M molecule to pick, Picking options: All molecules + True + False ]
-    popl3 ( node_parameter_var, M, M, (2 * M) + 2, "s" );
+    popl3 ( node_parameter_var, M, noOfLeaves, (2 * M) + 2, "s" );
     // Populate xtra var edge_parameter_var : var for edge function 
-    popl3 ( edge_parameter_var, M, M, (2 * M) + 2, "t" );
+    popl3 ( edge_parameter_var, M, noOfLeaves, (2 * M) + 2, "t" );
+
     // Populate parameter var [ Molecules , No.Of gate to pick ]
-    popl3 ( gate_selector_var_node, M, noOfgates, gateTypes, "u" );
+    popl3 ( gate_selector_var_node, M, noOfgates, fakeGateType, "u" );
     // Populate parameter var
-    popl3 ( gate_selector_var_edge, M, noOfgates, gateTypes, "v" );
+    popl3 ( gate_selector_var_edge, M, noOfgates, fakeGateType, "v" );
     
     auto setUnknownVariablesFalse =  !z3::mk_or( unknownN )  
                  && !z3::mk_or( unknownActiveN ) 
@@ -445,12 +457,13 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     // Boolean gates  function 
 
-    auto listSvar = flattern3d ( node_parameter_var, M, M, 2*M + 2, false );
-    auto listTvar = flattern3d ( edge_parameter_var, M, M, 2*M + 2, false );
-    auto listUvar = flattern3d ( gate_selector_var_node, M, noOfgates, gateTypes, false );
-    auto listVvar = flattern3d ( gate_selector_var_edge, M, noOfgates, gateTypes, false ); 
+    auto listSvar = flattern3d ( node_parameter_var, M, noOfLeaves, 2*M + 2, false );
+    auto listTvar = flattern3d ( edge_parameter_var, M, noOfLeaves, 2*M + 2, false );
+    auto listUvar = flattern3d ( gate_selector_var_node, M, noOfgates, fakeGateType, false );
+    auto listVvar = flattern3d ( gate_selector_var_edge, M, noOfgates, fakeGateType, false ); 
     
     z3::expr gateCons = logic_gates( node_parameter_var, edge_parameter_var, gate_selector_var_node, gate_selector_var_edge );
+   // std::cout << gateCons << "\n";
     
     z3::expr funcGate  = exists( listN, 
                          exists( listActiveN, 
