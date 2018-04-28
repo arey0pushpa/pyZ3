@@ -165,8 +165,8 @@ void vts::print_graph( z3::context& c, std::string filename,
         auto y = std::get<1>( i ); 
         auto q = std::get<2>( i ); 
         auto k = std::get<3>( i ); 
-        //std::cout << " [ " << x << ", " << y << ", " << q << ", " << k << " ]\n";  
-        std::cout << " Indside active [ " << x << ", " << y <<  ", " << k << " ]\n";  
+        std::cout << "Active molecule: [ " << x << ", " << y << ", " << q << ", " << k << " ]\n";  
+      //  std::cout << " Inside active [ " << x << ", " << y <<  ", " << k << " ]\n";  
 
         if ( q == 0 ) {
           color = "green";

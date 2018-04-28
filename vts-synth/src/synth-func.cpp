@@ -106,7 +106,7 @@ void print_func_cnf ( unsigned M, int D, std::vector < std::vector< std::vector 
       std::string depth_var;
       for ( unsigned k1 = 0; k1 < M; k1++ ) {
         if ( k1 == k ) continue;
-        auto var = func_arg[k][k1][d]; 
+        auto var = func_arg[k][d][k1]; 
         if ( var == 1 ) 
           dVar_update ( k1, M, depth_var, true, false );
         else if ( var == -1 ) 
@@ -134,8 +134,8 @@ void final_map ( unsigned noOfMolecules, unsigned arg2, unsigned arg3,
   // Take care of neg case of a var 
   for ( unsigned i = 0; i < noOfMolecules; i++ ) {
     for ( unsigned j = 0; j < arg2; j++ ) { 
-      if ( synthVar == 3 && i == j ) continue; 
       for ( unsigned k = 0; k < arg3; k++ ) { 
+      if ( synthVar == 3 && i == k ) continue; 
         // Case for true and false 2M ++:
         if ( synthVar == 4 && k >= noOfMolecules ) {
           if ( tVarStr[i][j][k+noOfMolecules] == 1) {
@@ -149,7 +149,7 @@ void final_map ( unsigned noOfMolecules, unsigned arg2, unsigned arg3,
         
         if ( tVarStr[i][j][k] == 1 ) { 
             func_arg[i][j][k] = 1;
-        } else if ( (synthVar == 3 && tVarStr[i][j+noOfMolecules][k] == 1) ||
+        } else if ( (synthVar == 3 && tVarStr[i][j][k+noOfMolecules] == 1) ||
                ( synthVar == 4 && tVarStr[i][j][k+noOfMolecules] == 1 ) ) {  
             func_arg[i][j][k] = -1;
           }else {
@@ -180,8 +180,8 @@ void model_map_3 ( std::vector < std::vector< std::vector <int> > >& wVarStr,
   auto coord = get_coordinates( fst, true );
   //std::cout << "The passed variable is : " << fst << "\n";
   auto func_mol = std::stoi( coord[1] );
-  auto dept_mol = std::stoi( coord[2] );
-  auto depth_id = std::stoi( coord[3] );
+  auto depth_id = std::stoi( coord[2] );
+  auto dept_mol = std::stoi( coord[3] );
   
   //std::cout << "[" << func_mol << ", " << dept_mol << ", " << depth_id << "] -> " <<  snd << "\n\n"; 
   if ( snd > 0 ) {
@@ -193,14 +193,14 @@ void model_map_3 ( std::vector < std::vector< std::vector <int> > >& wVarStr,
     std::cout << "Value is " <<  snd << "\n"; 
     */
     if ( synthVar != 3 || func_mol != dept_mol ) {
-      wVarStr[func_mol][dept_mol][depth_id] = 1;
+      wVarStr[func_mol][depth_id][dept_mol] = 1;
     }
   } else {
     //std::cout << fst << "\n";
     //std::cout << snd << "\n";
     // Maping from depqbf model to new variables.
     if ( synthVar != 3 || func_mol != dept_mol ) {
-      wVarStr[func_mol][dept_mol][depth_id] = -1;
+      wVarStr[func_mol][depth_id][dept_mol] = -1;
     }
   }
 }
@@ -213,9 +213,9 @@ void vts::print_denotation_console ( std::map<std::string,int> denotation_map, i
     unsigned noOfGates = 3;
 
     std::vector < std::vector< std::vector <int> > > sVarStr( M, 
-                  std::vector< std::vector <int> > ( 2*M, std::vector<int>( D ) ) );
+                  std::vector< std::vector <int> > ( D, std::vector<int>( 2*M ) ) );
     std::vector < std::vector< std::vector <int> > > tVarStr( M, 
-                  std::vector< std::vector <int> > ( 2*M, std::vector<int>( D ) ) );  
+                  std::vector< std::vector <int> > ( D, std::vector<int>( 2*M ) ) );  
 
     std::vector < std::vector< std::vector <int> > > sGVarStr( M, 
                   std::vector< std::vector <int> > ( noOfLeaves, std::vector<int>( (2 * M) + 2 ) ) );
@@ -258,12 +258,16 @@ void vts::print_denotation_console ( std::map<std::string,int> denotation_map, i
    
     if ( synthVar == 3 ) {
       
-      std::vector < std::vector< std::vector <int> > > func_para_n ( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
-      final_map ( M, M, D, sVarStr, func_para_n, false, synthVar );
+      std::vector < std::vector< std::vector <int> > > func_para_n ( M, std::vector< std::vector <int> > ( D, std::vector<int>( M ) ) );
+      //std::vector < std::vector< std::vector <int> > > func_para_n ( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
+      final_map ( M, D, M, sVarStr, func_para_n, false, synthVar );
+      //final_map ( M, M, D, sVarStr, func_para_n, false, synthVar );
       print_func_cnf ( M, D, func_para_n, false );
       
-      std::vector < std::vector< std::vector <int> > > func_para_e ( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
-      final_map ( M, M, D, tVarStr, func_para_e, true, synthVar );
+      std::vector < std::vector< std::vector <int> > > func_para_e ( M, std::vector< std::vector <int> > ( D, std::vector<int>( M ) ) );
+      //std::vector < std::vector< std::vector <int> > > func_para_e ( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
+      final_map ( M, D, M, tVarStr, func_para_e, true, synthVar );
+      //final_map ( M, M, D, tVarStr, func_para_e, true, synthVar );
       print_func_cnf ( M, D, func_para_e, true );
     }
     else if ( synthVar == 4 ){

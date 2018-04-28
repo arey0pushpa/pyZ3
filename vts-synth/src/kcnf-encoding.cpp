@@ -28,19 +28,22 @@ z3::expr vts::literal_cnf ( Vec3Expr s, unsigned i, unsigned k, bool e, unsigned
       if ( k1 == k )  continue;
       
       if ( e == true ) 
-        inner_list.push_back( ( s[k][k1][d] && presence_edge[i][j][q][k1] ) || ( s[k][k1+M][d] && !presence_edge[i][j][q][k1] ) );
+        inner_list.push_back( ( s[k][d][k] && presence_edge[i][j][q][k1] ) || ( s[k][d][k1+M] && !presence_edge[i][j][q][k1] ) );
+        //inner_list.push_back( ( s[k][k1][d] && presence_edge[i][j][q][k1] ) || ( s[k][k1+M][d] && !presence_edge[i][j][q][k1] ) );
       else 
-        inner_list.push_back( ( s[k][k1][d] && nodes[i][k1] ) || ( s[k][k1+M][d] && !nodes[i][k1] ) );
+        inner_list.push_back( ( s[k][d][k1] && nodes[i][k1] ) || ( s[k][d][k1+M] && !nodes[i][k1] ) );
+        //inner_list.push_back( ( s[k][k1][d] && nodes[i][k1] ) || ( s[k][k1+M][d] && !nodes[i][k1] ) );
       
-      cl_list.push_back( s[k][k1][d] );
-      cl_list.push_back( s[k][k1+M][d] );
-      il_list.push_back( !s[k][k1][d] || !s[k][k1+M][d] ) ;
+      cl_list.push_back( s[k][d][k1] );
+      cl_list.push_back( s[k][d][k1+M] );
+      il_list.push_back( !s[k][d][k1] || !s[k][d][k1+M] ) ;
     }
 
     // Exactly three : 3 CNF 
     // auto cConst =  at_least_three ( cl_list) && ! at_least_four( cl_list );
     // To make compuational challenge easy lets fix at_most_one`
-    auto cConst = !at_least_two( cl_list ); 
+    //auto cConst = !at_least_two( cl_list); 
+    auto cConst = !at_least_two( cl_list) && at_least_one( cl_list ); 
     lit_listC.push_back( cConst );
     
     auto iConst = mk_and ( il_list );
@@ -64,8 +67,6 @@ z3::expr vts::node_cnf ( Vec3Expr& node_parameter_var ) {
     for ( unsigned k = 0; k < M; k++ ) {
       auto cnf = (active_node[i][k] == literal_cnf( node_parameter_var, i, k, false ) );
       main_list.push_back ( cnf ); 
-     // std::cout << cnf << "\n";
-      //exit(0);
     }
   }
 

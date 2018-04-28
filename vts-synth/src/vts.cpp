@@ -41,9 +41,9 @@ void vts::add_known_edge( unsigned n1, unsigned n2, unsigned q,
   assert( n2 < N );
   assert( q < E_arity );
 
+  knownEdges.push_back( edges[n1][n2][q] );
   for ( unsigned i = 0; i < mols.size(); i++ ) {
     assert( mols[i] < M );
-    knownEdges.push_back( edges[n1][n2][q] );
     knownPresenceEdges.push_back( presence_edge[n1][n2][q][mols[i]] );
     if( act[i] == 0 ) {
       knownActiveEdges.push_back( !active_edge[n1][n2][q][mols[i]] );
@@ -52,7 +52,6 @@ void vts::add_known_edge( unsigned n1, unsigned n2, unsigned q,
     }
   }
 
-  
   /*
   // Tuple version
   for ( unsigned i = 0; i < mols.size(); i++ ) {
@@ -80,6 +79,7 @@ void vts::add_known_node( unsigned n,
 
   for ( unsigned i = 0; i < mols.size(); i++ ) {
      knownNodes.push_back( nodes[n][mols[i]] );
+    // std::cout << "Added: " << nodes[n][mols[i]] << '\n';
      if( act[i] == 0 ) {
       knownActiveNodes.push_back( !active_node[n][mols[i]] );
     } else if( act[i] == 1 ) {
@@ -407,8 +407,8 @@ z3::expr vts::molecule_presence_require_for_present_edge() {
 // V2: If molecule is active on an edge then it should be present on the edge.
 z3::expr vts::active_molecule_is_present_on_edge() {         //V2
   z3::expr_vector ls(ctx);
-  for( unsigned i = 0 ; i < N; i++ ) {
-    for( unsigned j = 0 ; j < N; j++ ) {
+  for( unsigned i = 0 ; i < N; i++) {
+    for ( unsigned j = 0 ; j < N; j++ ) {
       if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
@@ -769,9 +769,10 @@ z3::expr vts::vts_fusion_constraint () {
 }
 
 z3::expr vts::create_vts_constraint () {
-  auto cons = vts_basic_constraints() && vts_self_edges_constraint()
-                                    && vts_stability_constraint()
-                                    && vts_fusion_constraint();
+// auto cons = vts_basic_constraints() && vts_self_edges_constraint()
+  auto cons = vts_basic_constraints() 
+              && vts_stability_constraint()
+              && vts_fusion_constraint();
   return cons;
 }
 
