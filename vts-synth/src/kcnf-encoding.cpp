@@ -28,10 +28,13 @@ z3::expr vts::literal_cnf ( Vec3Expr s, unsigned i, unsigned k, bool e, unsigned
       if ( k1 == k )  continue;
       
       if ( e == true ) 
-        inner_list.push_back( ( s[k][d][k] && presence_edge[i][j][q][k1] ) || ( s[k][d][k1+M] && !presence_edge[i][j][q][k1] ) );
-        //inner_list.push_back( ( s[k][k1][d] && presence_edge[i][j][q][k1] ) || ( s[k][k1+M][d] && !presence_edge[i][j][q][k1] ) );
+        inner_list.push_back( ( s[k][d][k1] && presence_edge[i][j][q][k1] ) 
+                          || ( s[k][d][k1+M] && !presence_edge[i][j][q][k1] ) );
+        //inner_list.push_back( ( s[k][k1][d] && presence_edge[i][j][q][k1] ) || 
+        //( s[k][k1+M][d] && !presence_edge[i][j][q][k1] ) );
       else 
-        inner_list.push_back( ( s[k][d][k1] && nodes[i][k1] ) || ( s[k][d][k1+M] && !nodes[i][k1] ) );
+        inner_list.push_back( ( s[k][d][k1] && nodes[i][k1] ) 
+                           || ( s[k][d][k1+M] && !nodes[i][k1] ) );
         //inner_list.push_back( ( s[k][k1][d] && nodes[i][k1] ) || ( s[k][k1+M][d] && !nodes[i][k1] ) );
       
       cl_list.push_back( s[k][d][k1] );
