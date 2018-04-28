@@ -61,7 +61,6 @@ z3::expr vts::literal_cnf ( Vec2Expr s, unsigned i, unsigned k, bool e, unsigned
   //std::cout << c2 << '\n';
   //exit(0);
   auto c3 = mk_and( outer_list );
-
   auto constr = c1 && c2 && c3; 
   return constr;
 }
