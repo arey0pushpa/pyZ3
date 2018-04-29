@@ -415,8 +415,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
   // 3. KCnf  4. Cnf with low depth circuit
   else if ( variation == 3 ) {
-    // D: no of clauses
-    unsigned D = 2;
     
     // populate xtra var for node and edge function
     popl3 ( node_parameter_var, M, D, 2 * M, "s" );

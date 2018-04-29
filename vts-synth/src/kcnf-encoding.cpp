@@ -44,7 +44,8 @@ z3::expr vts::literal_cnf ( Vec2Expr s, unsigned i, unsigned k, bool e, unsigned
     // Exactly three : 3 CNF 
     // To make compuational challenge easy lets fix at_most_one`
     // auto cConst =  at_least_three ( cl_list) && ! at_least_four( cl_list );
-    auto cConst = !at_least_two( cl_list) && at_least_one( cl_list ); 
+    auto cConst = !at_least_two( cl_list ); 
+    //auto cConst = !at_least_two( cl_list) && at_least_one( cl_list ); 
     lit_listC.push_back( cConst );
     
     auto iConst = mk_and ( il_list );
