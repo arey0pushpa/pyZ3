@@ -53,6 +53,7 @@ private:
   model_version V;   // Variation
   unsigned   C;     // connectedness
   unsigned D;      // CNF conjunction depth 
+  unsigned L;
 
   void init_vts();
 
@@ -188,7 +189,7 @@ public:
   z3::expr k_connected_graph_constraint ( unsigned K, bool eQuantVar );
 
   /** Cnf encoding constraints **/
-  z3::expr literal_cnf (Vec3Expr s, unsigned i, unsigned k, bool e, unsigned n, unsigned q);
+  z3::expr literal_cnf (Vec2Expr s, unsigned i, unsigned k, bool e, unsigned n, unsigned q);
   z3::expr not_a_function( Vec2Expr& nodes, Vec2Expr& active_node );
   z3::expr cnf_function ( Vec3Expr& p_var, Vec3Expr& s_var );
 

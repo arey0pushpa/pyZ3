@@ -12,6 +12,8 @@
 // #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
 
+#define toDigit(c) (c-'0')
+
 inline std::vector<std::string> get_coordinates ( std::string text, bool splitOnUnder ) {
   std::vector<std::string> results;
   if ( splitOnUnder == false ) {
@@ -20,6 +22,11 @@ inline std::vector<std::string> get_coordinates ( std::string text, bool splitOn
     boost::split(results, text, [](char c){ return c == '_'; });
   }
   return results;
+}
+
+inline std::pair<int, int> getxy (std::string var) {
+  std::pair<int, int> p2( toDigit(var[2]) , toDigit(var[4]) );
+  return p2;
 }
 
 class vts_exception : public std::runtime_error

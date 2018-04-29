@@ -88,7 +88,7 @@ z3::expr_vector vts::flattern2d ( Vec2Expr& dump, unsigned s1, unsigned s2, bool
 }
 
 z3::expr_vector vts::flattern3d ( Vec3Expr& dump, unsigned s1, unsigned s2, unsigned s3, bool eq) {
-  z3::expr_vector  d1(ctx);
+  z3::expr_vector d1(ctx);
   for ( unsigned i = 0; i < s1; i++ ) {
     for( unsigned j = 0 ; j < s2; j++ ) {
       if ( eq == true && j == i) continue;

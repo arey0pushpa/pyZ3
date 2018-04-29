@@ -12,98 +12,139 @@
 
 //#include <boost/algorithm/string.hpp>
 
-#define toDigit(c) (c-'0')
+//#define toDigit(c) (c-'0')
 
-// Get xy 
-std::pair<int, int> getxy (std::string var) {
-  std::pair<int, int> p2( toDigit(var[2]) , toDigit(var[4]) );
-  return p2;
-}
-
-/*
-// Use Boost for delimiter
-std::vector<std::string> vts::get_coordinates ( std::string text ) {
-  std::vector<std::string> results;
-  boost::split(results, text, [](char c){ return c == '_'; });
-  return results;
-}
-*/
-void dVar_update ( unsigned k1, unsigned M, std::string& depth_var, bool lit, bool g ) {
+void dVar_update ( unsigned m, unsigned M, std::string& depth_var, 
+                   unsigned noOfLiterals, unsigned litCount, bool lit, bool gateCase ) {
   std::string var;
   if ( lit == true ) 
     var = "arg";
   else 
     var = "!arg";
     
-  if ( k1 == M-1 || g == true )
-    depth_var = depth_var + var + std::to_string (k1) + " ";
+  //if ( m == M-1 || gateCase == true ) {
+  if ( litCount == noOfLiterals ) {
+    depth_var = depth_var + var + std::to_string (m);
+  }else { 
+    depth_var = depth_var + var + std::to_string (m) + " || ";
+  }
+}
+
+void var_picker ( unsigned m, unsigned M, std::vector<std::string>& chosenVars,
+                   unsigned noOfLiterals, unsigned litCount, bool lit, bool gateCase ) {
+  std::string var;
+  if ( lit == true ) 
+    var = "arg" + std::to_string (m);
   else 
-    depth_var = depth_var + var + std::to_string (k1) + " || ";
+    var = "!arg" + std::to_string (m);
+  chosenVars.push_back( var );
+
 }
 
-void picked_var ( unsigned M, unsigned arg3, unsigned k, unsigned m,
-                      std::vector < std::vector< std::vector <int> > >& func_arg, std::string& depth_var ) {
-  for ( unsigned k1 = 0; k1 < arg3;  k1++ ) {
-        if ( k1 == k ) continue;
-        int var = func_arg[k][m][k1]; 
-        if ( k1 > M ) {
-           if ( var != 1 ) 
-              continue;
-           else {
-             if ( k1 == arg3 - 2 ) 
-               depth_var = depth_var + "true";
-             if ( k1 == arg3 - 1 )
-                depth_var = depth_var + "false";
-          }
-         } else {  
-          if ( var == 1 ) 
-            dVar_update ( k1, M, depth_var, true, true );
-          else if ( var == -1 ) 
-            dVar_update ( k1, M, depth_var, false, true );
-         } 
-      } 
+void chosen_var ( unsigned molecule, unsigned leafVar, unsigned candidateVar, unsigned M,
+                  std::vector < std::vector< std::vector <int> > >& func_arg, 
+                  std::vector<std::string>& chosenVars ) {
+  // m in [0..M+1]
+  
+  unsigned noOfLeaves = 4; 
+  unsigned leafCount = 1;
+  for ( unsigned m = 0; m < candidateVar; m++ ) {
+    auto var = func_arg[molecule][leafVar][m]; 
+    if ( m >= M ) {
+      if( var != 1 ) continue;
+      else {
+        // handle case of conct "true" 
+        if ( m == M ) 
+          chosenVars.push_back( "true" );
+        // handle case of conct "true" 
+        if ( m == M + 1 )
+          chosenVars.push_back( "false" );
+      }
+    } else {  
+      if( var == 1 ) { 
+        leafCount += 1;
+        var_picker ( m, M, chosenVars, noOfLeaves, leafCount, true, true );
+      }
+      else if( var == -1 ) {
+        leafCount += 1;
+        var_picker ( m, M, chosenVars, noOfLeaves, leafCount, false, true );
+      }
+    }
+  }
 }
 
-void chosen_gates ( unsigned noOfGates, unsigned k, unsigned m, 
-                    std::vector < std::vector< std::vector <int> > > wVarStr, std::string& gate_set ) {
-  if ( wVarStr[k][m][0] == 1 ) 
-    gate_set = gate_set + "AND";
-  else if ( wVarStr[k][m][1] == 1 )
-    gate_set = gate_set + "OR";
+void chosen_gates ( unsigned m, unsigned gateNumber, 
+                    std::vector < std::vector< std::vector <int> > > wVarStr, 
+                    std::vector<std::string> chosenGates ) {
+  if ( wVarStr[m][gateNumber][0] == 1 ) 
+    chosenGates.push_back( "AND" );
+  else 
+    chosenGates.push_back( "OR" );
 }  
 
+void print_learned_function ( std::vector<std::string>& chosenVars, 
+                              std::vector<std::string> chosenGates, 
+                              unsigned m, bool edgeVar ) { 
+  unsigned local_leaf_num = 4;
+  unsigned gate_counter = 0;
 
-void print_func_gates ( unsigned arg1, unsigned arg2, unsigned arg3, std::vector < std::vector< std::vector <int> > > func_arg, 
-                                std::vector < std::vector< std::vector <int> > >  tVarStr,
-                                  std::vector < std::vector< std::vector <int> > > uVarStr, bool e ) {
-                                    
-  for ( unsigned k = 0; k < arg1; k ++ )  {
+  while( local_leaf_num > 1 ) {
+    for( unsigned l = 0; l < local_leaf_num; l = l + 2 ) {
+      if( l == local_leaf_num - 1 ) {
+         chosenVars[l>>1] = chosenVars[l];
+      }else{
+         chosenVars[l>>1] =  chosenVars[l] + ' ' + 
+                             chosenGates[gate_counter] + 
+                             ' ' + chosenVars[l+1];
+         gate_counter++;
+      }
+     }
+    local_leaf_num = (local_leaf_num+1) >> 1;
+  }
+  //assert( local_leaf_num == 1);
+  if ( edgeVar == true ) {
+    std::cout << "b_" << std::to_string(m) << " = "  <<  chosenVars[0] << '\n';
+  } else {
+    std::cout << "a_" << std::to_string(m) << " = "  <<  chosenVars[0] << '\n';
+  }
+}
 
+
+void print_func_gates ( unsigned noOfMolecules, unsigned noOfLeaves, unsigned candidateVar, 
+                        std::vector < std::vector< std::vector <int> > > func_arg, 
+                        std::vector < std::vector< std::vector <int> > > uVarStr, bool e ) {    
+  unsigned noOfGates = 3;
+
+  for ( unsigned m = 0; m < noOfMolecules; m ++ )  {
+    std::vector<std::string> chosenVars; 
+    std::vector<std::string> chosenGates; 
+    std::string fVar;
+    std::string fGate;
     std::string f_val;
-
-    unsigned noOfGates = 2;
-    
-    std::string var_set;    
-    std::string gate_set;        
-    
-    for ( unsigned m = 0; m < arg2; m++ ) {
-       if ( m == k ) continue;
-       picked_var ( arg1, arg3, k, m, func_arg, var_set );
+    for ( unsigned l = 0; l < noOfLeaves; l++ ) {
+      chosen_var ( m, l, candidateVar, noOfMolecules, func_arg, chosenVars );
     } 
     
-    for (unsigned g = 0; g < arg1-1; g++ ) {
-        if ( e == true )
-          chosen_gates ( noOfGates, k, g, tVarStr, gate_set );
-        else
-          chosen_gates ( noOfGates, k, g, uVarStr, gate_set );
+    for (unsigned g = 0; g < noOfGates; g++ ) {
+      chosen_gates ( m, g, uVarStr, chosenGates );
+    }
+
+    for ( unsigned i = 0; i < chosenVars.size(); i++ ) {
+      fVar = fVar + chosenVars[i] + " ";
     }
     
-    f_val =  "[" + var_set + "]" + " [ " +  gate_set + " ] ";
-      
-    if ( e != true ) 
-      std::cout <<  "a_fun" + std::to_string (k) << " = " << "func ( " + f_val + " ) \n";
-    else 
-      std::cout <<  "e_fun" + std::to_string (k) << " = " << "func ( " + f_val + " ) \n";
+    for ( unsigned i = 0; i < chosenGates.size(); i++ ) {
+      fGate = fGate + chosenGates[i] + " ";
+    }
+
+     f_val =  "[" + fVar + "]" + " [ " +  fGate + " ] ";
+           
+     if ( e != true ) 
+        std::cout <<  "a_fun" + std::to_string (m) << " = " << "func ( " + f_val + " ) \n";
+     else 
+        std::cout <<  "e_fun" + std::to_string (m) << " = " << "func ( " + f_val + " ) \n";
+
+    //print_learned_function( chosenVars, chosenGates, m, e );
   }
 } 
 
@@ -115,14 +156,21 @@ void print_func_cnf ( unsigned M, int D, std::vector < std::vector< std::vector 
     std::string func_val;
     for ( int d = 0; d < D; d ++ ) {
       std::string depth_var;
+      unsigned noOfLiterals = 1; 
+      unsigned litCount = 0;
       for ( unsigned k1 = 0; k1 < M; k1++ ) {
         if ( k1 == k ) continue;
-        auto var = func_arg[k][k1][d]; 
-        if ( var == 1 ) 
-          dVar_update ( k1, M, depth_var, true, false );
-        else if ( var == -1 ) 
-          dVar_update ( k1, M, depth_var, false, false );
+        auto var = func_arg[k][d][k1]; 
+        if ( var == 1 ) { 
+          litCount += 1;
+          //std::cout << "Literal count is: " << litCount << " noOfLiterals " << noOfLiterals <<'\n'; 
+          dVar_update ( k1, M, depth_var, noOfLiterals, litCount, true, false );
+        } else if ( var == -1 ) { 
+          litCount += 1;
+          //std::cout << "Literal count is: " << litCount << " noOfLiterals " << noOfLiterals <<'\n'; 
+          dVar_update ( k1, M, depth_var, noOfLiterals, litCount, false, false );
         }
+      }
       
       if ( d == D-1 ) 
         func_val = func_val + "[" + depth_var + "]";
@@ -137,36 +185,35 @@ void print_func_cnf ( unsigned M, int D, std::vector < std::vector< std::vector 
   }
 }
 
-void final_map ( unsigned arg1, unsigned arg2, unsigned arg3,
+void final_map ( unsigned noOfMolecules, unsigned arg2, unsigned arg3,
                  std::vector < std::vector< std::vector <int> > >& tVarStr,
                  std::vector < std::vector< std::vector <int> > >& func_arg,  
                  bool e , int synthVar ) {
   // [2M -> M] conversion. Now: mapping [M,M,D]
   // Take care of neg case of a var 
-  for ( unsigned k = 0; k < arg1; k++ ) {
-    for ( unsigned k1 = 0; k1 < arg2; k1++ ) { 
-      if (k == k1 ) continue;
-      for ( unsigned d = 0; d < arg3; d ++ ) {
-        
-        if ( synthVar == 4 && d >= arg1 ) {
-          if ( tVarStr[k][k1][d] == 1) {
-            func_arg[k][k1][d] = 1;
+  for ( unsigned i = 0; i < noOfMolecules; i++ ) {
+    for ( unsigned j = 0; j < arg2; j++ ) { 
+      for ( unsigned k = 0; k < arg3; k++ ) { 
+        if ( synthVar == 3 && i == k ) continue; 
+        // Case for true and false 2M ++:
+        if ( synthVar == 4 && k >= noOfMolecules ) {
+          if ( tVarStr[i][j][k+noOfMolecules] == 1) {
+            func_arg[i][j][k] = 1;
             continue;
           } else {
-            func_arg[k][k1][d] = 0;
+            func_arg[i][j][k] = 0;
             continue;
           }
-        }
-        
-        if ( tVarStr[k][k1][d] == 1 ) { 
-          func_arg[k][k1][d] = 1;
-        } else if ( tVarStr[k][k1+arg1][d] == 1 ) {
-          func_arg[k][k1][d] = -1;
-        } else {
-          func_arg[k][k1][d] = 0;
-        }
+        } 
+        if ( tVarStr[i][j][k] == 1 ) { 
+            func_arg[i][j][k] = 1;
+        } else if ( (synthVar == 3 && tVarStr[i][j][k+noOfMolecules] == 1) ||
+               ( synthVar == 4 && tVarStr[i][j][k+noOfMolecules] == 1 ) ) {  
+            func_arg[i][j][k] = -1;
+          }else {
+            func_arg[i][j][k] = 0;
+          }
       }
-      
     }
   }
 }
@@ -186,40 +233,58 @@ void model_map_2 ( std::vector < std::vector <int> >& tVarStr, std::string fst, 
 }
 */
 
-void model_map_3 ( std::vector < std::vector< std::vector <int> > >& wVarStr, std::string fst, int snd ) {
-  
+void model_map_3 ( std::vector < std::vector< std::vector <int> > >& wVarStr, 
+                   std::string fst, int snd, unsigned synthVar ) { 
   auto coord = get_coordinates( fst, true );
   //std::cout << "The passed variable is : " << fst << "\n";
   auto func_mol = std::stoi( coord[1] );
-  auto dept_mol = std::stoi( coord[2] );
-  auto depth_id = std::stoi( coord[3] );
+  auto depth_id = std::stoi( coord[2] );
+  auto dept_mol = std::stoi( coord[3] );
   
-  std::cout << "[" << func_mol << ", " << dept_mol << ", " << depth_id << "] -> " <<  snd << "\n\n"; 
+  //std::cout << "[" << func_mol << ", " << dept_mol << ", " << depth_id << "] -> " <<  snd << "\n\n"; 
   if ( snd > 0 ) {
     // Maping from depqbf model to new variables.
-    // Mapping with < M, 2M, D > 
-      wVarStr[func_mol][dept_mol][depth_id] = 1;
+    /* Mapping with < M, 2M, D > 
+    std::cout << "m: " << func_mol << '\n';
+    std::cout << "m1: " << dept_mol << '\n'; 
+    std::cout << "d: " << depth_id << '\n';
+    std::cout << "Value is " <<  snd << "\n"; 
+    */
+    if ( synthVar != 3 || func_mol != dept_mol ) {
+      wVarStr[func_mol][depth_id][dept_mol] = 1;
+    }
   } else {
     //std::cout << fst << "\n";
     //std::cout << snd << "\n";
     // Maping from depqbf model to new variables.
-      wVarStr[func_mol][dept_mol][depth_id] = -1;
+    if ( synthVar != 3 || func_mol != dept_mol ) {
+      wVarStr[func_mol][depth_id][dept_mol] = -1;
+    }
   }
 }
  
 void vts::print_denotation_console ( std::map<std::string,int> denotation_map, int synthVar ) {
      
-     std::cout << "Lakan ayenge \n";
-    unsigned typeOfGates = 2;
+    //unsigned typeOfGates = 2;
+    unsigned binaryGateChoice = 1;
     unsigned noOfLeaves = 4;
+    unsigned noOfGates = 3;
 
-    std::vector < std::vector< std::vector <int> > > sVarStr( M, std::vector< std::vector <int> > ( 2*M, std::vector<int>( D ) ) );
-    std::vector < std::vector< std::vector <int> > > tVarStr( M, std::vector< std::vector <int> > ( 2*M, std::vector<int>( D ) ) );  
-    std::vector < std::vector< std::vector <int> > > sGVarStr( M, std::vector< std::vector <int> > ( M, std::vector<int>( (2 * M) + 2 ) ) );
-    std::vector < std::vector< std::vector <int> > > tGVarStr( M, std::vector< std::vector <int> > ( M, std::vector<int>( (2 * M ) + 2 ) ) ); 
-    std::vector < std::vector< std::vector <int> > > uVarStr ( M, std::vector< std::vector <int> > ( noOfLeaves, std::vector<int>( typeOfGates ) ) );
-    std::vector < std::vector< std::vector <int> > > vVarStr ( M, std::vector< std::vector <int> > ( noOfLeaves, std::vector<int>( typeOfGates ) ) );
+    std::vector < std::vector< std::vector <int> > > sVarStr( M, 
+                  std::vector< std::vector <int> > ( D, std::vector<int>( 2*M ) ) );
+    std::vector < std::vector< std::vector <int> > > tVarStr( M, 
+                  std::vector< std::vector <int> > ( D, std::vector<int>( 2*M ) ) );  
+
+    std::vector < std::vector< std::vector <int> > > sGVarStr( M, 
+                  std::vector< std::vector <int> > ( noOfLeaves, std::vector<int>( (2 * M) + 2 ) ) );
+    std::vector < std::vector< std::vector <int> > > tGVarStr( M, 
+                  std::vector< std::vector <int> > ( noOfLeaves, std::vector<int>( (2 * M ) + 2 ) ) ); 
+    std::vector < std::vector< std::vector <int> > > uVarStr ( M, 
+                  std::vector< std::vector <int> > ( noOfGates, std::vector<int>( binaryGateChoice ) ) );
+    std::vector < std::vector< std::vector <int> > > vVarStr ( M, 
+                  std::vector< std::vector <int> > ( noOfGates, std::vector<int>( binaryGateChoice ) ) );
     
+    /** Map model of depqbf to back to var. todo; get the model directly:*/
     for ( auto& dm : denotation_map ) {
       //std::cout << " dm is : [" << dm.first << ", " << dm.second << "]\n\n";
       std::string val;  
@@ -229,48 +294,53 @@ void vts::print_denotation_console ( std::map<std::string,int> denotation_map, i
 
       if ( synthVar == 3 ) {
         if ( dm.first[0] == 't' ) {
-          model_map_3 ( tVarStr, dm.first, dm.second );
+          model_map_3 ( tVarStr, dm.first, dm.second, synthVar );
         } else if ( dm.first[0] == 's' ) {
-          model_map_3 ( sVarStr, dm.first, dm.second );
+          model_map_3 ( sVarStr, dm.first, dm.second, synthVar );
         } 
       }
       
       // In case of synth Var 4 you have to create model-mapping for additioanal var u, v
       if ( synthVar == 4 ) {
         if ( dm.first[0] == 't' ) {
-          // Third parameter describes how many co-ord to pullout  
-          model_map_3 ( tGVarStr, dm.first, dm.second );
+          model_map_3 ( tGVarStr, dm.first, dm.second, synthVar );
         } else if ( dm.first[0] == 's' ) {
-          model_map_3 ( sGVarStr, dm.first, dm.second );
+          model_map_3 ( sGVarStr, dm.first, dm.second, synthVar );
         } else if ( dm.first[0] == 'u' ) {
-          model_map_3 ( uVarStr, dm.first, dm.second );
+          model_map_3 ( uVarStr, dm.first, dm.second, synthVar );
         } else if ( dm.first[0] == 'v' ) {
-          model_map_3 ( vVarStr, dm.first, dm.second );
+          model_map_3 ( vVarStr, dm.first, dm.second, synthVar );
         }
-     }
-     // std::cout << dm.first << "\n";     
+      }
    }
    
     if ( synthVar == 3 ) {
       
-      std::vector < std::vector< std::vector <int> > > func_para_n ( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
-      final_map ( M, M, D, sVarStr, func_para_n, false, synthVar );
+      std::vector < std::vector< std::vector <int> > > func_para_n ( M, std::vector< std::vector <int> > ( D, std::vector<int>( M ) ) );
+      //std::vector < std::vector< std::vector <int> > > func_para_n ( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
+      final_map ( M, D, M, sVarStr, func_para_n, false, synthVar );
+      //final_map ( M, M, D, sVarStr, func_para_n, false, synthVar );
       print_func_cnf ( M, D, func_para_n, false );
       
-      std::vector < std::vector< std::vector <int> > > func_para_e ( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
-      final_map ( M, M, D, tVarStr, func_para_e, true, synthVar );
+      std::vector < std::vector< std::vector <int> > > func_para_e ( M, std::vector< std::vector <int> > ( D, std::vector<int>( M ) ) );
+      //std::vector < std::vector< std::vector <int> > > func_para_e ( M, std::vector< std::vector <int> > ( M, std::vector<int>( D ) ) );
+      final_map ( M, D, M, tVarStr, func_para_e, true, synthVar );
+      //final_map ( M, M, D, tVarStr, func_para_e, true, synthVar );
       print_func_cnf ( M, D, func_para_e, true );
     }
     else if ( synthVar == 4 ){
 
-      std::vector < std::vector< std::vector <int> > > func_para_n ( M, std::vector< std::vector <int> > ( M, std::vector<int>( M + 2 ) ) );
-      final_map ( M, M, M+2, sGVarStr, func_para_n, false, synthVar );
-      // todo check whether noOfgates and gateTypes is required/ 
-      print_func_gates ( M, M, M+2, func_para_n, sGVarStr, uVarStr, false );
+      std::vector < std::vector< std::vector <int> > > func_para_n ( M, 
+                    std::vector< std::vector <int> > ( noOfLeaves, std::vector<int>( M + 2 ) ) );
+      final_map ( M, noOfLeaves, M+2, sGVarStr, func_para_n, false, synthVar );
+      print_func_gates ( M, noOfLeaves, M+2, func_para_n, uVarStr, false );
+      //print_func_gates ( M, noOfLeaves, M+2, func_para_n, sGVarStr, uVarStr, false );
       
-      std::vector < std::vector< std::vector <int> > > func_para_e ( M, std::vector< std::vector <int> > ( M, std::vector<int>( M + 2 ) ) );
-      final_map ( M, M, M+2, tGVarStr, func_para_e, true, synthVar );
-      print_func_gates ( M, M, M+2, func_para_e, tGVarStr, vVarStr, true );
+      std::vector < std::vector< std::vector <int> > > func_para_e ( M, 
+                    std::vector< std::vector <int> > ( noOfLeaves, std::vector<int>( M + 2 ) ) );
+      final_map ( M, noOfLeaves, M+2, tGVarStr, func_para_e, true, synthVar );
+      print_func_gates ( M, noOfLeaves, M+2, func_para_e, vVarStr, true );
+      //print_func_gates ( M, noOfLeaves, M+2, func_para_e, tGVarStr, vVarStr, true );
     }
 }
 

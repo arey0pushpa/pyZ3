@@ -149,7 +149,16 @@ int main(int ac, char* av[])
   vts_ptr v = nullptr;
 
   if( synthVar != 0 ) {
-    if( inputFile == true ) {
+      if( inputFile == true ) {
+      /*
+      unsigned int N = 3;
+      unsigned int M = 14;
+      unsigned int Q = 1;
+      // depth of cnf
+      unsigned int D = 2;
+      v = std::shared_ptr<vts>(new vts(c, M, N, Q, MODEL_4, 3, D ));
+      */
+
       load_vts ld(c, inputFilename[0] ); ld.load();
       v = ld.get_vts();
     } else{
@@ -166,6 +175,7 @@ int main(int ac, char* av[])
     unsigned int Q = 2;
     // depth of cnf
     unsigned int D = 2;
+    //unsigned L = 4;
     v = std::shared_ptr<vts>(new vts(c, M, N, Q, MODEL_4, 3, D ));
   }
   
@@ -182,7 +192,6 @@ int main(int ac, char* av[])
     z3::expr z = c.bool_const("z");
     z3::expr w = c.bool_const("w");
     
-      
     // represent z3 vts formula
     z3::expr f(c);
       
@@ -251,7 +260,7 @@ int main(int ac, char* av[])
     //bool timedout = false;
     std::future<int> future = std::async(std::launch::async, [](){ 
         // if ( flagA == false ) {
-        auto retVal  = system ("cd ./build/depqbf/examples;timeout 222s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
+        auto retVal  = system ("cd ./build/depqbf/examples;timeout 600s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
         // std::cout << retVal << "\n";
         //  } else {
         // auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
@@ -263,7 +272,7 @@ int main(int ac, char* av[])
     //std::cout << "Running depqbf ... " << "\n";
     std::future_status status;
 
-    status = future.wait_for( std::chrono::seconds(222) );
+    status = future.wait_for( std::chrono::seconds(600) );
 
     if ( status == std::future_status::timeout ) { 
       std::cout << "TimeOut! \n";
