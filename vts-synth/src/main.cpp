@@ -150,15 +150,6 @@ int main(int ac, char* av[])
 
   if( synthVar != 0 ) {
       if( inputFile == true ) {
-      /*
-      unsigned int N = 3;
-      unsigned int M = 14;
-      unsigned int Q = 1;
-      // depth of cnf
-      unsigned int D = 2;
-      v = std::shared_ptr<vts>(new vts(c, M, N, Q, MODEL_4, 3, D ));
-      */
-
       load_vts ld(c, inputFilename[0] ); ld.load();
       v = ld.get_vts();
     } else{
