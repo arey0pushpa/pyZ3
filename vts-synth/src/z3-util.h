@@ -31,6 +31,7 @@ typedef std::vector< Vec3Expr > Vec4Expr;
 typedef std::vector< std::tuple<unsigned,unsigned> > Tup2Expr;
 typedef std::vector< std::tuple<unsigned,unsigned,unsigned> > Tup3Expr;
 typedef std::vector< std::tuple<unsigned,unsigned,unsigned,unsigned> > Tup4Expr;
+typedef std::vector< std::tuple<unsigned,unsigned,unsigned,int> > Tup4SignedExpr;
 typedef std::vector< std::tuple<unsigned,unsigned,unsigned,unsigned,unsigned> > Tup5Expr;
 
 // function returns prenex body
@@ -98,6 +99,7 @@ z3::expr parseFormula( z3::context& c, std::string str,
                        const std::vector< std::string >& names );
 
 // Use Boost for delimiter
+
 
 
 #endif

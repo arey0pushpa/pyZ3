@@ -1,7 +1,8 @@
-#include<vts.h>
-#include<z3-util.h>
-#include<algorithm>
-#include<vector>
+#include <vts.h>
+#include <z3-util.h>
+#include <algorithm>
+#include <utils.h>
+
 
 
 /** To do list : 
@@ -140,7 +141,6 @@ z3::expr vts::annotate_plos_graph () {
    * N = 2, M = 6 
    * model 3: Arb on edge, Nothing on node
    */
-
   /** node: n[i][k] : below.  a[i][k] : use Model_3 **/
   // Node 0 : [111 110]  
   z3::expr node_cons = !nodes[0][0] && nodes[0][1] && nodes[0][2] && nodes[0][3] && nodes[0][4] && nodes[0][5]; 
@@ -168,64 +168,39 @@ bool equality_check( z3::expr_vector fixZ, z3::expr var ) {
   return false;
 }
 
+/* /Tuple Version 
+//static z3::expr_vector DEFAULT_VECTOR;
+//static Z3_ast_vector DEFAULT_VECTOR;
 
+static Vec2Expr DEFAULT_2D_XOR;
+static Vec3Expr DEFAULT_3D_XOR;
+static Vec4Expr DEFAULT_4D_XOR;
 
-/*
-void unassigned_2d_bits ( z3::expr_vector& flatternListN,
-                       std::vector < std::tuple <unsigned, unsigned> >& knownTuple,
-                       z3::expr_vector& unassignedVector ) {
-  auto var = knownTuple.begin();
-  for ( unsigned i = 0; i < flatternListN.size(); i++ ) {
-    auto coord = get_coordinates( Z3_ast_to_string(ctx(), flatternListN[i] );
-    if ( var[0] != coord[0] || var[1] != coord[1] ){
-      unassignedVector.push_back( var );
-      // if ( equality_check( fixZ, var ) ) 
-      //  continue;
-    } else 
-      var = std::next(var);
-  }
-}
-
-void unassigned_3d_bits ( z3::expr_vector& flatternListN,
-                       std::vector < std::tuple <unsigned, unsigned, unsigned> >& knownTuple,
-                       z3::expr_vector& unassignedVector ) {
-  auto var = knownTuple.begin();
-  for ( unsigned i = 0; i < flatternListN.size(); i++ ) {
-    auto coord = get_coordinates( Z3_ast_to_string(ctx(), flatternListN[i] );
-    if ( var[0] != coord[0] || var[1] != coord[1] || var[2] != coord[2] ){
-      unassignedVector.push_back( var );
-    } else 
-      var = std::next(var);
-  }
-}
-
-void unassigned_4d_bits ( z3::expr_vector& flatternListN,
-                       std::vector < std::tuple <unsigned, unsigned, unsigned, unsigned> >& knownTuple,
-                       z3::expr_vector& unassignedVector ) {
-  auto var = knownTuple.begin();
-  for ( unsigned i = 0; i < flatternListN.size(); i++ ) {
-    auto coord = get_coordinates( Z3_ast_to_string(ctx(), flatternListN[i] );
-    if ( var[0] != coord[0] || var[1] != coord[1] || var[2] != coord[2] || coord[3] != coord[3] ){
-      unassignedVector.push_back( var );
-    } else 
-      var = std::next(var);
-  }
-}
-*/
-
-/*
+// todo: rewrite 4d ->  using 3d -> using 2d
 void unassigned_2d_bits ( std::vector < std::tuple <unsigned, unsigned> >& knownTuple,
-                          z3::expr_vector& unassignedVector, Vec2Expr& n, unsigned arg1, unsigned arg2 ) {
-    auto var = knownTuple.begin();
-    for ( unsigned i = 0; i < arg1; i++ ) {
-      for ( unsigned j = 0; j < arg2; j++ ) {
-        if ( i != var[0] || j != var[1] ) {
-            unassignedVector.push_back ( n[i][j] );
-        } else {
-          var = std::next(var);
-        } 
-      }
+                          z3::expr_vector& knownVector, z3::expr_vector& unassignedVector, 
+                          Vec2Expr& vec, unsigned arg1, unsigned arg2, bool edgeCase ) { 
+                         // Vec2Expr& xorVec = DEFAULT_2D_XOR, 
+                       //   z3::expr_vector& listVar = {}, bool xorCase ) {
+  auto var = knownTuple.begin();
+  std::cout << "First element is: " << std::get<0> (*var);
+  exit(0);
+  for ( unsigned i = 0; i < arg1; i++ ) {
+    for ( unsigned j = 0; j < arg2; j++ ) {
+      if ( (i == j) && (edgeCase == true) ) continue;
+      if ( i != std::get<0> (*var) || j != std::get<1> (*var) ) {
+        unassignedVector.push_back( vec[i][j] );
+      } else {
+      //  if ( xorCase == false ) { 
+         knownVector.push_back( vec[i][j] );
+      //  } else {
+      //    knownVector.push_back( vec[i][j] ^ xorVec[i][j] );
+        //  listVar.push_back( xorVec[i][j] ); 
+       // }
+        var = std::next(var);
+      } 
     }
+  }
 }
 
 */
@@ -241,34 +216,82 @@ void unassigned_bits ( z3::expr_vector& listZ,
       unknownZ.push_back( var );
   }
 }
+
+Vec2Expr DEFAULT_2V;
+Vec3Expr DEFAULT_3V; 
+Vec4Expr DEFAULT_4V;
+    
+void xor_bits ( z3::context& c,
+                    z3::expr_vector& listZ,
+                    z3::expr_vector& knownZ,
+                    z3::expr_vector& fixKnown,
+                    z3::expr_vector& unknownZ,
+                    z3::expr_vector& xorZ, Vec2Expr& vec2, Vec3Expr& vec3, Vec4Expr& vec4, unsigned seq, unsigned step  ) {
+  for ( unsigned i = 0; i < listZ.size(); i++ ) {
+    auto var = listZ[i];
+    if ( equality_check( knownZ, var ) ) {
+      auto coord = get_coordinates( Z3_ast_to_string(c, var), false );  
+      auto x = std::stoi( coord[0] );
+      auto y = std::stoi( coord[1] );
+      if ( seq == 2 ) {
+        xorZ.push_back( vec2 [x][y] );
+        if (step == 0 || step == 1 || step == 5) {
+          fixKnown.push_back ( (var && !vec2[x][y]) || (!var && vec2[x][y]) );
+        } 
+      } else if ( seq == 3 ) {
+        auto z = std::stoi( coord[2] );
+        xorZ.push_back( vec3 [x][y][z]);
+        if (step == 2 ) {
+          fixKnown.push_back (  (var && !vec3[x][y][z]) || (!var && vec3[x][y][z]) );
+        }
+      } else if ( seq == 4 ) {
+        auto z = std::stoi( coord[2] );
+        auto w = std::stoi( coord[3] );
+        xorZ.push_back( vec4 [x][y][z][w] );
+        if ( step == 3 || step == 4 ) {
+          fixKnown.push_back ( (var && !vec4[x][y][z][w]) || (!var && vec4[x][y][z][w]) );
+        }
+      }else { 
+        continue;
+      }
+    }
+    else { 
+      unknownZ.push_back( var );
+   }                   
+  }
+}
+
+
 z3::expr vts::vts_synthesis ( unsigned variation ) {
   /** Basic Constraints **/
   z3::expr vtsCons = create_vts_constraint();  
-  z3::expr vtsActivity = vts_activity_constraint();
+  z3::expr vtsActivity = vts_activity_constraint(); 
+
+  /** Connectedness Constraints */
+  z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
+  z3::expr V5 = no_self_edges();
   
-  /*
+  z3::expr inputCons = ctx.bool_val(true);
+
+  /** Known and Unknown Bit variables */
   z3::expr_vector knownNodes( ctx );
   z3::expr_vector knownActiveNodes( ctx );
   z3::expr_vector knownEdges( ctx );
   z3::expr_vector knownPresenceEdges ( ctx );
   z3::expr_vector knownActiveEdges( ctx );
-  z3::expr_vector knownPairingP( ctx );
-  */
+  z3::expr_vector knownPairingMatrix( ctx );
+  
   z3::expr_vector unknownN( ctx );
   z3::expr_vector unknownActiveN( ctx );
   z3::expr_vector unknownE( ctx );
   z3::expr_vector unknownPresenceE( ctx );
   z3::expr_vector unknownActiveE( ctx );
+  z3::expr_vector unknownPairingM( ctx );
   
   /** Annotate graph : fix graph known variables **/
   //z3::expr inputCons =  annotate_mukund_graph ( knownNodes, knownActiveNodes, knownEdges, knownPresenceEdges, knownActiveEdges, knownPairingMatrix );
 
-  z3::expr inputCons = ctx.bool_val(true);
-
-  z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
-  z3::expr V5 = no_self_edges();
-
-  
+  /** Flattern all the possible Elemsnts */
   z3::expr_vector listN = node_list();
   z3::expr_vector listActiveN = active_node_list();
   z3::expr_vector listE = edge_list(); 
@@ -277,38 +300,60 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr_vector listPairingM = pairing_m_list(); 
   z3::expr_vector listReach = reach_list();
   
-  
-  unassigned_bits ( listN, knownNodes, unknownN ); 
-  unassigned_bits ( listActiveN, knownActiveNodes, unknownActiveN ); 
-  unassigned_bits ( listE, knownEdges, unknownE ); 
-  unassigned_bits ( listPresenceE, knownPresenceEdges, unknownPresenceE ); 
-  unassigned_bits ( listActiveE, knownActiveEdges, unknownActiveE ); 
-  
-  auto knownVarConstraint =  z3::mk_and( knownEdges ) 
+  z3::expr knownVarConstraint( ctx );
+
+  /*
+  if ( variation != 5 ) {
+    unassigned_2d_bits( knownNodesTuple, knownNodes, unknownN, nodes, N, M, false );    
+    unassigned_2d_bits( knownActiveNodesTuple, knownActiveNodes, 
+                        unknownActiveN, active_node, N, M, false );    
+    unassigned_2d_bits( knownPairingMatrixTuple, knownPairingMatrix, 
+                        unknownPairingM, pairing_m, M, M, true );    
+    
+    unassigned_3d_bits( knownEdgesTuple, knownEdges, unknownE, 
+                        edges, N, N, E_arity, true );    
+   
+    unassigned_4d_bits( knownPresenceEdgesTuple, knownPresenceEdges, 
+                        unknownPresenceE, presence_edge, N, N, E_arity, M, true );  
+    unassigned_4d_bits( knownActiveEdgesTuple, knownActiveEdges, 
+                        unknownActiveE, active_edge, N, N, E_arity, M, true );  
+    
+    knownVarConstraint =  z3::mk_and( knownEdges ) 
                               && z3::mk_and( knownActiveNodes ) 
                               && z3::mk_and( knownPresenceEdges )
                               && z3::mk_and( knownActiveEdges ) 
                               && z3::mk_and( knownNodes ) 
-                              && z3::mk_and( knownPairingMatrix );
+                              && z3::mk_and( knownPairingMatrix ); 
+  }
+  */                          
+   
 
+   if ( variation != 5 ) {
+    
+    unassigned_bits ( listN, knownNodes, unknownN ); 
+    unassigned_bits ( listActiveN, knownActiveNodes, unknownActiveN ); 
+    unassigned_bits ( listE, knownEdges, unknownE ); 
+    unassigned_bits ( listPresenceE, knownPresenceEdges, unknownPresenceE ); 
+    unassigned_bits ( listActiveE, knownActiveEdges, unknownActiveE ); 
   
-  /*
-  for ( unsigned i = 0; i < unknownN.size(); i++ ) {
-    std::cout << "unknown var is : " << unknownN[i] << "\n";
-  } 
-  * */
-  //exit(0);
+    knownVarConstraint =  z3::mk_and( knownEdges ) 
+                              && z3::mk_and( knownActiveNodes ) 
+                              && z3::mk_and( knownPresenceEdges )
+                              && z3::mk_and( knownActiveEdges ) 
+                              && z3::mk_and( knownNodes ) 
+                              && z3::mk_and( knownPairingMatrix ); 
+  }  
 
   // 1. Add edge to achieve graph stability and k connected. 
   if ( variation == 1 ) {   
-    //auto edgeC = ! at_least_four ( unknownE );
-    //auto edgeActivityC = ! at_least_three ( unknownActiveE );
-    //auto edgePresenceC = ! at_least_three ( unknownPresenceE );
+    auto edgeC = ! at_least_four ( unknownE );
+    auto edgeActivityC = ! at_least_three ( unknownActiveE );
+    auto edgePresenceC = ! at_least_three ( unknownPresenceE );
     
     // Fix rest of them to zero.
-    //auto setUnknownVariablesFalse = ! z3::mk_or ( unknownN )  && ! z3::mk_or ( unknownActiveN );
+    auto setUnknownVariablesFalse = ! z3::mk_or ( unknownN )  && ! z3::mk_or ( unknownActiveN );
     
-    //auto addConstraints = edgeC && edgeActivityC && edgePresenceC  && setUnknownVariablesFalse;
+    auto addConstraints = edgeC && edgeActivityC && edgePresenceC;
 
     auto qvtsCons = exists( listN, 
                     exists( listActiveN, 
@@ -317,7 +362,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listPairingM, 
                     exists( listReach, 
                             vtsCons && vtsActivity && knownVarConstraint ))))));   
-                    //       vtsCons && vtsActivity && inputCons && addConstraints ))))));   
 
     auto cons = exists( listE, 
                         qvtsCons && V5 && kConnCons ); 
@@ -328,13 +372,12 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   // 2. Add flow of molecules to fix fusion. 
   else if ( variation == 2 )  {
     
-    //auto edgeActivityC = ! at_least_three ( unknownActiveE );
-    //auto edgePresenceC = ! at_least_three ( unknownPresenceE );
+    auto edgeActivityC = ! at_least_three ( unknownActiveE );
+    auto edgePresenceC = ! at_least_three ( unknownPresenceE );
 
-//    auto setUnknownVariablesFalse = ! z3::mk_or ( unknownN )  && ! z3::mk_or ( unknownActiveN ) && !z3::mk_or ( unknownE );
-    //auto setUnknownVariablesFalse =  ! z3::mk_or ( unknownActiveN ) && !z3::mk_or ( unknownE );
+    auto setUnknownVariablesFalse =  ! z3::mk_or ( unknownActiveN ) && !z3::mk_or ( unknownE );
     
-    //auto addConstraints = edgeActivityC && edgePresenceC;
+    auto addConstraints = edgeActivityC && edgePresenceC;
     
     // fix rest of them to 0.
     z3::expr qvtsCons = exists( listN, 
@@ -343,7 +386,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                         exists( listPairingM, 
                         exists( listReach, 
                                 vtsCons && vtsActivity && knownVarConstraint )))));
-                              //  vtsCons && vtsActivity && addConstraints )))));
 
     auto cons = exists( listPresenceE, 
                 exists( listE, 
@@ -359,12 +401,12 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     popl3 ( node_parameter_var, M, 2 * M, D, "s" );
     // Populate xtra var t_var : var for node function 
     popl3 ( edge_parameter_var, M, 2 * M, D, "t" );
+    
     // [3]: N-CNF function 
     auto listSvar = flattern3d ( node_parameter_var, M, 2*M, D, false );
     auto listTvar = flattern3d ( edge_parameter_var, M, 2*M, D, false );
 
     z3::expr cnfCons = cnf_function( node_parameter_var, edge_parameter_var );
-    //std::cout << "\nI'm ona highway to hell \n";
 
     z3::expr func3cnf  = exists( listN, 
                          exists( listActiveN, 
@@ -375,12 +417,11 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                                  cnfCons && vtsCons && knownVarConstraint )))))) ;
 
     std::cout << "The added constraints is " << knownVarConstraint << "\n";
+  
     z3::expr cons = exists( listSvar, 
                     exists( listTvar, 
                     exists( listE, 
-                         //   kConnCons && V5 && func3cnf )));
                             kConnCons && V5 && inputCons && func3cnf )));
-//
     return cons;
   }
   else if ( variation == 4 ) {
@@ -396,13 +437,11 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     // Populate parameter var
     popl3 ( gate_selector_var_edge, M, noOfgates, gateTypes, "v" );
     
-    /*
     auto setUnknownVariablesFalse =  !z3::mk_or( unknownN )  
                  && !z3::mk_or( unknownActiveN ) 
                  && !z3::mk_or( unknownE )
                  && !z3::mk_or( unknownPresenceE )
                  && !z3::mk_or( unknownActiveE );
-   */
 
     // Boolean gates  function 
 
@@ -411,7 +450,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     auto listUvar = flattern3d ( gate_selector_var_node, M, noOfgates, gateTypes, false );
     auto listVvar = flattern3d ( gate_selector_var_edge, M, noOfgates, gateTypes, false ); 
     
-    z3::expr gateCons = logic_gates ( node_parameter_var, edge_parameter_var, gate_selector_var_node, gate_selector_var_edge );
+    z3::expr gateCons = logic_gates( node_parameter_var, edge_parameter_var, gate_selector_var_node, gate_selector_var_edge );
     
     z3::expr funcGate  = exists( listN, 
                          exists( listActiveN, 
@@ -427,7 +466,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listVvar, 
                     exists( listE, 
                             kConnCons && V5 && funcGate )))));
-                            //kConnCons && V5 && funcGate && inputCons )))));
 
     return cons;
 
@@ -439,10 +477,18 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     Vec4Expr xorPresenceEdges;
     Vec4Expr xorActiveEdges;
     Vec2Expr xorPairingMatrix;
+    
+    // use special expr_vector to avoid additional flatterning.
+    // Create flattening while call to unassigned bits
+    z3::expr_vector listXorN( ctx );
+    z3::expr_vector listXorActiveN( ctx );
+    z3::expr_vector listXorPairingM( ctx );
+    z3::expr_vector listXorE( ctx );
+    z3::expr_vector listXorPresenceE( ctx );
+    z3::expr_vector listXorActiveE( ctx );
 
-    // Add deletion logic
     // Populate edges: e(i,j,q)
-    popl3( xorEdges, N, N, E_arity, "xz" );
+    popl3( xorEdges, N, N, E_arity, "xz" ); 
 
     // Populate nodes: n(i,j)
     popl2 ( xorNodes, N, M, "xn" );
@@ -458,31 +504,111 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     // Populate pairing_m(k,k1)
     popl2 ( xorPairingMatrix, M, M, "xp" );
-  
-    //xorknownVarConstraint =        
+
+    Vec2Expr vec2;
+    Vec3Expr vec3; 
+    Vec4Expr vec4;
+    
+    z3::expr_vector xorknownN (ctx);
+    z3::expr_vector xorknownActiveN(ctx);
+    z3::expr_vector xorknownE(ctx);
+    z3::expr_vector xorknownPresenceE(ctx);
+    z3::expr_vector xorknownActiveE(ctx);
+    z3::expr_vector xorknownPairingM(ctx);
+    
+    xor_bits ( ctx, listN, knownNodes, xorknownN, unknownN, 
+               listXorN, xorNodes, vec3, vec4, 2, 0 ); 
+    xor_bits ( ctx, listActiveN, knownActiveNodes, xorknownActiveN, unknownActiveN, 
+              listXorActiveN, xorActiveNodes, vec3, vec4, 2, 1); 
+    xor_bits ( ctx, listE, knownEdges, xorknownE,  unknownE, 
+               listXorE, vec2, xorEdges, vec4, 3, 2 ); 
+    xor_bits ( ctx, listPresenceE, knownPresenceEdges, xorknownPresenceE, unknownPresenceE, 
+               listXorPresenceE, vec2, vec3, xorPresenceEdges, 4, 3 ); 
+    xor_bits ( ctx, listActiveE, knownActiveEdges, xorknownActiveE, unknownActiveE, 
+               listXorActiveE, vec2, vec3, xorActiveEdges, 4, 4 );
+
+    //xor_bits ( ctx, listPairingM, knownPairingMatrix, xorknownPairingM, unknownPairingM,
+    //          listXorPairingM, xorPairingMatrix, vec3, vec4, 2, 5 );
+    
+    knownVarConstraint =  z3::mk_and( xorknownN ) 
+                              && z3::mk_and( xorknownActiveN ) 
+                              && z3::mk_and( xorknownE )
+                              && z3::mk_and( xorknownPresenceE ) 
+                              && z3::mk_and( xorknownActiveE ) 
+                              && z3::mk_and( knownPairingMatrix ); 
+                              
+    /* deletion restriction
+    auto xadd_node_C = !at_least_three( listXorN );
+    auto xadd_active_node_C = !at_least_three ( listXorActiveN );
+    auto xadd_edge_C = !at_least_three( listXorE );
+    auto xadd_p_edge_C = !at_least_three( listXorPresenceE );
+    auto xadd_a_edge_C = !at_least_three( listXorActiveN );
+    
+    z3::expr delCons = xadd_node_C && xadd_active_node_C && xadd_edge_C && xadd_p_edge_C && xadd_a_edge_C;    
+    */
+    //z3::expr xorCons = knownVarConstraint && delCons; 
+    z3::expr xorCons = knownVarConstraint; 
+
+    /* Tuple version 
+    unassigned_2d_bits( knownNodesTuple, knownNodes, unknownN, nodes, N, M, false, xorNodes, listXorN );    
+    unassigned_2d_bits( knownActiveNodesTuple, knownActiveNodes, unknownActiveN, active_node, N, M, false, xorActiveNodes, listActiveN );    
+    unassigned_2d_bits( knownPairingMatrixTuple, knownPairingMatrix, unknownPairingM, pairing_m, M, M, true, xorPairingMatrix, listPairingM );    
+    
+    unassigned_3d_bits( knownEdgesTuple, knownEdges, unknownE, edges, N, N, E_arity, true, xorEdges, listE );    
+   
+    unassigned_4d_bits( knownPresenceEdgesTuple, knownPresenceEdges, unknownPresenceE, presence_edge, N, N, E_arity, M, true, xorPresenceEdges, listPresenceE );  
+    unassigned_4d_bits( knownActiveEdgesTuple, knownActiveEdges, unknownActiveE, active_edge, N, N, E_arity, M, true, xorActiveEdges, listActiveE );  
+   
+    // todo :: fix this.
+    knownVarConstraint =  z3::mk_and( knownEdges ) 
+                              && z3::mk_and( knownActiveNodes ) 
+                              && z3::mk_and( knownPresenceEdges )
+                              && z3::mk_and( knownActiveEdges ) 
+                              && z3::mk_and( knownNodes ) 
+                              && z3::mk_and( knownPairingMatrix ); 
+
+    auto x_node_C = !at_least_three( listXorN );
+    auto x_active_nodeC = !at_least_three ( listXorActiveN );
+    auto x_edge_C = !at_least_three( listXorE );
+    auto x_p_edgeC = !at_least_three( listXorPresenceE );
+    auto x_a_edgeC = !at_least_three( listXorActiveN );
+
+    z3::expr delCons = x_node_C && x_active_nodeC && x_edge_C && x_p_edgeC && x_a_edgeC;
+    z3::expr xorCons = knownVarConstraint && delCons; 
+    */   
+    
+    // Addition with restriction.
+    /*
     auto nodeC = ! at_least_three ( unknownN );
     auto nodeActivityC = ! at_least_two ( unknownActiveE );     
     auto edgeC = ! at_least_three ( unknownE );
     auto edgeActivityC = ! at_least_two ( unknownActiveE );
     auto edgePresenceC = ! at_least_two ( unknownPresenceE );
-    
-    // Fix rest of them to zero.
-    auto setUnknownVariablesFalse = !z3::mk_or( unknownN )  && !z3::mk_or( unknownActiveN ); 
-    auto inputConstraints = knownVarConstraint && edgeC && edgeActivityC && edgePresenceC  && setUnknownVariablesFalse;
 
-
+    z3::expr addCons = nodeC && nodeActivityC && edgeC && edgeActivityC && edgePresenceC;
+    */
+     
     auto qvtsCons = exists( listN, 
                     exists( listActiveN, 
                     exists( listPresenceE,  
                     exists( listActiveE, 
                     exists( listPairingM, 
                     exists( listReach, 
-                            vtsCons && vtsActivity && inputConstraints ))))));   
+                            vtsCons ))))));   
 
+/*
+ * exists( listXorN,
+                exists( listXorActiveN,
+                exists( listXorPairingM,
+                exists( listXorE,
+                exists( listXorPresenceE,
+                exists( listXorActiveE,
+ */
     auto cons = exists( listE, 
-                        qvtsCons && V5 && kConnCons ); 
+                 V5 && kConnCons && xorCons );
     return cons;
     
+  // return qvtsCons;
   } else {
     return ctx.bool_val(true);
   }

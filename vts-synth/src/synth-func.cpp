@@ -8,6 +8,7 @@
 #include <map>
 #include <tuple>
 #include <algorithm>
+#include <utils.h>
 
 //#include <boost/algorithm/string.hpp>
 
@@ -19,11 +20,6 @@ std::pair<int, int> getxy (std::string var) {
   return p2;
 }
 
-std::vector<std::string> get_coordinates ( std::string text ) {
-  std::vector<std::string> results;
-  boost::split(results, text, [](char c){ return c == '_'; });
-  return results;
-}
 /*
 // Use Boost for delimiter
 std::vector<std::string> vts::get_coordinates ( std::string text ) {
@@ -192,7 +188,7 @@ void model_map_2 ( std::vector < std::vector <int> >& tVarStr, std::string fst, 
 
 void model_map_3 ( std::vector < std::vector< std::vector <int> > >& wVarStr, std::string fst, int snd ) {
   
-  auto coord = get_coordinates( fst );
+  auto coord = get_coordinates( fst, true );
   //std::cout << "The passed variable is : " << fst << "\n";
   auto func_mol = std::stoi( coord[1] );
   auto dept_mol = std::stoi( coord[2] );
@@ -269,6 +265,7 @@ void vts::print_denotation_console ( std::map<std::string,int> denotation_map, i
 
       std::vector < std::vector< std::vector <int> > > func_para_n ( M, std::vector< std::vector <int> > ( M, std::vector<int>( M + 2 ) ) );
       final_map ( M, M, M+2, sGVarStr, func_para_n, false, synthVar );
+      // todo check whether noOfgates and gateTypes is required/ 
       print_func_gates ( M, M, M+2, func_para_n, sGVarStr, uVarStr, false );
       
       std::vector < std::vector< std::vector <int> > > func_para_e ( M, std::vector< std::vector <int> > ( M, std::vector<int>( M + 2 ) ) );
@@ -352,7 +349,7 @@ void vts::create_map ( z3::context& c, std::map<std::string,int>& denotation_map
         }
 
         else if ( var[0] == 'e' && var[1] == '_' && lit > 0 ) {
-          auto coord = get_coordinates( var );
+          auto coord = get_coordinates( var, true );
           x = std::stoi( coord[1] );
           y = std::stoi( coord[2] );
           q = std::stoi( coord[3] );
@@ -361,7 +358,7 @@ void vts::create_map ( z3::context& c, std::map<std::string,int>& denotation_map
         }
 
         else if ( var[0] == 'b' && var[1] == '_' && lit > 0 ) {
-          auto coord = get_coordinates( var );
+          auto coord = get_coordinates( var, true );
           x = std::stoi( coord[1] );
           y = std::stoi( coord[2] );
           q = std::stoi( coord[3] );

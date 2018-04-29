@@ -242,7 +242,7 @@ z3::expr vts::node_gate_fml ( Vec3Expr& chooseVars, Vec3Expr& chooseGates ) {
   return cons;
 }
 
-z3::expr vts::edge_gate_fml ( Vec3Expr& t, Vec3Expr& v ) {
+z3::expr vts::edge_gate_fml ( Vec3Expr& chooseVars, Vec3Expr& chooseGates ) {
   z3::expr_vector e_list(ctx);
  
   for( unsigned i = 0 ; i < N; i++ ) {
@@ -250,10 +250,8 @@ z3::expr vts::edge_gate_fml ( Vec3Expr& t, Vec3Expr& v ) {
       if ( i == j )  continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned k = 0; k < M; k++ ) {
-
-          auto efml = build_rhs_fml ( t[k], v[k], i, k, true, j, q );
+          auto efml = build_rhs_fml ( chooseVars[k], chooseGates[k], i, k, true, j, q );
           auto fml = ( active_edge[i][j][q][k] == efml ); 
-
           e_list.push_back ( fml );
         }
       }
