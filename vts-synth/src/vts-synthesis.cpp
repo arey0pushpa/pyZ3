@@ -477,7 +477,13 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                          exists( listActiveE, 
                          exists( listPairingM, 
                          exists( listReach, 
-                                 gateCons && vtsCons && knownVarConstraint && setUnknownVariablesFalse ))))));
+                                 gateCons
+                                 &&
+                                 vtsCons
+                                 &&
+                                 knownVarConstraint
+                                 && setUnknownVariablesFalse
+                                 ))))));
 
     z3::expr cons = exists( listSvar, 
                     exists( listTvar, 
@@ -485,6 +491,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listVvar, 
                     exists( listE, 
                             kConnCons && V5 && funcGate )))));
+
                             
     /** The query to ask                         
     z3::expr cons = exists( listSvar, 
