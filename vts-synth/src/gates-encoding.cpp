@@ -55,11 +55,11 @@ z3::expr vts::var_fml ( VecExpr& chooseVar, unsigned i, unsigned m, bool e,
     il_list.push_back( !chooseVar[m1] || !chooseVar[m1+M] ) ;
   }
 
-  ls.push_back( chooseVar[2*M] && ctx.bool_val(true) );
-  ls.push_back( chooseVar[(2*M) + 1] && ctx.bool_val(false) );
+  //ls.push_back( chooseVar[2*M] && ctx.bool_val(true) );
+  //ls.push_back( chooseVar[(2*M) + 1] && ctx.bool_val(false) );
+  ls.push_back( chooseVar[2*M] && true );
+  ls.push_back( chooseVar[(2*M) + 1] && false );
   
-  //ls.push_back( chooseVar[2*M] && true );
-  //ls.push_back( chooseVar[(2*M) + 1] && false );
   cl_list.push_back( chooseVar[2*M] );
   cl_list.push_back( chooseVar[(2*M) + 1] );
 
@@ -102,7 +102,8 @@ z3::expr vts::build_rhs_fml ( Vec2Expr& chooseVars, Vec2Expr& chooseGates,
  
   while( local_leaf_num > 1 ) {
     for( unsigned l = 0; l < local_leaf_num; l = l + 2 ) {
-      if( l == leaf_number - 1 ) {
+      if( l == local_leaf_num - 1 ) {
+      //if( l == leaf_number - 1 ) {
         n_list[l>>1] = n_list[l];
       }else{
         n_list[l>>1] = gates( chooseGates[gateVar],

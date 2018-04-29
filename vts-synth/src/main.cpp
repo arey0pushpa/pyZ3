@@ -175,6 +175,7 @@ int main(int ac, char* av[])
     unsigned int Q = 2;
     // depth of cnf
     unsigned int D = 2;
+    //unsigned L = 4;
     v = std::shared_ptr<vts>(new vts(c, M, N, Q, MODEL_4, 3, D ));
   }
   

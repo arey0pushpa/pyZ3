@@ -42,11 +42,9 @@ z3::expr vts::literal_cnf ( Vec2Expr s, unsigned i, unsigned k, bool e, unsigned
     }
 
     // Exactly three : 3 CNF 
-    // auto cConst =  at_least_three ( cl_list) && ! at_least_four( cl_list );
     // To make compuational challenge easy lets fix at_most_one`
-    //auto cConst = !at_least_two( cl_list); 
-    auto cConst = !at_least_two( cl_list); 
-    //auto cConst = !at_least_two( cl_list) && at_least_one( cl_list ); 
+    // auto cConst =  at_least_three ( cl_list) && ! at_least_four( cl_list );
+    auto cConst = !at_least_two( cl_list) && at_least_one( cl_list ); 
     lit_listC.push_back( cConst );
     
     auto iConst = mk_and ( il_list );
@@ -58,10 +56,10 @@ z3::expr vts::literal_cnf ( Vec2Expr s, unsigned i, unsigned k, bool e, unsigned
 
   auto c1 = mk_and( lit_listI );
   auto c2 = mk_and( lit_listC );
-  //std::cout << c2 << '\n';
-  //exit(0);
   auto c3 = mk_and( outer_list );
+  
   auto constr = c1 && c2 && c3; 
+  
   return constr;
 }
 
@@ -91,7 +89,6 @@ z3::expr vts::edge_cnf ( Vec3Expr& edge_parameter_var ) {
       if ( i == j )  continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned k = 0; k < M; k++ ) { 
-          //z3::expr_vector outer_list(ctx);
           auto cnf =  ( active_edge[i][j][q][k] == literal_cnf( edge_parameter_var[k], i, k, true, j, q ) ) ;  
           main_list.push_back ( cnf ); 
         }

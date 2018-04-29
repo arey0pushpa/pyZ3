@@ -53,6 +53,7 @@ private:
   model_version V;   // Variation
   unsigned   C;     // connectedness
   unsigned D;      // CNF conjunction depth 
+  unsigned L;
 
   void init_vts();
 
