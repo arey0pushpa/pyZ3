@@ -24,16 +24,18 @@ z3::expr vts::literal_cnf ( Vec2Expr s, unsigned i, unsigned k, bool e, unsigned
     z3::expr_vector cl_list(ctx);
     z3::expr_vector inner_list(ctx);
     
+    //std::cout << "value of k is :" << k << "\n";
     for ( unsigned k1 = 0; k1 < M; k1++ ) {
       if ( k1 == k )  continue;
       
       if ( e == true ) { 
         inner_list.push_back( ( s[d][k1] && presence_edge[i][j][q][k1] ) 
                           || ( s[d][k1+M] && !presence_edge[i][j][q][k1] ) );
-      }
-      else { 
+      } else { 
         inner_list.push_back( ( s[d][k1] && nodes[i][k1] ) 
                            || ( s[d][k1+M] && !nodes[i][k1] ) );
+      //std::cout << "value of k1 is: " << k1 << "\n" ; 
+      //std::cout << "Interested var is: " << s[d][k1] << " and " << s[d][k1+M] << "\n";
       }
       
       cl_list.push_back( s[d][k1] );
@@ -45,6 +47,8 @@ z3::expr vts::literal_cnf ( Vec2Expr s, unsigned i, unsigned k, bool e, unsigned
     // To make compuational challenge easy lets fix at_most_one`
     // auto cConst =  at_least_three ( cl_list) && ! at_least_four( cl_list );
     auto cConst = !at_least_two( cl_list ); 
+    //std::cout << cConst << "\n";
+    //exit(0);
     //auto cConst = !at_least_two( cl_list) && at_least_one( cl_list ); 
     lit_listC.push_back( cConst );
     

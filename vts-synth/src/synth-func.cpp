@@ -23,7 +23,7 @@ void dVar_update ( unsigned m, unsigned M, std::string& depth_var,
     var = "!arg";
     
   //if ( m == M-1 || gateCase == true ) {
-  if ( litCount == noOfLiterals ) {
+  if ( litCount == noOfLiterals || gateCase == true ) {
     depth_var = depth_var + var + std::to_string (m);
   }else { 
     depth_var = depth_var + var + std::to_string (m) + " || ";
@@ -74,8 +74,8 @@ void chosen_var ( unsigned molecule, unsigned leafVar, unsigned candidateVar, un
 }
 
 void chosen_gates ( unsigned m, unsigned gateNumber, 
-                    std::vector < std::vector< std::vector <int> > > wVarStr, 
-                    std::vector<std::string> chosenGates ) {
+                    std::vector < std::vector< std::vector <int> > >& wVarStr, 
+                    std::vector<std::string>& chosenGates ) {
   if ( wVarStr[m][gateNumber][0] == 1 ) 
     chosenGates.push_back( "AND" );
   else 
@@ -108,7 +108,6 @@ void print_learned_function ( std::vector<std::string>& chosenVars,
     std::cout << "a_" << std::to_string(m) << " = "  <<  chosenVars[0] << '\n';
   }
 }
-
 
 void print_func_gates ( unsigned noOfMolecules, unsigned noOfLeaves, unsigned candidateVar, 
                         std::vector < std::vector< std::vector <int> > > func_arg, 
