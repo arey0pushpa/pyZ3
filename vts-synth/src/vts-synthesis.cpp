@@ -471,6 +471,20 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     
     z3::expr gateCons = logic_gates( node_parameter_var, edge_parameter_var, 
                                      gate_selector_var_node, gate_selector_var_edge );
+    
+    z3::expr funcGate  = exists( listN, 
+                         exists( listActiveN, 
+                         exists( listPresenceE, 
+                         exists( listActiveE, 
+                         exists( listPairingM, 
+                         exists( listReach, 
+                                 gateCons
+                                 &&
+                                 vtsCons
+                                 &&
+                                 knownVarConstraint
+                                 && setUnknownVariablesFalse
+                                 ))))));
 
     z3::expr cons = exists( listSvar, 
                     exists( listTvar, 
@@ -479,6 +493,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listActiveN, 
                     exists( listActiveE,
                             gateCons && knownVarConstraint ))))));
+
                             
     /** The query to ask                         
     z3::expr cons = exists( listSvar, 
