@@ -30,83 +30,189 @@ have encoded the following variants of VTS synthesis.
 
 %
 %
-\begin{enumerate}[label=\Alph*]
-\item  Add new edges to the given VTS to achieve k-connectivity, graph stability and fusion. 
+\begin{enumerate}
+\item  Add new edges 
 \item  Modify the flow of molecules on the nodes and on the edges.
   \begin{enumerate}
-  	\item use available set of molecules.
-    \item allow new molecule type to be added.     
+  \item use available set of molecules.
+  \item allow new molecule type to be added.     
   \end{enumerate}        
 \item Learning meaningful activity functions from a given language of
   propositional formulas
-  \begin{enumerate}
-    \item kcnf: low depth circuit.
-    \item Boolean gates: And, Or.
-    \item Boolean gates with linear combination.  
-    \end{enumerate}        
+  % \begin{enumerate}
+  %   \item kcnf: low depth circuit.
+  %   \item Boolean gates: And, Or.
+  %   \item Boolean gates with linear combination.  
+  % \end{enumerate}        
   % - Function dependence with var occurring once.
 \item  VTS repair. Allow both delete and add to the system.
 \end{enumerate}
 
-\begin{align}
-  \exists n, a, e, b, p, r, p,
-  ( \texttt{Consistancy}\land \texttt{ActiveNode} \land 
-  \texttt{ActiveEdge} \land \texttt{GivenCons} \land
-  \texttt{ModifyCons} )   
-  \tag{E1}\label{eq:addedge1}
-\end{align}
+
+\subsection{Encoding Incomplete VTS}
+
+In our synthesis algorithm, we take a VTS $G =
+(\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ as input.
+%
+We allow activity functions not to be specified, i.e., vectors
+$\edgef$ and $\nodef$ may contain uninterpreted Boolean functions.
+%
+We construct the following constraints to encode the available information
+about $G$.
+%
+\begin{align*}
+  \texttt{KnownE} &= \land \{e_{i,j,q,m}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land q \leq q' \land m \in M_q \}\\
+  \texttt{KnownN} &= \land \{n_{i,m}| m \in \nlabel(i) \land i \in \nodes \}\\
+  \texttt{KnownP} &= \land \{p_{i,j}| (i,j) \in \pairs \} \\
+  \texttt{KnownActiveN} &= \land \{ a_{i,m} = \nodef_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is defined.} \} \\
+  \texttt{KnownActiveE} &= \land \{ b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
+                   | \edgef_m \text{ is defined.} \} \\
+  \texttt{KnownCons} & = \texttt{KnownE} \land \texttt{KnownN} \land 
+ \texttt{KnownP} \land \texttt{KnownActiveE} \land \texttt{KnownActiveN}
+\end{align*}
+We also collect the variables that are absent in the VTS.
+\begin{align*}
+  \texttt{UnknownELabel} &=
+  \{e_{i,j,q,m}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land 
+                          0 < q \leq q' \land m \not\in M_{q} \}\\
+  \texttt{UnknownE} &= \{e_{i,j,q}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land 
+                    q' < q \leq \pi \}\\
+  \texttt{UnknownNLabel} &= \{n_{i,m}| m \not\in \nlabel(i) \land i \in \nodes \}\\
+  \texttt{UnknownP} &= \{p_{i,j}| (i,j) \not\in \pairs \} \\
+  \texttt{UnnownActive} &=  \Land \{ a_{i,m} = \nodef_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is undefined.} \} \union \\
+   &\quad\quad\quad  \{ b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
+                   | \edgef_m \text{ is undefined.} \}
+\end{align*}
+We have defined $\texttt{UnknownE}$, $\texttt{UnknownN}$, and
+$\texttt{UnknownP}$
+as set and will be converted into formulas depending
+on the different usage in the synthesis problems. 
+
+% Since not all the activity functions are defined some of the functions
+% appearing in $\texttt{ActiveE}$ and $\texttt{ActiveN}$ are
+% uninterpreted function symbols.
+
+\subsection{Encoding synthesis property}
+
+We will do synthesis against the following property that says the VTS
+is stable and 3-connected, but not 4-connected.
+%
+The property is designed to balance the search space such that the synthesis procedure does not
+succeed with simply adding too many edges. 
+%
+\begin{align*}
+  \texttt{Property} =  \texttt{Stability} \land \texttt{Connected}(3) \land \texttt{DisConnected}(4)
+\end{align*}
+
+\subsection{Encoding synthesis constraints}
+
+Now we will consider the encodings for  the above
+listed synthesis problems.
+%
+The variations are presentations are to represent all the encodings supported by our tool.
+%
+However, the combinations of the variation are also possible and our tool easily
+supports them.
+%
+For simplicity of the presentation, we assume that if we are synthesizing an aspect of VTS,
+then all other aspects are fully given.
 
 
-% \begin{align}
-%   \exists n_{i_k} \, a_{i_k} \, e_{ijqk} \, b_{ijqk} \, p_{k_{k^{-}}} \,  r_{i_j} \, 
-%                ( basic_vts_constraints \land  vts\_activity\_constraint \land  given\_vts\_information \land  restriction\_on\_modification )   
-%   \tag{E1}\label{eq:addedge1}
-% \end{align}
+\subsubsection{Fixing VTS by adding edges}
+%
+Now we will consider the case when we add new edges to VTS to satisfy the properties.
+%
+In the following, the pseudo-Boolean formula $\texttt{AddE}$ encodes
+that at most $slimit$ new undeclared edges may be added in VTS.
+%
+\begin{align*}
+  \texttt{AddE}(slimit) &= \Sigma~\texttt{UnknownE} \leq slimit\\
+  \texttt{FixedE} &= \texttt{UnknownActive} \land \lnot \Lor \texttt{UnknownELabel} \;\union\;
+                    \texttt{UnknownNLabel} \;\union\;
+                    \texttt{UnknownP}
+\end{align*}
+We put together the constraints so far and obtain the following formula.
+\begin{align*}
+  & \texttt{SynthE}(slimit) = \\
+  & \quad\quad (  \texttt{Consistancy}\land \texttt{Property} \land
+  \texttt{KnownCons} \land \texttt{FixedE} \land
+  \texttt{AddE}(slimit) )
+  % \tag{SynthE}\label{eq:addedge1}
+\end{align*}
+As we have seen $\texttt{Consistancy}$ encodes the basic constraints about VTS,
+$\texttt{Property}$ encodes the goal, and $\texttt{KnownCons}$ are the constraints
+that are fixed in VTS.
+%
+A satisfying model of $\texttt{SynthE}$ will represent the synthesized VTS.
+%
+In the later synthesis problems, we will construct a similar QBF formula with same
+first three parts and the last one is due the requirements of the synthesis problem.
 
-%The basicvtsconstraints and vtsactivityconstraint are same as the
-The \texttt{Consistancy} describing stability of the graph and fusion of the
-edge into the node and the molecular activity describing the active
-state of a molecule. The \texttt{GivenCons} is encoded using a front
-end input language. The user provides the information of the VTS with
-a partial information using this front end. Our tool then converts
-these inputs into the constraints over the given VTS. 
+We limit the addition of the edges, since we look for a fix that require minimum number
+of changes in the given VTS.
+%
+We start with $slimit = 1$ and grow one by one until $\texttt{SynthE}(slimit)$
+becomes satisfiable.
 
-We encode the \texttt{ModifyCons} by putting the constraints on the unassigned edges and edge labels. The constraint of allowing only certain number of addition to the given VTS is encoded as \texttt{AtMostK} function over the unassigned edges and label.
+\paragraph{\bf Fixing VTS by adding molecules to the labels:}
+The system may also be fixed only by modifying labels on the edges or the nodes instead
+of adding edges.
+%
+In the following, the formula encodes that only $slimit$ edge labels may be added.
+\begin{align*}
+  &\texttt{AddLabelEdge}(slimit) = 
+    \Sigma~\texttt{UnknwonEdgeLabel}  \leq slimit\\
+  & \texttt{FixedForLabel} = \texttt{UnknownActive} \land \lnot \Lor \texttt{UnknownE} \;\union\;
+                    \texttt{UnknownNLabel} \;\union\;
+                    \texttt{UnknownP}\\
+  &\texttt{SynthLabel}(slimit) = \\
+  & \quad\quad
+    (  \texttt{Consistancy}\land \texttt{Property} \land
+  \texttt{KnownCons} \land \texttt{FixedForLabel} \land \texttt{AddLabelEdge}(slimit) )
+\end{align*}
+Similar to the previous encoding we solve the satisfiability of the above formula
+to obtain additional molecules that may be added to the edge labels.
+
+
+% We encode the \texttt{ModifyCons} by putting the constraints on the
+% unassigned edges and edge labels. The constraint of allowing only
+% certain number of addition to the given VTS is encoded as
+% \texttt{AtMostK} function over the unassigned edges and label.
 
 %\[Unassigned Edges\]}
 %\[Unassigned Activity Labels\]} 
 %\[Unassigned Molecule Labels\]
-\begin{align}
-   \texttt{EdgeConstraint} = \texttt{AtMostk} \, [ \texttt{unassigned\_edges} ]  
-   \tag{E2}\label{eq:addedge2}
-\end{align}
-\begin{align}
-   \texttt{EdgeActivity} = \texttt{AtMostK} \, [ \texttt{activity\_labels} ]
-   \tag{E3}\label{eq:addedge3}
-\end{align}
+% \begin{align}
+%    \texttt{EdgeConstraint} = \texttt{AtMostk} \, [ \texttt{unassigned\_edges} ]  
+%    \tag{E2}\label{eq:addedge2}
+% \end{align}
+% \begin{align}
+%    \texttt{EdgeActivity} = \texttt{AtMostK} \, [ \texttt{activity\_labels} ]
+%    \tag{E3}\label{eq:addedge3}
+% \end{align}
 
-\begin{align}
-   \texttt{EdgePresence} = \texttt{AtMostK} \, [ \texttt{unassigned\_molecule\_labels} ]  
-   \tag{E4}\label{eq:addedge4}
-\end{align}
+% \begin{align}
+%    \texttt{EdgePresence} = \texttt{AtMostK} \, [ \texttt{unassigned\_molecule\_labels} ]  
+%    \tag{E4}\label{eq:addedge4}
+% \end{align}
 
 
 
-Put \ref{eq:addedge2} in symbolic form and explain it in a couple of lines.
+% Put \ref{eq:addedge2} in symbolic form and explain it in a couple of lines.
 
-In order to decrease the search space we do not allow any modification in the node label and activity on the nodes. This constraint can be encoded as the fixing all the unassigned bits to false. 
+% In order to decrease the search space we do not allow any modification in the node label and activity on the nodes. This constraint can be encoded as the fixing all the unassigned bits to false. 
     
-%    // Fix rest of them to zero.
-%    auto fixVar0 = ! z3::mk_or ( openN )  && ! z3::mk_or ( openActiveN );
+% %    // Fix rest of them to zero.
+% %    auto fixVar0 = ! z3::mk_or ( openN )  && ! z3::mk_or ( openActiveN );
 
-\begin{align}
-  \exists i, j, q \,
-  ( \texttt{KConnectivity}  \land \texttt{NoSelfEdge} \land \ref{eq:addedge1} )    
-  \tag{E5}\label{eq:addedge5}
-\end{align}
+% \begin{align}
+%   \exists i, j, q \,
+%   ( \texttt{KConnectivity}  \land \texttt{NoSelfEdge} \land \ref{eq:addedge1} )    
+%   \tag{E5}\label{eq:addedge5}
+% \end{align}
 
 
-The \texttt{KConnectivity} and \texttt{NoSelfEdge} are same as the previous section, describing the graph to be a k but not k+1 connected and self edges are not allowed in the VTS. addedge1 is the constraint of \ref{eq:addedge1}.
+% The \texttt{KConnectivity} and \texttt{NoSelfEdge} are same as the previous section, describing the graph to be a k but not k+1 connected and self edges are not allowed in the VTS. addedge1 is the constraint of \ref{eq:addedge1}.
 
 %{i,j,m,p} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
 
@@ -121,19 +227,73 @@ The \texttt{KConnectivity} and \texttt{NoSelfEdge} are same as the previous sect
 %                    exists( setReach, 
 %                            vtsCons \&\& vtsActivity \&\& inputCons \&\& addConstraints ))))));   
 
- 
-\subsection{Encoding molecules presence}
+\subsubsection{Fixing VTS by learning activity functions:}
 
-\subsection{Encoding low depth cnf circuits}
+Now we consider a scenario where some of the activity functions for some of the molecules
+are missing.
+%
+The activity functions are $\mu$-input Boolean functions.
+%
+We choose a class of formulas for the candidate functions.
+%
+We encode the candidates in a formula with parameters.
+%
+We choose different candidates by choosing values for the parameters.
 
-\subsection{Encoding boolean gates}
 
-\subsection{Encoding vts repair}
-The repair of the VTS requires both the addition and the deletion of the present molecules, node molecules pairing matrix and activity of the molecules. We have encoded the vts repair in our tool using the dummy xor bits.
+The formula \texttt{NNFTemplate} encodes a set of negation normal form functions 
+that take $y_1,..,y_\mu$ as input and contain $\lambda$ literals.
+To encode the set, it also has finite-range integer variables
+$z_1,..,z_{2\lambda}$ as parameters to select the functions.
 
+% \paragraph{Encoding low depth cnf circuits}
+% \paragraph{Encoding boolean gates}
 
-\subsection{QBF encodings}
+\begin{align*}
+  \texttt{Gate}( z, w_1, w_2 ) = ( z  = 1 \limplies w_1  \land w_2 ) \land  
+  ( z = 2  \limplies w_1  \lor w_2 ) \land
+  ( z = 3  \limplies w_1 )\\
+  \texttt{Leaf}( z, [y_1,..,y_\mu] ) =
+  \Land\limits_{l=1}^{\mu} ( z = 2l-1  \limplies y_{l}) \land ( z = 2l  \limplies \lnot y_{l})\\
+  \texttt{NNFTemplate}([z_1,..,z_{2\lambda}],[y_1,..,y_\mu] ) = \\
+  \exists w_1,..,w_{2\lambda}.\;w_1 \land \Land_{l=1}^{\lambda} w_{\lambda+l} = \texttt{Leaf}( z_{\lambda+l}, [y_1,..,y_\mu] ) \land
+  w_{l} = \texttt{Gate}( z_l, w_{2l},w_{2l+1})
+\end{align*}
 
+Given the above templates 
+
+\begin{align*}
+  &\texttt{FindFunctions}(z,\lambda) =\\
+  &\Land \{ \bigwedge\limits_{i} n_{i,m} \limplies a_{i,m} = 
+  \texttt{NNFTemplate}([z_{m,1},..,z_{m,2\lambda}],[n_{i,1},\dots,n_{i,\mu}] ) |
+  \nodef_m \text{ is undefined}\} \\
+  &\Land \{ \bigwedge\limits_{i,j,q} e_{i,j,q,m} \limplies b_{i,j,q,m} = 
+  \texttt{NNFTemplate}([z_{i,j,q,1},..,z_{i,j,q,2\lambda}],[e_{i,j,q,1},..,e_{i,j,q,\mu}] ) | 
+  \edgef_m \text{ is undefined}
+  \}
+\end{align*}
+
+\begin{align*}
+    & \texttt{FixedForLabel} = \lnot \Lor \texttt{UnknownE} \;\union\; \texttt{UnknownN} \;\union\;
+                    \texttt{UnknownNLabel} \;\union\;
+                    \texttt{UnknownP}\\
+  &\texttt{SynthFunction}(z,\lambda) = \\
+  & \quad\quad
+    (  \texttt{Consistancy}\land \texttt{Property} \land
+  \texttt{KnownCons} \land \texttt{FixedForFunctions} \land \texttt{FindFunctions}(slimit) )
+\end{align*}
+
+\subsection{Repairing VTS:}
+%
+Now we will consider the repair of VTS by allowing not only addition but also
+deletion of the molecules, edges, functions, or pairing matrix.
+%
+We illustrate the repairing on one class of variables and rest can be .....
+%
+The repair of the VTS requires both the addition and the deletion of
+the present molecules, node molecules pairing matrix and activity of
+the molecules. We have encoded the vts repair in our tool using the
+dummy xor bits.
 
 
 
