@@ -477,7 +477,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                          exists( listActiveE, 
                          exists( listPairingM, 
                          exists( listReach, 
-                                 gateCons && vtsCons && knownVarConstraint ))))));
+                                 gateCons && vtsCons && knownVarConstraint && setUnknownVariablesFalse ))))));
 
     z3::expr cons = exists( listSvar, 
                     exists( listTvar, 
@@ -485,8 +485,19 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listVvar, 
                     exists( listE, 
                             kConnCons && V5 && funcGate )))));
-
-    return cons;
+                            
+    /** The query to ask                         
+    z3::expr cons = exists( listSvar, 
+                    exists( listTvar, 
+                    exists( listUvar, 
+                    exists( listVvar,
+                    exists( listActiveN, 
+                    exists( listPresenceE, 
+                    exists( listActiveE,
+                             knownVarConstraint && setUnknownVariablesFalse && funcGate )))))));                   
+   */
+   
+   return cons;
   } else if ( variation == 5 ) { 
     // known xor bits
     z3::expr_vector xorNVec( ctx );
