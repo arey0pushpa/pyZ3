@@ -500,6 +500,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listPairingM, 
                     exists( listReach,
                             gateCons && knownVarConstraint && vtsCons )))))))))));
+    // todo: V5 has some problems check assing it.
 
                             
     /** The query to ask                         
