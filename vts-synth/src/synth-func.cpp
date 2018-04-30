@@ -111,7 +111,7 @@ void print_func_gates ( unsigned noOfMolecules, unsigned noOfLeaves, unsigned ca
     //std::cout << "The size of chosenvar is " << chosenVars.size() << "\n";
     //std::cout << "The number of leafs are  " << noOfLeaves << "\n";
     
-    //assert( chosenVars.size() == noOfLeaves );
+    assert( chosenVars.size() == noOfLeaves );
 
     print_learned_function( chosenVars, chosenGates, m, e );
   }
@@ -249,12 +249,10 @@ void vts::print_denotation_console ( std::map<std::string,int> denotation_map, i
       std::string val;  
       dm.second > 0 ? val = "True" : val = "False";
 
-      /*
       if ( dm.second > 0 ) {
         std::cout << "True var is "  << dm.first << "\n";  
       }
-      */
-      std::cout << dm.first << " = " << val << "\n";  
+      //std::cout << dm.first << " = " << val << "\n";  
 
       // Map the depqbf output model to created vars
       if ( synthVar == 3 ) {
@@ -278,7 +276,7 @@ void vts::print_denotation_console ( std::map<std::string,int> denotation_map, i
         }
       }
    }
-    //exit(0);
+    exit(0);
    
     if ( synthVar == 3 ) {
       
