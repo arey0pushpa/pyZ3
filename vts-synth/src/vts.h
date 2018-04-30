@@ -192,7 +192,7 @@ public:
   z3::expr k_connected_graph_constraint ( unsigned K, bool eQuantVar );
 
   /** Cnf encoding constraints **/
-  z3::expr literal_cnf (Vec2Expr s, unsigned i, unsigned k, bool e, unsigned n, unsigned q);
+  z3::expr literal_cnf (Vec2Expr s, z3::expr_vector&, unsigned i, unsigned k, bool e, unsigned n, unsigned q);
   z3::expr not_a_function( Vec2Expr& nodes, Vec2Expr& active_node );
   z3::expr cnf_function ( Vec3Expr& p_var, Vec3Expr& s_var );
 
@@ -201,10 +201,8 @@ public:
 
   /** Gates constraint **/
   z3::expr gates( VecExpr& u, z3::expr x, z3::expr y );
-  z3::expr build_rhs_fml ( Vec2Expr& s, Vec2Expr& u, unsigned i, unsigned k, bool e, unsigned j, unsigned q );
-  //z3::expr var_fml (Vec3Expr s, unsigned i, unsigned k, unsigned g, bool e, unsigned j, unsigned q );
-  z3::expr var_fml (VecExpr& s, unsigned i,  unsigned k, bool e, unsigned j, unsigned q );
-
+  z3::expr build_rhs_fml ( Vec2Expr& s, Vec2Expr& u, z3::expr_vector&, unsigned i, unsigned k, bool e, unsigned j, unsigned q );
+  z3::expr var_fml ( VecExpr& chooseVar, z3::expr_vector& sideConstraintFormula, z3::expr_vector& sideConstraintLiteral, unsigned i, unsigned m, bool e, unsigned j, unsigned q ); 
   z3::expr node_gate_fml ( Vec3Expr& s, Vec3Expr& u );
   z3::expr edge_gate_fml ( Vec3Expr& t, Vec3Expr& v );
   z3::expr logic_gates ( Vec3Expr& s_var, Vec3Expr& t_var, Vec3Expr& gate_selector_var_node, Vec3Expr& gate_selector_var_edge );

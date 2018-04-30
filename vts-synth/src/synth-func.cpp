@@ -248,11 +248,13 @@ void vts::print_denotation_console ( std::map<std::string,int> denotation_map, i
       //std::cout << " dm is : [" << dm.first << ", " << dm.second << "]\n\n";
       std::string val;  
       dm.second > 0 ? val = "True" : val = "False";
-
+      
+      /*
       if ( dm.second > 0 ) {
         std::cout << "True var is "  << dm.first << "\n";  
       }
-      //std::cout << dm.first << " = " << val << "\n";  
+      */
+      std::cout << dm.first << " = " << val << "\n";  
 
       // Map the depqbf output model to created vars
       if ( synthVar == 3 ) {
@@ -276,7 +278,6 @@ void vts::print_denotation_console ( std::map<std::string,int> denotation_map, i
         }
       }
    }
-    exit(0);
    
     if ( synthVar == 3 ) {
       

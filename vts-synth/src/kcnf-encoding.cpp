@@ -12,7 +12,7 @@
  * * *************************************************************************/
 
 // Bool e :: edge or not (node) : [arg_list_2d, N, M, 0/1, N, E_arity]
-z3::expr vts::literal_cnf ( Vec2Expr s, unsigned i, unsigned k, bool e, unsigned j = 0, unsigned q = 0 ) {
+z3::expr vts::literal_cnf ( Vec2Expr s, z3::expr_vector& sideCons, unsigned i, unsigned k, bool e, unsigned j = 0, unsigned q = 0 ) {
 
   z3::expr_vector outer_list(ctx);
   z3::expr_vector lit_listC(ctx);
@@ -46,10 +46,8 @@ z3::expr vts::literal_cnf ( Vec2Expr s, unsigned i, unsigned k, bool e, unsigned
     // Exactly three : 3 CNF 
     // To make compuational challenge easy lets fix at_most_one`
     // auto cConst =  at_least_three ( cl_list) && ! at_least_four( cl_list );
-    auto cConst = !at_least_two( cl_list ); 
-    //std::cout << cConst << "\n";
-    //exit(0);
-    //auto cConst = !at_least_two( cl_list) && at_least_one( cl_list ); 
+    //auto cConst = !at_least_two( cl_list ); 
+    auto cConst = !at_least_two( cl_list) && at_least_one( cl_list ); 
     lit_listC.push_back( cConst );
     
     auto iConst = mk_and ( il_list );
@@ -62,47 +60,48 @@ z3::expr vts::literal_cnf ( Vec2Expr s, unsigned i, unsigned k, bool e, unsigned
   auto c1 = mk_and( lit_listI );
   auto c2 = mk_and( lit_listC );
   auto c3 = mk_and( outer_list );
+  sideCons.push_back( c1 && c2 );
   
-  auto constr = c1 && c2 && c3; 
-  
-  return constr;
+  return c3;
 }
 
 /*** Node activity constraint: a[i][k]  ***/
 z3::expr vts::node_cnf ( Vec3Expr& node_parameter_var ) {
 
   z3::expr_vector main_list(ctx);
-
+  z3::expr_vector sideCons( ctx );
   for ( unsigned i = 0; i < N; i++ ) {
     for ( unsigned k = 0; k < M; k++ ) {
-      auto cnf = (active_node[i][k] == literal_cnf( node_parameter_var[k], i, k, false ) );
+      auto cnf = (active_node[i][k] == literal_cnf( node_parameter_var[k], sideCons, i, k, false ) );
       main_list.push_back ( cnf ); 
     }
   }
 
+  auto additionalCons = mk_and ( sideCons );
   auto cons = mk_and ( main_list );
-  return cons;
+  return (cons && additionalCons );
 }
 
 /*** Edge activity constraint: b[i][j][q][k]  ***/
 z3::expr vts::edge_cnf ( Vec3Expr& edge_parameter_var ) {
 
   z3::expr_vector main_list(ctx);
-
+  z3::expr_vector sideCons( ctx );
   for( unsigned i = 0 ; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
       if ( i == j )  continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
         for ( unsigned k = 0; k < M; k++ ) { 
-          auto cnf =  ( active_edge[i][j][q][k] == literal_cnf( edge_parameter_var[k], i, k, true, j, q ) ) ;  
+          auto cnf =  ( active_edge[i][j][q][k] == literal_cnf( edge_parameter_var[k], sideCons, i, k, true, j, q ) ) ;  
           main_list.push_back ( cnf ); 
         }
       }
     }
   }
   
+  auto additionalCons = mk_and ( sideCons );
   auto cons = mk_and ( main_list );
-  return cons;
+  return (cons && additionalCons );
 }
 
 /** Function has a restricted form with Three CNF  **/ 
