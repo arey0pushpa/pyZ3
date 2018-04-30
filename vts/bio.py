@@ -684,7 +684,7 @@ connectivity = And( At_least_k_edges, k_min_1_connected, k_not_connected )
 trx = Tactic('card2bv')(k_min_1_connected).as_expr()
 print trx
 #print k_min_1_connected
-exit(0)
+#exit(0)
 #connectivity = And( At_least_k_edges, k_min_1_connected )
 #print connectivity
 #exit(0)

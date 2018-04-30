@@ -171,7 +171,6 @@ z3::expr vts::at_least_four ( VecExpr dump ) {
   unsigned L = dump.size(); 
   if ( L < 4 ) {
     return ctx.bool_val(false);
-    //return false;
   }
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
@@ -229,6 +228,21 @@ z3::expr vts::at_least_one ( z3::expr_vector dump ) {
   }
   return z3::mk_or ( ls );
 }
+
+z3::expr vts::at_most_one ( z3::expr_vector dump ) {
+  unsigned L = dump.size(); 
+  z3::expr_vector ls(ctx);
+  if ( L < 2 ) {
+    return ctx.bool_val(true);
+  }
+  for ( unsigned i = 0; i < L-1; i++ ) {
+    for ( unsigned j = i+1; j < L; j++) {
+      ls.push_back ( !dump[i] || !dump[j] );  
+    }
+ }
+  return z3::mk_and ( ls );
+}
+
 
 // At least 2 
 z3::expr vts::at_least_two ( z3::expr_vector dump ) {

@@ -54,7 +54,7 @@ int main(int ac, char* av[])
    
     options_description variation("Variation options");
     variation.add_options()
-      ("func-type", value<int>(), "fix a function type for QBF")
+      ("func-type,f", value<int>(), "fix a function type for QBF")
       ("synth-var,s", value<int>(), "fix a synthesis variation for vts")
       ;
     
@@ -62,7 +62,7 @@ int main(int ac, char* av[])
     options.add_options()
       ("use-z3", "use z3 for QBF solving")
       ("print-model,p", "print vts model")
-      ("display-graph", "display the vts as graph")
+      ("display-graph,g", "display the vts as graph")
       ("input-file,i", value< std::vector<std::string> >(),
      "Specifies input file.");
 
@@ -148,15 +148,14 @@ int main(int ac, char* av[])
   
   vts_ptr v = nullptr;
 
-  if( synthVar != 0 ) {
+  if( synthVar != -1 ) {
       if( inputFile == true ) {
-      load_vts ld(c, inputFilename[0] ); ld.load();
-      v = ld.get_vts();
-    } else{
-    //v = std::shared_ptr<vts>(new vts(c, M, N, Q, MODEL_4, 3, D ));
-       std::cout << "Using default file [t.vts] in current folder... \n";
-       load_vts ld(c, "./examples/t.vts" ); ld.load();
-       v = ld.get_vts(); 
+        load_vts ld( c, inputFilename[0] ); ld.load();
+        v = ld.get_vts();
+      } else{
+        std::cout << "Using default file [t.vts] in current folder... \n";
+        load_vts ld(c, "./examples/t.vts" ); ld.load();
+        v = ld.get_vts(); 
     }
   } else{
   
@@ -191,7 +190,19 @@ int main(int ac, char* av[])
     } else if( synthVar != -1 ) {
       f = v->vts_synthesis( synthVar ); 
     }else {
-      f = v->create_qbf_formula( 0 );
+      // Use SAT based VTS
+      auto model_vts = v->get_vts_for_prob1( );
+      if ( printModel == true ) { 
+        std::cout << model_vts << '\n';
+      }
+      if ( displayGraph == true ) { 
+        v->dump_dot( "/tmp/bio.dot", model_vts );
+        auto retVal = system("xdot /tmp/dep_vts.dot");
+        if(retVal == -1) 
+          std::cout << "SYSTEM ERROR !!!\n"; 
+      }
+      exit(0);
+      //f = v->create_qbf_formula( 0 );
     }
     //std::cout << f << "\n";
 

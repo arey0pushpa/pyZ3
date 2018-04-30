@@ -171,6 +171,9 @@ public:
   z3::expr at_least_two ( z3::expr_vector dump );
   z3::expr at_least_three ( z3::expr_vector dump  );
   z3::expr at_least_four( z3::expr_vector dump  );
+
+  z3::expr at_most_one ( z3::expr_vector dump );
+
   
   /** connectivity costraints **/
   // todo: variables are needed to be parametrized

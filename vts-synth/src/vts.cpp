@@ -781,16 +781,17 @@ z3::expr vts::create_vts_constraint () {
  * z3 model by solving built vts constraints
  */
 z3::model vts::get_vts_for_prob1( ) {
-  z3::expr v5 = no_self_edges();                              //V5
-  z3::expr basic_constraints_with_stability = create_vts_constraint();
-  //z3::expr cons =  basic_constraints_with_stability && edges[0][1][0] && not_k_connected();
-  z3::expr cons =  basic_constraints_with_stability && edges[0][1][0];
+  z3::expr V5 = no_self_edges();                              //V5
+  z3::expr basic_constraints = create_vts_constraint();
+  z3::expr connectivity = not_k_connected( 3, d_reach1, drop1 );
+  z3::expr cons =  basic_constraints && V5 && edges[0][1][0] && connectivity;
+  //z3::expr cons =  basic_constraints_with_stability && edges[0][1][0];
 
   z3::solver s(ctx);
   s.add( cons );
   if( s.check() == z3::sat ) {
     z3::model m = s.get_model();
-    std::cout << m << "\n";
+    //std::cout << m << "\n";
     return m;
   }else{
     std::cout << "model is not feasible!";

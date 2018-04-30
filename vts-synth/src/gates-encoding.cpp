@@ -63,7 +63,9 @@ z3::expr vts::var_fml ( VecExpr& chooseVar, unsigned i, unsigned m, bool e,
   cl_list.push_back( chooseVar[2*M] );
   cl_list.push_back( chooseVar[(2*M) + 1] );
 
-  auto coeffSum = at_least_one( cl_list ) && !at_least_two ( cl_list ); 
+  //auto coeffSum = at_least_one( cl_list ) && !at_least_two ( cl_list ); 
+  auto coeffSum = at_least_one( cl_list ) && at_most_one ( cl_list ); 
+  //std::cout << " CoeffSum is: " << coeffSum << "\n"; 
   auto varList = mk_or( ls );
   auto litList = mk_and ( il_list );
 
@@ -103,7 +105,6 @@ z3::expr vts::build_rhs_fml ( Vec2Expr& chooseVars, Vec2Expr& chooseGates,
   while( local_leaf_num > 1 ) {
     for( unsigned l = 0; l < local_leaf_num; l = l + 2 ) {
       if( l == local_leaf_num - 1 ) {
-      //if( l == leaf_number - 1 ) {
         n_list[l>>1] = n_list[l];
       }else{
         n_list[l>>1] = gates( chooseGates[gateVar],
