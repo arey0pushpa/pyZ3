@@ -460,7 +460,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                  && !z3::mk_or( unknownActiveN ) 
                  && !z3::mk_or( unknownE )
                  && !z3::mk_or( unknownPresenceE )
-                 && !z3::mk_or( unknownActiveE );
+                 && !z3::mk_or( unknownActiveE )
+                 && !z3::mk_or( unknownPairingM );
 
     // todo: avoid case M -> M' in first and third arg  
     auto listSvar = flattern3d ( node_parameter_var, M, noOfLeaves, 2*M + 2, false );
@@ -489,17 +490,17 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listTvar, 
                     exists( listUvar, 
                     exists( listVvar, 
-                    exists( listE, 
-                            kConnCons && V5 && funcGate )))));
+                    exists( listActiveN, 
+                    exists( listActiveE,
+                            gateCons && knownVarConstraint ))))));
 
                             
     /** The query to ask                         
     z3::expr cons = exists( listSvar, 
                     exists( listTvar, 
                     exists( listUvar, 
-                    exists( listVvar,
+                    exists( listVvar,z
                     exists( listActiveN, 
-                    exists( listPresenceE, 
                     exists( listActiveE,
                              knownVarConstraint && setUnknownVariablesFalse && funcGate )))))));                   
    */
