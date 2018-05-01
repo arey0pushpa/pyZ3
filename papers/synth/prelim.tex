@@ -1,6 +1,7 @@
 In this section, we will present the model of VTS from~\cite{PloS,SASB}.
 %
-We will also present the constrains and properties on the VTSs.   
+We will also present the constrains and properties on the VTSs, and their
+encoding as a QBF formula.   
 %
 We model a VTS as labelled graph along with assisting pairing matrices and
 activating functions.
@@ -27,8 +28,8 @@ nodes and edges respectively.
 %
 The model captures the study state of a VTS.
 %
-The analysis of the model will inform us the network/graph properties of
-VTSs.
+The analysis of the model will inform us about the network/graph
+properties of VTSs.
 
 Let $\pairs(M')$ denote $\{m|(m,m') \in P \text{ and } m' \in M'\}$.
 %
@@ -41,10 +42,14 @@ $\edgef(k,M')$ is true.
 We call $G$ {\em well-structured} if molecules $M$ is divided into
 two equal-sized partitions $M_1$ and $M_2$ such that
 $P \subseteq M_1 \times M_2$, and
-for each $(n,M',n') \in \edges$, $n \neq n'$, 
+for each $(n,M',n') \in \edges$, $n \neq n'$ and
 $M' \subseteq \nlabel(n) \intersection \nlabel(n')$.
 %
-In other words, a well-structured VTS has no self loops, and 
+In other words,
+no molecule can participate in fusion from both channels and
+compartments,
+%
+there are no self loops, and 
 each edge carry only those molecules that are present in its source
 and destination nodes. 
 %
@@ -99,14 +104,14 @@ VTS $(\nodes,\mols,\edges-E',\nlabel,\pairs,\edgef,\nodef)$ is connected.
 The conditions on the VTSs for a given size can be encoded as a QBF formula
 with uninterpreted functions.
 %
-To encode the constraints, we need needs variables for each aspect of
+To encode the constraints, we need variables for each aspect of
 VTS.
 %
 Let us suppose that the size of the graph is $\nu$ and number of
 molecules is $\mu$.
 %
-Furthermore, we also limit the maximum number $\pi$ of edges present
-between two nodes.
+To fully finitize the problem, we also limit the maximum number $\pi$
+of edges present between two nodes.
 %
 Here, we list the Boolean variables and uninterpreted function symbols
 that encode parts of VTSs.
@@ -143,33 +148,36 @@ $q$ will range over edges between two nodes, i.e., from $1$ to $\pi$.
 %
 
 The following constraints encode the basic consistency of VTSs.
-\begin{align}
-  \bigwedge\limits_{i,j,q} (\bigvee_m e_{i,j,q,m} )\limplies e_{i,j,q}
+\begin{align*}
+  \texttt{EdgeC} =\;& \bigwedge\limits_{i,j,q} (\bigvee_m e_{i,j,q,m} )\limplies e_{i,j,q}
   \land
   \bigwedge\limits_{i,q} \neg e_{i,i,q}
   \land
   % \tag{\texttt{NodeC}}\label{eq:f0}\\
   \bigwedge\limits_{\mathclap{i,j,q,m}} e_{i,j,q,m} \limplies (n_{i,m} \land n_{j,m} )
-  \tag{\texttt{EdgeC}}\label{eq:c0}\\
+  \\
+  \texttt{ActivityC} =\;&
   \bigwedge\limits_{\mathclap{i,j,q,m}} b_{i,j,q,m} \limplies e_{i,j,q,m} \quad\land\quad
   \bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
   % \tag{V2}\label{eq:f1}\\
-  \tag{\texttt{ActivityC}}\label{eq:c4}\\
+  \\
+  \texttt{PairingC} =\;&
   \bigwedge\limits_{m} 
   (\Lor\limits_{m'} p_{mm'} \limplies \Land_{m'} \lnot p_{m'm} ) \land
   (\Lor\limits_{m'} p_{m'm} \limplies \Land_{m'} \lnot p_{mm'} )
-  \tag{\texttt{PairingC}}\label{eq:c3}\\
+  \\
+  \texttt{Fusion1} =\;&
   \bigwedge\limits_{i,j,q} e_{i,j,q} \limplies
   \bigvee_{\mathclap{m,m^{\prime}}} (b_{i,j,q,m} \land a_{j,m^{\prime}} \land p_{m,m^{\prime}})
-  \tag{\texttt{Fusion1}}\label{eq:fuse1} \\
+  \\
+  \texttt{Fusion2} =\;&
 \bigwedge\limits_{\mathclap{i,j,q,m}} b_{i,j,q,m} \limplies \neg 
   \bigvee_{\mathclap{j \neq j^{\prime}, m^{\prime\prime}}} ( a_{j^{\prime},m^{\prime\prime}} \land p_{m,m^{\prime\prime}})
-  \tag{\texttt{Fusion2}}\label{eq:fuse2} \\
-  \texttt{EdgeC} \land
+  \\
+  \texttt{Consistancy} =\;& \texttt{EdgeC} \land
   \texttt{ActivityC} \land \texttt{PairingC} \land
   \texttt{Fusion1} \land \texttt{Fusion2} 
-  \tag{\texttt{Consistancy}}\label{eq:c3}
-\end{align}
+\end{align*}
 \texttt{EdgeC} states that each edge has at least one molecule,
 there are no self loops, and edge labels are consistent with node labels.   
 \texttt{ActivityC} states that active molecule are present.
@@ -179,24 +187,28 @@ via nodes or via edges, but not both.
 \texttt{Consistancy} is the conjunction of all of the above.
 
 \paragraph{Activity functions}
-We also need to encode that encode that
+We also need to encode that
 the activity of the molecules are controlled by activity functions.
 %
 However, the encoding functions can be given to us many different ways,
-for example as a lookup table, or  a concise Boolean formula.
+for example as a lookup table, or a concise Boolean formula.
 %
-In the following constraints, we assume the appropriate encoding is
-used for the functions.
+In the following section, we will assume the appropriate encoding is
+used for the functions and represent them by \texttt{NodeFun}$_m$
+and \texttt{EdgeFun}$_m$ for node and edge regulations respectively.
 %
-\begin{align}
-\bigwedge\limits_{i,m} n_{i,m} \limplies a_{i,m} =  \nodef_m (n_{i,1},\dots,n_{i,\mu}) 
-\tag{\texttt{ActiveN}}\label{eq:anb}\\
-   \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu} )
-  \tag{\texttt{ActiveE}}\label{eq:aeb}
-\end{align}
+We will use $\nodef_m$ and $\edgef_m$ to represent functions that
+are not defined in VTS.
+%
+% \begin{align}
+% \bigwedge\limits_{i,m} n_{i,m} \limplies a_{i,m} =  \nodef_m (n_{i,1},\dots,n_{i,\mu}) 
+% \tag{\texttt{ActiveN}}\label{eq:anb}\\
+%    \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu} )
+%   \tag{\texttt{ActiveE}}\label{eq:aeb}
+% \end{align}
 %
 Later we will be synthesizing missing activity functions and 
-replace the above constraints with parameterized constraints that
+replace $\nodef_m$ and $\edgef_m$ with parameterized constraints that
 encode a space of candidate functions.
 
 \subsection{VTS properties}

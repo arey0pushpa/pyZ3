@@ -51,8 +51,8 @@ about $G$.
   \texttt{KnownE} &= \land \{e_{i,j,q,m}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land q \leq q' \land m \in M_q \}\\
   \texttt{KnownN} &= \land \{n_{i,m}| m \in \nlabel(i) \land i \in \nodes \}\\
   \texttt{KnownP} &= \land \{p_{i,j}| (i,j) \in \pairs \} \\
-  \texttt{KnownActiveN} &= \land \{ a_{i,m} = \nodef_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is defined.} \} \\
-  \texttt{KnownActiveE} &= \land \{ b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
+  \texttt{KnownActiveN} &= \land \{ a_{i,m} = \texttt{NodeFun}_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is defined.} \} \\
+  \texttt{KnownActiveE} &= \land \{ b_{i,j,q,m} = \texttt{EdgeFun}_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
                    | \edgef_m \text{ is defined.} \} \\
   \texttt{KnownCons} & = \texttt{KnownE} \land \texttt{KnownN} \land 
  \texttt{KnownP} \land \texttt{KnownActiveE} \land \texttt{KnownActiveN}
