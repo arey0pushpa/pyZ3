@@ -55,10 +55,11 @@ void chosen_var ( unsigned candidateVar, std::vector <int> & func_arg,
 
 void chosen_gates ( std::vector <int>& wVarStr, 
                     std::vector<std::string>& chosenGates ) {
-  if ( wVarStr[0] == 1 ) 
+  if ( wVarStr[0] == 1 ) {
     chosenGates.push_back( "AND" );
-  else 
+  } else { 
     chosenGates.push_back( "OR" );
+  }
 }  
 
 void print_learned_function ( std::vector<std::string>& chosenVars, 
@@ -108,12 +109,30 @@ void print_func_gates ( unsigned noOfMolecules, unsigned noOfLeaves, unsigned ca
       chosen_gates ( uVarStr[m][g], chosenGates );
     }
     
-    //std::cout << "The size of chosenvar is " << chosenVars.size() << "\n";
+    //std::cout << "The size of chosenGate is " << chosenGates.size() << "\n";
     //std::cout << "The number of leafs are  " << noOfLeaves << "\n";
     
     assert( chosenVars.size() == noOfLeaves );
+    assert( chosenGates.size() == noOfGates );
 
     print_learned_function( chosenVars, chosenGates, m, e );
+    
+    /*
+    for ( unsigned i = 0; i < chosenVars.size(); i++ ) {
+      fVar = fVar + chosenVars[i] + " ";
+    }
+    
+    for ( unsigned i = 0; i < chosenGates.size(); i++ ) {
+      fGate = fGate + chosenGates[i] + " ";
+    }
+
+     f_val =  "[" + fVar + "]" + " [ " +  fGate + " ] ";
+           
+     if ( e != true ) 
+        std::cout <<  "a_fun" + std::to_string (m) << " = " << "func ( " + f_val + " ) \n";
+     else 
+        std::cout <<  "e_fun" + std::to_string (m) << " = " << "func ( " + f_val + " ) \n";
+  */
   }
 } 
 
@@ -202,7 +221,7 @@ void model_map_2 ( std::vector < std::vector <int> >& tVarStr, std::string fst, 
 */
 
 void model_map_3 ( std::vector < std::vector< std::vector <int> > >& wVarStr, 
-                   std::string fst, int snd, unsigned synthVar ) { 
+                   std::string fst, int snd, unsigned synthVar, bool gateCase ) { 
   auto coord = get_coordinates( fst, true );
   //std::cout << "The passed variable is : " << fst << "\n";
   auto func_mol = std::stoi( coord[1] );
@@ -210,13 +229,15 @@ void model_map_3 ( std::vector < std::vector< std::vector <int> > >& wVarStr,
   auto dept_mol = std::stoi( coord[3] );
   
   //std::cout << "[" << func_mol << ", " << dept_mol << ", " << depth_id << "] -> " <<  snd << "\n\n"; 
-  if ( snd > 0 && func_mol != dept_mol ) {
-    //std::cout << "The true var " << fst << "\n";
-    //std::cout << "m: " << func_mol << '\n';
-    //std::cout << "m1: " << dept_mol << '\n'; 
-    //std::cout << "d: " << depth_id << '\n';
-    //std::cout << "Value is " <<  snd << "\n"; 
-    wVarStr[func_mol][depth_id][dept_mol] = 1; 
+  if ( snd > 0 ) {
+    if ( gateCase == true || func_mol != dept_mol ) {
+      //std::cout << "The true var " << fst << "\n";
+      //std::cout << "m: " << func_mol << '\n';
+      //std::cout << "m1: " << dept_mol << '\n'; 
+      //std::cout << "d: " << depth_id << '\n';
+      //std::cout << "Value is " <<  snd << "\n"; 
+      wVarStr[func_mol][depth_id][dept_mol] = 1; 
+    }
   } else {
     wVarStr[func_mol][depth_id][dept_mol] = 0;
   }
@@ -259,22 +280,22 @@ void vts::print_denotation_console ( std::map<std::string,int> denotation_map, i
       // Map the depqbf output model to created vars
       if ( synthVar == 3 ) {
         if ( dm.first[0] == 't' ) {
-          model_map_3 ( tVarStr, dm.first, dm.second, synthVar );
+          model_map_3 ( tVarStr, dm.first, dm.second, synthVar, false );
         } else if ( dm.first[0] == 's' ) {
-          model_map_3 ( sVarStr, dm.first, dm.second, synthVar );
+          model_map_3 ( sVarStr, dm.first, dm.second, synthVar, false );
         } 
       }
       
       // In case of synth Var 4 you have to create model-mapping for additioanal var u, v
       if ( synthVar == 4 ) {
         if ( dm.first[0] == 't' ) {
-          model_map_3 ( tGVarStr, dm.first, dm.second, synthVar );
+          model_map_3 ( tGVarStr, dm.first, dm.second, synthVar, false );
         } else if ( dm.first[0] == 's' ) {
-          model_map_3 ( sGVarStr, dm.first, dm.second, synthVar );
+          model_map_3 ( sGVarStr, dm.first, dm.second, synthVar, false );
         } else if ( dm.first[0] == 'u' ) {
-          model_map_3 ( uVarStr, dm.first, dm.second, synthVar );
+          model_map_3 ( uVarStr, dm.first, dm.second, synthVar, true );
         } else if ( dm.first[0] == 'v' ) {
-          model_map_3 ( vVarStr, dm.first, dm.second, synthVar );
+          model_map_3 ( vVarStr, dm.first, dm.second, synthVar, true );
         }
       }
    }

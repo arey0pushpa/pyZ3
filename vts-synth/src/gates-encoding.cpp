@@ -12,7 +12,7 @@ z3::expr vts::gates( VecExpr& u, z3::expr x, z3::expr y ) {
   auto g1 = x && y;
   auto g2 = x || y;
 
-  return ( u[0] && g1 )  ||  ( !u[0] && g2 );
+  return ( ( u[0] && g1 )  ||  ( !u[0] && g2 ) );
 
   /** Implement in case of more than two gates **
   auto g3 = ctx.bool_val(true);
