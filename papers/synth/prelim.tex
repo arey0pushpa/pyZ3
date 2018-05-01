@@ -198,7 +198,7 @@ used for the functions and represent them by \texttt{NodeFun}$_m$
 and \texttt{EdgeFun}$_m$ for node and edge regulations respectively.
 %
 We will use $\nodef_m$ and $\edgef_m$ to represent functions that
-are not defined in VTS.
+are not defined in a VTS.
 %
 % \begin{align}
 % \bigwedge\limits_{i,m} n_{i,m} \limplies a_{i,m} =  \nodef_m (n_{i,1},\dots,n_{i,\mu}) 
@@ -214,10 +214,10 @@ encode a space of candidate functions.
 \subsection{VTS properties}
 
 For synthesis of incomplete systems,
-we need properties properties against which we synthesize the missing parts.
+we need properties  against which we synthesize the missing parts.
 %
 Here we will discussed two such properties proposed in earlier
-works~\cite{SASBpaper}.
+works~\cite{SASBpaper}, namely stability and $k$-connectedness.
 %
 
 \paragraph{Stability property}
@@ -240,9 +240,9 @@ Subsequently, we encode stability condition using the reachability variables.
 
 \paragraph{$k$-connected property}
 %
-$k$-connectedness is a robustness property.
+$k$-connectedness expresses robustness against failure of few edges.
 %
-Let us use $d_{i,j,q}$ to indicate $q$th edge between $i$ and $j$ is dropped
+Let us use $d_{i,j,q}$ to indicate $q$th edge between $i$ and $j$ is failed
 and $r'_{i,j}$ to indicate if there is a path from $i$ to $j$ in
 the modified VTS.
 %
@@ -253,9 +253,10 @@ the modified VTS.
 % We have a graph that is not $k$-connected.
 %
 In the following, $\texttt{Drop}(d,k)$  encode that only
-existing edges can be dropped and exactly $k-1$ edges are dropped.
+existing edges can be failed and exactly $k-1$ edges are failed.
 %
-$\texttt{Reach}(d,r')$ defines reachability in the modified VTS,
+Both $\texttt{ReachBelow}(d,r')$ and $\texttt{ReachAbove}(d,r')$ defines
+reachability in the modified VTS,
 therefore we use a new variable $r'_{i,j}$ to encode reachability from
 $i$ to $j$.
 %
@@ -275,9 +276,9 @@ other node.
    \bigwedge\limits_{i,j}  r^{\prime}_{i,j} \limplies [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ]\\
   \texttt{Connected}(r') = & \Land\limits_{i,j} (r^{\prime}_{i,j} \lor r^{\prime}_{j,i})
 \end{align*}
-We will be synthesizing for both connected any disconnected graphs.
+We will be synthesizing for both connected and disconnected graphs.
 %
-We also define the following macros. 
+We define the following macros. 
 \begin{align*}
   \texttt{Connected}(k) = & \forall d.\;
           (\texttt{Drop}(d,k) \limplies \exists r'.\;\texttt{ReachBelow}(d,r')
@@ -287,7 +288,7 @@ We also define the following macros.
                                 \land \lnot \texttt{Connected}(r'))
 \end{align*}
 Since the free variables in $\texttt{Connectedness}(k)$ are universally
-quantified, please note that the connectedness property introduces the two
+quantified, the connectedness property introduces the two
 quantifier alternations.
 %
 

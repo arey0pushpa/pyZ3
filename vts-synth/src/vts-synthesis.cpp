@@ -358,8 +358,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   
     knownVarConstraint = z3::mk_and ( list_expr );
     /*
-    for( unsigned i = 0; i < knownNodes.size(); i++  ) {
-      std::cout << "Nodes is " << knownNodes[i] << "\n" ;
+    for( unsigned i = 0; i < knownActiveEdges.size(); i++  ) {
+      std::cout << "Nodes is " << knownActiveEdges[i] << "\n" ;
     }
     */
 
@@ -425,6 +425,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     z3::expr cnfCons = cnf_function( node_parameter_var, edge_parameter_var );
     
+    /*
     z3::expr func3cnf  = exists( listN, 
                          exists( listActiveN, 
                          exists( listPresenceE, 
@@ -437,6 +438,18 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listTvar, 
                     exists( listE, 
                             kConnCons && V5 && func3cnf )));
+   */
+      z3::expr cons = exists( listSvar, 
+                    exists( listTvar, 
+                    exists( listN, 
+                    exists( listActiveN,
+                    exists( listE, 
+                    exists( listPresenceE, 
+                    exists( listActiveE,
+                    exists( listPairingM, 
+                    exists( listReach,
+                            cnfCons && knownVarConstraint && vtsCons )))))))));
+    
     return cons;
   }
   else if ( variation == 4 ) {
@@ -500,6 +513,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listPairingM, 
                     exists( listReach,
                             gateCons && knownVarConstraint && vtsCons )))))))))));
+    // todo: V5 has some problems check assing it.
 
                             
     /** The query to ask                         
