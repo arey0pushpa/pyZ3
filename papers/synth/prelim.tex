@@ -122,7 +122,7 @@ that encode parts of VTSs.
 \item Boolean variable $n_{i,m}$ indicates if $m \in \nlabel(i)$
 \item Boolean variable $e_{i,j,q}$ indicates if $q$th edge exists between $i$ and $j$.
 \item Boolean variable $e_{i,j,q,m}$ indicates if $q$th edge between $i$ and $j$ contains $m$.
-\item Boolean variable $p_{m_1,m_2,m_3,m_4}$ indicates if $\{m_1,m_2,m_3,m_4\} \in \pairs$
+\item Boolean variable $p_{\{m_1,m_2,m_3,m_4\}}$ indicates if $\{m_1,m_2,m_3,m_4\} \in \pairs$
 \item uninterpreted Boolean functions $\nodef_m : \booleans^\mu \maps \booleans$
 encoding $\nodef(m)$ map
 \item uninterpreted Boolean functions $\edgef_m : \booleans^\mu \maps \booleans$
@@ -165,8 +165,9 @@ The following constraints encode the basic consistency of VTSs.
   \\
   \texttt{PairingC} =\;&
   \exists qr. \Land\limits_{\mathrlap{m_1,m_2,m_3,m_4}\;\;}
-                         (p_{m_1,m_2,m_3,m_4} \limplies qr_{m_1} + qr_{m_2} + qr_{m_3} + qr_{m_4} = 3) \land\\ 
-  & \quad\quad\quad ( m_1 = m_2 = m_3 = m_4  \limplies \lnot p_{m_1,m_2,m_3,m_4} )
+                         (p_{\{m_1,m_2,m_3,m_4\}} \limplies qr_{m_1} + qr_{m_2} + qr_{m_3} + qr_{m_4} = 3) 
+% \land\\ 
+%   & \quad\quad\quad ( m_1 = m_2 = m_3 = m_4  \limplies \lnot p_{m_1,m_2,m_3,m_4} )
   % \bigwedge\limits_{m} 
   % (\Lor\limits_{m'} p_{mm'} \limplies \Land_{m'} \lnot p_{m'm} ) \land
   % (\Lor\limits_{m'} p_{m'm} \limplies \Land_{m'} \lnot p_{mm'} )
@@ -174,12 +175,12 @@ The following constraints encode the basic consistency of VTSs.
   \texttt{Fusion1} =\;&
   \bigwedge\limits_{i,j,q} e_{i,j,q} \limplies
   \bigvee_{{m_1,m_2,m_3,m_4}} (\Land_{l=1}^4 ( b_{i,j,q,m_l} \lor a_{j,m_l} ) \land 
-                        \sum_{l=1}^4 b_{i,j,q,m_l} > 0 \land\\
-  & \qquad \qquad \qquad \qquad \sum_{l=1}^4 a_{j,m_l} > 0 \land p_{m_1,m_2,m_3,m_4})
+                        \Lor\limits_{l=1}^4 b_{i,j,q,m_l} \land\\
+  & \qquad \qquad \qquad \qquad \Lor\limits_{l=1}^4 a_{j,m_l}\land p_{\{m_1,m_2,m_3,m_4\}})
   \\
   \texttt{Fusion2} =\;&
 \bigwedge\limits_{\mathclap{i,j,q,m_1,m_2,m_3, l \in \{1,..,3\}}} b_{i,j,q,m_1} \land ..\land b_{i,j,q,m_l} \limplies \neg 
-  \bigvee_{\mathclap{j \neq j^{\prime}, m_{l+1}^{\prime},..,m_{4}^{\prime}}} ( a_{j^{\prime},m_{l+1}^{\prime}} \land .. \land a_{j^{\prime},m_4^{\prime}} \land p_{m_1,..,m_l,m^{\prime}_{l+1},..,m^{\prime}_4})
+  \bigvee_{\mathclap{j \neq j^{\prime}, m_{l+1}^{\prime},..,m_{4}^{\prime}}} ( a_{j^{\prime},m_{l+1}^{\prime}} \land .. \land a_{j^{\prime},m_4^{\prime}} \land p_{\{m_1,..,m_l,m^{\prime}_{l+1},..,m^{\prime}_4\}})
   \\
   \texttt{Consistancy} =\;& \texttt{EdgeC} \land
   \texttt{ActivityC} \land \texttt{PairingC} \land
