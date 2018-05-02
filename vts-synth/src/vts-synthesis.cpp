@@ -528,14 +528,15 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
    
    return cons;
   } else if ( variation == 5 ) { 
-    // known xor bits
+    // xor bits collection
     z3::expr_vector xorNVec( ctx );
     z3::expr_vector xorActiveNVec( ctx );
     z3::expr_vector xorPairingMVec( ctx );
     z3::expr_vector xorEVec( ctx );
     z3::expr_vector xorPresenceEVec( ctx );
     z3::expr_vector xorActiveEVec( ctx );
-    
+    //z3::expr_vector xorReachVec( ctx );
+
     // xor bits for each boolean var in vts
     Vec2Expr xorNodes;
     Vec2Expr xorActiveNodes;
@@ -543,6 +544,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     Vec4Expr xorPresenceEdges;
     Vec4Expr xorActiveEdges;
     Vec2Expr xorPairingMatrix;
+    //Vec4Expr xorReach;
     
     popl2 ( xorNodes, N, M, "xn" );
     popl2 ( xorActiveNodes, N, M, "xa" );
@@ -550,22 +552,24 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     popl4 ( xorPresenceEdges, N, N, E_arity, M, "xe" );
     popl4 ( xorActiveEdges, N, N, E_arity, M, "xb" );
     popl2 ( xorPairingMatrix, M, M, "xp" );
-
+    //popl4 ( xorReach, N, N, M, N-1, "xr" );
+  
     auto listXorN = flattern2d ( xorNodes, N, M, false );
     auto listXorActiveN = flattern2d( xorActiveNodes, N, M, false );
     auto listXorPairingM = flattern2d( xorPairingMatrix, M, M, true );
     auto listXorE = flattern3d( xorEdges, N, N, E_arity, true );
     auto listXorPresenceE = flattern4d( xorPresenceEdges, N, N, E_arity, M, true );
     auto listXorActiveE = flattern4d ( xorActiveEdges, N, N, E_arity, M, true );
+    //auto listXorReach = flattern4d ( xorReach, N, N, M, N-1, true );
     
-    
-    // unknown xor bits
+    // known xor bits [xor bits ^ n_i_k]
     z3::expr_vector xorknownN (ctx);
     z3::expr_vector xorknownActiveN(ctx);
     z3::expr_vector xorknownE(ctx);
     z3::expr_vector xorknownPresenceE(ctx);
     z3::expr_vector xorknownActiveE(ctx);
     z3::expr_vector xorknownPairingM(ctx);
+    // z3::expr_vector xorknownReach(ctx);
     
     // dummy variables
     Vec2Expr vec2;
@@ -592,7 +596,12 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                               && z3::mk_and( xorknownPresenceE ) 
                               && z3::mk_and( xorknownActiveE ) 
                               && z3::mk_and( knownPairingMatrix ); 
-                              
+    /*
+    for( unsigned i = 0; i < xorknownE.size(); i++  ) {
+      std::cout << "Nodes is " << xorknownE[i] << "\n" ;
+    }                          
+    exit(0);
+    * */
     // deletion restriction 
     auto xadd_node_C = !at_least_three( xorNVec );
     auto xadd_active_node_C = !at_least_three( xorActiveNVec );
@@ -601,7 +610,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     auto xadd_a_edge_C = !at_least_three( xorActiveNVec );
     
     z3::expr delCons = xadd_node_C && xadd_active_node_C && xadd_edge_C && xadd_p_edge_C && xadd_a_edge_C;    
-    z3::expr xorCons = knownVarConstraint && delCons; 
+    
+    //z3::expr xorCons = knownVarConstraint && delCons; 
+    z3::expr xorCons = knownVarConstraint; 
 
     /* Tuple version 
     unassigned_2d_bits( knownNodesTuple, knownNodes, unknownN, nodes, N, M, false, xorNodes, listXorN );    
@@ -641,14 +652,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     z3::expr addCons = nodeC && nodeActivityC && edgeC && edgeActivityC && edgePresenceC;
     */
-     
-    auto qvtsCons = exists( listN, 
-                    exists( listActiveN, 
-                    exists( listPresenceE,  
-                    exists( listActiveE, 
-                    exists( listPairingM, 
-                    exists( listReach, 
-                            vtsCons && xorCons ))))));   
 
     auto cons = exists( listXorN,
                 exists( listXorActiveN,
@@ -657,7 +660,13 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                 exists( listXorPresenceE,
                 exists( listXorActiveE,
                 exists( listE, 
-                        V5 && kConnCons )))))));
+                exists( listN, 
+                    exists( listActiveN, 
+                    exists( listPresenceE,  
+                    exists( listActiveE, 
+                    exists( listPairingM, 
+                    exists( listReach, 
+                         vtsCons && xorCons  )))))))))))));
     return cons;
     
   } else {

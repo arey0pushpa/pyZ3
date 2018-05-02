@@ -113,7 +113,7 @@ void print_func_gates ( unsigned noOfMolecules, unsigned noOfLeaves, unsigned ca
     //std::cout << "The number of leafs are  " << noOfLeaves << "\n";
     
     assert( chosenVars.size() == noOfLeaves );
-    assert( chosenGates.size() == noOfGates );
+    //assert( chosenGates.size() == noOfGates );
 
     print_learned_function( chosenVars, chosenGates, m, e );
     
