@@ -227,7 +227,8 @@ $m$-path from $i$ to $j$ of length less than or equal to $p$.
 %
 We use $m$-reachability to encode the stability condition in VTSs.
 %
-The following constraint recursively encodes that node $j$ is $m$-reachable from node $i$ in less than $p$ steps.
+The following constraint recursively encodes that node $j$ is
+$m$-reachable from node $i$ in less than $p$ steps.
 %
 Subsequently, we encode stability condition using the reachability variables.
 \begin{align*}
@@ -252,44 +253,41 @@ the modified VTS.
 % %
 % We have a graph that is not $k$-connected.
 %
-In the following, $\texttt{Drop}(d,k)$  encode that only
+In the following, $\texttt{Fail}(d,k)$ encodes that only
 existing edges can be failed and exactly $k-1$ edges are failed.
 %
-Both $\texttt{ReachBelow}(d,r')$ and $\texttt{ReachAbove}(d,r')$ defines
-reachability in the modified VTS,
-therefore we use a new variable $r'_{i,j}$ to encode reachability from
-$i$ to $j$.
+$\texttt{FailReach}(d,r')$ defines reachability in the modified VTS.
+%
+We use a new variable $r'_{i,j,p}$ to encode reachability from
+$i$ to $j$ in at most $p$ steps.
 %
 $\texttt{Connected}(r')$ says that all nodes are reachable from any
 other node.
-% In the following constraint, we encode $r'_{i,j}$ is true if there is an
-% edge $(i,\_,j)$ and it is not dropped, or there is a node
-% $i^{\prime}$ such that, there is an edge $(i,\_,i^{\prime})$ which is
-% not dropped and $r'_{i',j}$ is true.
 \begin{align*}
-  \texttt{Drop}(d,k) = & 
+  \texttt{fail}(d,k) = & 
   \bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \land 
   \sum_{i,j,q} d_{i,j,q} = k-1\\
-  \texttt{ReachAbove}(d,r') = &
-  \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}_{i,j}\\
-  \texttt{ReachBelow}(d,r') = &
-   \bigwedge\limits_{i,j}  r^{\prime}_{i,j} \limplies [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ]\\
-  \texttt{Connected}(r') = & \Land\limits_{i,j} (r^{\prime}_{i,j} \lor r^{\prime}_{j,i})
+  % \texttt{ReachAbove}(d,r') = &
+  % \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}_{i,j}\\
+  \texttt{failReach}(d,r') = &
+   \bigwedge\limits_{i,j,p}  r^{\prime}_{i,j,p} \limplies [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j,p-1} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ]\\
+  \texttt{connected}(r') = & \Land\limits_{i,j} (r^{\prime}_{i,j,\nu} \lor r^{\prime}_{j,i,\nu})
 \end{align*}
-We will be synthesizing for both connected and disconnected graphs.
+We will be synthesizing $k$-connected graphs.
 %
-We define the following macros. 
+We define $\texttt{connected}(k)$ that says for all possible valid failures
+the graph remains reachable. 
 \begin{align*}
-  \texttt{Connected}(k) = & \forall d.\;
-          (\texttt{Drop}(d,k) \limplies \exists r'.\;\texttt{ReachBelow}(d,r')
-                                \land \texttt{Connected}(r'))\\
-  \texttt{Disconnected}(k) = & \exists d.\;
-          (\texttt{Drop}(d,k) \land \exists r'.\;\texttt{ReachAbove}(d,r')
-                                \land \lnot \texttt{Connected}(r'))
+  \texttt{connected}(k) = & \forall d.\;
+          (\texttt{fail}(d,k) \limplies \exists r'.\;\texttt{failReach}(d,r')
+                                \land \texttt{connected}(r'))
+% \\
+  % \texttt{Disconnected}(k) = & \exists d.\;
+  %         (\texttt{Drop}(d,k) \land \exists r'.\;\texttt{ReachAbove}(d,r')
+  %                               \land \lnot \texttt{Connected}(r'))
 \end{align*}
-Since the free variables in $\texttt{Connectedness}(k)$ are universally
-quantified, the connectedness property introduces the two
-quantifier alternations.
+Since $d$ variables in $\texttt{connected}(k)$ are universally
+quantified, $\texttt{connected}(k)$ introduces quantifier alternations.
 %
 
 

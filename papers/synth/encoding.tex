@@ -1,6 +1,7 @@
-In this section, we will present a list of problems that may arise from
-synthesis of VTSs from partial available information
-and our method for completing the missing parts.
+%
+In this section, we will present a list of synthesis problems that may
+arise from partial available information about a VTS and our solution
+for the problems.
 
 \subsection{Problem Statements}
 
@@ -9,30 +10,25 @@ are not specified.
 %
 Our objective is to find the missing parts.
 %
-The missing information can be in any of these combinations parts of
-VTS. For example existence of some undiscovered edges or nodes, or
-insufficient knowledge about the presence of molecules in some part of
-the VTS (either on the node or on the edge).
+The missing parts can be in any of the components of VTS. 
 %
-To cover most of the likely variations of this missing information we
-have encoded the following variants of VTS synthesis.
+For example, some undiscovered edges or nodes, or insufficient
+knowledge about the presence of molecules in some part of the VTS.
+%
+To cover most of the likely variations of this missing information,
+we have encoded the following variants of VTS synthesis problem.
 
 \begin{enumerate}
-\item  Add new edges 
-\item  Modify the flow of molecules on the nodes and on the edges.
-  % \begin{enumerate}
-  % \item use available set of molecules.
-  % \item allow new molecule type to be added.     
-  % \end{enumerate}        
-\item Learning meaningful activity functions from a given language of
-  propositional formulas
+\item Fixing VTS by adding edges 
+\item Fixing VTS by adding molecules to the labels
+\item Fixing VTS by learning activity functions
   % \begin{enumerate}
   %   \item kcnf: low depth circuit.
   %   \item Boolean gates: And, Or.
   %   \item Boolean gates with linear combination.  
   % \end{enumerate}        
   % - Function dependence with var occurring once.
-\item  VTS repair. Allow both delete and add to the system.
+\item  Fixing VTS by both adding/deleting parts
 \end{enumerate}
 
 
@@ -41,38 +37,39 @@ have encoded the following variants of VTS synthesis.
 In our synthesis method, we take a VTS $G =
 (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ as input.
 %
-We allow activity functions not to be specified, i.e., vectors
-$\edgef$ and $\nodef$ may contain uninterpreted Boolean functions.
+We allow activity functions not to be specified.
 %
 We construct the following constraints to encode the available information
 about $G$.
 %
 \begin{align*}
-  \texttt{KnownE} &= \land \{e_{i,j,q,m}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land q \leq q' \land m \in M_q \}\\
-  \texttt{KnownN} &= \land \{n_{i,m}| m \in \nlabel(i) \land i \in \nodes \}\\
-  \texttt{KnownP} &= \land \{p_{i,j}| (i,j) \in \pairs \} \\
+  \texttt{PresentE} &= \land \{e_{i,j,q,m}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land q \leq q' \land m \in M_q \}\\
+  \texttt{PresentN} &= \land \{n_{i,m}| m \in \nlabel(i) \land i \in \nodes \}\\
+  \texttt{PresentP} &= \land \{p_{i,j}| (i,j) \in \pairs \} \\
   \texttt{KnownActiveN} &= \land \{ a_{i,m} = \texttt{NodeFun}_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is defined.} \} \\
   \texttt{KnownActiveE} &= \land \{ b_{i,j,q,m} = \texttt{EdgeFun}_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
                    | \edgef_m \text{ is defined.} \} \\
-  \texttt{KnownCons} & = \texttt{KnownE} \land \texttt{KnownN} \land 
- \texttt{KnownP} \land \texttt{KnownActiveE} \land \texttt{KnownActiveN}
+  \texttt{PresentCons} & = \texttt{PresentE} \land \texttt{PresentN} \land 
+ \texttt{PresentP} \land \texttt{KnownActiveE} \land \texttt{KnownActiveN}
 \end{align*}
-We also collect the variables that are not set to true in $\texttt{KnownCons}$.
+We also collect the variables that are not set to true in $\texttt{PresentCons}$.
 \begin{align*}
-  \texttt{UnknownELabel} &=
+  \texttt{AbsentELabel} &=
   \{e_{i,j,q,m}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land 
                           0 < q \leq q' \land m \not\in M_{q} \}\\
-  \texttt{UnknownE} &= \{e_{i,j,q}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land 
+  \texttt{AbsentE} &= \{e_{i,j,q}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land 
                     q' < q \leq \pi \}\\
-  \texttt{UnknownNLabel} &= \{n_{i,m}| m \not\in \nlabel(i) \land i \in \nodes \}\\
-  \texttt{UnknownP} &= \{p_{i,j}| (i,j) \not\in \pairs \} \\
+  \texttt{AbsentNLabel} &= \{n_{i,m}| m \not\in \nlabel(i) \land i \in \nodes \}\\
+  \texttt{AbsentP} &= \{p_{i,j}| (i,j) \not\in \pairs \} \\
   \texttt{UnnownActive} &=  \Land \{ a_{i,m} = \nodef_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is undefined.} \} \union \\
    &\quad\quad\quad  \{ b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
                    | \edgef_m \text{ is undefined.} \}
 \end{align*}
-We have defined $\texttt{UnknownE}$, $\texttt{UnknownN}$, and
-$\texttt{UnknownP}$
-as set and will be converted into formulas depending
+We have defined $\texttt{AbsentELabel}$, $\texttt{AbsentE}$, $\texttt{AbsentN}$, and
+$\texttt{AbsentP}$
+as sets.
+%
+They will be converted into formulas depending
 on the different usage in the synthesis problems. 
 
 % Since not all the activity functions are defined some of the functions
@@ -82,18 +79,25 @@ on the different usage in the synthesis problems.
 \subsection{Encoding synthesis property}
 
 We will do synthesis against the following property that says the VTS
-is stable and 3-connected, but not 4-connected.
+is stable and 3-connected.
 %
-The property is designed to balance the search space such that the synthesis procedure does not
-succeed with simply adding too many edges. 
+% The property is designed to balance the search space such that the synthesis procedure does not
+% succeed with simply adding too many edges. 
 %
 \begin{align*}
-  \texttt{Property} =  \texttt{Stability} \land \texttt{Connected}(3) \land \texttt{DisConnected}(4)
+  \texttt{Property} =  \texttt{Stability} \land \texttt{Connected}(3) 
+  %\land \texttt{DisConnected}(4)
 \end{align*}
+The property was proposed in~\cite{plos}.
+%
+However, the biological relevance of the property is debatable and open for change.
+%
+Our tool is easily modifiable to support any other property that may be deemed 
+interesting by the biologists.
 
 \subsection{Encoding synthesis constraints}
 
-Now we will consider the encodings for  the above
+Now we will consider the encodings for the
 listed synthesis problems.
 %
 The presented variations represent the encodings
@@ -108,12 +112,12 @@ synthesizing an aspect of VTS, then all other aspects are fully given.
 Therefore, we will describe two kinds of constraints for synthesis
 problems.
 %
-The first will encode the variable part in the synthesis problem and
+One will encode the variable part in the synthesis problem and
 the other encodes the fixed parts.
 %
 Subsequently, the two constraints will be put together with 
 $\texttt{Consistancy}$ and 
-$\texttt{Property}$.
+$\texttt{Property}$ to construct the constraints for synthesis.
 
 \subsubsection{Fixing VTS by adding edges}
 %
@@ -122,58 +126,61 @@ Now we will consider the case when we add new edges to VTS to satisfy the proper
 In the following, the pseudo-Boolean formula $\texttt{AddE}$ encodes
 that at most $slimit$ new undeclared edges may be added in the VTS.
 %
-\texttt{FixedForEdge} encodes the parts of the VTS that do not change.
+\texttt{FixedForEdge} encodes the parts of the VTS that are not allowed to change.
 \begin{align*}
-  &\texttt{AddE}(slimit) = \sum~\texttt{UnknownE} \leq slimit\\
-  &\texttt{FixedForEdge} = \texttt{KnownCons} \land \texttt{UnknownActive} \land\\
-   & \quad\quad\quad\quad \lnot \Lor \texttt{UnknownELabel} \;\union\;
-                    \texttt{UnknownNLabel} \;\union\;
-                    \texttt{UnknownP}
+  &\texttt{addE}(slimit) = \sum~\texttt{AbsentE} \leq slimit\\
+  &\texttt{fixedForEdge} = \texttt{PresentCons} \land \texttt{UnknownActive} \land\\
+   & \quad\quad\quad\quad \lnot \Lor \texttt{AbsentELabel} \;\union\;
+                    \texttt{AbsentNLabel} \;\union\;
+                    \texttt{AbsentP}
 \end{align*}
-We put together the constraints and obtain the following formula.
+We put together the constraints and obtain the following formula $\texttt{synthE}(slimit)$.
 \begin{align*}
-  & \texttt{SynthE}(slimit) =
-     (  \texttt{Consistancy}\land \texttt{Property} \land
-   \texttt{FixedForEdge} \land
-  \texttt{AddE}(slimit) )
+  & \texttt{synthE}(slimit) =
+       \texttt{consistancy}\land \texttt{property} \land
+   \texttt{fixedForEdge} \land
+  \texttt{addE}(slimit)
   % \tag{SynthE}\label{eq:addedge1}
 \end{align*}
-As we have seen $\texttt{Consistancy}$ encodes the basic constraints about VTS,
-$\texttt{Property}$ encodes the goal, and
-the rest two are just defined constraints.
+As we have seen $\texttt{consistancy}$ encodes the basic constraints about VTS,
+$\texttt{property}$ encodes the goal, and
+the rest two are defined just above.
 %
-A satisfying model of $\texttt{SynthE}$ will represent the synthesized VTS.
+A satisfying model of $\texttt{synthE}$ will make 
+some of the edges in $\texttt{AbsentE}$ true such that~$\texttt{property}$ is satisfied.
 %
-In the later synthesis problems, we will construct a similar QBF
-formula with same first two parts and the last two are due the
-requirements of the synthesis problem.
-
 We limit the addition of the edges, since we look for a fix that require minimum number
 of changes in the given VTS.
 %
-We start with $slimit = 1$ and grow one by one until $\texttt{SynthE}(slimit)$
+We start with $slimit = 1$ and grow one by one until $\texttt{synthE}(slimit)$
 becomes satisfiable.
+
+In the later synthesis problems, we will construct a similar QBF
+formula with same first two parts and the last two are due the
+requirements of the synthesis problem.
 
 \paragraph{\bf Fixing VTS by adding molecules to the labels:}
 The system may also be fixed only by modifying labels on the edges or the nodes instead
 of adding edges.
 %
+Here let us consider only adding molecules to the labels of edges.
+%
 In the following, the formula encodes that only $slimit$ edge labels may be added.
 \begin{align*}
   &\texttt{AddLabelEdge}(slimit) = 
     \sum~\texttt{UnknwonEdgeLabel}  \leq slimit\\
-  & \texttt{FixedForLabel} = \texttt{KnownCons} \land \texttt{UnknownActive} \land\\
-  & \quad \quad \lnot \Lor \texttt{UnknownE} \;\union\;
-                    \texttt{UnknownNLabel} \;\union\;
-                    \texttt{UnknownP}\\
+  & \texttt{FixedForLabel} = \texttt{PresentCons} \land \texttt{UnknownActive} \land\\
+  & \quad \quad \lnot \Lor \texttt{AbsentE} \;\union\;
+                    \texttt{AbsentNLabel} \;\union\;
+                    \texttt{AbsentP}\\
   &\texttt{SynthLabel}(slimit) = \\
   & \quad\quad
     (  \texttt{Consistancy}\land \texttt{Property} \land
    \texttt{FixedForLabel} \land \texttt{AddLabelEdge}(slimit) )
 \end{align*} 
-Similar to the previous encoding we solve the
+Similar to the previous encoding, we solve the
 satisfiability of the above formula to obtain additional molecules
-that may be added to the node labels.
+that may be added to the edge labels to satisfy the properties.
 
 
 
@@ -184,12 +191,16 @@ are missing.
 %
 The activity functions are $\mu$-input Boolean functions.
 %
-We choose a class of formulas for the candidate functions.
+First, we choose a class of formulas for the candidate functions.
 %
 We encode the candidates in a formula with parameters.
 %
-We choose different candidates by choosing values for the parameters.
-
+By assigning different values for the parameters, a solver may select
+different candidates for the activity functions.
+%
+We will illustrate only one class of formulas.
+%
+However, we support other classes of formulas for example $k$-CNF.
 
 In the following, the formula \texttt{NNFTemplate} encodes a set of
 negation normal form functions that take $y_1,..,y_\mu$ as input and
@@ -238,11 +249,11 @@ $\texttt{FixedForFunctions}$.
   \texttt{NNFTemplate}([z_{i,j,q,1},..,z_{i,j,q,2\lambda}],[e_{i,j,q,1},..,e_{i,j,q,\mu}] ) | 
   \edgef_m \text{ is undefined}
   \}\\
-  & \texttt{FixedForFunctions} = \texttt{KnownCons} \land\\
+  & \texttt{FixedForFunctions} = \texttt{PresentCons} \land\\
   & \quad \quad
-\lnot \Lor \texttt{UnknownE} \;\union\; \texttt{UnknownELabel} \;\union\;
-                    \texttt{UnknownNLabel} \;\union\;
-                    \texttt{UnknownP}\\
+\lnot \Lor \texttt{AbsentE} \;\union\; \texttt{AbsentELabel} \;\union\;
+                    \texttt{AbsentNLabel} \;\union\;
+                    \texttt{AbsentP}\\
   &\texttt{SynthFunction}(z,\lambda) = \\
   & \quad\quad
     (  \texttt{Consistancy}\land \texttt{Property} \land
@@ -254,16 +265,16 @@ variations.
 By reading of the values of $z$ in a satisfying model of the formula,
 we learn the synthesized function.
 
-\subsection{Repairing VTS:}
+\subsection{Fixing VTS by both adding/deleting parts:}
 %
-Now we will consider the repair of VTS by allowing not only addition but also
+Now we will consider repairing of VTS by allowing not only addition but also
 deletion of the molecules, edges, functions, or pairing matrix.
 %
-We have encoded the vts repair in our tool by introducing flip bits
+We have encoded the repairing in our tool by introducing flip bits
 for each variable that is modifiable in the VTS.
 %
 We illustrate the repairing on one class of variables and rest can be
-trivially extended.
+easily extended.
 %
 Let us consider repairing of node labels.
 %
@@ -275,80 +286,33 @@ and $flip_{i,m}$.
 We also limit how many times the $flip_{i,m}$ can be true, therefore
 limiting the number of flips.
 %
+The above constraints are encoded in $\texttt{FlipN}(slimit)$.
+\begin{align*}
+    &\texttt{FlipN}(slimit,flip) = \Land \{n_{i,m}\lxor flip_{i,m}| m \in \nlabel(i) \land i \in \nodes \} \land \\
+  & \quad \quad \quad
+    \Land \{ \lnot n_{i,m}\lxor flip_{i,m}| m \not \in \nlabel(i) \land i \in \nodes \} \land  \sum\limits_{i,m} flip_{i,m} \leq slimit
+\end{align*}
+%
 Similar to the earlier variations, we construct
 $\texttt{SynthRepairNode}(slimit)$ for the repair.
-% 
+%
+In that, $\texttt{FixedForNodeRepair}$ encodes all the parts of VTS that do not change.
 \begin{align*}
-    &\texttt{FlipN}(slimit) = \Land \{n_{i,m}\lxor flip_{i,m}| m \in \nlabel(i) \land i \in \nodes \} \land \\
-  & \quad \quad \quad
-    \Land \{ \lnot n_{i,m}\lxor flip_{i,m}| m \not \in \nlabel(i) \land i \in \nodes \} \land  \sum\limits_{i,m} flip_{i,m} \leq slimit \\
-% \\  
-    & \texttt{FixedForNodeRepair} =  \texttt{KnownE} \land  
-      \texttt{KnownP} \land \texttt{KnownActiveE} \land \texttt{KnownActiveN}
+% \\ 
+    & \texttt{FixedForNodeRepair} =  \texttt{PresentE} \land  
+      \texttt{PresentP} \land \texttt{KnownActiveE} \land \texttt{KnownActiveN}
       \land \\
   & \quad \quad \texttt{UnknownActive} \land \lnot 
-    \Lor \texttt{UnknownE} \;\union\; \texttt{UnknownNLabel} \;\union\;
-    \texttt{UnknownP}\\
-  &\texttt{SynthRepairNode}(slimit) = \\
+    \Lor \texttt{AbsentE} \;\union\; \texttt{AbsentNLabel} \;\union\;
+    \texttt{AbsentP}\\
+  &\texttt{SynthRepairNode}(slimit,flip) = \\
   & \quad\quad
     (  \texttt{Consistancy}\land \texttt{Property} \land
-    \texttt{FixedForNodeRepair} \land \texttt{FlipN}(slimit) )
+    \texttt{FixedForNodeRepair} \land \texttt{FlipN}(slimit,flip) )
 \end{align*}
-
-
-% We encode the \texttt{ModifyCons} by putting the constraints on the
-% unassigned edges and edge labels. The constraint of allowing only
-% certain number of addition to the given VTS is encoded as
-% \texttt{AtMostK} function over the unassigned edges and label.
-
-%\[Unassigned Edges\]}
-%\[Unassigned Activity Labels\]} 
-%\[Unassigned Molecule Labels\]
-% \begin{align}
-%    \texttt{EdgeConstraint} = \texttt{AtMostk} \, [ \texttt{unassigned\_edges} ]  
-%    \tag{E2}\label{eq:addedge2}
-% \end{align}
-% \begin{align}
-%    \texttt{EdgeActivity} = \texttt{AtMostK} \, [ \texttt{activity\_labels} ]
-%    \tag{E3}\label{eq:addedge3}
-% \end{align}
-
-% \begin{align}
-%    \texttt{EdgePresence} = \texttt{AtMostK} \, [ \texttt{unassigned\_molecule\_labels} ]  
-%    \tag{E4}\label{eq:addedge4}
-% \end{align}
-
-
-
-% Put \ref{eq:addedge2} in symbolic form and explain it in a couple of lines.
-
-% In order to decrease the search space we do not allow any modification in the node label and activity on the nodes. This constraint can be encoded as the fixing all the unassigned bits to false. 
-    
-% %    // Fix rest of them to zero.
-% %    auto fixVar0 = ! z3::mk_or ( openN )  && ! z3::mk_or ( openActiveN );
-
-% \begin{align}
-%   \exists i, j, q \,
-%   ( \texttt{KConnectivity}  \land \texttt{NoSelfEdge} \land \ref{eq:addedge1} )    
-%   \tag{E5}\label{eq:addedge5}
-% \end{align}
-
-
-% The \texttt{KConnectivity} and \texttt{NoSelfEdge} are same as the previous section, describing the graph to be a k but not k+1 connected and self edges are not allowed in the VTS. addedge1 is the constraint of \ref{eq:addedge1}.
-
-%{i,j,m,p} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
-
-    
- %   auto addConstraints = edgeC \&\& edgeActivityC \&\& edgePresenceC  \&\& fixVar0;
-
-% %   auto qvtsCons = exists( setN, 
-%                    exists( setActiveN, 
-%                    exists( setPresenceE,  
-%                    exists( setActiveE, 
-%                    exists( setPairingM, 
-%                    exists( setReach, 
-%                            vtsCons \&\& vtsActivity \&\& inputCons \&\& addConstraints ))))));   
-
+A satisfying model of $\texttt{SynthRepairNode}(slimit,flip)$ will assign some
+$flip$ bits to true.
+We will learn from the assignments the needed modifications in the VTS. 
 
 %%% Local Variables:
 %%% mode: latex
