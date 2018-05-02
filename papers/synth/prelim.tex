@@ -14,7 +14,7 @@ activating functions.
   \item $\edges \subseteq \nodes \times (\powerset{\mols}-\emptyset) \times \nodes$ is the
     set of edges with molecule sets as labels,
   \item $\nlabel : \nodes \maps \powerset{\mols}$ defines the molecules present in the nodes,
-  \item $\pairs \subseteq \mols \times \mols$ is pairing relation,
+  \item $\pairs \subseteq 2^{\mols}$ is pairing relation,
   \item $\nodef : \mols \maps \powerset{\mols} \maps \booleans$ is activity maps for nodes, and
   \item $\edgef : \mols \maps \powerset{\mols} \maps \booleans $ is activity maps for edges.
   \end{itemize}
@@ -31,7 +31,7 @@ The model captures the study state of a VTS.
 The analysis of the model will inform us about the network/graph
 properties of VTSs.
 
-Let $\pairs(M')$ denote $\{m|(m,m') \in P \text{ and } m' \in M'\}$.
+% Let $\pairs(M')$ denote $\{P\setminus M'|  P \in \pairs \text{ and } P \intersect M' \neq \emptyset \}$.
 %
 A molecule $k$ is {\em active} at node $n$ if $k \in \nlabel(n)$ and
 $\nodef(k,\nlabel(n))$ is true.
@@ -40,8 +40,8 @@ A molecule $k$ is {\em active} at edges $(n,M',n')$ if $k \in M'$ and
 $\edgef(k,M')$ is true.
 %
 We call $G$ {\em well-structured} if molecules $M$ is divided into
-two equal-sized partitions $M_1$ and $M_2$ such that
-$P \subseteq M_1 \times M_2$, and
+two partitions $Q$ and $R$ such that
+for each $P \in \pairs, |P \intersect Q| \leq 3 \land |P \intersect R| = 1 $, and
 for each $(n,M',n') \in \edges$, $n \neq n'$ and
 $M' \subseteq \nlabel(n) \intersection \nlabel(n')$.
 %
@@ -53,13 +53,15 @@ there are no self loops, and
 each edge carry only those molecules that are present in its source
 and destination nodes. 
 %
-An edge $(n,M',n') \in \edges$ {\em fuses} with its destination node $n'$
-if there are molecules $m,m' \in \mols$ such that $m$ is active in
-$(n,M',n')$, $m'$ is active in $n'$, and $(m,m') \in \pairs$.
+An edge $(n,M',\_) \in \edges$ {\em fuses} with a node $n'$
+if there are non-empty set of molecules $M'' \subseteq M'$ and $M''' \subseteq \nlabel(n')$
+such that $M''$ are active in the edge, $M'''$ are active in $n'$, and $M'' \union M''' \in \pairs$.
 %
 We call $G$ {\em well-fused} if each edge $(n,M',n') \in \edges$ fuses
-with non-empty fusing molecules $M'' \subseteq M'$
-and $\pairs(M'')$ are not active in any other node.
+with its destination node $n'$
+and can not fuse with any other node.
+
+% $\pairs(M'')$ are not active in any other node.
 
 % We will also consider several variations of the model.
 % %
@@ -120,7 +122,7 @@ that encode parts of VTSs.
 \item Boolean variable $n_{i,m}$ indicates if $m \in \nlabel(i)$
 \item Boolean variable $e_{i,j,q}$ indicates if $q$th edge exists between $i$ and $j$.
 \item Boolean variable $e_{i,j,q,m}$ indicates if $q$th edge between $i$ and $j$ contains $m$.
-\item Boolean variable $p_{m,m'}$ indicates if $(m,m') \in \pairs$
+\item Boolean variable $p_{m_1,m_2,m_3,m'}$ indicates if $\{m_1,m_2,m_3,m'\} \in \pairs$
 \item uninterpreted Boolean functions $\nodef_m : \booleans^\mu \maps \booleans$
 encoding $\nodef(m)$ map
 \item uninterpreted Boolean functions $\edgef_m : \booleans^\mu \maps \booleans$
@@ -162,17 +164,22 @@ The following constraints encode the basic consistency of VTSs.
   % \tag{V2}\label{eq:f1}\\
   \\
   \texttt{PairingC} =\;&
-  \bigwedge\limits_{m} 
-  (\Lor\limits_{m'} p_{mm'} \limplies \Land_{m'} \lnot p_{m'm} ) \land
-  (\Lor\limits_{m'} p_{m'm} \limplies \Land_{m'} \lnot p_{mm'} )
+  \exists qr. \Land\limits_{\mathrlap{m_1,m_2,m_3,m_4}\;\;}
+                         (p_{m_1,m_2,m_3,m_4} \limplies qr_{m_1} + qr_{m_2} + qr_{m_3} + qr_{m_4} = 3) \land\\ 
+  & \quad\quad\quad ( m_1 = m_2 = m_3 = m_4  \limplies \lnot p_{m_1,m_2,m_3,m_4} )
+  % \bigwedge\limits_{m} 
+  % (\Lor\limits_{m'} p_{mm'} \limplies \Land_{m'} \lnot p_{m'm} ) \land
+  % (\Lor\limits_{m'} p_{m'm} \limplies \Land_{m'} \lnot p_{mm'} )
   \\
   \texttt{Fusion1} =\;&
   \bigwedge\limits_{i,j,q} e_{i,j,q} \limplies
-  \bigvee_{\mathclap{m,m^{\prime}}} (b_{i,j,q,m} \land a_{j,m^{\prime}} \land p_{m,m^{\prime}})
+  \bigvee_{{m_1,m_2,m_3,m_4}} (\Land_{l=1}^4 ( b_{i,j,q,m_l} \lor a_{j,m_l} ) \land 
+                        \sum_{l=1}^4 b_{i,j,q,m_l} > 0 \land\\
+  & \qquad \qquad \qquad \qquad \sum_{l=1}^4 a_{j,m_l} > 0 \land p_{m_1,m_2,m_3,m_4})
   \\
   \texttt{Fusion2} =\;&
-\bigwedge\limits_{\mathclap{i,j,q,m}} b_{i,j,q,m} \limplies \neg 
-  \bigvee_{\mathclap{j \neq j^{\prime}, m^{\prime\prime}}} ( a_{j^{\prime},m^{\prime\prime}} \land p_{m,m^{\prime\prime}})
+\bigwedge\limits_{\mathclap{i,j,q,m_1,m_2,m_3, l \in \{1,..,3\}}} b_{i,j,q,m_1} \land ..\land b_{i,j,q,m_l} \limplies \neg 
+  \bigvee_{\mathclap{j \neq j^{\prime}, m_{l+1}^{\prime},..,m_{4}^{\prime}}} ( a_{j^{\prime},m_{l+1}^{\prime}} \land .. \land a_{j^{\prime},m_4^{\prime}} \land p_{m_1,..,m_l,m^{\prime}_{l+1},..,m^{\prime}_4})
   \\
   \texttt{Consistancy} =\;& \texttt{EdgeC} \land
   \texttt{ActivityC} \land \texttt{PairingC} \land
