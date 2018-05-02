@@ -122,7 +122,7 @@ that encode parts of VTSs.
 \item Boolean variable $n_{i,m}$ indicates if $m \in \nlabel(i)$
 \item Boolean variable $e_{i,j,q}$ indicates if $q$th edge exists between $i$ and $j$.
 \item Boolean variable $e_{i,j,q,m}$ indicates if $q$th edge between $i$ and $j$ contains $m$.
-\item Boolean variable $p_{m_1,m_2,m_3,m'}$ indicates if $\{m_1,m_2,m_3,m'\} \in \pairs$
+\item Boolean variable $p_{m_1,m_2,m_3,m_4}$ indicates if $\{m_1,m_2,m_3,m_4\} \in \pairs$
 \item uninterpreted Boolean functions $\nodef_m : \booleans^\mu \maps \booleans$
 encoding $\nodef(m)$ map
 \item uninterpreted Boolean functions $\edgef_m : \booleans^\mu \maps \booleans$
@@ -239,11 +239,11 @@ $m$-reachable from node $i$ in less than $p$ steps.
 %
 Subsequently, we encode stability condition using the reachability variables.
 \begin{align*}
-  \texttt{paths}(r) &= \bigwedge\limits_{\mathclap{i,j,m,p}} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
+  \texttt{Paths}(r) &= \bigwedge\limits_{\mathclap{i,j,m,p}} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
   \\
-  \texttt{loop}(r) &= \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,\nu}
+  \texttt{Loop}(r) &= \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,\nu}
   \\
-  \texttt{stability} &= \exists r. \; \texttt{paths}(r) \land \texttt{loop}(r)
+  \texttt{Stability} &= \exists r. \; \texttt{Paths}(r) \land \texttt{Loop}(r)
 \end{align*}
 
 \paragraph{$k$-connected property}
@@ -271,30 +271,30 @@ $i$ to $j$ in at most $p$ steps.
 $\texttt{Connected}(r')$ says that all nodes are reachable from any
 other node.
 \begin{align*}
-  \texttt{fail}(d,k) = & 
+  \texttt{Fail}(d,k) = & 
   \bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \land 
   \sum_{i,j,q} d_{i,j,q} = k-1\\
   % \texttt{ReachAbove}(d,r') = &
   % \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}_{i,j}\\
-  \texttt{failReach}(d,r') = &
+  \texttt{FailReach}(d,r') = &
    \bigwedge\limits_{i,j,p}  r^{\prime}_{i,j,p} \limplies [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j,p-1} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ]\\
-  \texttt{connected}(r') = & \Land\limits_{i,j} (r^{\prime}_{i,j,\nu} \lor r^{\prime}_{j,i,\nu})
+  \texttt{Connected}(r') = & \Land\limits_{i,j} (r^{\prime}_{i,j,\nu} \lor r^{\prime}_{j,i,\nu})
 \end{align*}
 We will be synthesizing $k$-connected graphs.
 %
-We define $\texttt{connected}(k)$ that says for all possible valid failures
+We define $\texttt{Connected}(k)$ that says for all possible valid failures
 the graph remains reachable. 
 \begin{align*}
-  \texttt{connected}(k) = & \forall d.\;
-          (\texttt{fail}(d,k) \limplies \exists r'.\;\texttt{failReach}(d,r')
-                                \land \texttt{connected}(r'))
+  \texttt{Connected}(k) = & \forall d.\;
+          (\texttt{Fail}(d,k) \limplies \exists r'.\;\texttt{FailReach}(d,r')
+                                \land \texttt{Connected}(r'))
 % \\
   % \texttt{Disconnected}(k) = & \exists d.\;
   %         (\texttt{Drop}(d,k) \land \exists r'.\;\texttt{ReachAbove}(d,r')
   %                               \land \lnot \texttt{Connected}(r'))
 \end{align*}
-Since $d$ variables in $\texttt{connected}(k)$ are universally
-quantified, $\texttt{connected}(k)$ introduces quantifier alternations.
+Since $d$ variables in $\texttt{Connected}(k)$ are universally
+quantified, $\texttt{Connected}(k)$ introduces quantifier alternations.
 %
 
 

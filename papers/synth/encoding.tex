@@ -128,31 +128,31 @@ that at most $slimit$ new undeclared edges may be added in the VTS.
 %
 \texttt{FixedForEdge} encodes the parts of the VTS that are not allowed to change.
 \begin{align*}
-  &\texttt{addE}(slimit) = \sum~\texttt{AbsentE} \leq slimit\\
-  &\texttt{fixedForEdge} = \texttt{PresentCons} \land \texttt{UnknownActive} \land\\
+  &\texttt{AddE}(slimit) = \sum~\texttt{AbsentE} \leq slimit\\
+  &\texttt{FixedForEdge} = \texttt{PresentCons} \land \texttt{UnknownActive} \land\\
    & \quad\quad\quad\quad \lnot \Lor \texttt{AbsentELabel} \;\union\;
                     \texttt{AbsentNLabel} \;\union\;
                     \texttt{AbsentP}
 \end{align*}
-We put together the constraints and obtain the following formula $\texttt{synthE}(slimit)$.
+We put together the constraints and obtain the following formula $\texttt{SynthE}(slimit)$.
 \begin{align*}
-  & \texttt{synthE}(slimit) =
-       \texttt{consistancy}\land \texttt{property} \land
-   \texttt{fixedForEdge} \land
-  \texttt{addE}(slimit)
+  & \texttt{SynthE}(slimit) =
+       \texttt{Consistancy}\land \texttt{Property} \land
+   \texttt{FixedForEdge} \land
+  \texttt{AddE}(slimit)
   % \tag{SynthE}\label{eq:addedge1}
 \end{align*}
-As we have seen $\texttt{consistancy}$ encodes the basic constraints about VTS,
-$\texttt{property}$ encodes the goal, and
+As we have seen $\texttt{Consistancy}$ encodes the basic constraints about VTS,
+$\texttt{Property}$ encodes the goal, and
 the rest two are defined just above.
 %
-A satisfying model of $\texttt{synthE}$ will make 
-some of the edges in $\texttt{AbsentE}$ true such that~$\texttt{property}$ is satisfied.
+A satisfying model of $\texttt{SynthE}$ will make 
+some of the edges in $\texttt{AbsentE}$ true such that~$\texttt{Property}$ is satisfied.
 %
 We limit the addition of the edges, since we look for a fix that require minimum number
 of changes in the given VTS.
 %
-We start with $slimit = 1$ and grow one by one until $\texttt{synthE}(slimit)$
+We start with $slimit = 1$ and grow one by one until $\texttt{SynthE}(slimit)$
 becomes satisfiable.
 
 In the later synthesis problems, we will construct a similar QBF
