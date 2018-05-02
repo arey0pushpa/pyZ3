@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <chrono>
 #include <ctime>
+//#include <time.h>
 
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
@@ -142,6 +143,9 @@ int main(int ac, char* av[])
     
   z3::context c;
 
+  // Record start time
+  auto start = std::chrono::high_resolution_clock::now();
+  
   //std::cout << useZ3;
   //std::cout << vm["func-model"].as<int>() << "\n";            
   //exit(0);
@@ -284,7 +288,10 @@ int main(int ac, char* av[])
       return 1;
     }
     if ( status == std::future_status::ready ) { 
-      std::cout << "Program run was sucessful! ";
+      std::cout << "Program run was sucessful!\n";
+      auto finish = std::chrono::high_resolution_clock::now();
+      std::chrono::duration<double> elapsed = finish - start;
+      std::cout << "entire run took " << elapsed.count() << " secs\n";
     }
 
     v->print_graph( c, "/tmp/dep_vts.dot", qs, printModel, displayGraph, synthVar ); 
@@ -315,8 +322,7 @@ int main(int ac, char* av[])
 catch (z3::exception & ex) {
 std::cout << "Nuclear Missles are launched ----> " << ex << "\n";
 }
-
-return 0;
+  return 0;
 }
 
 

@@ -467,6 +467,27 @@ z3::expr vts::no_self_edges() {                              //V5
 
 // V6: Only Q R entry has possible non zero entry.
 
+
+
+/*
+unsigned qSnareCount = 23;
+//unsigned rSnareCount = M - 7;
+z3::expr vts::restriction_on_pairing_matrix() {              //V6
+  z3::expr_vector ls(ctx);
+  z3::expr e(ctx);
+  for( unsigned x = 0 ; x < M; x++ ) {
+    for( unsigned y = 0 ; y < M; y++ ) {
+      if ( ((x < qSnareCount) && (y < qSnareCount)) || ((x >= qSnareCount) && (y >= qSnareCount)) ) {
+        e = !pairing_m[x][y];
+        ls.push_back( e );
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+*/
+
 z3::expr vts::restriction_on_pairing_matrix() {              //V6
   z3::expr_vector ls(ctx);
   z3::expr e(ctx);
@@ -480,7 +501,6 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
   }
   return z3::mk_and( ls );
 }
-
 
 // V7 : There should be an active pair corresponding to pairing matrix
 z3::expr vts::edge_must_fuse_with_target() {                 //V7
