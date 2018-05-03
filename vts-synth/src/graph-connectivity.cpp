@@ -57,7 +57,7 @@ z3::expr vts::k_connected_graph_constraint ( unsigned K, bool eQuantVar ) {
   
   z3::expr k_min_1_connected = forall ( setD1, implies 
 		  (  (exactly_k_drops ( K-1, drop1 ) && only_present_edges_can_be_dropped ( drop1 )), is_reach1 ) );
-   std::cout << k_min_1_connected;
+    // std::cout << k_min_1_connected;
 
   z3::expr k_not_connected = exists ( setD2,  
 		    (exactly_k_drops ( K, drop2 ) && only_present_edges_can_be_dropped ( drop2 )) && is_reach2 ) ;
