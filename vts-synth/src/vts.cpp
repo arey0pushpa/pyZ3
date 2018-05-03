@@ -469,6 +469,15 @@ z3::expr vts::no_self_edges() {                              //V5
 // V6: Only Q R entry has possible non zero entry.
 
 
+// pairing restrictions: Only self dependency is disallowed.
+z3::expr vts::restriction_on_pairing_matrix() {              //V6
+  z3::expr_vector ls(ctx);
+  for( unsigned x = 0 ; x < M; x++ ) {
+      ls.push_back( !pairing_m[x][x] );
+  }
+  return z3::mk_and( ls );
+}
+
 
 /*
 unsigned qSnareCount = 23;
@@ -487,7 +496,6 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
   return z3::mk_and( ls );
 }
 
-*/
 
 z3::expr vts::restriction_on_pairing_matrix() {              //V6
   z3::expr_vector ls(ctx);
@@ -502,6 +510,7 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
   }
   return z3::mk_and( ls );
 }
+*/
 
 // V7 : There should be an active pair corresponding to pairing matrix
 z3::expr vts::edge_must_fuse_with_target() {                 //V7
