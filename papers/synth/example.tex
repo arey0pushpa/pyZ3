@@ -1,18 +1,34 @@
+% \newenvironment{psmallmatrix}
+%   {\left(\begin{smallmatrix}}
+%   {\end{smallmatrix}\right)}
+
 \begin{figure}[t]
   \centering
-  \begin{tikzpicture}[->,>=stealth',auto,node distance=4cm,
+  \begin{tikzpicture}[->,>=stealth',auto,node distance=5cm,
   thick,main node/.style={rectangle,draw,font=\sffamily\Large\bfseries}]
-  \node[main node] (ga) {GA{\small \^{Qa4} \^{Qa6} \^{Qb4} \^{Qb6} \^{Qc4} \^{R6}}};
-  \node[main node] (ic) [below right of=ga,yshift=7mm] {IC {\small \^{Qa6} \^{Qb6} \^{R1}}};
+  \node[main node,text width=3cm] (ga) {GA{\small \^{Qa4} \^{Qa6} \^{Qb4} \^{Qb6} \^{Qc4} \^{R6}}};
+  \node[main node] (ic) [below right of=ga,yshift=8mm,xshift=5mm] {IC {\small \^{Qa6} \^{Qb6} \^{R1}}};
   \node[main node] (er) [below of=ga] {ER {\small \^{Qa1} \^{Qb1} \^{R1}}};
-  \node[main node] (ee) [left of=ga] {EE};
-  \node[main node] (le) [below of=ee] {LE};
+  \node[main node,text width=2.5cm] (pm) [right of=ga] {PM {\small \^{Qa5} \^{Qa7} \^{Qbc2} \^{Qbc7}}};
+  \node[main node] (ee) [right of=pm] {EE {\small \^{Qa2} \^{Qb2/3} \^{Qc2/3}}};
+  \node[main node] (le) [below of=ee] {LE {\small \^{Qa8} \^{Qb8} \^{Qc8}}};
+
   \path (ic) edge[bend right] node [right] {\^{Qc6}} (ga);
   \path (er) edge[bend left] node [left] {R6} (ga);
   \path (er) edge[bend right] node [left] {\^{Qc6}} (ga);
   \path (er) edge[bend right] node [right] {\^{Qc6}} (ic);
   \path (ga) edge[bend right=80] node [right] {\^{Qc1}} (er);
   \path (ee) edge[bend left] node [left] {\^{R8},Qa7,Qbc7,R7} (le);
+
+  %pm <-> ee
+  \path (ee) edge[bend left=10] node [above] {\^{R3}} (pm);
+  \path (pm) edge[bend left=10] node [above] {{Qb2} Qc2} (ee);
+
+  %ga->pm
+  \path (ga) edge[bend left=10] node [above] {{Qb2} Qc2} (pm);
+  \path (ga) edge[bend left=80] node [above] {\^{R2}} (pm);
+  \path (ga) edge[bend left=52] node [above] {\^{R7}} (pm);
+  \path (ga) edge[bend left] node [above] {\^{R8}} (pm);
   \end{tikzpicture}
   \caption{found-in-nature VTS}
   \label{fig:mukund-vts}
