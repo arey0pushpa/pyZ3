@@ -1,4 +1,25 @@
-In figure~\ref{fig:mukund}
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[->,>=stealth',auto,node distance=4cm,
+  thick,main node/.style={rectangle,draw,font=\sffamily\Large\bfseries}]
+  \node[main node] (ga) {GA{\small \^{Qa4} \^{Qa6} \^{Qb4} \^{Qb6} \^{Qc4} \^{R6}}};
+  \node[main node] (ic) [below right of=ga,yshift=7mm] {IC {\small \^{Qa6} \^{Qb6} \^{R1}}};
+  \node[main node] (er) [below of=ga] {ER {\small \^{Qa1} \^{Qb1} \^{R1}}};
+  \node[main node] (ee) [left of=ga] {EE};
+  \node[main node] (le) [below of=ee] {LE};
+  \path (ic) edge[bend right] node [right] {\^{Qc6}} (ga);
+  \path (er) edge[bend left] node [left] {R6} (ga);
+  \path (er) edge[bend right] node [left] {\^{Qc6}} (ga);
+  \path (er) edge[bend right] node [right] {\^{Qc6}} (ic);
+  \path (ga) edge[bend right=80] node [right] {\^{Qc1}} (er);
+  \path (ee) edge[bend left] node [left] {\^{R8},Qa7,Qbc7,R7} (le);
+  \end{tikzpicture}
+  \caption{found-in-nature VTS}
+  \label{fig:mukund-vts}
+\end{figure}
+
+In figure~\ref{fig:mukund-vts}
+
 
 
 %%% Local Variables:
