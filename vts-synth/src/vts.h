@@ -76,7 +76,8 @@ private:
 
   Vec4Expr reach;
   Vec3Expr drop1;
-  Vec2Expr d_reach1;
+  // Vec2Expr d_reach1;
+  Vec3Expr d_reach1;
   Vec3Expr drop2;
   Vec2Expr d_reach2;
 
@@ -182,7 +183,9 @@ public:
   z3::expr atmost_k_drops(unsigned k);          //
   z3::expr exactly_k_drops(unsigned k, Vec3Expr& dump);         //
   z3::expr reachability_under_drop_def(Vec2Expr& r_varas, Vec3Expr& dump1, unsigned conn_or_not);//
-  z3::expr remains_connected( Vec2Expr& r_varas );                 //
+  z3::expr reachability_under_drop_def( Vec3Expr& r_varas, Vec3Expr& dump1 );
+  z3::expr remains_connected( Vec3Expr& r_varas );                 //
+  // z3::expr remains_connected( Vec2Expr& r_varas );                 //
   z3::expr gets_disconnected( Vec2Expr& r_varas );                 //
 
   z3::expr not_k_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump );
