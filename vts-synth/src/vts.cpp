@@ -512,7 +512,38 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
 }
 */
 
+
+z3::expr vts::edge_must_fuse_with_target() {                 //V7
+  z3::expr_vector ls(ctx);
+  z3::expr lhs(ctx);
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)
+        continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        lhs = ctx.bool_val(false);
+        for ( unsigned m1 = 0; m1 < M; m1++ ) {
+          for ( unsigned m2 = 0; m2 < M; m2++ ) {
+            for ( unsigned m3 = 0; m3 < M; m3++ ) {
+              for ( unsigned m4 = 0; m4 < M; m4++ ) {
+                z3::expr_vector inner_list(ctx);
+                for ( unsigned l = 0; l < 4; l++ ) {
+                    active_edge[i][j][q][
+                }
+              }
+            }
+          }
+        }
+      z3::expr e =  implies ( edges[i][j][q], lhs );
+      ls.push_back( e );
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
 // V7 : There should be an active pair corresponding to pairing matrix
+/*
 z3::expr vts::edge_must_fuse_with_target() {                 //V7
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
@@ -536,6 +567,7 @@ z3::expr vts::edge_must_fuse_with_target() {                 //V7
   }
   return z3::mk_and( ls );
 }
+*/
 
 //  V8: Edge should not be able to potentially fuse with
 //      any node other than it's target.
