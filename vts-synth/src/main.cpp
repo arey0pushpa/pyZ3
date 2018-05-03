@@ -164,7 +164,7 @@ int main(int ac, char* av[])
   } else{
   
     // vts: v [context, Molecule, Nodes, Edge_arity, Version, Connectivity, Cnf_depth ]
-    unsigned int N = 2;
+    unsigned int N = 3;
     unsigned int M = 4;
     unsigned int Q = 2;
     // depth of cnf

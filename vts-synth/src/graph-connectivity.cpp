@@ -50,7 +50,6 @@ z3::expr vts::k_connected_graph_constraint ( unsigned K, bool eQuantVar ) {
   
   // Create:  Exists (setR1, reach_d1 && d1_all-conn )
   z3::expr is_reach1 = exists( setR1, reachability_under_drop_def( d_reach1 , drop1) && remains_connected( d_reach1 )  );
-  std::cout << is_reach1;
   z3::expr is_reach2 = exists( setR2, reachability_under_drop_def( d_reach2 , drop2, 1 ) && gets_disconnected( d_reach2 )  );
   
   z3::expr_vector setD1 = flattern3d ( drop1, N, N, E_arity, true );
@@ -58,7 +57,8 @@ z3::expr vts::k_connected_graph_constraint ( unsigned K, bool eQuantVar ) {
   
   z3::expr k_min_1_connected = forall ( setD1, implies 
 		  (  (exactly_k_drops ( K-1, drop1 ) && only_present_edges_can_be_dropped ( drop1 )), is_reach1 ) );
- 
+   std::cout << k_min_1_connected;
+
   z3::expr k_not_connected = exists ( setD2,  
 		    (exactly_k_drops ( K, drop2 ) && only_present_edges_can_be_dropped ( drop2 )) && is_reach2 ) ;
  
