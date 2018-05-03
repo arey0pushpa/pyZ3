@@ -201,7 +201,8 @@ void vts::init_vts() {
   popl3 ( drop1, N, N, E_arity, "d1" );
 
 //Populate d_reach1(i,j)
-  popl2 ( d_reach1, N , N, "r1" );
+  // popl2 ( d_reach1, N , N, "r1" );
+  popl3 ( d_reach1, N, N, N, "r1" );
 
 // Populate drop2(i,j,q)
   popl3 ( drop2, N, N, E_arity, "d2" );
@@ -651,7 +652,8 @@ z3::expr vts::is_undirected_dumped_edge( unsigned i, unsigned j,
 
 // undirected reachability
 z3::expr vts::reachability_under_drop_def( Vec2Expr& r_vars,
-                                           Vec3Expr& dump, unsigned conn_or_not ) { //
+                                           Vec3Expr& dump,
+                                           unsigned conn_or_not ) { //
   z3::expr_vector cond_list(ctx);
   for ( unsigned i = 0; i < N; i++ ) {
     for( unsigned j = 0 ; j < N; j++ ) {
@@ -678,12 +680,51 @@ z3::expr vts::reachability_under_drop_def( Vec2Expr& r_vars,
   return z3::mk_and( cond_list );
 }
 
-z3::expr vts::remains_connected( Vec2Expr& r_varas ){                 //
+
+z3::expr vts::reachability_under_drop_def( Vec3Expr& r_vars,
+                                           Vec3Expr& dump ) { //
+  z3::expr_vector cond_list(ctx);
+  for ( unsigned i = 0; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i) continue;
+      z3::expr ud_i_j = is_undirected_dumped_edge( i, j, dump );
+      for( unsigned p = 0; p < N-1; p++ ) {
+        if( p ==0 ) {
+          cond_list.push_back( z3::implies( r_vars[i][j][0], ud_i_j ) );
+        }else{
+          z3::expr_vector paths_list(ctx);
+          for( unsigned l = 0; l < N; l++ ) {
+            if( l == i || l == j ) continue;
+            paths_list.push_back( is_undirected_dumped_edge(i,l,dump)
+                                  && r_vars[l][j][p-1] );
+          }
+          auto cond = z3::implies( r_vars[i][j][p], ud_i_j || z3::mk_or( paths_list ) );
+          cond_list.push_back( cond );
+        }
+      }
+    }
+  }
+  
+  return z3::mk_and( cond_list );
+}
+
+// z3::expr vts::remains_connected( Vec2Expr& r_varas ){                 //
+//   z3::expr_vector cond_list(ctx);
+//   for ( unsigned i = 0; i < N; i++ ) {
+//     for( unsigned j = i+1 ; j < N; j++ ) {
+//       if (j == i) continue;
+//       cond_list.push_back( r_varas[i][j] );
+//     }
+//   }
+//   return z3::mk_and( cond_list );
+// }
+
+z3::expr vts::remains_connected( Vec3Expr& r_varas ){                 //
   z3::expr_vector cond_list(ctx);
   for ( unsigned i = 0; i < N; i++ ) {
     for( unsigned j = i+1 ; j < N; j++ ) {
       if (j == i) continue;
-      cond_list.push_back( r_varas[i][j] );
+      cond_list.push_back( r_varas[i][j][N-1] );
     }
   }
   return z3::mk_and( cond_list );
@@ -715,12 +756,12 @@ z3::expr vts::not_k_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump ) {
     //&& remains_connected( r_varas );
 }
 
-z3::expr vts::k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump ) {
-  return only_present_edges_can_be_dropped( dump )
-    && exactly_k_drops( k, dump )
-    && reachability_under_drop_def( r_varas, dump, 0 )
-    && remains_connected( r_varas );
-}
+// z3::expr vts::k_min_1_connected( unsigned k, Vec2Expr& r_varas, Vec3Expr& dump ) {
+//   return only_present_edges_can_be_dropped( dump )
+//     && exactly_k_drops( k, dump )
+//     && reachability_under_drop_def( r_varas, dump, 0 )
+//     && remains_connected( r_varas );
+// }
 
 z3::expr vts::not_a_function( Vec2Expr& nodes, Vec2Expr& active_node) {
   z3::expr_vector cond_list(ctx);
@@ -803,7 +844,8 @@ z3::expr vts::create_vts_constraint () {
 z3::model vts::get_vts_for_prob1( ) {
   z3::expr V5 = no_self_edges();                              //V5
   z3::expr basic_constraints = create_vts_constraint();
-  z3::expr connectivity = not_k_connected( 3, d_reach1, drop1 );
+  z3::expr connectivity = not_k_connected( 3, d_reach2, drop1 );
+  // z3::expr connectivity = not_k_connected( 3, d_reach1, drop1 );
   z3::expr cons =  basic_constraints && V5 && edges[0][1][0] && connectivity;
   //z3::expr cons =  basic_constraints_with_stability && edges[0][1][0];
 
