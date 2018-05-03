@@ -469,8 +469,9 @@ z3::expr vts::no_self_edges() {                              //V5
 // V6: Only Q R entry has possible non zero entry.
 
 
+unsigned qSnareCount = 23;
 // pairing restrictions: Only self dependency is disallowed.
-z3::expr vts::restriction_on_pairing_matrix() {              //V6
+z3::expr vts::qr_restriction_on_pairing_matrix() {              //V6
   z3::expr_vector ls(ctx);
   for( unsigned x = 0 ; x < M; x++ ) {
       ls.push_back( !pairing_m[x][x] );
@@ -495,7 +496,7 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
   }
   return z3::mk_and( ls );
 }
-
+*/
 
 z3::expr vts::restriction_on_pairing_matrix() {              //V6
   z3::expr_vector ls(ctx);
@@ -510,10 +511,9 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
   }
   return z3::mk_and( ls );
 }
-*/
 
 
-z3::expr vts::edge_must_fuse_with_target() {                 //V7
+z3::expr vts::qr_edge_must_fuse_with_target() {                 //V7
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
   for( unsigned i = 0 ; i < N; i++ ) {
@@ -521,21 +521,35 @@ z3::expr vts::edge_must_fuse_with_target() {                 //V7
       if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
-        lhs = ctx.bool_val(false);
-        for ( unsigned m1 = 0; m1 < M; m1++ ) {
-          for ( unsigned m2 = 0; m2 < M; m2++ ) {
-            for ( unsigned m3 = 0; m3 < M; m3++ ) {
-              for ( unsigned m4 = 0; m4 < M; m4++ ) {
-                z3::expr_vector inner_list(ctx);
-                for ( unsigned l = 0; l < 4; l++ ) {
-                    active_edge[i][j][q][
-                }
-              }
-            }
+        //lhs = ctx.bool_val(false);
+        for ( unsigned m = 0; m < M; m++ ) {
+          z3::expr_vector qSnareFml(ctx);
+          z3::expr_vector rSnareFml(ctx);
+          z3::expr_vector candidateFormula(ctx);
+          auto flag = false;
+          if ( m > qSnareCount ) 
+            flag == true;
+          candidateFormula.push ( active_edge[i][j][q][m] || active_node[j][m] ) ; 
+          for ( unsigned m1 = 0; m1 < M; m1++ ) {
+            if ( m == m1 ) continue;
+            auto fml = (active_edge[i][j][q][m1] || active_node[j][m1]) && pairing_m[m][m1]; 
+            if ( flag == true ) {
+              qSnareFml.push_back( fml );
+            } else {
+              rSnareFml.push_back( fml );
+            } 
           }
+          z3::expr sideCons( ctx );
+          if ( flag == true ) {
+            auto sideCons2 = exactly_two( qSnareFml  );
+            auto sideCons1 = exactly_one( rSnareFml  );
+            auto sideCons = sideCons1 && sideCons2;
+          } else {
+            auto sideCons = exactly_three( qSnareFml  );
         }
-      z3::expr e =  implies ( edges[i][j][q], lhs );
-      ls.push_back( e );
+        candidateFormula.push_back( mk_or(qSnareFml) || mk_or(rSnareFml) );
+        z3::expr e =  implies ( edges[i][j][q], lhs );
+        ls.push_back( e );
       }
     }
   }
@@ -543,7 +557,6 @@ z3::expr vts::edge_must_fuse_with_target() {                 //V7
 }
 
 // V7 : There should be an active pair corresponding to pairing matrix
-/*
 z3::expr vts::edge_must_fuse_with_target() {                 //V7
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
@@ -567,7 +580,6 @@ z3::expr vts::edge_must_fuse_with_target() {                 //V7
   }
   return z3::mk_and( ls );
 }
-*/
 
 //  V8: Edge should not be able to potentially fuse with
 //      any node other than it's target.

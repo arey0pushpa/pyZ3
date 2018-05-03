@@ -145,8 +145,11 @@ public:
   z3::expr edge_label_subset_of_node_label();            //V4 
   z3::expr no_self_edges();                              //V5
   z3::expr restriction_on_pairing_matrix();              //V6
+  z3::expr qr_restriction_on_pairing_matrix();              //V6
   z3::expr edge_must_fuse_with_target();                 //V7
+  z3::expr qr_edge_must_fuse_with_target();                //V7
   z3::expr edge_fuse_only_with_target();                 //V8  
+  z3::expr qr_edge_fuse_only_with_target();                 //V8  
 
   // Steady state
   z3::expr reachability_def();           //R1
