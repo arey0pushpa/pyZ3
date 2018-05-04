@@ -1,5 +1,5 @@
 In recent years, there has been a wide range of methods
-developed for the similar synthesis problems~\cite{sktech,cegis,exampleSynth}.
+developed for the similar synthesis problems~\cite{sketch,sygus,exampleSynth}.
 %
 They range from filling gaps an implementation of C programs from the
 pool of template predicates to learn learn an a program from example
@@ -7,7 +7,7 @@ runs of the program.
 %
 In the course of developing such methods,
 the background technology, i.e. solving of quantified
-constraints,~\cite{depQBF,Z3quantifier,markusRabeSolver} has been evolving rapidly.
+constraints,~\cite{lonsing2010depqbf,z3Quant} has been evolving rapidly.
 
 There are a few examples of using synthesis technique in biology especially in gene regulatory networks~\cite{shavit2016automated, fisher2015synthesising}. A very recent work~\cite{fisher2015synthesising} synthesize executable gene regulatory networks from single-cell gene expression data. 
 Synthesis technique is also used in optimal synthesis for chemical reaction networks~\cite{cardelli2017syntax}. The~\cite{fisher2015synthesising} uses constraint (satisfiability) solving techniques for the synthesis whereas ~\cite{shavit2016automated} uses SMT for synthesis. The paper~\cite{cardelli2017syntax} in addition of using SMT over ODE, uses a template-guided approach. In our case queries contain quantifiers so we have employed QBF solving with Z3 for the solving the synthesis problem. To our best knowledge this is the first application of synthesis in VTS.
