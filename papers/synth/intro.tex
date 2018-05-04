@@ -1,11 +1,12 @@
+
 %Motivate VTS
-\ashu{Reduce the intro by half page}
+\ashu{reduce the intro by half page}
 
 Eukaryotic cells, including human cells, consist of multiple membrane
 bound compartments.
 %
 Material is transported among these compartments by the vesicle
-transport system (VTS) [].
+transport system (VTS).
 %
 Briefly, the source compartment produces a membrane bound packet of
 molecules called a vesicle.
@@ -57,72 +58,67 @@ We use the model of VTSs that has been presented in~\cite{VTS}.
 Please look at appendix~\ref{sec:model}
 for the detailed discussion on pros and cons of the model.
 % Describe VTS in detail
-While VTSs transports molecules, VTSs are also
-regulated by the molecules.
+
+
+VTSs are regulated by the same molecules that they transport. Molecules on compartments and on vesicles can be in either an active or an inactive state.
+% the term vesicle has already been introduced.. using two terms for the same object seems confusing. 
 %
-Each compartment contains a set of molecules.
+% (The molecules are transported to the other compartments via
+%unidirectional channels.) cannot comment on unidirectionality of vesicles. they may be undergoingmultiple cycles of back-fusion for all we %know..  
 %
-The molecules are transported to the other compartments via
-unidirectional channels.  
+The active molecules regulate the vesicle they occur on.
 %
-The molecules in a compartment may be active or not active.
+A vesicle is enabled by a set of molecules
+such that one part of the set occurs in the vesicle and the other part
+occurs in the target compartment.
+% use either target or destination consistantly throughout..i prefer target because that's what the t in t-SNARE stands for.
 %
-Similarly, a molecule can be active or inactive in a channel. 
-%
-The active molecules are the regulators of the channels.
-%
-A channel is enabled by a pair of sets of molecules
-such that one occurs in the channel and the other
-occurs in the destination compartment.
-%
-The molecules in both the sets must be active in the channel
-and compartment respectively.
+These molecules must be active in the vesicle
+and target compartment respectively.
 %
 The pairs are called {\em fusing} sets and analogously
-the channel is considered to be {\em fused} with the
+the vesicle is considered to be {\em fused} with the
 destination compartment.
 %
-Not all the pairs of set of molecule can participate in the fusion, the
+Not all sets molecule can participate in the fusion, the
 potential fusion pairs are usually determined by biological experiments.
 %
-To ensure effective regulation, the fusing pairs must be
-unique for each fused channel-compartment pair.
+Generally, in cells, the fusing pairs are found to be distinct for distinct vesicle-compartment fusions.
 %
-A molecule that has participated in a fusion must not interfere
-with fusion at different compartments or channels.
+In order that a molecule that has participated in a fusion does not interfere
+with fusion at compartments and vesicles, in the model, we require that the molecule is inactive on appropriate compartments.
 %
-Therefore, the molecule must be inactive in appropriate compartments.
 %
 The activity of molecules is regulated by the other molecules, i.e.,
 the presence and absence of the other molecules in a compartment or
-channel may make the molecule active or inactive.
+vesicle may make the molecule active or inactive.
 %
 We call this regulation as {\em activity functions}.
 
 % Defending our model
 %
-In the VTS model, we assume that the system is in study state and the
+In this VTS model, we assume that the system is in steady state and the
 concentrations of the molecules in the compartments do not change over
 time.
 %
 We model the system as a labelled graph, where compartments are nodes and
-transport channels are edges.
+transport vesicles are edges.
 %
 The set of molecules present and their activity in a compartment or
-a channel is the label of the respective node or edge.
+a vesicle is the label of the respective node or edge.
 %
 The regulation controls are defined by a fusion pairing relation
 containing pairs of molecules and activity
 Boolean functions.
 %
-Since the system is in study state, we expect that any molecule that
+Since our system is in steady state, we expect that any molecule that
 leaves a compartment must come back via some path on the graph.
 %
 We call this property of VTS as {\em stability}.
 
 % Partial info defence
 %
-As we have discussed earlier, our understanding of VTSs are partial.
+As we have discussed earlier, our understanding of VTSs is partial.
 %
 % It largely means that the current knowledge is due to the patch work
 % of biological experiments~\cite{model} for identifying the compartments,
@@ -135,8 +131,9 @@ As we have discussed earlier, our understanding of VTSs are partial.
 %
 %{Speculative: Make a case for completing partial parts of VTSs!!}
 %
-For example, we may suspect that some edges may not have been
-discovered in a VTS that does not satisfy the stability condition.
+%For example, it is possible that some edges may not have been
+%discovered in a VTS that does not satisfy the stability condition.
+% nature of missing information has already been elaborated upon in the first paragraph
 %
 The synthesis for the unknown pieces may be {\em assisted} by computation on
 the graph model of VTSs.
@@ -158,7 +155,7 @@ We have implemented the encoding in a flexible tool,
 which can handle a wide range of synthesis query.
 %
 We have applied our tool on two found-in-nature VTSs, namely
-M1~\cite{} and S1~\cite{}.
+M1~\cite{} and S1~\cite{burri2004complete}.
 %
 We have also applied our tool on various synthetic examples to
 demonstrate that our tool scale upto the graph size ??, which

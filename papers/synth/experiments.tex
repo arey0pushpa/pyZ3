@@ -21,10 +21,10 @@
 \end{table}
 
 
-We implemented the encodings in a tool called~\ourtool\footnote{\ashu{\url{http://add-git-hub-url}}}.
+We implemented the encodings in a tool called~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
 %
 The tool takes a partially defined VTS as input in its custom designed
-input language.
+input language. The input is then converted to the constraints over VTS. 
 %
 The tool can not only synthesize the above discussed query, but also their
 combination.
@@ -33,11 +33,15 @@ For example, our tool can modify labels of nodes or edges while
 learning activity functions.
 %
 Our tool is developed in C++ and uses~\zthree~\cite{z3} infrastructure for
-processing formulas. Since the formulas are in QBF, we cannot use~\zthree.
+processing formulas. 
 %
-We use~\depqbf~\cite{depqbf} for solving of QBF formulas.
+Since, the formulas involve alternation of quantifiers over Boolean variables Z3 is not a suitable choice. We translate the formula created by Z3 tool into standard QDIMACS~\cite{qdimacs} format. Which can be used as an input for most of the QBF solvers. 
+
+%Since the formulas are in QBF, we cannot use~\zthree.
 %
-Our tool includes about ?? lines of code.
+We use~\depqbf~\cite{lonsing2010depqbf} for solving of QBF formulas. 
+%
+Our tool includes about 7000 lines of code.
 
 We have applied~\ourtool~on six partially defined VTS.
 %
@@ -49,7 +53,12 @@ with \ashu{?}GB memory and 900s timeout.
 The first four VTSs are synthetic and inspire from literature for typical
 motifs in VTSs. 
 %
-The last two are the VTSs that are from .......\ashu{Describe the source of two examples}.
+%
+The fifth VTS is taken from "A complete set of SNAREs in yeast"
+~\cite{burri2004complete} paper. It has been adapted from the paper by separating the v and the t SNAREs. 
+%The t SNAREs are labelled within compartments and v SNAREs on the edges. %\ashu{Describe the source of two examples}.
+%
+The last VTS represent mammalian SNARE map created by studying the literature references.  
 
 The table shows timing for various synthesis queries.
 %
@@ -62,10 +71,12 @@ $\infty$ indicates that any number of changes with the synthesis query
 search space can obtain the VTS.
 %
 \ashu{@ankit: please discuss all the synthesis queries in the table.}
+
+Variation 1 of our tool adds new labelled edges to the graph. We have ranked the all possible graph edits with the simple rank of minimum updates. Our tools were able to complete this graph by adding five new edges and nine new molecules in 210s. Variation 2 of our graph adds new labels to the edge and was able to fix this graph with eleven new molecule labels in 180s. Variation 3 of our tool synthesis low depth CNF functions and was able to synthesis the result in 500s. Variation 4 of our tool synthesis Boolean function based on AND, OR gates. The result shows the basic template of 4 leaves and 3 gates we allow the user to provide its own template in our front-end language. The tool was able to synthesize the Boolean functions in 470s.
 %
 %
-Our experiments suggest that the synthesis problems are solvable by modern
-solvers and the synthesis technology may be useful for biological research.
+%Our experiments suggest that the synthesis problems are solvable by modern 
+%solvers and the synthesis technology may be useful for biological research.
 %
 
 
