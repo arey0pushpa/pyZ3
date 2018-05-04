@@ -512,12 +512,11 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
   return z3::mk_and( ls );
 }
 
-
 z3::expr vts::qr_edge_must_fuse_with_target() {                 //V7
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
-  for( unsigned i = 0 ; i < N; i++ ) {
-    for( unsigned j = 0 ; j < N; j++ ) {
+  for( unsigned i = 0; i < N; i++ ) {
+    for( unsigned j = 0; j < N; j++ ) {
       if (j == i)
         continue;
       for ( unsigned q = 0; q < E_arity; q++ ) {
@@ -529,30 +528,37 @@ z3::expr vts::qr_edge_must_fuse_with_target() {                 //V7
           auto flag = false;
           if ( m > qSnareCount ) 
             flag == true;
-          candidateFormula.push ( active_edge[i][j][q][m] || active_node[j][m] ) ; 
-          for ( unsigned m1 = 0; m1 < M; m1++ ) {
-            if ( m == m1 ) continue;
-            auto fml = (active_edge[i][j][q][m1] || active_node[j][m1]) && pairing_m[m][m1]; 
+            auto ae = active_edge[i][j][q][m];
+            auto an = active_node[j][m]; 
+            //candidateFormula.push( ( ae || an ) && ( !ae || !an ) );
+            candidateFormula.push( ae || an  );
+            z3::expr sideCons( ctx );
+            for ( unsigned m1 = 0; m1 < M; m1++ ) {
+              if ( m == m1 ) continue;
+                auto ae = active_edge[i][j][q][m1];
+                auto an = active_node[j][m1];
+                // todo: if both are present the molecule becomes inactive.
+                auto fml = (ae || ae) && (!ae || !an) && pairing_m[m][m1]; 
+              if ( flag == true ) {
+                qSnareFml.push_back( fml );
+              } else {
+                rSnareFml.push_back( fml );
+              } 
+            }
             if ( flag == true ) {
-              qSnareFml.push_back( fml );
+              auto sideCons1 = !at_least_three(qSnareFml) && at_least_two(qSnareFml);
+              auto sideCons2 = at_least_one(rSnareFml) && at_most_one(rSnareFml);
+              sideCons = sideCons1 && sideCons2;
             } else {
-              rSnareFml.push_back( fml );
-            } 
+              sideCons = at_least_three(qSnareFml) && !at_least_four(qSnareFml);
           }
-          z3::expr sideCons( ctx );
-          if ( flag == true ) {
-            auto sideCons2 = exactly_two( qSnareFml  );
-            auto sideCons1 = exactly_one( rSnareFml  );
-            auto sideCons = sideCons1 && sideCons2;
-          } else {
-            auto sideCons = exactly_three( qSnareFml  );
         }
-        candidateFormula.push_back( mk_or(qSnareFml) || mk_or(rSnareFml) );
-        z3::expr e =  implies ( edges[i][j][q], lhs );
+        candidateFormula.push_back( mk_or(qSnareFml) && mk_or(rSnareFml) );
+        auto cons = mk_or( candidateFormula) && sideCons;
+        z3::expr e =  implies ( edges[i][j][q], cons );
         ls.push_back( e );
-      }
+      } 
     }
-  }
   return z3::mk_and( ls );
 }
 

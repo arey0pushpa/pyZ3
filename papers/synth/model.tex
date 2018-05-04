@@ -4,14 +4,13 @@
 %
 Therefore, the model only has aspects of a network or a graph.\\
 
-\ankit{Write about Q/R SNARES: fill tomorrow}
 The molecules transported by the VTS are themselves its regulators. The molecules in a
 compartment/vesicle may be active or inactive. The molecules that are respnsible for vesicle fusion
 are called SNARE proteins []. Active SNAREs present on vesicles (v-SNAREs) bind with their
-cognate active SNAREs on the target compartment (t-SNAREs) to enable veiscle fusion. A cell
-contains multiple kinds of v- and t- SNAREs. Only specific pairs of v and t SNAREs can bind to
+cognate active SNAREs on the target compartment (t-SNAREs) to enable vesicle fusion. A cell
+contains multiple kinds of v- and t-SNAREs. Only specific pairs of v and t SNAREs can bind to
 each other and participate in fusion. Fusion compatible v- and t- SNAREs are determined by
-biological experiments. Different vesicle-compartmetn fusions in the cell are brought about by
+biological experiments. Different vesicle-compartment fusions in the cell are brought about by
 different v- and t-SNARE pairs. A molecule that participates in a given fusion reaction must not
 interfere with fusion at different compartments or vesicles. Therefore, SNAREs must be kept in an
 inactive form in appropriate compartments/vesicles. The activity of molecules is regulated by the
@@ -23,9 +22,7 @@ fusion pairing relation containing pairs of SNAREs and molecular regulation by a
 functions. Since the system is in steady state, we expect that any molecule that leaves a
 compartment must come back via some path on the graph. We call this property of VTS as stability.
 
-\ankit{Discuss the yeast and eukaryotes VTS model and assumptions }
-A few assumptions on biological level.
-
+A few assumptions on modeling level.
 \begin{enumerate}
 \item[1] A cell is a set of compartments exchanging vesicles.
 \item[2] Compartments are neither created nor destroyed.
@@ -36,19 +33,18 @@ A few assumptions on biological level.
 \item Fusion of vesicles to compartments is driven by specific SNARE pairing.
 \item The activity of a SNARE can be regulated by other molecules present on the same compartment
 or vesicle.
-\item An active SNARE pair is necessary and sufficient for fusion. \ankit{Change it to consider QR SNARES}
- \end{enumerate}
+\item An active SNARE pair is necessary and sufficient for fusion. 
+\end{enumerate}
+ 
 
+\ankit{Discuss the yeast and eukaryotes VTS model and assumptions }
 
 \begin{enumerate}
-
-
 \item Complex form using three Q-SNAREs and one R-SNARE. In order for a vesicle to fuse to it's corresponding target compartment this combination has to be present.
 \item In the graph shown the R-SNAREs are always in active. Every combination is formed by three active Q-SNAREs and one active R-SNARE.
 \item  Qai, Qbi, Qci and Ri are just dummy names, real biological names can be found in the below table. 
 \item In the diagram white circle molecules are always active. Other edge labels are inactive molecules.
 \item Pairing matrix restriction: ith R-SNARE can fuse with only the corresponding ith Q-SNARES and vice-versa. No other combination is allowed.
-\item Concept of v and t-SNAREs is replaced by Q and R-SNAREs. 
 \end{enumerate}
 
 
