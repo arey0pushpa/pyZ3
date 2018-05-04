@@ -1057,9 +1057,21 @@ z3::expr vts::vts_basic_constraints () {
   z3::expr v2 = active_molecule_is_present_on_edge();         //V2
   z3::expr v3 = active_molecule_is_present_on_node();         //V3
   z3::expr v4 = edge_label_subset_of_node_label();            //V4
+  z3::expr v6 = restriction_on_pairing_matrix();              //V6
+  
+  z3::expr base_cons = v1 && v2 && v3 && v4 && v6;
+ // z3::expr base_cons = v1 && v2 && v3 && v4;
+  return base_cons;
+}
+
+z3::expr vts::qr_vts_basic_constraints () {  
+  z3::expr v1 = molecule_presence_require_for_present_edge(); //V1
+  z3::expr v2 = active_molecule_is_present_on_edge();         //V2
+  z3::expr v3 = active_molecule_is_present_on_node();         //V3
+  z3::expr v4 = edge_label_subset_of_node_label();            //V4
  // z3::expr v6 = restriction_on_pairing_matrix();              //V6
   
-//  z3::expr base_cons = v1 && v2 && v3 && v4 && v6;
+ // z3::expr base_cons = v1 && v2 && v3 && v4 && v6;
   z3::expr base_cons = v1 && v2 && v3 && v4;
   return base_cons;
 }
@@ -1099,7 +1111,7 @@ z3::expr vts::create_vts_constraint () {
 
 z3::expr vts::create_qr_vts_constraint () {
 // auto cons = vts_basic_constraints() && vts_self_edges_constraint()
-  auto cons = vts_basic_constraints() 
+  auto cons = qr_vts_basic_constraints () 
               && vts_stability_constraint()
               && vts_qr_fusion_constraint();
   return cons;

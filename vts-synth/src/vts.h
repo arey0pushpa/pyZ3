@@ -152,6 +152,7 @@ public:
   z3::expr qr_edge_must_fuse_with_target();                //V7
   z3::expr edge_fuse_only_with_target();                 //V8  
   z3::expr qr_edge_fuse_only_with_target();                 //V8  
+  z3::expr qr_vts_basic_constraints ();  
 
   //qr_4d
   z3::expr is_fuse( VecExpr& edge_vec, VecExpr& node_vec,
