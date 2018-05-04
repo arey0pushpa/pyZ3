@@ -1,11 +1,38 @@
 %Motivate VTS
 \ashu{Reduce the intro by half page}
 
-Eukaryotic cells, including human cells, consist of multiple membrane bound compartments.
-Material is transported among these compartments by the vesicle transport system (VTS) []. Briefly,
-the source compartment produces a membrane bound packet of molecules called a vesicle. After
-release, this vesicle specifically recognizes the correct target compartment within the cell, and fuses
-with it. The molecules that form the machinery of the VTS are known. \todo{connect to function }{We also know a lot about the specific functions} of these molecules and how these molecules interact amongst each other. In spite of this detailed knowledge at the level of the molecules, the structure of the VTS network, or the road-map of the eukaryotic cell, is far from complete. The current knowledge of the network is put together from a patch work of biological experiments. This information is scattered across several publications. Even after this information is collected and put together, we find that the network obtained is still not complete; new vesicles and new contents in previously known vesicles are constantly being discovered. The synthesis for the unknown pieces may be assisted by computation on the graph model of VTSs. 
+Eukaryotic cells, including human cells, consist of multiple membrane
+bound compartments.
+%
+Material is transported among these compartments by the vesicle
+transport system (VTS) [].
+%
+Briefly, the source compartment produces a membrane bound packet of
+molecules called a vesicle.
+%
+After release, this vesicle specifically recognizes the correct target
+compartment within the cell, and fuses with it.
+%
+A lot of information about the molecules that form the machinery of
+the VTS has been discovered, including their regulatory interaction
+with each other. 
+% %
+% \todo{connect to function }{We also know a lot about the specific functions} of these molecules and how these molecules interact amongst each other.
+%
+In spite of this detailed knowledge at the level of the molecules, the
+structure of the VTS network, or the road-map of the eukaryotic cell,
+is far from complete.
+%
+The current knowledge of the network is put together from a patch work
+of biological experiments and is scattered across several publications.
+%
+Even after this information is collected and put together, we find
+that the network obtained is still not complete; new vesicles and new
+contents in previously known vesicles are constantly being discovered.
+%
+The synthesis for the unknown pieces may be assisted by computation on
+the graph model of VTSs.
+%
 % 
 %In this work, we use a model described in [] to find out, given a partial
 %VTS graph and details about interactions amongst its molecules, what the complete graph of the
@@ -23,13 +50,12 @@ with it. The molecules that form the machinery of the VTS are known. \todo{conne
 %
 In this paper, we are looking at the computational questions 
 arise from the VTSs.
-%
-In the following, we use the model of VTSs that has been presented
-in~\cite{VTS}.
+
+
+We use the model of VTSs that has been presented in~\cite{VTS}.
 %
 Please look at appendix~\ref{sec:model}
 for the detailed discussion on pros and cons of the model.
-
 % Describe VTS in detail
 While VTSs transports molecules, VTSs are also
 regulated by the molecules.
@@ -45,21 +71,21 @@ Similarly, a molecule can be active or inactive in a channel.
 %
 The active molecules are the regulators of the channels.
 %
-A channel is enabled by a pair of molecules
+A channel is enabled by a pair of sets of molecules
 such that one occurs in the channel and the other
 occurs in the destination compartment.
 %
-Both the molecules must be active in the channel
+The molecules in both the sets must be active in the channel
 and compartment respectively.
 %
-The pairs are called {\em fusing} molecules and analogously
+The pairs are called {\em fusing} sets and analogously
 the channel is considered to be {\em fused} with the
 destination compartment.
 %
-Not all the pairs of molecules can participate in the fusion, the
+Not all the pairs of set of molecule can participate in the fusion, the
 potential fusion pairs are usually determined by biological experiments.
 %
-To ensure effective regulation, the fusing molecule pairs must be
+To ensure effective regulation, the fusing pairs must be
 unique for each fused channel-compartment pair.
 %
 A molecule that has participated in a fusion must not interfere
@@ -75,8 +101,9 @@ We call this regulation as {\em activity functions}.
 
 % Defending our model
 %
-In the VTS model, we assume that the system is in study state and
-the concentrations of the molecules in the compartments do not change over time.
+In the VTS model, we assume that the system is in study state and the
+concentrations of the molecules in the compartments do not change over
+time.
 %
 We model the system as a labelled graph, where compartments are nodes and
 transport channels are edges.
@@ -95,16 +122,16 @@ We call this property of VTS as {\em stability}.
 
 % Partial info defence
 %
-Although the VTSs are important, our understanding of VTSs are partial.
+As we have discussed earlier, our understanding of VTSs are partial.
 %
-It largely means that the current knowledge is due to the patch work
-of biological experiments~\cite{model} for identifying the compartments,
-channels, molecules, and their activity and regulatory control.
-%
-Often the information is scattered around in several publications.
-%
-Even after with some effort we may collate all the known information about
-a VTS, we may still have unknown pieces of the system; new vesicles and new contents in previously known vesicles are constantly being discovered.
+% It largely means that the current knowledge is due to the patch work
+% of biological experiments~\cite{model} for identifying the compartments,
+% channels, molecules, and their activity and regulatory control.
+% %
+% Often the information is scattered around in several publications.
+% %
+% Even after with some effort we may collate all the known information about
+% a VTS, we may still have unknown pieces of the system; new vesicles and new contents in previously known vesicles are constantly being discovered.
 %
 %{Speculative: Make a case for completing partial parts of VTSs!!}
 %
@@ -118,16 +145,16 @@ In this paper, we consider several versions of the synthesis problem
 involving different parts of VTSs that can be synthesized, such as
 modifying labels, adding/deleting edges, and learning activity functions.
 %
-We also consider variation on the properties against which we do synthesis,
-namely stability, and $k$-connectedness that states
-that VTS remains connected after removing any $k-1$ edges.
+We also consider variation on the properties against which we do
+synthesis, namely stability, and $k$-connectedness that states that
+VTS remains connected after removing any $k-1$ edges.
 %
 In order to synthesize the parts of a VTS such that it satisfies the
 constraints, we encode the synthesis problem into a satisfiability of
 quantified Boolean formulas(QBFs). 
 %
 
-We have implemented the encoding in a highly flexible tool,
+We have implemented the encoding in a flexible tool,
 which can handle a wide range of synthesis query.
 %
 We have applied our tool on two found-in-nature VTSs, namely
@@ -146,6 +173,8 @@ The following are the contributions of this work:
 \end{itemize}
 
 The rest of the paper is organized as follows.
+%
+In section~\ref{sec:example}, we present a motivating example.
 %
 In section~\ref{sec:prelim}, we present the graph model of VTSs and encoding of several
 constraints on VTSs.

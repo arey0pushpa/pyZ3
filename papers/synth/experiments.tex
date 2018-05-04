@@ -20,6 +20,55 @@
   \label{tab:qf-grabh}
 \end{table}
 
+
+We implemented the encodings in a tool called~\ourtool\footnote{\ashu{\url{http://add-git-hub-url}}}.
+%
+The tool takes a partially defined VTS as input in its custom designed
+input language.
+%
+The tool can not only synthesize the above discussed query, but also their
+combination.
+%
+For example, our tool can modify labels of nodes or edges while
+learning activity functions.
+%
+Our tool is developed in C++ and uses~\zthree~\cite{z3} infrastructure for
+processing formulas. Since the formulas are in QBF, we cannot use~\zthree.
+%
+We use~\depqbf~\cite{depqbf} for solving of QBF formulas.
+%
+Our tool includes about ?? lines of code.
+
+We have applied~\ourtool~on six partially defined VTS.
+%
+The results are presented in table~\ref{tab:qf-graph}.
+%
+The experiments were conducted on ... machine,
+with \ashu{?}GB memory and 900s timeout.
+%
+The first four VTSs are synthetic and inspire from literature for typical
+motifs in VTSs. 
+%
+The last two are the VTSs that are from .......\ashu{Describe the source of two examples}.
+
+The table shows timing for various synthesis queries.
+%
+For each synthesis query, we have two columns.
+%
+One column reports the timing and the other reports the minimum changes
+needed to obtain a valid VTS.
+%
+$\infty$ indicates that any number of changes with the synthesis query
+search space can obtain the VTS.
+%
+\ashu{@ankit: please discuss all the synthesis queries in the table.}
+%
+%
+Our experiments suggest that the synthesis problems are solvable by modern
+solvers and the synthesis technology may be useful for biological research.
+%
+
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"
