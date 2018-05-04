@@ -179,6 +179,7 @@ void vts::init_vts() {
 
 // Populate pairing_m(k,k1)
   popl2 ( pairing_m, M, M, "p" );
+  popl4 ( pairing_m_4d, M, M, M, M, "p" );// todo: more efficent implementation
 /*
 // Populate xtra var s_var : var for node function
   //popl2 ( s_var, 2 * (M-1), J, "s" );
@@ -512,27 +513,125 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
 // hack: FIXING NUMBER OF QSNARES, QSANRES always starts from 0.
 unsigned qSnareCount = 23;
 
-void vts::create_formula ( z3::expr_vector& qSnareFml, z3::expr_vector& rSnareFml,
-                           z3::expr_vector& molOnEdge, z3::expr_vector& molOnTargetNode,
-                           unsigned i, unsigned j, unsigned q, unsigned m, bool flag )  {
+void vts::create_formula ( z3::expr_vector& qSnareFml,
+                           z3::expr_vector& rSnareFml,
+                           z3::expr_vector& molOnEdge,
+                           z3::expr_vector& molOnTargetNode,
+                           unsigned i, unsigned j, unsigned q, unsigned m,
+                           bool flag )  {
    for ( unsigned m1 = 0; m1 < M; m1++ ) {
-            if ( m == m1 ) continue;
-              auto ae = active_edge[i][j][q][m1] && pairing_m[m][m1];
-              auto an = active_node[j][m1] && pairing_m[m][m1];
-              molOnEdge.push_back( ae  ); 
-              molOnTargetNode.push_back( an ); 
-              // todo: if both are present the molecule becomes inactive.
-              auto fml = (ae || an) && (!ae || !an); 
-            if ( flag == true ) {
-              qSnareFml.push_back( fml );
-            } else {
-              rSnareFml.push_back( fml );
-            } 
-  }
+     if ( m == m1 ) continue;
+     auto ae = active_edge[i][j][q][m1] && pairing_m[m][m1];
+     auto an = active_node[j][m1] && pairing_m[m][m1];
+     molOnEdge.push_back( ae  );
+     molOnTargetNode.push_back( an );
+     // todo: if both are present the molecule becomes inactive.
+     auto fml = (ae || an) && (!ae || !an);
+     if ( flag == true ) {
+       qSnareFml.push_back( fml );
+     } else {
+       rSnareFml.push_back( fml );
+     }
+   }
 }
 
-void vts::fusion_constraint (z3::expr_vector& candidateMoleculeFormula, 
-                             unsigned i, unsigned j, unsigned q, unsigned m, bool f1Orf2 ) {
+///---------------------------------------------------------------------------
+// Ashutosh version
+z3::expr vts::is_fuse( VecExpr& edge_vec, VecExpr& node_vec,
+                       std::vector< unsigned >& fuse_mols ) {
+  z3::expr_vector node_active(ctx);
+  z3::expr_vector edge_active(ctx);
+  z3::expr_vector some_where_active(ctx);
+  for(unsigned l = 0; l < 4; l++ ) {
+    unsigned m = fuse_mols[l];
+    auto either_place = edge_vec[m] || node_vec[m];
+    some_where_active.push_back(either_place);
+    edge_active.push_back( edge_vec[m] );
+    node_active.push_back( node_vec[m] );
+  }
+  some_where_active.push_back( mk_or( edge_active ) );
+  some_where_active.push_back( mk_or( node_active ) );
+  return mk_and( some_where_active ) &&
+    pairing_m_4d[fuse_mols[0]][fuse_mols[1]][fuse_mols[2]][fuse_mols[3]];
+}
+
+z3::expr vts::qr_4d_edge_must_fuse_with_target() {                 //V7
+  z3::expr_vector ls(ctx);
+  std::vector< unsigned > fuse_mols;
+  fuse_mols.resize(4);
+  for( unsigned i = 0; i < N; i++ ) {
+    for( unsigned j = 0; j < N; j++ ) {
+      if (j == i)
+        continue;
+      VecExpr& an = active_node[j];
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        VecExpr& ae = active_edge[i][j][q];
+        z3::expr_vector candidateMoleculeFormula(ctx);
+        //lhs = ctx.bool_val(false);
+        for ( unsigned m1 = 0   ; m1 < M; m1++ ) { fuse_mols[0]=m1;
+        for ( unsigned m2 = m1+1; m2 < M; m2++ ) { fuse_mols[1]=m2;
+        for ( unsigned m3 = m2+1; m3 < M; m3++ ) { fuse_mols[2]=m3;
+        for ( unsigned m4 = m3+1; m4 < M; m4++ ) { fuse_mols[3]=m4;
+          if( m3 > M/2 || m4 < M/2 ) continue; // QR boundry
+          z3::expr is_f = is_fuse( ae, an, fuse_mols);
+          candidateMoleculeFormula.push_back( is_f );
+        }}}}
+        auto cons = mk_or ( candidateMoleculeFormula );
+        z3::expr e =  implies ( edges[i][j][q], cons );
+        ls.push_back( e );
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+z3::expr vts::qr_4d_edge_fuse_only_with_target() {       //V8
+  z3::expr_vector ls(ctx);
+  std::vector< unsigned > fuse_mols;
+  fuse_mols.resize(4);
+
+  for( unsigned i = 0 ; i < N; i++ ) {
+    for( unsigned j = 0 ; j < N; j++ ) {
+      if (j == i)
+        continue;
+      for ( unsigned q = 0; q < E_arity; q++ ) {
+        VecExpr& ae = active_edge[i][j][q];
+        z3::expr_vector rhs(ctx);
+        for( unsigned jp = 0 ; jp < N; jp++ ) {
+          if ( jp == j ) continue;
+          VecExpr& an = active_node[jp];
+          // For each possible active candidate molecule
+          z3::expr_vector candidateMoleculeFormula(ctx);
+          for ( unsigned m1 = 0   ; m1 < M; m1++ ) { fuse_mols[0]=m1;
+          for ( unsigned m2 = m1+1; m2 < M; m2++ ) { fuse_mols[1]=m2;
+          for ( unsigned m3 = m2+1; m3 < M; m3++ ) { fuse_mols[2]=m3;
+          for ( unsigned m4 = m3+1; m4 < M; m4++ ) { fuse_mols[3]=m4;
+            if( m3 > M/2 || m4 < M/2 ) continue; // QR boundry
+            z3::expr is_f = is_fuse( ae, an,fuse_mols );
+            rhs.push_back( !is_f );
+          }}}}
+        }
+        auto cons = mk_and( rhs );
+        z3::expr e = implies( edges[i][j][q], cons );
+        ls.push_back( e );
+      }
+    }
+  }
+  return z3::mk_and( ls );
+}
+
+z3::expr vts::vts_qr_4d_fusion_constraint () {
+  z3::expr v7 = qr_4d_edge_must_fuse_with_target();         //V7
+  z3::expr v8 = qr_4d_edge_fuse_only_with_target();         //V8
+  auto cons = v7 && v8;
+  return cons;
+}
+
+//-----------------------------------------------------------
+
+void vts::fusion_constraint( z3::expr_vector& candidateMoleculeFormula,
+                             unsigned i, unsigned j, unsigned q, unsigned m,
+                             bool f1Orf2 ) {
  // Used to make sure QCount = 3 and RCount = 1
           z3::expr_vector qSnareFml(ctx);
           z3::expr_vector rSnareFml(ctx);
@@ -543,27 +642,26 @@ void vts::fusion_constraint (z3::expr_vector& candidateMoleculeFormula,
           // For subconstraint [b_ijqm1 || a_jm1] && p_mm1
           z3::expr fusionMoleculeFormula(ctx);
           auto flag = false;
-          if ( m > qSnareCount ) { 
+          if ( m > qSnareCount ) {
             flag = true;
           }
           auto ae = active_edge[i][j][q][m];
-          auto an = active_node[j][m]; 
+          auto an = active_node[j][m];
           // fusion candidate that cause fusion
-          if ( f1Orf2 == true ) { 
+          if ( f1Orf2 == true ) {
             //fusionMoleculeFormula =  ae || an;
             fusionMoleculeFormula = ( ae || an ) && ( !ae || !an );
             //increase the possible count of mole on edge o node
-            molOnEdge.push_back( ae  ); 
-            molOnTargetNode.push_back( an ); 
+            molOnEdge.push_back( ae  );
+            molOnTargetNode.push_back( an );
           } else {
            fusionMoleculeFormula =  ae;
           }
           //fusionMoleculeFormula.push( ( ae || an ) && ( !ae || !an ) );
-         
-          create_formula ( qSnareFml, rSnareFml,
-                           molOnEdge, molOnTargetNode,
+
+          create_formula( qSnareFml, rSnareFml, molOnEdge, molOnTargetNode,
                            i, j, q, m, flag );
-         
+
           if ( flag == true ) {
             if ( f1Orf2 == true ) {
               auto sideCons1 = at_least_two(qSnareFml);
@@ -585,14 +683,16 @@ void vts::fusion_constraint (z3::expr_vector& candidateMoleculeFormula,
           }
            // sideCons = at_least_three(qSnareFml) && !at_least_four(qSnareFml);
         }
-          auto atleastOneMolOnEdge = mk_or( molOnEdge ); 
-          auto atleastOneMolOnTargetNode = mk_or( molOnTargetNode ); 
+          auto atleastOneMolOnEdge = mk_or( molOnEdge );
+          auto atleastOneMolOnTargetNode = mk_or( molOnTargetNode );
           auto molCons = atleastOneMolOnEdge && atleastOneMolOnTargetNode;
           fusionMoleculeFormula = fusionMoleculeFormula && mk_or(qSnareFml) && mk_or(rSnareFml);
-          
+
           auto cf = fusionMoleculeFormula && sideCons && molCons;
           candidateMoleculeFormula.push_back( cf );
-} 
+}
+
+
 
 z3::expr vts::qr_edge_must_fuse_with_target() {                 //V7
   z3::expr_vector ls(ctx);

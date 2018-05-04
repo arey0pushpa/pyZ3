@@ -71,6 +71,7 @@ private:
   Vec4Expr active_edge;
 
   Vec2Expr pairing_m;
+  Vec4Expr pairing_m_4d;
   std::vector<z3::func_decl> node_funcs;
   std::vector<z3::func_decl> edge_funcs;
 
@@ -151,6 +152,13 @@ public:
   z3::expr edge_fuse_only_with_target();                 //V8  
   z3::expr qr_edge_fuse_only_with_target();                 //V8  
 
+  //qr_4d
+  z3::expr is_fuse( VecExpr& edge_vec, VecExpr& node_vec,
+                         std::vector< unsigned >& fuse_mols );
+  z3::expr qr_4d_edge_must_fuse_with_target();                //V7
+  z3::expr qr_4d_edge_fuse_only_with_target();                 //V8  
+  z3::expr vts_qr_4d_fusion_constraint ();
+  
   // Steady state
   z3::expr reachability_def();           //R1
   z3::expr steady_state_stability_cond(); //R2

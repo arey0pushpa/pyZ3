@@ -1,0 +1,49 @@
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[->,>=stealth',auto,node distance=5cm,
+  thick,main node/.style={rectangle,draw,font=\sffamily\Large\bfseries}]
+  \node[main node,text width=3cm] (ga) {GA{\small \^{Qa4} \^{Qa6} \^{Qb4} \^{Qb6} \^{Qc4} \^{R6}}};
+  \node[main node] (ic) [below right of=ga,yshift=20mm,xshift=20mm] {IC {\small \^{Qa6} \^{Qb6} \^{R1}}};
+  \node[main node] (er) [below right of=ga] {ER {\small \^{Qa1} \^{Qb1} \^{R1}}};
+  \node[main node,text width=2.5cm] (pm) [above right of=ga] {PM {\small \^{Qa5} \^{Qa7} \^{Qbc2} \^{Qbc7}}};
+  \node[main node] (ee) [below right of=pm] {EE {\small \^{Qa2} \^{Qb2/3} \^{Qc2/3}}};
+  \node[main node] (le) [above of=ee,yshift=-13mm,xshift=18mm] {LE {\small \^{Qa8} \^{Qb8} \^{Qc8}}};
+
+  % \path (ic) edge node [below] {\^{Qc6}} (ga);
+  % \path (er) edge[bend right=20] node [right] {\^{Qc6}} (ic);
+
+
+  % %er <> ga
+  % \path (er) edge[bend right=20] node [left] {\^{Qc6}} (ga);
+  % \path (er) edge[bend left=20] node [left] {R6} (ga);
+  % \path (ga) edge[bend right=40] node [left] {\^{Qc1}} (er);
+
+
+  % %ga <-> ee
+  % \path (ga) edge[bend left=25] node [above] {Qb2 Qc2} (ee);
+  % \path (ga) edge[bend left=10] node [above] {Qbc2/3} (ee);
+  % \path (ee) edge[bend left=0] node [below] {Qb2/3,Qa2,R2,\^{R4},Qc2/3} (ga);
+
+  % %le <-> pm
+  % \path (le) edge[bend right=10] node [above] {Qb7 Qc7} (pm);
+  % %ee -> le
+  % \path (ee) edge[bend right] node [below,rotate=70] {\^{R8},Qa7,Qbc7,R7} (le);
+
+  % %pm <-> ee
+  % \path (ee) edge[bend left=10] node [above] {\^{R3}} (pm);
+  % \path (pm) edge[bend left=30] node [above,rotate=-45,text width = 2.5cm] {\^{R2} {Qa7} Qbc7, R7, Qc7, Qa2} (ee);
+
+  % %ga->pm
+  % \path (ga) edge[bend left=10] node [right] {{Qb2} Qc2} (pm);
+  % \path (ga) edge[bend left=80] node [above] {\^{R2}} (pm);
+  % \path (ga) edge[bend left=52] node [above] {\^{R7}} (pm);
+  % \path (ga) edge[bend left] node [above] {\^{R8}} (pm);
+  \end{tikzpicture}
+  \caption{found-in-nature VTS}
+  \label{fig:mukund-vts}
+\end{figure}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
