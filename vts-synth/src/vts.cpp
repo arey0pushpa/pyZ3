@@ -106,6 +106,14 @@ void vts::add_known_pairing( unsigned m1, unsigned m2 ) {
   */
 }
 
+void vts::qr_add_known_pairing( unsigned m1, unsigned m2, unsigned m3, unsigned m4 ) {
+    knownPairingMatrix.push_back( pairing_m_4d[m1][m2][m3][m4] );
+  /*
+  std::vector < std::tuple <unsigned, unsigned> > knownPairingTuple;
+  knownPairingTuple.push_back ( std::make_tuple( m1, m2 ) );
+  std::sort(begin(knownPairingTuple), end(knownPairingTuple), TupleCompare<0>()); 
+  */
+}
 void vts::add_known_activity_node_function( unsigned m, z3::expr f ) {
   
 }
@@ -1049,9 +1057,10 @@ z3::expr vts::vts_basic_constraints () {
   z3::expr v2 = active_molecule_is_present_on_edge();         //V2
   z3::expr v3 = active_molecule_is_present_on_node();         //V3
   z3::expr v4 = edge_label_subset_of_node_label();            //V4
-  z3::expr v6 = restriction_on_pairing_matrix();              //V6
+ // z3::expr v6 = restriction_on_pairing_matrix();              //V6
   
-  z3::expr base_cons = v1 && v2 && v3 && v4 && v6;
+//  z3::expr base_cons = v1 && v2 && v3 && v4 && v6;
+  z3::expr base_cons = v1 && v2 && v3 && v4;
   return base_cons;
 }
 
@@ -1075,8 +1084,8 @@ z3::expr vts::vts_fusion_constraint () {
 }
 
 z3::expr vts::vts_qr_fusion_constraint () {
-  z3::expr v7 = qr_edge_must_fuse_with_target();         //V7
-  z3::expr v8 = qr_edge_fuse_only_with_target();         //V8
+  z3::expr v7 = qr_4d_edge_must_fuse_with_target();       //V7
+  z3::expr v8 = qr_4d_edge_fuse_only_with_target();        //V8
   auto cons = v7 && v8;
   return cons;
 }

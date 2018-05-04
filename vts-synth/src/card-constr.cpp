@@ -326,6 +326,10 @@ z3::expr_vector vts::presence_edge_list() {
     return flattern4d ( presence_edge, N, N, E_arity, M, true );
 }
 
+z3::expr_vector vts::pairing_m_4d_list() {
+    return flattern4d ( pairing_m_4d, N, N, E_arity, M, true );
+}
+
 z3::expr_vector vts::active_edge_list() {
     return flattern4d ( active_edge, N, N, E_arity, M, true );
 }

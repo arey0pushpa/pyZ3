@@ -42,6 +42,7 @@ private:
   void get_node();
   void get_edge();
   void get_pairing();
+  void qr_get_pairing();
   void get_node_function();
   void get_edge_function();
 public:

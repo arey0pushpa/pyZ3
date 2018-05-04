@@ -304,6 +304,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr_vector listActiveE = active_edge_list(); 
   z3::expr_vector listPairingM = pairing_m_list(); 
   z3::expr_vector listReach = reach_list();
+  z3::expr_vector listPairing4M  = pairing_m_4d_list();
   
   z3::expr knownVarConstraint( ctx );
 
@@ -340,6 +341,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     unassigned_bits ( listE, knownEdges, unknownE ); 
     unassigned_bits ( listPresenceE, knownPresenceEdges, unknownPresenceE ); 
     unassigned_bits ( listActiveE, knownActiveEdges, unknownActiveE ); 
+    unassigned_bits ( listPairing4M, knownPairingMatrix, unknownPairingM ); 
   
     z3::expr_vector list_expr (ctx);
 
@@ -376,7 +378,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     // fix all unknwon bits to false.
     auto setUnknownVariablesFalse = 
-                                !z3::mk_or( unknownE );
+                                !z3::mk_or( unknownE ) 
+                                && !z3::mk_or ( unknownPairingM );
     
     auto addConstraints = edgeC && nodeActivityC;
 
@@ -385,8 +388,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listPresenceE,  
                     exists( listActiveE, 
                     exists( listPairingM, 
+                    exists( listPairing4M, 
                     exists( listReach, 
-                            vtsCons && knownVarConstraint && setUnknownVariablesFalse && addConstraints ))))));   
+                            vtsCons && knownVarConstraint && setUnknownVariablesFalse )))))));   
 
     auto cons = exists( listE, 
                         qvtsCons ); 
@@ -410,7 +414,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                         exists( listActiveN, 
                         exists( listActiveE, 
                         exists( listPairingM, 
-                        exists( listReach, 
+                        exists( listPairing4M, 
+                     //   exists( listReach, 
                                 vtsCons && knownVarConstraint )))));
 
     auto cons = exists( listPresenceE, 

@@ -160,6 +160,12 @@ void load_vts::get_pairing() {
   v->add_known_pairing( m1, m2 );
 }
 
+void load_vts::qr_get_pairing() {
+  unsigned m1,m2,m3,m4;
+  in >> m1 >> m2 >> m3 >> m4;
+  v->qr_add_known_pairing( m1, m2, m3, m4 );
+}
+
 void load_vts::get_node_function() {
   unsigned m;
   in >> m;
@@ -197,7 +203,8 @@ void load_vts::load() {
       case 'e': get_edge(); break;
       case 'f': get_node_function(); break;
       case 'g': get_edge_function(); break;
-      case 'p': get_pairing(); break;
+     // case 'p': get_pairing(); break;
+      case 'p': qr_get_pairing(); break;
       default:
         load_error( "expecting a command at line", line_num );
       }

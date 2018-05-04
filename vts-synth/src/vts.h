@@ -125,7 +125,8 @@ public:
                        std::vector<unsigned>&);
   void add_known_node( unsigned, std::vector<unsigned>&,
                        std::vector<unsigned>&);
-  void add_known_pairing( unsigned, unsigned );
+  void add_known_pairing( unsigned, unsigned);
+  void qr_add_known_pairing( unsigned m1, unsigned m2, unsigned m3, unsigned m4 );
   void add_known_activity_node_function( unsigned, z3::expr );
   void add_known_activity_edge_function( unsigned, z3::expr );
 
@@ -261,6 +262,7 @@ public:
   z3::expr_vector presence_edge_list();
   z3::expr_vector active_edge_list();
   z3::expr_vector pairing_m_list();
+  z3::expr_vector pairing_m_4d_list();
   z3::expr_vector reach_list();
   z3::expr_vector edge_list();
   
