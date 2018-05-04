@@ -511,7 +511,7 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
   }
   return z3::mk_and( ls );
 }
-
+/*
 z3::expr vts::qr_edge_must_fuse_with_target() {                 //V7
   z3::expr_vector ls(ctx);
   z3::expr lhs(ctx);
@@ -561,7 +561,7 @@ z3::expr vts::qr_edge_must_fuse_with_target() {                 //V7
     }
   return z3::mk_and( ls );
 }
-
+*/
 // V7 : There should be an active pair corresponding to pairing matrix
 z3::expr vts::edge_must_fuse_with_target() {                 //V7
   z3::expr_vector ls(ctx);
