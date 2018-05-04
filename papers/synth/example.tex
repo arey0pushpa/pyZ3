@@ -47,10 +47,27 @@
   \label{fig:mukund-vts}
 \end{figure}
 
-In figure~\ref{fig:mukund-vts}
+%t snares are labelled within compartmetns, v snares on the edges
+%and snare complexes on the left-hand side
+The figure~\ref{fig:mukund-vts} represent mammalian SNARE map created by studying the references~\cite{somya}. 
+To construct the map, we have assumed that vesicles only contain a single
+active v-SNARE, and we have attributed t-SNAREs and inactive v-SNAREs that
+travel between compartments to one of the known vesicles that go between
+the same source and target compartments.
+In order to identify the active SNARE complex involved in any particular
+vesicle fusion, two criteria were used: 
+\begin{enumerate}
+\item[a.] The SNARE complex is formed \textit{in vivo}. In most papers, this is determined by immunoprecipitation of the SNARE complex from the relevant cell fraction. 
+\item[b.] Blocking SNARE complex formation (for example, using antibodies against these SNAREs, or
+using cytosolic forms of these SNAREs) blocks the specific transport step.
+\end{enumerate}
 
 
-The figure~\ref{fig:mukund} represent mammalian SNARE map created by studying the references []. In this diagram the gray circles represent compartments, the identities of compartments are
+Note that these vesicles have been collected from multiple cell types, and
+any given cell type is likely to contain only a subset of the vesicles in
+the map.
+
+In this diagram the gray circles represent compartments, the identities of compartments are
 written within: ER=endoplasmic reticulum, ERGIC=ER-Golgi intermediate compartment,
 RE=recycling endosome, EE=early endosome, LE=late endosome, LYS=lysosome, PM=plasma
 membrane. Thin black arrows represent vesicle edges.
@@ -61,7 +78,9 @@ SNARES of the complex Stx-4-SNAP23-VAMP7. Here, the cycles for two SNARE molecul
 VAMP7 and SNAP23 are complete. The green labels represent the paths taken by SNAREs of the
 complex Stx13-SNAP25-VAMP2. Here the cycle for VAMP2 is complete.The blue labels represent
 the paths taken by SNARES of the complex Stx5-Gs28-Bet1/GS15-Ykt6. Here, cycles for none of
-the SNAREs are complete. 
+the SNAREs are complete. So, even though most edges known so far are present in the map, paths for molecules (SNAREs) across the cell are still not complete.
+
+We have used our tool to synthesize possible fixes to complete the graph. Variation 1 of our tool adds new labelled edges to the graph. We have ranked the all possible graph edits with simple rank of minimum updates. Our tools was able to complete this graph by adding five new edges and nine new molecules in 210s. Variation 2 of our graph adds new labels to the edge and was able to fix this graph with eleven new molecule labels in 180s. Variation 3 of our tool synthesis low depth CNF functions and was able to synthesis the result in 500s. Variation 4 of our tool synthesis Boolean function based on AND, OR gates. The result shows the basic template of 4 leafs and 3 gates we allow user to provide it's own template in our front end language. The tool was able to synthesize the Boolean functions in 470s.
 
 %%% Local Variables:
 %%% mode: latex
