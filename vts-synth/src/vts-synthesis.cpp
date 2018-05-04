@@ -266,7 +266,8 @@ void xor_bits ( z3::context& c,
 
 z3::expr vts::vts_synthesis ( unsigned variation ) {
   /** Basic Constraints **/
-  z3::expr vtsCons = create_vts_constraint();  
+  //z3::expr vtsCons = create_vts_constraint();  
+  z3::expr vtsCons = create_qr_vts_constraint();  
   //z3::expr nodeActive = always_active_on_node();
   z3::expr vtsActivity = vts_activity_constraint(); 
 

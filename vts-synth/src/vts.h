@@ -155,12 +155,21 @@ public:
   z3::expr reachability_def();           //R1
   z3::expr steady_state_stability_cond(); //R2
   
+  z3::expr vts_qr_fusion_constraint ();
+  z3::expr create_qr_vts_constraint ();
+
   /** Flattening of the x-d Vectors. **/
   z3::expr_vector flattern2d ( Vec2Expr& dump, unsigned s1, unsigned s2, bool eq );
   z3::expr_vector flattern3d ( Vec3Expr& dump, unsigned s1, unsigned s2, unsigned s3, bool eq );
   z3::expr_vector flattern4d ( Vec4Expr& dump, unsigned s1, unsigned s2, unsigned s3, unsigned s4, bool eq );
   
   VecExpr flattern_3d ( Vec3Expr& dump );
+
+  /** HELPER FOR VTS */
+  void create_formula ( z3::expr_vector& qSnareFml, z3::expr_vector& rSnareFml,
+                        z3::expr_vector& molOnEdge, z3::expr_vector& molOnTargetNode,
+                        unsigned i, unsigned j, unsigned q, unsigned m, bool flag );
+  void fusion_constraint (z3::expr_vector& candidateMoleculeFormula, unsigned i, unsigned j, unsigned q, unsigned m, bool f1Orf2 );
 
   /*** connectivity constraints ***/
   // At least at most
