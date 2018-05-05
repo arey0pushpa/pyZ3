@@ -384,15 +384,16 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     */
     
     // fix all unknwon bits to false.
-   // auto setUnknownVariablesFalse = 
-   //                             !z3::mk_or( unknownE ) 
-   //                             && !z3::mk_or ( unknownPairingM );
-                                
-//    auto setUnknownVariablesFalse =  
-//                                    !z3::mk_or( unknownE );
-  //  auto setUnknownVariablesFalse = !z3::mk_or( unknownN )  && !z3::mk_or( unknownActiveN ) 
-  //                                 && !z3::mk_or( unknownE ) && !z3::mk_or( unknownPresenceE ) && !z3::mk_or( unknownActiveE );                                  
-    //auto addConstraints = nodeC;
+   auto setUnknownVariablesFalse = ctx.bool_val(true)
+     // && !z3::mk_or( unknownN )
+     // && !z3::mk_or( unknownActiveN )
+     // && !z3::mk_or( unknownE )
+     // && !z3::mk_or( unknownPresenceE )
+     // && !z3::mk_or( unknownActiveE )
+     // && !z3::mk_or ( unknownPairingM )
+     ;
+
+   //auto addConstraints = nodeC;
 /*
     auto qvtsCons = exists( listN, 
                     exists( listActiveN, 
@@ -405,10 +406,13 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     //   exists( listPairing4M, 
 
+
     auto cons = exists( listE, 
                 qvtsCons ); 
     */
-    auto cons = vtsCons && knownVarConstraint;
+
+
+    auto cons = vtsCons && knownVarConstraint && setUnknownVariablesFalse;
     return cons;
   }
 

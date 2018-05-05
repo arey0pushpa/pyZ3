@@ -576,11 +576,11 @@ z3::expr vts::qr_4d_edge_must_fuse_with_target() {                 //V7
         VecExpr& ae = active_edge[i][j][q];
         z3::expr_vector candidateMoleculeFormula(ctx);
         //lhs = ctx.bool_val(false);
-        for ( unsigned m1 = 0   ; m1 < M; m1++ ) { fuse_mols[0]=m1;
-        for ( unsigned m2 = m1+1; m2 < M; m2++ ) { fuse_mols[1]=m2;
-        for ( unsigned m3 = m2+1; m3 < M; m3++ ) { fuse_mols[2]=m3;
-        for ( unsigned m4 = m3+1; m4 < M; m4++ ) { fuse_mols[3]=m4;
-          if( m3 > qSnareCount || m4 < qSnareCount ) continue; // QR boundry
+        for ( unsigned m1 = 0   ; m1 < qSnareCount; m1++ ) { fuse_mols[0]=m1;
+        for ( unsigned m2 = m1+1; m2 < qSnareCount; m2++ ) { fuse_mols[1]=m2;
+        for ( unsigned m3 = m2+1; m3 < qSnareCount; m3++ ) { fuse_mols[2]=m3;
+        for ( unsigned m4 = qSnareCount; m4 < M; m4++ ) { fuse_mols[3]=m4;
+          // if( m3 > qSnareCount || m4 < qSnareCount ) continue; // QR boundry
           z3::expr is_f = is_fuse( ae, an, fuse_mols);
           candidateMoleculeFormula.push_back( is_f );
         }}}}
@@ -610,11 +610,11 @@ z3::expr vts::qr_4d_edge_fuse_only_with_target() {       //V8
           VecExpr& an = active_node[jp];
           // For each possible active candidate molecule
           z3::expr_vector candidateMoleculeFormula(ctx);
-          for ( unsigned m1 = 0   ; m1 < M; m1++ ) { fuse_mols[0]=m1;
-          for ( unsigned m2 = m1+1; m2 < M; m2++ ) { fuse_mols[1]=m2;
-          for ( unsigned m3 = m2+1; m3 < M; m3++ ) { fuse_mols[2]=m3;
-          for ( unsigned m4 = m3+1; m4 < M; m4++ ) { fuse_mols[3]=m4;
-            if( m3 > qSnareCount || m4 < qSnareCount ) continue; // QR boundry
+          for ( unsigned m1 = 0   ; m1 < qSnareCount; m1++ ) { fuse_mols[0]=m1;
+          for ( unsigned m2 = m1+1; m2 < qSnareCount; m2++ ) { fuse_mols[1]=m2;
+          for ( unsigned m3 = m2+1; m3 < qSnareCount; m3++ ) { fuse_mols[2]=m3;
+          for ( unsigned m4 = qSnareCount; m4 < M; m4++ ) { fuse_mols[3]=m4;
+            // if( m3 > qSnareCount || m4 < qSnareCount ) continue; // QR boundry
             z3::expr is_f = is_fuse( ae, an,fuse_mols );
             rhs.push_back( !is_f );
           }}}}
@@ -1101,6 +1101,7 @@ z3::expr vts::vts_qr_fusion_constraint () {
   z3::expr v8 = qr_4d_edge_fuse_only_with_target();        //V8
   auto cons = v7 && v8;
   std::cout << "Finished qr fusion constraints!\n";
+  // auto cons = ctx.bool_val(true);
   return cons;
 }
 
@@ -1114,9 +1115,9 @@ z3::expr vts::create_vts_constraint () {
 
 z3::expr vts::create_qr_vts_constraint () {
 // auto cons = vts_basic_constraints() && vts_self_edges_constraint()
-  auto cons = qr_vts_basic_constraints () 
-              && vts_stability_constraint()
-              && vts_qr_fusion_constraint();
+  auto cons = qr_vts_basic_constraints ()
+    && vts_stability_constraint()
+    && vts_qr_fusion_constraint();
   return cons;
 }
 

@@ -179,14 +179,7 @@ int main(int ac, char* av[])
   //v->dump_dot("/tmp/vts.dot", mdl );
   //v->dump_dot("/tmp/vts.dot", qbf_mdl );
 
-    z3::expr t = c.bool_val( true );
-    z3::expr fal = c.bool_val( false );
-    z3::expr x = c.bool_const("x");
-    z3::expr y = c.bool_const("y");
-    z3::expr z = c.bool_const("z");
-    z3::expr w = c.bool_const("w");
-    
-    // represent z3 vts formula
+  // represent z3 vts formula
     z3::expr f(c);
       
     if( funcType != -1 ) {
@@ -210,31 +203,17 @@ int main(int ac, char* av[])
     }
     //std::cout << f << "\n";
 
-
-    /* First Order Formula to test basic functionality  */
-    //std::cout << f << "\n";
-    // z3::expr f = exists( x, forall( z, x || ( z && forall( y, exists( w, implies( y, w) && x && z) )) ) );
-    //z3::expr f = forall(x, exists( y, !(x && y ) ) ) ;
-    //z3::expr f = forall( x, exists( w, w && forall ( y,  x&& y ) ) ) ;
-    //z3::expr f = forall( x, exists ( y,  forall (w, exists (z, x && y && w && z)  )) );
-    //z3::expr f = forall( x, forall ( y, exists (z,  z == x ||  z == y) )) ; 
-    //std::cout << "The sort of the formula f is: " << Z3_get_sort( c, f ) << "\n";
-
-    // UNSAT Check: sat, Unsat check passed
-    //z3::expr f = forall ( x, exists (y, (x || !y) && (!x || y) && (x || y) ));   
-
-    // Losing example : QDIMACS working fine
-    //z3::expr f = exists (x, exists (y, exists (z, forall(w, exists (ww, ( (!x || ww) && (y || w || !ww) && (z || !w || !ww) && (!y || !z) ))))));  
-
-    //auto fml_f = negform ( c, f ); 
-    //negform ( c, f ); 
-
     /* Run Z3 home made QBF solver or DepQbf */
     if ( useZ3 == true ) { 
       if (synthVar != -1 ) {
         std::cout << "Using z3...\n";
-        v->get_vts_for_synth( f );
-      }  else {
+        z3::model m = v->get_vts_for_synth( f );
+        v->dump_dot("/tmp/vts.dot", m) ;
+        auto retVal = system("xdot /tmp/vts.dot");
+        if(retVal == -1) 
+          std::cout << "SYTEM ERROR !!!\n";
+        exit(0);
+      } else {
         v->use_z3_qbf_solver( f );
       }
     }
