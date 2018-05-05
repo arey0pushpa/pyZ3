@@ -135,7 +135,7 @@ that at most $slimit$ new undeclared edges may be added in the VTS.
                     \texttt{AbsentNLabel} \;\union\;
                     \texttt{AbsentP}
 \end{align*}
-We put together the constraints and obtain the following formula $\texttt{SynthE}(slimit)$.
+We put together the constraints and obtain the following formula.
 \begin{align*}
   & \texttt{SynthE}(slimit) =
        \texttt{Consistancy}\land \texttt{Property} \land
@@ -143,8 +143,8 @@ We put together the constraints and obtain the following formula $\texttt{SynthE
   \texttt{AddE}(slimit)
   % \tag{SynthE}\label{eq:addedge1}
 \end{align*}
-As we have seen $\texttt{Consistancy}$ encodes the basic constraints about VTS,
-$\texttt{Property}$ encodes the goal, and
+Similar to what we have seen $\texttt{Consistancy}$ encodes the basic constraints about VTS,
+$\texttt{Property}$\; encodes the goal, and
 the rest two are defined just above.
 %
 A satisfying model of $\texttt{SynthE}$ will make 
