@@ -95,6 +95,11 @@ inline std::string sanitise_string(std::string str) {
   return str;
 }
 
+inline z3::expr _xor( z3::expr const & a, z3::expr const & b ) {
+  check_context(a, b);
+  Z3_ast r = Z3_mk_xor(a.ctx(), a, b);
+  return z3::expr(a.ctx(), r);
+}
 
 
 z3::expr parseFormula( z3::context& c, std::string str,

@@ -188,6 +188,7 @@ z3::expr vts::at_least_four ( VecExpr dump ) {
   }
   return z3::mk_or( ls );
 }
+
 /** Overloaded z3::expr **/
 
 // At least 5 
@@ -346,3 +347,97 @@ z3::expr_vector vts::edge_list() {
     return flattern3d ( edges, N, N, E_arity, true );
 }
 
+
+//------------------------------------------
+
+std::pair< z3::expr, z3::expr >
+mk_full_adder(  z3::expr i1, z3::expr i2, z3::expr cin ) {
+  z3::expr out = _xor( _xor( i1, i2 ), cin);
+  z3::expr cout = (i1 && i2) || (i2 && cin) || (cin && i1);
+  return std::make_pair( out, cout );
+}
+
+
+void
+mk_adder( const std::vector<z3::expr>& i1,
+          const std::vector<z3::expr>& i2,
+          std::vector<z3::expr>& result ) {
+  assert( i1 > 0);
+  assert( i1.size() == i2.size() );
+  auto& ctx = i1[0].ctx();
+  result.clear();
+  z3::expr cin = ctx.bool_val(false);
+  for(unsigned i = 0; i < i1.size(); i++) {
+    auto out_pair = mk_full_adder(i1[i], i2[i], cin );
+    result.push_back( out_pair.first );
+    cin = out_pair.second;
+  }
+  result.push_back( cin );
+}
+
+
+void
+mk_adder_pair( const std::vector< std::vector<z3::expr> >& in_nums,
+               std::vector< std::vector<z3::expr> > results ) {
+  auto& ctx = in_nums[0][0].ctx();
+  unsigned r_count = 0;
+  for( unsigned i = 0; i < in_nums.size(); i = i + 2  ) {
+    mk_adder( in_nums[i],  in_nums[i+1], results[r_count] );
+    r_count++;
+  }
+  if( in_nums.size() % 2 == 1 ) {
+    auto& last_num = in_nums.back();
+    results.push_back( last_num );
+    results.back().push_back( ctx.bool_val(false) );
+  }
+}
+
+void
+collect_sum( std::vector< std::vector<z3::expr> >& ins ) {
+  assert( ins.size() > 0 );
+  while( ins.size() > 1 ) {
+    std::vector< std::vector<z3::expr> > results;
+    mk_adder_pair( ins, results );
+    assert( ins.size() > results.size() );
+    ins = results;
+  }
+}
+
+std::vector<z3::expr>
+sum_bits( const std::vector<z3::expr>& in_bits ) {
+  std::vector< std::vector<z3::expr> > ins;
+  for( auto b : in_bits ) {
+    std::vector<z3::expr> bit_vec;
+    bit_vec.push_back( in_bits[b] );
+    ins.push_back( bit_vec );
+  }
+  collect_sum( ins );
+  return ins[0];
+}
+
+inline int get_bit(unsigned val, unsigned idx) {
+    unsigned mask = 1 << (idx & 31);
+    return (val & mask) != 0;
+}
+
+z3::expr
+mk_bv_le_k( const std::vector<z3::expr>& in_num, unsigned k ) {
+  assert( in_num.size() > 0 );
+  auto& ctx = in_num[0].ctx();
+  z3::expr out(ctx);
+  out = get_bit(k, 0) ? ctx.bool_val(true) : !in_num[0];
+  for (unsigned idx = 1; idx < in_num.size(); idx++) {
+    if( get_bit(k, idx) ) {
+      out = out || !in_num[idx];
+    } else {
+      out = !in_num[idx] && out;
+    }
+  }
+  return out;
+}
+
+z3::expr
+mk_le_k_bits( const std::vector<z3::expr>& bits, unsigned k ) {
+  auto sum = sum_bits( bits );
+  return mk_bv_le_k( sum, k );
+}
