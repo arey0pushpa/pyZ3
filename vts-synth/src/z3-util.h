@@ -101,6 +101,8 @@ inline z3::expr _xor( z3::expr const & a, z3::expr const & b ) {
   return z3::expr(a.ctx(), r);
 }
 
+z3::expr mk_le_k_bits( const z3::expr_vector& bits, unsigned k );
+z3::expr mk_le_k_bits( const std::vector<z3::expr>& bits, unsigned k );
 
 z3::expr parseFormula( z3::context& c, std::string str,
                        const std::vector< std::string >& names );

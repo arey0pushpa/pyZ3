@@ -362,7 +362,7 @@ void
 mk_adder( const std::vector<z3::expr>& i1,
           const std::vector<z3::expr>& i2,
           std::vector<z3::expr>& result ) {
-  assert( i1 > 0);
+  assert( i1.size() > 0);
   assert( i1.size() == i2.size() );
   auto& ctx = i1[0].ctx();
   result.clear();
@@ -378,10 +378,12 @@ mk_adder( const std::vector<z3::expr>& i1,
 
 void
 mk_adder_pair( const std::vector< std::vector<z3::expr> >& in_nums,
-               std::vector< std::vector<z3::expr> > results ) {
+               std::vector< std::vector<z3::expr> >& results ) {
   auto& ctx = in_nums[0][0].ctx();
   unsigned r_count = 0;
-  for( unsigned i = 0; i < in_nums.size(); i = i + 2  ) {
+  std::vector<z3::expr> dummy;
+  for( unsigned i = 0; i < in_nums.size()-1; i = i + 2  ) {
+    results.push_back( dummy );
     mk_adder( in_nums[i],  in_nums[i+1], results[r_count] );
     r_count++;
   }
@@ -408,12 +410,25 @@ sum_bits( const std::vector<z3::expr>& in_bits ) {
   std::vector< std::vector<z3::expr> > ins;
   for( auto b : in_bits ) {
     std::vector<z3::expr> bit_vec;
-    bit_vec.push_back( in_bits[b] );
+    bit_vec.push_back( b );
     ins.push_back( bit_vec );
   }
   collect_sum( ins );
   return ins[0];
 }
+
+std::vector<z3::expr>
+sum_bits( const z3::expr_vector& in_bits ) {
+  std::vector< std::vector<z3::expr> > ins;
+  for( unsigned i =0; i < in_bits.size(); i++ ) {
+    std::vector<z3::expr> bit_vec;
+    bit_vec.push_back( in_bits[i] );
+    ins.push_back( bit_vec );
+  }
+  collect_sum( ins );
+  return ins[0];
+}
+
 
 inline int get_bit(unsigned val, unsigned idx) {
     unsigned mask = 1 << (idx & 31);
@@ -438,6 +453,12 @@ mk_bv_le_k( const std::vector<z3::expr>& in_num, unsigned k ) {
 
 z3::expr
 mk_le_k_bits( const std::vector<z3::expr>& bits, unsigned k ) {
+  auto sum = sum_bits( bits );
+  return mk_bv_le_k( sum, k );
+}
+
+z3::expr
+mk_le_k_bits( const z3::expr_vector& bits, unsigned k ) {
   auto sum = sum_bits( bits );
   return mk_bv_le_k( sum, k );
 }

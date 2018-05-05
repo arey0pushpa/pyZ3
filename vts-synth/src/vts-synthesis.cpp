@@ -372,7 +372,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
   // 1. Add edge to achieve graph stability and k connected. 
   if ( variation == 1 ) {   
-    auto edgeC = !at_least_three( unknownE );
+    // auto edgeC = !at_least_three( unknownE );
+    auto edgeC = mk_le_k_bits( unknownE, 3);
  //   auto edgeActivityC = !at_least_three( unknownActiveE );
     //auto edgePresenceC = !at_least_four( unknownPresenceE );
  //    auto nodeC = !at_least_four( unknownN );    
