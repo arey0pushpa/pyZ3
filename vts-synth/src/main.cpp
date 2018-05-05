@@ -198,7 +198,6 @@ int main(int ac, char* av[])
         if(retVal == -1) 
           std::cout << "SYSTEM ERROR !!!\n"; 
       }
-      exit(0);
       //f = v->create_qbf_formula( 0 );
     }
     //std::cout << f << "\n";
@@ -208,10 +207,22 @@ int main(int ac, char* av[])
       if (synthVar != -1 ) {
         std::cout << "Using z3...\n";
         z3::model m = v->get_vts_for_synth( f );
-        v->dump_dot("/tmp/vts.dot", m) ;
-        auto retVal = system("xdot /tmp/vts.dot");
-        if(retVal == -1) 
-          std::cout << "SYTEM ERROR !!!\n";
+        if ( printModel == true ) { 
+           std::cout << m << '\n';
+         }
+         if ( displayGraph == true ) {
+           if ( synthVar == 1 ) {
+             v->edge_dump_dot("/tmp/vts.dot", m);
+           } else {
+              v->dump_dot("/tmp/vts.dot", m);
+           }
+           auto retVal = system("xdot /tmp/vts.dot");
+           if(retVal == -1) 
+               std::cout << "SYTEM ERROR !!!\n";
+        }
+        auto finishZ3 = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsedZ3 = finishZ3 - start;
+        std::cout << "entire run took " << elapsedZ3.count() << " secs\n";
         exit(0);
       } else {
         v->use_z3_qbf_solver( f );
@@ -304,7 +315,7 @@ int main(int ac, char* av[])
 }
 
 catch (z3::exception & ex) {
-std::cout << "Nuclear Missles are launched ----> " << ex << "\n";
+std::cout << "\n Nuclear Missles are launched ----> " << ex << "\n";
 }
   return 0;
 }

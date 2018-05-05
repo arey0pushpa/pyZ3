@@ -272,7 +272,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
  // z3::expr vtsActivity = vts_activity_constraint(); 
 
   /** Connectedness Constraints */
-  z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
+  //z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
  // z3::expr V5 = no_self_edges();
   
   //z3::expr inputCons = ctx.bool_val(true);
@@ -371,8 +371,18 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   }  
 
   // 1. Add edge to achieve graph stability and k connected. 
-  if ( variation == 1 ) {   
-    auto edgeC = !at_least_three( unknownE );
+  if ( variation == 1 ) {
+      z3::expr expr = ctx.int_val(0);
+        auto tt = ctx.bool_val(true);
+        for (auto& i: d1) {
+         expr = expr + z3::ite( i, ctx.int_val(1), ctx.int_val(0) ) ;
+       }
+  //std::cout << "The total count is : " << expr;  
+      return (tt && (expr == ctx.int_val(drop_count)) );
+     */ 
+   //   auto edgeC =  pbeq(unknownE , 1, int 1);
+     auto edgeC =  atmost(unknownE, 1);
+   // auto edgeC = !at_least_two( unknownE );
  //   auto edgeActivityC = !at_least_three( unknownActiveE );
     //auto edgePresenceC = !at_least_four( unknownPresenceE );
  //    auto nodeC = !at_least_four( unknownN );    
@@ -412,7 +422,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     */
 
 
-    auto cons = vtsCons && knownVarConstraint && setUnknownVariablesFalse;
+    auto cons = vtsCons && knownVarConstraint && setUnknownVariablesFalse && edgeC;
     return cons;
   }
 

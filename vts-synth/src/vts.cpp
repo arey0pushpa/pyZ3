@@ -1108,7 +1108,7 @@ z3::expr vts::vts_qr_fusion_constraint () {
 z3::expr vts::create_vts_constraint () {
 // auto cons = vts_basic_constraints() && vts_self_edges_constraint()
   auto cons = vts_basic_constraints() 
-              && vts_stability_constraint()
+            && vts_stability_constraint()
               && vts_fusion_constraint();
   return cons;
 }
@@ -1127,7 +1127,7 @@ z3::model vts::get_vts_for_synth( z3::expr f ) {
   s.add( f );
   if( s.check() == z3::sat ) {
     z3::model m = s.get_model();
-    std::cout << m << "\n";
+    //std::cout << m << "\n";
     return m;
   }else{
     std::cout << "model is not feasible!";
