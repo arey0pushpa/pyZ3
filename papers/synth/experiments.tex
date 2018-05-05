@@ -1,24 +1,25 @@
 \begin{table}[t]
   \centering
-  \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}}\hline
-    {\multirow{2}{*} \textbf{Size}}  & \multicolumn{2}{c|}{\textbf{Add edge}} & \multicolumn{2}{c|}{\textbf{Add molecules}} & \multicolumn{2}{c|}{\textbf{Low depth CNF}}  &  \multicolumn{2}{c|}{\textbf{Gate function}} &  \multicolumn{2}{c|}{\textbf{VTS repair}} \\\hline
-   
+  \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|}\hline
+    {\multirow{2}{*} \textbf{}}  & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Learning NNF}}  &  \multicolumn{2}{c|}{\textbf{Learning}} &  \multicolumn{2}{c|}{\textbf{Add/Delete}} \\
+    {\multirow{2}{*} \textbf{}}  & \multicolumn{2}{c|}{\textbf{edge}} & \multicolumn{2}{c|}{\textbf{molecules}} & \multicolumn{2}{c|}{\textbf{(only $\land$ and $\lor$)}}  &  \multicolumn{2}{c|}{\textbf{k-CNF}} &  \multicolumn{2}{c|}{\textbf{parts}} \\
+    \hline   
    \cline{2-9}
     {} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} \\\hline
     
-    plos1-dia[3/4C] & 0.0292 & $\infty$ & 0.0255 & $\infty$ & 0.0843 & $\infty$ & 0.1005 & $\infty$ & 0.0492 & 0.0\\\hline
-    plos2-dia [4C] & 0.0414 & 0 & 0.0407 & 0 & 1.333 & 1 node & 2.327 & 1N 9PE & 0.042 & 0 \\\hline
-%[M=8, N=2, Q=2]    
-% n/A n/A activeN == UNSAT adding edge == UNSAT activeE == UNSAT presenceE == UNSAT
-    mukund[3/4C] & 185.06 & 4N 8E & 0.3773 & 0.0 & 2.062 & 0.0 & !13.92/1.553 & 0.0 & 0.230 & 0.0 \\\hline
-    node4[-] & 16.70 & 0.0 & 16.472 & 0.0 &  5.085 & $\infty$ & 7.011 & $\infty$ & 2.194 & 0.0\\\hline
-    yeast-graph & 0.0 & 0.0 & 0.0 & 0.00 & 0.0 & 0.0 & 0.0  & 0.0 & 0.0 & 0.0 \\\hline
-    mukund-comp & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0\\\hline
+    plos1-dia[3/4C]& 0.0292&$\infty$& 0.0255 &$\infty$& 0.1005      & $\infty$ & 0.0843&$\infty$& 0.0492 & 0.0\\\hline
+    plos2-dia [4C] & 0.0414& 0      & 0.0407 & 0      & 2.327       & 1N 9PE   & 1.333 & 1 node & 0.042  & 0 \\\hline
+    mukund[3/4C]  & 185.06 & 4N 8E  & 0.3773 & 0.0    & !13.92/1.553& 0.0      & 2.062 & 0.0    & 0.230  & 0.0 \\\hline
+    node4[-]      & 16.70  & 0.0    & 16.472 & 0.0    & 7.011       & $\infty$ & 5.085 &$\infty$& 2.194  & 0.0\\\hline
+    yeast-graph   & 0.0    & 0.0    & 0.0    & 0.00   & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0 \\\hline
+    mukund-comp   & 0.0    & 0.0    & 0.0    & 0.0    & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0\\\hline
   \end{tabular}
   \caption{Run-times for searching for models (in secs). \#C  stands for minimum changes.
   Time is reported in seconds.}
   \label{tab:qf-graph}
 \end{table}
+%[M=8, N=2, Q=2]    
+% n/A n/A activeN == UNSAT adding edge == UNSAT activeE == UNSAT presenceE == UNSAT
 
 
 We implemented the encodings in a tool
@@ -62,7 +63,6 @@ typical motifs in VTSs.
 The fifth VTS is taken from "A complete set of SNAREs in yeast"
 ~\cite{burri2004complete} paper. It has been adapted from the paper by
 separating the v and the t SNAREs. 
-%The t SNAREs are labelled within compartments and v SNAREs on the edges. %\ashu{Describe the source of two examples}.
 %
 The last VTS represent mammalian SNARE map created by studying the literature references.  
 
@@ -77,29 +77,33 @@ $\infty$ indicates that any number of changes with the synthesis query
 search space can obtain the VTS.
 %
 %\ashu{@ankit: please discuss all the synthesis queries in the table.}
-
-Variation 1 of our tool adds new labelled edges to the graph.
+In the table, we are reporting five synthesis queries
+%
+The first one only adds new labelled edges to the graph.
 %
 We have ranked the all possible graph edits with the simple rank of
 minimum updates.
 %
-Our tools were able to complete this graph by adding five new edges
+Our tools were able to complete the graphs by adding five new edges
 and nine new molecules in 210s.
 %
-Variation 2 of our graph adds new labels to the edge and was able to
-fix this graph with eleven new molecule labels in 180s.
+The second query adds new labels to the edge and was able to
+fix the graphs with eleven new molecule labels in 180s.
 %
-Variation 3 of our tool synthesis low depth CNF functions and was able
-to synthesis the result in 500s.
-%
-Variation 4 of our tool synthesis Boolean function based on AND, OR
-gates.
+The third query synthesizes NNF Boolean functions only containing
+$\land$ and $\lor$ gates.
 %
 The result shows the basic template of 4 leaves and 3 gates we allow
 the user to provide its own template in our front-end language.
 %
 The tool was able to synthesize the Boolean functions in 470s.
 %
+To illustrated the versatility of our tool,
+the the fourth query synthesizes $3$-CNF functions (encoding not presented) and was able
+to synthesis the results for all graphs in 500s.
+%
+Finally, we report queries that allows both addition and deletion of parts of
+VTS\ashu{which parts}. 
 %
 %Our experiments suggest that the synthesis problems are solvable by modern 
 %solvers and the synthesis technology may be useful for biological research.
