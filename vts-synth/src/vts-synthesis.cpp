@@ -371,7 +371,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   }  
 
   // 1. Add edge to achieve graph stability and k connected. 
-<<<<<<< HEAD
   if ( variation == 1 ) {
       z3::expr expr = ctx.int_val(0);
         auto tt = ctx.bool_val(true);
