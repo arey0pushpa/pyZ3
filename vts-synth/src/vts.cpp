@@ -1123,7 +1123,7 @@ z3::model vts::get_vts_for_synth( z3::expr f ) {
   s.add( f );
   if( s.check() == z3::sat ) {
     z3::model m = s.get_model();
-    //std::cout << m << "\n";
+    std::cout << m << "\n";
     return m;
   }else{
     std::cout << "model is not feasible!";
