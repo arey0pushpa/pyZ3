@@ -203,8 +203,8 @@ void load_vts::load() {
       case 'e': get_edge(); break;
       case 'f': get_node_function(); break;
       case 'g': get_edge_function(); break;
-      case 'p': get_pairing(); break;
-      //case 'p': qr_get_pairing(); break;
+      //case 'p': get_pairing(); break;
+      case 'p': qr_get_pairing(); break;
       default:
         load_error( "expecting a command at line", line_num );
       }
