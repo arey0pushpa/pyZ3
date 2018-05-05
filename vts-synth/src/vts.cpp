@@ -519,7 +519,7 @@ z3::expr vts::restriction_on_pairing_matrix() {              //V6
 
 
 // hack: FIXING NUMBER OF QSNARES, QSANRES always starts from 0.
-unsigned qSnareCount = 23;
+unsigned qSnareCount = 16;
 
 void vts::create_formula ( z3::expr_vector& qSnareFml,
                            z3::expr_vector& rSnareFml,
@@ -580,7 +580,7 @@ z3::expr vts::qr_4d_edge_must_fuse_with_target() {                 //V7
         for ( unsigned m2 = m1+1; m2 < M; m2++ ) { fuse_mols[1]=m2;
         for ( unsigned m3 = m2+1; m3 < M; m3++ ) { fuse_mols[2]=m3;
         for ( unsigned m4 = m3+1; m4 < M; m4++ ) { fuse_mols[3]=m4;
-          if( m3 > M/2 || m4 < M/2 ) continue; // QR boundry
+          if( m3 > qSnareCount || m4 < qSnareCount ) continue; // QR boundry
           z3::expr is_f = is_fuse( ae, an, fuse_mols);
           candidateMoleculeFormula.push_back( is_f );
         }}}}
@@ -614,7 +614,7 @@ z3::expr vts::qr_4d_edge_fuse_only_with_target() {       //V8
           for ( unsigned m2 = m1+1; m2 < M; m2++ ) { fuse_mols[1]=m2;
           for ( unsigned m3 = m2+1; m3 < M; m3++ ) { fuse_mols[2]=m3;
           for ( unsigned m4 = m3+1; m4 < M; m4++ ) { fuse_mols[3]=m4;
-            if( m3 > M/2 || m4 < M/2 ) continue; // QR boundry
+            if( m3 > qSnareCount || m4 < qSnareCount ) continue; // QR boundry
             z3::expr is_f = is_fuse( ae, an,fuse_mols );
             rhs.push_back( !is_f );
           }}}}
@@ -1120,6 +1120,20 @@ z3::expr vts::create_qr_vts_constraint () {
   return cons;
 }
 
+
+z3::model vts::get_vts_for_synth( z3::expr f ) {
+  z3::solver s(ctx);
+  s.add( f );
+  if( s.check() == z3::sat ) {
+    z3::model m = s.get_model();
+    //std::cout << m << "\n";
+    return m;
+  }else{
+    std::cout << "model is not feasible!";
+    assert(false);
+  }
+  return s.get_model(); //dummy call
+}
 
 /**
  * z3 model by solving built vts constraints

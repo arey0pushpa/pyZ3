@@ -155,6 +155,33 @@ which can handle a wide range of synthesis query.
 We have applied our tool on two found-in-nature
 VTSs~\cite{burri2004complete}.
 %
+In figure~\ref{fig:mukund-vts}, we present one of the two for
+mammalian cells obtained by studying the
+literature.\footnote{Please read appendix~\ref{sec:ex-vts} for more biological details.}
+%
+The VTS has six nodes and 20+ molecules.
+%
+We can easily check that stability condition is not satisfied for
+many molecules for example ???.
+%
+It is clear that there are several unknowns about the VTS.
+%
+%
+% Our tool 
+% % and hollow arrows represent maturation edges. 
+% We have used our tool to synthesize possible fixes to complete the
+% graph.
+% %
+% Based on the variation we were able to synthesis the this graph
+% within ??s.
+%
+Our synthesis tool reports that minimum ?? edges needs to be added to make
+the VTS stable.
+%
+Our experiments suggest that the synthesis problems are
+solvable by modern solvers and the synthesis technology may be useful
+for biological research.
+%
 We have also applied our tool on various synthetic examples to
 demonstrate that our tool scale upto the graph size size nodes, which
 is the size of typical VTSs in a eukaryotic cell.
@@ -164,13 +191,13 @@ The following are the contributions of this work:
 \item We have identified an interesting application of
   the synthesis technology.
 \item We have developed encoding of the synthesis problem in QBF.
-\item A user friendly and scalable tool based on a well known SMT solver Z3
+\item A user friendly and scalable tool based on QBF solvers
 \end{itemize}
 
 The rest of the paper is organized as follows.
 %
-In section~\ref{sec:example}, we present a motivating example.
-%
+% In section~\ref{sec:example}, we present a motivating example.
+% %
 In section~\ref{sec:prelim}, we present the graph model of VTSs and encoding of several
 constraints on VTSs.
 %
@@ -181,6 +208,7 @@ In section~\ref{sec:experiments}, we present our implementation and experimental
 %
 We discuss related work in~\ref{sec:related} and conclude in section~\ref{sec:conclusion}.
 
+\input{fig-mukund-vts}
 
 
 %%% Local Variables:

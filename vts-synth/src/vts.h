@@ -255,6 +255,8 @@ public:
   z3::expr vts_basic_constraints();
   z3::expr create_vts_constraint();
   z3::model get_vts_for_prob1();
+  z3::model get_vts_for_synth( z3::expr f );
+
   z3::expr create_qbf_formula( int funcType );
 
   // Helper 
