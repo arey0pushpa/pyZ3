@@ -372,11 +372,11 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
   // 1. Add edge to achieve graph stability and k connected. 
   if ( variation == 1 ) {   
-   // auto edgeC = !at_least_four( unknownE );
-    auto edgeActivityC = !at_least_three( unknownActiveE );
+    auto edgeC = !at_least_three( unknownE );
+ //   auto edgeActivityC = !at_least_three( unknownActiveE );
     //auto edgePresenceC = !at_least_four( unknownPresenceE );
-    auto nodeC = !at_least_four( unknownN );    
-    auto nodeActivityC = !at_least_three ( unknownActiveN ); 
+ //    auto nodeC = !at_least_four( unknownN );    
+ //   auto nodeActivityC = !at_least_three ( unknownActiveN ); 
     /*
     for( unsigned i = 0; i < unknownN.size(); i++  ) {
       std::cout << "Nodes is " << unknownN[i] << "\n" ;
@@ -390,9 +390,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                                 
 //    auto setUnknownVariablesFalse =  
 //                                    !z3::mk_or( unknownE );
-     auto setUnknownVariablesFalse = !z3::mk_or( unknownN )  && !z3::mk_or( unknownActiveN ) 
-                                   && !z3::mk_or( unknownE ) && !z3::mk_or( unknownPresenceE ) && !z3::mk_or( unknownActiveE );                                  
-    auto addConstraints = nodeC;
+  //  auto setUnknownVariablesFalse = !z3::mk_or( unknownN )  && !z3::mk_or( unknownActiveN ) 
+  //                                 && !z3::mk_or( unknownE ) && !z3::mk_or( unknownPresenceE ) && !z3::mk_or( unknownActiveE );                                  
+    //auto addConstraints = nodeC;
 
     auto qvtsCons = exists( listN, 
                     exists( listActiveN, 
@@ -401,7 +401,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                //     exists( listPairingM, 
                     exists( listPairing4M,
                     exists( listReach, 
-                            vtsCons && knownVarConstraint && setUnknownVariablesFalse ))))));   
+                            vtsCons && knownVarConstraint ))))));   
 
     //   exists( listPairing4M, 
 
