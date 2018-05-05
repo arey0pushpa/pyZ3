@@ -1,6 +1,6 @@
 %
 In this section, we will present a list of synthesis problems that may
-arise from partial available information about a VTS and our solution
+arise from the partial available information about a VTS and our synthesis method
 for the problems.
 
 \subsection{Problem Statements}
@@ -50,7 +50,8 @@ about $G$.
   \texttt{KnownActiveE} &= \land \{ b_{i,j,q,m} = \texttt{EdgeFun}_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
                    | \edgef_m \text{ is defined.} \} \\
   \texttt{PresentCons} & = \texttt{PresentE} \land \texttt{PresentN} \land 
- \texttt{PresentP} \land \texttt{KnownActiveE} \land \texttt{KnownActiveN}
+  \texttt{PresentP} \land \texttt{KnownActiveE} \land \\
+  &  \texttt{KnownActiveN}
 \end{align*}
 We also collect the variables that are not set to true in $\texttt{PresentCons}$.
 \begin{align*}
@@ -222,8 +223,7 @@ $z_1,..,z_{2\lambda}$ as parameters.
 
 \begin{align*}
   &\texttt{Gate}( x, w_1, w_2 ) = ( x  = 1 \limplies w_1  \land w_2 ) \land  
-  ( x = 2  \limplies w_1  \lor w_2 ) \land
-  ( x = 3  \limplies w_1 ) \land ...\\
+  ( x = 2  \limplies w_1  \lor w_2 ) \\
   &\texttt{Leaf}( x, [y_1,..,y_\mu] ) =
   \Land\limits_{l=1}^{\mu} ( x = 2l-1  \limplies y_{l}) \land ( x = 2l  \limplies \lnot y_{l})\\
   &\texttt{NNFTemplate}([z_1,..,z_{2\lambda}],[y_1,..,y_\mu] ) = \\
@@ -243,11 +243,12 @@ $\texttt{FixedForFunctions}$.
 \begin{align*}
   &\texttt{FindFunctions}(z,\lambda) =\\
   &\Land \{ \bigwedge\limits_{i} n_{i,m} \limplies a_{i,m} = 
-  \texttt{NNFTemplate}([z_{m,1},..,z_{m,2\lambda}],[n_{i,1},\dots,n_{i,\mu}] ) |
+  \texttt{NNFTemplate}([z_{m,1},..,z_{m,2\lambda}],[n_{i,1},\dots,n_{i,\mu}] ) \\
+  & \hspace{8cm}|
   \nodef_m \text{ is undefined}\} \\
   &\Land \{ \bigwedge\limits_{i,j,q} e_{i,j,q,m} \limplies b_{i,j,q,m} = 
-  \texttt{NNFTemplate}([z_{i,j,q,1},..,z_{i,j,q,2\lambda}],[e_{i,j,q,1},..,e_{i,j,q,\mu}] ) | 
-  \edgef_m \text{ is undefined}
+  \texttt{NNFTemplate}([z_{i,j,q,1},..,z_{i,j,q,2\lambda}],[e_{i,j,q,1},..,e_{i,j,q,\mu}] ) \\
+  & \hspace{8cm} | \edgef_m \text{ is undefined}
   \}\\
   & \texttt{FixedForFunctions} = \texttt{PresentCons} \land\\
   & \quad \quad
@@ -255,7 +256,7 @@ $\texttt{FixedForFunctions}$.
                     \texttt{AbsentNLabel} \;\union\;
                     \texttt{AbsentP}\\
   &\texttt{SynthFunction}(z,\lambda) = \\
-  & \quad\quad
+  & \quad
     (  \texttt{Consistancy}\land \texttt{Property} \land
    \texttt{FixedForFunctions} \land \texttt{FindFunctions}(slimit) )
 \end{align*}
@@ -300,9 +301,9 @@ In that, $\texttt{FixedForNodeRepair}$ encodes all the parts of VTS that do not 
 \begin{align*}
 % \\ 
     & \texttt{FixedForNodeRepair} =  \texttt{PresentE} \land  
-      \texttt{PresentP} \land \texttt{KnownActiveE} \land \texttt{KnownActiveN}
+      \texttt{PresentP} \land \texttt{KnownActiveE} 
       \land \\
-  & \quad \quad \texttt{UnknownActive} \land \lnot 
+  & \quad \texttt{UnknownActive} \land \texttt{KnownActiveN} \land \lnot 
     \Lor \texttt{AbsentE} \;\union\; \texttt{AbsentNLabel} \;\union\;
     \texttt{AbsentP}\\
   &\texttt{SynthRepairNode}(slimit,flip) = \\

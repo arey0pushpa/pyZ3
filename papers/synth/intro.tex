@@ -152,39 +152,30 @@ quantified Boolean formulas(QBFs).
 We have implemented the encoding in a flexible tool,
 which can handle a wide range of synthesis query.
 %
-We have applied our tool on two found-in-nature
-VTSs~\cite{burri2004complete}.
+We have applied our tool on several VTSs including two found-in-nature
+VTSs.
 %
 In figure~\ref{fig:mukund-vts}, we present one of the two for
 mammalian cells obtained by studying the
 literature.\footnote{Please read appendix~\ref{sec:ex-vts} for more biological details.}
 %
-The VTS has six nodes and 20+ molecules.
+The VTS has six nodes and 55 molecules.
 %
 We can easily check that stability condition is not satisfied for
 many molecules for example ???.
 %
-It is clear that there are several unknowns about the VTS.
+On the example, our synthesis tool reports that minimum ?? edges needed
+to be added to make the VTS stable.
 %
-%
-% Our tool 
-% % and hollow arrows represent maturation edges. 
-% We have used our tool to synthesize possible fixes to complete the
-% graph.
-% %
-% Based on the variation we were able to synthesis the this graph
-% within ??s.
-%
-Our synthesis tool reports that minimum ?? edges needs to be added to make
-the VTS stable.
+The dashed edges are the suggested edges from our tool.
 %
 Our experiments suggest that the synthesis problems are
 solvable by modern solvers and the synthesis technology may be useful
 for biological research.
 %
-We have also applied our tool on various synthetic examples to
-demonstrate that our tool scale upto the graph size size nodes, which
-is the size of typical VTSs in a eukaryotic cell.
+% We have also applied our tool on various synthetic examples to
+% demonstrate that our tool scale upto the graph size size nodes, which
+% is the size of typical VTSs in a eukaryotic cell.
 
 The following are the contributions of this work:
 \begin{itemize}
