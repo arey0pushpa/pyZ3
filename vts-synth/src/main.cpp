@@ -61,7 +61,7 @@ int main(int ac, char* av[])
     
     options_description options("Available options");
     options.add_options()
-      ("use-z3", "use z3 for QBF solving")
+      ("use-z3,z", "use z3 for QBF solving")
       ("print-model,p", "print vts model")
       ("display-graph,g", "display the vts as graph")
       ("input-file,i", value< std::vector<std::string> >(),
@@ -231,7 +231,11 @@ int main(int ac, char* av[])
 
     /* Run Z3 home made QBF solver or DepQbf */
     if ( useZ3 == true ) { 
-      v->use_z3_qbf_solver( f );
+      if (synthVar != -1 ) {
+        v->get_vts_for_synth( f );
+      }  else {
+        v->use_z3_qbf_solver( f );
+      }
     }
     VecsExpr qs;
     auto prenex_f = prenex( f, qs );
