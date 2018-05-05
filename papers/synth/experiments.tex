@@ -1,10 +1,10 @@
 \begin{table}[t]
   \centering
   \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}}\hline
-    {\multirow{2}{*} \textbf{Size}}  & \multicolumn{2}{c|}{\textbf{Add edge}} & \multicolumn{2}{c|}{\textbf{Add molecules}} & \multicolumn{2}{c|}{\textbf{Low depth Cnf}}  &  \multicolumn{2}{c|}{\textbf{Gate function}} &  \multicolumn{2}{c|}{\textbf{VTS repair}} \\\hline
+    {\multirow{2}{*} \textbf{Size}}  & \multicolumn{2}{c|}{\textbf{Add edge}} & \multicolumn{2}{c|}{\textbf{Add molecules}} & \multicolumn{2}{c|}{\textbf{Low depth CNF}}  &  \multicolumn{2}{c|}{\textbf{Gate function}} &  \multicolumn{2}{c|}{\textbf{VTS repair}} \\\hline
    
    \cline{2-9}
-    {} & {\textbf{Timing}} & {\textbf{Changes}} & {\textbf{Timing}} & {\textbf{Changes}} & {\textbf{Timing}} & {\textbf{Changes}} & {\textbf{Timing}} & {\textbf{Changes}} & {\textbf{Timing}} & {\textbf{Changes}} \\\hline
+    {} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} \\\hline
     
     plos1-dia[3/4C] & 0.0292 & $\infty$ & 0.0255 & $\infty$ & 0.0843 & $\infty$ & 0.1005 & $\infty$ & 0.0492 & 0.0\\\hline
     plos2-dia [4C] & 0.0414 & 0 & 0.0407 & 0 & 1.333 & 1 node & 2.327 & 1N 9PE & 0.042 & 0 \\\hline
@@ -15,7 +15,8 @@
     yeast-graph & 0.0 & 0.0 & 0.0 & 0.00 & 0.0 & 0.0 & 0.0  & 0.0 & 0.0 & 0.0 \\\hline
     mukund-comp & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0\\\hline
   \end{tabular}
-  \caption{Run-times for searching for models (in secs).}
+  \caption{Run-times for searching for models (in secs). \#C  stands for minimum changes.
+  Time is reported in seconds.}
   \label{tab:qf-graph}
 \end{table}
 
