@@ -190,8 +190,9 @@ The following constraints encode the basic consistency of VTSs.
 \texttt{EdgeC} states that each edge has at least one molecule,
 there are no self loops, and edge labels are consistent with node labels.   
 \texttt{ActivityC} states that active molecule are present.
-\texttt{PairingC} states that a molecule can either participate in fusion
-via nodes or via edges, but not both.
+\texttt{PairingC} states that all molecules are divided into
+two types and any fusing set of molecules
+must have three molecules involved from one type and one molecule from the other.
 \texttt{Fusion1}, and \texttt{Fusion2} states the well-fused condition.
 \texttt{Consistancy} is the conjunction of all of the above.
 
@@ -279,7 +280,7 @@ other node.
   % \texttt{ReachAbove}(d,r') = &
   % \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}_{i,j}\\
   \texttt{FReach}(d,r') = &\hspace{-1ex}
-   \bigwedge\limits_{i,j,p}  \hspace{-1ex}r^{\prime}_{i,j,p} \hspace{-1ex}\limplies\hspace{-1ex} [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \hspace{-1pt}\lor \hspace{-2pt} (\bigvee_{\matchclap{i' \neq i}}  r^{\prime}_{i',j,p-1} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ]\\
+   \bigwedge\limits_{i,j,p}  \hspace{-1ex}r^{\prime}_{i,j,p} \hspace{-1ex}\limplies\hspace{-1ex} [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \hspace{-1pt}\lor \hspace{-2pt} (\bigvee_{\mathclap{i' \neq i}}  r^{\prime}_{i',j,p-1} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ]\\
   \texttt{Connected}(r') = & \Land\limits_{i,j} (r^{\prime}_{i,j,\nu} \lor r^{\prime}_{j,i,\nu})
 \end{align*}
 We will be synthesizing $k$-connected graphs.
