@@ -232,6 +232,7 @@ int main(int ac, char* av[])
     /* Run Z3 home made QBF solver or DepQbf */
     if ( useZ3 == true ) { 
       if (synthVar != -1 ) {
+        std::cout << "Using z3...\n";
         v->get_vts_for_synth( f );
       }  else {
         v->use_z3_qbf_solver( f );

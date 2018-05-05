@@ -393,7 +393,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   //  auto setUnknownVariablesFalse = !z3::mk_or( unknownN )  && !z3::mk_or( unknownActiveN ) 
   //                                 && !z3::mk_or( unknownE ) && !z3::mk_or( unknownPresenceE ) && !z3::mk_or( unknownActiveE );                                  
     //auto addConstraints = nodeC;
-
+/*
     auto qvtsCons = exists( listN, 
                     exists( listActiveN, 
                     exists( listPresenceE,  
@@ -406,7 +406,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     //   exists( listPairing4M, 
 
     auto cons = exists( listE, 
-                        qvtsCons ); 
+                qvtsCons ); 
+    */
+    auto cons = vtsCons && knownVarConstraint;
     return cons;
   }
 
