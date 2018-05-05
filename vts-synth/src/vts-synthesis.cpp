@@ -433,7 +433,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     auto cons = exists( listPresenceE, 
                 exists( listE, 
-                        qvtsCons && V5 )); 
+                        qvtsCons )); 
              //kConnCons
     return cons;
   }
@@ -542,9 +542,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                   //  exists( listPresenceE, 
                     exists( listPairing4M,
                     exists( listActiveE,
-                    exists( listPairingM, 
+                 //   exists( listPairingM, 
                 //    exists( listReach,
-                            gateCons && knownVarConstraint && vtsCons && setUnknownVariablesFalse && nodeC ))))))))));
+                            gateCons && knownVarConstraint && vtsCons && setUnknownVariablesFalse && nodeC )))))))));
     // todo: V5 has some problems check assing it.
 
                             
@@ -615,8 +615,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                xorNVec, 2, 0, xorNodes ); 
     xor_bits ( ctx, listActiveN, knownActiveNodes, xorknownActiveN, unknownActiveN, 
               xorActiveNVec, 2, 1, xorActiveNodes ); 
-    xor_bits ( ctx, listPairingM, knownPairingMatrix, xorknownPairingM, unknownPairingM,
-              xorPairingMVec, 2, 5, xorPairingMatrix );
+  //  xor_bits ( ctx, listPairingM, knownPairingMatrix, xorknownPairingM, unknownPairingM,
+  //            xorPairingMVec, 2, 5, xorPairingMatrix );
     xor_bits ( ctx, listE, knownEdges, xorknownE,  unknownE, 
                xorEVec, 3, 2, vec2, xorEdges ); 
     xor_bits ( ctx, listPresenceE, knownPresenceEdges, xorknownPresenceE, unknownPresenceE, 
