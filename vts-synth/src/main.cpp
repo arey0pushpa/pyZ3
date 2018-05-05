@@ -193,17 +193,6 @@ int main(int ac, char* av[])
       f = v->create_qbf_formula( funcType );
     } else if( synthVar != -1 ) {
       f = v->vts_synthesis( synthVar ); 
-         auto model_vts = v->get_vts_for_synth(f);
-      if ( printModel == true ) { 
-        std::cout << model_vts << '\n';
-      }
-      if ( displayGraph == true ) { 
-        v->dump_dot( "/tmp/bio.dot", model_vts );
-        auto retVal = system("xdot /tmp/dep_vts.dot");
-        if(retVal == -1) 
-          std::cout << "SYSTEM ERROR !!!\n"; 
-      }
-      exit(0);
     }else {
       // Use SAT based VTS
       auto model_vts = v->get_vts_for_prob1( );
