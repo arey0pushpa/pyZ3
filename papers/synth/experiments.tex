@@ -1,7 +1,6 @@
-
 \begin{table}[t]
   \centering
-  \begin{tabular}[t]{|c|c|c|c|c|c|c|c|c|c|c}\hline
+  \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}}\hline
     {\multirow{2}{*} \textbf{Size}}  & \multicolumn{2}{c|}{\textbf{Add edge}} & \multicolumn{2}{c|}{\textbf{Add molecules}} & \multicolumn{2}{c|}{\textbf{Low depth Cnf}}  &  \multicolumn{2}{c|}{\textbf{Gate function}} &  \multicolumn{2}{c|}{\textbf{VTS repair}} \\\hline
    
    \cline{2-9}
@@ -21,13 +20,16 @@
 \end{table}
 
 
-We implemented the encodings in a tool called~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
+We implemented the encodings in a tool
+called~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
 %
-The tool takes a partially defined VTS as input in its custom designed
-input language. The input is then converted to the constraints over VTS. 
+The tool takes a partially defined VTS as input in a custom designed
+input language.
 %
-The tool can not only synthesize the above discussed query, but also their
-combination.
+The input is then converted to the constraints over VTS. 
+%
+The tool can not only synthesize the above discussed queries, but also their
+combinations.
 %
 For example, our tool can modify labels of nodes or edges while
 learning activity functions.
@@ -35,27 +37,30 @@ learning activity functions.
 Our tool is developed in C++ and uses~\zthree~\cite{z3} infrastructure for
 processing formulas. 
 %
-Since, the formulas involve alternation of quantifiers over Boolean variables Z3 is not a suitable choice. We translate the formula created by Z3 tool into standard QDIMACS~\cite{qdimacs} format. Which can be used as an input for most of the QBF solvers. 
-
-%Since the formulas are in QBF, we cannot use~\zthree.
+Since, the formulas involve alternation of quantifiers over Boolean
+variables Z3 is not a suitable choice.
+%
+We translate the formula created by Z3 tool into standard
+QDIMACS~\cite{qdimacs} format and use as an input for QBF solvers. 
 %
 We use~\depqbf~\cite{lonsing2010depqbf} for solving of QBF formulas. 
 %
 Our tool includes about 7000 lines of code.
 
-We have applied~\ourtool~on six partially defined VTS.
+We have applied~\ourtool~on six partially defined VTSs.
 %
 The results are presented in table~\ref{tab:qf-graph}.
 %
-The experiments were conducted on ... machine,
+The experiments were conducted on ?? machine,
 with \ashu{?}GB memory and 900s timeout.
 %
-The first four VTSs are synthetic and inspire from literature for typical
-motifs in VTSs. 
+The first four VTSs are synthetic, but inspire from literature for
+typical motifs in VTSs. 
 %
 %
 The fifth VTS is taken from "A complete set of SNAREs in yeast"
-~\cite{burri2004complete} paper. It has been adapted from the paper by separating the v and the t SNAREs. 
+~\cite{burri2004complete} paper. It has been adapted from the paper by
+separating the v and the t SNAREs. 
 %The t SNAREs are labelled within compartments and v SNAREs on the edges. %\ashu{Describe the source of two examples}.
 %
 The last VTS represent mammalian SNARE map created by studying the literature references.  
@@ -72,7 +77,27 @@ search space can obtain the VTS.
 %
 %\ashu{@ankit: please discuss all the synthesis queries in the table.}
 
-Variation 1 of our tool adds new labelled edges to the graph. We have ranked the all possible graph edits with the simple rank of minimum updates. Our tools were able to complete this graph by adding five new edges and nine new molecules in 210s. Variation 2 of our graph adds new labels to the edge and was able to fix this graph with eleven new molecule labels in 180s. Variation 3 of our tool synthesis low depth CNF functions and was able to synthesis the result in 500s. Variation 4 of our tool synthesis Boolean function based on AND, OR gates. The result shows the basic template of 4 leaves and 3 gates we allow the user to provide its own template in our front-end language. The tool was able to synthesize the Boolean functions in 470s.
+Variation 1 of our tool adds new labelled edges to the graph.
+%
+We have ranked the all possible graph edits with the simple rank of
+minimum updates.
+%
+Our tools were able to complete this graph by adding five new edges
+and nine new molecules in 210s.
+%
+Variation 2 of our graph adds new labels to the edge and was able to
+fix this graph with eleven new molecule labels in 180s.
+%
+Variation 3 of our tool synthesis low depth CNF functions and was able
+to synthesis the result in 500s.
+%
+Variation 4 of our tool synthesis Boolean function based on AND, OR
+gates.
+%
+The result shows the basic template of 4 leaves and 3 gates we allow
+the user to provide its own template in our front-end language.
+%
+The tool was able to synthesize the Boolean functions in 470s.
 %
 %
 %Our experiments suggest that the synthesis problems are solvable by modern 
