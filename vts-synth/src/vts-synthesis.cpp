@@ -413,9 +413,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   // 2. Add flow of molecules to fix fusion. 
   else if ( variation == 2 )  {
     
-    z3::expr edgeActivityC = !at_least_three( unknownActiveE );
-    z3::expr edgePresenceC = !at_least_three( unknownPresenceE );
-    z3::expr addConstraints = edgeActivityC && edgePresenceC;
+   // z3::expr edgeActivityC = !at_least_three( unknownActiveE );
+   // z3::expr edgePresenceC = !at_least_three( unknownPresenceE );
+   // z3::expr addConstraints = edgeActivityC && edgePresenceC;
 
 
     // fix all unknwon bits to false.
@@ -429,7 +429,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                       //  exists( listPairingM, 
                         exists( listPairing4M, 
                        exists( listReach, 
-                                vtsCons && knownVarConstraint && setUnknownVariablesFalse )))));
+                                vtsCons && knownVarConstraint )))));
 
     auto cons = exists( listPresenceE, 
                 exists( listE, 
