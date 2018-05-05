@@ -272,7 +272,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
  // z3::expr vtsActivity = vts_activity_constraint(); 
 
   /** Connectedness Constraints */
-  z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
+  //z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
  // z3::expr V5 = no_self_edges();
   
   //z3::expr inputCons = ctx.bool_val(true);
@@ -371,13 +371,17 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   }  
 
   // 1. Add edge to achieve graph stability and k connected. 
-  if ( variation == 1 ) {   
+  if ( variation == 1 ) {
+     
+    // auto edgeC =  pbeq(unknownE , 1, int 1);
+    // auto edgeC =  atmost(unknownE, 1);
+    // auto edgeC = !at_least_two( unknownE );
     // auto edgeC = !at_least_three( unknownE );
-    auto edgeC = mk_le_k_bits( unknownE, 3);
- //   auto edgeActivityC = !at_least_three( unknownActiveE );
+    auto edgeC = mk_le_k_bits( unknownE, 1 );
+    // auto edgeActivityC = !at_least_three( unknownActiveE );
     //auto edgePresenceC = !at_least_four( unknownPresenceE );
- //    auto nodeC = !at_least_four( unknownN );    
- //   auto nodeActivityC = !at_least_three ( unknownActiveN ); 
+    // auto nodeC = !at_least_four( unknownN );    
+    // auto nodeActivityC = !at_least_three ( unknownActiveN ); 
     /*
     for( unsigned i = 0; i < unknownN.size(); i++  ) {
       std::cout << "Nodes is " << unknownN[i] << "\n" ;
@@ -413,7 +417,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     */
 
 
-    auto cons = vtsCons && knownVarConstraint && setUnknownVariablesFalse;
+    auto cons = vtsCons && knownVarConstraint && setUnknownVariablesFalse && edgeC;
     return cons;
   }
 
@@ -423,8 +427,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
    // z3::expr edgeActivityC = !at_least_three( unknownActiveE );
    // z3::expr edgePresenceC = !at_least_three( unknownPresenceE );
    // z3::expr addConstraints = edgeActivityC && edgePresenceC;
-
-
+    auto edgeC = mk_le_k_bits( unknownPresenceE, 6 );
+     
+     /* 
     // fix all unknwon bits to false.
     //z3::expr setUnknownVariablesFalse = !z3::mk_or( unknownActiveN ) && !z3::mk_or( unknownE );
     auto setUnknownVariablesFalse = !z3::mk_or( unknownN )  && !z3::mk_or( unknownActiveN ) 
@@ -440,7 +445,10 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
     auto cons = exists( listPresenceE, 
                 exists( listE, 
-                        qvtsCons )); 
+                        qvtsCons ));
+   */
+     auto cons = vtsCons && knownVarConstraint && edgeC;
+
              //kConnCons
     return cons;
   }

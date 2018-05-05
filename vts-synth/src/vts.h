@@ -274,7 +274,9 @@ public:
   z3::expr is_qth_edge_present( unsigned i, unsigned j, unsigned q );
   z3::expr is_undirected_dumped_edge( unsigned i, unsigned j, Vec3Expr& dump1 );
   void dump_dot( std::string filename, z3::model mdl );
+  void edge_dump_dot( std::string filename, z3::model mdl );
   void print_graph( z3::context& c ,std::string filename, VecsExpr qs, bool printModel, bool displayGraph, int synthVar );
+  
 };
 
 typedef std::shared_ptr<vts> vts_ptr;

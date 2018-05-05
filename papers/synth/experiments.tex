@@ -18,6 +18,28 @@
   Time is reported in seconds.}
   \label{tab:qf-graph}
 \end{table}
+
+\begin{table}[t]
+  \centering
+  \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|}\hline
+    {\multirow{2}{*} \textbf{}}  & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Learning NNF}}  &  \multicolumn{2}{c|}{\textbf{Learning}} &  \multicolumn{2}{c|}{\textbf{Add/Delete}} \\
+    {\multirow{2}{*} \textbf{Benchmark}}  & \multicolumn{2}{c|}{\textbf{edge}} & \multicolumn{2}{c|}{\textbf{molecules}} & \multicolumn{2}{c|}{\textbf{(only $\land$ and $\lor$)}}  &  \multicolumn{2}{c|}{\textbf{k-CNF}} &  \multicolumn{2}{c|}{\textbf{parts}} \\
+    \cline{2-11}
+    {} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} \\
+    \hline
+    
+    plos1-dia[3/4C]& 0.0292&$\infty$& 0.0255 &$\infty$& 0.1005      & $\infty$ & 0.0843&$\infty$& 0.0492 & 0.0\\\hline
+    plos2-dia [4C] & 0.0414& 0      & 0.0407 & 0      & 2.327       & 1N 9PE   & 1.333 & 1 node & 0.042  & 0 \\\hline
+    mukund[3/4C]  & 185.06 & 4N 8E  & 0.3773 & 0.0    & !13.92/1.553& 0.0      & 2.062 & 0.0    & 0.230  & 0.0 \\\hline
+    node4[-]      & 16.70  & 0.0    & 16.472 & 0.0    & 7.011       & $\infty$ & 5.085 &$\infty$& 2.194  & 0.0\\\hline
+    yeast-graph   & 40.8728    & 1 edge  & 0.0    & 0.00   & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0 \\\hline
+    mukund-comp   & 0.0    & 0.0    & 0.0    & 0.0    & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0\\\hline
+  \end{tabular}
+  \caption{Run-times for searching for models (in secs). \#C  stands for minimum changes.
+  Time is reported in seconds.}
+  \label{tab:z3-qf-graph}
+\end{table}
+
 %[M=8, N=2, Q=2]    
 % n/A n/A activeN == UNSAT adding edge == UNSAT activeE == UNSAT presenceE == UNSAT
 
