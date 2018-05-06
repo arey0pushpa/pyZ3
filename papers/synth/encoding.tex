@@ -45,7 +45,7 @@ about $G$.
 \begin{align*}
   \texttt{PresentE} &= \land \{e_{i,j,q,m}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land q \leq q' \land m \in M_q \}\\
   \texttt{PresentN} &= \land \{n_{i,m}| m \in \nlabel(i) \land i \in \nodes \}\\
-  \texttt{PresentP} &= \land \{p_{i,j}| (i,j) \in \pairs \} \\
+  \texttt{PresentP} &= \land \{p_{\{m_1,m_2,m_3,m_4\}}| \{m_1,m_2,m_3,m_4\} \in \pairs \} \\
   \texttt{KnownActiveN} &= \land \{ a_{i,m} = \texttt{NodeFun}_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is defined.} \} \\
   \texttt{KnownActiveE} &= \land \{ b_{i,j,q,m} = \texttt{EdgeFun}_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
                    | \edgef_m \text{ is defined.} \} \\
@@ -61,7 +61,7 @@ We also collect the variables that are not set to true in $\texttt{PresentCons}$
   \texttt{AbsentE} &= \{e_{i,j,q}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land 
                     q' < q \leq \pi \}\\
   \texttt{AbsentNLabel} &= \{n_{i,m}| m \not\in \nlabel(i) \land i \in \nodes \}\\
-  \texttt{AbsentP} &= \{p_{i,j}| (i,j) \not\in \pairs \} \\
+  \texttt{AbsentP} &= \{p_{\{m_1,m_2,m_3,m_4\}}| {\{m_1,m_2,m_3,m_4\}} \not\in \pairs \} \\
   \texttt{UnnownActive} &=  \Land \{ a_{i,m} = \nodef_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is undefined.} \} \union \\
    &\quad\quad\quad  \{ b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
                    | \edgef_m \text{ is undefined.} \}
