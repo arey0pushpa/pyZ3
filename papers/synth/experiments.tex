@@ -7,11 +7,11 @@
     {} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} \\
     \hline
     
-    plos1-dia[3C/4C]& 0.326 &$\infty$& 0.312 &$\in0.224fty$& 0.669 & $\infty$ & 0.966 &$\infty$& !0.985/ & add: 1 edge bit, del: 2 edge bit, 1 actv E, 1 act node\\\hline
-    plos2-dia[4C] & 0.266 & 0   & 0.248 & 0  & 2.327  & 1N 9PE   & 1.333 & 1 node & 0.042  & 0 \\\hline
-    mukund[3/4C]  & 185.06 & 4N 8E  & 0.3773 & 0.0    & !13.92/1.553& 0.0      & 2.062 & 0.0    & 0.230  & 0.0 \\\hline
-    node4[-]      & 16.70  & 0.0    & 16.472 & 0.0    & 7.011       & $\infty$ & 5.085 &$\infty$& 2.194  & 0.0\\\hline
-    yeast-graph   & 0.0    & 0.0    & 0.0    & 0.00   & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0 \\\hline
+    plos1-dia[3C]& 0.326 &$\infty$& 0.312 &$\in0.224fty$& 0.669 & $\infty$ & 0.966 &$\infty$& 0.277 & add: 1 edge bit, 1 node bit, del: 1 E, 1 AE, 1 AN\\\hline
+    plos2-dia[4C] & 0.266 & 0   & 0.3229 & 0  & 1.409  & 0 & 2.114 & 0 &  0.3378 & 0 \\\hline
+    mukund[3/4C]  & 0.767 & 1 E  & 1.049 & 5 PE & 3.523 & 1E & 4.961 & - & 1.172  & -1 E, -2 PE, -1 AN. +1 E, +4 PE, +4 N, +2 AN, +2 AE \\\hline
+    node4[-]  & 16.70  & 0.0    & 16.472 & 0.0    & 7.011       & $\infty$ & 5.085 &$\infty$& 2.194  & 0.0\\\hline
+    yeast-graph[3C]   & 95.0162    & 1 edge   & 94.5206    & 0.00   & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0 \\\hline
     mukund-comp   & 0.0    & 0.0    & 0.0    & 0.0    & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0\\\hline
   \end{tabular}
   \caption{Run-times for searching for models (in secs). \#C  stands for minimum changes.
@@ -28,12 +28,12 @@
     {} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} \\
     \hline
     
-    plos1-dia & 0.041&$\infty$& 0.320 &$\infty$& 0.225 & $\infty$ & 0.33&$\infty$& 3.74 & del: . 1 edge, 1 edge bit 1 node, 1 act each add: 1 edge bit 1 node bit\\\hline
+    plos1-dia & 0.041&$\infty$& 0.320 &$\infty$& 0.225 & $\infty$ & 0.33&$\infty$& 3.74 & -1 E, -1 PN, - 1 N, -1 PE. +1 AE, +1 PE, +1 N\\\hline
     plos2-dia & 3.97 & 0 &  2.647 & 0  & 5.941 & 0 & 5.680 & 0 & 3.56 & 0 \\\hline
-    mukund  & 3.483 & 1 edge  & 4.379 & 5 edge bits  & 6.340[-] / 29.980 & 2 edge, 10 edge bits  & 10.4052[-] & [-] & 3.650  &  del : 1 edge, 2 edge bit, 1 active node. add:1 edge 4 edge bit 4 node bit, 2 act \\\hline
-    node4  & 4.1502  & 1 edge  & 10.562  & 12 mol & 3.401  & $\infty$ & 4.760 &$\infty$&  5.05  & del: 2 edge, 2 act, 1 node and 1 act. add: 12 node, 8 edge, 1 edge bits \\\hline
-    yeast-graph & 40.8728  & 1 edge  &   timeout  & N/A   & 1313.91  & 1 edge  & 517.619   & 1 edge    & 380.43  &  del: 1 edge, 2 node, 2 act bits each. add: 2 edge, 12 mol, 7 node bits \\\hline
-    mukund-comp   & 0.0    & 0.0    & 0.0    & 0.0    & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0\\\hline
+    mukund  & 3.483 & 1 E  & 4.379 & 5 PE  & 6.340[-] / 29.980 & 2 E, 10 PE  & 10.4052[-] & [-] & 3.650  & -1 E, -2 PE, -1 AN. +1 E, +4 PE, +4 N, +2 AN, +2 AE \\\hline
+    node4  & 4.1502  & 1 E  & 10.562  & 12 PE & 3.401  & $\infty$ & 4.760 &$\infty$&  5.05  & -2 E, -2 PE, -1 N, -1 AN, -1 AE. +12 N, +8 E, +1 PE \\\hline
+    yeast-graph & 40.8728  & 1 E  &   timeout  & N/A   & 1313.91  & 1 E  & 517.619   & 1 E & 380.43  &  -1 E, -2 N, -2 AE, -2 AN. +2 E, 12 PE, 7 N. \\\hline
+    mammal-graph   & 0.0    & 0.0    & 0.0    & 0.0    & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0\\\hline
   \end{tabular}
   \caption{Run-times for searching for Z3 models (in secs). \#C  stands for minimum changes.
   Time is reported in seconds.}
