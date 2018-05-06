@@ -15,14 +15,14 @@
     yeast-graph   & 0.0    & 0.0    & 0.0    & 0.00   & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0 \\\hline
     mukund-comp   & 0.0    & 0.0    & 0.0    & 0.0    & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0\\\hline
   \end{tabular}
-  \caption{Run-times for searching for models (in secs). \#C  stands for minimum changes.
+  \caption{Run-times for synthesis queries with~\depqbf (in secs). \#C  stands for minimum changes.
   Time is reported in seconds.}
   \label{tab:qf-graph}
 \end{table}
 
 \begin{table}[t]
   \centering
-  \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|}\hline
+  \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}C{4cm}@{}|}\hline
     {\multirow{2}{*} \textbf{}}  & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Learning NNF}}  &  \multicolumn{2}{c|}{\textbf{Learning}} &  \multicolumn{2}{c|}{\textbf{Add/Delete}} \\
     {\multirow{2}{*} \textbf{Benchmark}}  & \multicolumn{2}{c|}{\textbf{edge}} & \multicolumn{2}{c|}{\textbf{molecules}} & \multicolumn{2}{c|}{\textbf{(only $\land$ and $\lor$)}}  &  \multicolumn{2}{c|}{\textbf{k-CNF}} &  \multicolumn{2}{c|}{\textbf{parts}} \\
     \cline{2-11}
@@ -36,7 +36,7 @@
     yeast-graph & 40.8728  & 1 edge  &   timeout  & N/A   & 1313.91  & 1 edge  & 517.619   & 1 edge    & 380.43  &  del: 1 edge, 2 node, 2 act bits each. add: 2 edge, 12 mol, 7 node bits \\\hline
     mukund-comp   & 0.0    & 0.0    & 0.0    & 0.0    & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0\\\hline
   \end{tabular}
-  \caption{Run-times for searching for Z3 models (in secs). \#C  stands for minimum changes.
+  \caption{Run-times for synthesis queries with~\depqbf (in secs). \#C  stands for minimum changes.
   Time is reported in seconds.}
   \label{tab:z3-qf-graph}
 \end{table}
