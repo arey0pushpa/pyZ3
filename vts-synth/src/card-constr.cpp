@@ -17,6 +17,16 @@ VecExpr vts::flattern_3d ( Vec3Expr& dump ) {
   return d1;
 }
 
+z3::expr vts::cardC (z3::expr_vector d1, unsigned drop_count) {
+   z3::expr expr = ctx.int_val(0);
+        auto tt = ctx.bool_val(true);
+        for (unsigned i=0; i < d1.size(); i++ ) {
+         expr = expr + z3::ite( d1[i], ctx.int_val(1), ctx.int_val(0) ) ;
+       }
+     // std::cout << "The total count is : " << expr;  
+      return (tt && (expr == ctx.int_val(drop_count)) );
+}
+
 
 // Use PbEq for exactly k.
 z3::expr vts::exactly_k_drops( unsigned drop_count, Vec3Expr& dump ) { //

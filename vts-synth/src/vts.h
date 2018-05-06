@@ -197,7 +197,7 @@ public:
 
   z3::expr at_most_one ( z3::expr_vector dump );
 
-  
+  z3::expr cardC (z3::expr_vector d1, unsigned drop_count);
   /** connectivity costraints **/
   // todo: variables are needed to be parametrized
   z3::expr only_present_edges_can_be_dropped( Vec3Expr& dump ); //
