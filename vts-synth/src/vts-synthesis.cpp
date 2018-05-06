@@ -272,7 +272,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
  // z3::expr vtsActivity = vts_activity_constraint(); 
 
   /** Connectedness Constraints */
-  z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
+  z3::expr kConnCons = k_connected_graph_constraint( 4, false ); 
  // z3::expr V5 = no_self_edges();
   
   //z3::expr inputCons = ctx.bool_val(true);
@@ -428,7 +428,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
    // z3::expr edgeActivityC = !at_least_three( unknownActiveE );
    // z3::expr edgePresenceC = !at_least_three( unknownPresenceE );
    // z3::expr addConstraints = edgeActivityC && edgePresenceC;
-    auto edgeC = mk_le_k_bits( unknownPresenceE, 4);
+    auto edgeC = mk_le_k_bits( unknownPresenceE, 12);
      
       
     // fix all unknwon bits to false.
@@ -672,22 +672,22 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     auto xadd_a_edge_C = !at_least_two( xorActiveNVec );
 */
 
-    auto xadd_node_C = mk_le_k_bits( xorNVec, 1 );
-    auto xadd_active_node_C =  mk_le_k_bits( xorActiveNVec, 1 );
-    auto xadd_edge_C =  mk_le_k_bits( xorEVec, 1 );
+    auto xadd_node_C = mk_le_k_bits( xorNVec, 2);
+    auto xadd_active_node_C =  mk_le_k_bits( xorActiveNVec, 2 );
+    auto xadd_edge_C =  mk_le_k_bits( xorEVec, 2 );
     auto xadd_p_edge_C = mk_le_k_bits( xorPresenceEVec, 2);
-    auto xadd_a_edge_C = mk_le_k_bits( xorActiveEVec, 1);
+    auto xadd_a_edge_C = mk_le_k_bits( xorActiveEVec, 2);
     
     auto edgeC = 
-      mk_le_k_bits( unknownE, 1);
+      mk_le_k_bits( unknownE, 2);
     auto edgePresenceC =
-      mk_le_k_bits( unknownPresenceE, 4);
+      mk_le_k_bits( unknownPresenceE, 12);
     auto nodeC = 
-      mk_le_k_bits( unknownN, 4);    
+      mk_le_k_bits( unknownN, 8);    
    auto edgeActivityC = 
-      mk_le_k_bits( unknownActiveE, 2);
+      mk_le_k_bits( unknownActiveE, 4);
     auto nodeActivityC = 
-      mk_le_k_bits ( unknownActiveN, 2 ); 
+      mk_le_k_bits ( unknownActiveN, 4 ); 
   
     auto addCons = edgeC &&  edgePresenceC && nodeC;
     auto delCons = xadd_node_C && xadd_active_node_C && xadd_edge_C && xadd_p_edge_C && xadd_a_edge_C;    
