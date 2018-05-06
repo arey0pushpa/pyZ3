@@ -2,6 +2,7 @@
 \usepackage{makecell}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{pdflscape}
 % \usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
 
 % I ADDED FOR THE CHANGE IN ENUMERATE TO ALPHABBETICAL
@@ -100,6 +101,11 @@
   \noalign{\vskip\arrayrulewidth}%
   \noalign{\global\arrayrulewidth\savedwidth}%
 }
+
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
 
 % Remove comment for double spacing

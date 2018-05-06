@@ -1,3 +1,4 @@
+\begin{landscape}
 \begin{table}[t]
   \centering
   \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|}\hline
@@ -39,6 +40,7 @@
   Time is reported in seconds.}
   \label{tab:z3-qf-graph}
 \end{table}
+\end{landscape}
 
 %[M=8, N=2, Q=2]    
 % n/A n/A activeN == UNSAT adding edge == UNSAT activeE == UNSAT presenceE == UNSAT
@@ -105,24 +107,26 @@ The first one only adds new labelled edges to the graph.
 %
 We have ranked the all possible graph edits with the simple rank of
 minimum updates.
+% %
+% Our tools were able to complete the graphs by adding five new edges
+% and nine new molecules in 210s.
 %
-Our tools were able to complete the graphs by adding five new edges
-and nine new molecules in 210s.
-%
-The second query adds new labels to the edge and was able to
-fix the graphs with eleven new molecule labels in 180s.
+The second query adds new labels to the edge.
+%  and was able to
+% fix the graphs with eleven new molecule labels in 180s.
 %
 The third query synthesizes NNF Boolean functions only containing
-$\land$ and $\lor$ gates.
+$\land$ and $\lor$ gates for activity functions, while allowing
+more edges to be added.
 %
-The result shows the basic template of 4 leaves and 3 gates we allow
-the user to provide its own template in our front-end language.
+The result shows the basic template of 4 leaves and 3 gates.
 %
-The tool was able to synthesize the Boolean functions in 470s.
+% The tool was able to synthesize the Boolean functions in 470s.
 %
-To illustrated the versatility of our tool,
-the the fourth query synthesizes $3$-CNF functions (encoding not presented) and was able
-to synthesis the results for all graphs in 500s.
+To illustrated the versatility of our tool, the the fourth query
+synthesizes $3$-CNF functions (encoding not presented).
+%  and was able to
+% synthesis the results for all graphs in 500s.
 %
 Finally, we report queries that allows both addition and deletion of parts of
 VTS\ashu{which parts}. 
