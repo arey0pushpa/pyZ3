@@ -1,8 +1,11 @@
-\begin{table}[t]
+\begin{sidewaysfigure}[t]
   \centering
-  \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|}\hline
+  \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}C{4cm}@{}|}\hline
+% \begin{table}[t]
+%   \centering
+%   \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|}\hline
     {\multirow{2}{*} \textbf{}}  & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Learning NNF}}  &  \multicolumn{2}{c|}{\textbf{Learning}} &  \multicolumn{2}{c|}{\textbf{Add/Delete}} \\
-    {\multirow{2}{*} \textbf{Benchmark}}  & \multicolumn{2}{c|}{\textbf{edge}} & \multicolumn{2}{c|}{\textbf{molecules}} & \multicolumn{2}{c|}{\textbf{(only $\land$ and $\lor$)}}  &  \multicolumn{2}{c|}{\textbf{k-CNF}} &  \multicolumn{2}{c|}{\textbf{parts}} \\
+    {\multirow{2}{*} \textbf{Table a}}  & \multicolumn{2}{c|}{\textbf{edge}} & \multicolumn{2}{c|}{\textbf{molecules}} & \multicolumn{2}{c|}{\textbf{(only $\land$ and $\lor$)}}  &  \multicolumn{2}{c|}{\textbf{k-CNF}} &  \multicolumn{2}{c|}{\textbf{parts}} \\
     \cline{2-11}
     {} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} \\
     \hline
@@ -14,16 +17,13 @@
     yeast-graph[3C]   & 95.016    & 1 E   & 94.5206    & 0.00   & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0 \\\hline
        & 0.0    & 0.0    & 0.0    & 0.0    & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0\\\hline
   \end{tabular}
-  \caption{Run-times for searching for models (in secs). \#C  stands for minimum changes.
-  Time is reported in seconds.}
-  \label{tab:qf-graph}
-\end{table}
-
-\begin{table}[t]
-  \centering
-  \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|}\hline
+  % \caption{Run-times for searching for models (in secs). \#C  stands for minimum changes.
+  % Time is reported in seconds.}
+  % \label{tab:qf-graph}
+% \end{table}
+  \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}C{4cm}@{}|}\hline
     {\multirow{2}{*} \textbf{}}  & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Learning NNF}}  &  \multicolumn{2}{c|}{\textbf{Learning}} &  \multicolumn{2}{c|}{\textbf{Add/Delete}} \\
-    {\multirow{2}{*} \textbf{Benchmark}}  & \multicolumn{2}{c|}{\textbf{edge}} & \multicolumn{2}{c|}{\textbf{molecules}} & \multicolumn{2}{c|}{\textbf{(only $\land$ and $\lor$)}}  &  \multicolumn{2}{c|}{\textbf{k-CNF}} &  \multicolumn{2}{c|}{\textbf{parts}} \\
+    {\multirow{2}{*} \textbf{Table b}}  & \multicolumn{2}{c|}{\textbf{edge}} & \multicolumn{2}{c|}{\textbf{molecules}} & \multicolumn{2}{c|}{\textbf{(only $\land$ and $\lor$)}}  &  \multicolumn{2}{c|}{\textbf{k-CNF}} &  \multicolumn{2}{c|}{\textbf{parts}} \\
     \cline{2-11}
     {} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} \\
     \hline
@@ -35,10 +35,12 @@
     yeast-graph & 40.8728  & 1 E  &   timeout  & N/A   & 1313.91  & 1 E  & 517.619   & 1 E & 380.43  &  -1 E, -2 N, -2 AE, -2 AN. +2 E, 12 PE, 7 N. \\\hline
     mammal-graph   & 0.0    & 0.0    & 0.0    & 0.0    & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0\\\hline
   \end{tabular}
-  \caption{Run-times for searching for Z3 models (in secs). \#C  stands for minimum changes.
-  Time is reported in seconds.}
+  \caption{Run-times for synthesis queries. \#C  stands for minimum changes. Time is reported
+    in seconds. (a) solver used~\depqbf (b) solver used~\zthree}
+  % \caption{Run-times for searching for Z3 models (in secs). \#C  stands for minimum changes.
+  % Time is reported in seconds.}
   \label{tab:z3-qf-graph}
-\end{table}
+\end{sidewaysfigure}
 
 %[M=8, N=2, Q=2]    
 % n/A n/A activeN == UNSAT adding edge == UNSAT activeE == UNSAT presenceE == UNSAT
@@ -61,10 +63,10 @@ learning activity functions.
 Our tool is developed in C++ and uses~\zthree~\cite{z3} infrastructure for
 processing formulas. 
 %
-Since, the formulas involve alternation of quantifiers over Boolean
-variables Z3 is not a suitable choice.
+Since, some of the formulas involve alternation of quantifiers over
+Boolean variables Z3 is not a suitable choice for those examples.
 %
-We translate the formula created by Z3 tool into standard
+We translate the formulas created by Z3 tool into standard
 QDIMACS~\cite{qdimacs} format and use as an input for QBF solvers. 
 %
 We use~\depqbf~\cite{lonsing2010depqbf} for solving of QBF formulas. 
@@ -73,7 +75,8 @@ Our tool includes about 7000 lines of code.
 
 We have applied~\ourtool~on six partially defined VTSs.
 %
-The results are presented in table~\ref{tab:qf-graph}.
+The results are presented in table~\ref{tab:qf-graph} for both the solvers
+\depqbf and \zthree.
 %
 To use~\zthree, we remove \texttt{Connected} constraints, such the query becomes
 quantifier free.
@@ -87,9 +90,7 @@ The first four VTSs are synthetic, but inspire from literature for
 typical motifs in VTSs. 
 %
 %
-The fifth VTS is taken from "A complete set of SNAREs in yeast"
-~\cite{burri2004complete} paper. It has been adapted from the paper by
-separating the v and the t SNAREs. 
+The fifth VTS is taken from~\cite{burri2004complete}.
 %
 The last VTS represent mammalian SNARE map created by studying the literature references.  
 
@@ -110,32 +111,33 @@ The first one only adds new labelled edges to the graph.
 %
 We have ranked the all possible graph edits with the simple rank of
 minimum updates.
+% %
+% Our tools were able to complete the graphs by adding five new edges
+% and nine new molecules in 210s.
 %
-Our tools were able to complete the graphs by adding five new edges
-and nine new molecules in 210s.
-%
-The second query adds new labels to the edge and was able to
-fix the graphs with eleven new molecule labels in 180s.
+The second query adds new labels to the edge.
+%  and was able to
+% fix the graphs with eleven new molecule labels in 180s.
 %
 The third query synthesizes NNF Boolean functions only containing
-$\land$ and $\lor$ gates.
+$\land$ and $\lor$ gates for activity functions, while allowing
+more edges to be added.
 %
-The result shows the basic template of 4 leaves and 3 gates we allow
-the user to provide its own template in our front-end language.
+The result shows the basic template of 4 leaves and 3 gates.
 %
-The tool was able to synthesize the Boolean functions in 470s.
+% The tool was able to synthesize the Boolean functions in 470s.
 %
-To illustrated the versatility of our tool,
-the the fourth query synthesizes $3$-CNF functions (encoding not presented) and was able
-to synthesis the results for all graphs in 500s.
+To illustrated the versatility of our tool, the the fourth query
+synthesizes $3$-CNF functions (encoding not presented).
+%  and was able to
+% synthesis the results for all graphs in 500s.
 %
-Finally, we report queries that allows both addition and deletion of parts of
-VTS\ashu{which parts}. 
+Finally, we report queries that allows both addition and deletion of edges, and labels
+of node and labels. 
 %
 %Our experiments suggest that the synthesis problems are solvable by modern 
 %solvers and the synthesis technology may be useful for biological research.
 %
-
 
 %%% Local Variables:
 %%% mode: latex
