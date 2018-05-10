@@ -266,13 +266,13 @@ void xor_bits ( z3::context& c,
 
 z3::expr vts::vts_synthesis ( unsigned variation ) {
   /** Basic Constraints **/
-  z3::expr vtsCons = create_vts_constraint();  
-  //z3::expr vtsCons = create_qr_vts_constraint();  
+  //z3::expr vtsCons = create_vts_constraint();  
+  z3::expr vtsCons = create_qr_vts_constraint();  
   //z3::expr nodeActive = always_active_on_node();
  // z3::expr vtsActivity = vts_activity_constraint(); 
 
   /** Connectedness Constraints */
-  z3::expr kConnCons = k_connected_graph_constraint( 4, false ); 
+  z3::expr kConnCons = k_connected_graph_constraint( 3, false ); 
  // z3::expr V5 = no_self_edges();
   
   //z3::expr inputCons = ctx.bool_val(true);
@@ -302,9 +302,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   z3::expr_vector listE = edge_list(); 
   z3::expr_vector listPresenceE = presence_edge_list();
   z3::expr_vector listActiveE = active_edge_list(); 
-  z3::expr_vector listPairingM = pairing_m_list(); 
+  //z3::expr_vector listPairingM = pairing_m_list(); 
   z3::expr_vector listReach = reach_list();
-//  z3::expr_vector listPairing4M  = pairing_m_4d_list();
+  z3::expr_vector listPairing4M  = pairing_m_4d_list();
   
   z3::expr knownVarConstraint( ctx );
 
@@ -341,8 +341,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     unassigned_bits ( listE, knownEdges, unknownE ); 
     unassigned_bits ( listPresenceE, knownPresenceEdges, unknownPresenceE ); 
     unassigned_bits ( listActiveE, knownActiveEdges, unknownActiveE ); 
-    unassigned_bits ( listPairingM, knownPairingMatrix, unknownPairingM ); 
-  //  unassigned_bits ( listPairing4M, knownPairingMatrix, unknownPairingM ); 
+   // unassigned_bits ( listPairingM, knownPairingMatrix, unknownPairingM ); 
+     unassigned_bits ( listPairing4M, knownPairingMatrix, unknownPairingM ); 
   
     z3::expr_vector list_expr (ctx);
 
@@ -378,8 +378,14 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     // auto edgeC =  atmost(unknownE, 1);
 //     auto edgeC = !at_least_two( unknownE );
     // auto edgeC = !at_least_three( unknownE );
-  // auto edgeC = mk_le_k_bits( unknownE, 0);
-    // auto edgeActivityC = !at_least_three( unknownActiveE );
+    auto edgeC = mk_le_k_bits( unknownE, 1);
+    /*
+    for ( unsigned i = 0; i < knownEdges.size(); i++ ) {
+      std::cout << "known edge: " << knownEdges[i] << "\n";
+    }
+    */
+    //
+    //auto edgeActivityC = !at_least_three( unknownActiveE );
     //auto edgePresenceC = !at_least_four( unknownPresenceE );
     // auto nodeC = !at_least_four( unknownN );    
     // auto nodeActivityC = !at_least_three ( unknownActiveN ); 
@@ -400,13 +406,12 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
      ;
 
    //auto addConstraints = nodeC;
-
     auto qvtsCons = exists( listN, 
                     exists( listActiveN, 
                     exists( listPresenceE,  
                     exists( listActiveE, 
-                    exists( listPairingM, 
-                //    exists( listPairing4M,
+                  //  exists( listPairingM, 
+                    exists( listPairing4M,
                     exists( listReach, 
                             vtsCons && knownVarConstraint ))))));   
 
@@ -414,11 +419,11 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
 
 
     auto cons = exists( listE, 
-                 qvtsCons && kConnCons ); 
+                 qvtsCons && kConnCons && edgeC ); 
+              //   qvtsCons ); 
     
-
-
-  //  auto cons = vtsCons && knownVarConstraint && setUnknownVariablesFalse;
+  
+   // auto cons = vtsCons && knownVarConstraint && setUnknownVariablesFalse && edgeC;
     return cons;
   }
 
@@ -428,9 +433,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
    // z3::expr edgeActivityC = !at_least_three( unknownActiveE );
    // z3::expr edgePresenceC = !at_least_three( unknownPresenceE );
    // z3::expr addConstraints = edgeActivityC && edgePresenceC;
-    auto edgeC = mk_le_k_bits( unknownPresenceE, 0);
+    auto edgeC = mk_le_k_bits( unknownPresenceE, 20);
      
-      
+     /* 
     // fix all unknwon bits to false.
     //z3::expr setUnknownVariablesFalse = !z3::mk_or( unknownActiveN ) && !z3::mk_or( unknownE );
     auto setUnknownVariablesFalse = !z3::mk_or( unknownN )  && !z3::mk_or( unknownActiveN ) 
@@ -439,16 +444,17 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     z3::expr qvtsCons = exists( listN, 
                         exists( listActiveN, 
                         exists( listActiveE, 
-                        exists( listPairingM, 
-                      //  exists( listPairing4M, 
+                       // exists( listPairingM, 
+                       exists( listPairing4M, 
                        exists( listReach, 
                                 vtsCons && knownVarConstraint )))));
 
     auto cons = exists( listPresenceE, 
                 exists( listE, 
-                        kConnCons && qvtsCons && edgeC ));
-   
-   //  auto cons = vtsCons && knownVarConstraint && edgeC;
+                         qvtsCons && edgeC ));
+                        //kConnCons && qvtsCons && edgeC ));
+   */
+     auto cons = vtsCons && knownVarConstraint && edgeC;
 
              //kConnCons
     return cons;
@@ -467,7 +473,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     //auto edgeC = mk_le_k_bits( unknownE, 2 ) && mk_le_k_bits( unknownPresenceE, 10);
     //mk_le_k_bits( unknownN, 5);
 
-    auto nodeC = !at_least_two( unknownN );
+ //   auto nodeC = !at_least_two( unknownN );
      
     z3::expr cnfCons = cnf_function( node_parameter_var, edge_parameter_var );
   
@@ -476,6 +482,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                                    && !z3::mk_or( unknownE ) && !z3::mk_or( unknownPresenceE ) && !z3::mk_or( unknownActiveE );
     */
     
+  /*              
     z3::expr func3cnf  = exists( listN, 
                          exists( listActiveN, 
                          exists( listPresenceE, 
@@ -487,9 +494,8 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     z3::expr cons = exists( listSvar, 
                     exists( listTvar, 
                     exists( listE, 
-                            kConnCons && func3cnf )));
+                            func3cnf )));
               
-              /*              
       z3::expr cons = exists( listSvar, 
                     exists( listTvar, 
                     exists( listN, 
@@ -502,7 +508,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                  //   exists( listReach,
                             cnfCons && knownVarConstraint && vtsCons ))))))));
       */
-//         auto cons =   cnfCons && knownVarConstraint && vtsCons;
+    auto cons = cnfCons && knownVarConstraint && vtsCons;
     
     return cons;
   }
@@ -526,13 +532,14 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     
    // auto nodeC = !at_least_two( unknownN );
     // restrict the sreach space by assigning unknown bits to false
+    /*
     auto setUnknownVariablesFalse =  //!z3::mk_or( unknownN )  
                   !z3::mk_or( unknownActiveN ) 
                 && !z3::mk_or( unknownE )
                 // && !z3::mk_or( unknownPresenceE )
                  && !z3::mk_or( unknownActiveE )
                  && !z3::mk_or( unknownPairingM );
-    
+    */
     // todo: avoid case M -> M' in first and third arg  
     auto listSvar = flattern3d ( node_parameter_var, M, noOfLeaves, 2*M + 2, false );
     auto listTvar = flattern3d ( edge_parameter_var, M, noOfLeaves, 2*M + 2, false );
@@ -557,7 +564,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                                  knownVarConstraint
                                  && setUnknownVariablesFalse
                                  ))))));
-  */
     
     z3::expr cons = exists( listSvar, 
                     exists( listTvar, 
@@ -567,12 +573,14 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listActiveN,
                     exists( listE, 
                     exists( listPresenceE, 
-                 //   exists( listPairing4M,
+                    exists( listPairing4M,
                     exists( listActiveE,
-                    exists( listPairingM, 
+                 //   exists( listPairingM, 
                     exists( listReach,
-                            kConnCons && gateCons && knownVarConstraint && vtsCons  ))))))))) ));
-          //      auto cons =  gateCons && knownVarConstraint && vtsCons;
+                            gateCons && knownVarConstraint && vtsCons  ))))))))) ));
+                            //kConnCons && gateCons && knownVarConstraint && vtsCons  ))))))))) ));
+  */
+      auto cons =  gateCons && knownVarConstraint && vtsCons;
     // todo: V5 has some problems check assing it.
 
                             
@@ -595,7 +603,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     z3::expr_vector xorEVec( ctx );
     z3::expr_vector xorPresenceEVec( ctx );
     z3::expr_vector xorActiveEVec( ctx );
-    //z3::expr_vector xorReachVec( ctx );
+    z3::expr_vector xorReachVec( ctx );
 
     // xor bits for each boolean var in vts
     Vec2Expr xorNodes;
@@ -603,8 +611,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     Vec3Expr xorEdges;
     Vec4Expr xorPresenceEdges;
     Vec4Expr xorActiveEdges;
-    Vec2Expr xorPairingMatrix;
-    //Vec4Expr xorReach;
+    //Vec2Expr xorPairingMatrix;
+    Vec4Expr xorPairingMatrix;
+    Vec4Expr xorReach;
     
     popl2 ( xorNodes, N, M, "xn" );
     popl2 ( xorActiveNodes, N, M, "xa" );
@@ -612,17 +621,17 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     popl4 ( xorPresenceEdges, N, N, E_arity, M, "xe" );
     popl4 ( xorActiveEdges, N, N, E_arity, M, "xb" );
 //    popl2 ( xorPairingMatrix, M, M, "xp" );
- //   popl4 ( xorPairingMatrix, M, M, "xp" );
-    //popl4 ( xorReach, N, N, M, N-1, "xr" );
+    popl4 ( xorPairingMatrix, M, M, M, M, "xp" );
+    popl4 ( xorReach, N, N, M, N-1, "xr" );
   
     auto listXorN = flattern2d ( xorNodes, N, M, false );
     auto listXorActiveN = flattern2d( xorActiveNodes, N, M, false );
-    auto listXorPairingM = flattern2d( xorPairingMatrix, M, M, true );
- //   auto listXorPairingM = flattern4d( xorPairingMatrix, M, M, M, M, true );
+    //auto listXorPairingM = flattern2d( xorPairingMatrix, M, M, true );
+    auto listXorPairingM = flattern4d( xorPairingMatrix, M, M, M, M, true );
     auto listXorE = flattern3d( xorEdges, N, N, E_arity, true );
     auto listXorPresenceE = flattern4d( xorPresenceEdges, N, N, E_arity, M, true );
     auto listXorActiveE = flattern4d ( xorActiveEdges, N, N, E_arity, M, true );
-    //auto listXorReach = flattern4d ( xorReach, N, N, M, N-1, true );
+    auto listXorReach = flattern4d ( xorReach, N, N, M, N-1, true );
     
     // known xor bits [xor bits ^ n_i_k]
     z3::expr_vector xorknownN (ctx);
@@ -631,7 +640,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     z3::expr_vector xorknownPresenceE(ctx);
     z3::expr_vector xorknownActiveE(ctx);
     z3::expr_vector xorknownPairingM(ctx);
-    // z3::expr_vector xorknownReach(ctx);
+    z3::expr_vector xorknownReach(ctx);
     
     // dummy variables
     Vec2Expr vec2;
@@ -643,8 +652,9 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                xorNVec, 2, 0, xorNodes ); 
     xor_bits ( ctx, listActiveN, knownActiveNodes, xorknownActiveN, unknownActiveN, 
               xorActiveNVec, 2, 1, xorActiveNodes ); 
-    xor_bits ( ctx, listPairingM, knownPairingMatrix, xorknownPairingM, unknownPairingM,
-              xorPairingMVec, 2, 5, xorPairingMatrix );
+    xor_bits ( ctx, listPairing4M, knownPairingMatrix, xorknownPairingM, unknownPairingM,
+              xorPairingMVec, 4, 4, vec2, vec3, xorPairingMatrix );
+              //xorPairingMVec, 2, 5, xorPairingMatrix );
     xor_bits ( ctx, listE, knownEdges, xorknownE,  unknownE, 
                xorEVec, 3, 2, vec2, xorEdges ); 
     xor_bits ( ctx, listPresenceE, knownPresenceEdges, xorknownPresenceE, unknownPresenceE, 
@@ -663,42 +673,43 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
       std::cout << "Nodes is " << xorknownE[i] << "\n" ;
     }                          
     exit(0);
-    * */
+    * 
     // deletion restriction 
-  /*  auto xadd_node_C = !at_least_two( xorNVec );
+   auto xadd_node_C = !at_least_two( xorNVec );
     auto xadd_active_node_C = !at_least_two( xorActiveNVec );
     auto xadd_edge_C = !at_least_two( xorEVec );
     auto xadd_p_edge_C = !at_least_two( xorPresenceEVec );
     auto xadd_a_edge_C = !at_least_two( xorActiveNVec );
-*/
+    */
 
-    auto xadd_node_C = mk_le_k_bits( xorNVec, 1 );
-    auto xadd_active_node_C =  mk_le_k_bits( xorActiveNVec, 1 );
-    auto xadd_edge_C =  mk_le_k_bits( xorEVec, 1 );
-    auto xadd_p_edge_C = mk_le_k_bits( xorPresenceEVec, 1);
-    auto xadd_a_edge_C = mk_le_k_bits( xorActiveEVec, 1);
+    auto xadd_node_C = mk_le_k_bits( xorNVec, 2 );
+    auto xadd_active_node_C =  mk_le_k_bits( xorActiveNVec, 2 );
+    auto xadd_edge_C =  mk_le_k_bits( xorEVec, 2 );
+    auto xadd_p_edge_C = mk_le_k_bits( xorPresenceEVec, 2);
+    auto xadd_a_edge_C = mk_le_k_bits( xorActiveEVec, 2);
     
     auto edgeC = 
-      mk_le_k_bits( unknownE, 1);
+      mk_le_k_bits( unknownE, 2);
     auto edgePresenceC =
-      mk_le_k_bits( unknownPresenceE, 1);
+      mk_le_k_bits( unknownPresenceE, 20);
     auto nodeC = 
-      mk_le_k_bits( unknownN, 1);    
+      mk_le_k_bits( unknownN, 20);    
    auto edgeActivityC = 
-      mk_le_k_bits( unknownActiveE, 1 );
+      mk_le_k_bits( unknownActiveE, 8 );
     auto nodeActivityC = 
-      mk_le_k_bits ( unknownActiveN, 1 ); 
+      mk_le_k_bits ( unknownActiveN, 8 ); 
   
     auto addCons = edgeC &&  edgePresenceC && nodeC;
     auto delCons = xadd_node_C && xadd_active_node_C && xadd_edge_C && xadd_p_edge_C && xadd_a_edge_C;    
 
      auto setUnknownVariablesFalse = !z3::mk_or( unknownN )  && !z3::mk_or( unknownActiveN ) 
-                                   && !z3::mk_or( unknownE ) && !z3::mk_or( unknownPresenceE ) && !z3::mk_or( unknownActiveE );
+                                   && !z3::mk_or( unknownE ) && !z3::mk_or( unknownPresenceE ) 
+                                   && !z3::mk_or( unknownActiveE );
                                  
-    z3::expr xorCons = knownVarConstraint && delCons; 
+    z3::expr xorCons = knownVarConstraint; 
     //z3::expr xorCons = knownVarConstraint; 
 
-    /* Tuple version 
+   /*  Tuple version 
     unassigned_2d_bits( knownNodesTuple, knownNodes, unknownN, nodes, N, M, false, xorNodes, listXorN );    
     unassigned_2d_bits( knownActiveNodesTuple, knownActiveNodes, unknownActiveN, active_node, N, M, false, xorActiveNodes, listActiveN );    
     unassigned_2d_bits( knownPairingMatrixTuple, knownPairingMatrix, unknownPairingM, pairing_m, M, M, true, xorPairingMatrix, listPairingM );    
@@ -735,7 +746,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     auto edgePresenceC = ! at_least_two ( unknownPresenceE );
 
     z3::expr addCons = nodeC && nodeActivityC && edgeC && edgeActivityC && edgePresenceC;
-  */
 
     auto cons = exists( listXorN,
                 exists( listXorActiveN,
@@ -748,11 +758,12 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listActiveN, 
                     exists( listPresenceE,  
                     exists( listActiveE, 
-                    exists( listPairingM, 
+                 //   exists( listPairingM, 
                      exists( listReach, 
-                         vtsCons && xorCons )))))))))))));
-                         
-  //  auto cons = vtsCons && xorCons;
+                         vtsCons && xorCons ))))))))))));
+      */                   
+//    auto cons = xorCons;
+    auto cons = vtsCons && xorCons;
     return cons;
     
   } else {

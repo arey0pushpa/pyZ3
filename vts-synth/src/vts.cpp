@@ -1098,8 +1098,9 @@ z3::expr vts::vts_fusion_constraint () {
 z3::expr vts::vts_qr_fusion_constraint () {
   std::cout << "Making qr fusion constraints!\n";
   z3::expr v7 = qr_4d_edge_must_fuse_with_target();       //V7
-  z3::expr v8 = qr_4d_edge_fuse_only_with_target();        //V8
+   z3::expr v8 = qr_4d_edge_fuse_only_with_target();        //V8
   auto cons = v7 && v8;
+  //auto cons = v7;
   std::cout << "Finished qr fusion constraints!\n";
   // auto cons = ctx.bool_val(true);
   return cons;

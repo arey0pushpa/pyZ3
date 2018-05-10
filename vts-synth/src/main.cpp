@@ -216,7 +216,9 @@ int main(int ac, char* av[])
            } else {
               v->dump_dot("/tmp/vts.dot", m);
            }
-           auto retVal = system("xdot /tmp/vts.dot");
+           auto retVal = system("dot -Tpng /tmp/vts.dot -o vts.png; open vts.png");
+
+           //auto retVal = system("xdot /tmp/vts.dot");
            if(retVal == -1) 
                std::cout << "SYTEM ERROR !!!\n";
         }
@@ -261,7 +263,7 @@ int main(int ac, char* av[])
     //bool timedout = false;
     std::future<int> future = std::async(std::launch::async, [](){ 
         // if ( flagA == false ) {
-        auto retVal  = system ("cd ./build/depqbf/examples;timeout 600s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
+        auto retVal  = system ("cd ./build/depqbf/examples;gtimeout 6000s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
         // std::cout << retVal << "\n";
         //  } else {
         // auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
@@ -273,7 +275,7 @@ int main(int ac, char* av[])
     //std::cout << "Running depqbf ... " << "\n";
     std::future_status status;
 
-    status = future.wait_for( std::chrono::seconds(600) );
+    status = future.wait_for( std::chrono::seconds(6000) );
 
     if ( status == std::future_status::timeout ) { 
       std::cout << "TimeOut! \n";
@@ -291,7 +293,8 @@ int main(int ac, char* av[])
 
     v->print_graph( c, "/tmp/dep_vts.dot", qs, printModel, displayGraph, synthVar ); 
     if ( displayGraph == true ) { 
-      auto retVal = system("xdot /tmp/dep_vts.dot");
+      auto retVal = system("dot -Tpng /tmp/vts.dot -o vts.png; open vts.png");
+     // auto retVal = system("xdot /tmp/dep_vts.dot");
       if(retVal == -1) 
         std::cout << "SYTEM ERROR !!!\n"; 
     }
