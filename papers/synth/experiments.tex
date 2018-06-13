@@ -39,8 +39,7 @@ mammal-graph[3C]  &  timeout     & N/A  &  timeout     & N/A    &  timeout      
     mammal-graph   &  timeout     & N/A  &  timeout     & N/A    &  timeout         & N/A      &  timeout    &  N/A   &  timeout     & N/A\\\hline
   \end{tabular}
   \caption{Run-times for synthesis queries. \#C  stands for minimum changes. Time is reported
-    in seconds. (a) solver used~\depqbf (b) solver used~\zthree. The sub-mammal is a subgraph of the complete mammalian graph. In the Add/Delete parts column, `+'n sign is used to show
-    addition of n number of the molecules, similarly `-'n is used to show the removal of n number of molecules. 
+    in seconds. (a) solver used~\depqbf (b) solver used~\zthree. The sub-mammal is a subgraph of the complete mammalian graph. In the Add/Delete parts column, `+'n sign is used to show the addition of n number of the molecules, similarly `-'n is used to show the removal of n number of molecules. 
   In the table N represents node labels, AN represents active node molecules, E represents edges, PE represents the presence of molecules on the edge and AE represents active molecules on the edge. 
     The C stands for graph connectedness which is part of only DepQBF experiments.
       }
@@ -61,7 +60,7 @@ input language.
 %
 The input is then converted to the constraints over VTS. 
 %
-The tool can not only synthesize the above discussed queries, but also their
+The tool can not only synthesize the above-discussed queries, but also their
 combinations.
 %
 For example, our tool can modify labels of nodes or edges while
@@ -70,10 +69,10 @@ learning activity functions.
 Our tool is developed in C++ and uses~\zthree~\cite{z3} infrastructure for
 processing formulas. 
 %
-Since, some of the formulas involve alternation of quantifiers over
+Since some of the formulas involve alternation of quantifiers over
 Boolean variables Z3 is not a suitable choice for those examples.
 %
-We translate the formulas created by Z3 tool into standard
+We translate the formulas created by Z3 tool into a standard
 QDIMACS~\cite{qdimacs} format and use as an input for QBF solvers. 
 %
 We use~\depqbf~\cite{lonsing2010depqbf} for solving of QBF formulas. 
@@ -86,16 +85,16 @@ The results are presented in table~\ref{tab:qf-graph} for both the solvers
 \depqbf and \zthree.
 %
 To use~\zthree, we remove \texttt{Connected} constraints, such that the queries becomes
-quantifier free.
+quantifier-free.
 %
 % The experiments were conducted on a machine,
 % with \ashu{?}MHz processor, \ashu{?}GB memory, and 900s timeout.
 %
 The experiments were done on a machine with Intel(R) Core(TM) i3-4030U
 CPU @ 1.90GHz processor and 4GB RAM with 30 min (1800 sec) timeout.
-%The experiments were conducted with 900s timeout.
+%The experiments were conducted with a 900s timeout.
 %
-The first four VTSs are synthetic, but inspire from literature for
+The first four VTSs are synthetic but inspire from literature for
 typical motifs in VTSs. The third VTS is a subgraph of~\ref{fig:mukund-vts}.
 %
 %
@@ -136,7 +135,7 @@ The result shows the basic template of 4 leaves and 3 gates.
 %
 % The tool was able to synthesize the Boolean functions in 470s.
 %
-To illustrated the versatility of our tool, the the fourth query
+To illustrate the versatility of our tool, the fourth query
 synthesizes $3$-CNF functions (encoding not presented).
 %  and was able to
 % synthesis the results for all graphs in 500s.
