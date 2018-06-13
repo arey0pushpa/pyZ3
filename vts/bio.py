@@ -12,7 +12,7 @@ set_option(max_args=10000000, max_lines=1000000, max_depth=10000000, max_visited
 # input parsing
 # input number of nodes and molecules
 parser = argparse.ArgumentParser(description='Auto testing for TARA')
-parser.add_argument("-M","--mols", type=int, default=4, help = "number of molecules")
+parser.add_argument("-i","--file", type=file, default=examples/qbflib.qdimacs, help = "number of molecules")
 parser.add_argument("-N","--nodes", type=int, default=2, help = "number of nodes")
 parser.add_argument("-Q","--pedges", type=int, default=2, help = "max no.of parallel edges btw two nodes")
 parser.add_argument("-V","--variation", type=int, default=1, help = "model of the biological system")
