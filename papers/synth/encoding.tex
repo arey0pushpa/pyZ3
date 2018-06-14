@@ -42,6 +42,10 @@ We allow activity functions not to be specified.
 We construct the following constraints to encode the available information
 about $G$.
 %
+We encode both the present and  the absent components in $G$.
+%
+Later, the constraints will help us encode the synthesis problems.
+%
 \begin{align*}
   \texttt{PresentE} &= \land \{e_{i,j,q,m}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land q \leq q' \land m \in M_q \}\\
   \texttt{PresentN} &= \land \{n_{i,m}| m \in \nlabel(i) \land i \in \nodes \}\\
@@ -187,8 +191,8 @@ that may be added to the edge labels to satisfy the properties.
 
 \subsubsection{Fixing VTS by learning activity functions:}
 
-Now we consider a scenario where some of the activity functions for some of the molecules
-are missing.
+Now we consider a scenario where some of the activity functions for
+some of the molecules are missing.
 %
 The activity functions are $\mu$-input Boolean functions.
 %

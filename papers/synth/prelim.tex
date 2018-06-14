@@ -9,8 +9,8 @@ activating functions.
 \begin{df}
   A VTS $G$ is a tuple $(\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$, where
   \begin{itemize}
-  \item $\nodes$ is a set of nodes representing compartments in the VTS,
-  \item $\mols$ is the set of molecules flowing in the system, 
+  \item $\nodes$ is a finite set of nodes representing compartments in the VTS,
+  \item $\mols$ is the finite set of molecules flowing in the system, 
   \item $\edges \subseteq \nodes \times (\powerset{\mols}-\emptyset) \times \nodes$ is the
     set of edges with molecule sets as labels,
   \item $\nlabel : \nodes \maps \powerset{\mols}$ defines the molecules present in the nodes,
@@ -49,9 +49,13 @@ In other words,
 no molecule can participate in fusion from both channels and
 compartments,
 %
+pairing relations have sets of four molecules such that three
+are of one type and one is of another type
+(motivated by the biochemistry of the fusion),
+%
 there are no self loops, and 
 each edge carry only those molecules that are present in its source
-and destination nodes. 
+and destination nodes.
 %
 An edge $(n,M',\_) \in \edges$ {\em fuses} with a node $n'$
 if there are non-empty set of molecules $M'' \subseteq M'$ and $M''' \subseteq \nlabel(n')$
@@ -190,25 +194,30 @@ The following constraints encode the basic consistancy of VTSs.
 \texttt{EdgeC} states that each edge has at least one molecule,
 there are no self loops, and edge labels are consistent with node labels.   
 \texttt{ActivityC} states that active molecule are present.
-\texttt{PairingC} states that all molecules are divided into
-two types and any fusing set of molecules
-must have three molecules involved from one type and one molecule from the other.
+\texttt{PairingC} states that all molecules are divided into two types
+using $qr_m$ bit, which encodes if $m$ belongs to one type or another,
+and any fusing set of molecules must have three molecules involved
+from one type and one molecule from the other.
 \texttt{Fusion1}, and \texttt{Fusion2} states the well-fused condition.
 \texttt{Consistancy} is the conjunction of all of the above.
 
 \paragraph{Activity functions}
-We also need to encode that
-the activity of the molecules are controlled by activity functions.
 %
-However, the encoding functions can be given to us many different ways,
+We also need to encode that the activity of the molecules are
+controlled by activity functions.
+%
+The input VTS may include concrete activity functions for some molecules,
+and for the others the functions may be unknown and to be synthesized. 
+%
+The concrete functions can be given to us in many different ways,
 for example as a lookup table, or a concise Boolean formula.
 %
 In the following section, we will assume the appropriate encoding is
-used for the functions and represent them by \texttt{NodeFun}$_m$
+used for the concrete functions and represent them by \texttt{NodeFun}$_m$
 and \texttt{EdgeFun}$_m$ for node and edge regulations respectively.
 %
 We will use $\nodef_m$ and $\edgef_m$ to represent functions that
-are not defined in a VTS.
+are unknown in a VTS.
 %
 % \begin{align}
 % \bigwedge\limits_{i,m} n_{i,m} \limplies a_{i,m} =  \nodef_m (n_{i,1},\dots,n_{i,\mu}) 
@@ -217,7 +226,7 @@ are not defined in a VTS.
 %   \tag{\texttt{ActiveE}}\label{eq:aeb}
 % \end{align}
 %
-Later we will be synthesizing missing activity functions and 
+Later we will be synthesizing the unknown activity functions and 
 replace $\nodef_m$ and $\edgef_m$ with parameterized constraints that
 encode a space of candidate functions.
 
@@ -298,6 +307,15 @@ the graph remains reachable.
 \end{align*}
 Since $d$ variables in $\texttt{Connected}(k)$ are universally
 quantified, $\texttt{Connected}(k)$ introduces quantifier alternations.
+%
+Therefore, synthesis against this property will require QBF reasoning.
+%
+We may make the formula quantifier free  by considering all possible failures
+separately and introducing a vector of reachability variables for each
+failure.
+%
+However, this will blow up the size of the formula and may not be
+solvable by a SAT solver.
 %
 
 
