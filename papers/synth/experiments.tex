@@ -15,7 +15,7 @@
     sub-mammal[3C]  & 0.767 & 1 E  & 1.049 & 5 PE & 3.523 & 1E & 4.961 & 1E & 1.172  & -1 E, -2 PE, -1 AN. +1 E, +4 PE, +4 N, +2 AN, +2 AE. \\\hline
     node4[3C]  & 1.554  & 1 E   &  3.859 & 12 PE  &  5.286  & $\infty$ & 4.502 &$\infty$& 2.194  & -2 E, -2 PE, -1 N, -1 AN, -1 AE. +12 N, +8 E, +1 PE.\\\hline
  %   yeast-graph[3C]   & 95.016    & 1 E   & 94.520   & 1 E   & 169.430  & 1 E & 172.35   & 1E   & 107.43  &  -1 E, -2 N, -2 AE, -2 AN. +2 E, 12 PE, 7 N. \\\hline
-    yeast-graph[3C]   & 95.016    & 1 E  &   timeout  & N/A   & 1393.84  & 1 E  & 468.161   & 1 E & 69.81  &  -1 E, -1 N, -1 AE, -1 AN, -1PE. +1 E, 7 PE, 8 N. \\\hline
+    yeast-graph[3C]   & 95.016    & 1 E  &   timeout  & N/A   & 1571.42  & 1 E  & 530.211   & 1 E & 110.206  &  -1 E, -1 N, -1 AE, -1 AN, -1PE. +1 E, 7 PE, 8 N. \\\hline
 
 mammal-graph[3C]  &  timeout     & N/A  &  timeout     & N/A    &  timeout         & N/A      &  timeout    &  N/A    &  timeout     & N/A\\\hline
    %    & 0.0    & 0.0    & 0.0    & 0.0    & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0\\\hline
@@ -38,11 +38,8 @@ mammal-graph[3C]  &  timeout     & N/A  &  timeout     & N/A    &  timeout      
     yeast-graph & 40.225  & 1 E  &   timeout  & N/A   & 1393.84  & 1 E  & 468.161   & 1 E & 69.81  &  -1 E, -1 N, -1 AE, -1 AN, -1PE. +1 E, 7 PE, 8 N. \\\hline
     mammal-graph   &  timeout     & N/A  &  timeout     & N/A    &  timeout         & N/A      &  timeout    &  N/A   &  timeout     & N/A\\\hline
   \end{tabular}
-  \caption{Run-times for synthesis queries. \#C  stands for minimum changes in the synthesised VTS in comparision to the given VTS. Time is reported
-    in seconds. (a) solver used~\depqbf (b) solver used~\zthree. The sub-mammal is a subgraph of the complete mammalian graph. In the Add/Delete parts column, `+'n sign is used to show the addition of n number of the molecules, similarly `-'n is used to show the removal of n number of molecules. 
-In the table, N is node labels, AN is active node molecules, E is edges, PE is molecule presence on the edge and AE is active molecules on the edge. 
-    The [kC] stands for k graph connectedness which is part of only DepQBF experiments.
-      }
+    \caption{Run-times for synthesis queries. \#C stands for minimum changes in the synthesized VTS in comparison with the given partial VTS. Time is reported in seconds. (a) The solver used is DepQBF (b) The solver used is Z3. The sub-mammal is a subgraph of the complete mammal-graph. In the Add/Delete parts column, ‘+’n sign is used to show the addition of n number of the molecules, similarly ‘-’n is used to show the removal of n number of molecules. In the table, N is node labels, AN is active node molecules, E is edges, PE is molecule presence on the edge and AE is active molecules on the edge. The [kC] stands for k graph connectedness which is part of only DepQBF experiments.}
+
   % \caption{Run-times for searching for Z3 models (in secs). \#C  stands for minimum changes.
   % Time is reported in seconds.}
   \label{tab:qf-graph}
@@ -52,7 +49,7 @@ In the table, N is node labels, AN is active node molecules, E is edges, PE is m
 % n/A n/A activeN == UNSAT adding edge == UNSAT activeE == UNSAT presenceE == UNSAT
 
 
-We implemented the encodings in a tool
+We have implemented the encodings in a tool
 called~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
 %
 The tool takes a partially defined VTS as input in a custom designed
@@ -95,7 +92,8 @@ CPU @ 1.90GHz processor and 4GB RAM with 30 min (1800 sec) timeout.
 %The experiments were conducted with a 900s timeout.
 %
 The first four VTSs are synthetic but inspire from literature for
-typical motifs in VTSs. The third VTS is a subgraph of~\ref{fig:mukund-vts}.
+typical motifs in VTSs. 
+The third VTS is a subgraph of the last VTS.
 %
 %
 The fifth VTS is taken from~\cite{burri2004complete}.
