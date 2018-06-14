@@ -9,11 +9,11 @@ Briefly, the source compartment produces a membrane-bound packet of
 molecules called a vesicle.
 %
 After release, this vesicle specifically recognizes the correct target
-compartment within the cell, and fuses with it.
+compartment within the cell, and fuses with it~\cite{alberts2013essential}.
 %
 A lot of information about the molecules that form the machinery of
 the VTS has been discovered, including their regulatory interaction
-with each other. 
+with each other~\cite{bonifacino2004mechanisms}. 
 % %
 % \todo{connect to function }{We also know a lot about the specific functions} of these molecules and how these molecules interact amongst each other.
 %
@@ -21,12 +21,14 @@ In spite of this detailed knowledge at the level of the molecules, the
 structure of the VTS network, or the road-map of the eukaryotic cell,
 is far from complete.
 %
+For example, although thee localization of various SNAREs in the cell is known, and also their site of action~\cite{hong2014tethering}, for most SNAREs, how they first reached the compartments they reside in is not known.
+%
 The current knowledge of the network is put together from a patchwork
 of biological experiments and is scattered across several publications.
 %
 Even after this information is collected and put together, we find
 that the network obtained is still not complete; new vesicles and new
-contents in previously known vesicles are constantly being discovered.
+contents in previously known vesicles are constantly being discovered(some new discoveries include~\cite{chanaday2017you, d2017tethering, rodepeter2017indication, zhao2017conserved}).
 %
 The synthesis for the unknown pieces may be assisted by computation on
 the graph model of VTSs.
@@ -50,6 +52,9 @@ In this paper, we are looking at the computational questions
 arising from the VTSs.
 
 
+%
+In particular, the VTS molecules to keep in mind for the purpose of this paper are SNARE proteins. SNAREs drive the recognition of the target compartment by vesicles and their subsequent fusion. Functionally, SNAREs can be divided into v-SNAREs (which are present on vesicles) and t-SNAREs (which are present on compartments). A vesicle fuses with a compartment if its v-SNARE can form a complex with the t-SNARE present on that compartment. Not all v- and t- SNARE combinations can form complexes; this constraint forms part of the basis for the specificity of vesicle traffic~\cite{jahn2006snares}. The activity of SNARE proteins is further regulated by their interaction with other traffic molecules, such as SM proteins~\cite{sudhof2009membrane} and proteins of tethering complexes~\cite{hong2014tethering}.
+%
 We use the model of VTSs that has been presented in~\cite{shukla2017discovering}.
 %
 Please look at appendix~\ref{sec:model}
@@ -142,6 +147,8 @@ modifying labels, adding/deleting edges, and learning activity functions.
 We also consider variation on the properties against which we do
 synthesis, namely stability, and $k$-connectedness that states that the VTS remains connected after removing any $k-1$ edges.
 %
+We have assumed that the given partial VTS is always well-fused whereas properties like stability and k-connectedness may not hold in the partial VTS.
+%
 In order to synthesize the parts of a VTS such that it satisfies the
 constraints, we encode the synthesis problem into one of satisfiability of
 quantified Boolean formulas(QBFs). 
@@ -199,8 +206,6 @@ encoding into QBF satisfiability.
 In section~\ref{sec:experiments}, we present our implementation and experimental results.
 %
 We discuss related work in~\ref{sec:related} and conclude in section~\ref{sec:conclusion}.
-
-
 
 %%% Local Variables:
 %%% mode: latex
