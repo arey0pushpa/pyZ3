@@ -1,6 +1,6 @@
 %
 In this section, we will present a list of synthesis problems that may
-arise from the partial available information about a VTS and our synthesis method
+arise from the partially available information about a VTS and our synthesis method
 for the problems.
 
 \subsection{Problem Statements}
@@ -42,6 +42,10 @@ We allow activity functions not to be specified.
 We construct the following constraints to encode the available information
 about $G$.
 %
+We encode both the present and  the absent components in $G$.
+%
+Later, the constraints will help us encode the synthesis problems.
+%
 \begin{align*}
   \texttt{PresentE} &= \land \{e_{i,j,q,m}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land q \leq q' \land m \in M_q \}\\
   \texttt{PresentN} &= \land \{n_{i,m}| m \in \nlabel(i) \land i \in \nodes \}\\
@@ -62,7 +66,7 @@ We also collect the variables that are not set to true in $\texttt{PresentCons}$
                     q' < q \leq \pi \}\\
   \texttt{AbsentNLabel} &= \{n_{i,m}| m \not\in \nlabel(i) \land i \in \nodes \}\\
   \texttt{AbsentP} &= \{p_{\{m_1,m_2,m_3,m_4\}}| {\{m_1,m_2,m_3,m_4\}} \not\in \pairs \} \\
-  \texttt{UnnownActive} &=  \Land \{ a_{i,m} = \nodef_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is undefined.} \} \union \\
+  \texttt{UnknownActive} &=  \Land \{ a_{i,m} = \nodef_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is undefined.} \} \union \\
    &\quad\quad\quad  \{ b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
                    | \edgef_m \text{ is undefined.} \}
 \end{align*}
@@ -187,8 +191,8 @@ that may be added to the edge labels to satisfy the properties.
 
 \subsubsection{Fixing VTS by learning activity functions:}
 
-Now we consider a scenario where some of the activity functions for some of the molecules
-are missing.
+Now we consider a scenario where some of the activity functions for
+some of the molecules are missing.
 %
 The activity functions are $\mu$-input Boolean functions.
 %
@@ -201,7 +205,7 @@ different candidates for the activity functions.
 %
 We will illustrate only one class of formulas.
 %
-However, we support other classes of formulas for example $k$-CNF.
+However, we support other classes of formulas, for example, $k$-CNF.
 
 In the following, the formula \texttt{NNFTemplate} encodes a set of
 negation normal form functions that take $y_1,..,y_\mu$ as input and
@@ -237,7 +241,7 @@ where $z$ is the vectors of parameters for encoding parameters
 for each molecule,
 and $\lambda$ limits the size of the candidate functions. 
 %
-We fix the all other aspect of the VTS to be fixed via constraints
+We fix the all other aspects of the VTS to be fixed via constraints
 $\texttt{FixedForFunctions}$.
 %
 \begin{align*}
@@ -284,7 +288,7 @@ For each bit $n_{i,m}$, we create a bit $flip_{i,m}$.
 We add constraints that take xor of VTS assigned values for  $n_{i,m}$
 and $flip_{i,m}$.
 %
-We also limit how many times the $flip_{i,m}$ can be true, therefore
+We also limit the number of $flip_{i,m}$ that can be true, therefore
 limiting the number of flips.
 %
 The above constraints are encoded in $\texttt{FlipN}(slimit)$.

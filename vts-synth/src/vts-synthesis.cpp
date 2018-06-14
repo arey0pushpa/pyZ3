@@ -386,7 +386,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     */
     //
     //auto edgeActivityC = !at_least_three( unknownActiveE );
-    //auto edgePresenceC = !at_least_four( unknownPresenceE );
+      //auto edgePresenceC = !at_least_four( unknownPresenceE );
     // auto nodeC = !at_least_four( unknownN );    
     // auto nodeActivityC = !at_least_three ( unknownActiveN ); 
     /*
@@ -433,7 +433,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
    // z3::expr edgeActivityC = !at_least_three( unknownActiveE );
    // z3::expr edgePresenceC = !at_least_three( unknownPresenceE );
    // z3::expr addConstraints = edgeActivityC && edgePresenceC;
-    auto edgeC = mk_le_k_bits( unknownPresenceE, 20);
+    auto edgeC = mk_le_k_bits( unknownPresenceE, 12);
      
      /* 
     // fix all unknwon bits to false.
@@ -622,6 +622,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     popl4 ( xorActiveEdges, N, N, E_arity, M, "xb" );
 //    popl2 ( xorPairingMatrix, M, M, "xp" );
     popl4 ( xorPairingMatrix, M, M, M, M, "xp" );
+ //   popl4 ( xorPairingMatrix, M, M, "xp" );
     popl4 ( xorReach, N, N, M, N-1, "xr" );
   
     auto listXorN = flattern2d ( xorNodes, N, M, false );
@@ -682,7 +683,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     auto xadd_a_edge_C = !at_least_two( xorActiveNVec );
     */
 
-    auto xadd_node_C = mk_le_k_bits( xorNVec, 2 );
+    auto xadd_node_C = mk_le_k_bits( xorNVec, 2);
     auto xadd_active_node_C =  mk_le_k_bits( xorActiveNVec, 2 );
     auto xadd_edge_C =  mk_le_k_bits( xorEVec, 2 );
     auto xadd_p_edge_C = mk_le_k_bits( xorPresenceEVec, 2);
@@ -706,7 +707,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                                    && !z3::mk_or( unknownE ) && !z3::mk_or( unknownPresenceE ) 
                                    && !z3::mk_or( unknownActiveE );
                                  
-    z3::expr xorCons = knownVarConstraint; 
+    z3::expr xorCons = knownVarConstraint && delCons && addCons; 
     //z3::expr xorCons = knownVarConstraint; 
 
    /*  Tuple version 

@@ -615,7 +615,7 @@ z3::expr vts::qr_4d_edge_fuse_only_with_target() {       //V8
           for ( unsigned m3 = m2+1; m3 < qSnareCount; m3++ ) { fuse_mols[2]=m3;
           for ( unsigned m4 = qSnareCount; m4 < M; m4++ ) { fuse_mols[3]=m4;
             // if( m3 > qSnareCount || m4 < qSnareCount ) continue; // QR boundry
-            z3::expr is_f = is_fuse( ae, an,fuse_mols );
+            z3::expr is_f = is_fuse( ae, an, fuse_mols );
             rhs.push_back( !is_f );
           }}}}
         }

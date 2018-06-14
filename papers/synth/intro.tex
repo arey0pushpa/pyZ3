@@ -1,12 +1,11 @@
 
 %Motivate VTS
-Eukaryotic cells, including human cells, consist of multiple membrane
-bound compartments.
+Eukaryotic cells, including human cells, consist of multiple membrane-bound compartments.
 %
 Material is transported among these compartments by the vesicle
 transport system (VTS).
 %
-Briefly, the source compartment produces a membrane bound packet of
+Briefly, the source compartment produces a membrane-bound packet of
 molecules called a vesicle.
 %
 After release, this vesicle specifically recognizes the correct target
@@ -22,7 +21,7 @@ In spite of this detailed knowledge at the level of the molecules, the
 structure of the VTS network, or the road-map of the eukaryotic cell,
 is far from complete.
 %
-The current knowledge of the network is put together from a patch work
+The current knowledge of the network is put together from a patchwork
 of biological experiments and is scattered across several publications.
 %
 Even after this information is collected and put together, we find
@@ -35,7 +34,7 @@ the graph model of VTSs.
 % 
 %In this work, we use a model described in [] to find out, given a partial
 %VTS graph and details about interactions amongst its molecules, what the complete graph of the
-%VTS could look like. (Please look at appendix A for the detailed discussion on pros and cons of the
+%VTS could look like. (Please look at Appendix A for the detailed discussion on pros and cons of the
 %model.
 %
 %Eukaryotic cells, including human cells, consists of multiple compartments.
@@ -48,13 +47,13 @@ the graph model of VTSs.
 %questions of cell biology.
 %
 In this paper, we are looking at the computational questions 
-arise from the VTSs.
+arising from the VTSs.
 
 
 We use the model of VTSs that has been presented in~\cite{shukla2017discovering}.
 %
 Please look at appendix~\ref{sec:model}
-for the detailed discussion on pros and cons of the model.
+for a detailed discussion on pros and cons of the model.
 % Describe VTS in detail
 
 
@@ -62,14 +61,14 @@ VTSs are regulated by the same molecules that they transport. Molecules on compa
 % the term vesicle has already been introduced.. using two terms for the same object seems confusing. 
 %
 % (The molecules are transported to the other compartments via
-%unidirectional channels.) cannot comment on unidirectionality of vesicles. they may be undergoingmultiple cycles of back-fusion for all we %know..  
+%unidirectional channels.) cannot comment on unidirectionality of vesicles. they may be undergoing multiple cycles of back-fusion for all we %know.  
 %
 The active molecules regulate the vesicle they occur on.
 %
 A vesicle is enabled by a set of molecules
 such that one part of the set occurs in the vesicle and the other part
 occurs in the target compartment.
-% use either target or destination consistantly throughout..i prefer target because that's what the t in t-SNARE stands for.
+% use either target or destination consistently throughout..i prefer target because that's what the t in t-SNARE stands for.
 %
 These molecules must be active in the vesicle
 and target compartment respectively.
@@ -78,7 +77,7 @@ The pairs are called {\em fusing} sets and analogously
 the vesicle is considered to be {\em fused} with the
 destination compartment.
 %
-Not all sets molecule can participate in the fusion, the
+Not all molecule sets can participate in the fusion, the
 potential fusion pairs are usually determined by biological experiments.
 %
 Generally, in cells, the fusing pairs are found to be distinct for distinct vesicle-compartment fusions.
@@ -118,7 +117,7 @@ We call this property of VTS as {\em stability}.
 %
 As we have discussed earlier, our understanding of VTSs is partial.
 %
-% It largely means that the current knowledge is due to the patch work
+% It largely means that the current knowledge is due to the patchwork
 % of biological experiments~\cite{model} for identifying the compartments,
 % channels, molecules, and their activity and regulatory control.
 % %
@@ -141,21 +140,19 @@ involving different parts of VTSs that can be synthesized, such as
 modifying labels, adding/deleting edges, and learning activity functions.
 %
 We also consider variation on the properties against which we do
-synthesis, namely stability, and $k$-connectedness that states that
-VTS remains connected after removing any $k-1$ edges.
+synthesis, namely stability, and $k$-connectedness that states that the VTS remains connected after removing any $k-1$ edges.
 %
 In order to synthesize the parts of a VTS such that it satisfies the
-constraints, we encode the synthesis problem into a satisfiability of
+constraints, we encode the synthesis problem into one of satisfiability of
 quantified Boolean formulas(QBFs). 
 %
 
 We have implemented the encoding in a flexible tool,
-which can handle a wide range of synthesis query.
+which can handle a wide range of synthesis queries.
 %
 We have applied our tool on several VTSs including two found-in-nature
 VTSs.
 %
-
 % \input{fig-mukund-vts}
 % %
 % In figure~\ref{fig:mukund-vts}, we present one of the two for
@@ -178,7 +175,7 @@ solvable by modern solvers and the synthesis technology may be useful
 for biological research.
 %
 % We have also applied our tool on various synthetic examples to
-% demonstrate that our tool scale upto the graph size size nodes, which
+% demonstrate that our tool scale up to the graph size nodes, which
 % is the size of typical VTSs in a eukaryotic cell.
 
 The following are the contributions of this work:
@@ -186,7 +183,7 @@ The following are the contributions of this work:
 \item We have identified an interesting application of
   the synthesis technology.
 \item We have developed encoding of the synthesis problem in QBF.
-\item A user friendly and scalable tool based on QBF solvers
+\item A user-friendly and scalable tool based on QBF solvers
 \end{itemize}
 
 The rest of the paper is organized as follows.

@@ -211,7 +211,7 @@ void load_vts::load() {
       if( !initialized_vts ) {
         V = UN_INIT;
         unsigned C = 3;
-        D = 2;
+        D = 3;
         if( M != 0 && N != 0 && Q != 0 ) {
           initialized_vts = true;
           v = std::shared_ptr<vts>(new vts(c, M, N, Q, V, C, D ));
