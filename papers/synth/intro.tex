@@ -21,14 +21,20 @@ In spite of this detailed knowledge at the level of the molecules, the
 structure of the VTS network, or the road-map of the eukaryotic cell,
 is far from complete.
 %
-For example, although thee localization of various SNAREs in the cell is known, and also their site of action~\cite{hong2014tethering}, for most SNAREs, how they first reached the compartments they reside in is not known.
+For example, although the localization of various SNAREs --a class of
+molecules that participate in the control of VTS-- in the cell is
+known, and also their site of action~\cite{hong2014tethering}, for
+most SNAREs, how they first reached the compartments they reside in is
+not known.
 %
 The current knowledge of the network is put together from a patchwork
 of biological experiments and is scattered across several publications.
 %
 Even after this information is collected and put together, we find
 that the network obtained is still not complete; new vesicles and new
-contents in previously known vesicles are constantly being discovered (some new discoveries include~\cite{chanaday2017you, d2017tethering, rodepeter2017indication, zhao2017conserved}).
+contents in previously known vesicles are constantly being discovered
+(some new discoveries include~\cite{chanaday2017you, d2017tethering,
+rodepeter2017indication, zhao2017conserved}).
 %
 The synthesis for the unknown pieces may be assisted by computation on
 the graph model of VTSs.
@@ -53,21 +59,51 @@ arising from the VTSs.
 
 
 %
-VTSs are regulated by the same molecules that they transport. 
+VTSs are regulated by the same molecules that they transport.
+%
 For the purpose of this paper, the VTS molecules we focus on are the transmembrane SNARE proteins.
-%which form an essential part of the cellular addressing system.
 %
-%In particular, the VTS molecules to keep in mind for the purpose of this paper are SNARE proteins. 
+SNAREs drive the recognition of the target compartment by vesicles and
+their subsequent fusion.
 %
-SNAREs drive the recognition of the target compartment by vesicles and their subsequent fusion. Functionally, SNAREs can be divided into v-SNAREs (which are present on vesicles) and t-SNAREs (which are present on compartments). A vesicle fuses with a compartment if its v-SNARE can form a complex with the t-SNARE present on that compartment. Not all v- and t- SNARE combinations can form complexes; this constraint forms part of the basis for the specificity of vesicle traffic~\cite{jahn2006snares}. The activity of SNARE proteins is further regulated by their interaction with other traffic molecules, such as SM proteins~\cite{sudhof2009membrane} and proteins of tethering complexes~\cite{hong2014tethering}.
+The SNAREs can be divided into v-SNAREs (which are present
+on vesicles) and t-SNAREs (which are present on compartments). A
+vesicle fuses with a compartment if its v-SNARE can form a complex
+with the t-SNARE present on that compartment.
+%
+Not all v- and t- SNARE combinations can form complexes; this
+constraint forms part of the basis for the specificity of vesicle
+traffic~\cite{jahn2006snares}.
+%
+The activity of SNARE proteins is further regulated by their
+interaction with other traffic molecules \ashu{ [do we need the following], such as SM
+proteins~\cite{sudhof2009membrane} and proteins of tethering
+complexes~\cite{hong2014tethering}.}
 %
 
-We use the model of VTSs that has been presented in~\cite{shukla2017discovering}.
+We use the model of VTSs that has been presented
+in~\cite{shukla2017discovering}.
 %
-Please look at Appendix~\ref{sec:model}
-for a detailed discussion on pros and cons of the model.
+Please look at Appendix~\ref{sec:model} for a detailed discussion on
+pros and cons of the model.
 %
-We model the system as a labeled graph, where compartments are nodes and transport vesicles are edges. Molecular compositions of the compartments and vesicles are given by node and edge labels respectively. These molecules can be active or inactive on any given compartment or vesicle. The activity state of molecules is also included in the node and edge labels. Consistently with the SNARE picture, a vesicle is enabled by a set of molecules such that one part of the set occurs in the vesicle and the other part occurs in the target compartment. 
+We model the system as a labeled graph, where compartments are nodes
+and transport vesicles are edges.
+%
+The molecular compositions of the compartments and vesicles are the
+node and edge labels respectively.
+%
+The molecules can be active or inactive on any a compartment or
+vesicle.
+%
+The activity states of molecules are also included in the labels.
+%
+Due to the biology of SNAREs of the VTSs our interest, a vesicle is enabled
+by a set of {\em four} molecules such that one part of the set occurs in the
+vesicle and the other part occurs in the target of the vesicle compartment.
+%
+The partition is always three and one molecules.
+%
 % Describe VTS in detail
 %Molecules on compartments and on vesicles can be in either an active or an inactive state.
 % the term vesicle has already been introduced.. using two terms for the same object seems confusing. 
@@ -80,22 +116,25 @@ We model the system as a labeled graph, where compartments are nodes and transpo
 %A vesicle is enabled by a set of molecules such that one part of the set occurs in the vesicle and the other part occurs in the target compartment.
 % use either target or destination consistently throughout..i prefer target because that's what the t in t-SNARE stands for.
 %
-These molecules must be active in the vesicle
+The enabling molecules must be active in the vesicle
 and target compartment respectively.
 %
 The pairs are called {\em fusing} sets and analogously
 the vesicle is considered to be {\em fused} with the
 destination compartment.
 %
-Not all sets of molecules can participate in the fusion; in real biological cells, fusogenic SNARE complexes are discovered through experiments. 
+Not all sets of molecules can participate in the fusion; in the
+biological cells, fusogenic SNARE complexes are discovered through
+experiments.
+%
 %Not all molecule sets can participate in the fusion, the
 %potential fusion pairs are usually determined by biological experiments.
 %
-Generally, in cells, the fusing pairs are found to be distinct for distinct vesicle-compartment fusions.
+Generally, the fusing pairs are found to be distinct for distinct vesicle-compartment fusions.
 %
-In order that a molecule that has participated in a fusion does not interfere
-with fusion at compartments and vesicles, in the model, we require that the molecule is inactive on appropriate compartments.
-%
+To ensure that a molecule that has participated in a fusion does not
+interfere with fusion at compartments and vesicles, in the model, we
+require that the molecule is inactive on appropriate compartments.
 %
 The activity of molecules is regulated by the other molecules, i.e.,
 the presence and absence of the other molecules in a compartment or
@@ -119,7 +158,9 @@ containing pairs of molecules and activity
 Boolean functions.
 
 %
-In the model, we assume that the system is in steady state and the concentrations of the molecules in compartments do not change over time.
+In the model, we assume that the system is in steady state and the
+concentrations of the molecules in compartments do not change over
+time.
 %
 Since our system is in steady state, we expect that any molecule that
 leaves a compartment must come back via some path on the graph.
@@ -193,13 +234,13 @@ for biological research.
 % demonstrate that our tool scale up to the graph size nodes, which
 % is the size of typical VTSs in a eukaryotic cell.
 
-The following are the contributions of this work:
-\begin{itemize}
-\item We have identified an interesting application of
-  the synthesis technology.
-\item We have developed encoding of the synthesis problem in QBF.
-\item A user-friendly and scalable tool based on QBF solvers
-\end{itemize}
+% The following are the contributions of this work:
+% \begin{itemize}
+% \item We have identified an interesting application of
+%   the synthesis technology.
+% \item We have developed encoding of the synthesis problem in QBF.
+% \item A user-friendly and scalable tool based on QBF solvers
+% \end{itemize}
 
 The rest of the paper is organized as follows.
 %
