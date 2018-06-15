@@ -28,7 +28,7 @@ of biological experiments and is scattered across several publications.
 %
 Even after this information is collected and put together, we find
 that the network obtained is still not complete; new vesicles and new
-contents in previously known vesicles are constantly being discovered(some new discoveries include~\cite{chanaday2017you, d2017tethering, rodepeter2017indication, zhao2017conserved}).
+contents in previously known vesicles are constantly being discovered (some new discoveries include~\cite{chanaday2017you, d2017tethering, rodepeter2017indication, zhao2017conserved}).
 %
 The synthesis for the unknown pieces may be assisted by computation on
 the graph model of VTSs.
@@ -53,26 +53,31 @@ arising from the VTSs.
 
 
 %
-In particular, the VTS molecules to keep in mind for the purpose of this paper are SNARE proteins. SNAREs drive the recognition of the target compartment by vesicles and their subsequent fusion. Functionally, SNAREs can be divided into v-SNAREs (which are present on vesicles) and t-SNAREs (which are present on compartments). A vesicle fuses with a compartment if its v-SNARE can form a complex with the t-SNARE present on that compartment. Not all v- and t- SNARE combinations can form complexes; this constraint forms part of the basis for the specificity of vesicle traffic~\cite{jahn2006snares}. The activity of SNARE proteins is further regulated by their interaction with other traffic molecules, such as SM proteins~\cite{sudhof2009membrane} and proteins of tethering complexes~\cite{hong2014tethering}.
+VTSs are regulated by the same molecules that they transport. 
+For the purpose of this paper, the VTS molecules we focus on are the transmembrane SNARE proteins.
+%which form an essential part of the cellular addressing system.
 %
+%In particular, the VTS molecules to keep in mind for the purpose of this paper are SNARE proteins. 
+%
+SNAREs drive the recognition of the target compartment by vesicles and their subsequent fusion. Functionally, SNAREs can be divided into v-SNAREs (which are present on vesicles) and t-SNAREs (which are present on compartments). A vesicle fuses with a compartment if its v-SNARE can form a complex with the t-SNARE present on that compartment. Not all v- and t- SNARE combinations can form complexes; this constraint forms part of the basis for the specificity of vesicle traffic~\cite{jahn2006snares}. The activity of SNARE proteins is further regulated by their interaction with other traffic molecules, such as SM proteins~\cite{sudhof2009membrane} and proteins of tethering complexes~\cite{hong2014tethering}.
+%
+
 We use the model of VTSs that has been presented in~\cite{shukla2017discovering}.
 %
-Please look at appendix~\ref{sec:model}
+Please look at Appendix~\ref{sec:model}
 for a detailed discussion on pros and cons of the model.
+%
+We model the system as a labeled graph, where compartments are nodes and transport vesicles are edges. Molecular compositions of the compartments and vesicles are given by node and edge labels respectively. These molecules can be active or inactive on any given compartment or vesicle. The activity state of molecules is also included in the node and edge labels. Consistently with the SNARE picture, a vesicle is enabled by a set of molecules such that one part of the set occurs in the vesicle and the other part occurs in the target compartment. 
 % Describe VTS in detail
-
-
-VTSs are regulated by the same molecules that they transport. Molecules on compartments and on vesicles can be in either an active or an inactive state.
+%Molecules on compartments and on vesicles can be in either an active or an inactive state.
 % the term vesicle has already been introduced.. using two terms for the same object seems confusing. 
 %
 % (The molecules are transported to the other compartments via
 %unidirectional channels.) cannot comment on unidirectionality of vesicles. they may be undergoing multiple cycles of back-fusion for all we %know.  
 %
-The active molecules regulate the vesicle they occur on.
+%The active molecules regulate the vesicle they occur on.
 %
-A vesicle is enabled by a set of molecules
-such that one part of the set occurs in the vesicle and the other part
-occurs in the target compartment.
+%A vesicle is enabled by a set of molecules such that one part of the set occurs in the vesicle and the other part occurs in the target compartment.
 % use either target or destination consistently throughout..i prefer target because that's what the t in t-SNARE stands for.
 %
 These molecules must be active in the vesicle
@@ -82,8 +87,9 @@ The pairs are called {\em fusing} sets and analogously
 the vesicle is considered to be {\em fused} with the
 destination compartment.
 %
-Not all molecule sets can participate in the fusion, the
-potential fusion pairs are usually determined by biological experiments.
+Not all sets of molecules can participate in the fusion; in real biological cells, fusogenic SNARE complexes are discovered through experiments. 
+%Not all molecule sets can participate in the fusion, the
+%potential fusion pairs are usually determined by biological experiments.
 %
 Generally, in cells, the fusing pairs are found to be distinct for distinct vesicle-compartment fusions.
 %
@@ -96,22 +102,24 @@ the presence and absence of the other molecules in a compartment or
 vesicle may make the molecule active or inactive.
 %
 We call this regulation as {\em activity functions}.
-
 % Defending our model
 %
-In this VTS model, we assume that the system is in steady state and the
-concentrations of the molecules in the compartments do not change over
-time.
+%In this VTS model, we assume that the system is in steady state and the
+%concentrations of the molecules in the compartments do not change over
+%time.
 %
-We model the system as a labelled graph, where compartments are nodes and
-transport vesicles are edges.
+%We model the system as a labelled graph, where compartments are nodes and
+%transport vesicles are edges.
 %
-The set of molecules present and their activity in a compartment or
-a vesicle is the label of the respective node or edge.
+%The set of molecules present and their activity in a compartment or
+%a vesicle is the label of the respective node or edge.
 %
 The regulation controls are defined by a fusion pairing relation
 containing pairs of molecules and activity
 Boolean functions.
+
+%
+In the model, we assume that the system is in steady state and the concentrations of the molecules in compartments do not change over time.
 %
 Since our system is in steady state, we expect that any molecule that
 leaves a compartment must come back via some path on the graph.
