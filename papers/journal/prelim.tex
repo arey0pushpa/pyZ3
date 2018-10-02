@@ -1,0 +1,332 @@
+In this section, we will present the model of VTS from~\cite{smtVTS}.
+%
+We will also present the constraints and properties on the VTSs, and their
+encoding as a QBF formula.   
+%
+We model a VTS as a labelled graph along with assisting pairing matrices and
+activating functions.
+
+\begin{df}
+  A VTS $G$ is a tuple $(\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$, where
+  \begin{itemize}
+  \item $\nodes$ is a finite set of nodes representing compartments in the VTS,
+  \item $\mols$ is the finite set of molecules flowing in the system, 
+  \item $\edges \subseteq \nodes \times (\powerset{\mols}-\emptyset) \times \nodes$ is the
+    set of edges with molecule sets as labels,
+  \item $\nlabel : \nodes \maps \powerset{\mols}$ defines the molecules present in the nodes,
+  \item $\pairs \subseteq 2^{\mols}$ is pairing relation,
+  \item $\nodef : \mols \maps \powerset{\mols} \maps \booleans$ is activity maps for nodes, and
+  \item $\edgef : \mols \maps \powerset{\mols} \maps \booleans $ is activity maps for edges.
+  \end{itemize}
+\end{df}
+$\nodes$, $\mols$, $\edges$, and $\nlabel$ define a labelled graph.
+%
+Additionally, $\pairs$ defines which molecules can fuse with which molecules,
+and
+$\nodef$ and $\edgef$ are the activity functions for molecules on
+nodes and edges respectively.
+%
+The model captures the steady state of a VTS.
+%
+The analysis of the model will inform us about the network/graph
+properties of VTSs.
+
+% Let $\pairs(M')$ denote $\{P\setminus M'|  P \in \pairs \text{ and } P \intersect M' \neq \emptyset \}$.
+%
+A molecule $k$ is {\em active} at node $n$ if $k \in \nlabel(n)$ and
+$\nodef(k,\nlabel(n))$ is true.
+%
+A molecule $k$ is {\em active} at edges $(n,M',n')$ if $k \in M'$ and
+$\edgef(k,M')$ is true.
+%
+We call $G$ {\em well-structured} if molecules $M$ is divided into
+two partitions $Q$ and $R$ such that
+for each $P \in \pairs, |P \intersect Q| = 3 \land |P \intersect R| = 1 $, and
+for each $(n,M',n') \in \edges$, $n \neq n'$ and
+$M' \subseteq \nlabel(n) \intersection \nlabel(n')$.
+%
+In other words,
+molecules are of two types $Q$ and $R$,
+% no molecule can participate in fusion from both channels and
+% compartments,
+%
+pairing relations have sets of four molecules such that three
+are of one type and one is of another type
+(motivated by the biochemistry of the fusion),
+%
+there are no self loops, and 
+each edge carry only those molecules that are present in its source
+and destination nodes.
+%
+An edge $(n,M',\_) \in \edges$ {\em fuses} with a node $n'$
+if there are non-empty set of molecules $M'' \subseteq M'$ and $M''' \subseteq \nlabel(n')$
+such that $M''$ are active in the edge, $M'''$ are active in $n'$, and $M'' \union M''' \in \pairs$.
+%
+We call $G$ {\em well-fused} if each edge $(n,M',n') \in \edges$ fuses
+with its destination node $n'$
+and can not fuse with any other node.
+
+% $\pairs(M'')$ are not active in any other node.
+
+% We will also consider several variations of the model.
+% %
+% For example, the unique edge between two nodes, the activity of molecules is
+% not constrained by $\nodef$ and $\edgef$, etc.
+%
+
+A {\em path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes 
+such that $(n_i,\_,n_{i+1}) \in \edges$ for each $ 0 < i < \ell$.
+%
+For a molecule $m \in M$,
+an {\em $m$-path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes 
+such that $(n_i,M',n_{i+1}) \in \edges$ and $m \in M'$ for
+each $ 0 < i < \ell$.
+%
+A node $n'$ is {\em ($m$-)reachable} from node $n$ in $G$ if there is a ($m$-)path
+$n,...,n'$ in $G$.
+%
+% A node $n'$ is {\em $m$-reachable} from node $n$ in $G$ if there is a
+% $m$-path $n,...,n'$ in $G$.
+%
+We call $G$ {\em stable} if for each $(n,M',n') \in \edges$ and $m \in M'$,
+$n$ is $m$-reachable from $n'$.
+%
+We call $G$ {\em connected} if for each $n,n' \in \nodes$,
+$n'$ is reachable from $n$ in $G$.
+%
+We call $G$ $k$-connected if for each $\edges' \subseteq \edges$ and $|\edges'| < k$,
+VTS $(\nodes,\mols,\edges-E',\nlabel,\pairs,\edgef,\nodef)$ is connected.
+
+
+
+%
+% In the definition, we do not care about the paths to be $m$-connected for some $m$.  
+% %
+% A variant of the definition may be sensitive to the $m$-connectedness, but
+% we are not considering the variation.
+
+
+\subsection{Encoding VTS}
+
+The conditions on the VTSs for a given size can be encoded as a QBF formula
+with uninterpreted functions.
+%
+To encode the constraints, we need variables for each aspect of
+VTS.
+%
+Let us suppose that the size of the graph is $\nu$ and a number of
+molecules are $\mu$.
+%
+To fully finitize the problem, we also limit the maximum number $\pi$
+of edges present between two nodes.
+%
+Here, we list the Boolean variables and uninterpreted function symbols
+that encode parts of VTSs.
+\begin{enumerate}
+
+\item Boolean variable $n_{i,m}$ indicates if $m \in \nlabel(i)$
+\item Boolean variable $e_{i,j,q}$ indicates if $q$th edge exists between $i$ and $j$.
+\item Boolean variable $e_{i,j,q,m}$ indicates if $q$th edge between $i$ and $j$ contains $m$.
+\item Boolean variable $p_{\{m_1,m_2,m_3,m_4\}}$ indicates if $\{m_1,m_2,m_3,m_4\} \in \pairs$
+\item uninterpreted Boolean functions $\nodef_m : \booleans^\mu \maps \booleans$
+encoding $\nodef(m)$ map
+\item uninterpreted Boolean functions $\edgef_m : \booleans^\mu \maps \booleans$
+encoding $\edgef(m)$ map
+\end{enumerate}
+We also have auxiliary Boolean variables that will help us encode the well-fused property. 
+\begin{enumerate}
+\item $a_{i,m}$ indicates that molecule $m$ is active at node $i$, i.e., $\nodef(m,L(i))$
+  holds
+\item $b_{i,j,q,m}$ indicates that molecule $m$ is active at $q$th edge $(i,M',j)$ between $i$ and $j$, i.e., $\edgef(m,M')$ holds
+\end{enumerate}
+
+We will describe several constraints that encode VTSs in this section.
+%
+In the next section, we will extend the encoding for the synthesis problem.
+%
+To avoid cumbersome notation, we will not explicitly write the ranges
+of the indexing in the constraints.
+%
+$i$ and $j$ will range over nodes, i.e., from $1$ to $\nu$.
+%
+$m$ will range over molecules, i.e., from $1$ to $\mu$.
+%
+$q$ will range over edges between two nodes, i.e., from $1$ to $\pi$.
+%
+
+The following constraints encode the basic consistancy of VTSs.
+\begin{align*}
+  \texttt{EdgeC} =\;&\hspace{-1ex}\bigwedge\limits_{i,j,q} (\bigvee_m e_{i,j,q,m} )\limplies e_{i,j,q}
+  \land
+  \bigwedge\limits_{i,q} \neg e_{i,i,q}
+  \land
+  % \tag{\texttt{NodeC}}\label{eq:f0}\\
+  \bigwedge\limits_{\mathclap{i,j,q,m}} e_{i,j,q,m} \limplies (n_{i,m} \land n_{j,m} )
+  \\
+  \texttt{ActivityC} =\;&
+  \bigwedge\limits_{\mathclap{i,j,q,m}} b_{i,j,q,m} \limplies e_{i,j,q,m} \quad\land\quad
+  \bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
+  % \tag{V2}\label{eq:f1}\\
+  \\
+  \texttt{PairingC} =\;&
+  \exists qr. \Land\limits_{\mathrlap{m_1,m_2,m_3,m_4}\;\;}
+                         (p_{\{m_1,m_2,m_3,m_4\}} \limplies qr_{m_1} + qr_{m_2} + qr_{m_3} + qr_{m_4} = 3) 
+% \land\\ 
+%   & \quad\quad\quad ( m_1 = m_2 = m_3 = m_4  \limplies \lnot p_{m_1,m_2,m_3,m_4} )
+  % \bigwedge\limits_{m} 
+  % (\Lor\limits_{m'} p_{mm'} \limplies \Land_{m'} \lnot p_{m'm} ) \land
+  % (\Lor\limits_{m'} p_{m'm} \limplies \Land_{m'} \lnot p_{mm'} )
+  \\
+  \texttt{Fusion1} =\;&
+  \bigwedge\limits_{i,j,q} e_{i,j,q} \limplies
+  \bigvee_{{m_1,m_2,m_3,m_4}} (\Land_{l=1}^4 ( b_{i,j,q,m_l} \lor a_{j,m_l} ) \land 
+                        \Lor\limits_{l=1}^4 b_{i,j,q,m_l} \land\\
+  & \qquad \qquad \qquad \qquad \Lor\limits_{l=1}^4 a_{j,m_l}\land p_{\{m_1,m_2,m_3,m_4\}})
+  \\
+  \texttt{Fusion2} =\;&
+\bigwedge\limits_{\mathclap{i,j,q,m_1,m_2,m_3, l \in \{1,..,3\}}} b_{i,j,q,m_1} \land ..\land b_{i,j,q,m_l} \limplies \\
+  & \hspace{2cm} \neg 
+  \bigvee_{\mathclap{j \neq j^{\prime}, m_{l+1}^{\prime},..,m_{4}^{\prime}}} ( a_{j^{\prime},m_{l+1}^{\prime}} \land .. \land a_{j^{\prime},m_4^{\prime}} \land p_{\{m_1,..,m_l,m^{\prime}_{l+1},..,m^{\prime}_4\}})
+  \\
+  \texttt{Consistancy} =\;& \texttt{EdgeC} \land
+  \texttt{ActivityC} \land \texttt{PairingC} \land
+  \texttt{Fusion1} \land \texttt{Fusion2} 
+\end{align*}
+\texttt{EdgeC} states that each edge has at least one molecule,
+there are no self loops, and edge labels are consistent with node labels.   
+\texttt{ActivityC} states that active molecule are present.
+\texttt{PairingC} states that all molecules are divided into two types
+using $qr_m$ bit, which encodes if $m$ belongs to one type or another,
+and any fusing set of molecules must have three molecules involved
+from one type and one molecule from the other.
+\texttt{Fusion1}, and \texttt{Fusion2} states the well-fused condition.
+\texttt{Consistancy} is the conjunction of all of the above.
+
+\paragraph{Activity functions}
+%
+We also need to encode that the activity of the molecules are
+controlled by activity functions.
+%
+The input VTS may include concrete activity functions for some molecules,
+and for the others the functions may be unknown and to be synthesized. 
+%
+The concrete functions can be given to us in many different ways,
+for example as a lookup table, or a concise Boolean formula.
+%
+In the following section, we will assume the appropriate encoding is
+used for the concrete functions and represent them by \texttt{NodeFun}$_m$
+and \texttt{EdgeFun}$_m$ for node and edge regulations respectively.
+%
+We will use $\nodef_m$ and $\edgef_m$ to represent functions that
+are unknown in a VTS.
+%
+% \begin{align}
+% \bigwedge\limits_{i,m} n_{i,m} \limplies a_{i,m} =  \nodef_m (n_{i,1},\dots,n_{i,\mu}) 
+% \tag{\texttt{ActiveN}}\label{eq:anb}\\
+%    \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu} )
+%   \tag{\texttt{ActiveE}}\label{eq:aeb}
+% \end{align}
+%
+Later we will be synthesizing the unknown activity functions and 
+replace $\nodef_m$ and $\edgef_m$ with parameterized constraints that
+encode a space of candidate functions.
+
+\subsection{VTS properties}
+
+For the synthesis of incomplete systems,
+we need properties against which we synthesize the missing parts.
+%
+Here we will discuss two such properties proposed in earlier
+works~\cite{smtVTS}, namely stability and $k$-connectedness.
+%
+
+\paragraph{Stability property}
+%
+We use Boolean variable $r_{i,j,m,p}$ to indicate if there is an
+$m$-path from $i$ to $j$ of length less than or equal to $p$.
+%
+We use $m$-reachability to encode the stability condition in VTSs.
+%
+The following constraint recursively encodes that node $j$ is
+$m$-reachable from node $i$ in less than $p$ steps.
+%
+Subsequently, we encode stability condition using the reachability variables.
+\begin{align*}
+  \texttt{Paths}(r) &= \bigwedge\limits_{\mathclap{i,j,m,p}} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
+  \\
+  \texttt{Loop}(r) &= \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,\nu}
+  \\
+  \texttt{Stability} &= \exists r. \; \texttt{Paths}(r) \land \texttt{Loop}(r)
+\end{align*}
+
+\paragraph{$k$-connected property}
+%
+$k$-connectedness expresses robustness against failure of few edges.
+%
+Let us use $d_{i,j,q}$ to indicate $q$th edge between $i$ and $j$ is failed
+and $r'_{i,j}$ to indicate if there is a path from $i$ to $j$ in
+the modified VTS.
+%
+% To check whether $k$-connected is a
+% necessary condition, we remove (drop) $k-1$ edges from the graph and
+% if it disconnects the graph, and we get an assignment.
+% %
+% We have a graph that is not $k$-connected.
+%
+In the following, $\texttt{Fail}(d,k)$ encodes that only
+existing edges can be failed and exactly $k-1$ edges are failed.
+%
+$\texttt{FReach}(d,r')$ defines reachability in the modified VTS.
+%
+We use a new variable $r'_{i,j,p}$ to encode reachability from
+$i$ to $j$ in at most $p$ steps.
+%
+$\texttt{Connected}(r')$ says that all nodes are reachable from any
+other node.
+\begin{align*}
+  \texttt{Fail}(d,k) = & 
+  \bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \land 
+  \sum_{i,j,q} d_{i,j,q} = k-1\\
+  % \texttt{ReachAbove}(d,r') = &
+  % \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}_{i,j}\\
+  \texttt{FReach}(d,r') = &\hspace{-1ex}
+   \bigwedge\limits_{i,j,p}  \hspace{-1ex}r^{\prime}_{i,j,p} \hspace{-1ex}\limplies\hspace{-1ex} [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \hspace{-1pt}\lor \hspace{-2pt} (\bigvee_{\mathclap{i' \neq i}}  r^{\prime}_{i',j,p-1} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ]\\
+  \texttt{Connected}(r') = & \Land\limits_{i,j} (r^{\prime}_{i,j,\nu} \lor r^{\prime}_{j,i,\nu})
+\end{align*}
+We will be synthesizing $k$-connected graphs.
+%
+We define $\texttt{Connected}(k)$ that says for all possible valid failures
+the graph remains reachable. 
+\begin{align*}
+  \texttt{Connected}(k) = & \forall d.\;
+          (\texttt{Fail}(d,k) \limplies \exists r'.\;\texttt{FReach}(d,r')
+                                \land \texttt{Connected}(r'))
+% \\
+  % \texttt{Disconnected}(k) = & \exists d.\;
+  %         (\texttt{Drop}(d,k) \land \exists r'.\;\texttt{ReachAbove}(d,r')
+  %                               \land \lnot \texttt{Connected}(r'))
+\end{align*}
+Since $d$ variables in $\texttt{Connected}(k)$ are universally
+quantified, $\texttt{Connected}(k)$ introduces quantifier alternations.
+%
+Therefore, synthesis against this property will require QBF reasoning.
+%
+We may make the formula quantifier free  by considering all possible failures
+separately and introducing a vector of reachability variables for each
+failure.
+%
+However, this will blow up the size of the formula and may not be
+solvable by a SAT solver.
+%
+
+
+% \subsection{Solvers}
+% Due to the combinatorial nature of the graphs, the search space is huge
+% and often hard to enumerate naively.
+% %
+% We need sophisticated solvers 
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
