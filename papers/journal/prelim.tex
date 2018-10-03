@@ -1,99 +1,58 @@
+We will use lower case variables like $e,r,s$ etc to represent vectors of Boolean variables
+possibly indexed with multiple dimensions.
+%
+For example, $r_{ij}$ is a Boolean variable for index $(i,j)$.
+%
+%
+A Boolean variable may take Boolean values $1$ or $0$.
+%
+The binary Boolean operators $\land$, $\lor$, and $\limplies$ are usually defined.
+%
+$\Land$ and $\Lor$ are operators that extend $\land$ and $\lor$ over
+collection of formulas.
+%
+We will use the variables and the operators to construct Boolean formulas to
+encode our problems.
+%
+An assignment is a map from variables in the formula to Boolean values.
+%
+An assignment may satisfy a formula if the interpretation of Boolean operators
+reduce the whole Formula into 1.
+%
+The problem of finding a satisfying assignment for a Boolean formula is
+hard.
+%
 
-
-% \subsection{VTS properties}
-
-% For the synthesis of incomplete systems,
-% we need properties against which we synthesize the missing parts.
-% %
-% Here we will discuss two such properties proposed in earlier
-% works~\cite{smtVTS}, namely stability and $k$-connectedness.
-% %
-
-% \paragraph{Stability property}
-% %
-% We use Boolean variable $r_{i,j,m,p}$ to indicate if there is an
-% $m$-path from $i$ to $j$ of length less than or equal to $p$.
-% %
-% We use $m$-reachability to encode the stability condition in VTSs.
-% %
-% The following constraint recursively encodes that node $j$ is
-% $m$-reachable from node $i$ in less than $p$ steps.
-% %
-% Subsequently, we encode stability condition using the reachability variables.
-% \begin{align*}
-%   \texttt{Paths}(r) &= \bigwedge\limits_{\mathclap{i,j,m,p}} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
-%   \\
-%   \texttt{Loop}(r) &= \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,\nu}
-%   \\
-%   \texttt{Stability} &= \exists r. \; \texttt{Paths}(r) \land \texttt{Loop}(r)
-% \end{align*}
-
-% \paragraph{$k$-connected property}
-% %
-% $k$-connectedness expresses robustness against failure of few edges.
-% %
-% Let us use $d_{i,j,q}$ to indicate $q$th edge between $i$ and $j$ is failed
-% and $r'_{i,j}$ to indicate if there is a path from $i$ to $j$ in
-% the modified VTS.
-% %
-% % To check whether $k$-connected is a
-% % necessary condition, we remove (drop) $k-1$ edges from the graph and
-% % if it disconnects the graph, and we get an assignment.
-% % %
-% % We have a graph that is not $k$-connected.
-% %
-% In the following, $\texttt{Fail}(d,k)$ encodes that only
-% existing edges can be failed and exactly $k-1$ edges are failed.
-% %
-% $\texttt{FReach}(d,r')$ defines reachability in the modified VTS.
-% %
-% We use a new variable $r'_{i,j,p}$ to encode reachability from
-% $i$ to $j$ in at most $p$ steps.
-% %
-% $\texttt{Connected}(r')$ says that all nodes are reachable from any
-% other node.
-% \begin{align*}
-%   \texttt{Fail}(d,k) = & 
-%   \bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \land 
-%   \sum_{i,j,q} d_{i,j,q} = k-1\\
-%   % \texttt{ReachAbove}(d,r') = &
-%   % \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}_{i,j}\\
-%   \texttt{FReach}(d,r') = &\hspace{-1ex}
-%    \bigwedge\limits_{i,j,p}  \hspace{-1ex}r^{\prime}_{i,j,p} \hspace{-1ex}\limplies\hspace{-1ex} [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \hspace{-1pt}\lor \hspace{-2pt} (\bigvee_{\mathclap{i' \neq i}}  r^{\prime}_{i',j,p-1} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ]\\
-%   \texttt{Connected}(r') = & \Land\limits_{i,j} (r^{\prime}_{i,j,\nu} \lor r^{\prime}_{j,i,\nu})
-% \end{align*}
-% We will be synthesizing $k$-connected graphs.
-% %
-% We define $\texttt{Connected}(k)$ that says for all possible valid failures
-% the graph remains reachable. 
-% \begin{align*}
-%   \texttt{Connected}(k) = & \forall d.\;
-%           (\texttt{Fail}(d,k) \limplies \exists r'.\;\texttt{FReach}(d,r')
-%                                 \land \texttt{Connected}(r'))
-% % \\
-%   % \texttt{Disconnected}(k) = & \exists d.\;
-%   %         (\texttt{Drop}(d,k) \land \exists r'.\;\texttt{ReachAbove}(d,r')
-%   %                               \land \lnot \texttt{Connected}(r'))
-% \end{align*}
-% Since $d$ variables in $\texttt{Connected}(k)$ are universally
-% quantified, $\texttt{Connected}(k)$ introduces quantifier alternations.
-% %
-% Therefore, synthesis against this property will require QBF reasoning.
-% %
-% We may make the formula quantifier free  by considering all possible failures
-% separately and introducing a vector of reachability variables for each
-% failure.
-% %
-% However, this will blow up the size of the formula and may not be
-% solvable by a SAT solver.
-% %
+Quantified Boolean formulas(QBFs) also allow quantifiers over Boolean variables.
+%
+For example, $\forall x \exists y. (x \lor y)$, for Boolean variables $x$ and $y$.
+%
+The formula says that for both the values of $x$ there is a value of $y$
+such that $x \lor y$ is 1.
+%
+The problem of finding satisfying assignment for QBFs is even harder problem.
+%
 
 
 \subsection{Solvers}
-Due to the combinatorial nature of the graphs, the search space is huge
-and often hard to enumerate naively.
+In this paper, we will encode several problems into finding satisfying
+solutions of a Boolean formula or QBFs.
 %
-We need sophisticated solvers 
+We will use SAT/SMT/QBF solvers to get the satisfying assignments.
+%
+The modern solvers are result of several decades of research
+and implement sophisticated algorithms.
+%
+A SAT solver typically implements conflict-driven clause learning(CDCL).
+%
+The QBF solver add support of quantifiers by adding more rules for
+quantifiers.
+
+%
+% Due to the combinatorial nature of the graphs, the search space is huge
+% and often hard to enumerate naively.
+%
+% We need sophisticated solvers 
 
 %%% Local Variables:
 %%% mode: latex
