@@ -1,0 +1,171 @@
+In this section, we will present our formal model of VTS.
+%
+Our model attempts to capture only the relevant aspects of the
+system to develop understanding the flow structure of VTSs.
+%
+The model assumes that a cell consists of clearly defined compartments
+that are well stirred within themselves.
+%
+The model assumes that all chemical reactions get sufficient time to complete.
+%
+The model describes stable flow of molecules and does not
+capture the transient nature of VTSs.
+%
+The model also does not capture concentrations of the molecules and
+only captures their presence or absence.
+%
+
+In the model, the compartments are nodes of a graph
+and vesicles are the edges between the nodes.
+%
+There is a set of relevant molecules that participate in
+management of the VTS.
+%
+Both nodes and edges are labelled with subsets of the molecules.
+%
+The molecules are activity and their control is defined using
+activity functions and a pairing matrix.
+%
+
+\begin{df}
+  A VTS $G$ is a tuple $(\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$, where
+  \begin{itemize}
+  \item $\nodes$ is a finite set of nodes representing compartments in the VTS,
+  \item $\mols$ is the finite set of molecules flowing in the system, 
+  \item $\edges \subseteq \nodes \times (\powerset{\mols}-\emptyset) \times \nodes$ is the
+    set of edges with molecule sets as labels,
+  \item $\nlabel : \nodes \maps \powerset{\mols}$ defines the molecules present in the nodes,
+  \item $\pairs \subseteq 2^{\mols}$ is pairing relation,
+  \item $\nodef : \mols \maps \powerset{\mols} \maps \booleans$ is activity maps for nodes, and
+  \item $\edgef : \mols \maps \powerset{\mols} \maps \booleans $ is activity maps for edges.
+  \end{itemize}
+\end{df}
+$\nodes$, $\mols$, $\edges$, and $\nlabel$ define a labelled graph.
+%
+Additionally, $\pairs$ defines which molecules can fuse with which molecules,
+and
+$\nodef$ and $\edgef$ are the activity functions for molecules on
+nodes and edges respectively.
+%
+% The model captures the steady state of a VTS.
+% %
+% The analysis of the model will inform us about the network/graph
+% properties of VTSs.
+
+% Let $\pairs(M')$ denote $\{P\setminus M'|  P \in \pairs \text{ and } P \intersect M' \neq \emptyset \}$.
+%
+A molecule $k$ is {\em active} at node $n$ if $k \in \nlabel(n)$ and
+$\nodef(k,\nlabel(n))$ is true.
+%
+A molecule $k$ is {\em active} at edges $(n,M',n')$ if $k \in M'$ and
+$\edgef(k,M')$ is true.
+%
+We say $G$ is {\em fuse compatible} if molecules $M$ is divided into
+two partitions $Q$ and $R$ such that
+for each $P \in \pairs, |P \intersect Q| = 3 \land |P \intersect R| = 1 $.
+%
+In other words,
+molecules are of two types $Q$ and $R$,
+%
+pairing relations have sets of four molecules such that three
+are of one type (??) and one is of another type (??).
+%
+% This distinction of molecules is due to section~\ref{mol-types}.
+%
+We call $G$ {\em well-structured} if it is pair compatible, and
+for each $(n,M',n') \in \edges$, $n \neq n'$ and
+$M' \subseteq \nlabel(n) \intersection \nlabel(n')$.
+%
+In addition to fuse compatibility, the well-structured property requires that
+here are no self loops, and 
+each edge carry only those molecules that are present in its source
+and destination nodes.
+%
+An edge $(n,M',\_) \in \edges$ {\em fuses} with a node $n'$
+if there are non-empty set of molecules $M'' \subseteq M'$ and $M''' \subseteq \nlabel(n')$
+such that $M''$ are active in the edge, $M'''$ are active in $n'$, and $M'' \union M''' \in \pairs$.
+%
+We call $G$ {\em well-fused} if each edge $(n,M',n') \in \edges$ fuses
+with its destination node $n'$
+and can not fuse with any other node.
+%
+$\pairs$ models biological possible quadruple of molecules that participate in fusion.
+%
+Each edge must be uniquely supported by such a quadruple of molecules.
+%
+We also require three of them to be on the node or edge, and the forth one
+to be on the other side of the fusion.
+
+% $\pairs(M'')$ are not active in any other node.
+
+% We will also consider several variations of the model.
+% %
+% For example, the unique edge between two nodes, the activity of molecules is
+% not constrained by $\nodef$ and $\edgef$, etc.
+%
+
+A {\em path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes 
+such that $(n_i,\_,n_{i+1}) \in \edges$ for each $ 0 < i < \ell$.
+%
+For a molecule $m \in M$,
+an {\em $m$-path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes 
+such that $(n_i,M',n_{i+1}) \in \edges$ and $m \in M'$ for
+each $ 0 < i < \ell$.
+%
+A node $n'$ is {\em ($m$-)reachable} from node $n$ in $G$ if there is a ($m$-)path
+$n,...,n'$ in $G$.
+%
+% A node $n'$ is {\em $m$-reachable} from node $n$ in $G$ if there is a
+% $m$-path $n,...,n'$ in $G$.
+%
+We call $G$ {\em stable} if for each $(n,M',n') \in \edges$ and $m \in M'$,
+$n$ is $m$-reachable from $n'$.
+%
+The definition of stability implies that if a molecule leaves a
+compartment then there must be a path for it to come back.
+%
+It ensures that the flow of molecules does not deplete a
+compartment.
+%
+Such a property is often expected in several physical systems
+such that electromagnetic fields, fluid dynamics, etc.
+
+%
+We call $G$ {\em connected} if for each $n,n' \in \nodes$,
+$n'$ is reachable from $n$ in $G$.
+%
+We call $G$ $k$-connected if for each $\edges' \subseteq \edges$ and
+$|\edges'| < k$, VTS
+$(\nodes,\mols,\edges-E',\nlabel,\pairs,\edgef,\nodef)$ is connected.
+%
+We will check if a VTS $G$ is $k$-connected or not.
+%
+The property of $k$-connectedness is a robustness property that one
+expects from a biological systems.
+%
+The property says even after failure of a few edges the system will continue to work.
+
+
+%
+% In the definition, we do not care about the paths to be $m$-connected for some $m$.  
+% %
+% A variant of the definition may be sensitive to the $m$-connectedness, but
+% we are not considering the variation.
+
+Let us discuss rough sizes of the system and expected behaviors.
+%
+A typical VTS may have about 10 compartments.
+%
+The VTS may transport a large number of molecules but the molecules that
+are relevant of the control of VTS are about 50~\cite{doWeKnowThis}.
+%
+According to the definition the activity of molecules can be controlled by
+the presence of all other molecules.
+%
+However, in practice the activity of a molecule is controlled by
+the presence of ~2-3 other molecules.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
