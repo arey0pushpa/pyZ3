@@ -1,0 +1,27 @@
+Modern day SAT/SMT solvers can handle millions of variables and due to the exhaustive nature of the searching, solving the combinatorial problem is a natural fit for the SAT/SMT solvers. There are many graphs related combinatorial work \cite{gay2013solving,wotzlaw2012generalized} that have used SAT solvers. Thanks to the improvement in SAT solver and formal techniques, tools like model checkers and theorem provers scalability and combinatorial solving capability are now being used to model complex biological systems \cite{heule2010exact,yordanov2013smt,mangla2010timing}.
+% Many network questions are being reduced to solving a SAT question.
+Many of these biological system uses these tools and techniques to reason about graphs and networks rules with possible exhaustive search \cite{guerra2012reasoning,chin2008biographe}.
+
+Recently these tools and techniques have found the use of modeling and understanding the gene regulatory networks (GNR) \cite{giacobbe2015model,rosenblueth2014inference, batt2010efficient, yordanov2016method, dunn2014defining, paoletti2014analyzing, koksal2013synthesis}. GNR is a complex system driven by many complex rules. We extended this work and have applied model checkers to the more complex transport network (VTS) \cite{mani2016stacking,shukla}, but scaling it to cases which are interesting biologically is still a challenge. In this paper, we have achieved the scalability required for analyzing VTS for eukaryotic cells, of total ten compartments (N = 10). \\
+
+
+In recent years, there has been a wide range of methods
+developed for the similar synthesis problems~\cite{sketch,sygus,exampleSynth}.
+%
+They range from filling gaps an implementation of C programs from the pool of template predicates to learn a program from example
+runs of the program.
+%
+In the course of developing such methods,
+the background technology, i.e. solving of quantified
+constraints has been evolving rapidly~\cite{lonsing2010depqbf,z3Quant}.
+%
+
+There has been some work in
+applying synthesis technique in biology especially in gene regulatory networks~\cite{shavit2016automated, fisher2015synthesising}. A very recent work~\cite{fisher2015synthesising} synthesize executable gene regulatory networks from single-cell gene expression data.
+Synthesis technique is also used in optimal synthesis for chemical reaction networks~\cite{cardelli2017syntax}. The~\cite{fisher2015synthesising} uses constraint (satisfiability) solving techniques for the synthesis whereas ~\cite{shavit2016automated} uses SMT for synthesis. The paper~\cite{cardelli2017syntax} in addition to using SMT over ODE, uses a template-guided approach. In our case queries contain quantifiers so we have employed QBF solving with Z3 for the solving the synthesis problem. To our best knowledge, this is the first application of synthesis in VTS.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
+~        
