@@ -1,54 +1,48 @@
-\begin{sidewaysfigure}[t]
-  \centering
-  \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}C{4cm}@{}|}\hline
-% \begin{table}[t]
-%   \centering
-%   \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|}\hline
-    {\multirow{2}{*} \textbf{}}  & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Learning NNF}}  &  \multicolumn{2}{c|}{\textbf{Learning}} &  \multicolumn{2}{c|}{\textbf{Add/Delete}} \\
-    {\multirow{2}{*} \textbf{Table a}}  & \multicolumn{2}{c|}{\textbf{edge}} & \multicolumn{2}{c|}{\textbf{molecules}} & \multicolumn{2}{c|}{\textbf{(only $\land$ and $\lor$)}}  &  \multicolumn{2}{c|}{\textbf{k-CNF}} &  \multicolumn{2}{c|}{\textbf{parts}} \\
-    \cline{2-11}
-    {} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} \\
-    \hline
-    
-    plos1-dia[3C]& 0.326 &$\infty$& 0.312 &$\infty$& 0.669 & $\infty$ & 0.966 &$\infty$& 0.277 & -1 E, -1 AE, -1 AN. +1 E, +1 N. \\\hline
-    plos2-dia[4C] & 0.266 & 0   & 0.322 & 0  & 1.409  & 0 & 2.114 & 0 &  0.337 & 0 \\\hline
-    sub-mammal[3C]  & 0.767 & 1 E  & 1.049 & 5 PE & 3.523 & 1E & 4.961 & 1E & 1.172  & -1 E, -2 PE, -1 AN. +1 E, +4 PE, +4 N, +2 AN, +2 AE. \\\hline
-    node4[3C]  & 1.554  & 1 E   &  3.859 & 12 PE  &  5.286  & $\infty$ & 4.502 &$\infty$& 2.194  & -2 E, -2 PE, -1 N, -1 AN, -1 AE. +12 N, +8 E, +1 PE.\\\hline
- %   yeast-graph[3C]   & 95.016    & 1 E   & 94.520   & 1 E   & 169.430  & 1 E & 172.35   & 1E   & 107.43  &  -1 E, -2 N, -2 AE, -2 AN. +2 E, 12 PE, 7 N. \\\hline
-    yeast-graph[3C]   & 95.016    & 2 E  &   timeout  & N/A   & 1571.42  & 2 E  & 530.210   & 2 E & 72.316  &  -1 E, -1 N, -1 AE, -1 AN, -1PE. +2 E, 7 PE, 8 N. \\\hline
+\begin{enumerate}
+  \item CBMC: \\
+The first tool is implemented using model checking tool for C program CBMC~\cite{clarke2004tool}.
+%
+Unlike a general model checker~\cite{cimatti2002nusmv}, CBMC checks the verified property for all the possible states, only up to a certain “depth,” a parametric limit on the size of the model.
+%
+CBMC allows the depth of model to be incrementally increased to any desired value.
 
-mammal-graph[3C]  &  timeout     & N/A  &  timeout     & N/A    &  timeout         & N/A      &  timeout    &  N/A    &  timeout     & N/A\\\hline
-   %    & 0.0    & 0.0    & 0.0    & 0.0    & 0.0         & 0.0      & 0.0   & 0.0    & 0.0    & 0.0\\\hline
-  \end{tabular}
-  % \caption{Run-times for searching for models (in secs). \#C  stands for minimum changes.
-  % Time is reported in seconds.}
-  % \label{tab:qf-graph}
-% \end{table}
-  \begin{tabular}[t]{|c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}C{4cm}@{}|}\hline
-    {\multirow{2}{*} \textbf{}}  & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Add}} & \multicolumn{2}{c|}{\textbf{Learning NNF}}  &  \multicolumn{2}{c|}{\textbf{Learning}} &  \multicolumn{2}{c|}{\textbf{Add/Delete}} \\
-    {\multirow{2}{*} \textbf{Table b}}  & \multicolumn{2}{c|}{\textbf{edge}} & \multicolumn{2}{c|}{\textbf{molecules}} & \multicolumn{2}{c|}{\textbf{(only $\land$ and $\lor$)}}  &  \multicolumn{2}{c|}{\textbf{k-CNF}} &  \multicolumn{2}{c|}{\textbf{parts}} \\
-    \cline{2-11}
-    {} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} & {\textbf{Time}} & {\textbf{\#C}} \\
-    \hline
-    
-    plos1-dia & 0.041&$\infty$& 0.320 &$\infty$& 0.225 & $\infty$ & 0.33&$\infty$& 3.74 & -1 E, -1 PE, - 1 N, -1 PE. +1 AE, +1 PE, +1 N\\\hline
-    plos2-dia & 3.97 & 0 &  2.647 & 0  & 5.941 & 0 & 5.680 & 0 & 3.56 & 0 \\\hline
-    sub-mammal & 3.483 & 1 E  & 4.379 & 5 PE  & 29.980 & 1 E  & 10.405 & 1 E & 3.650  & -1 E, -2 PE, -1 AN. +1 E, +4 PE, +4 N, +2 AN, +2 AE \\\hline
-    node4  & 4.150  & 1 E  & 10.562  & 12 PE & 3.401  & $\infty$ & 4.760 &$\infty$&  5.05  & -2 E, -2 PE, -1 N, -1 AN, -1 AE. +12 N, +8 E, +1 PE \\\hline
-    yeast-graph & 40.225  & 2 E  &   timeout  & N/A   & 1393.84  & 2 E  & 468.161   & 2 E & 69.81  &  -1 E, -1 N, -1 AE, -1 AN, -1PE. +2 E, 7 PE, 8 N. \\\hline
-    mammal-graph   &  timeout     & N/A  &  timeout     & N/A    &  timeout         & N/A      &  timeout    &  N/A   &  timeout     & N/A\\\hline
-  \end{tabular}
-    \caption{Run-times for synthesis queries. \#C stands for minimum changes in the synthesized VTS in comparison with the given partial VTS. Time is reported in seconds. (a) The solver used is DepQBF (b) The solver used is Z3. The sub-mammal is a subgraph of the complete mammal-graph. In the Add/Delete parts column, ‘+’n sign is used to show the addition of n number of the molecules, similarly ‘-’n is used to show the removal of n number of molecules. In the table, N is node labels, AN is active node molecules, E is edges, PE is molecule presence on the edge and AE is active molecules on the edge. The [kC] stands for k graph connectedness which is part of only DepQBF experiments.}
+CBMC consists of a C-language front-end (CFE) and SAT Solver back-end (SAT).
+%
+CBMC accepts ANSI-C programs interspersed with special annotations (called assumes and assertions) to express constraints on the model and properties to be checked. 
+%		
+In our experiments, the vesicle transport network was modeled as a non-deterministic C-program manipulating a graph with labeled edges with the fusion rules and steady state properties expressed as constraints
+using assumes. 
+%		
+The correspondence relationship between connectedness conditions
+and guarantees for steady state were expressed as assertions to be checked. 
+%		
+Given an exploration depth provided by the user, which in our case corresponds to the size of the graph, CBMC verifies the properties by executing the following steps:
+	\begin{itemize}
+	\item Convert (using CFE) the model and the properties into a Boolean formula (verification condition) such that the property is true of all behaviors of the model up to the specified
+depth iff the Boolean formula is valid.
+	\item Check (using a SAT solver) validity of the verification condition. CBMC reports successful verification if the formula is found to be valid. If not, then CBMC produces a counterexample,
+an assignment to the variables of the model, that is a witness to the violation of the property.
+	\end{itemize}
 
-  % \caption{Run-times for searching for Z3 models (in secs). \#C  stands for minimum changes.
-  % Time is reported in seconds.}
-  \label{tab:qf-graph}
-\end{sidewaysfigure}
-
-%[M=8, N=2, Q=2]    
-% n/A n/A activeN == UNSAT adding edge == UNSAT activeE == UNSAT presenceE == UNSAT
+CBMC has a built-in SAT solver called MiniSat~\cite{sorensson2005minisat}, but it is also possible to use various other SAT solver blackboxes for property verification. Besides using MiniSat as a default SAT solver for our model,
+		we have used different SAT solvers for the verification of the property, particularly CryptoMiniSat~\cite{soos2016cryptominisat} which was the winner of SAT 2015 Competition~\cite{balyo2016sat}. 
+%		
+MiniSat performed satisfactorily in comparison to other SAT solvers.
+\item Z3: \\
+	We have implemented the encodings for each variants using the python interface of Z3 in a tool (MAA). 
+%
+Our tool allows the user to choose a model and the size
+of the network besides other parameters like connectivity and number of parallel edges. 
+%		
+It uses Z3 Python interface to build the needed constraints and applies Z3 solver on the constraints to find a model ( a satisfying assignment that respects the constraints). 
+%
+This tool also translates the satisfying model found by Z3 into
+a VTS and presents a visual output to the user in form of annotated graph. 
+%
+We also visually report the dropped edges required to disconnect the graph, it gives information about the connectivity of the graph.
 
 
+\item DEPQBF: \\
 We have implemented the encodings in a tool
 called~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
 %
@@ -141,6 +135,7 @@ synthesizes $3$-CNF functions (encoding not presented).
 Finally, we report queries that allows both addition and deletion of edges, and labels
 of node and labels. 
 
+\end{enumerate}
 
 %
 %Our experiments suggest that the synthesis problems are solvable by modern 
