@@ -1,5 +1,5 @@
-\begin{enumerate}
-  \item CBMC: \\
+We have developed three different tools (satVTS, smtVTS, synthVTS) for implementation of proposed encodings. All the experiments were done on a machine with Intel(R) Core(TM) i3-4030U CPU @ 1.90GHz processor and 4GB RAM with 30 min (1800 sec) timeout.
+\subsection{SATVTS (Bounded model checker based tool)} 
 The first tool is implemented using model checking tool for C program CBMC~\cite{clarke2004tool}.
 %
 Unlike a general model checker~\cite{cimatti2002nusmv}, CBMC checks the verified property for all the possible states, only up to a certain “depth,” a parametric limit on the size of the model.
@@ -24,11 +24,11 @@ depth iff the Boolean formula is valid.
 an assignment to the variables of the model, that is a witness to the violation of the property.
 	\end{itemize}
 
-CBMC has a built-in SAT solver called MiniSat~\cite{sorensson2005minisat}, but it is also possible to use various other SAT solver blackboxes for property verification. Besides using MiniSat as a default SAT solver for our model,
-		we have used different SAT solvers for the verification of the property, particularly CryptoMiniSat~\cite{soos2016cryptominisat} which was the winner of SAT 2015 Competition~\cite{balyo2016sat}. 
+CBMC has a built-in SAT solver called MiniSat~\cite{sorensson2005minisat}, but it is also possible to use various other SAT solver blackboxes for property verification. Besides using MiniSat as a default SAT solver for our model, we have used different SAT solvers for the verification of the property, particularly CryptoMiniSat~\cite{soos2016cryptominisat} which was the winner of SAT 2015 Competition~\cite{balyo2016sat}. 
 %		
 MiniSat performed satisfactorily in comparison to other SAT solvers.
-\item Z3: \\
+
+\subsection{SMTVTS/pyVTS (SMT based tool)}
 	We have implemented the encodings for each variants using the python interface of Z3 in a tool (MAA). 
 %
 Our tool allows the user to choose a model and the size
@@ -41,8 +41,7 @@ a VTS and presents a visual output to the user in form of annotated graph.
 %
 We also visually report the dropped edges required to disconnect the graph, it gives information about the connectivity of the graph.
 
-
-\item DEPQBF: \\
+\subsection{SynthVTS (QBF based synthesis tool)} 
 We have implemented the encodings in a tool
 called~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
 %
@@ -81,8 +80,6 @@ quantifier-free.
 % The experiments were conducted on a machine,
 % with \ashu{?}MHz processor, \ashu{?}GB memory, and 900s timeout.
 %
-The experiments were done on a machine with Intel(R) Core(TM) i3-4030U
-CPU @ 1.90GHz processor and 4GB RAM with 30 min (1800 sec) timeout.
 %The experiments were conducted with a 900s timeout.
 %
 The first four VTSs are synthetic but inspire from literature for
@@ -134,8 +131,6 @@ synthesizes $3$-CNF functions (encoding not presented).
 %
 Finally, we report queries that allows both addition and deletion of edges, and labels
 of node and labels. 
-
-\end{enumerate}
 
 %
 %Our experiments suggest that the synthesis problems are solvable by modern 
