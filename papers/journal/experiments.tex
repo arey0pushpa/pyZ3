@@ -40,6 +40,62 @@ This tool also translates the satisfying model found by Z3 into
 a VTS and presents a visual output to the user in form of annotated graph. 
 %
 We also visually report the dropped edges required to disconnect the graph, it gives information about the connectivity of the graph.
+%
+To illustrate usability of our tool in the last column of the table 1, we present the minimum connectedness needed for the different variants after applying our tool for sizes from 2 to 10. 
+%
+We found no graph for the variant A with constraints Ann and Aen. 
+%
+Replacing constraint on the node of Ann with Anb (variant B)
+does not affect the outcome. 
+%
+If we allow every present molecule to stay active
+(Ann) but constraint the edge by a boolean function (Aeb) the resultant VTS has to be at least 3-connected. 
+%
+Similarly, the results for the other cases are presented in the table.
+
+In Table~\ref{tab:qf-grabh}, we present the running times for the sear
+ch of
+VTSs of sizes 2 to 10 that satisfy the variants.
+and compare with our old encoding
+({Old-e}) from~\cite{shukla}.
+%
+For the comparison between both encodings we have fixed the total
+number of molecules to be $|M| = 2|N|$ for $ |N|> 2$ and
+$|M| = 2|N| + 1$ for $|N| = 2$.
+%
+For each variant, we fix maximum number of parallel
+edges to 2.
+%
+In the table we have shown comparison for specific connectivity, for
+example variant A is checked against any graph with connectivity 2,
+variant B with connectivity 3 similarly for the rest of the Variants.
+%
+
+We have compared our performance with the performance of our earlier
+CBMC based implementation (old-encoding).
+%
+For example, the formula for variation F, the total number of
+compartments ($|N|$) equals to 10, returns in 129.78 minutes (7786.8 s
+ecs)
+with a SAT result.
+%
+In comparison, CBMC results in OUT OF MEMORY for $|N|$ greater than 5.
+%
+``!'' indicate that the constraints were unsatisfiable.
+%
+Using this encoding in comparison to the old one, not only we got effi
+ciency improved for finding a SAT model but also did better in the cas
+e of refutation that no model exist (Table 2 Variant A timing comparis
+on and Variant D with N =2). 
+%
+Hence with the use of this novel encoding, we are able to scale the system to a much larger compartmentalized system, especially to
+eukaryotic cells with a total number of 10 compartments.
+%
+Furthermore, we experimented with limits of our tools and found
+that $\zthree$ was able to solve the constraints up to $\sim{14-18}$ n
+odes.
+
+
 
 \subsection{SynthVTS (QBF based synthesis tool)} 
 We have implemented the encodings in a tool
