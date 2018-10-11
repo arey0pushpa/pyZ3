@@ -1,17 +1,23 @@
+
+
 We have developed three different tools (satVTS, smtVTS, synthVTS) for implementation of proposed encodings. All the experiments were done on a machine with Intel(R) Core(TM) i3-4030U CPU @ 1.90GHz processor and 4GB RAM with 30 min (1800 sec) timeout.
+
+\input{result-table}
+
 \subsection{SATVTS (Bounded model checker based tool)} 
 The first tool is implemented using model checking tool for C program CBMC~\cite{clarke2004tool}.
 %
+CBMC is a Bounded Model Checker for C and C++ programs. 
+%
 Unlike a general model checker~\cite{cimatti2002nusmv}, CBMC checks the verified property for all the possible states, only up to a certain “depth,” a parametric limit on the size of the model.
 %
-CBMC allows the depth of model to be incrementally increased to any desired value.
+The depth of model is specified by the user and can be  incrementally increased to a desired value.
 
-CBMC consists of a C-language front-end (CFE) and SAT Solver back-end (SAT).
+The CBMC architecture consists of a C-language front-end (CFE) and a SAT Solver back-end (SAT). 
 %
-CBMC accepts ANSI-C programs interspersed with special annotations (called assumes and assertions) to express constraints on the model and properties to be checked. 
+CBMC front end accepts ANSI-C programs with some special annotations (called assumes and assertions) to express constraints on the model and properties to be checked. 
 %		
-In our experiments, the vesicle transport network was modeled as a non-deterministic C-program manipulating a graph with labeled edges with the fusion rules and steady state properties expressed as constraints
-using assumes. 
+In our experiments, the vesicle transport network was modelled as a non-deterministic C-program manipulating a graph with labelled edges with the fusion rules and steady state properties expressed as constraints using assumes. 
 %		
 The correspondence relationship between connectedness conditions
 and guarantees for steady state were expressed as assertions to be checked. 
