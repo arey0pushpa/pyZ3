@@ -1,5 +1,53 @@
-SAT and SMT solvers are a perfect fit for solving combinatorial problems due to their exhaustive nature of searching. 
+\begin{table}[!ht]
+	%\begin{adjustwidth}{-2.25in}{0in} % Comment out/remove adjustwidth environment if table fits in text column.
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline 
+		\textbf{N} & \textbf{Total Number of graphs} \\ \hline
+		1.         & 0                               \\ \hline
+		2.         & 0                               \\ \hline
+		3.         & 0                               \\ \hline
+		4.         & 1                               \\ \hline
+		5.         & 2                               \\ \hline
+		6.         & 15                              \\ \hline
+		7.         & 121                             \\ \hline
+		8.         & 2159                            \\ \hline
+		9.         & 68715                           \\ \hline
+		10.        & 3952378                         \\ \hline
+	\end{tabular}
+	\label{tab-graphs}
+     \caption{Number of simple 3-edge-connected unlabeled N-node graphs.}
+	%\end{adjustwidth}
+\end{table}
+
+The analysis of vesicle traffic systems is a difficult problem
+because of the combinatorial scaling of possible traffic topologies and regulatory rules. 
 %
+For example, we might want to check some conjecture of interest for all 3-connected graphs and
+all possible variations of SNARE regulation rules. 
+%
+The number of graphs of specified connectivity grows exponentially with the number of nodes: Table~\ref{tab-graphs} shows how many 3-edge-connected graphs~\cite{a052448-oeis} exist (without parallel or self edges) as node number N increases.
+%
+
+Previous analyses of VTS have mostly been based on sampling approach~\cite{mani2016wine, mani2016stacking}. 
+%
+In these analyses, vesicle traffic is
+modeled as a dynamical system. 
+%
+The traffic rule specifies how the system transitions from one
+time point to the next. 
+%
+Given a traffic rule and an initial condition, the system is evolved over time until a steady state is reached. By studying a large sample of randomly generated traffic
+rules, such analyses can make statistical claims about vesicle traffic.
+%
+Hence making precise general prediction about the properties of vesicle traffic networks over all possible traffic rules, not just for a sampled subset is not possible.
+%
+SAT and SMT solvers are a perfect fit for this situation, solving combinatorial problems with their exhaustive nature of searching. 
+%
+These tools check a specified logical property
+on every possible state of a model constructed using variables ranging over Boolean or any
+finite discrete type.
+
 Improvement in SAT and SMT solvers in the past decades have led to their use in modeling and understanding complex biological systems~\cite{heule2010exact,yordanov2013smt,mangla2010timing}. 
 %
 Many of which involve reasoning about graphs and networks rules with possible exhaustive search and hence can be reduced to solving a SAT/SMT question. 
