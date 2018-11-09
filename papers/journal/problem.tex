@@ -1,0 +1,62 @@
+This section will present the different search problems of VTS.
+
+\subsection{SMT}
+
+\paragraph{Search problem}
+Based upon earlier discussion, we need to answer the following search
+question among VTSs.
+For a given $k$, size $\nu$, and molecule number $\mu$,
+we are searching for well-structured, stable, and well-fused VTS
+$G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ such that
+$|\nodes| = \nu$, $|\mols| = \mu$, and
+$G$ is not $k$-connected.    
+
+
+\subsection{BMC}
+The notion of stability and connectivity varies slightly for BMC encoding. 
+
+%
+We call $G$ {\em stable} if for each $(n,M',n') \in \edges$ and $m \in M'$,
+there exists a $m$-path in G with $n_1 = n'$ and $n_\ell = n$.
+%
+
+%
+We call $G$ {\em connected} if for each $n,n' \in \nodes$,
+$n'$ there is a path from $n$ to $n'$ in G.
+%
+We call $G$ $k$-connected if for each $\edges' \subseteq \edges$ and $|\edges'| < k$,
+VTS $(\nodes,\mols,\edges-E',\nlabel,\pairs,\edgef,\nodef)$ is connected.
+%
+
+We use $m$-${path}_i^j$ to denote an $m$-path between source node i and target node is j. 
+
+For the experimentation, we will restrict ourselves to the cycles of length one. 
+%
+This restriction puts an upper limit of N on the length of each searched path. 
+%
+Creating a formula to search a path of length N for each molecule m on every edge E will be extremely large and harder for the solvers to handle.  
+%
+Even if there exist shorter paths we have to create the formula of maximum size N. 
+% 
+To resolve the these problems we will use a technique called bounded model checking, where the depth of the path can be specified and consequently increased or decreased.  
+%
+This specified depth is called unwinding in the technical terms.
+%and can be specified for each path separately.
+
+\paragraph{Search problem}
+Based upon earlier discussion, we need to answer the following search
+question among VTSs.
+For a given $k$, size $\nu$, molecule number $\mu$, and unwinding depth w,
+we are searching for well-structured, stable, and well-fused VTS
+$G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ such that
+$|\nodes| = \nu$, $|\mols| = \mu$, and $G$ is not $k$-connected with w length of unwinding.    
+
+\subsection{QBF and synthesis}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
+             

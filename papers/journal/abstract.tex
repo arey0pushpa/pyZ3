@@ -1,33 +1,22 @@
-Vesicle Traffic Systems (VTSs) are the material transport 
+Vesicle Traffic Systems (VTSs) are the material transport
 mechanisms among the compartments inside the biological cells.
 %
 The compartments are viewed as nodes that are labeled with the
 containing chemicals and the transport channels
 are similarly viewed as labeled edges between the nodes.
 %
+Several interesting questions about VTS translates to combinatorial
+search and synthesis problem. 
+%
+We present novel SAT, SMT and QBF based encodings of the properties
+over vesicle traffic systems and a tool that searches for the networks
+that satisfies the properties using these solvers. 
+%
 Understanding VTSs is an ongoing area of research and for many cells
-they are partially known.
+they are partially known...
 %
-For example, there may be undiscovered edges, nodes, or their labels
-in a VTS of a cell.
-%
-It has been speculated that there are properties that the VTSs must
-satisfy.
-%
-For example, stability, i.e., every chemical that is leaving a
-compartment comes back.
-%
-Many synthesis questions may arise in this scenario, where we want
-to complete a partially known VTS under a given property.
-%
-In the paper, we present novel encodings of the above questions
-into the QBF (quantified Boolean formula) satisfiability problems.
-%
-We have implemented the encodings in a highly configurable tool
-and applied to a couple of found-in-nature VTSs and 
-several synthetic graphs.
-%
-Our results demonstrate that our method can scale up to the graphs of interest.
+In our experiments, we show that our tool can search for network of sizes that are considered
+to be relevant by biologists.
 
 % Vesicle Traffic Systems(VTSs) are the material transport 
 % mechanisms among the compartments inside the biological cells.

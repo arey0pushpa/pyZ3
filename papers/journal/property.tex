@@ -1,0 +1,87 @@
+The conjecture relates graph-connectedness to a particular variation of SNARE pairing and regulation rules of the VTS.
+%
+We are interested in the following two type of properties of the transport graph:
+
+\begin{enumerate}
+\item Existential condition:
+%the structural connectedness of the transport graph required for the system driven by a particular set of rules. 
+structural connectedness of a transport graph which satisfies the stated set of rules. 
+
+%there is a transport graph with the structural connectedness which satisfies the stated set of rules. 
+
+%that a transport graph satisfies driven by a particular set of rules. 
+%And we are interested in the least one. 
+
+\item Universal condition: 
+%every graph with the structural connectedness satisfies the stated set of rules. 
+the structural connectedness that ensures every transport graph with that fundamental structure satisfies the stated set of rules. 
+%The goal is to find the minimum graph connectivity that satisfies sufficient condition.
+\end{enumerate}
+
+The goal is to find the minimum graph connectivity that satisfies each of these condition.
+
+%We express both these conditions as assertions in our program.
+
+\subsubsection{Checking existential conditions} 
+In our program, the rules VTS needs to follow 
+%
+%are we represent the stability, fusion, SNARE pairing and regulation rules, and the connectedness property that the system needs to follow, as 
+%
+are represented as constrained over the transport graphs (G), label on the nodes and edges and activity of those labels (determined by a Boolean function f). 
+%
+Each of these constrained functions is defined to be TRUE for a G and f: if and only if the corresponding condition holds for the given G and f. 
+%
+We use these functions to define the assertion that characterizes the existential condition to be checked. 
+%
+We will show in later sections how we encode these Boolean functions. 
+
+
+To ensure that k-connectedness is an existential condition, we have to find a k-connected graph that satisfies all the rules (and constraints) of the system. 
+%
+We also have to ensure that the particular k is the least one. 
+%
+%Let's fix our conjecture: ``k-connectedness is a necessary condition for the system regulated by a Boolean function on the node and SNARE-SNARE inhibition on the edge". 
+%
+To find a k-connected graph (G) we specify our property as a query for the existence of a model for a conjunction of the formula representing stability, fusion and specific graph connectivity constraint. 
+%
+
+\begin{align*}
+  &\texttt{LabeledVTS} = \texttt{Stability} \, \land \, \texttt{Fusion} \land \, \texttt{MinConnectivity(k)} 
+\end{align*}
+
+We will start with the value of k = 1 and check for the satisfiability of the above formula.
+%
+In case the formula is satisfiable the procedure terminates and we report the value of k. 
+%
+If the formula is not satisfiable we increment the k by 1 and perform the same procedure. 
+%
+In this way, we ensure that the reported k is the minimum connectivity of the VTS that satisfies the existential condition.  
+% Used E as edge and L_e L_n as label for node and the edge,
+
+\subsubsection{Checking universal conditions}
+
+Similarly, for the conjecture that k-connectedness is a universal condition for the VTS, we have to ensure that every graph of k-connected structure satisfies all the rules (and constraints) of the system. 
+%
+We also have to ensure that the particular k is the least one. 
+%
+This condition can be specified as: for every k-connected graph, there exists a satisfiable assignment following the rules of the system. 
+
+\begin{align*}
+  & \forall G \, \texttt{Connectivity(k)} \implies  \exists
+                        f,p: \texttt{Stability} \, \land \, \texttt{Fusion}  
+\end{align*}
+
+Note that the specification of this requires quantifier alternation. 
+%
+Most SAT solvers can check (at least efficiently) only quantifier-free formulas. 
+%
+%To handle this challenge, we used a combination of nondeterminism and Boolean enumeration at the C-source level to eliminate quantifiers, as explained further below.
+We will use the same procedure as the existential condition to ensure the k to be the least one.
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
+          
