@@ -308,7 +308,7 @@ NOracle (m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} | {m-path}_i^j | = l
 
 Now we can encode stability using the NOracle and say if there is an $m$-edge between $i$ and $j$, there is a $m$-path from $j$ to $i$ of length max w.
 \begin{align}
- \bigwedge\limits_{i,j,m} (\bigvee_{q} e[i][j][q][m]) \limplies NOracle(m, j, i, w)
+ \bigwedge\limits_{i,j,m} (\bigvee_{q} bv\_e_{i,j,q,m} > 0) \limplies NOracle(m, j, i, w)
   \tag{S2}\label{eq:reachbmc2}
 \end{align}
 
