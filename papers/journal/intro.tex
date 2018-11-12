@@ -1,3 +1,202 @@
+\textbf{Components of the vesicle transport network}:
+The vesicle transport network is used by cells to transport molecules across compartments.
+% 
+The mechanism of vesicle transport can roughly be broken down into two steps: budding of vesicles from the source compartment and their fusion with the target compartment.
+%
+Vesicle budding involves three steps:
+\begin{enumerate}
+	\item  \textbf{Sorting of cargo molecules by cytosolic adaptor molecules}. 
+	 Cargo adaptors bind to short linear stretches of amino acids in the cargo molecules called sorting signals and thereby sequester them for packaging. 
+	 %
+	 Different adaptor proteins act at different compartments, for eg., sec23/24 is required
+	for packaging vesicles that form at the ER, the AP2 adaptor is used for packaging vesicles at the plasma membrane, etc. 
+	%
+	Adaptors are recruited to the source compartments through interactions with
+	the lipids that form the source compartment's membrane, and interactions with Arf/Sar GTPases which signal the initiation of vesicle formation~\cite{paczkowski2015cargo}.
+	
+	\item \textbf{Membrane deformation, which involves cytosolic coat proteins}.
+	   Coat proteins are recruited to the forming vesicle through their interaction with adaptor proteins. 
+	   %
+	   These are naturally curved proteins, and their assembly on membranes leads to membrane deformation.
+	   %
+	   A single kind of coat protein can bind to multiple kinds of adaptors, thereby allowing the packaging of multiple types of cargo within the same vesicle. 
+	   %
+	   Clathrin, COP2 and COP1 are the three major kinds of coat proteins
+	   in eukaryotic cells. 
+	   %
+	   The clathrin coat operates at multiple compartments, and can interact with
+	   multiple adaptors proteins, whereas the COP2 and COP1 coat are only involved in vesicle formation at a single compartment; the ER and the Golgi respectively~\cite{faini2013vesicle}
+	   
+	   
+	 \item \textbf{Pinching of vesicles from the source compartment by dynamin}.
+	 The final step in vesicle formation is its piching off from the source compartment.
+	 %
+	 This process requires ATP and is performed by the cytosolic dynamin proteins, which are recruited to the vesicle neck by the coat proteins~\cite{cocucci2014dynamin}
+\end{enumerate}
+
+Vesicle fusion involves two steps:
+\begin{enumerate}
+	\item \textbf{Recognition of the correct target compartment}. 
+	      This is a complex process involving Rab
+	      GTPases and tethering complexes:
+	    
+	    \begin{enumerate}[label=(\roman*)]
+	    	\item \textbf{Rab GTPases}  are small proteins which occur in two forms: the membrane associated and active
+	    	GTP bound form, and the cytosolic and inactive GDP bound forms. 
+	    	%
+	    	Different compartments of the
+	    	cell are associated with a different type of Rab protein. In their active form, Rabs recruit many
+	    	downstream proteins, including tethering complexes, fusion regulators, motor proteins, sorting
+	    	adaptors, etc, to the membrane they are associated with. 
+	    	%
+	    	The proteins that are recruited by active
+	    	Rabs are called Rab effectors.
+	    	%
+	    	Rab activity is controlled by two proteins: GEFs turn Rabs on and
+	    	GAPs turn them off. 
+	    	%
+	    	Each Rab has its own specific GEF and GAP. In some cases, GEFs and GAPs
+	    	themselves can be Rab effectors, thus generating feed-forward and feedback loops. 
+	    	%
+	    	In their cytosolic, inactive form, Rabs are complexed with GDI proteins, and it is in this form that Rabs are presented to membrane bound GEFs for activation~\cite{muller2018molecular}
+	    	
+	    	\item \textbf{Tethering complexes} sequester vesicles to their target compartments and regulate SNARE
+	    	proteins, which enable vesicle fusion. 
+	    	%
+	    	Tethers are believed to bind to SNAREs and function as
+	    	chaperones for SNARE complex assembly which is the ultimate step in membrane fusion. 
+	    	%
+	    	There are two types of tethering complexes: multi subunit tethers and long coiled-coil tethers:
+	    	
+	    	\begin{enumerate}[label=(\alph*)]
+	    		\item \textbf{Coiled coil} tethers are long, single subunit proteins. 
+	    		%
+	    		These tethers are believed to bind the
+	    		vesicle on one end and the target compartment on the other end, thereby bridging the two before
+	    		fusion.
+	    		%
+	    		A clear mechanism for action of these tethers is missing, but based on their interactions with
+	    		other proteins of the traffic machinery, some hypotheses as to their mechanism of action have been
+	    		put forth. 
+	    		%
+	    		Golgins, coiled coil tethers that are anchored at the Golgi by a transmembrane domain, contain a large number of binding sites for Rab GTPases. 
+	    		%
+	    		Thus, golgins might capture vesicles by
+	    		binding vesicle-associated Rab proteins. 
+	    		%
+	    		Golgins also contain domains which can sense membrane
+	    		curvature, which they could be using to recognize vesicles. 
+	    		%
+	    		They might also be interacting directly
+	    		with vesicle SNAREs~\cite{baker2016chaperoning}.
+	    		
+	    		\item \textbf{Multi-subunit tethering complexes (MTCs)} are composed of three or more different
+	    		subunits.
+	    		%
+	    		MTCs are known to interact with vesicle coat proteins, Rab GTPases, SNAREs and SM proteins.
+	    		%
+	    		For example, the HOPS complex, which is required for homotypic (fusion of two identical
+	    		membranes) and heterotypic fusion in the endo-lysosomal system, was shown to tether membranes
+	    		through its interactions with the membrane-associated Rab GTPase Ypt7, acidic phospholipids and
+	    		SNAREs. 
+	    		%
+	    		The HOPS complex binds both individual SNAREs and SNARE complexes. It also
+	    		seems to protect assembling trans-SNARE complexes from premature disassembly. 
+	    		%
+	    		Another example is given by the Dsl1 complex, which is anchored to the ER membrane through interactions
+	    		with t-SNAREs. 
+	    		%
+	    		At the other end, the Dsl1 complex contains multiple binding sites for COPI
+	    		(vesicle coat that is present on vesicles produced by the Golgi). 
+	    		%
+	    		This structure suggests that the Dsl1
+	    		complex functions as a tether connecting COPI-coated vesicles to their target organelle, the ER~\cite{baker2016chaperoning}.
+	    		
+	    	\end{enumerate}
+    		    
+      \end{enumerate}
+	  
+	  \item \textbf{Fusion of vesicle with the target compartment} is brought about by SNARE proteins. 
+	  %
+	  SNAREs
+	  are defined by a 60- to 70-residue SNARE motif. Most SNAREs are anchored to the membrane by
+	  their C-terminal transmembrane helices. 
+	  %
+	  The formation of a productive SNARE complex requires
+	  the formation of a four-helix bundle containing four different SNARE motifs. Usually, one of these
+	  motifs is contributed by the SNARE on the vesicle membrane (v-SNAREs), and the other three
+	  motifs by SNAREs on the membrane of the tartget compartment (t-SNAREs). 
+	  %
+	  Alternatively, they
+	  can be defined by their amino acid sequences as R-, Qa-, Qb-, and Qc-SNAREs. A few SNARE
+	  proteins, such as SNAP25, contain both Qb- and Qc-SNARE motifs.
+	  %
+	  Most v-SNAREs are RSNAREs, and most t-SNAREs are Q-SNAREs~\cite{yoon2018snare}.
+	  
+	  
+\end{enumerate}
+
+Many SNAREs also have N-terminal domains that regulate SNARE complex assembly and/or
+interact with other parts of the vesicle fusion machinery. 
+%
+Qa-SNAREs have an amino terminal
+domain called the Habc domain, which can fold back on the SNARE domain and hold the QaSNARE
+in an inactive state. 
+%
+This inactivated state is stabilized by interactions with SM proteins~\cite{yoon2018snare}.	      
+
+A subset of R-SNAREs (the longin SNAREs) possess an amino-terminal domain called the longin domain. 
+%
+In addition to regulation of SNARE activity as in the case of the Qa-SNARE Habcdomains,
+these longin domains also regulate the localization of longin SNAREs through their
+interaction with adaptor proteins~\cite{daste2015structure}.
+
+Different vesicle-target compartment pairs in the cell are associated with unique SNARE
+complexes.
+%
+Membrane fusion converts the trans-SNARE complex (v- and t- SNAREs on opposite
+membranes) into a cis-SNARE complex (both v- and t- SNAREs on the same membrane).
+Disassembly of cis-SNARE complexes requires Sec17 and Sec18 (the yeast SNAP and NSF
+protein, respectively). 
+%
+This process requires energy which is released by the hydrolysis of ATP.
+
+\textbf{SNAREs are regulated by SM proteins}, which have three modes of action: SM proteins can hold
+the Qa-SNAREs in an autoinhibited state and prevent or postpone their assembly into SNARE
+complexes.
+%
+ Secondly, some SM proteins have been seen to act as a template upon which a halfzippered
+complex between the Qa- and R-SNAREs (an early SNARE complex intermediate) can
+form. 
+%
+In this mode, by choosing an R-SNARE located on the opposite membrane, SM proteins
+could be imposing a filter inhibiting the formation of futile cis-SNARE complexes and promoting
+trans-SNARE complexes.
+%
+Finally, SM proteins bind the four-helix bundles formed by assembled
+SNARE complexes.
+%
+ This mode of binding of SM proteins might protect assembled SNARE
+complexes from premature disassembly by NSF and SNAPs and/or might stimulate fusion directly~\cite{baker2016chaperoning}.
+%
+SM proteins have also been shown to interact with tethers~\cite{yoon2018snare}.
+
+\textbf{Major paths in the vesicle transport network}:
+Molecules traverse the cell in a series of vesicles, and there are two major such routes of transport in all eukaryotic cells:
+\begin{enumerate}
+	\item the secretory route, which takes proteins from the ER, their site of production, to the plasma
+	membrane, from where they are secreted out of the cell.
+	\item the endocytic route, which takes proteins from the outside of the cell through the plasma
+	membrane to the endocytic compartments, where they are digested.
+\end{enumerate}
+
+Other paths are used for cross talk between the secretory and the endocytic routes.
+%
+There are also cyclic paths for recycle of proteins which are necessarily dislodged during the process of vesicle traffic back to their original compartments. 
+
+
+\textbf{Biological Model of VTS}
+%
 A characteristic feature of eukaryotic cells is the presence of multiple internal membrane bound organelles. 
 %
 These organelles exchange molecules amongst themselves in small membrane bound packets called vesicles. 
