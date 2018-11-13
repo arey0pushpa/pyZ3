@@ -1,4 +1,7 @@
-In this section we will present the SAT, SMT and QBF based encoding of both the search and the synthesis problem. We will start with the SMT based encoding and later present the contrast with the BMC encoding.
+\externaldocument{sat-table}
+\externaldocument{smt-table}
+
+In this section we will present the BMC, SMT and QBF based encoding of both the search and the synthesis problem. We will start with the SMT based encoding and later present the contrast with the BMC encoding.
 
 \subsection{SMT based encoding}
 
@@ -237,45 +240,53 @@ unreachable pair of nodes in the underlying undirected graph.
 
 \subsection{BMC based encoding}
 
-The BMC encoding differs with presented SMT encoding slightly in the way variables are represented and how we encode reachability.  
+The BMC encoding differs with the presented SMT encoding slightly in the way variables are represented and how we encode reachability.  
 %
-Variables are not Boolean indexed with multiple dimensions but multidimensional arrays. 
+Variables are not Boolean indexed with multiple dimensions but arrays of bitvectors of size $\mu$. 
 %
-For clarity, we will only present the stability encoding.  
-
-We initialize the system with a fixed number of node size (N) and distinct molecular types (M). 
-%
-We use a two-dimensional array variable \textit{Graph}[N][N] to represent the transport graph. The graph variable is set to x, Graph[i][j] = x, if there are exactly x edges between node i and j. 
+%We initialize the system with a fixed number of node size (N) and distinct molecular types (M). 
+%%
+%We use a two-dimensional array variable \textit{Graph}[N][N] to represent the transport graph. The graph variable is set to x, Graph[i][j] = x, if there are exactly x edges between node i and j. 
 %\begin{align*}
 %graph [i] [j] = x.
 %\end{align*}
-
 %
-The nodes are represented as a bitvectors of size M with each bit corresponding to the presence or the absence of the molecule. 
+For example the edges are represented as a bitvectors of size M with each bit corresponding to the presence or the absence of the molecule. 
 %
 The index of the bitvector implicitly determines the corresponding molecule we are referring to.
+
+\begin{enumerate}
+	\item Bit vector $bv\_e[i][j][q]$ represent the $q$th edge between $i$ and $j$.
+\end{enumerate}
+
+
 % 
 
 The molecule set is divided into Q and R-SNAREs. 
 %
 For clarity, we consider both in the same amount and represent the first half of the bitvector as  Q-SNAREs and rest as R-SNAREs.
 %
-A node in the system with M = 4 molecules is interpreted as a tag [M1, M2, M3, M4]. 
+An edge in the system with M = 4 molecules is interpreted as a tag [M1, M2, M3, M4]. 
 %
 Where M1, M2 are Q-SNAREs and M3, M4 are R-SNAREs.
 %
 Also, each $M_i$ can be either 0 or 1, representing the presence or absence of the molecule i.
 %
-Similarly, an edge in the graph is also tagged as a bitvector of length M.   
+
+\textbf{Example 1} The variable bv\_e[1][2][1] = 1001 represent first edge between node 1 and node 2 with molecule M1 and M4 present. 
+
+Similarly, a node in the graph is also tagged as a bitvector of length M.   
 %
 We leave the graph completely arbitrary and add the constraint to enforce that the graph is k-connected. 
+%
+For clarity, we will only present the stability encoding.  
 
 In order to specify the stability condition, we use a combination of enumeration and nondeterminism.
 %
 Nondeterminism can be considered as an oracle that guesses a correct $m$-path for a specific m if it exists. 
 %
 We then use this path as a witness to ensures that stability is maintained for each outgoing molecule m on every edge E.
-
+%
 
 \subsubsection{Constraints for stability condition}
 %
@@ -308,7 +319,7 @@ NOracle (m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} | {m-path}_i^j | = l
 
 Now we can encode stability using the NOracle and say if there is an $m$-edge between $i$ and $j$, there is a $m$-path from $j$ to $i$ of length max w.
 \begin{align}
- \bigwedge\limits_{i,j,m} (\bigvee_{q} bv\_e_{i,j,q,m} > 0) \limplies NOracle(m, j, i, w)
+ \bigwedge\limits_{i,j,m} (\bigvee_{q} (bv\_e[i][j][q] >> m) > 0) \limplies NOracle(m, j, i, w)
   \tag{S2}\label{eq:reachbmc2}
 \end{align}
 
@@ -343,7 +354,7 @@ By adding the path length, we break the circular dependencies, the
 constraint remains polynomial in size, and satisfying assignments only
 correspond to correct reachability.
 
-\subsection{SMT problems for different variants}
+\subsection{BMC and SMT problems for different variants}
 %\ankit{Bring model variant table here}
 
 We have encoded the following variants of VTSs.

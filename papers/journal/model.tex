@@ -54,7 +54,7 @@ nodes and edges respectively.
 
 % Let $\pairs(M')$ denote $\{P\setminus M'|  P \in \pairs \text{ and } P \intersect M' \neq \emptyset \}$.
 
-\subsection{BMC and SMT}
+\textbf{Fusion condition in BMC and SMT:}
 $\pairs$ defines which molecules can fuse with which molecules.
 %
 Let $\pairs(M')$ denote $\{m|(m,m') \in P \text{ and } m' \in M'\}$.
@@ -85,7 +85,7 @@ not constrained by $\nodef$ and $\edgef$, etc.
 %
 
 
-\subsection{QBF and synthesis}
+\textbf{Fusion condition in QBF and synthesis:}
 %
 A molecule $k$ is {\em active} at node $n$ if $k \in \nlabel(n)$ and
 $\nodef(k,\nlabel(n))$ is true.
@@ -128,7 +128,6 @@ Each edge must be uniquely supported by such a quadruple of molecules.
 %
 We also require three of them to be on the node or edge, and the forth one
 to be on the other side of the fusion.
-
 % $\pairs(M'')$ are not active in any other node.
 
 % We will also consider several variations of the model.
@@ -137,7 +136,9 @@ to be on the other side of the fusion.
 % not constrained by $\nodef$ and $\edgef$, etc.
 %
 
-\subsection{Uniform}
+\vspace{0.2cm}
+%\subsection{Uniform}
+\noindent
 A {\em path} in $G$ is a sequence $n_1,...,n_\ell$ of nodes 
 such that $(n_i,\_,n_{i+1}) \in \edges$ for each $ 0 < i < \ell$.
 %
@@ -183,8 +184,11 @@ Let us discuss rough sizes of the system and expected behaviors.
 %
 A typical VTS may have about 10 compartments.
 %
+%Across eukaryotes, there are 20 broad SNARE varieties, though individual species can
+%contain higher numbers (humans have 41)~\cite{kloepper2007elaborate}..
+
 The VTS may transport a large number of molecules but the molecules that
-are relevant of the control of VTS are about 50~\cite{doWeKnowThis}.
+are \todo{SA: commented line above} relevant of the control of VTS are about 50~\cite{kloepper2007elaborate}.
 %
 According to the definition the activity of molecules can be controlled by
 the presence of all other molecules.

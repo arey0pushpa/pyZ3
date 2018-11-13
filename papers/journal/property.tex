@@ -22,7 +22,6 @@ The goal is to find the minimum graph connectivity that satisfies each of these 
 
 %We express both these conditions as assertions in our program.
 
-\subsubsection{Checking existential conditions} 
 In our program, the rules VTS needs to follow 
 %
 %are we represent the stability, fusion, SNARE pairing and regulation rules, and the connectedness property that the system needs to follow, as 
@@ -31,10 +30,11 @@ are represented as constrained over the transport graphs (G), label on the nodes
 %
 Each of these constrained functions is defined to be TRUE for a G and f: if and only if the corresponding condition holds for the given G and f. 
 %
-We use these functions to define the assertion that characterizes the existential condition to be checked. 
+We use these functions to define the assertion that characterizes the corresponding condition to be checked. 
 %
 We will show in later sections how we encode these Boolean functions. 
 
+\subsubsection{Checking existential conditions} 
 
 To ensure that k-connectedness is an existential condition, we have to find a k-connected graph that satisfies all the rules (and constraints) of the system. 
 %
