@@ -1,0 +1,35 @@
+
+
+\begin{table}[t]
+	\centering
+	% \def\arraystretch{1.6}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		{\multirow{2}{*}{\textbf{Variant}}}  &
+		\multicolumn{2}{c|}{\textbf{Constraints}} &
+		{\multirow{2}{*}{\textbf{Graph connectivity}}}
+		% \multicolumn{2}{c|}{\textbf{Graph connectivity}}
+		\\
+		\cline{2-3}
+		&  \textbf{Rest} & \textbf{Activity} &  % & \textbf{Sampling: Guarantee}
+	\\ \hline
+	
+	A. & \multirow{5}{*}{
+		\makecell{ \ref{eq:f0}--\ref{eq:fuse2},\\
+			\ref{eq:reach1},\ref{eq:reach2},\\
+			\ref{eq:drop1}--\ref{eq:drop4}}
+	}
+	& \ref{eq:ann},\ref{eq:aen} & No graph     \\\cline{3-4}
+	B. & & \ref{eq:anb},\ref{eq:aen} & No graph     \\\cline{3-4}
+	C. & & \ref{eq:ann},\ref{eq:aeb} & 3-connected  \\\cline{3-4}
+	D. & & \ref{eq:anb},\ref{eq:aeb} & 2-connected  \\\cline{3-4}
+	E. & & \ref{eq:ann},\ref{eq:aep} & No graph     \\\cline{3-4}
+	F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected  \\\hline
+	
+	% C_es :Self edges are allowed
+	% C_ed : Every edge is distinct 
+\end{tabular}
+\caption{{\bf Activity regulation of molecules vs. graph connectivity.
+}}
+\label{tab:smt-grph}
+\end{table}
