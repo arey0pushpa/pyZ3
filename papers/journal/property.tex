@@ -46,7 +46,8 @@ To find a k-connected graph (G) we specify our property as a query for the exist
 %
 
 \begin{align*}
-  &\texttt{LabeledVTS} = \texttt{Stability} \, \land \, \texttt{Fusion} \land \, \texttt{MinConnectivity(k)} 
+  &\texttt{LabeledVTS} = \texttt{Stability} \, \land \, \texttt{Fusion} \land \, \texttt{MinConnectivity(k)}
+ \tag{E}\label{eq:existcond}
 \end{align*}
 
 We will start with the value of k = 1 and check for the satisfiability of the above formula.
@@ -57,6 +58,7 @@ If the formula is not satisfiable we increment the k by 1 and perform the same p
 %
 In this way, we ensure that the reported k is the minimum connectivity of the VTS that satisfies the existential condition.  
 % Used E as edge and L_e L_n as label for node and the edge,
+
 
 \subsubsection{Checking universal conditions}
 
@@ -69,14 +71,17 @@ This condition can be specified as: for every k-connected graph, there exists a 
 \begin{align*}
   & \forall G \, \texttt{Connectivity(k)} \implies  \exists
                         f,p: \texttt{Stability} \, \land \, \texttt{Fusion}  
+  \tag{U}\label{eq:univcond}
 \end{align*}
 
+We will use the same procedure as the existential condition to ensure the k to be the least one.
+%
 Note that the specification of this requires quantifier alternation. 
 %
 Most SAT solvers can check (at least efficiently) only quantifier-free formulas. 
 %
 %To handle this challenge, we used a combination of nondeterminism and Boolean enumeration at the C-source level to eliminate quantifiers, as explained further below.
-We will use the same procedure as the existential condition to ensure the k to be the least one.
+
 
 
 

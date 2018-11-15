@@ -1,11 +1,12 @@
-\externaldocument{sat-table}
-\externaldocument{smt-table}
+%\externaldocument{sat-table}
+%\externaldocument{smt-table}
+%\externaldocument{qbf-table}
 
 In this section we will present the BMC, SMT and QBF based encoding of both the search and the synthesis problem. We will start with the SMT based encoding and later present the contrast with the BMC encoding.
 
 \subsection{SMT based encoding}
 
-\subsection{Boolean satisfiability of the search problem}
+%\subsection{Boolean satisfiability of the search problem}
 
 We translate the search problem into a Boolean satisfiability
 problem and use SMT solvers to find the satisfying VTSs.
@@ -256,7 +257,7 @@ For example the edges are represented as a bitvectors of size M with each bit co
 The index of the bitvector implicitly determines the corresponding molecule we are referring to.
 
 \begin{enumerate}
-	\item Bit vector $bv\_e[i][j][q]$ represent the $q$th edge between $i$ and $j$.
+	\item Bit vector $bv\_e[i][j][q]$ represent the $q$th edge between node $i$ and $j$.
 \end{enumerate}
 
 
@@ -283,7 +284,7 @@ For clarity, we will only present the stability encoding.
 
 In order to specify the stability condition, we use a combination of enumeration and nondeterminism.
 %
-Nondeterminism can be considered as an oracle that guesses a correct $m$-path for a specific m if it exists. 
+Nondeterminism can be viewed as an oracle that guesses a correct $m$-path for a specific m if it exists. 
 %
 We then use this path as a witness to ensures that stability is maintained for each outgoing molecule m on every edge E.
 %
@@ -292,7 +293,9 @@ We then use this path as a witness to ensures that stability is maintained for e
 %
 We use NOracle to guess the required path to encode the stability condition in VTS.
 %
-The following constraint encodes that there is a $m$-path from node $i$ to node $j$ of maximum $w$ length.
+A naive implementation of NOracle is shown in~\ref{eq:reachbmc1}.
+%
+The constraint encodes that there is a $m$-path from node $i$ to node $j$ of maximum $w$ length.
 %there is a edge between $i^{\prime \prime}$ and
 %$(i \neq i^{\prime \prime})$ with $m$ present, and j is $m$-reachable from $i'$ in less than $p-1$ steps.
 %
@@ -303,7 +306,7 @@ The following constraint encodes that there is a $m$-path from node $i$ to node 
 % \end{align}
 %The NOracle can be thought of as a disjunction of $m$-path of increment length. 
 %
-The NOracle perform enumeration of $m$-${paths}_i^j$ of at most w length. 
+It performs enumeration of $m$-${paths}_i^j$ of at most w length. 
 %
 Exploring $m$-${paths}_i^j$ of length 1 which is a direct edge between $i$ and $j$ with molecule $m$ present on it, until $m$-${paths}_i^j$ of length w-1.
 %by performing series of node hops till final node destination j is reached.
@@ -318,8 +321,10 @@ NOracle (m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} | {m-path}_i^j | = l
 \end{align}
 
 Now we can encode stability using the NOracle and say if there is an $m$-edge between $i$ and $j$, there is a $m$-path from $j$ to $i$ of length max w.
+%
+We have used bv $\unrhd$ m to extract the $m^{th}$ bit of the bitvector bv. 
 \begin{align}
- \bigwedge\limits_{i,j,m} (\bigvee_{q} (bv\_e[i][j][q] >> m) > 0) \limplies NOracle(m, j, i, w)
+ \bigwedge\limits_{i,j,m} (\bigvee_{q} (bv\_e[i][j][q] \unrhd m) > 0) \limplies NOracle(m, j, i, w)
   \tag{S2}\label{eq:reachbmc2}
 \end{align}
 
@@ -396,7 +401,475 @@ The constraints for the variants can be given to a SMT solver to find
 VTSs that belong to the variants.
 
 \subsection{Universal condition}
+Recall that the specification for universal condition~\ref{eq:univcond} requires quantifier alternation. 
+%
+Most SAT solvers can not efficiently handle the quantifier in the formulas. 
+% 
+\todo{SA: Rewrite completely}But it is still possible to encode the universal condition~\ref{eq:univcond} as a SAT or SMT problem.
+% 
+We have implemented a SAT version with the current encoding of the same.
+%
+The basic idea is to conjunct the formula for each combination value of the quantified variable. 
+%
+This may blow up the formula size for the solver to solve.
 
+\input{qbf-table}
+%
+In the table~\ref{tab:satqbf-graph}, you can see that SAT version was not able to scale it to the desired results.
+%
+This is due to the fact that directly translating a quantified formula into a quantifier-free  by introducing a vector of variables for each boolean possibility will blow up the size of the formula and may not be solvable by a SAT solver.
+
+\textbf{QBF encoding of universal condition:}
+We will describe several constraints that encode VTSs in this section.
+%
+To avoid cumbersome notation, we will not explicitly write the ranges
+of the indexing in the constraints.
+%
+$i$ and $j$ will range over nodes, i.e., from $1$ to $\nu$.
+%
+$m$ will range over molecules, i.e., from $1$ to $\mu$.
+%
+$q$ will range over edges between two nodes, i.e., from $1$ to $\pi$.
+%
+
+The following constraints encode the basic consistency of VTSs. 
+%
+Recall that now the molecule set is divided into 3:1 Q and R pairs (or partition).
+\begin{align*}
+\texttt{EdgeC} =\;&\hspace{-1ex}\bigwedge\limits_{i,j,q} (\bigvee_m e_{i,j,q,m} )\limplies e_{i,j,q}
+\land
+\bigwedge\limits_{i,q} \neg e_{i,i,q}
+\land
+% \tag{\texttt{NodeC}}\label{eq:f0}\\
+\bigwedge\limits_{\mathclap{i,j,q,m}} e_{i,j,q,m} \limplies (n_{i,m} \land n_{j,m} )
+\\
+\texttt{ActivityC} =\;&
+\bigwedge\limits_{\mathclap{i,j,q,m}} b_{i,j,q,m} \limplies e_{i,j,q,m} \quad\land\quad
+\bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
+% \tag{V2}\label{eq:f1}\\
+\\
+\texttt{PairingC} =\;&
+\exists qr. \Land\limits_{\mathrlap{m_1,m_2,m_3,m_4}\;\;}
+(p_{\{m_1,m_2,m_3,m_4\}} \limplies qr_{m_1} + qr_{m_2} + qr_{m_3} + qr_{m_4} = 3) 
+% \land\\ 
+%   & \quad\quad\quad ( m_1 = m_2 = m_3 = m_4  \limplies \lnot p_{m_1,m_2,m_3,m_4} )
+% \bigwedge\limits_{m} 
+% (\Lor\limits_{m'} p_{mm'} \limplies \Land_{m'} \lnot p_{m'm} ) \land
+% (\Lor\limits_{m'} p_{m'm} \limplies \Land_{m'} \lnot p_{mm'} )
+\\
+\texttt{Fusion1} =\;&
+\bigwedge\limits_{i,j,q} e_{i,j,q} \limplies
+\bigvee_{{m_1,m_2,m_3,m_4}} (\Land_{l=1}^4 ( b_{i,j,q,m_l} \lor a_{j,m_l} ) \land 
+\Lor\limits_{l=1}^4 b_{i,j,q,m_l} \land\\
+& \qquad \qquad \qquad \qquad \Lor\limits_{l=1}^4 a_{j,m_l}\land p_{\{m_1,m_2,m_3,m_4\}})
+\\
+\texttt{Fusion2} =\;&
+\bigwedge\limits_{\mathclap{i,j,q,m_1,m_2,m_3, l \in \{1,..,3\}}} b_{i,j,q,m_1} \land ..\land b_{i,j,q,m_l} \limplies \\
+& \hspace{2cm} \neg 
+\bigvee_{\mathclap{j \neq j^{\prime}, m_{l+1}^{\prime},..,m_{4}^{\prime}}} ( a_{j^{\prime},m_{l+1}^{\prime}} \land .. \land a_{j^{\prime},m_4^{\prime}} \land p_{\{m_1,..,m_l,m^{\prime}_{l+1},..,m^{\prime}_4\}})
+\\
+\texttt{Consistancy} =\;& \texttt{EdgeC} \land
+\texttt{ActivityC} \land \texttt{PairingC} \land
+\texttt{Fusion1} \land \texttt{Fusion2} 
+\end{align*}
+\texttt{EdgeC} states that each edge has at least one molecule,
+there are no self loops, and edge labels are consistent with node labels.   
+\texttt{ActivityC} states that active molecule are present.
+\texttt{PairingC} states that all molecules are divided into two types
+using $qr_m$ bit, which encodes if $m$ belongs to one type or another,
+and any fusing set of molecules must have three molecules involved
+from one type and one molecule from the other.
+\texttt{Fusion1}, and \texttt{Fusion2} states the well-fused condition.
+\texttt{Consistancy} is the conjunction of all of the above.
+
+\paragraph{Activity functions}
+%
+We also need to encode that the activity of the molecules are
+controlled by activity functions.
+%
+The input VTS may include concrete activity functions for some molecules,
+and for the others the functions may be unknown and to be synthesized. 
+%
+The concrete functions can be given to us in many different ways,
+for example as a lookup table, or a concise Boolean formula.
+%
+In the following section, we will assume the appropriate encoding is
+used for the concrete functions and represent them by \texttt{NodeFun}$_m$
+and \texttt{EdgeFun}$_m$ for node and edge regulations respectively.
+%
+%We will use $\nodef_m$ and $\edgef_m$ to represent functions that
+%are unknown in a VTS.
+%
+% \begin{align}
+% \bigwedge\limits_{i,m} n_{i,m} \limplies a_{i,m} =  \nodef_m (n_{i,1},\dots,n_{i,\mu}) 
+% \tag{\texttt{ActiveN}}\label{eq:anb}\\
+%    \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu} )
+%   \tag{\texttt{ActiveE}}\label{eq:aeb}
+% \end{align}
+%
+%Later we will be synthesizing the unknown activity functions and 
+%replace $\nodef_m$ and $\edgef_m$ with parameterized constraints that
+%encode a space of candidate functions.
+%\subsubsection{VTS properties}
+%For the synthesis of incomplete systems,
+%we need properties against which we synthesize the missing parts.
+%
+Next, we will discuss stability and $k$-connectedness.
+%
+
+\paragraph{Stability property}
+%
+We use Boolean variable $r_{i,j,m,p}$ to indicate if there is an
+$m$-path from $i$ to $j$ of length less than or equal to $p$.
+%
+We use $m$-reachability to encode the stability condition in VTSs.
+%
+The following constraint recursively encodes that node $j$ is
+$m$-reachable from node $i$ in less than $p$ steps.
+%
+Subsequently, we encode stability condition using the reachability variables.
+\begin{align*}
+\texttt{Paths}(r) &= \bigwedge\limits_{\mathclap{i,j,m,p}} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
+\\
+\texttt{Loop}(r) &= \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,\nu}
+\\
+\texttt{Stability} &= \exists r. \; \texttt{Paths}(r) \land \texttt{Loop}(r)
+\end{align*}
+
+\paragraph{$k$-connected property}
+%
+$k$-connectedness expresses robustness against failure of few edges.
+%
+Let us use $d_{i,j,q}$ to indicate $q$th edge between $i$ and $j$ is failed
+and $r'_{i,j}$ to indicate if there is a path from $i$ to $j$ in
+the modified VTS.
+%
+% To check whether $k$-connected is a
+% necessary condition, we remove (drop) $k-1$ edges from the graph and
+% if it disconnects the graph, and we get an assignment.
+% %
+% We have a graph that is not $k$-connected.
+%
+In the following, $\texttt{Fail}(d,k)$ encodes that only
+existing edges can be failed and exactly $k-1$ edges are failed.
+%
+$\texttt{FReach}(d,r')$ defines reachability in the modified VTS.
+%
+We use a new variable $r'_{i,j,p}$ to encode reachability from
+$i$ to $j$ in at most $p$ steps.
+%
+$\texttt{Connected}(r')$ says that all nodes are reachable from any
+other node.
+\begin{align*}
+\texttt{Fail}(d,k) = & 
+\bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \land 
+\sum_{i,j,q} d_{i,j,q} = k-1\\
+% \texttt{ReachAbove}(d,r') = &
+% \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}_{i,j}\\
+\texttt{FReach}(d,r') = &\hspace{-1ex}
+\bigwedge\limits_{i,j,p}  \hspace{-1ex}r^{\prime}_{i,j,p} \hspace{-1ex}\limplies\hspace{-1ex} [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \hspace{-1pt}\lor \hspace{-2pt} (\bigvee_{\mathclap{i' \neq i}}  r^{\prime}_{i',j,p-1} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ]\\
+\texttt{Connected}(r') = & \Land\limits_{i,j} (r^{\prime}_{i,j,\nu} \lor r^{\prime}_{j,i,\nu})
+\end{align*}
+%We will be synthesizing $k$-connected graphs.
+%
+We define $\texttt{Connected}(k)$ that says for all possible valid failures
+the graph remains reachable. 
+\begin{align*}
+\texttt{Connected}(k) = & \forall d.\;
+(\texttt{Fail}(d,k) \limplies \exists r'.\;\texttt{FReach}(d,r')
+\land \texttt{Connected}(r'))
+% \\
+% \texttt{Disconnected}(k) = & \exists d.\;
+%         (\texttt{Drop}(d,k) \land \exists r'.\;\texttt{ReachAbove}(d,r')
+%                               \land \lnot \texttt{Connected}(r'))
+\end{align*}
+Since $d$ variables in $\texttt{Connected}(k)$ are universally
+quantified, $\texttt{Connected}(k)$ introduces quantifier alternations.
+%
+Therefore, synthesis against this property will require QBF reasoning.
+%
+We may make the formula quantifier free  by considering all possible failures
+separately and introducing a vector of reachability variables for each
+failure.
+%
+However, this will blow up the size of the formula and may not be
+solvable by a SAT solver.
+%
+
+\subsection{Synthesis of VTS}
+%In this section, we will present our synthesis method for
+%the synthesis problems.
+
+
+\subsubsection{Encoding Incomplete VTS}
+
+In our synthesis method, we take a VTS $G =
+(\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ as input.
+%
+We allow activity functions not to be specified.
+%
+We will use the same encoding for the VTS as discussed in the QBF subsection.
+%
+We construct the following constraints to encode the available information
+about $G$.
+%
+We encode both the present and the absent components in $G$.
+%
+Later, the constraints will help us encode the synthesis problems.
+%
+\begin{align*}
+\texttt{PresentE} &= \land \{e_{i,j,q,m}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land q \leq q' \land m \in M_q \}\\
+\texttt{PresentN} &= \land \{n_{i,m}| m \in \nlabel(i) \land i \in \nodes \}\\
+\texttt{PresentP} &= \land \{p_{\{m_1,m_2,m_3,m_4\}}| \{m_1,m_2,m_3,m_4\} \in \pairs \} \\
+\texttt{KnownActiveN} &= \land \{ a_{i,m} = \texttt{NodeFun}_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is defined.} \} \\
+\texttt{KnownActiveE} &= \land \{ b_{i,j,q,m} = \texttt{EdgeFun}_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
+| \edgef_m \text{ is defined.} \} \\
+\texttt{PresentCons} & = \texttt{PresentE} \land \texttt{PresentN} \land 
+\texttt{PresentP} \land \texttt{KnownActiveE} \land \\
+&  \texttt{KnownActiveN}
+\end{align*}
+We also collect the variables that are not set to true in $\texttt{PresentCons}$.
+\begin{align*}
+\texttt{AbsentELabel} &=
+\{e_{i,j,q,m}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land 
+0 < q \leq q' \land m \not\in M_{q} \}\\
+\texttt{AbsentE} &= \{e_{i,j,q}|(i,M_1,j),...,(i,M_{q'},j) \in \edges \land 
+q' < q \leq \pi \}\\
+\texttt{AbsentNLabel} &= \{n_{i,m}| m \not\in \nlabel(i) \land i \in \nodes \}\\
+\texttt{AbsentP} &= \{p_{\{m_1,m_2,m_3,m_4\}}| {\{m_1,m_2,m_3,m_4\}} \not\in \pairs \} \\
+\texttt{UnknownActive} &=  \Land \{ a_{i,m} = \nodef_m (n_{i,1},\dots,n_{i,\mu}) | \nodef_m \text{ is undefined.} \} \union \\
+&\quad\quad\quad  \{ b_{i,j,q,m} = \edgef_m(e_{i,j,q,1}, .., e_{i,j,q,\mu})
+| \edgef_m \text{ is undefined.} \}
+\end{align*}
+We have defined $\texttt{AbsentELabel}$, $\texttt{AbsentE}$, $\texttt{AbsentN}$, and
+$\texttt{AbsentP}$
+as sets.
+%
+They will be converted into formulas depending
+on the different usage in the synthesis problems. 
+
+% Since not all the activity functions are defined some of the functions
+% appearing in $\texttt{ActiveE}$ and $\texttt{ActiveN}$ are
+% uninterpreted function symbols.
+
+\subsubsection{Encoding synthesis constraints}
+
+Now we will consider the encodings for the
+listed synthesis problems.
+%
+The presented variations represent the encodings
+supported by our tool.
+%
+Additionally, the combinations of the variation are also possible and
+our tool easily supports them.
+%
+For simplicity of the presentation, we assume that if we are
+synthesizing an aspect of VTS, then all other aspects are fully given.
+%
+Therefore, we will describe two kinds of constraints for synthesis
+problems.
+%
+One will encode the variable part in the synthesis problem and
+the other encodes the fixed parts.
+%
+Subsequently, the two constraints will be put together with 
+$\texttt{Consistancy}$ and 
+$\texttt{Property}$ to construct the constraints for synthesis.
+
+\subsubsection{Fixing VTS by adding edges}
+%
+Now we will consider the case when we add new edges to VTS to satisfy the properties.
+%
+In the following, the pseudo-Boolean formula $\texttt{AddE}$ encodes
+that at most $slimit$ new undeclared edges may be added in the VTS.
+%
+\texttt{FixedForEdge} encodes the parts of the VTS that are not allowed to change.
+\begin{align*}
+&\texttt{AddE}(slimit) = \sum~\texttt{AbsentE} \leq slimit\\
+&\texttt{FixedForEdge} = \texttt{PresentCons} \land \texttt{UnknownActive} \land\\
+& \quad\quad\quad\quad \lnot \Lor \texttt{AbsentELabel} \;\union\;
+\texttt{AbsentNLabel} \;\union\;
+\texttt{AbsentP}
+\end{align*}
+We put together the constraints and obtain the following formula.
+\begin{align*}
+& \texttt{SynthE}(slimit) =
+\texttt{Consistancy}\land \texttt{Property} \land
+\texttt{FixedForEdge} \land
+\texttt{AddE}(slimit)
+% \tag{SynthE}\label{eq:addedge1}
+\end{align*}
+Similar to what we have seen $\texttt{Consistancy}$ encodes the basic constraints about VTS,
+$\texttt{Property}$\; encodes the goal, and
+the rest two are defined just above.
+%
+A satisfying model of $\texttt{SynthE}$ will make 
+some of the edges in $\texttt{AbsentE}$ true such that~$\texttt{Property}$ is satisfied.
+%
+We limit the addition of the edges, since we look for a fix that require minimum number
+of changes in the given VTS.
+%
+We start with $slimit = 1$ and grow one by one until $\texttt{SynthE}(slimit)$
+becomes satisfiable.
+
+In the later synthesis problems, we will construct a similar QBF
+formula with same first two parts and the last two are due the
+requirements of the synthesis problem.
+
+\paragraph{\bf Fixing VTS by adding molecules to the labels:}
+The system may also be fixed only by modifying labels on the edges or the nodes instead
+of adding edges.
+%
+Here let us consider only adding molecules to the labels of edges.
+%
+In the following, the formula encodes that only $slimit$ edge labels may be added.
+\begin{align*}
+&\texttt{AddLabelEdge}(slimit) = 
+\sum~\texttt{UnknwonEdgeLabel}  \leq slimit\\
+& \texttt{FixedForLabel} = \texttt{PresentCons} \land \texttt{UnknownActive} \land\\
+& \quad \quad \lnot \Lor \texttt{AbsentE} \;\union\;
+\texttt{AbsentNLabel} \;\union\;
+\texttt{AbsentP}\\
+&\texttt{SynthLabel}(slimit) = \\
+& \quad\quad
+(  \texttt{Consistancy}\land \texttt{Property} \land
+\texttt{FixedForLabel} \land \texttt{AddLabelEdge}(slimit) )
+\end{align*} 
+Similar to the previous encoding, we solve the
+satisfiability of the above formula to obtain additional molecules
+that may be added to the edge labels to satisfy the properties.
+
+
+
+\subsubsection{Fixing VTS by learning activity functions:}
+
+Now we consider a scenario where some of the activity functions for
+some of the molecules are missing.
+%
+The activity functions are $\mu$-input Boolean functions.
+%
+First, we choose a class of formulas for the candidate functions.
+%
+We encode the candidates in a formula with parameters.
+%
+By assigning different values for the parameters, a solver may select
+different candidates for the activity functions.
+%
+We will illustrate only one class of formulas.
+%
+However, we support other classes of formulas, for example, $k$-CNF.
+
+In the following, the formula \texttt{NNFTemplate} encodes a set of
+negation normal form functions that take $y_1,..,y_\mu$ as input and
+contain $\lambda$ literals.
+%
+We use $\texttt{Gate}$ to encode a gate that takes a parameter integer
+$x$ to encode various gates.
+%
+We use $\texttt{Leaf} $ to encode the literal at some position.
+%
+Both are stitched to define \texttt{NNFTemplate}.
+%
+To encode the set of NNF formulas with $\lambda$ literals, it has
+finite-range integer variables
+$z_1,..,z_{2\lambda}$ as parameters.
+
+% \paragraph{Encoding low depth cnf circuits}
+% \paragraph{Encoding boolean gates}
+
+\begin{align*}
+&\texttt{Gate}( x, w_1, w_2 ) = ( x  = 1 \limplies w_1  \land w_2 ) \land  
+( x = 2  \limplies w_1  \lor w_2 ) \\
+&\texttt{Leaf}( x, [y_1,..,y_\mu] ) =
+\Land\limits_{l=1}^{\mu} ( x = 2l-1  \limplies y_{l}) \land ( x = 2l  \limplies \lnot y_{l})\\
+&\texttt{NNFTemplate}([z_1,..,z_{2\lambda}],[y_1,..,y_\mu] ) = \\
+&\exists w_1,..,w_{2\lambda}.\;w_1 \land \Land_{l=1}^{\lambda} w_{\lambda+l} = \texttt{Leaf}( z_{\lambda+l}, [y_1,..,y_\mu] ) \land
+w_{l} = \texttt{Gate}( z_l, w_{2l},w_{2l+1})
+\end{align*}
+
+Using the template we define the constraints $\texttt{FindFunctions}(z,\lambda)$
+that encodes the candidate functions that satisfy the activity requirements,
+where $z$ is the vectors of parameters for encoding parameters
+for each molecule,
+and $\lambda$ limits the size of the candidate functions. 
+%
+We fix the all other aspects of the VTS to be fixed via constraints
+$\texttt{FixedForFunctions}$.
+%
+\begin{align*}
+&\texttt{FindFunctions}(z,\lambda) =\\
+&\Land \{ \bigwedge\limits_{i} n_{i,m} \limplies a_{i,m} = 
+\texttt{NNFTemplate}([z_{m,1},..,z_{m,2\lambda}],[n_{i,1},\dots,n_{i,\mu}] ) \\
+& \hspace{8cm}|
+\nodef_m \text{ is undefined}\} \\
+&\Land \{ \bigwedge\limits_{i,j,q} e_{i,j,q,m} \limplies b_{i,j,q,m} = 
+\texttt{NNFTemplate}([z_{i,j,q,1},..,z_{i,j,q,2\lambda}],[e_{i,j,q,1},..,e_{i,j,q,\mu}] ) \\
+& \hspace{8cm} | \edgef_m \text{ is undefined}
+\}\\
+& \texttt{FixedForFunctions} = \texttt{PresentCons} \land\\
+& \quad \quad
+\lnot \Lor \texttt{AbsentE} \;\union\; \texttt{AbsentELabel} \;\union\;
+\texttt{AbsentNLabel} \;\union\;
+\texttt{AbsentP}\\
+&\texttt{SynthFunction}(z,\lambda) = \\
+& \quad
+(  \texttt{Consistancy}\land \texttt{Property} \land
+\texttt{FixedForFunctions} \land \texttt{FindFunctions}(slimit) )
+\end{align*}
+We construct $\texttt{SynthFunction}(z,\lambda)$ similar to the earlier
+variations.
+%
+By reading of the values of $z$ in a satisfying model of the formula,
+we learn the synthesized function.
+
+\subsubsection{Fixing VTS by both adding/deleting parts:}
+%
+Now we will consider repairing of VTS by allowing not only addition but also
+deletion of the molecules, edges, functions, or pairing matrix.
+%
+We have encoded the repairing in our tool by introducing flip bits
+for each variable that is modifiable in the VTS.
+%
+We illustrate the repairing on one class of variables and rest can be
+easily extended.
+%
+Let us consider repairing of node labels.
+%
+For each bit $n_{i,m}$, we create a bit $flip_{i,m}$.
+%
+We add constraints that take xor of VTS assigned values for  $n_{i,m}$
+and $flip_{i,m}$.
+%
+We also limit the number of $flip_{i,m}$ that can be true, therefore
+limiting the number of flips.
+%
+The above constraints are encoded in $\texttt{FlipN}(slimit)$.
+\begin{align*}
+&\texttt{FlipN}(slimit,flip) = \Land \{n_{i,m}\lxor flip_{i,m}| m \in \nlabel(i) \land i \in \nodes \} \land \\
+& \quad \quad \quad
+\Land \{ \lnot n_{i,m}\lxor flip_{i,m}| m \not \in \nlabel(i) \land i \in \nodes \} \land  \sum\limits_{i,m} flip_{i,m} \leq slimit
+\end{align*}
+%
+Similar to the earlier variations, we construct
+$\texttt{SynthRepairNode}(slimit)$ for the repair.
+%
+In that, $\texttt{FixedForNodeRepair}$ encodes all the parts of VTS that do not change.
+\begin{align*}
+% \\ 
+& \texttt{FixedForNodeRepair} =  \texttt{PresentE} \land  
+\texttt{PresentP} \land \texttt{KnownActiveE} 
+\land \\
+& \quad \texttt{UnknownActive} \land \texttt{KnownActiveN} \land \lnot 
+\Lor \texttt{AbsentE} \;\union\; \texttt{AbsentNLabel} \;\union\;
+\texttt{AbsentP}\\
+&\texttt{SynthRepairNode}(slimit,flip) = \\
+& \quad\quad
+(  \texttt{Consistancy}\land \texttt{Property} \land
+\texttt{FixedForNodeRepair} \land \texttt{FlipN}(slimit,flip) )
+\end{align*}
+A satisfying model of $\texttt{SynthRepairNode}(slimit,flip)$ will assign some
+$flip$ bits to true.
+We will learn from the assignments the needed modifications in the VTS. 
 
 %%% Local Variables:
 %%% mode: latex

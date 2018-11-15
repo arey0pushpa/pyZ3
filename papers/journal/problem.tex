@@ -51,6 +51,64 @@ $|\nodes| = \nu$, $|\mols| = \mu$, and $G$ is not $k$-connected with w depth of 
 \subsection{QBF and synthesis}
 Here we will present the QBF and Synthesis search problem.
 
+ \todo{A dummy template} \textbf{QBF search problem:}
+For a given $k$, size $\nu$, and molecule number $\mu$,
+we are searching for well-structured, stable, and well-fused VTS
+$G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ such that
+$|\nodes| = \nu$, $|\mols| = \mu$,and
+$G$ is not $k$-connected.    
+
+%
+%In this section, we will present a list of synthesis problems that may
+%arise from the partially available information about a VTS and our synthesis method
+%for the problems.
+
+%\subsection{Problem Statements}
+\textbf{Synthesis problem statement:}
+We will assume that we are given a VTS, whose all components
+are not specified.
+%
+Our objective is to find the missing parts.
+%
+The missing parts can be in any of the components of VTS. 
+%
+For example, some undiscovered edges or nodes, or insufficient
+knowledge about the presence of molecules in some part of the VTS.
+%
+To cover most of the likely variations of this missing information,
+we have encoded the following variants of VTS synthesis problem.
+
+\begin{enumerate}
+	\item Fixing VTS by adding edges 
+	\item Fixing VTS by adding molecules to the labels
+	\item Fixing VTS by learning activity functions
+	% \begin{enumerate}
+	%   \item kcnf: low depth circuit.
+	%   \item Boolean gates: And, Or.
+	%   \item Boolean gates with linear combination.  
+	% \end{enumerate}        
+	% - Function dependence with var occurring once.
+	\item  Fixing VTS by both adding/deleting parts
+\end{enumerate}
+
+\subsubsection{Encoding synthesis property}
+
+We will do synthesis against the following property that says the VTS
+is stable and 3-connected.
+%
+% The property is designed to balance the search space such that the synthesis procedure does not
+% succeed with simply adding too many edges. 
+%
+\begin{align*}
+\texttt{Property} =  \texttt{Stability} \land \texttt{Connected}(3) 
+%\land \texttt{DisConnected}(4)
+\end{align*}
+The property was proposed in~\cite{shukla2017discovering}.
+%
+However, the biological relevance of the property is debatable and open for change.
+%
+Our tool is easily modifiable to support any other property that may be deemed 
+interesting by the biologists.
 
 
 %%% Local Variables:
