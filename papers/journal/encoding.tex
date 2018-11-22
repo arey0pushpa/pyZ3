@@ -332,10 +332,10 @@ We have used bv $\unrhd$ m to extract the $m^{th}$ bit of the bitvector bv.
 %we are not considering the variation.
 
 \subsection{The key improvement}
-The key improvement in our work over the earlier tool is the
-encoding of reachability, which was done using enumeration of paths.
+The key improvement of SMT tool over the BMC is the
+encoding of reachability, which was done using an enumeration of paths. 
 %
-In the current work, we have encoded reachability in two different
+In SMT tool, reachability is encoded in two different
 ways in constraints~\eqref{eq:reach1} and~\eqref{eq:drop3}.
 %
 The reachability is recursively defined in~\eqref{eq:drop3} and has
@@ -586,14 +586,14 @@ the graph remains reachable.
 Since $d$ variables in $\texttt{Connected}(k)$ are universally
 quantified, $\texttt{Connected}(k)$ introduces quantifier alternations.
 %
-Therefore, synthesis against this property will require QBF reasoning.
-%
-We may make the formula quantifier free  by considering all possible failures
-separately and introducing a vector of reachability variables for each
-failure.
-%
-However, this will blow up the size of the formula and may not be
-solvable by a SAT solver.
+%Therefore, synthesis against this property will require QBF reasoning.
+%%
+%We may make the formula quantifier free  by considering all possible failures
+%separately and introducing a vector of reachability variables for each
+%failure.
+%%
+%However, this will blow up the size of the formula and may not be
+%solvable by a SAT solver.
 %
 
 \subsection{Synthesis of VTS}
