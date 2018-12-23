@@ -1,14 +1,36 @@
 %\externaldocument{sat-table}
 
-We have developed three different tools (\sattool, \smttool, \ourtool) for implementation of proposed encodings. {\sattool} is based on the architecture of a Bounded model checker (CBMC) and uses an enumeration of paths for encoding the reachability problem. {\smttool} is based on the SMT solver Z3 and uses the efficient encoding of finding a least fixed point to solve reachability problem. The {\ourtool} is a synthesis tool for synthesizing incomplete information in the input VTS. It is based on the QBF encoding and uses {\depqbf} solver to solve the generated QBF. All the experiments were done on a machine with Intel(R) Core(TM) i3-4030U CPU @ 1.90GHz processor and 4GB RAM with 30 min (1800 sec) timeout.
+%We have developed four different tools (\sattool, \smttool, \qbftool, \ourtool) for implementation of proposed encodings.
+%
+We have developed the {\vtstool} tool to conjecture the properties of the VTS. 
+%
+The toolchain is divided into three different blocks. 
+%
+Checking existential condition, checking the universal condition and performing synthesis on the incomplete VTS. 
+%
+The existential condition is subdivided into two sub-block, using bounded model checking and using constraint solving. 
+%
+We will refer to existential subblocks as {\sattool} and {\smttool}, universal block as {\qbftool} and synthesis block as {\ourtool}.
+
+
+\subsection{Implementation}
+{\sattool} is based on the architecture of a Bounded model checker (CBMC) and uses an enumeration of paths for encoding the reachability problem.
+%
+{\smttool} is based on the SMT solver Z3 and uses the efficient encoding of finding a least fixed point to solve reachability problem. 
+%
+{\qbftool} is based on the QBF encoding of the universal condition and uses {\depqbf} solver to solve the generated QBF. 
+%
+The {\ourtool} is a synthesis tool for synthesizing incomplete information in the input VTS.
+%
+All the experiments were done on a machine with  Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz processor and 16GB RAM with 30 min (1800 sec) timeout.
 
 %\input{sat-table}
 
 %\input{tab:satqbf-grabh}
 %\ExecuteMetaData[result-table.tex]{tab:satqbf-grabh}
 
-\subsection{SATVTS (Bounded model checker based tool)} 
-The first tool is implemented using model checking tool for C program CBMC~\cite{clarke2004tool}.
+\textbf{{\sattool} (Bounded model checker based tool)}:
+The {\sattool} tool is implemented using model checking tool for C program CBMC~\cite{clarke2004tool}.
 %
 CBMC is a Bounded Model Checker for C and C++ programs. 
 %
@@ -37,8 +59,8 @@ CBMC has a built-in SAT solver called MiniSat~\cite{sorensson2005minisat}, but i
 %		
 MiniSat performed satisfactorily in comparison to other SAT solvers.
 
-\subsection{SMTVTS/pyVTS (SMT based tool)}
-	We have implemented the encodings for each variants using the python interface of Z3 in a tool (MAA). 
+\textbf{{\smttool} (SMT based tool)}:
+	We have implemented the encodings for each variants using the python interface of Z3 in a tool {\smttool}. 
 %
 Our tool allows the user to choose a model and the size
 of the network besides other parameters like connectivity and number of parallel edges. 
@@ -107,8 +129,9 @@ that $\zthree$ was able to solve the constraints up to $\sim{14-18}$ n
 odes.
 
 
+\textbf{{\qbftool} (QBF based synthesis tool):}
 
-\subsection{SynthVTS (QBF based synthesis tool)} 
+\input{synth-table}
 We have implemented the encodings in a tool
 called~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
 %
