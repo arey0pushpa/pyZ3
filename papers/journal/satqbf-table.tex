@@ -15,18 +15,18 @@
 			%{} & \multicolumn{2}{c|}{2-connected} & \multicolumn{2}{c|}{3-connected} & \multicolumn{2}{c|}{2-connected}  &  \multicolumn{2}{c|}{4-connected}
 			
 			\\\cline{2-5}
-			{} & {Node} & {Edge} & {Connectivity} &  {QBF-time}
+			{} & {Node} & {Edge} & {Connectivity} & {SAT-time} 
 			
 			\\\hline
-			1. & Bf & Bf & 3C & 2.12   \\\hline
-			2. & None & Bf  & 3C & 7.12  \\\hline
-			3. & Bf & SNARE inhib & 4C  & 7.66 \\\hline
-			4. & None & SNARE inhib   & M/O & 48.35 \\\hline
-			5. & Bf & None  & No graphs  & 890.84 \\\hline
-			6. &  None & None  & No graphs  & M/O \\\hline
+			1. & Bf & Bf & 3C & 1432.12  \\\hline
+			2. & None & Bf  & 3C & 779.12 \\\hline
+			3. & Bf & SNARE inhib & - & M/O  \\\hline
+			4. & None & SNARE inhib  & No graph & M/O\\\hline
+			5. & Bf & None  & No graphs & M/O  \\\hline
+			6. &  None & None  & No graphs & M/O \\\hline
 			
 	\end{tabular}
 %}
-	\caption{ QBF result and timings (in secs.)}
-	\label{tab:qbf-graph}
+	\caption{ Direct SAT encoding of universal condition (in secs.)}
+	\label{tab:satqbf-graph}
 \end{table}

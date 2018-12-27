@@ -360,6 +360,8 @@ By adding the path length, we break the circular dependencies, the
 constraint remains polynomial in size, and satisfying assignments only
 correspond to correct reachability.
 
+\input{variation-table}
+
 \subsection{BMC and SMT problems for different variants}
 %\ankit{Bring model variant table here}
 
@@ -379,7 +381,9 @@ activity of molecules on the nodes and edges.
 %
 % For the version A, every present molecule is in active state.
 %
-In the table~\ref{tab:grph}, we present the constraints involved in each version.
+
+
+In the table~\ref{tab:var-grph}, we present the constraints involved in each version.
 %
 The column two of the table shows that the constraints V1-V8, R1-R2, and D1-D4 are present
 for every variant.
@@ -414,11 +418,11 @@ The basic idea is to conjunct the formula for each combination value of the quan
 %
 This may blow up the formula size for the solver to solve.
 
-\input{qbf-table}
+\input{satqbf-table}
 %
 In the table~\ref{tab:satqbf-graph}, you can see that SAT version was not able to scale it to the desired results.
 %
-This is due to the fact that directly translating a quantified formula into a quantifier-free  by introducing a vector of variables for each boolean possibility will blow up the size of the formula and may not be solvable by a SAT solver.
+This can be due to the fact that directly translating a quantified formula into a quantifier-free  by introducing a vector of variables for each boolean possibility will blow up the size of the formula and may not be solvable by a SAT solver.
 
 \textbf{QBF encoding of universal condition:}
 We will describe several constraints that encode VTSs in this section.

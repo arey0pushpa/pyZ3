@@ -1,20 +1,25 @@
 %\textbf{Components of the vesicle transport network}:
-A characteristic feature of eukaryotic cells is the presence of multiple internal membrane-bound organelles. 
-These organelles exchange molecules amongst themselves in small membrane-bound packets called vesicles. 
+A characteristic feature of eukaryotic cells is the presence of multiple internal membrane-bound organelles called compartments.
+% 
+These compartments exchange molecules amongst themselves in small membrane-bound packets called vesicles. 
 %
-The recognition of cargo molecules to be loaded onto these vesicles and the recognition of the correct target organelles for each vesicle is performed by an intricate network of molecules called the vesicle transport system~\cite{alberts2002molecular}. 
+The recognition of cargo molecules to be loaded onto these vesicles and the recognition of the correct target compartments for each vesicle is performed by an intricate network of molecules called the vesicle transport system~\cite{alberts2002molecular}. 
 %
-We call the set of internal organelles, together with the molecular routes that connect them through vesicle exchange, the vesicle transport network. 
+We call the set of internal compartments, together with the molecular routes that connect them through vesicle exchange, the vesicle transport network. 
 %
 Vesicle traffic underpins nearly every aspect of eukaryotic cellular physiology, including
 human cellular physiology.
 %
 Understanding how this system function is, therefore,
 one of the central challenges of cell biology.
+%
+The high complexity of the problems~\cite{mani2016wine, mani2016stacking} in VTS restricts the use of traditional methods like simulation and statistical reasoning. 
+%The high complexity of problem restricts the use of traditional methods like simulation and statistical reasoning and the requirement of precise analysis makes formal methods an ideal candidate. 
+The requirement of precise analysis makes formal methods ideal candidate in this case. 
 
-\vspace{0.5cm}
-
-\textbf{Components of the vesicle transport network}:
+First, we will give an overview of the VTS mechanism and then will sketch out a few interesting problems that are key to the understanding of the VTS.
+%
+%\textbf{Components of the vesicle transport network}:
 The vesicle transport network is used by cells to transport molecules across compartments.
 % 
 The mechanism of vesicle transport can roughly be broken down into two steps: budding of vesicles from the source compartment and their fusion with the target compartment.

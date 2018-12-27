@@ -2,15 +2,19 @@
 
 %We have developed four different tools (\sattool, \smttool, \qbftool, \ourtool) for implementation of proposed encodings.
 %
-We have developed the {\vtstool} tool to conjecture the properties of the VTS. 
+We have developed the {\vtstool} tool to conjecture the properties of the VTS (explained in Section 6). 
 %
-The toolchain is divided into three different blocks. 
 %
-Checking existential condition, checking the universal condition and performing synthesis on the incomplete VTS. 
+The {\vtstool} tool includes about 10,000 lines of code.
+%
+The tool is divided into three different blocks,
+%
+checking existential condition, checking the universal condition and performing synthesis on the incomplete VTS. 
 %
 The existential condition is subdivided into two sub-block, using bounded model checking and using constraint solving. 
 %
 We will refer to existential subblocks as {\sattool} and {\smttool}, universal block as {\qbftool} and synthesis block as {\ourtool}.
+%
 
 
 \subsection{Implementation}
@@ -20,7 +24,7 @@ We will refer to existential subblocks as {\sattool} and {\smttool}, universal b
 %
 {\qbftool} is based on the QBF encoding of the universal condition and uses {\depqbf} solver to solve the generated QBF. 
 %
-The {\ourtool} is a synthesis tool for synthesizing incomplete information in the input VTS.
+The {\ourtool} is a synthesis tool for synthesizing incomplete information in the input VTS using {\qbftool}.
 %
 All the experiments were done on a machine with  Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz processor and 16GB RAM with 30 min (1800 sec) timeout.
 
@@ -41,7 +45,8 @@ The depth of model is specified by the user and can be  incrementally increased 
 The CBMC architecture consists of a C-language front-end (CFE) and a SAT Solver back-end (SAT). 
 %
 CBMC front end accepts ANSI-C programs with some special annotations (called assumes and assertions) to express constraints on the model and properties to be checked. 
-%		
+%	
+	
 In our experiments, the vesicle transport network was modelled as a non-deterministic C-program manipulating a graph with labelled edges with the fusion rules and steady state properties expressed as constraints using assumes. 
 %		
 The correspondence relationship between connectedness conditions
@@ -65,14 +70,47 @@ MiniSat performed satisfactorily in comparison to other SAT solvers.
 Our tool allows the user to choose a model and the size
 of the network besides other parameters like connectivity and number of parallel edges. 
 %		
-It uses Z3 Python interface to build the needed constraints and applies Z3 solver on the constraints to find a model ( a satisfying assignment that respects the constraints). 
+It uses Z3 Python interface to build the needed constraints and applies Z3 solver on the constraints to find a model (a satisfying assignment that respects the constraints). 
 %
 This tool also translates the satisfying model found by Z3 into
 a VTS and presents a visual output to the user in form of annotated graph. 
 %
 We also visually report the dropped edges required to disconnect the graph, it gives information about the connectivity of the graph.
 %
-To illustrate usability of our tool in the last column of the table 1, we present the minimum connectedness needed for the different variants after applying our tool for sizes from 2 to 10. 
+
+
+\textbf{{\qbftool} (QBF based universal condition):}
+{\qbftool} is developed in C++ and uses~\zthree~\cite{z3} infrastructure and implement the encodings of the VTS in QBF form (presented in section 6.5). 
+%
+Since some of the formulas involve alternation of quantifiers over
+Boolean variables Z3 is not a suitable choice for those examples.
+%
+We translate the formulas created by Z3 tool into a standard
+QDIMACS~\cite{qdimacs} format and use as an input for QBF solvers. 
+%
+We use~\depqbf~\cite{lonsing2010depqbf} for solving the QBF formulas. 
+
+\textbf{{\ourtool} (QBF based synthesis tool):}
+
+\input{synth-table}
+We have implemented the synthesis  encodings in a tool
+called~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
+%
+The tool takes a partially defined VTS as input in a custom designed
+input language.
+%
+The input is then converted to the constraints over VTS using the {\qbftool} interface. 
+%
+The tool can not only synthesize the above-discussed queries, but also their
+combinations.
+%
+For example, our tool can modify labels of nodes or edges while
+learning activity functions.
+
+
+\subsection{Results}
+
+To illustrate usability of our tool in the last column of the Table~\ref{tab:smt-grph}, we present the minimum connectedness needed for the different variants after applying our tool for sizes from 2 to 10. 
 %
 We found no graph for the variant A with constraints Ann and Aen. 
 %
@@ -82,15 +120,13 @@ does not affect the outcome.
 If we allow every present molecule to stay active
 (Ann) but constraint the edge by a boolean function (Aeb) the resultant VTS has to be at least 3-connected. 
 %
-Similarly, the results for the other cases are presented in the table.
+Similarly, the results for other cases are presented in the table.
 
 \input{smt-table}
 
-In Table~\ref{tab:smt-grph}, we present the running times for the sear
-ch of
+In Table~\ref{tab:smt-grph}, we present the running times for the search of
 VTSs of sizes 2 to 10 that satisfy the variants.
-and compare with our old encoding
-({Old-e}) from~\cite{shukla}.
+and compare with the {\sattool}.
 %
 For the comparison between both encodings we have fixed the total
 number of molecules to be $|M| = 2|N|$ for $ |N|> 2$ and
@@ -128,40 +164,15 @@ Furthermore, we experimented with limits of our tools and found
 that $\zthree$ was able to solve the constraints up to $\sim{14-18}$ n
 odes.
 
+\input{qbf-table}
+%\textbf{Universal Condition:}
+Table~\ref{tab:qbf-graph} presents the result of the QBF tool.
 
-\textbf{{\qbftool} (QBF based synthesis tool):}
-
-\input{synth-table}
-We have implemented the encodings in a tool
-called~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
-%
-The tool takes a partially defined VTS as input in a custom designed
-input language.
-%
-The input is then converted to the constraints over VTS. 
-%
-The tool can not only synthesize the above-discussed queries, but also their
-combinations.
-%
-For example, our tool can modify labels of nodes or edges while
-learning activity functions.
-%
-Our tool is developed in C++ and uses~\zthree~\cite{z3} infrastructure for
-processing formulas. 
-%
-Since some of the formulas involve alternation of quantifiers over
-Boolean variables Z3 is not a suitable choice for those examples.
-%
-We translate the formulas created by Z3 tool into a standard
-QDIMACS~\cite{qdimacs} format and use as an input for QBF solvers. 
-%
-We use~\depqbf~\cite{lonsing2010depqbf} for solving of QBF formulas. 
-%
-Our tool includes about 7000 lines of code.
+%\textbf{Synthesis}:
 
 We have applied~\ourtool~on six partially defined VTSs.
 %
-The results are presented in table~\ref{tab:qf-graph} for both the solvers
+The results are presented in Fig~\ref{tab:synth-graph} for both the solvers
 \depqbf and \zthree.
 %
 To use~\zthree, we remove \texttt{Connected} constraints, such that the queries becomes
