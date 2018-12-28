@@ -34,50 +34,50 @@ All the experiments were done on a machine with  Intel(R) Core(TM) i7-2600 CPU @
 %\ExecuteMetaData[result-table.tex]{tab:satqbf-grabh}
 
 \textbf{{\sattool} (Bounded model checker based tool)}:
-The {\sattool} tool is implemented using model checking tool for C program CBMC~\cite{clarke2004tool}.
+	We have implemented the encodings for different variants of VTS (presented in section 6.2) using CBMC, a Bounded Model Checker, for C and C++ programs. 
 %
-CBMC is a Bounded Model Checker for C and C++ programs. 
+%Unlike a general model checker~\cite{cimatti2002nusmv}, CBMC
 %
-Unlike a general model checker~\cite{cimatti2002nusmv}, CBMC checks the verified property for all the possible states, only up to a certain “depth,” a parametric limit on the size of the model.
+The tool verify property for all the possible states, only up to a certain “depth,” a parametric limit on the size of the model.
 %
 The depth of model is specified by the user and can be  incrementally increased to a desired value.
-
+%
 The CBMC architecture consists of a C-language front-end (CFE) and a SAT Solver back-end (SAT). 
 %
 CBMC front end accepts ANSI-C programs with some special annotations (called assumes and assertions) to express constraints on the model and properties to be checked. 
 %	
-	
+\todo{SA: CBMC Diagram}	
 In our experiments, the vesicle transport network was modelled as a non-deterministic C-program manipulating a graph with labelled edges with the fusion rules and steady state properties expressed as constraints using assumes. 
 %		
 The correspondence relationship between connectedness conditions
 and guarantees for steady state were expressed as assertions to be checked. 
 %		
-Given an exploration depth provided by the user, which in our case corresponds to the size of the graph, CBMC verifies the properties by executing the following steps:
+Given an exploration depth provided by the user, which in our case corresponds to the size of the graph, {\sattool} verifies the properties by executing the following steps:
 	\begin{itemize}
 	\item Convert (using CFE) the model and the properties into a Boolean formula (verification condition) such that the property is true of all behaviors of the model up to the specified
 depth iff the Boolean formula is valid.
-	\item Check (using a SAT solver) validity of the verification condition. CBMC reports successful verification if the formula is found to be valid. If not, then CBMC produces a counterexample,
+	\item Check (using a SAT solver) validity of the verification condition. {\sattool} reports successful verification if the formula is found to be valid. If not, then {\sattool} produces a counterexample,
 an assignment to the variables of the model, that is a witness to the violation of the property.
 	\end{itemize}
+For our experimentation purpose, the SAT solver backend used were MiniSat~\cite{sorensson2005minisat}, and CryptoMiniSat~\cite{soos2016cryptominisat}, the winner of SAT 2015 Competition~\cite{balyo2016sat}. 
 
-CBMC has a built-in SAT solver called MiniSat~\cite{sorensson2005minisat}, but it is also possible to use various other SAT solver blackboxes for property verification. Besides using MiniSat as a default SAT solver for our model, we have used different SAT solvers for the verification of the property, particularly CryptoMiniSat~\cite{soos2016cryptominisat} which was the winner of SAT 2015 Competition~\cite{balyo2016sat}. 
-%		
-MiniSat performed satisfactorily in comparison to other SAT solvers.
+%CBMC has a built-in SAT solver called MiniSat~\cite{sorensson2005minisat}, but it is also possible to use various other SAT solver blackboxes for property verification. Besides using MiniSat as a default SAT solver for our model, we have used different SAT solvers for the verification of the property, particularly CryptoMiniSat~\cite{soos2016cryptominisat} which was the winner of SAT 2015 Competition~\cite{balyo2016sat}. 
+%		MiniSat performed satisfactorily in comparison to other SAT solvers.
 
 \textbf{{\smttool} (SMT based tool)}:
-	We have implemented the encodings for each variants using the python interface of Z3 in a tool {\smttool}. 
+	We have implemented the encodings for each variants (presented in section 6.1) using the python interface of Z3 in a tool {\smttool}. 
 %
-Our tool allows the user to choose a model and the size
+The tool allows the user to choose a model and the size
 of the network besides other parameters like connectivity and number of parallel edges. 
 %		
 It uses Z3 Python interface to build the needed constraints and applies Z3 solver on the constraints to find a model (a satisfying assignment that respects the constraints). 
 %
 This tool also translates the satisfying model found by Z3 into
-a VTS and presents a visual output to the user in form of annotated graph. 
+a VTS and represent a visual output to the user in form of coloured annotated graph. 
 %
-We also visually report the dropped edges required to disconnect the graph, it gives information about the connectivity of the graph.
+%We also visually report the dropped edges required to disconnect the graph, it gives information about the connectivity of the graph.
 %
-
+ 
 
 \textbf{{\qbftool} (QBF based universal condition):}
 {\qbftool} is developed in C++ and uses~\zthree~\cite{z3} infrastructure and implement the encodings of the VTS in QBF form (presented in section 6.5). 
@@ -86,14 +86,14 @@ Since some of the formulas involve alternation of quantifiers over
 Boolean variables Z3 is not a suitable choice for those examples.
 %
 We translate the formulas created by Z3 tool into a standard
-QDIMACS~\cite{qdimacs} format and use as an input for QBF solvers. 
+QDIMACS~\cite{qdimacs} format and use it as an input for QBF solvers. 
 %
-We use~\depqbf~\cite{lonsing2010depqbf} for solving the QBF formulas. 
+We have used~\depqbf~\cite{lonsing2010depqbf} for solving the QBF formulas. 
 
 \textbf{{\ourtool} (QBF based synthesis tool):}
 
 \input{synth-table}
-We have implemented the synthesis  encodings in a tool
+We have implemented the synthesis encodings (presented in section 6.6) in a tool
 called~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
 %
 The tool takes a partially defined VTS as input in a custom designed
@@ -101,7 +101,7 @@ input language.
 %
 The input is then converted to the constraints over VTS using the {\qbftool} interface. 
 %
-The tool can not only synthesize the above-discussed queries, but also their
+The tool can not only synthesize the discussed queries, but also their
 combinations.
 %
 For example, our tool can modify labels of nodes or edges while
@@ -109,28 +109,28 @@ learning activity functions.
 
 
 \subsection{Results}
+The results and timings of three blocks of the {\vtstool} are presented in the table~\ref{tab:smt-grph}, for both {\sattool} and {\smttool}, in table~\ref{tab:qbf-graph} for {\sattool} and in table~\ref{tab:synth-graph} for~{\ourtool}.
 
-To illustrate usability of our tool in the last column of the Table~\ref{tab:smt-grph}, we present the minimum connectedness needed for the different variants after applying our tool for sizes from 2 to 10. 
-%
-We found no graph for the variant A with constraints Ann and Aen. 
-%
-Replacing constraint on the node of Ann with Anb (variant B)
-does not affect the outcome. 
-%
-If we allow every present molecule to stay active
-(Ann) but constraint the edge by a boolean function (Aeb) the resultant VTS has to be at least 3-connected. 
-%
-Similarly, the results for other cases are presented in the table.
+
+%To illustrate usability of our tool in the last column of the Table~\ref{tab:smt-grph}, we present the minimum connectedness needed for the different variants after applying our tool for sizes from 2 to 10. 
+%%
+%We found no graph for the variant A with constraints Ann and Aen. 
+%%
+%Replacing constraint on the node of Ann with Anb (variant B)
+%does not affect the outcome. 
+%%
+%If we allow every present molecule to stay active
+%(Ann) but constraint the edge by a boolean function (Aeb) the resultant VTS has to be at least 3-connected. 
+%%
+%Similarly, the results for other cases are presented in the table.
 
 \input{smt-table}
 
 In Table~\ref{tab:smt-grph}, we present the running times for the search of
-VTSs of sizes 2 to 10 that satisfy the variants.
-and compare with the {\sattool}.
+VTSs for {\smttool} of sizes 2 to 10 that satisfy the variants and compare with the {\sattool}.
 %
 For the comparison between both encodings we have fixed the total
-number of molecules to be $|M| = 2|N|$ for $ |N|> 2$ and
-$|M| = 2|N| + 1$ for $|N| = 2$.
+number of molecules to be $|M| = 2|N|$ for $ |N|> 2$ and $|M| = 2|N| + 1$ for $|N| = 2$.
 %
 For each variant, we fix maximum number of parallel
 edges to 2.
@@ -140,8 +140,7 @@ example variant A is checked against any graph with connectivity 2,
 variant B with connectivity 3 similarly for the rest of the Variants.
 %
 
-We have compared our performance with the performance of our earlier
-CBMC based implementation (old-encoding).
+%We have compared our performance with the performance of our earlier CBMC based implementation (old-encoding).
 %
 For example, the formula for variation F, the total number of
 compartments ($|N|$) equals to 10, returns in 129.78 minutes (7786.8 s
