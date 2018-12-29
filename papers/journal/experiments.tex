@@ -18,7 +18,7 @@ We will refer to existential subblocks as {\sattool} and {\smttool}, universal b
 
 
 \subsection{Implementation}
-{\sattool} is based on the architecture of a Bounded model checker (CBMC) and uses an enumeration of paths for encoding the reachability problem.
+{\sattool} is based on the architecture of a bounded model checker (CBMC) and uses an enumeration of paths for encoding the reachability problem.
 %
 {\smttool} is based on the SMT solver Z3 and uses the efficient encoding of finding a least fixed point to solve reachability problem. 
 %
@@ -33,7 +33,7 @@ All the experiments were done on a machine with  Intel(R) Core(TM) i7-2600 CPU @
 %\input{tab:satqbf-grabh}
 %\ExecuteMetaData[result-table.tex]{tab:satqbf-grabh}
 
-\textbf{{\sattool} (Bounded model checker based tool)}:
+\textbf{{\sattool} (bounded model checker based tool)}:
 	We have implemented the encodings for different variants of VTS (presented in section 6.2) using CBMC, a Bounded Model Checker, for C and C++ programs. 
 %
 %Unlike a general model checker~\cite{cimatti2002nusmv}, CBMC
@@ -42,17 +42,20 @@ The tool verify property for all the possible states, only up to a certain “de
 %
 The depth of model is specified by the user and can be  incrementally increased to a desired value.
 %
-\todo{SA: CBMC Diagram}	
-The CBMC architecture consists of a C-language front-end (CFE) and a SAT Solver back-end (SAT). 
+\todo{SA: Do we need a diagram}	
+%The CBMC architecture consists of a C-language front-end (CFE) and a SAT Solver back-end (SAT). 
 %
-CBMC front end accepts ANSI-C programs with some special annotations (called assumes and assertions) to express constraints on the model and properties to be checked. 
-%	
+%CBMC front end accepts 
 
+We encode the problem using CBMC C-language front-end (CFE) interface 
+%ANSI-C programs 
+with some special annotations (called assumes and assertions) to express constraints on the model and properties to be checked. 
+%	
 In our experiments, the vesicle transport network was modelled as a non-deterministic C-program manipulating a graph with labelled edges with the fusion rules and steady state properties expressed as constraints using assumes. 
 %		
 The correspondence relationship between connectedness conditions
 and guarantees for steady state were expressed as assertions to be checked. 
-%		
+
 Given an exploration depth provided by the user, which in our case corresponds to the size of the graph, {\sattool} verifies the properties by executing the following steps:
 	\begin{itemize}
 	\item Convert (using CFE) the model and the properties into a Boolean formula (verification condition) such that the property is true of all behaviors of the model up to the specified
@@ -107,7 +110,8 @@ combinations.
 %
 For example, our tool can modify labels of nodes or edges while
 learning activity functions.
-
+%
+The tool returns a complete VTS with visual graph representation as an output to the user.  
 
 \subsection{Results}
 The results and timings of three blocks of the {\vtstool} are presented in the table~\ref{tab:smt-grph} and table~\ref{tab:satsmt-graph}, for both {\sattool} and {\smttool}, in table~\ref{tab:qbf-graph} for {\sattool} and in table~\ref{tab:synth-graph} for~{\ourtool}.
@@ -138,32 +142,43 @@ For this comparison we fixed the total number of molecules ($|M|$) to be $2|N|$
 and maximum number of parallel
 edges to be 2.
 %
+%
+In the table ``!'' indicate that no model exists for the constraint  (constraints were unsatisfiable).
 %In the table we have shown comparison for specific connectivity, for example variant A is checked against any graph with connectivity 2, variant B with connectivity 3 similarly for the rest of the variants.
 %
 %We have compared our performance with the performance of our earlier CBMC based implementation (old-encoding).
 %
-As an example, the result of verifying the formula for variation F, of 2-connected 10 compartment graph took 129.78 minutes (7786.8 secs) with a satisfying result.
+As an example, the result of verifying the formula for variation F of 2-connected, 10 compartment graph took 129.78 minutes (7786.8 secs) with a satisfying result.
 %
 In comparison, {\sattool} was unable to solve the instance and ran OUT OF MEMORY.
-%
-In the table ``!'' indicate that no model exists for the constraint  (constraints were unsatisfiable).
 % for $|N|$ greater than 5.
 %
 % 
-The recursive encoding also performed better for the cases where instance was unsatisfiable (table~\ref{tab:satsmt-graph} Variant A timing comparison and Variant D with N =2).
+The recursive encoding also performed better for the cases where the instance was unsatisfiable (table~\ref{tab:satsmt-graph} Variant A timing comparison and Variant D with N =2).
 %instead of enumeration, not only we got efficiency improved for finding a SAT model but also did better in the case of refutation that no model exist (table~\ref{tab:satsmt-graph} Variant A timing comparison and Variant D with N =2). 
 %
-Hence with the use of improved encoding of reachability, we were able to scale the system to the biologicly relevant compartment size, the
+Hence with the use of improved encoding of reachability, we were able to scale the system to the biologically relevant compartment size, the
 %a much larger compartmentalized system, especially to interesting 
-case of eukaryotic cells with a total number of 10 compartments.
+the case of eukaryotic cells with a total number of 10 compartments.
 %
 Furthermore, we experimented with limits of our tools and found that {\smttool} was able to solve the constraints up to $20$ nodes.
 
 \input{qbf-table}
 %\textbf{Universal Condition:}
-\todo{SA: Will add after experimentations.}
+\todo{SA: will improve after experimentation.}
 Table~\ref{tab:qbf-graph} presents the result of the QBF tool.
+%
+The table represents the result of the graph connectivity for each variation of the VTS.  
+%
+For example, we found that the 3-connected graph satisfies the universal condition for the variation 2. 
+%
+Note that for this variation existential condition result was the 2-connected graph. 
+%
+For every other version, the results remained the same.
+% 
+The experimentations were done using two QBF solvers: \depqbf and \rarqbf.
 
+%(there is a satisfying assignments to satisfy constraints of VTS) is valid VTS.   
 %\textbf{Synthesis}:
 
 We have applied~\ourtool~on six partially defined VTSs.
