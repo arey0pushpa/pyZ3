@@ -18,6 +18,10 @@ We will refer to existential subblocks as {\sattool} and {\smttool}, universal b
 
 
 \subsection{Implementation}
+%The existential condition is implemented with two different encodings. First, with a bounded model checker that uses an enumeration of paths for encoding the reachability problem: {\sattool}.
+%which is based on the architecture of a
+%
+%The other with an SMT solver Z3 that uses the efficient encoding of finding a least fixed point to solve it: {\smttool}.
 {\sattool} is based on the architecture of a bounded model checker (CBMC) and uses an enumeration of paths for encoding the reachability problem.
 %
 {\smttool} is based on the SMT solver Z3 and uses the efficient encoding of finding a least fixed point to solve reachability problem. 
