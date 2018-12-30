@@ -329,10 +329,16 @@ This is motivated by the idea that pairing must generate an inactive bi-molecula
 The analysis of vesicle traffic systems is a difficult problem
 because of the combinatorial scaling of possible traffic topologies and regulatory rules. 
 %
-For example, we might want to check some conjecture of interest for all 3-connected graphs and
-all possible variations of SNARE regulation rules. 
+For example, we might want to check some conjecture of interest for all graphs of a certain structure. 
 %
-The number of graphs of specified connectivity grows exponentially with the number of nodes: Table~\ref{tab:threec} shows how many 3-edge-connected graphs~\cite{a052448-oeis} exist (without parallel or self edges) as node number N increases.
+The number of graphs with that specific structure with a combination of the possible regulatory rule will be large to handle by any tool.
+%
+Precise analysis of the properties of the VTS would be hindered by the same reason. 
+%
+Properties of the VTS would be hindered by the same reason. 
+%3-connected graphs and all possible variations of SNARE regulation rules. 
+%
+%The number of graphs of specified connectivity grows exponentially with the number of nodes: Table~\ref{tab:threec} shows how many 3-edge-connected graphs~\cite{a052448-oeis} exist (without parallel or self edges) as node number N increases.
 
 \subsection{Interesting properties of VTS}
 %\textbf{Properties of a VTS that satisfies all cell-biological constraints:} 
@@ -409,10 +415,53 @@ Completing the vesicle traffic network is a difficult task for the following rea
 	\item It can be difficult to distinguish between the direct and indirect effects of experiments involving knock-downs or knock outs of traffic molecules \cite{hirst2004epsinr,mishev2013small}.
 \end{enumerate}
 
-Nonetheless, completing the vesicle traffic network for different organisms is very useful. Many diseases are caused by the malfunction of the vesicle traffic network. Knowledge of the complete network would be helpful in identifying the root causes\cite{bexiga2013human,gissen2007cargos}. At a more basic level, having complete pictures of the vesicle traffic system for various organisms and various cell-types would allow comparative studies, and therefore would allow the deduction of modes of evolution of the form of the traffic network, and would also allow us to decipher features such as parts of the traffic system that is unchanging, and therefore likely to be its core, and parts that are more plastic \cite{barlow2017seeing}.
-
-In this paper, using constraints on global vesicle traffic network topology due to local molecular interactions, we take incomplete pictures of vesicle traffic networks as inputs and output various completed versions which can then be tested experimentally.
+Nonetheless, completing the vesicle traffic network for different organisms is very useful. 
 %
+Many diseases are caused by the malfunction of the vesicle traffic network. 
+%
+Knowledge of the complete network would be helpful in identifying the root causes~\cite{bexiga2013human,gissen2007cargos}. 
+%
+At a more basic level, having complete pictures of the vesicle traffic system for various organisms and various cell-types would allow comparative studies, and therefore would allow the deduction of modes of evolution of the form of the traffic network, and would also allow us to decipher features such as parts of the traffic system that is unchanging, and therefore likely to be its core, and parts that are more plastic \cite{barlow2017seeing}.
+
+%
+The set of basic constraints the VTS should follow is dictated by underlying cell biology.   
+%
+In order to even attempt to complete a given partial VTS we have to agree on the properties that every complete VTS should follow in spite of basic constraints. 
+%
+We can use our stability and k-connectivity constraints as a basis for this investigation.   
+%
+The incomplete VTS might not respect these constraints. 
+%
+In this paper, using constraints on global vesicle traffic network topology due to local molecular interactions, we take incomplete pictures of vesicle traffic networks as inputs.
+%
+We output various completed versions of VTS against these properties which can then be tested experimentally.
+%
+
+We have implemented the encoding in a flexible tool, which can handle a wide range of synthesis queries. 
+%
+We have applied our tool on several VTSs including
+two found-in-nature VTSs.
+%
+Our experiments suggest that some of the synthesis problems are solvable by modern solvers and the synthesis technology may be useful for biological research.
+%
+
+The rest of the paper is organized as follows. 
+%
+In Sect.~\ref{sec:prelim}, we present the notations we use in this paper. 
+%
+In Sect.~\ref{sec:model}, we present graph model of VTSs.
+%
+%encoding of several constraints on VTSs. 
+%
+In Sect.~\ref{sec:property}, we present the properties of interest.
+%
+In Sect.~\ref{sec:problem}, we present formal problem statement of the verification properties.
+%
+In Sect.~\ref{sec:encoding}, we present the encoding of BMC, SMT, QBF and Synthesis into SAT, SMT and QBF satisfiability. 
+%
+In Sect.~\ref{sec:experiments}, we present our implementation and experimental results. 
+%
+In Sect.~\ref{sec:related}, we discuss related work and conclude in Sect.~\ref{sec:conclusion}.
 
 %Previous analyses of VTS have mostly been based on sampling approach~\cite{mani2016wine, mani2016stacking}. 
 %%
