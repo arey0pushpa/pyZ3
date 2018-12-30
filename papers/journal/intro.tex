@@ -250,39 +250,40 @@ The constraints imposed by cell biology is incorporated in the  annotations of t
 The cell can be abstractly represented as an annotated graph. 
 Every compartment in the cell can be represented as a node in the graph. 
 %
-The set of molecules present in the compartment, for example SNARE proteins associated with it, are represented as a label to the corresponding nodes.
+The set of molecules present in the compartment, for example, SNARE proteins associated with it, are represented as a label to the corresponding nodes.
 %
 The label of each node will be unique molecules present on the compartment, i.e we abstract over the quantity of the molecule present in a compartment.
-%This represent the flux of the molecule type present at that compartment.
+%This represents the flux of the molecule type present at that compartment.
 %
-The target vesicle flowing from source compartment to the target compartment is represented by an labelled directed edge. 
+The target vesicle flowing from source compartment to the target compartment is represented by a labeled directed edge. 
 % 
-The label represent the associated flux of all molecular types carried by the corresponding vesicle.
+The label represents the associated flux of all molecular types carried by the corresponding vesicle.
+%
 %
 
 \textbf{Steady state:} 
 The vesicle transfer will change the molecular composition (distinct molecule count) on both the source compartment and the target compartment. 
 %
-In our abstracted model we will assume that cell is in a steady state. 
+In our abstracted model, we will assume that cell is in a steady state. 
 %
-The compartment's composition does not evolve over the short times scales.
+The compartment's composition does not evolve over the short times' scales.
 %
-Therefore, the incoming and outgoing flux are balanced for each of the molecular type at each compartment.
+Therefore, the incoming and outgoing flux is balanced for each of the molecular types at each compartment.
 %
 This abstraction is supported by the cell biology as on the scale of seconds and minutes the molecular composition actually remains the same. 
 %
-In this paper we refer to the steady state of the cell as stability condition over the annotated graph.
+In this paper, we refer to the steady state of the cell as stability condition over the annotated graph.
 
 
 %Each edge is associated with a flux of all the molecular types carried by the corresponding vesicle. The total amount of each molecular type on each compartment can therefore increase or decrease. We assume the cell is in a steady state where each compartment’s composition does not vary over short time scales. Therefore, incoming and outgoing fluxes are balanced for each molecular type at each compartment; it is the \textit{stability cond1ition}.
 
 \textbf{Vesicle fusion:}
-Based on the earlier discussion of fusion, the vesicle targeting is driven by molecular interactions.  
+%Based on the earlier discussion of fusion, the vesicle targeting is driven by molecular interactions.  
 %
-Particularly, molecules composition (SNARE proteins etc) present on the budded vesicle determines it's properties, which 
+%Particularly, molecules composition (SNARE proteins etc) present on the budded vesicle determines it's properties, which 
 % 
 %The molecular composition and hence the properties of the transfer vesicle 
-is the crucial factor to which target compartment the vesicle will fuse to.
+%is the crucial factor to which target compartment the vesicle will fuse to.
 %
 %For any given pair of a vesicle and a compartment, the SNARE proteins present on both influence the fusion of the vesicle to that compartment.
 %  
@@ -290,33 +291,34 @@ is the crucial factor to which target compartment the vesicle will fuse to.
 %
 %Once a vesicle has budded out of the source, the molecules it carries determine its properties. In particular, for any given pair of a vesicle and a compartment, the set of SNARE proteins that label the former and latter influence whether the vesicle will fuse to that compartment. Biophysically, fusion requires a direct physical interaction between at least one SNARE type on the vesicle and one SNARE type on the compartment. 
 %
-SNAREs are of two types (known as Q and R in the cell biology literature) and vesicle fusion requires a pairing of a Q-SNARE with an R-SNARE between transfer vesicle and target compartment. 
+%SNAREs are of two types (known as Q and R in the cell biology iterature) and 
+Vesicle fusion requires a pairing of a Q-SNARE with an R-SNARE between transfer vesicle and target compartment. 
 %For any given pair of a vesicle and a compartment, vesicle fusion requires a pairing of a Q-SNARE with an R-SNARE on 
 %the SNARE proteins present on both influence the fusion of the vesicle to that compartment.
 %
 %The list of molecular pairs that can drive a fusion event is given in a pairing matrix between Q and R SNAREs. 
 %
-Only particular pair of Q ad R SNAREs are allowed to fuse with each other.
+Only a particular pair of Q and R SNAREs are allowed to fuse with each other.
 %
-Without loss of generality we assume equal numbers of Q and R SNARE types.
+Without loss of generality, we assume equal numbers of Q and R SNARE types.
 %
 Therefore, we can abstract the underlying cell biology by labeling the nodes and edges with an equal number of Q and R SNAREs. 
 % equal number of Q and R SNAREs as a part of node and edge label.
 %
 %
-Given a relation of all allowed fusion SNARE pairings, we can computationally determine whether a particular transfer vesicle will fuse to a particular target compartment (edge between two compartments) based on the above condition.  
+Given a relation of all allowed fusion SNARE pairings, we can computationally determine whether a particular transfer vesicle will fuse to a particular target compartment (the edge between two compartments) based on the above condition.  
 
 \textbf{Molecular regulation:} 
-Fusion takes place only if the SNARE types involved on the vesicle and compartment must both be in an active state.
+Fusion takes place only if the SNARE types involved in the vesicle and compartment must both be in an active state.
 %We assume that for fusion to occur, the pair of 
 %
 The activity of these SNAREs is dependent on the presence of other molecules on the vesicle or compartment, respectively.
 %
-In our abstract model we create a set of variations of different kind of molecular regulations.
+In our abstract model, we create a set of variations of different kind of molecular regulations.
 %
 Most generally, the activity state of a given SNARE can be a Boolean function of all the molecular types on a compartment or vesicle. 
 %
-We have also tested \cite{shukla} a particularly simple regulation mechanism in which two SNAREs that can pair to drive fusion inhibit one another; this is the \textit{pairing inhibition}. 
+We have also tested \cite{shukla} a particularly simple regulation mechanism in which two SNAREs that can pair to drive fusion to inhibit one another; this is the \textit{pairing inhibition}. 
 %
 This is motivated by the idea that pairing must generate an inactive bi-molecular complex.
 %
