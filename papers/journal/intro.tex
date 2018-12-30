@@ -19,6 +19,7 @@ The requirement of precise analysis makes formal methods ideal candidate in this
 
 First, we will give an overview of the VTS mechanism and then will sketch out a few interesting problems that are key to the understanding of the VTS.
 
+\subsection{Vesicle traffic system}
 \todo{SA:One para of BIO BACKGROUND related to VTS. Why they are Important history etc.}
 %
 %\textbf{Components of the vesicle transport network}:
@@ -224,21 +225,105 @@ Molecules traverse the cell in a series of vesicles, and there are two major suc
 Other paths are used for cross talk between the secretory and the endocytic routes. For example, vesicles are sent from the TGN (Trans-Golgi network) to the early and the late endosomes to transport enzymes, and vesicles are sent back from the endocytic compartments to the TGN to recycle sorting receptors\cite{progida2016bidirectional}. Also recently, evidence for unconventional vesicle-mediated secretory routes have been found, which bypass the Golgi. The molecules involved in these routes are as yet unknown\cite{nickel2018unconventional}. 
 %
 
-\begin{table}
-	\begin{center}
-		\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
-			\hline
-			Nodes & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ \hline
-			Graphs & 0 & 0 & 0 & 1 & 2 & 15 & 121 & 2159 & 68715 & 3952378 \\ 
-			\hline
-		\end{tabular}
-		\label{tab:threec}
-		\caption{Number of simple 3-edge-connected unlabelled N-node graphs.}
-	\end{center}	
-\end{table}
+%\begin{table}
+%	\begin{center}
+%		\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+%			\hline
+%			Nodes & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ \hline
+%			Graphs & 0 & 0 & 0 & 1 & 2 & 15 & 121 & 2159 & 68715 & 3952378 \\ 
+%			\hline
+%		\end{tabular}
+%		\label{tab:threec}
+%		\caption{Number of simple 3-edge-connected unlabelled N-node graphs.}
+%	\end{center}	
+%\end{table}
+\subsection{Abstraction of VTS as a graph problem}
 
-\todo{SA: Describe the model in graph terms and connect it to the topology question. ONE PAGE !}
-\textbf{Difficulty of the problem:}
+%In this section, we will describe the basic constraints imposed by cell biology. These are all incorporated into an abstract model of a VTS, whose properties will then be explored using SMT solvers.
+
+In this section, we will abstract from the biological description of a VTS and represent the whole network as an annotated transport graph. 
+%
+The constraints imposed by cell biology is incorporated in the  annotations of the graph. 
+
+\textbf{The cell as a transport graph:} 
+%We consider a cell to be a collection of compartments (nodes) and vesicles (edges), thus defining a transport graph. Every compartment or vesicle has a set of molecular labels, such as SNARE proteins, associated with it.
+The cell can be abstractly represented as an annotated graph. 
+Every compartment in the cell can be represented as a node in the graph. 
+%
+The set of molecules present in the compartment, for example SNARE proteins associated with it, are represented as a label to the corresponding nodes.
+%
+The label of each node will be unique molecules present on the compartment, i.e we abstract over the quantity of the molecule present in a compartment.
+%This represent the flux of the molecule type present at that compartment.
+%
+The target vesicle flowing from source compartment to the target compartment is represented by an labelled directed edge. 
+% 
+The label represent the associated flux of all molecular types carried by the corresponding vesicle.
+%
+
+\textbf{Steady state:} 
+The vesicle transfer will change the molecular composition (distinct molecule count) on both the source compartment and the target compartment. 
+%
+In our abstracted model we will assume that cell is in a steady state. 
+%
+The compartment's composition does not evolve over the short times scales.
+%
+Therefore, the incoming and outgoing flux are balanced for each of the molecular type at each compartment.
+%
+This abstraction is supported by the cell biology as on the scale of seconds and minutes the molecular composition actually remains the same. 
+%
+In this paper we refer to the steady state of the cell as stability condition over the annotated graph.
+
+
+%Each edge is associated with a flux of all the molecular types carried by the corresponding vesicle. The total amount of each molecular type on each compartment can therefore increase or decrease. We assume the cell is in a steady state where each compartment’s composition does not vary over short time scales. Therefore, incoming and outgoing fluxes are balanced for each molecular type at each compartment; it is the \textit{stability cond1ition}.
+
+\textbf{Vesicle fusion:}
+Based on the earlier discussion of fusion, the vesicle targeting is driven by molecular interactions.  
+%
+Particularly, molecules composition (SNARE proteins etc) present on the budded vesicle determines it's properties, which 
+% 
+%The molecular composition and hence the properties of the transfer vesicle 
+is the crucial factor to which target compartment the vesicle will fuse to.
+%
+%For any given pair of a vesicle and a compartment, the SNARE proteins present on both influence the fusion of the vesicle to that compartment.
+%  
+%Biophysically, fusion of a vesicle to the target compartment requires a direct physical interaction between at least one SNARE type on the vesicle and one SNARE type on the compartment.
+%
+%Once a vesicle has budded out of the source, the molecules it carries determine its properties. In particular, for any given pair of a vesicle and a compartment, the set of SNARE proteins that label the former and latter influence whether the vesicle will fuse to that compartment. Biophysically, fusion requires a direct physical interaction between at least one SNARE type on the vesicle and one SNARE type on the compartment. 
+%
+SNAREs are of two types (known as Q and R in the cell biology literature) and vesicle fusion requires a pairing of a Q-SNARE with an R-SNARE between transfer vesicle and target compartment. 
+%For any given pair of a vesicle and a compartment, vesicle fusion requires a pairing of a Q-SNARE with an R-SNARE on 
+%the SNARE proteins present on both influence the fusion of the vesicle to that compartment.
+%
+%The list of molecular pairs that can drive a fusion event is given in a pairing matrix between Q and R SNAREs. 
+%
+Only particular pair of Q ad R SNAREs are allowed to fuse with each other.
+%
+Without loss of generality we assume equal numbers of Q and R SNARE types.
+%
+Therefore, we can abstract the underlying cell biology by labeling the nodes and edges with an equal number of Q and R SNAREs. 
+% equal number of Q and R SNAREs as a part of node and edge label.
+%
+%
+Given a relation of all allowed fusion SNARE pairings, we can computationally determine whether a particular transfer vesicle will fuse to a particular target compartment (edge between two compartments) based on the above condition.  
+
+\textbf{Molecular regulation:} 
+Fusion takes place only if the SNARE types involved on the vesicle and compartment must both be in an active state.
+%We assume that for fusion to occur, the pair of 
+%
+The activity of these SNAREs is dependent on the presence of other molecules on the vesicle or compartment, respectively.
+%
+In our abstract model we create a set of variations of different kind of molecular regulations.
+%
+Most generally, the activity state of a given SNARE can be a Boolean function of all the molecular types on a compartment or vesicle. 
+%
+We have also tested \cite{shukla} a particularly simple regulation mechanism in which two SNAREs that can pair to drive fusion inhibit one another; this is the \textit{pairing inhibition}. 
+%
+This is motivated by the idea that pairing must generate an inactive bi-molecular complex.
+%
+
+%We assume that for fusion to occur, the pair of SNARE types involved on the vesicle and compartment must both be in an active state. Whether these SNAREs are active or inactive depends on the other molecules found on the vesicle or compartment, respectively. We test many different versions of this kind of molecular regulation. Most generally, the activity state of a given SNARE can be a Boolean function of all the molecular types on a compartment or vesicle. We have also tested \cite{shukla} a particularly simple regulation mechanism in which two SNAREs that can pair to drive fusion inhibit one another; this is the \textit{pairing inhibition}. This is motivated by the idea that pairing must generate an inactive bi-molecular complex.
+
+\textbf{Difficulty of the analysis:}
 The analysis of vesicle traffic systems is a difficult problem
 because of the combinatorial scaling of possible traffic topologies and regulatory rules. 
 %
@@ -247,7 +332,66 @@ all possible variations of SNARE regulation rules.
 %
 The number of graphs of specified connectivity grows exponentially with the number of nodes: Table~\ref{tab:threec} shows how many 3-edge-connected graphs~\cite{a052448-oeis} exist (without parallel or self edges) as node number N increases.
 
-\textbf{Synthesis of VTS:}
+\subsection{Interesting properties of VTS}
+%\textbf{Properties of a VTS that satisfies all cell-biological constraints:} 
+Suppose we are given a particular transport graph, a particular labeling of all the compartments and edges, a particular fusion pairing matrix, and a particular regulatory model. This information is then sufficient to check the following properties, which summarise the cell-biological constraints described above:
+\begin{enumerate}
+	\item We can determine which molecules are active on every compartment or vesicle.
+	\item For every vesicle fusing to a compartment, we can determine whether there exists an active pair (one molecule on the vesicle, one on the compartment) which drives that fusion event.
+	\item For every vesicle-compartment pair where the vesicle does not fuse to the compartment, we can verify that there is no pairing of active molecules on the
+	vesicle and compartment that could drive their fusion.
+	\item We can verify that every molecular type entering a compartment also leaves the compartment, and also that every molecular type entering a set of compartments also leaves that set. This is the steady state condition. In the biological literature this is often referred to as “homeostasis” and is a widespread and well-accepted assumption about cellular behaviour, at least over timescales of minutes to hours \cite{mani2016stacking}.
+\end{enumerate}
+
+The biological problem often boils down to such an analysis. A cell biologist might determine which molecules flow between which set of compartments, and biochemical experiments could be used to see how these molecules activate one another. We can then ask: is this a complete and consistent description? That is, do all the required properties listed above hold, given what the experimentalists have told us? It is often the case that biological data is missing. For example, only a few of the dozens of molecules involved in real VTSs have been mapped out. Therefore, it is extremely likely that the description provided by the cell biologist is incomplete. We can use our model to find out which properties have failed to hold, and thus prescribe new experiments in order to fill in the missing information.
+
+Can we find a simple test to see whether any information is missing, given the experimental data? We have shown that graph k-connectedness furnishes precisely such a test \cite{shukla}. If the data provided by cell-biologists, suitably represented as a graph, does not have a certain degree of connectivity, this implies that some biological data has been missed. (The converse is not true: even if the required connectivity does hold, there might of course be more information missing.)
+
+Our result about k-connectedness being a useful test of missing information \cite{shukla} was obtained using SAT solvers for graphs up to a certain size, and a certain number of molecules. This was due to limitations in how we encoded the problem. Here we present a much more natural encoding that allows our result to be extended to graph sizes and molecule numbers that are typical of those found in real cells.
+
+
+%\subsection{Modeling and Symbolic Analysis of VTS: An Overview}
+\label{subsec:graphmodel}
+%
+Since a VTS is a transport graph, it is but natural to formally model
+VTS as graphs (as used in computer science) with their nodes denoting
+compartments and labeled edges denoting transport vesicles with labels
+denoting the set of molecules being transported. The pairing mechanism
+can be represented as matching tables over sets of molecules.
+% i.e., formally as a boolean function that given requisite labels of nodes and vesicles that returns true if the required regulations are met. 
+%
+Given such a graph model of VTSs and their properties, such as
+stability condition and fusion rules, can be formally defined as
+constraints over graphs and uninterpreted Boolean functions.
+%
+% Note that the formulas define among other things constraints over
+% paths between nodes in the graph model of VTS. Similarly, one can
+% define fusion rules as constraints over the boolean functions modeling
+% the regulations.  
+\
+% For example, the steady state condition, described informally earlier, can be defined by the formula shown in Listing~1.1.
+
+%\begin{itemize}
+%\item \srivas{Detailed BIO to Graph problem}
+%\end{itemize}
+
+
+%Given definitions of fusion and budding rules and the steady state conditions, whether a VTS meets maximum connectivity requirement, i.e. the LGC property, can be verified by checking if the formula show in Listing~1.2 is valid.  Here we have defined the property by checking over existence of any fusion/budding rules.  We can eliminate the existential quantifier if we are interested in checking the property for a particular fusion/budding rule.
+%
+%\subsection{Converting the Graph Problem into Boolean SAT problem}
+%\label{subsec:satproblem}
+%To convert the graph problem described in sec~\ref{subsec:graphmodeling}, into a boolean SAT problem, we need to define a scheme to represent graphs and boolean functions using a suitable set of propositional variables.  In our earlier work, we modeled the graph problem in C using arrays to model graphs and boolean function.  We then used the CBMC model checker to convert the graph problem into a SAT problem.  One of the challenges we had in our earlier work is dealing with quantifiers.  Note that the connectedness property defined in Listing~1.2 has quantifier alternation.  Even if we were to eliminate the existential quantifier by instantiating the problem for a fixed set of fusion rules, we would have embedded quantifiers in the antecedent of implications.   CBMC supports only a quantifier-free logic n its assertion language.  In our earlier work we used a combination of explicit enumeration at the C-level and clever use f non-determinism to eliminate alternation of quantifiers.  This enumeration was one source of bottleneck for scaling in our earlier work.  In the current work we eliminate this bottleneck by modeling the problem directly as a SAT instance using uninterpreted functions and recursive relations.  The details of te hnew encding will described in subsequent sections.
+
+A VTS is {\em $k$-connected} if every pair of compartments remain
+reachable after dropping $k-1$ vesicles.
+%
+This property of VTSs has been considered informative and
+studied by~\cite{shukla}.
+%
+Here we have build an {\em efficient} tool that studies properties of
+VTSs that are not $k$-connected, from some $k$. 
+
+\subsection{Synthesis of VTS:}
 Although vesicle-mediated traffic was discovered decades ago~\cite{wells2005discovery}, the picture of the vesicle transport network is far from complete; we do not yet know how many of the cellular proteins reach their resident organelles within the cell, and new vesicle routes are being discovered every year ~\cite{nickel2018unconventional,weill2018toolbox}. 
 %
 Completing the vesicle traffic network is a difficult task for the following reasons: 
