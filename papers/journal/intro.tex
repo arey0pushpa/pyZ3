@@ -335,7 +335,7 @@ The number of graphs with that specific structure with a combination of the poss
 %
 Precise analysis of the properties of the VTS would be hindered by the same reason. 
 %
-Properties of the VTS would be hindered by the same reason. 
+%Properties of the VTS would be hindered by the same reason. 
 %3-connected graphs and all possible variations of SNARE regulation rules. 
 %
 %The number of graphs of specified connectivity grows exponentially with the number of nodes: Table~\ref{tab:threec} shows how many 3-edge-connected graphs~\cite{a052448-oeis} exist (without parallel or self edges) as node number N increases.
@@ -390,14 +390,11 @@ constraints over graphs and uninterpreted Boolean functions.
 %\label{subsec:satproblem}
 %To convert the graph problem described in sec~\ref{subsec:graphmodeling}, into a boolean SAT problem, we need to define a scheme to represent graphs and boolean functions using a suitable set of propositional variables.  In our earlier work, we modeled the graph problem in C using arrays to model graphs and boolean function.  We then used the CBMC model checker to convert the graph problem into a SAT problem.  One of the challenges we had in our earlier work is dealing with quantifiers.  Note that the connectedness property defined in Listing~1.2 has quantifier alternation.  Even if we were to eliminate the existential quantifier by instantiating the problem for a fixed set of fusion rules, we would have embedded quantifiers in the antecedent of implications.   CBMC supports only a quantifier-free logic n its assertion language.  In our earlier work we used a combination of explicit enumeration at the C-level and clever use f non-determinism to eliminate alternation of quantifiers.  This enumeration was one source of bottleneck for scaling in our earlier work.  In the current work we eliminate this bottleneck by modeling the problem directly as a SAT instance using uninterpreted functions and recursive relations.  The details of te hnew encding will described in subsequent sections.
 
-A VTS is {\em $k$-connected} if every pair of compartments remain
-reachable after dropping $k-1$ vesicles.
+%A VTS is {\em $k$-connected} if every pair of compartments remain reachable after dropping $k-1$ vesicles.
 %
-This property of VTSs has been considered informative and
-studied by~\cite{shukla}.
+%This property of VTSs has been considered informative and studied by~\cite{shukla}.
 %
-Here we have build an {\em efficient} tool that studies properties of
-VTSs that are not $k$-connected, from some $k$. 
+%Here we have build an {\em efficient} tool that studies properties of VTSs that are not $k$-connected, from some $k$. 
 
 \subsection{Synthesis of VTS:}
 Although vesicle-mediated traffic was discovered decades ago~\cite{wells2005discovery}, the picture of the vesicle transport network is far from complete; we do not yet know how many of the cellular proteins reach their resident organelles within the cell, and new vesicle routes are being discovered every year ~\cite{nickel2018unconventional,weill2018toolbox}. 

@@ -2,16 +2,16 @@
 
 \begin{table}[t]
 	\centering
-    \def\arraystretch{1.3}
-	\begin{tabular}{|c|c|c|c|c|c|}
+    \def\arraystretch{1.2}
+	\begin{tabular}{ |c|c|c|c| }
 		\hline
-		{\multirow{2}{*}{\textbf{Variant}}}  &
-		\multicolumn{2}{c|}{\textbf{Constraints}} & 
-	%	{\multirow{2}{*}{\textbf{Results}}} 
-		\multicolumn{3}{c|}{\textbf{Existential condition results}}
+		{\multirow{2}{*}{Variant}}  &
+		\multicolumn{2}{c|} {Constraints} & 
+	%	{\multirow{2}{*}{\textbf{Results}}}
+	    {\multirow{2}{*}{Graph connectivity }} 
 		\\
-		\cline{2-6}
-		&  Rest & Activity & Graph connectivity & BMC & SMT 
+		\cline{2-3}
+		&  Rest & Activity & 
 	\\ \hline
 	
 	A. & \multirow{5}{*}{
@@ -19,12 +19,12 @@
 			\ref{eq:reach1},\ref{eq:reach2},\\
 			\ref{eq:drop1}--\ref{eq:drop4}}
 	}
-	& \ref{eq:ann},\ref{eq:aen} & No graph  & 1.02 & 2.02   \\\cline{3-6}
-	B. & & \ref{eq:anb},\ref{eq:aen} & No graph & 1.02 & 2.02    \\\cline{3-6}
-	C. & & \ref{eq:ann},\ref{eq:aeb} & 3-connected & 1.02 & 2.02 \\\cline{3-6}
-	D. & & \ref{eq:anb},\ref{eq:aeb} & 2-connected & 1.02 & 2.02 \\\cline{3-6}
-	E. & & \ref{eq:ann},\ref{eq:aep} & No graph  & 1.02 & 2.02   \\\cline{3-6}
-	F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected & 1.02 & 2.02 \\\hline
+	& \ref{eq:ann},\ref{eq:aen} & No graph   \\
+	B. & & \ref{eq:anb},\ref{eq:aen} & No graph \\
+	C. & & \ref{eq:ann},\ref{eq:aeb} & 3-connected \\
+	D. & & \ref{eq:anb},\ref{eq:aeb} & 2-connected \\
+	E. & & \ref{eq:ann},\ref{eq:aep} & No graph    \\
+	F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected \\\hline
 	
 	% C_es :Self edges are allowed
 	% C_ed : Every edge is distinct 
@@ -38,23 +38,25 @@
 	\centering
 	\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
 		max width=\textwidth}{
-		\begin{tabular}[t]{|c|c|c|c|c|c|c|c|c|}\hline
+		\begin{tabular}[t]{ c|c c|c c|c c|c c}\hline
 			
-			{\multirow{2}{*} {\textbf{Size}}}  & \multicolumn{2}{c|}{\textbf{Variant A}} & \multicolumn{2}{c|}{\textbf{Variant C}} & \multicolumn{2}{c|}{\textbf{Variant D}}  &  \multicolumn{2}{c|}{\textbf{Variant F}} \\\cline{2-9}
+			{\multirow{2}{*} {Size}}  & \multicolumn{2}{c|}{Variant A} & \multicolumn{2}{c|}{Variant C} & \multicolumn{2}{c|}{Variant D}  &  \multicolumn{2}{c}{Variant F} \\ 
+			%\cline{2-9}
 			
-			{} & \multicolumn{2}{c|}{\textbf{2-connected} } & \multicolumn{2}{c|}{\textbf{3-connected} } & \multicolumn{2}{c|}{\textbf{2-connected}}  &  \multicolumn{2}{c|}{\textbf{4-connected}}
+			{} & \multicolumn{2}{c|} {2-connected}  & \multicolumn{2}{c|} {3-connected}  & \multicolumn{2}{c|} {2-connected}  &  \multicolumn{2}{c} {4-connected}
 			%{} & \multicolumn{2}{c|}{2-connected} & \multicolumn{2}{c|}{3-connected} & \multicolumn{2}{c|}{2-connected}  &  \multicolumn{2}{c|}{4-connected}
-			\\\cline{2-9}
-			{} & {\textbf{MAA}} & {\textbf{Old-e}} & {\textbf{MAA}} & {\textbf{Old-e}} & {\textbf{MAA}} & {\textbf{Old-e}} & {\textbf{MAA}} & {\textbf{Old-e}} \\\hline
-			2 & !0.085 & !2.43 & 0.15 & 2.12 & \cellcolor{green!25}!0.13 & \cellcolor{red!25}!1.89 & 0.35 & 5.12 \\\hline
+			\\
+			%\cline{2-9}
+			{} & {\smttool} & {\sattool} & {\smttool} & {\sattool} & {\smttool} & {\sattool} & {\smttool} & {\sattool} \\\hline
+			2 & !0.085 & !2.43 & 0.15 & 2.12 & !0.13 & !1.89 & 0.35 & 5.12 \\\hline
 			3 & !0.54 & !8.04 & 0.95  & 7.65 & 0.62 & 7.66  & 1.36 & 23.94\\\hline
 			4 & !2.57 & !297.93 & 2.33 & 22.74 & 2.85 & 48.35  & 4.81 & 123.34\\\hline
-			5 & !7.7 & !3053.8 & \cellcolor{green!25}7.60 & \cellcolor{red!25}500.03 & 10.27 & 890.84 & 33.36  & 2482.71 \\\hline
+			5 & !7.7 & !3053.8 & 7.60 & 500.03 & 10.27 & 890.84 & 33.36  & 2482.71 \\\hline
 			6 & !22.98 & M/O & 19.52 & M/O & 30.81 & M/O  & 147.52 & M/O\\\hline
 			7 & !57.07 & M/O & 81.89 & M/O & 82.94 & M/O & 522.26  & M/O \\\hline
 			8 & !164.14 & M/O & 630.85 & M/O & 303.19 & M/O & 2142.76 & M/O\\\hline
-			9 & !307.67 & M/O & 2203.45 & M/O & 971.01 & M/O & 4243.34 & M/O\\\hline
-			10 & \cellcolor{green!25}!558.34 & \cellcolor{red!25}M/O & \cellcolor{green!25}7681.93 & \cellcolor{red!25}M/O & \cellcolor{green!25}2274.30 & \cellcolor{red!25}M/O & \cellcolor{green!25}7786.82 & \cellcolor{red!25}M/O\\\hline
+			9 & !307.67 & M/O & 2203.45 & M/O & 971.01 & M/O & 4243.34 & M/O\\ \hline
+			10 & !558.34 & M/O & 7681.93 & M/O & 2274.30 & M/O & 7786.82 & M/O\\\hline
 	\end{tabular}}
 
 	\caption{{\sattool} and {\smttool} run-times for searching for models (in secs).}
