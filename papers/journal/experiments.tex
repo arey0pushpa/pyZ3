@@ -176,6 +176,28 @@ The results and timings of three blocks of the {\vtstool} are presented in the t
 
 The minimal connectivity results for each variation of the existential condition is presented in table~\ref{tab:smt-grph}.
 %
+No matter what the rules of molecular
+interactions and regulation, steady state requires the graph structure to be at least strongly connected, and therefore 2-connected.
+%
+Beyond this, we find that 3-connectedness is existential condition for the Boolean regulation model on vesicles, while 4-connectedness is necessary and sufficient for the more constrained SNARE-SNARE inhibition on vesicles and Boolean regulation on compartments.
+%
+For more constrained regulation models
+(including the case where SNAREs are always active) we did not find any possible graphs
+representing steady state vesicle transport networks. 
+%
+This strongly suggests (but does not
+prove, since we only checked graphs of finite size) that no such graphs exist.
+%We have found no graphs for Variants A where no regulation is enforced on the activity of the molecules both on the edges and nodes.
+%%
+%Two other cases Variant B, Variant E also results in the no graph satisfying the constraints.
+%%  
+%2-connectedness is the existential condition for Variants D where activity of the molecule is dependent on the presence of the other molecules. 
+%%
+%Variants C has 3-connectedness as
+
+
+\todo{SA: Explain the results in details and Add biological interpretation of results.}
+%
 Table~\ref{tab:satsmt-graph} presents the comparison of the running times of {\smttool} and {\sattool} on VTS variations of sizes 2 to 10.
 %
 For this comparison we have fixed the total number of molecules ($|M|$) to be $2|N|$ 
