@@ -12,7 +12,8 @@ set_option(max_args=10000000, max_lines=1000000, max_depth=10000000, max_visited
 # input parsing
 # input number of nodes and molecules
 parser = argparse.ArgumentParser(description='Auto testing for TARA')
-parser.add_argument("-i","--file", type=file, default=examples/qbflib.qdimacs, help = "number of molecules")
+#parser.add_argument("-M","--file", type=file, default=4, help = "number of molecules")
+parser.add_argument("-M","--mols", type=int, default=4, help = "number of molecules")
 parser.add_argument("-N","--nodes", type=int, default=2, help = "number of nodes")
 parser.add_argument("-Q","--pedges", type=int, default=2, help = "max no.of parallel edges btw two nodes")
 parser.add_argument("-V","--variation", type=int, default=1, help = "model of the biological system")
@@ -39,7 +40,7 @@ bag.append ('6. No regulation at all.')
 #    if V == i + 1:
 #        print ' '
 #        print 'Default/choosen vesicular traffic system is regulated by ...',
-#        print bag[i]
+#        print bag[i]No graph
 #        print ' '
 #        print 'Use -V option to change the regulated variation.' 
 #        for i in bag:
@@ -209,9 +210,10 @@ if V == 1:
     #print Activity_node
     #print Activity_edge
     #exit(0)
+#Boolean on Edge
 elif V == 2:
     Activity_node = f_nn()
-    #Activity_edge = f_be()
+    Activity_edge = True
     #print Activity_node
     #print Activity_edge
 elif V == 3:
@@ -223,7 +225,7 @@ elif V == 4:
     Activity_node = f_nn()
     Activity_edge = f_se()
 elif V == 5:
-    #Activity_node = f_bn()
+    Activity_node = True
     Activity_edge = f_ne()
 else:
     Activity_node = f_nn()
@@ -550,7 +552,6 @@ for i in range(N):
             #rhs = And( rhs, r1[l][j])
             kbc = Or ( kbc, And (rhs, r1[i][j])) 
         w = Implies( r1[i][j], Or (bhs , kbc) )
-        #w = Implies( Or(bhs , kbc), r1[i][j] )
         A_list.append(w)
 D3_1_reachability = And(A_list)
 
@@ -639,10 +640,11 @@ for i in range(N):
     for j in range(i+1, N):
         if i == j:
             continue
-        D4_list.append( r1[i][j])
-        #rijji = Or (r1[i][j], r1[j][i])
-        #D4_list.append( rijji )
+        #D4_list.append( r1[i][j])
+        rijji = Or (r1[i][j], r1[j][i])
+        D4_list.append( rijji )
 D4_1_all_connected = And( D4_list )
+D4_1_some_disconnected = Not( And( D4_list ) )
 #print D4_1_all_connected
 #exit(0)
 
@@ -665,6 +667,19 @@ D4_2_some_disconnected = Not( And( D44_list ) )
 #print D4_2_some_disconnected
 #exit(0)
 
+#----- Constraint to enforce every node is part of the sol
+Nf_list = []
+for i in range(N):
+    N_list = []
+    for j in range(N):
+        if i == j: 
+            continue
+        for q in range(Q): 
+            N_list.append( edge[i][j][q] )
+    Nf_list.append( Or (N_list) )
+Every_node_participate = And (Nf_list)
+
+'''
 # K-1 Connectivity constraints. ####### 
 is_reach = Exists( setR1_connectivity, And(D3_1_reachability, D4_1_all_connected) )
 
@@ -774,8 +789,7 @@ qv =  list(itertools.chain(*parameter))
 noFunctionPossible = ForAll(qv,  Implies( allconstraints, not_a_function))
 
 #print noFunctionPossible
-
-s.add( And( connectivity, V5_self_edge_not_allowed, noFunctionPossible ) )
+#s.add( And( connectivity, V5_self_edge_not_allowed, noFunctionPossible ) )
 
 print(s)
 #exit(0)
@@ -784,16 +798,41 @@ print(s)
 #s.add( And( connectivity, ForAll (qv,  Implies( allconstraints, not_a_function) ) ) )
   
 # s.add( connectivity )
+'''
+
+s = Solver()
 
 # Neccessary condition Check.
-#s.add (Activity_node, Activity_edge, V1_molecule_presence_require_for_present_edge, V2_active_molecule_should_be_present, V3_active_molecule_on_node_should_be_present, V4_edgelabel_subset_of_nodelabel, V5_self_edge_not_allowed, V6_pairing_matrix_restrictions, V7_fusion_edge_must_fuse_with_target, V8_fusion2_edge_potentially_not_fuse_anythingelse, R1_steady_state_reachability_defination, R2_steady_state_stability)
+#connectivity = And ( D1_1_edge_exists, 
+#                     D2_1_drops_are_k_minus_1, 
+#                     At_least_k_edges, 
+#                     D3_1_reachability, 
+#                     D4_1_some_disconnected) 
+
+s.add (Activity_node, Activity_edge, 
+        V1_molecule_presence_require_for_present_edge, 
+        V2_active_molecule_should_be_present, 
+        V3_active_molecule_on_node_should_be_present, 
+        V4_edgelabel_subset_of_nodelabel, 
+        V5_self_edge_not_allowed, 
+        V6_pairing_matrix_restrictions, 
+        V7_fusion_edge_must_fuse_with_target, 
+        V8_fusion2_edge_potentially_not_fuse_anythingelse, 
+        R1_steady_state_reachability_defination, 
+        R2_steady_state_stability,
+        Every_node_participate,
+        D1_1_edge_exists,
+        D2_1_drops_are_k_minus_1,
+        At_least_k_edges,
+        D3_1_reachability,
+        D4_1_some_disconnected)
 
 print "solving...\n"
 #st = time.time()
 print s.check()
 
-#b = time.time() - st 
-#print "Solving took...", str(b + fbx)
+b = time.time() - st 
+print "Solving took...", str(b)
 
 # Printing the Graph ##########
 def dump_dot( filename, m ) :
@@ -896,6 +935,8 @@ if s.check() == sat:
     dump_dot( "/tmp/bio.dot", m )
 else:
     print "failed to solve"
+
+print "Solving took...", str(b)
     
     
 # CADET TRANSFORMATION #####
