@@ -56,7 +56,7 @@ All the experiments were done
 %Each test was run 
 on a machine with Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz processor and 16GB RAM.
 %
-A 30 min (1800 sec) timeout was used for the tool.
+A 90 min (5400 sec) timeout was used for the tool.
 
 %\input{sat-table}
 
@@ -101,7 +101,8 @@ The satisfying model is translated into a readable format and in case of a viola
 %	\item Check (using a SAT solver) validity of the verification condition. {\sattool} reports successful verification if the formula is found to be valid. If not, then {\sattool} produces a counterexample,
 %an assignment to the variables of the model, that is a witness to the violation of the property.
 %	\end{itemize}
-For our experimentation purpose, the SAT solver backend used were MiniSat~\cite{sorensson2005minisat}, and CryptoMiniSat~\cite{soos2016cryptominisat}, the winner of SAT 2015 Competition~\cite{balyo2016sat}. 
+For our experimentation purpose, the SAT solver backend used were MiniSat~\cite{sorensson2005minisat}, and CryptoMiniSat~\cite{soos2016cryptominisat}.
+% the winner of SAT 2015 Competition~\cite{balyo2016sat}. 
 
 %CBMC has a built-in SAT solver called MiniSat~\cite{sorensson2005minisat}, but it is also possible to use various other SAT solver blackboxes for property verification. Besides using MiniSat as a default SAT solver for our model, we have used different SAT solvers for the verification of the property, particularly CryptoMiniSat~\cite{soos2016cryptominisat} which was the winner of SAT 2015 Competition~\cite{balyo2016sat}. 
 %		MiniSat performed satisfactorily in comparison to other SAT solvers.
@@ -111,7 +112,7 @@ The recursive encoding (presented in section 6.1)
 %We have implemented the encodings 
 for each variant is implemented in {\smttool}.
 %
-It used python interface of industrial strength SMT solver, Z3. 
+The tool is based on industrial strength SMT solver, Z3. 
 %
 The tool allows the user to choose a model and the size
 of the network besides other parameters like connectivity and number of parallel edges. 
@@ -134,14 +135,13 @@ The tool is developed in C++ and uses~\zthree~\cite{z3} infrastructure to encode
 Since some of the formulas involve alternation of quantifiers over Boolean variables Z3 is not a suitable choice for those examples.
 %
 We translate the formulas created by Z3 tool into a standard
-QDIMACS~\cite{qdimacs} format and use it as an input for QBF solvers. 
+QDIMACS~\cite{qdimacs} format and use QBF solvers to solve the formula. 
 %
-We have used~\depqbf~\cite{lonsing2010depqbf} for solving the QBF formulas. 
+We have used~\depqbf~\cite{lonsing2010depqbf} for solving QBF formulas with alternation of quantifiers. 
 
 \textbf{{\ourtool} (QBF based synthesis tool):}
 \input{synth-table}
-We have implemented the synthesis encodings (presented in section 6.6) in
-called~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
+We have implemented the synthesis encodings (presented in section 6.6) in~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
 %
 The tool takes a partially defined VTS as input in a custom designed
 input language.
