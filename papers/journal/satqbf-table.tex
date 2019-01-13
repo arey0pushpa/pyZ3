@@ -34,27 +34,30 @@
 \begin{table}[t]
 	\centering
 	\def\arraystretch{1.2}
-	\begin{tabular}{ c|c|c|c }
+	\begin{tabular}{ c|c|c| c|c }
 		\hline
-		{\multirow{2}{*}{Variant}}  &
-		\multicolumn{2}{c|} {Constraints} & 
+		{\multirow{3}{*}{Variant}}  &
+		\multicolumn{3}{c|} {Constraints} & 
 		%	{\multirow{2}{*}{\textbf{Results}}}
-		{\multirow{2}{*}{SAT-time} } 
+		{\multirow{3}{*}{SAT-time} } 
 		\\
-		\cline{2-3}
-		&  Rest & Activity & 
-		\\ \hline
+		\cline{2-4}
+		& 	{\multirow{2}{*}{Rest} }  & 	\multicolumn{2}{c|} {Activity} & 
+		\\ 
+				\cline{3-4}
+	    &  & Node  & Edge & 
+	    \\\hline
 		
 		A. & \multirow{5}{*}{
 			\makecell{ \texttt{Consistancy}, \\  \texttt{Stability}, \\
 				\texttt{Connected(k)}  }
 		}
-		& \ref{eq:ann},\ref{eq:aen} &  T/O  \\
-		B. & & \ref{eq:anb},\ref{eq:aen} & T/O \\
-		C. & & \ref{eq:ann},\ref{eq:aeb} & T/O \\
-		D. & & \ref{eq:anb},\ref{eq:aeb} & T/O \\
-		E. & & \ref{eq:ann},\ref{eq:aep} & M/O   \\
-		F. & & \ref{eq:anb},\ref{eq:aep} & M/O \\\hline
+		& \ref{eq:ann} & \ref{eq:aen} &  T/O  \\
+		B. & & \ref{eq:anb} & \ref{eq:aen} & T/O \\
+		C. & & \ref{eq:ann} &  \ref{eq:aeb} & T/O \\
+		D. & & \ref{eq:anb} & \ref{eq:aeb} & T/O \\
+		E. & & \ref{eq:ann} & \ref{eq:aep} & M/O   \\
+		F. & & \ref{eq:anb} &  \ref{eq:aep} & M/O \\\hline
 		
 		% C_es :Self edges are allowed
 		% C_ed : Every edge is distinct 

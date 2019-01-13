@@ -1,33 +1,69 @@
-
+%
+%
+%\begin{table}[t]
+%	\centering
+%  %  \def\arraystretch{1.2}
+%	\begin{tabular}{|c|c|c|c|}
+%		\hline
+%		{\multirow{2}{*}{\textbf{Variant}}}  &
+%		\multicolumn{3}{c|}{\textbf{Constraints}}
+%		\\
+%		\cline{2-4}
+%		&  Rest & Node Activity & Edge Activity 
+%	\\ \hline
+%	
+%	A. & \multirow{5}{*}{
+%		\makecell{ \ref{eq:f0}--\ref{eq:fuse2},\\
+%			\ref{eq:reach1},\ref{eq:reach2},\\
+%			\ref{eq:drop1}--\ref{eq:drop4}}
+%	}
+%	& \ref{eq:ann} & \ref{eq:aen}    \\
+%	B. & & \ref{eq:anb} & \ref{eq:aen}   \\
+%	C. & & \ref{eq:ann} & \ref{eq:aeb}  \\
+%	D. & & \ref{eq:anb} & \ref{eq:aeb} \\
+%	E. & & \ref{eq:ann} & \ref{eq:aep}   \\
+%	F. & & \ref{eq:anb} & \ref{eq:aep} \\\hline
+%	
+%	% C_es :Self edges are allowed
+%	% C_ed : Every edge is distinct 
+%\end{tabular}
+%\caption{{\bf Activity regulation of molecules on he nodes and edges.
+%}}
+%\label{tab:var-grph}
+%\end{table}
 
 \begin{table}[t]
 	\centering
-  %  \def\arraystretch{1.2}
-	\begin{tabular}{|c|c|c|c|}
+	\def\arraystretch{1.2}
+	\begin{tabular}{ c|c c | c }
 		\hline
-		{\multirow{2}{*}{\textbf{Variant}}}  &
-		\multicolumn{3}{c|}{\textbf{Constraints}}
+		{\multirow{3}{*}{Variant}}  &
+		\multicolumn{3}{c} {Constraints} 
+		%	{\multirow{2}{*}{\textbf{Results}}}
 		\\
 		\cline{2-4}
-		&  Rest & Node Activity & Edge Activity 
-	\\ \hline
-	
-	A. & \multirow{5}{*}{
-		\makecell{ \ref{eq:f0}--\ref{eq:fuse2},\\
-			\ref{eq:reach1},\ref{eq:reach2},\\
-			\ref{eq:drop1}--\ref{eq:drop4}}
-	}
-	& \ref{eq:ann} & \ref{eq:aen}    \\
-	B. & & \ref{eq:anb} & \ref{eq:aen}   \\
-	C. & & \ref{eq:ann} & \ref{eq:aeb}  \\
-	D. & & \ref{eq:anb} & \ref{eq:aeb} \\
-	E. & & \ref{eq:ann} & \ref{eq:aep}   \\
-	F. & & \ref{eq:anb} & \ref{eq:aep} \\\hline
-	
-	% C_es :Self edges are allowed
-	% C_ed : Every edge is distinct 
-\end{tabular}
-\caption{{\bf Activity regulation of molecules on he nodes and edges.
-}}
+		& 	{\multirow{2}{*}{Rest} }  & \multicolumn{2}{c} {Activity} 
+		\\ 
+		\cline{3-4}
+		&  & On Node  & On Edge 
+		\\\hline
+		
+		A. & \multirow{5}{*}{
+					\makecell{ \ref{eq:f0}--\ref{eq:fuse2},\\
+						\ref{eq:reach1},\ref{eq:reach2},\\
+						\ref{eq:drop1}--\ref{eq:drop4}}
+				}
+		& \ref{eq:ann} & \ref{eq:aen} \\
+		B. & & \ref{eq:anb} & \ref{eq:aen}  \\
+		C. & & \ref{eq:ann} &  \ref{eq:aeb}  \\
+		D. & & \ref{eq:anb} & \ref{eq:aeb}  \\
+		E. & & \ref{eq:ann} & \ref{eq:aep}    \\
+		F. & & \ref{eq:anb} &  \ref{eq:aep}  \\\hline
+		
+		% C_es :Self edges are allowed
+		% C_ed : Every edge is distinct 
+	\end{tabular}
+\caption{ Activity regulation of molecules on the nodes and edges.
+}
 \label{tab:var-grph}
 \end{table}
