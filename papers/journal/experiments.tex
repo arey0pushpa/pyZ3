@@ -221,7 +221,7 @@ In the table M/O indicates the search results in out of memory, T/O indicates a 
 %
 %We have compared our performance with the performance of our earlier CBMC based implementation (old-encoding).
 %
-As an example, the result of verifying the formula for variation C of 2-connected, 10 compartment graph took 1977.72 secs. with a satisfying result.
+As an example, the result of verifying the formula for variation C of 2-connected, 10 compartment graph took 1977.72 secs for a satisfying result.
 %
 In comparison, {\sattool} was unable to solve the instance and ran out of memory.
 % for $|N|$ greater than 5.
@@ -234,7 +234,7 @@ Hence with the use of improved encoding of reachability, we were able to scale t
 %a much larger compartmentalized system, especially to interesting 
 the case of eukaryotic cells with a total number of 10 compartments.
 %
-Furthermore, we experimented with limits of our tools and found that {\smttool} was able to solve the constraints up to $20$ nodes.
+Furthermore, we experimented with limits of our tools and found that {\smttool} was able to solve the constraints up to $18$ nodes.
 
 \input{qbf-table}
 %\textbf{Universal Condition:}
@@ -248,7 +248,8 @@ For example, we found that the 3-connected graph satisfies the universal conditi
 Note that for this variation existential condition result was the 2-connected graph. 
 %
 For every other version, the results remained the same.
-This implies that for every 3-connected graph, a valid VTS that satisfies all constraints \todo{ elaborate a bit on the constraints} exists.
+%
+This implies that for every 3-connected graph there is a valid VTS that satisfies all the constraints of the system.
 % 
 For biological cells, this means that the whole space of 3-connected graphs is available for evolutionary exploration
 %
