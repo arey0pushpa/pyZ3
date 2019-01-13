@@ -4,9 +4,10 @@
 %	\caption{{\bf SAT and QBF implementation comparison.}}
 %	\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
 %		max width=\textwidth}{
-		\begin{tabular}[t]{ c|c c|c|c }\hline
+		\begin{tabular}[t]{ c|c c|c }\hline
 			
-			{\multirow{2}{*} {Sr.No}}  & \multicolumn{2}{c|}{Regulation} & \multicolumn{2}{c}{Universal condition} 
+			{\multirow{2}{*} {Sr.No}}  & \multicolumn{2}{c|}{Regulation} &
+			{\multirow{2}{*} {Universal condition}} 
 			
 		%	\\\cline{2-7}
 			
@@ -15,16 +16,17 @@
 			%{} & \multicolumn{2}{c|}{2-connected} & \multicolumn{2}{c|}{3-connected} & \multicolumn{2}{c|}{2-connected}  &  \multicolumn{2}{c|}{4-connected}
 			
 			\\
-			\cline{2-5}
-			{} & {Node} & {Edge} & {Connectivity} &  {QBF-time}
+			\cline{2-3}
+			{} & {Node} & {Edge} 
+			% &  {QBF-Scalable}
 			
 			\\\hline
-			1. & Bf & Bf & 3C & 2.12   \\\hline
-			2. & None & Bf  & 3C & 7.12  \\\hline
-			3. & Bf & SNARE inhib & 4C  & 7.66 \\\hline
-			4. & None & SNARE inhib   & M/O & 48.35 \\\hline
-			5. & Bf & None  & No graphs  & 890.84 \\\hline
-			6. &  None & None  & No graphs  & M/O \\\hline
+			1. & Bf & Bf & 3-Connected   \\\hline
+			2. & None & Bf  & 3-Connected   \\\hline
+			3. & Bf & SNARE inhib & 4-Connected  \\\hline
+			4. & None & SNARE inhib   & No graphs  \\\hline
+			5. & Bf & None  & No graphs   \\\hline
+			6. &  None & None  & No graphs   \\\hline
 			
 	\end{tabular}
 %}

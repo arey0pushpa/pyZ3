@@ -185,7 +185,16 @@ We found that 3-connectedness is the existential condition for the Boolean regul
 For all other constrained regulation models of VTS, the experimentation was unable to find any graphs representing the vesicle transport networks in the stable state.
 %(including the case where SNAREs are always active) we did not find any possible graphs representing stable vesicle transport networks. 
 %
-This hints that no such graphs exist, as our graphs are of finite size, this does not amount to a  proof. 
+This strongly suggests that no such graphs exist, as our graphs are of finite size, this does not amount to a  proof. 
+
+For biological cells, the steady state condition implies that every compartment that gives a vesicle necessarily receives a vesicle too.
+%
+On top of this, for the case where traffic molecules are regulated in some form, every pair of compartments with a vesicle going between them, have two additional vesicle paths connecting them; where these two paths go in opposite directions.
+%
+Finally, when we take into account the exact manner in which SNAREs interact in real cells, we find that the biological VTS must conform to a very specific structure; any two compartments that are connected by a vesicle, must be connected by 4 vesicle paths, two of them going in the same direction, and the other two in the opposite direction. 
+%
+No graph results suggests that a functional VTS necessarily needs some form of regulation, where the molecules of the VTS are kept inactive in places where they might disrupt other interactions
+
 %This strongly suggests (but does not prove, since we only checked graphs of finite size) that no such graphs exist.
 %We have found no graphs for Variants A where no regulation is enforced on the activity of the molecules both on the edges and nodes.
 %%
@@ -194,6 +203,7 @@ This hints that no such graphs exist, as our graphs are of finite size, this doe
 %2-connectedness is the existential condition for Variants D where activity of the molecule is dependent on the presence of the other molecules. 
 %%
 %Variants C has 3-connectedness as
+
 
 
 \todo{SA: Explain the results in details and Add biological interpretation of results.}
@@ -230,7 +240,7 @@ Furthermore, we experimented with limits of our tools and found that {\smttool} 
 
 \input{qbf-table}
 %\textbf{Universal Condition:}
-\todo{SA: will improve after experimentation.}
+
 Table~\ref{tab:qbf-graph} presents the result of the QBF tool.
 %
 The table represents the result of the graph connectivity for each variation of the VTS.  
@@ -240,8 +250,12 @@ For example, we found that the 3-connected graph satisfies the universal conditi
 Note that for this variation existential condition result was the 2-connected graph. 
 %
 For every other version, the results remained the same.
+This implies that for every 3-connected graph, a valid VTS that satisfies all constraints \todo{ elaborate a bit on the constraints} exists.
 % 
-The experimentations were done using two QBF solvers: \depqbf and \rarqbf.
+For biological cells, this means that the whole space of 3-connected graphs is available for evolutionary exploration
+%
+%The experimentations were done using two QBF solvers: \depqbf and \rarqbf.
+
 
 %(there is a satisfying assignments to satisfy constraints of VTS) is valid VTS.   
 %\textbf{Synthesis}:
