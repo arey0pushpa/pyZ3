@@ -3,28 +3,57 @@
 \begin{table}[t]
 	\centering
     \def\arraystretch{1.2}
-	\begin{tabular}{ |c|c|c|c| }
-		\hline
-		{\multirow{2}{*}{Variant}}  &
-		\multicolumn{2}{c|} {Constraints} & 
+%	\begin{tabular}{ |c|c|c|c| }
+%		\hline
+%		{\multirow{2}{*}{Variant}}  &
+%		\multicolumn{2}{c|} {Constraints} & 
+%	%	{\multirow{2}{*}{\textbf{Results}}}
+%	    {\multirow{2}{*}{Graph connectivity }} 
+%		\\
+%		\cline{2-3}
+%		&  Rest & Activity & 
+%	\\ \hline
+%	
+%	A. & \multirow{5}{*}{
+%		\makecell{ \ref{eq:f0}--\ref{eq:fuse2},\\
+%			\ref{eq:reach1},\ref{eq:reach2},\\
+%			\ref{eq:drop1}--\ref{eq:drop4}}
+%	}
+%	& \ref{eq:ann},\ref{eq:aen} & No graph   \\
+%	B. & & \ref{eq:anb},\ref{eq:aen} & No graph \\
+%	C. & & \ref{eq:ann},\ref{eq:aeb} & 3-connected \\
+%	D. & & \ref{eq:anb},\ref{eq:aeb} & 2-connected \\
+%	E. & & \ref{eq:ann},\ref{eq:aep} & No graph    \\
+%	F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected \\\hline
+%	
+%	% C_es :Self edges are allowed
+%	% C_ed : Every edge is distinct 
+%\end{tabular}
+	\begin{tabular}{ c|c|c c|c }
+	\hline
+	{\multirow{3}{*}{Variant}}  &
+	\multicolumn{3}{c|} {Constraints} & 
 	%	{\multirow{2}{*}{\textbf{Results}}}
-	    {\multirow{2}{*}{Graph connectivity }} 
-		\\
-		\cline{2-3}
-		&  Rest & Activity & 
-	\\ \hline
+	{\multirow{3}{*}{Graph connectivity} } 
+	\\
+	\cline{2-4}
+	& 	{\multirow{2}{*}{Rest} }  & 	\multicolumn{2}{c|} {Activity} & 
+	\\ 
+	\cline{3-4}
+	&  & Node  & Edge & 
+	\\\hline
 	
 	A. & \multirow{5}{*}{
-		\makecell{ \ref{eq:f0}--\ref{eq:fuse2},\\
-			\ref{eq:reach1},\ref{eq:reach2},\\
-			\ref{eq:drop1}--\ref{eq:drop4}}
+				\makecell{ \ref{eq:f0}--\ref{eq:fuse2},\\
+					\ref{eq:reach1},\ref{eq:reach2},\\
+					\ref{eq:drop1}--\ref{eq:drop4}}
 	}
-	& \ref{eq:ann},\ref{eq:aen} & No graph   \\
-	B. & & \ref{eq:anb},\ref{eq:aen} & No graph \\
-	C. & & \ref{eq:ann},\ref{eq:aeb} & 3-connected \\
-	D. & & \ref{eq:anb},\ref{eq:aeb} & 2-connected \\
-	E. & & \ref{eq:ann},\ref{eq:aep} & No graph    \\
-	F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected \\\hline
+	& \ref{eq:ann} & \ref{eq:aen} & No graph  \\
+	B. & & \ref{eq:anb} & \ref{eq:aen} & No graph \\
+	C. & & \ref{eq:ann} &  \ref{eq:aeb} &  3-connected \\
+	D. & & \ref{eq:anb} & \ref{eq:aeb} & 2-connected \\
+	E. & & \ref{eq:ann} & \ref{eq:aep} & No graph  \\
+	F. & & \ref{eq:anb} &  \ref{eq:aep} & 4-connected \\\hline
 	
 	% C_es :Self edges are allowed
 	% C_ed : Every edge is distinct 

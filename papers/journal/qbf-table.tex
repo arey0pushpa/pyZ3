@@ -1,69 +1,59 @@
-%\begin{table}[t]
-%	\centering
-%	    \def\arraystretch{1.2}
-%%	\caption{{\bf SAT and QBF implementation comparison.}}
-%%	\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
-%%		max width=\textwidth}{
-%		\begin{tabular}[t]{ c|c c|c }\hline
-%			
-%			{\multirow{2}{*} {Sr.No}}  & \multicolumn{2}{c|}{Regulation} &
-%			{\multirow{2}{*} {Universal condition}} 
-%			
-%		%	\\\cline{2-7}
-%			
-%%			{} & \multicolumn{2}{c|}{\textbf{2-connected} } & \multicolumn{2}{c|}{\textbf{3-connected} } & \multicolumn{2}{c|}{\textbf{2-connected}}  &  \multicolumn{2}{c|}{\textbf{4-connected}}
-%
-%			%{} & \multicolumn{2}{c|}{2-connected} & \multicolumn{2}{c|}{3-connected} & \multicolumn{2}{c|}{2-connected}  &  \multicolumn{2}{c|}{4-connected}
-%			
-%			\\
-%			\cline{2-3}
-%			{} & {Node} & {Edge} 
-%			% &  {QBF-Scalable}
-%			
-%			\\\hline
-%			1. & Bf & Bf & 3-Connected   \\\hline
-%			2. & None & Bf  & 3-Connected   \\\hline
-%			3. & Bf & SNARE inhib & 4-Connected  \\\hline
-%			4. & None & SNARE inhib   & No graphs  \\\hline
-%			5. & Bf & None  & No graphs   \\\hline
-%			6. &  None & None  & No graphs   \\\hline
-%			
-%	\end{tabular}
-%%}
-%	\caption{ QBF result and timings (in secs.)}
-%	\label{tab:qbf-graph}
-%\end{table}
-%
-%
-
 \begin{table}[t]
 	\centering
 	\def\arraystretch{1.2}
-	\begin{tabular}{ c|c|c|c }
-		\hline
-		{\multirow{2}{*}{Variant}}  &
-		\multicolumn{2}{c|} {Constraints} & 
-		%	{\multirow{2}{*}{\textbf{Results}}}
-		{\multirow{2}{*}{Graph connectivity }} 
-		\\
-		\cline{2-3}
-		&  Rest & Activity & 
-		\\ \hline
-		
-		A. & \multirow{5}{*}{
-			\makecell{ \texttt{Consistancy}, \\  \texttt{Stability}, \\
-				 \texttt{Connected(k)}  }
-		}
-		& \ref{eq:ann},\ref{eq:aen} & No graph   \\
-		B. & & \ref{eq:anb},\ref{eq:aen} & No graph \\
-		C. & & \ref{eq:ann},\ref{eq:aeb} & 3-connected \\
-		D. & & \ref{eq:anb},\ref{eq:aeb} & 3-connected \\
-		E. & & \ref{eq:ann},\ref{eq:aep} & No graph    \\
-		F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected \\\hline
-		
-		% C_es :Self edges are allowed
-		% C_ed : Every edge is distinct 
-	\end{tabular}
+%	\begin{tabular}{ c|c|c|c }
+%		\hline
+%		{\multirow{2}{*}{Variant}}  &
+%		\multicolumn{2}{c|} {Constraints} & 
+%		%	{\multirow{2}{*}{\textbf{Results}}}
+%		{\multirow{2}{*}{Graph connectivity }} 
+%		\\
+%		\cline{2-3}
+%		&  Rest & Activity & 
+%		\\ \hline
+%		
+%		A. & \multirow{5}{*}{
+%			\makecell{ \texttt{Consistancy}, \\  \texttt{Stability}, \\
+%				 \texttt{Connected(k)}  }
+%		}
+%		& \ref{eq:ann},\ref{eq:aen} & No graph   \\
+%		B. & & \ref{eq:anb},\ref{eq:aen} & No graph \\
+%		C. & & \ref{eq:ann},\ref{eq:aeb} & 3-connected \\
+%		D. & & \ref{eq:anb},\ref{eq:aeb} & 3-connected \\
+%		E. & & \ref{eq:ann},\ref{eq:aep} & No graph    \\
+%		F. & & \ref{eq:anb},\ref{eq:aep} & 4-connected \\\hline
+%		
+%		% C_es :Self edges are allowed
+%		% C_ed : Every edge is distinct 
+%	\end{tabular}
+	\begin{tabular}{ c|c c c|c }
+	\hline
+	{\multirow{3}{*}{Variant}}  &
+	\multicolumn{3}{c|} {Constraints} & 
+	%	{\multirow{2}{*}{\textbf{Results}}}
+	{\multirow{3}{*}{Graph connectivity} } 
+	\\
+	\cline{2-4}
+	& 	{\multirow{2}{*}{Rest} }  & 	\multicolumn{2}{c|} {Activity} & 
+	\\ 
+	\cline{3-4}
+	&  & Node  & Edge & 
+	\\\hline
+	
+	A. & \multirow{5}{*}{
+					\makecell{ \texttt{Consistancy}, \\  \texttt{Stability}, \\
+						 \texttt{Connected(k)}  }
+	}
+	& \ref{eq:ann} & \ref{eq:aen} & No graph  \\
+	B. & & \ref{eq:anb} & \ref{eq:aen} & No graph \\
+	C. & & \ref{eq:ann} &  \ref{eq:aeb} &  3-connected \\
+	D. & & \ref{eq:anb} & \ref{eq:aeb} & 3-connected \\
+	E. & & \ref{eq:ann} & \ref{eq:aep} & No graph  \\
+	F. & & \ref{eq:anb} &  \ref{eq:aep} & 4-connected \\\hline
+	
+	% C_es :Self edges are allowed
+	% C_ed : Every edge is distinct 
+\end{tabular}
 	\caption{ QBF result for graph connectivity}
 	\label{tab:qbf-graph}
 \end{table}
