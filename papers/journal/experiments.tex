@@ -208,7 +208,7 @@ No graph results suggests that a functional VTS necessarily needs some form of r
 %
 Table~\ref{tab:satsmt-graph} presents the comparison of the running times of {\smttool} and {\sattool} on VTS variations of sizes 2 to 10.
 %
-For this comparison we have fixed the total number of molecules ($|M|$) to be $2|N|$ 
+For this comparison we have fixed the total number of molecules minimum twice the node count 
 %for $ |N|> 2$ and $2|N| + 1$ for $|N| = 2$
 %
 %For each variant, we fix 1
@@ -216,18 +216,18 @@ and maximum number of parallel
 edges to be 2.
 %
 %
-In the table ``!'' indicate that no model exists for the constraint  (constraints were unsatisfiable).
+In the table M/O indicates the search results in out of memory, T/O indicates a time out and ``!'' indicate that no model exists for the constraint  (constraints were unsatisfiable).
 %In the table we have shown comparison for specific connectivity, for example variant A is checked against any graph with connectivity 2, variant B with connectivity 3 similarly for the rest of the variants.
 %
 %We have compared our performance with the performance of our earlier CBMC based implementation (old-encoding).
 %
-As an example, the result of verifying the formula for variation F of 2-connected, 10 compartment graph took 129.78 minutes (7786.8 secs) with a satisfying result.
+As an example, the result of verifying the formula for variation C of 2-connected, 10 compartment graph took 1977.72 secs. with a satisfying result.
 %
-In comparison, {\sattool} was unable to solve the instance and ran OUT OF MEMORY.
+In comparison, {\sattool} was unable to solve the instance and ran out of memory.
 % for $|N|$ greater than 5.
 %
 % 
-The recursive encoding also performed better for the cases where the instance was unsatisfiable (table~\ref{tab:satsmt-graph} Variant A timing comparison and Variant D with N =2).
+The recursive encoding also performed better for the cases where the instance was unsatisfiable (Variant A timing comparison).
 %instead of enumeration, not only we got efficiency improved for finding a SAT model but also did better in the case of refutation that no model exist (table~\ref{tab:satsmt-graph} Variant A timing comparison and Variant D with N =2). 
 %
 Hence with the use of improved encoding of reachability, we were able to scale the system to the biologically relevant compartment size, the
