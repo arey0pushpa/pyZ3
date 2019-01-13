@@ -1,10 +1,25 @@
-Improvement in SAT and SMT solvers in the past decades have led to their use in modeling and understanding complex biological systems~\cite{heule2010exact,yordanov2013smt,mangla2010timing}. 
+Previous analysis of vesicle traffic system has used simulation and statistical reasoning~\cite{mani2016stacking}. 
 %
-Many of which involve reasoning about graphs and networks rules with possible exhaustive search and hence can be reduced to solving a SAT/SMT question. 
+Such analysis is far from complete and can only make statistical claims based on a subset of samples. 
 %
-Modeling and understanding the gene regulatory networks (GNR)~\cite{guerra2012reasoning,chin2008biographe}, modeling and understanding the gene regulatory networks (GNR)~\cite{giacobbe2015model,rosenblueth2014inference, batt2010efficient, yordanov2016method, dunn2014defining, paoletti2014analyzing, koksal2013synthesis} is one such example. 
+The properties of VTS required precise analysis for all possible rules and variations that make formal methods a suitable choice.
+
+The Boolean satisfiabilty (SAT) solvers are used to solve wide range of problems including
 %
-We have extended the application of SAT and SMT solvers to the most comple Biological transport network (VTS)~\cite{mani2016stacking,shukla}. 
+software and hardware verification, equivalence checking, automatic test generation,
+AI planning, scheduling and program synthesis. 
+%
+The enormous progress in the performance of SAT and SMT solvers
+%Improvement in SAT and SMT solvers
+in the past decades have led to their use in modeling and understanding complex biological systems~\cite{heule2010exact,yordanov2013smt,mangla2010timing}. 
+%
+Many of which involve reasoning about graphs and networks rules~\cite{guerra2012reasoning,chin2008biographe} with possible exhaustive search.
+% and hence can be reduced to solving a SAT/SMT question. 
+%
+
+One of the prominent areas of application of SAt/SMT solvers are modeling and understanding the gene regulatory networks (GNR)~\cite{giacobbe2015model,rosenblueth2014inference, batt2010efficient, yordanov2016method, dunn2014defining, paoletti2014analyzing, koksal2013synthesis}.
+%
+We have extended the application of SAT and SMT solvers to the most complex Biological transport network (VTS)~\cite{mani2016stacking,shukla}. 
 
 In recent years, there has been a wide range of methods
 developed for the similar synthesis problems~\cite{sketch,sygus,exampleSynth}.
