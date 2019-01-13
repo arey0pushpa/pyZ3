@@ -403,8 +403,9 @@ for i in range(N):
             for q in range(Q):
                 rhs = Or( Or (And( edge[i][l][q], Not (dump1[i][l][q]) ), And (edge[l][i][q], Not ( dump1[l][i][q]) ) ) , rhs)
             #rhs = And( rhs, r1[l][j])
-            kbc = Or ( kbc, And (rhs, r1[i][j])) 
-        # THIS WAS A BUG :)
+            # THIS WAS A BUG No.1:)
+            kbc = Or ( kbc, And (rhs, r1[l][j])) 
+        # THIS WAS A BUG No.2 :)
         #w = Implies( r1[i][j], Or (bhs , kbc) )
         w = Implies( Or (bhs , kbc), r1[i][j] )
         A_list.append(w)
