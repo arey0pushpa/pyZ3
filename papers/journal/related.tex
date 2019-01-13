@@ -1,12 +1,12 @@
 Previous analysis of vesicle traffic system has used simulation and statistical reasoning~\cite{mani2016stacking}. 
 %
-Such analysis is far from complete and can only make statistical claims based on a subset of samples. 
+Such analysis is far from complete and can only make statistical claims about VTS based on a subset of samples. 
 %
-The properties of VTS required precise analysis for all possible rules and variations that make formal methods a suitable choice.
+The properties of VTS discussed in this paper require precise analysis for all possible rules and variations, that make formal methods a suitable alternative.
 
 The Boolean satisfiabilty (SAT) solvers are used to solve wide range of problems including
 %
-software and hardware verification~\cite{biere1999symbolic1, biere1999symbolic2, bjesse2001finding, velev2003effective}, equivalence checking~\cite{goldberg2001using} automatic test case generation~\cite{stephan1996combinational},
+software and hardware verification~\cite{biere1999symbolic1, biere1999symbolic2, bjesse2001finding, velev2003effective}, equivalence checking~\cite{goldberg2001using}, automatic test case generation~\cite{stephan1996combinational},
 AI planning~\cite{kautz1996pushing} and scheduling~\cite{gomes1998randomization}. 
 %
 The enormous progress in the performance of SAT and SMT solvers
@@ -17,11 +17,16 @@ Many of which involve reasoning about graphs and networks rules~\cite{guerra2012
 % and hence can be reduced to solving a SAT/SMT question. 
 %
 
-One of the prominent areas of application of SAT/SMT solvers are modeling and understanding the gene regulatory networks (GNR)~\cite{giacobbe2015model,rosenblueth2014inference, batt2010efficient, yordanov2016method, dunn2014defining, paoletti2014analyzing, koksal2013synthesis}.
+One of the prominent areas of application of SAT/SMT solvers is modeling and understanding the gene regulatory networks (GNR)~\cite{giacobbe2015model,rosenblueth2014inference, batt2010efficient, yordanov2016method, dunn2014defining, paoletti2014analyzing, koksal2013synthesis}.
 %
-The gene regulatory network question is encoded into a Boolean satisfiability problem and then with the help of a SAT and SMT solvers solve the generated formula. 
+The gene regulatory network question is encoded into a Boolean satisfiability problem and then SAT and SMT solvers are used to solve the generated formula. 
+%
+The~\cite{rosenblueth2014inference, batt2010efficient, dunn2014defining} use symbolic SAT solving approach whereas~\cite{giacobbe2015model, yordanov2016method} present an SMT based encoding of the problem.
 % 
 We have extended the application of SAT and SMT solvers to a comparatively more complex biological transport network~\cite{mani2016stacking} namely vesicle traffic system. 
+%
+To our best knowledge this series of work is the first application
+of formal methods to vesicle traffic networks.
 
 In recent years, there has been a wide range of methods
 developed for the similar synthesis problems~\cite{sketch,sygus,exampleSynth}.
