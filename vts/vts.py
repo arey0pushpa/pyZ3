@@ -352,6 +352,7 @@ for i in range(N):
         for q in range(Q):
             D1_list.append( Implies (dump1[i][j][q], edge[i][j][q]) )
 D1_only_present_e_dropped = And (D1_list)
+d1_1_0_0 = False
 
 # Make sure that the summation of edges present is greater than k-1
 oneList = []

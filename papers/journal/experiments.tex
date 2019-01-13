@@ -93,7 +93,7 @@ Using the tool's interface user can select the variation of the VTS, connectivit
 %
 The {\sattool} verifies the properties by first converting the constraints and properties into a Boolean formula and determine the satisfiability of the formula with the help of a SAT solver backend.
 %
-The satisfying model is translated into a readable format and in case of a violation, the tool produces a readable counterexample.
+The satisfying model is translated into a human readable format and in case of a violation, the tool produces a readable counterexample.
 %  following steps:
 %	\begin{itemize}
 %	\item Convert (using CFE) the model and the properties into a Boolean formula (verification condition) such that the property is true of all behaviors of the model up to the specified
@@ -117,7 +117,7 @@ The tool is based on industrial strength SMT solver, Z3.
 The tool allows the user to choose a model and the size
 of the network besides other parameters like connectivity and number of parallel edges. 
 %		
-It uses Z3 Python interface to build the needed constraints and applies Z3 solver on the constraints to find a model (a satisfying assignment that respects the constraints). 
+It uses Z3 Python interface to build the needed constraints and applies Z3 solver on the constraints to find a model (a satisfying assignment that follows the constraints). 
 %
 This tool also translates the satisfying model found by Z3 into
 a VTS and represent a visual output to the user in form of coloured annotated graph. 
@@ -148,8 +148,8 @@ input language.
 %
 The input is then converted to the constraints over VTS using the {\qbftool} interface. 
 %
-The tool can not only synthesize the discussed queries, but also their
-combinations.
+The tool can synthesize the queries discussed earlier and also their combinations.
+%The tool can not only synthesize the discussed queries, but also their combinations.
 %
 For example, our tool can modify labels of nodes or edges while
 learning activity functions.
@@ -157,7 +157,7 @@ learning activity functions.
 The tool returns a complete VTS with visual graph representation as an output to the user.  
 
 \subsection{Results}
-The results and timings of three blocks of the {\vtstool} are presented in the table~\ref{tab:smt-grph} and table~\ref{tab:satsmt-graph}, for both {\sattool} and {\smttool}, in table~\ref{tab:qbf-graph} for {\sattool} and in table~\ref{tab:synth-graph} for~{\ourtool}.
+The results and timings of three blocks of the {\vtstool} are presented in the table~\ref{tab:smt-grph} and table~\ref{tab:satsmt-graph}, for both {\sattool} and {\smttool}, in table~\ref{tab:qbf-graph} for {\qbftool} and in table~\ref{tab:synth-graph} for~{\ourtool}.
 
 
 %To illustrate usability of our tool in the last column of the Table~\ref{tab:smt-grph}, we present the minimum connectedness needed for the different variants after applying our tool for sizes from 2 to 10. 
@@ -174,7 +174,7 @@ The results and timings of three blocks of the {\vtstool} are presented in the t
 
 \input{smt-table}
 
-The minimal connectivity results for each variation of the existential condition is presented in table~\ref{tab:smt-grph}.
+The minimal connectivity results for each variation of the existential condition are presented in table~\ref{tab:smt-grph}.
 %
 %No matter what the rules of molecular interactions and regulation, steady state requires the graph structure to be at least strongly connected, and therefore 2-connected.
 The steady-state constraint requires that structure of the graph is at least 2-connected. 
@@ -182,12 +182,11 @@ The steady-state constraint requires that structure of the graph is at least 2-c
 We found that 3-connectedness is the existential condition for the Boolean regulation model on vesicles, while 4-connectedness is the existential condition for the more constrained SNARE-SNARE inhibition on vesicles and Boolean regulation on compartments.
 %Beyond this, we find that 3-connectedness is existential condition for the Boolean regulation model on vesicles, while 4-connectedness is existential condition for the more constrained SNARE-SNARE inhibition on vesicles and Boolean regulation on compartments.
 %
-For more constrained regulation models
-(including the case where SNAREs are always active) we did not find any possible graphs
-representing steady state vesicle transport networks. 
+For all other constrained regulation models of VTS, the experimentation was unable to find any graphs representing the vesicle transport networks in the stable state.
+%(including the case where SNAREs are always active) we did not find any possible graphs representing stable vesicle transport networks. 
 %
-This strongly suggests (but does not
-prove, since we only checked graphs of finite size) that no such graphs exist.
+This hints that no such graphs exist, as our graphs are of finite size, this does not amount to a  proof. 
+%This strongly suggests (but does not prove, since we only checked graphs of finite size) that no such graphs exist.
 %We have found no graphs for Variants A where no regulation is enforced on the activity of the molecules both on the edges and nodes.
 %%
 %Two other cases Variant B, Variant E also results in the no graph satisfying the constraints.

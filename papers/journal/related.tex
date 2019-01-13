@@ -4,6 +4,7 @@ Such analysis is far from complete and can only make statistical claims based on
 %
 The properties of VTS required precise analysis for all possible rules and variations that make formal methods a suitable choice.
 
+\todo{Add references}
 The Boolean satisfiabilty (SAT) solvers are used to solve wide range of problems including
 %
 software and hardware verification, equivalence checking, automatic test generation,
@@ -17,9 +18,11 @@ Many of which involve reasoning about graphs and networks rules~\cite{guerra2012
 % and hence can be reduced to solving a SAT/SMT question. 
 %
 
-One of the prominent areas of application of SAt/SMT solvers are modeling and understanding the gene regulatory networks (GNR)~\cite{giacobbe2015model,rosenblueth2014inference, batt2010efficient, yordanov2016method, dunn2014defining, paoletti2014analyzing, koksal2013synthesis}.
+One of the prominent areas of application of SAT/SMT solvers are modeling and understanding the gene regulatory networks (GNR)~\cite{giacobbe2015model,rosenblueth2014inference, batt2010efficient, yordanov2016method, dunn2014defining, paoletti2014analyzing, koksal2013synthesis}.
 %
-We have extended the application of SAT and SMT solvers to the most complex Biological transport network (VTS)~\cite{mani2016stacking,shukla}. 
+The gene regulatory network question is encoded into a Boolean satisfiability problem and then with the help of a SAT and SMT solvers solve the generated formula. 
+% 
+We have extended the application of SAT and SMT solvers to a more complex biological transport network~\cite{mani2016stacking} namely vesicle traffic system. 
 
 In recent years, there has been a wide range of methods
 developed for the similar synthesis problems~\cite{sketch,sygus,exampleSynth}.
