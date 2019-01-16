@@ -277,14 +277,13 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
   
   //z3::expr inputCons = ctx.bool_val(true);
 
-  /** Known and Unknown Bit variables 
+  /** Known and Unknown Bit variables */
   z3::expr_vector knownNodes( ctx );
   z3::expr_vector knownActiveNodes( ctx );
   z3::expr_vector knownEdges( ctx );
   z3::expr_vector knownPresenceEdges ( ctx );
   z3::expr_vector knownActiveEdges( ctx );
   z3::expr_vector knownPairingMatrix( ctx );
-  */
   
   z3::expr_vector unknownN( ctx );
   z3::expr_vector unknownActiveN( ctx );
@@ -378,7 +377,7 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
     // auto edgeC =  atmost(unknownE, 1);
 //     auto edgeC = !at_least_two( unknownE );
     // auto edgeC = !at_least_three( unknownE );
-    auto edgeC = mk_le_k_bits( unknownE, 1);
+    auto edgeC = mk_le_k_bits( unknownE, 3);
     /*
     for ( unsigned i = 0; i < knownEdges.size(); i++ ) {
       std::cout << "known edge: " << knownEdges[i] << "\n";
@@ -414,9 +413,6 @@ z3::expr vts::vts_synthesis ( unsigned variation ) {
                     exists( listPairing4M,
                     exists( listReach, 
                             vtsCons && knownVarConstraint ))))));   
-
-    //   exists( listPairing4M, 
-
 
     auto cons = exists( listE, 
                  qvtsCons && kConnCons && edgeC ); 

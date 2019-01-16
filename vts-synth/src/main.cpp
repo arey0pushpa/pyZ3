@@ -74,7 +74,7 @@ int main(int ac, char* av[])
 
     // Declare an options description instance which will be shown
     // to the user
-    options_description visible("VTS-Synth [version 0.0.1]. (C) Copyright 2017-2018 TIFR Mumbai. \nUsage: ./vts-synth [--options] [--variation arg] \n\nFunction types:\n  0. Arbitrary Boolean func: ackermannization. [default] \n  1. K-cnf with depth D. \n  2. Logic-gates AND OR. \n  3. Logic gate with unique arguments. \n\nSynthesis variation:\n  0. Default. \n  1. Edge synthesis.\n  2. Molecule synthesis.\n  3. K-Cnf.\n  4. Logic gates.\n  5. VTS repair.\n 6. Activate-deactivate");
+    options_description visible("VTS-Synth [version 0.0.1]. (C) Copyright 2017-2018 TIFR Mumbai. \nUsage: ./vts-synth [--options] [--variation arg] \n\nFunction types:\n  0. Arbitrary Boolean func: ackermannization. [default] \n  1. K-cnf with depth D. \n  2. Logic-gates AND OR. \n  3. Logic gate with unique arguments. \n\nSynthesis variation:\n  0. Default. \n  1. Edge synthesis.\n  2. Molecule synthesis.\n  3. K-Cnf.\n  4. Logic gates.\n  5. VTS repair.\n  6. Activate-deactivate");
     visible.add(general).add(variation).add(options);
 
 
@@ -229,8 +229,11 @@ int main(int ac, char* av[])
         v->use_z3_qbf_solver( f );
       }
     }
+
     VecsExpr qs;
+		std::cout << "Creating Prenexing of the Formula\n";
     auto prenex_f = prenex( f, qs );
+		std::cout << "Done Prenexing the Formula\n";
 
     /* Print the formaula in pcnf  Avoid printing now ! */
     //std::cout << "Prenexed f : " << prenex_f << "\n";
@@ -262,7 +265,7 @@ int main(int ac, char* av[])
     //bool timedout = false;
     std::future<int> future = std::async(std::launch::async, [](){ 
         // if ( flagA == false ) {
-        auto retVal  = system ("cd ./build/depqbf/examples;gtimeout 6000s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
+        auto retVal  = system ("cd ./build/depqbf/examples;timeout 6000s ../depqbf --qdo --no-dynamic-nenofex  /tmp/myfile.qdimacs > /tmp/out.txt");
         // std::cout << retVal << "\n";
         //  } else {
         // auto retVal = system("cd ./build/depqbf/examples; gcc -o depqbf-file depqbf-file.c -L.. -lqdpll; ./depqbf-file" );
