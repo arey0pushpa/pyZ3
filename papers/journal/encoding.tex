@@ -335,16 +335,12 @@ NOracle (m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} | {m-path}_i^j | = l
 
 We encode stability using NOracle and if there is an $m$-edge between node $i$ and $j$, there has to be a $m$-path from $j$ to $i$ of length maximum w.
 %
-%We have used bv $\unrhd$ m to extract the $m^{th}$ bit of the bitvector bv. 
+We have used bv $\unrhd$ m to extract the $m^{th}$ bit of the bitvector bv. 
+
 \begin{align}
- \bigwedge\limits_{i,j,m} (\bigvee_{q} bv\_e[i][j][q] \limplies NOracle(m, j, i, w)
+ \bigwedge\limits_{i,j,m} (\bigvee_{q} (bv\_e[i][j][q] \unrhd m) == 1) \limplies NOracle(m, j, i, w)
   \tag{S2}\label{eq:reachbmc2}
 \end{align}
-
-%\begin{align}
-% \bigwedge\limits_{i,j,m} (\bigvee_{q} (bv\_e[i][j][q] \unrhd m) > 0) \limplies NOracle(m, j, i, w)
- % \tag{S2}\label{eq:reachbmc2}
-%\end{align}
 
 %A variant of the definition may be sensitive to the $m$-connectedness, but
 %we are not considering the variation.
