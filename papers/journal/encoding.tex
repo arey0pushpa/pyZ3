@@ -5,6 +5,7 @@
 In this section we will present the BMC, SMT and QBF based encoding of both the search and the synthesis problem. We will start with the SMT based encoding and later present the contrast with the BMC encoding.
 
 \subsection{SMT based encoding}
+\label{enc:smt}
 
 %\subsection{Boolean satisfiability of the search problem}
 
@@ -95,11 +96,16 @@ Self edges are not allowed.
 \begin{align}
    \bigwedge\limits_{i,q} \neg e_{i,i,q}\tag{V5}\label{eq:c2}
 \end{align}
-We fix first half as Q-SNAREs and rest as R-SNAREs and set diagonal blocks in pairing matrix to be 0's.
+We divide the pairing matrix into Q-SNAREs and R-SNAREs blocks and set the dependency bits of Q-SNAREs to Q-SNAREs (and similarly R-SNAREs to R-SNAREs) in the pairing matrix to be 0's.
 %It reduces the search space.
 % Condition on $p_{kk'}$. \ashu{why???} .
+%\begin{align}
+%  \bigwedge\limits_{(x < M/2 \, \land  \, y < M/2) \lor  (x >= M/2 \land y >= M/2)} \neg p(x,y)
+%  \tag{V6}\label{eq:c3}
+%\end{align}
+
 \begin{align}
-  \bigwedge\limits_{(x < M/2 \, \land  \, y < M/2) \lor  (x >= M/2 \land y >= M/2)} \neg p(x,y)
+  \bigwedge\limits_{(x < 3M/4 \, \land  \, y < 3M/4) \lor  (x >= 3M/4 \land y >= 3M/4)} \neg p(x,y)
   \tag{V6}\label{eq:c3}
 \end{align}
 
@@ -252,15 +258,11 @@ Variables are not Boolean indexed with multiple dimensions but arrays of bitvect
 %graph [i] [j] = x.
 %\end{align*}
 %
-For example the edges are represented as a bitvectors of size M with each bit corresponding to the presence or the absence of the molecule. 
+For examplei, the edges are represented as a bitvectors of size M with each bit corresponding to the presence or the absence of the molecule. 
 %
 The index of the bitvector implicitly determines the corresponding molecule we are referring to.
-
-\begin{enumerate}
-	\item Bit vector $bv\_e[i][j][q]$ represent the $q$th edge between node $i$ and $j$.
-\end{enumerate}
-
-
+%
+Bit vector $bv\_e[i][j][q]$ represent the $q$th edge between node $i$ and $j$.
 % 
 
 The molecule set is divided into Q and R-SNAREs. 
@@ -273,14 +275,15 @@ Where M1, M2 are Q-SNAREs and M3, M4 are R-SNAREs.
 %
 Also, each $M_i$ can be either 0 or 1, representing the presence or absence of the molecule i.
 %
-
-\textbf{Example 1} The variable bv\_e[1][2][1] = 1001 represent first edge between node 1 and node 2 with molecule M1 and M4 present. 
+For example, the variable bv\_e[1][2][1] = 1001 represent first edge between node 1 and node 2 with molecule M1 and M4 present. 
 
 Similarly, a node in the graph is also tagged as a bitvector of length M.   
 %
 We leave the graph completely arbitrary and add the constraint to enforce that the graph is k-connected. 
 %
-For clarity, we will only present the stability encoding.  
+Here, we will only present the stability encoding.  
+%
+Rest of the encoding are similar to that of the presented in~\ref{enc:smt}.
 
 In order to specify the stability condition, we use a combination of enumeration and nondeterminism.
 %
@@ -320,13 +323,18 @@ NOracle (m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} | {m-path}_i^j | = l
   \tag{S1}\label{eq:reachbmc1}
 \end{align}
 
-Now we can encode stability using the NOracle and say if there is an $m$-edge between $i$ and $j$, there is a $m$-path from $j$ to $i$ of length max w.
+We encode stability using NOracle and if there is an $m$-edge between node $i$ and $j$, there has to be a $m$-path from $j$ to $i$ of length maximum w.
 %
-We have used bv $\unrhd$ m to extract the $m^{th}$ bit of the bitvector bv. 
+%We have used bv $\unrhd$ m to extract the $m^{th}$ bit of the bitvector bv. 
 \begin{align}
- \bigwedge\limits_{i,j,m} (\bigvee_{q} (bv\_e[i][j][q] \unrhd m) > 0) \limplies NOracle(m, j, i, w)
+ \bigwedge\limits_{i,j,m} (\bigvee_{q} bv\_e[i][j][q] \limplies NOracle(m, j, i, w)
   \tag{S2}\label{eq:reachbmc2}
 \end{align}
+
+%\begin{align}
+% \bigwedge\limits_{i,j,m} (\bigvee_{q} (bv\_e[i][j][q] \unrhd m) > 0) \limplies NOracle(m, j, i, w)
+ % \tag{S2}\label{eq:reachbmc2}
+%\end{align}
 
 %A variant of the definition may be sensitive to the $m$-connectedness, but
 %we are not considering the variation.
