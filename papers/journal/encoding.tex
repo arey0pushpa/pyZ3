@@ -119,14 +119,15 @@ be able to potentially fuse with any node other than its destination node.
   \bigwedge\limits_{i,j,q} e_{i,j,q} \limplies 
 \bigvee_{{m_1,m_2,m_3,m_4}} (\Land_{l=1}^4 ( b_{i,j,q,m_l} \lor a_{j,m_l} ) \land
 \Lor\limits_{l=1}^4 b_{i,j,q,m_l} \land
+  \notag \\
+	\qquad \qquad \qquad \qquad
 	\Lor\limits_{l=1}^4 a_{j,m_l} \land p_{\{m_1,m_2,m_3,m_4\}})
-\mspace{50mu}
   \tag{V7}\label{eq:fuse1}  
 \end{align}
 
 \begin{align}
 	\bigwedge\limits_{\mathclap{i,j,q,m_1,m_2,m_3, l \in \{1,..,3\}}} b_{i,j,q,m_1} \land ..\land b_{i,j,q,m_l} \limplies
-\mspace{310mu}
+\mspace{300mu}
   \notag \\
 	\qquad \qquad \qquad \qquad
 	\neg
@@ -185,6 +186,7 @@ matrix.
 \begin{align}
 	\bigwedge\limits_{i,j,q, m}  [e_{i,j,q,m} \land \bigwedge_{m_l \neq m,l \in \{1,..,3\}} e_{i,j,q,m'} \land p_{m, m_l}] \limplies 
 	\notag \\
+	  \qquad \qquad \qquad \qquad
 	(\neg b_{i,j,q,m} \land \bigwedge_{\mathclap{m_l \neq m,l, p_{m, m_l} \in \{1,..,3\}}} \neg b_{i,j,q,m_l})
   \tag{Aep}\label{eq:aep}
 \end{align}
