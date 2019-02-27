@@ -118,10 +118,20 @@ be able to potentially fuse with any node other than its destination node.
 \begin{align}
   \bigwedge\limits_{i,j,q} e_{i,j,q} \limplies 
 \bigvee_{{m_1,m_2,m_3,m_4}} (\Land_{l=1}^4 ( b_{i,j,q,m_l} \lor a_{j,m_l} ) \land
-\Lor\limits_{l=1}^4 b_{i,j,q,m_l} \land \Lor\limits_{l=1}^4 a_{j,m_l} \land p_{\{m_1,m_2,m_3,m_4\}})
+\Lor\limits_{l=1}^4 b_{i,j,q,m_l} \land
+  \notag\\	
+	\Lor\limits_{l=1}^4 a_{j,m_l} \land p_{\{m_1,m_2,m_3,m_4\}})
   \tag{V7}\label{eq:fuse1}  
 \end{align}
 
+\begin{align}
+	\bigwedge\limits_{\mathclap{i,j,q,m_1,m_2,m_3, l \in \{1,..,3\}}} b_{i,j,q,m_1} \land ..\land b_{i,j,q,m_l} \limplies
+\mspace{250mu}
+  \notag\\
+	\neg
+\bigvee_{\mathclap{j \neq j^{\prime}, m_{l+1}^{\prime},..,m_{4}^{\prime}}} ( a_{j^{\prime},m_{l+1}^{\prime}} \land .. \land a_{j^{\prime},m_4^{\prime}} \land p_{\{m_1,..,m_l,m^{\prime}_{l+1},..,m^{\prime}_4\}})
+  \tag{V8}\label{eq:fuse2}  
+\end{align}
 
 % Fusion rules consist of two different mechanisms.
 % \begin{enumerate}
