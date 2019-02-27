@@ -116,10 +116,10 @@ its destination node.
 Constraint~\eqref{eq:fuse2} encodes that each edge should not
 be able to potentially fuse with any node other than its destination node.
 \begin{align}
-  \bigwedge\limits_{i,j,q} e_{i,j,q} \limplies \bigvee_{m,m^{\prime}} (b_{i,j,q,m} \land a_{j,m^{\prime}} \land p_{m,m^{\prime}})
-  \tag{V7}\label{eq:fuse1}  \\
-\bigwedge\limits_{i,j,q,m} b_{i,j,q,m} \limplies \neg \bigvee_{j \neq j^{\prime}, m^{\prime\prime}} ( a_{j^{\prime},m^{\prime\prime}} \land p_{m,m^{\prime\prime}})
-  \tag{V8}\label{eq:fuse2}  
+  \bigwedge\limits_{i,j,q} e_{i,j,q} \limplies 
+\bigvee_{{m_1,m_2,m_3,m_4}} (\Land_{l=1}^4 ( b_{i,j,q,m_l} \lor a_{j,m_l} ) \land
+\Lor\limits_{l=1}^4 b_{i,j,q,m_l} \land \Lor\limits_{l=1}^4 a_{j,m_l} \land p_{\{m_1,m_2,m_3,m_4\}})
+  \tag{V7}\label{eq:fuse1}  
 \end{align}
 
 
@@ -258,7 +258,7 @@ Variables are not Boolean indexed with multiple dimensions but arrays of bitvect
 %graph [i] [j] = x.
 %\end{align*}
 %
-For examplei, the edges are represented as a bitvectors of size M with each bit corresponding to the presence or the absence of the molecule. 
+For example, the edges are represented as a bitvectors of size M with each bit corresponding to the presence or the absence of the molecule. 
 %
 The index of the bitvector implicitly determines the corresponding molecule we are referring to.
 %
