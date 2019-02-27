@@ -54,38 +54,38 @@ nodes and edges respectively.
 
 % Let $\pairs(M')$ denote $\{P\setminus M'|  P \in \pairs \text{ and } P \intersect M' \neq \emptyset \}$.
 
-\textbf{Fusion condition in BMC and SMT:}
-$\pairs$ defines which molecules can fuse with which molecules.
-%
-Let $\pairs(M')$ denote $\{m|(m,m') \in P \text{ and } m' \in M'\}$.
-%
-$\nodef$ and $\edgef$ are used to define activity of molecules on
-nodes and edges respectively.
-%
-A molecule $k$ is {\em active} at node $n$ if $k \in \nlabel(n)$ and
-$\nodef(k,\nlabel(n))$ is true.
-%
-A molecule $k$ is {\em active} at edges $(n,M',n')$ if $k \in M'$ and
-$\edgef(k,M')$ is true.
-%
-We call $G$ {\em well-structured} if molecules $M$ is divided into
-two equal-sized partitions $M_1$ and $M_2$ such that
-$P \subseteq M_1 \times M_2$, and
-for each $(n,M',n') \in \edges$, $n \neq n'$, 
-$M' \subseteq \nlabel(n) \intersection \nlabel(n')$.
-%
-In other words, a well-structured VTS has no self loops, and 
-each edge carry only those molecules that are present in its source
-and destination nodes. 
+% \textbf{Fusion condition in BMC and SMT:}
+% $\pairs$ defines which molecules can fuse with which molecules.
+% %
+% Let $\pairs(M')$ denote $\{m|(m,m') \in P \text{ and } m' \in M'\}$.
+% %
+% $\nodef$ and $\edgef$ are used to define activity of molecules on
+% nodes and edges respectively.
+% %
+% A molecule $k$ is {\em active} at node $n$ if $k \in \nlabel(n)$ and
+% $\nodef(k,\nlabel(n))$ is true.
+% %
+% A molecule $k$ is {\em active} at edges $(n,M',n')$ if $k \in M'$ and
+% $\edgef(k,M')$ is true.
+% %
+% We call $G$ {\em well-structured} if molecules $M$ is divided into
+% two equal-sized partitions $M_1$ and $M_2$ such that
+% $P \subseteq M_1 \times M_2$, and
+% for each $(n,M',n') \in \edges$, $n \neq n'$, 
+% $M' \subseteq \nlabel(n) \intersection \nlabel(n')$.
+% %
+% In other words, a well-structured VTS has no self loops, and 
+% each edge carry only those molecules that are present in its source
+% and destination nodes. 
 
-We will also consider several variations of the model.
-%
-For example, unique edge between two nodes, activity of molecules is
-not constrained by $\nodef$ and $\edgef$, etc.
-%
+% We will also consider several variations of the model.
+% %
+% For example, unique edge between two nodes, activity of molecules is
+% not constrained by $\nodef$ and $\edgef$, etc.
+% %
 
 
-\textbf{Fusion condition in QBF and synthesis:}
+% \textbf{Fusion condition in QBF and synthesis:}
 %
 A molecule $k$ is {\em active} at node $n$ if $k \in \nlabel(n)$ and
 $\nodef(k,\nlabel(n))$ is true.
@@ -101,7 +101,7 @@ In other words,
 molecules are of two types $Q$ and $R$,
 %
 pairing relations have sets of four molecules such that three
-are of one type (??) and one is of another type (??).
+are of type $Q$ and one of type $R$ or vice versa.
 %
 % This distinction of molecules is due to section~\ref{mol-types}.
 %
@@ -180,13 +180,14 @@ expects from a biological systems.
 %
 The property says even after failure of a few edges the system will continue to work.
 
+\ashu{Should be written bio people}
 Let us discuss rough sizes of the system and expected behaviors.
 %
 A typical VTS may have about 10 compartments.
 %
 %Across eukaryotes, there are 20 broad SNARE varieties, though individual species can
 %contain higher numbers (humans have 41)~\cite{kloepper2007elaborate}..
-
+%
 The VTS may transport a large number of molecules but the molecules that
 are \todo{SA: commented line above} relevant of the control of VTS are about 50~\cite{kloepper2007elaborate}.
 %
