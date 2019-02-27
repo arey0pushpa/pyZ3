@@ -181,7 +181,9 @@ The following constraint encodes that the activity of the molecules on
 edges is defined by inhibition by other molecules based on the pairing
 matrix. 
 \begin{align}
-   \bigwedge\limits_{i,j,q, m}  [e_{i,j,q,m} \limplies  \bigwedge_{m' \neq m} (p_{m,m'} \limplies e_{i,j,q,m'})] \lequiv (\neg b_{i,j,q,m} \land\;\;\;\;  \bigwedge_{\mathclap{m' \neq m, p_{m,m'}}} \neg b_{i,j,q,m'})
+	\bigwedge\limits_{i,j,q, m}  [e_{i,j,q,m} \land \bigwedge_{m_l \neq m,l \in \{1,..,3\}} p_{m,m_l} \land e_{i,j,q,m'}] \limplies 
+	\notag \\
+	(\neg b_{i,j,q,m} \land\;\;\;\;  \bigwedge_{\mathclap{m_l \neq m,l, p_{m, m_l} \in \{1,..,3\}}} \neg b_{i,j,q,m_l})
   \tag{Aep}\label{eq:aep}
 \end{align}
 %
