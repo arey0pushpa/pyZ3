@@ -265,7 +265,7 @@ unreachable pair of nodes in the underlying undirected graph.
 
 The BMC encoding differs with the presented SMT encoding slightly in the way variables are represented and how we encode reachability.  
 %
-Variables are not Boolean indexed with multiple dimensions but arrays of bitvectors of size $\mu$. 
+In the BMC encoding, variables are represented as an array of bit vectors of size $M$. 
 %
 %We initialize the system with a fixed number of node size (N) and distinct molecular types (M). 
 %%
@@ -274,48 +274,46 @@ Variables are not Boolean indexed with multiple dimensions but arrays of bitvect
 %graph [i] [j] = x.
 %\end{align*}
 %
-For example, the edges are represented as a bitvectors of size M with each bit corresponding to the presence or the absence of the molecule. 
+For example, every edge is represented as a bit vector of size $M$ with each bit corresponding to the presence or absence of the molecule. 
 %
-The index of the bitvector implicitly determines the corresponding molecule we are referring to.
+Bit vector \texttt{bvEdge}$[i][j][q]$ represent the $q$th edge between node $i$ and $j$.
 %
-Bit vector $bv\_e[i][j][q]$ represent the $q$th edge between node $i$ and $j$.
+The index of the bit vector implicitly determines the corresponding molecule we are referring to in the edge.
 % 
 
 The molecule set is divided into Q and R-SNAREs. 
 %
-For clarity, we consider both in the same amount and represent the first half of the bitvector as  Q-SNAREs and rest as R-SNAREs.
+For clarity, we consider the first part of the bit vector as Q-SNAREs and rest as R-SNAREs.
 %
-An edge in the system with M = 4 molecules is interpreted as a tag [M1, M2, M3, M4]. 
+An edge in the system with $M$ = 4 molecules is interpreted as a label [$M_{1}, M_{2}, M_{3}, M_{4}$]. 
 %
-Where M1, M2 are Q-SNAREs and M3, M4 are R-SNAREs.
+Where $M_{1}, M_{2}, M_{3}$ are Q-SNAREs while $M_{4}$ is a R-SNARE.
 %
-Also, each $M_i$ can be either 0 or 1, representing the presence or absence of the molecule i.
+Also, each $M_i$ can be either 0 or 1, representing the presence or absence of the $i^{th}$ molecule.
 %
-For example, the variable bv\_e[1][2][1] = 1001 represent first edge between node 1 and node 2 with molecule M1 and M4 present. 
+For example, the variable \texttt{bvEdge}[1][2][1] = 1001 represent first edge between node 1 and node 2 with molecule $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) present. 
 
-Similarly, a node in the graph is also tagged as a bitvector of length M.   
+Similarly, a node in the graph is also labelled as a bit vector of length $M$.   
 %
 We leave the graph completely arbitrary and add the constraint to enforce that the graph is k-connected. 
 %
 Here, we will only present the stability encoding.  
 %
-Rest of the encoding are similar to that of the presented in~\ref{enc:smt}.
+Rest of the encoding are similar to the one presented in the Section~\ref{enc:smt}.
 
 In order to specify the stability condition, we use a combination of enumeration and nondeterminism.
 %
-Nondeterminism can be viewed as an oracle that guesses a correct $m$-path for a specific m if it exists. 
+Nondeterminism can be viewed as an oracle that encodes a correct $m$-path for a specific $m$ if it exists. 
 %
-We then use this path as a witness to ensures that stability is maintained for each outgoing molecule m on every edge E.
+We then use this path as a witness to ensures that stability is maintained for each outgoing molecule $m$ on every edge $E$.
 %
 
 \subsubsection{Constraints for stability condition}
 %
-We use NOracle to guess the required path to encode the stability condition in VTS.
+We use \texttt{NOracle} to represent the required path to encode the stability condition in VTS.
 %
-A naive implementation of NOracle is shown in~\ref{eq:reachbmc1}.
-%
-The constraint encodes that there is a $m$-path from node $i$ to node $j$ of maximum $w$ length.
-%there is a edge between $i^{\prime \prime}$ and
+A naive implementation is shown in~\ref{eq:reachbmc1} where \texttt{NOracle}$(m, i, j, w)$ represent the presence of a $m-path$ from node $i$ to node $j$ of maximum $w$ length.
+%there is a edge between $i^{\prime \prime}$ and01
 %$(i \neq i^{\prime \prime})$ with $m$ present, and j is $m$-reachable from $i'$ in less than $p-1$ steps.
 %
 % \begin{align}
@@ -325,9 +323,9 @@ The constraint encodes that there is a $m$-path from node $i$ to node $j$ of max
 % \end{align}
 %The NOracle can be thought of as a disjunction of $m$-path of increment length. 
 %
-It performs enumeration of $m$-${paths}_i^j$ of at most w length. 
+It performs enumeration of every $m-path$, $m$-${paths}_i^j$, of at most $w$ length. 
 %
-Exploring $m$-${paths}_i^j$ of length 1 which is a direct edge between $i$ and $j$ with molecule $m$ present on it, until $m$-${paths}_i^j$ of length w-1.
+Exploring $m$-${paths}_i^j$ of length 1 which is a direct edge between $i$ and $j$ with molecule $m$ present on it, until $m$-${paths}_i^j$ of length $w-1$.
 %by performing series of node hops till final node destination j is reached.
 %Starting with $m$-${paths}_i^j$ of length 1 which is a direct edge between $i$ and $j$ with molecule $m$ present on the edge or performing series of node hops till final node destination j is reached.
 
@@ -335,16 +333,16 @@ Exploring $m$-${paths}_i^j$ of length 1 which is a direct edge between $i$ and $
 %\bigvee\limits_{l = 1}^{|path| - 1} |m-path| = l
 
 \begin{align}
-NOracle (m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} | {m-path}_i^j | = l
+\texttt{NOracle}(m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} | {m-path}_i^j | = l
   \tag{S1}\label{eq:reachbmc1}
 \end{align}
 
-We encode stability using NOracle and if there is an $m$-edge between node $i$ and $j$, there has to be a $m$-path from $j$ to $i$ of length maximum w.
+We encode stability using \texttt{NOracle} and if there is an $m$-edge between node $i$ and $j$, there has to be a $m$-path from $j$ to $i$ of length maximum w.
 %
 We have used bv $\unrhd$ m to extract the $m^{th}$ bit of the bitvector bv. 
 
 \begin{align}
- \bigwedge\limits_{i,j,m} (\bigvee_{q} (bv\_e[i][j][q] \unrhd m) == 1) \limplies NOracle(m, j, i, w)
+ \bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m) := 1) \limplies NOracle(m, j, i, w)
   \tag{S2}\label{eq:reachbmc2}
 \end{align}
 
