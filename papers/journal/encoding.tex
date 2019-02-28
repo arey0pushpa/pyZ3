@@ -312,7 +312,7 @@ We then use this path as a witness to ensures that stability is maintained for e
 %
 We use \texttt{NOracle} to represent the required path to encode the stability condition in VTS.
 %
-A naive implementation is shown in~\ref{eq:reachbmc1} where \texttt{NOracle}$(m, i, j, w)$ represent the presence of a $m-path$ from node $i$ to node $j$ of maximum $w$ length.
+A naive implementation is shown in~\ref{eq:reachbmc1} where \texttt{NOracle}$(m, i, j, w)$ represent the presence of a $m$-$path$ from node $i$ to node $j$ of maximum $w$ length.
 %there is a edge between $i^{\prime \prime}$ and01
 %$(i \neq i^{\prime \prime})$ with $m$ present, and j is $m$-reachable from $i'$ in less than $p-1$ steps.
 %
@@ -323,7 +323,7 @@ A naive implementation is shown in~\ref{eq:reachbmc1} where \texttt{NOracle}$(m,
 % \end{align}
 %The NOracle can be thought of as a disjunction of $m$-path of increment length. 
 %
-It performs enumeration of every $m-path$, $m$-${paths}_i^j$, of at most $w$ length. 
+It performs enumeration of every $m$-$path$, $m$-${paths}_i^j$, of at most $w$ length. 
 %
 Exploring $m$-${paths}_i^j$ of length 1 which is a direct edge between $i$ and $j$ with molecule $m$ present on it, until $m$-${paths}_i^j$ of length $w-1$.
 %by performing series of node hops till final node destination j is reached.
