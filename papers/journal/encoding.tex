@@ -303,14 +303,13 @@ Rest of the encoding are similar to the one presented in the Section~\ref{enc:sm
 
 In order to specify the stability condition, we use a combination of enumeration and nondeterminism.
 %
-Nondeterminism can be viewed as an oracle that encodes a correct $m$-path for a specific $m$ if it exists. 
+Nondeterminism can be viewed as an oracle that guesses a correct $m$-path for a specific $m$ if it exists. 
 %
 We then use this path as a witness to ensures that stability is maintained for each outgoing molecule $m$ on every edge $E$.
 %
-
 \subsubsection{Constraints for stability condition}
 %
-We use \texttt{NOracle} to represent the required path to encode the stability condition in VTS.
+We use \texttt{NOracle} to guess the required path to encode the stability condition in VTS.
 %
 A naive implementation is shown in~\ref{eq:reachbmc1} where \texttt{NOracle}$(m, i, j, w)$ represent the presence of a $m$-$path$ from node $i$ to node $j$ of maximum $w$ length.
 %there is a edge between $i^{\prime \prime}$ and01
@@ -325,7 +324,7 @@ A naive implementation is shown in~\ref{eq:reachbmc1} where \texttt{NOracle}$(m,
 %
 It performs enumeration of every $m$-$path$, $m$-${paths}_i^j$, of at most $w$ length. 
 %
-Exploring $m$-${paths}_i^j$ of length 1 which is a direct edge between $i$ and $j$ with molecule $m$ present on it, until $m$-${paths}_i^j$ of length $w-1$.
+Starting with exploring $m$-${paths}_i^j$ of length 1, a direct edge between $i$ and $j$ with molecule $m$ present on it, until every $m$-${paths}_i^j$ of length $w-1$ is explored.
 %by performing series of node hops till final node destination j is reached.
 %Starting with $m$-${paths}_i^j$ of length 1 which is a direct edge between $i$ and $j$ with molecule $m$ present on the edge or performing series of node hops till final node destination j is reached.
 
@@ -337,24 +336,28 @@ Exploring $m$-${paths}_i^j$ of length 1 which is a direct edge between $i$ and $
   \tag{S1}\label{eq:reachbmc1}
 \end{align}
 
-We encode stability using \texttt{NOracle} and if there is an $m$-edge between node $i$ and $j$, there has to be a $m$-path from $j$ to $i$ of length maximum w.
+We encode stability using \texttt{NOracle}. If there is an $m$-edge between node $i$ and $j$, there has to be a $m$-$path_i^j$ from $j$ to $i$ of maximum $w$ length.
 %
-We have used bv $\unrhd$ m to extract the $m^{th}$ bit of the bitvector bv. 
+The expression (\texttt{bv} $\unrhd$ $m$) extracts the $m^{th}$ bit of the bitvector \texttt{bv}. 
 
 \begin{align}
- \bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m) := 1) \limplies NOracle(m, j, i, w)
+	\bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m) := 1) \limplies \texttt{NOracle}(m, j, i, w)
   \tag{S2}\label{eq:reachbmc2}
 \end{align}
 
 %A variant of the definition may be sensitive to the $m$-connectedness, but
 %we are not considering the variation.
 
-\subsection{The key improvement}
-The key improvement of SMT tool over the BMC is the
+\subsection{The key difference in the reachability encoding}
+The key improvement of the SMT tool over the BMC is the
 encoding of reachability.
-% which was done using an enumeration of paths. 
+% which was done using an enumeration of paths.
 %
-In SMT tool, reachability is encoded in two different
+In the BMC tool, reachability is encoded by enumerating all the possible paths using nondeterminism.
+%
+This encoding is non-optimal in the sense that in the worst case an exponential number of paths needs to be explored.
+%
+Whereas in the SMT tool, reachability is encoded in two different
 ways in constraints~\eqref{eq:reach1} and~\eqref{eq:drop3}.
 %
 The reachability is recursively defined in~\eqref{eq:drop3} and has
