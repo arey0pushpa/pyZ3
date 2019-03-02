@@ -8,14 +8,14 @@ First, we give an overview of the molecular mechanism of the VTS and then we ske
 
 \subsection{Vesicle traffic system}
 Vesicles were discovered decades ago, in the early 1950s, and major molecules of the vesicle traffic system and their functions were discovered soon after~\cite{wells2005discovery}. These molecules can roughly be categorized as budding molecules, whose role is in the formation and budding of transport vesicles from the source compartment, and fusion molecules, which enable fusion of transport vesicles with the target compartments. Below, we give a brief description of the sequence of steps involved in the vesicle transport process. Through this description, we wish to provide a glimpse of the kind of molecular regulatory interactions that we encode in our model.
- 
+
 \begin{figure}
-	\includegraphics[width=\textwidth]{ankitspaper_schem1.png}
-	\label{schematic}
-	\caption{Schematic of the vesicle transport system. Steps involved in vesicle transport between two compartments; a source and a target compartment are shown. The symbols used for different molecules involved in vesicle traffic are explained in the key. At the source compartment, transmembrane cargo proteins are sorted by cytosolic adaptor proteins. Here, the different colours indicate different types of cargo and adaptor proteins. Coat proteins are recruited to the forming vesicle by adaptor proteins. Note here that a single type of coat protein can interact with multiple types of adaptor proteins. Subsequently, the vesicle is pinched off at its neck by dynamin. Once the vesicle has left the source compartment, the coat and adaptor proteins fall off and the vesicle is recognized and bound by a tethering complex whose one end is attached to the target compartment. At the target compartment, the tethered vesicle undergoes fusion, thereby releasing its contents into the target compartment. }
+	\includegraphics[width=0.8\textwidth,natwidth=610,natheight=642]{diavts.png}
+	\caption{Schematic of the vesicle transport system. Steps involved in vesicle transport between two compartments; a source and a target compartment are shown. The symbols used for different molecules involved in vesicle traffic are explained in the key. At the source compartment, transmembrane cargo proteins are sorted by cytosolic adaptor proteins. Here, the different colours indicate different types of cargo and adaptor proteins. Coat proteins are recruited to the forming vesicle by adaptor proteins. Note here that a single type of coat protein can interact with multiple types of adaptor proteins. Subsequently, the vesicle is pinched off at its neck by dynamin. Once the vesicle has left the source compartment, the coat and adaptor proteins fall off and the vesicle is recognized and bound by a tethering complex whose one end is attached to the target compartment. At the target compartment, the tethered vesicle undergoes fusion, thereby releasing its contents into the target compartment.}
+    \label{fig:vts}
 \end{figure}
 
-\textbf{Vesicle budding} involves sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment~\ref{schematic}.
+\textbf{Vesicle budding} involves sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment~\ref{fig:vts}.
 %
 Cargo sorting is performed by cytosolic adaptor proteins. 
 Adaptors are recruited to the source compartment through interactions with the lipids that form the compartment's membrane, and interactions with molecular switches called Arf/Sar which signal the initiation of vesicle formation~\cite{paczkowski2015cargo}. Then these adaptors bind to cargo molecules and thereby sequester them for packaging. 
@@ -32,7 +32,7 @@ Finally, transport vesicles bud out from the source compartment. This process re
 %
 The vesicle is now ready for transport and subsequent fusion with a target compartment.
 
-\textbf{Vesicle fusion involves two steps:} recognition of the correct target compartment and fusion of the transport vesicle~\cite{schematic}.
+\textbf{Vesicle fusion involves two steps:} recognition of the correct target compartment and fusion of the transport vesicle~\ref{fig:vts}.
 
 Target compartment recognition involves molecular switches called Rabs and  tethering complexes. Distinct compartments of the cell are associated with distinct Rabs. For example, Rab5 is associated early endosomes and  Rab7 with late endosomes\cite{rink2005rab}.  Rabs are master regulators; in their active form Rabs recruit many downstream proteins, including tethering complexes, fusion regulators, motor proteins, etc, to their compartment. ~\cite{muller2018molecular}
 

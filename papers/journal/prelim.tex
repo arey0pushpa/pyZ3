@@ -19,8 +19,7 @@ An assignment is a map from the variables in the formula to the Boolean values.
 An assignment may satisfy a formula if the interpretation of Boolean operators
 reduce the whole Formula into 1.
 %
-The problem of finding a satisfying assignment for a Boolean formula is
-known to be hard~\cite{sat-hard}.
+The problem of finding a satisfying assignment for a Boolean formula is known to be hard~\cite{cook1971complexity}.
 %
 
 Quantified Boolean formulas(QBFs) also allow quantifiers over Boolean variables.
@@ -30,23 +29,21 @@ For example, $\forall x \exists y. (x \lor y)$, for Boolean variables $x$ and $y
 The formula says that for both the values of $x$ there is a value of $y$
 such that $x \lor y$ is 1.
 %
-The problem of finding satisfying assignment for QBFs is even harder problem~\cite{qbf-hard}.
+The problem of finding satisfying assignment for QBFs is even harder problem~\cite{arora2009computational}.
 %
-
 
 \subsection{Solvers}
 In this paper, we will encode several problems into finding satisfying
 solutions of a Boolean formula or QBFs.
 %
-We will use BMC,SMT and QBF solvers to get the satisfying assignments.
+We will use BMC, SMT and QBF solvers to get the satisfying assignments.
 %
 The modern solvers are result of several decades of research
 and implement sophisticated algorithms.
 %
-A SAT solver typically implements conflict-driven clause learning (CDCL)~\cite{cdcl}.
-%
-The QBF solver add support of quantifiers by adding more rules for
-quantifiers~\cite{qbf}.
+A SAT solver typically implements conflict-driven clause learning (CDCL)~\cite{biere2009conflict}.
+%1
+The QBF solver add support of quantifiers by adding more rules for quantifiers~\cite{buning2009theory}.
 
 %
 % Due to the combinatorial nature of the graphs, the search space is huge

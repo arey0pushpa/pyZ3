@@ -1,21 +1,38 @@
-# Makefile for papers
-MAIN = main
-.PHONY: clean open spell
+filename=main
 
-all: $(MAIN).pdf
+pdf: ps
+	ps2pdf ${filename}.ps
 
-$(MAIN).pdf: *.tex *.bib *.cls
-	latexmk -pdf $(MAIN).tex
+pdf-print: ps
+	ps2pdf -dColorConversionStrategy=/LeaveColorUnchanged -dPDFSETTINGS=/printer ${filename}.ps
 
-spell:
-	for f in `find . -name "*.tex"`; do aspell -t -l en_us -c $$f; done;
-#	aspell -t -l en_us -c $(MAIN).tex
+#text: html
+#	html2text -width 100 -style pretty ${filename}.html | sed -n '/./,$$p' | head -n-2 >${filename}.txt
 
-zip:
-	zip -r $(MAIN).zip *.tex */*.tex *.bib *.cls
+#html:
+#	@#latex2html -split +0 -info "" -no_navigation ${filename}
+#	htlatex ${filename}
+
+ps:	dvi
+	dvips -t letter ${filename}.dvi
+
+dvi:
+	latex ${filename}
+	bibtex ${filename}||true
+	latex ${filename}
+	latex ${filename}
+
+read:
+	evince ${filename}.pdf &
 
 clean:
-	rm -f $(MAIN).aux $(MAIN).bbl $(MAIN).blg $(MAIN).bst $(MAIN).dvi $(MAIN).fdb_latexmk $(MAIN).fls $(MAIN).idx $(MAIN).lof $(MAIN).log $(MAIN).nav $(MAIN).out $(MAIN).pdf $(MAIN).snm $(MAIN).synctex.gz $(MAIN).toc
-	rm -f $(MAIN).zip
-	rm -f *.bak */*.bak *.auto *.log */*.log *~ */*~ */texput.log
-	rm -rf auto
+	rm -f *.ps
+	rm -f *.pdf
+	rm -f *.log
+	rm -f *.aux
+	rm -f *.out
+	rm -f *.dvi
+	rm -f *.bbl
+	rm -f *.blg
+	rm -f *.fls
+	rm -f *.tmp
