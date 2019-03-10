@@ -75,6 +75,8 @@
 \usepackage{catchfilebetweentags}
 
 \usepackage{tkz-orm}
+
+% added package for the matrix
 \usetikzlibrary{matrix, positioning}
 \tikzset{
     every left delimiter/.style={xshift=1ex},
@@ -86,13 +88,7 @@
         nodes={anchor=center, inner sep=.3333em},
         }
 }
-\def\B{
-\begin{bmatrix}
-    p_1q_1 & p_1q_2  &\cdots &p_1q_N\\
-    p_2q_1 & p_2q_2  &\cdots &p_2q_N\\
-    \vdots & & &  \vdots\\
-    p_Nq_1 & p_Nq_2 &\cdots &p_Nq_N\\
-\end{bmatrix}}
+
 \usepackage{lineno}
 \linenumbers
 
