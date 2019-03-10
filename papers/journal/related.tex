@@ -17,18 +17,29 @@ Many of which involve reasoning about graphs and networks rules~\cite{guerra2012
 % and hence can be reduced to solving a SAT/SMT question. 
 %
 
-One of the prominent areas of application of SAT/SMT solvers is modeling and understanding the gene regulatory networks (GNR)~\cite{giacobbe2015model,rosenblueth2014inference, batt2010efficient, yordanov2016method, dunn2014defining, paoletti2014analyzing, koksal2013synthesis}.
+One of the prominent areas of application of SAT and SMT solvers is modeling and understanding the gene regulatory networks (GNR)~\cite{giacobbe2015model,rosenblueth2014inference, yordanov2016method, dunn2014defining, paoletti2014analyzing, koksal2013synthesis}.
 %
-The gene regulatory network question is encoded into a Boolean satisfiability problem and then SAT and SMT solvers are used to solve the generated formula. 
+The gene regulatory network question is encoded either directly as a Boolean satisfiability problem or in addition with the combinations of background theories.
 %
-The~\cite{rosenblueth2014inference, batt2010efficient, dunn2014defining} use symbolic SAT solving approach whereas~\cite{giacobbe2015model, yordanov2016method} present an SMT based encoding of the problem.
-% 
-We have extended the application of SAT and SMT solvers to a comparatively more complex biological transport network~\cite{mani2016stacking} namely vesicle traffic system. 
+The generated formula is then solved with the help of a SAT solver. 
+%
+The~\cite{rosenblueth2014inference} uses symbolic model checking approach on the qualitative
+models of regulatory networks.
+%
+Whereas,~\cite{dunn2014defining}  uses symbolic, SAT-based approach on the Boolean network model. 
+%
+The~\cite{giacobbe2015model, yordanov2016method} presents an SMT based encoding of the problem based on the presented Boolean model.
+%
+
+We have extended the application of SAT and SMT solvers to a comparatively more complex biological transport network~\cite{mani2016stacking} namely vesicle traffic system (VTS). 
+%
+%Unlike the GNR, not many  VTS
+We have presented both SAT and SMT based encoding for our Boolean model of the VTS.
 %
 We have also introduced the use of QBF solvers and it's encoding in this context.
 % 
-To our best knowledge this series of work is the first application
-of formal methods to vesicle traffic networks.
+To our best knowledge our work is the first application
+of formal methods to the vesicle traffic networks.
 
 In recent years, there has been a wide range of methods
 developed for the similar synthesis problems~\cite{sketch,sygus,exampleSynth}.

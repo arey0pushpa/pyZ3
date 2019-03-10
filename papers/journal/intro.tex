@@ -42,7 +42,7 @@ A clear mechanism for action of these tethers is missing, but evidence from expe
 The final step in vesicle transport is fusion of vesicle with the target compartment.This is brought about by SNARE proteins. 
 There are four kinds of SNAREs: R, Qa, Qb, and Qc; and vesicle fusion requires formation of a SNARE complex containing one of each type. In all known cases, one SNARE protein of the complex is contributed by the vesicle and the other three SNAREs by the target compartment (A few SNARE proteins, such as SNAP25, contain both Qb- and Qc-SNARE motifs)~\cite{yoon2018snare}.
 
-\todo{schematic of snare regulatory network}
+\somya{schematic of snare regulatory network}
 In keeping with their central role in vesicle transport,both the activity and the localization of SNARE proteins are regulated. Notable regulators are Sec17/18 and the SM proteins.
 %
 \newline Sec17/18 bring about disassembly of SNARE complexes post-fusion in order that these SNAREs may be reused. 
@@ -61,8 +61,8 @@ In keeping with their central role in vesicle transport,both the activity and th
 	\item SM proteins have also been shown to interact with tethers~\cite{yoon2018snare}.
 \end{itemize}
 
+\somya{schematic of intracellular compartments and  major routes}
 \textbf{Major paths in the vesicle transport network}:
-\todo{schematic of intracellular compartments and  major routes}
 Molecules traverse the cell in a series of vesicles, and there are two major routes of vesicle transport in all eukaryotic cells.
 %
 \begin{itemize}
@@ -188,14 +188,16 @@ Precise analysis of the properties of the VTS would be hindered by the same reas
 %The number of graphs of specified connectivity grows exponentially with the number of nodes: Table~\ref{tab:threec} shows how many 3-edge-connected graphs~\cite{a052448-oeis} exist (without parallel or self edges) as node number N increases.
 
 \subsection{Graph connectivity is an interesting and accessible property of the VTS}
+\ankit{This section requires serious work and best written by Mukund.}
 %\textbf{Properties of a VTS that satisfies all cell-biological constraints:} 
 Interactions between the molecules of the VTS together produce a functional vesicle transport network, in which molecules flow between intracellular compartments using specified paths. The molecules of the VTS, their interactions and modes of regulation have been worked out to a large extent through cell-biological experiments. But we do not know if this information is complete. In order to assess how completely we know the VTS, we need easily readable benchmarks. 
 
-\todo{SA: Need more text on the importance and relevance of PROPRTY OF CONNECTIVITY}
+\ankit{Need more clarity on the importance and relevance of the CONNECTIVITY and it's relevance.}
 One such benchmark is provided by our result about connectivity of the VTS graph. Graph connectivity is defined as the minimum number of edges that need to be removed from an undirected graph to render it disconnected. For example, in a directed cyclic graph, every node has at least one incoming and one outgoing edge, at least 2 edges need to be removed in order to disconnect the graph. Therefore the underlying undirected graph is 2-connected. 
 From our result, for a given set of biomolecular interactions, for a cell that is in steady state, we expect the VTS graph to have a certain k-connectivity. When regulation is given by arbitrary Boolean rules,   we find that VTS graphs must be 3-connected. And when we add the constraint of the specific form of regulatory interactions seen between VTS molecules, we expect vesicle transport graphs to be 2-strongly connected [28].
 
-\todo{SA: We need not specify Synthesis here. Only connectivity use next subsection to build this. SM: but this is the para where we explain why connectivity is interesting an biological property}
+\ankit{We need not specify Synthesis here. Only connectivity use next subsection to build this.}
+\somya{But this is the para where we explain why connectivity is interesting an biological property}
 The vesicle transport graphs available today for eukaryotic organisms are incomplete themselves. 
 %
 In this situation, we use our result as a tool to predict missing edges which satisfy the graph connectivity constraint. 
