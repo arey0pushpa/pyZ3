@@ -307,7 +307,8 @@ Nondeterminism can be viewed as an oracle that guesses a correct $m$-path for a 
 %
 We then use this path as a witness to ensures that stability is maintained for each outgoing molecule $m$ on every edge $E$.
 %
-\subsubsection{Constraints for stability condition}
+
+\textbf{Constraints for stability condition}
 %
 We use \texttt{NOracle} to represent the required path to encode the stability condition in VTS.
 %
@@ -427,21 +428,25 @@ The constraints for the variants can be given to a SMT solver to find
 VTSs that belong to the variants.
 
 \subsection{Universal condition}
+%
 Recall that the specification for universal condition~\ref{eq:univcond} requires quantifier alternation. 
 %
 Most SAT solvers can not efficiently handle the quantifier in the formulas. 
 % 
-\todo{SA: Rewrite completely}But it is still possible to encode the universal condition~\ref{eq:univcond} as a SAT or SMT problem.
+Although, it is possible to encode the universal condition~\ref{eq:univcond} as a SAT or SMT problem.
+%
+There is always a danger of a blow-up in the formula size, making it harder for the SAT solver to handle. 
+%Which may blow up the formula size for the solver to solve.
 % 
-We have implemented a SAT version with the current encoding of the same.
+As an experiment we have implemented a trivial SMT version of the universal problem extending the current SMT encodings.
 %
 The basic idea is to conjunct the formula for each combination value of the quantified variable. 
 %
-This may blow up the formula size for the solver to solve.
+
 
 \input{satqbf-table}
 %
-The table~\ref{tab:satqbf-graph}, shows results of search result of universal condition for N = 5, 3-connected graphs. The SAT version was not able to scale it to the desired results and either timed-out (T/O) or ran out of memory (M/O).
+The table~\ref{tab:satqbf-graph}, shows results of search result of universal condition for N = 4, 3-connected graphs. The SAT version was not able to scale it to the desired results and either timed-out (T/O) or ran out of memory (M/O).
 %
 This can be due to the fact that directly translating a quantified formula into a quantifier-free  by introducing a vector of variables for each boolean possibility will blow up the size of the formula and may not be solvable by a SAT solver.
 
