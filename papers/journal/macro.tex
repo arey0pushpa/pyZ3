@@ -75,6 +75,24 @@
 \usepackage{catchfilebetweentags}
 
 \usepackage{tkz-orm}
+\usetikzlibrary{matrix, positioning}
+\tikzset{
+    every left delimiter/.style={xshift=1ex},
+    every right delimiter/.style={xshift=-1ex},
+    bmatrix/.style={matrix of math nodes,
+        inner sep=0pt,
+        left delimiter={[},
+        right delimiter={]},
+        nodes={anchor=center, inner sep=.3333em},
+        }
+}
+\def\B{
+\begin{bmatrix}
+    p_1q_1 & p_1q_2  &\cdots &p_1q_N\\
+    p_2q_1 & p_2q_2  &\cdots &p_2q_N\\
+    \vdots & & &  \vdots\\
+    p_Nq_1 & p_Nq_2 &\cdots &p_Nq_N\\
+\end{bmatrix}}
 \usepackage{lineno}
 \linenumbers
 

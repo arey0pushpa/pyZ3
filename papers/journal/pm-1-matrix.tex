@@ -1,5 +1,7 @@
 \begin{figure}[t]
 \centering
+
+
 %\begin{minipage}{0.45\linewidth}
 \begin{tikzpicture}[node distance = 26mm]
    \begin{scope}[]
@@ -17,7 +19,15 @@
 	  \draw [->,thick] (n2) -- node[right=2pt]  {$2\overline{3}$} (n0);
   \end{scope}
 
-  \begin{scope}[xshift=3cm,yshift=0.0cm]
+  \begin{scope}[xshift=5cm,yshift=-1.4cm]
+   \matrix (B) [bmatrix] {
+       p_1q_1 & p_1q_2  &\cdots &p_1q_N\\
+      p_2q_1 & p_2q_2  &\cdots &p_2q_N\\[-1ex]
+      \vdots & & &  \vdots\\
+      p_Nq_1 & p_Nq_2 &\cdots &p_Nq_N\\[-1ex]
+      \vdots & & &  \vdots\\
+            p_Nq_1 & p_Nq_2 &\cdots &p_Nq_N\\    
+      };
 %	
 %	\matrix [matrix of math nodes,left delimiter=(,right delimiter=),
 %	         row sep=0.07cm,column sep=0.07cm] (m) {
