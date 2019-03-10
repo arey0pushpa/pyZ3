@@ -11,7 +11,15 @@ Vesicles were discovered decades ago, in the early 1950s, and major molecules of
 
 \begin{figure}
 	\includegraphics[width=0.8\textwidth,natwidth=610,natheight=642]{diavts.png}
-	\caption{Schematic of the vesicle transport system. Steps involved in vesicle transport between two compartments; a source and a target compartment are shown. The symbols used for different molecules involved in vesicle traffic are explained in the key. At the source compartment, transmembrane cargo proteins are sorted by cytosolic adaptor proteins. Here, the different colours indicate different types of cargo and adaptor proteins. Coat proteins are recruited to the forming vesicle by adaptor proteins. Note here that a single type of coat protein can interact with multiple types of adaptor proteins. Subsequently, the vesicle is pinched off at its neck by dynamin. Once the vesicle has left the source compartment, the coat and adaptor proteins fall off and the vesicle is recognized and bound by a tethering complex whose one end is attached to the target compartment. At the target compartment, the tethered vesicle undergoes fusion, thereby releasing its contents into the target compartment.}
+	\caption{Schematic of the vesicle transport system. Steps involved in vesicle transport between two compartments; a source and a target compartment are shown. 
+	%
+	The symbols used for different molecules involved in vesicle traffic are explained in the key. At the source compartment, transmembrane cargo proteins are sorted by cytosolic adaptor proteins. 
+	%
+	Here, the different colours indicate different types of cargo and adaptor proteins. Coat proteins are recruited to the forming vesicle by adaptor proteins. 
+	%
+	Note here that a single type of coat protein can interact with multiple types of adaptor proteins. Subsequently, the vesicle is pinched off at its neck by dynamin. 
+	%
+	Once the vesicle has left the source compartment, the coat and adaptor proteins fall off and the vesicle is recognized and bound by a tethering complex whose one end is attached to the target compartment. At the target compartment, the tethered vesicle undergoes fusion, thereby releasing its contents into the target compartment.}
     \label{fig:vts}
 \end{figure}
 
@@ -187,7 +195,7 @@ Precise analysis of the properties of the VTS would be hindered by the same reas
 %
 %The number of graphs of specified connectivity grows exponentially with the number of nodes: Table~\ref{tab:threec} shows how many 3-edge-connected graphs~\cite{a052448-oeis} exist (without parallel or self edges) as node number N increases.
 
-\subsection{Graph connectivity is an interesting and accessible property of the VTS}
+\subsubsection{Graph connectivity is an interesting and accessible property of the VTS}
 \ankit{This section requires serious work and best written by Mukund.}
 %\textbf{Properties of a VTS that satisfies all cell-biological constraints:} 
 Interactions between the molecules of the VTS together produce a functional vesicle transport network, in which molecules flow between intracellular compartments using specified paths. The molecules of the VTS, their interactions and modes of regulation have been worked out to a large extent through cell-biological experiments. But we do not know if this information is complete. In order to assess how completely we know the VTS, we need easily readable benchmarks. 
@@ -206,8 +214,37 @@ These predictions are intended to be used as guides for future experiments.
 %
 A mismatch between our predictions and experiments would indicate that our current understanding of the VTS molecules is necessarily incomplete. 
 %
-Note that, on the other hand, if our predictions are experimentally confirmed, it does not imply that our understanding of the VTS is complete.
+Note that, on the other hand, if our predictions are experimentally confirmed, it does not imply that our understanding of the VTS is complete.\\
 
+\ankit{Added this as a template. Will change it soon.}
+\begin{example}
+%
+In figure~\ref{fig:M1}, we present a VTS that has 3 compartments and 8 molecules, and a corresponding pairing matrix.
+%
+Molecules are numbered 0-7.
+%
+In the VTS, labels are a string of molecule ids, and an overline over an id indicates that the molecule is active.
+%
+Every molecule on the node is active.
+%
+The activity of the molecules on an edge are controlled
+by presence of the other molecules on the edge.
+%
+On the right side of the figure, we show the pairing matrix.
+%
+An entry 1 represents pairing between molecules.
+%
+$\times$ represents no pairing.
+%
+Rows corresponds to the labels of edges, and
+columns corresponds to the labels of nodes.
+%
+Every molecule flows on a cycle, ensuring steady state.
+%
+This is a 3-connected graph.
+\end{example}
+
+\input{pm-1-matrix}
 %\subsection{Modeling and Symbolic Analysis of VTS: An Overview}
 \label{subsec:graphmodel}
 %
