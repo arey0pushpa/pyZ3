@@ -3,45 +3,45 @@
 	%\begin{minipage}{0.45\linewidth
  \begin{subfigure}[b]{0.49\linewidth}
 
-	\begin{tikzpicture}[->,>=stealth', auto , node distance=3.0cm,
+	\begin{tikzpicture}[->,>=stealth', auto , node distance=3.1cm,
 	  thick,main node/.style={rectangle,draw}]
 	 % 	\begin{scope}[]
 	  \node[main node, text width=1.5cm] (pm) {PM { \^{Qa5} 
 	  		                     \^{Qa7} \^{Qbc2} \^{Qbc7}}};
 	  \node[main node, text width=1.5cm] (ee) [below right of=pm] {EE { \^{Qa2} \^{Qb2/3} \^{Qc2/3}}};
-	  \node[main node, text width=1.5cm] (le) [above of=ee,yshift=-10mm,xshift=23mm] {LE { \^{Qa8} \^{Qb8} \^{Qc8}}};
+	  \node[main node, text width=1.5cm] (le) [above of=ee,yshift=-10mm,xshift=20mm] {LE { \^{Qa8} \^{Qb8} \^{Qc8}}};
 	
 	  %le <-> pm
-	  \path (le) edge[bend right=30] node [above] {Qb7 Qc7} (pm);
+	  \path (le) edge[bend right=55] node [above] {Qb7 Qc7} (pm);
 	  %ee -> le
-	  \path (ee) edge[bend right, text width=3.0cm] node [below,rotate=65] {\^{R8},Qa7, Qbc7,R7} (le);
+	  \path (ee) edge[bend right=32, text width=2.0cm] node [below,rotate=55] {\^{R8},Qa7, Qbc7,R7} (le);
 	
 	  %pm <-> ee
-	  \path (ee) edge[bend left=30] node [above] {\^{R3}} (pm);
-	  \path (pm) edge[bend left=30, text width=2.5cm] node [above,rotate=-45] {\^{R2} {Qa7} Qbc7, R7, Qc7, Qa2} (ee);
+	  \path (ee) edge[bend left=32] node [below, rotate=-15] {\^{R3}} (pm);
+	  \path (pm) edge[bend left=30, text width=2.0cm] node [above,rotate=-45] {\^{R2} {Qa7} Qbc7, R7, Qc7, Qa2} (ee);
 	\end{tikzpicture}
   \end{subfigure}%
  % \end{scope}
 %  \vspace{1.2cm}
   \begin{subfigure}[b]{0.49\linewidth}
-	  \begin{tikzpicture}[->,>=stealth',auto,node distance=3.0cm,
+	  \begin{tikzpicture}[->,>=stealth',auto,node distance=3.5cm,
 	  thick,main node/.style={rectangle,draw}]
 	 % \begin{scope}[xshift=3.5cm,yshift=0.0cm]
-	  \node[main node,text width=1.5cm] (pm) {PM {\small \^{Qa5} \^{Qa7} \^{Qbc2} \^{Qbc7}}};
+	  \node[main node,text width=1.5cm] (pm) {PM {\small \^{Qa5} \^{Qa7} \^{Qbc2} \^{Qbc7 ...}}};
 	  \node[main node, text width=1.5cm] (ee) [below right of=pm] {EE {\small \^{Qa2} \^{Qb2/3} \^{Qc2/3} ... }};
-	  \node[main node, text width=1.5cm] (le) [above of=ee,yshift=-10mm,xshift=23mm] {LE {\small \^{Qa8} \^{Qb8} \^{Qc8}}};
+	  \node[main node, text width=1.5cm] (le) [above of=ee,yshift=-10mm,xshift=23mm] {LE {\small \^{Qa8} \^{Qb8} \^{Qc8 ...}}};
 	  
 	  %le <-> pm
-	  \path (le) edge[bend right=30] node [above] {Qb7 Qc7,{\color{blue} { \textbf{R7}}}} (pm);
+	  \path (le) edge[bend right=45] node [above] {Qb7 Qc7,{\color{blue} { \textbf{R7}}}} (pm);
 	  
 	  %le <-> ee
-	  {\color{red} { \path (le) edge[bend right] node [below,rotate=70] {\color{blue} { {\textbf{\^{R8},Qa7}}}} (ee);
+	  {\color{red} { \path (le) edge[bend right] node [below,rotate=50] {\color{blue} { {\textbf{\^{R8},Qa7}}}} (ee);
 	  }}
 	  %ee -> le
-	  \path (ee) edge[bend right] node [below,rotate=70] {\^{R8},Qa7, Qbc7,R7} (le);	  
+	  \path (ee) edge[bend right] node [text width=1.5cm, below,rotate=50] {\^{R8},Qa7, Qbc7,R7} (le);	  
 	  
 	  %pm <-> ee
-	  \path (ee) edge[bend left=30] node [above] {\^{R3, {\color{blue} { \textbf{\^{Qa2,}, \^{Qa7}, \^{R2}}}}}} (pm);
+	  \path (ee) edge[bend left=30] node [below, text width=2.0cm] {\^{R3, {\color{blue} { \textbf{\^{Qa2}, \^{Qa7}, \^{R2}}}}}} (pm);
 	  \path (pm) edge[bend left=30] node [above,rotate=-45,text width = 2.5cm] {\^{R2} {Qa7} Qbc7, R7, Qc7, Qa2} (ee);	    
 	 % \end{scope}
 	 \end{tikzpicture}
