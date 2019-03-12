@@ -6,10 +6,10 @@
 	\begin{tikzpicture}[->,>=stealth', auto , node distance=3.1cm,
 	  thick,main node/.style={rectangle,draw}]
 	 % 	\begin{scope}[]
-	  \node[main node, text width=1.5cm] (pm) {PM { \^{Qa5} 
+	  \node[main node, text width=1.5cm] (pm) {\textbf{PM:} { \^{Qa5} 
 	  		                     \^{Qa7} \^{Qbc2} \^{Qbc7}}};
-	  \node[main node, text width=1.5cm] (ee) [below right of=pm] {EE { \^{Qa2} \^{Qb2/3} \^{Qc2/3}}};
-	  \node[main node, text width=1.5cm] (le) [above of=ee,yshift=-10mm,xshift=20mm] {LE { \^{Qa8} \^{Qb8} \^{Qc8}}};
+	  \node[main node, text width=1.5cm] (ee) [below right of=pm] {\textbf{EE:} { \^{Qa2} \^{Qb2/3} \^{Qc2/3}}};
+	  \node[main node, text width=1.3cm] (le) [above of=ee,yshift=-10mm,xshift=20mm] {\textbf{LE:} { \^{Qa8} \^{Qb8} \^{Qc8}}};
 	
 	  %le <-> pm
 	  \path (le) edge[bend right=55] node [above] {Qb7 Qc7} (pm);
@@ -27,9 +27,9 @@
 	  \begin{tikzpicture}[->,>=stealth',auto,node distance=3.5cm,
 	  thick,main node/.style={rectangle,draw}]
 	 % \begin{scope}[xshift=3.5cm,yshift=0.0cm]
-	  \node[main node,text width=1.5cm] (pm) {PM {\small \^{Qa5} \^{Qa7} \^{Qbc2} \^{Qbc7 ...}}};
-	  \node[main node, text width=1.5cm] (ee) [below right of=pm] {EE {\small \^{Qa2} \^{Qb2/3} \^{Qc2/3} ... }};
-	  \node[main node, text width=1.5cm] (le) [above of=ee,yshift=-10mm,xshift=23mm] {LE {\small \^{Qa8} \^{Qb8} \^{Qc8 ...}}};
+	  \node[main node,text width=1.5cm] (pm) {\textbf{PM:} {\small \^{Qa5} \^{Qa7} \^{Qbc2} \^{Qbc7 ...}}};
+	  \node[main node, text width=1.5cm] (ee) [below right of=pm] {\textbf{EE:} {\small \^{Qa2} \^{Qb2/3} \^{Qc2/3} ... }};
+	  \node[main node, text width=1.5cm] (le) [above of=ee,yshift=-10mm,xshift=23mm] {\textbf{LE:} {\small \^{Qa8} \^{Qb8} \^{Qc8 ...}}};
 	  
 	  %le <-> pm
 	  \path (le) edge[bend right=45] node [above] {Qb7 Qc7,{\color{blue} { \textbf{R7}}}} (pm);
