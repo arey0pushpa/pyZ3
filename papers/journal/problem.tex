@@ -3,21 +3,26 @@ This section will present the different search problems of VTS.
 We categorize the search problems into three different categories, search problem for existential condition, search problem for universal condition and performing synthesis on the incomplete VTS. 
 
 \subsection{Existential condition}
-We employ two techniques to investigate the existential condition. 
+We employ two techniques to examine the existential condition. 
 %
-First, using bounded model checking (BMC).
+First, using the bounded model checking (BMC) technique~\cite{biere1999symbolic1, biere2003bounded}.
+%
+%It  represents the executions of a program symbolically and 
 %
 %The Bounded model checking technique
-It performs a search for violation of the property in the program executions whose length is bounded by some fixed integer value, a \textit{depth}. 
+BMC is an automatic technique that performs a search for the violation of the property in the program executions whose length is bounded by some fixed integer value $w$ (\textit{unwinding depth}). 
 %
-In the case of no violation for a particular depth, one can iteratively increase the depth until either property is violated, the problem becomes intractable, or an upper bound of the system is reached.
+The bounded execution is represented symbolically as a propositional formula and solved using a SAT solver.
+% is used to check the satisfiability of the resultant propositional formula.
 %
-For our case, the depth (called as \textit{unwinding} in the technical terms) is the length of the path in the underline graph.
+In case there is no violation for a particular depth, one can progressively increase the depth until either property is violated, the problem becomes intractable, or an upper bound of the system is reached, indicating the satisfiability of the property.
+%
+For our case, the unwinding depth is the length of the path of the underline graph.
 %
 %
-For the experimentation, we will restrict ourselves to the elementary cycles (cycles of length one). 
+For the experimentation, we restrict the check only to the elementary cycles, cycles of length one. 
 %
-This restriction puts an upper limit of $N$ on the length of each searched path. 
+This restriction puts an upper limit of number of node, $N$ on the length of the searched path. 
 %
 %
 %and the upper bound is the number of nodes $N$.
