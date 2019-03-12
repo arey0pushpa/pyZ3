@@ -40,13 +40,13 @@ Throughout the paper we will address these two subcategories as $\fbmc$ and $\fs
 %
 Here, we will present both $\fbmc$ and $\fsmt$ search problem for the existential condition.
 
-\subsubsection{$\fbmc$ Search problem:}
+\subsubsection{$\fbmc$ Search problem.}
 For a given $k$, size $\nu$, molecule number $\mu$, and unwinding depth $w$,
 we are searching for well-structured, stable, and well-fused VTS
 $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ such that
 $|\nodes| = \nu$, $|\mols| = \mu$, and $G$ is not $k$-connected with w depth of unwinding.    
 
-\subsubsection{$\fsmt$ Search problem:}
+\subsubsection{$\fsmt$ Search problem.}
 For a given $k$, size $\nu$, and molecule number $\mu$,
 we are searching for well-structured, stable, and well-fused VTS
 $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ such that
@@ -77,15 +77,16 @@ $G$ is not $k$-connected.
 %To resolve these problems we will use a technique called bounded model checking, where the depth of the path can be specified and consequently increased or decreased.  
 %
 
-\subsection{Universal condition:}
-Here we will present the QBF.
-
-\ankit{This is a dummy template. need a rewrite.} \textbf{QBF search problem:}
-For a given $k$, size $\nu$, and molecule number $\mu$,
-we are searching for well-structured, stable, and well-fused VTS
-$G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ such that
-$|\nodes| = \nu$, $|\mols| = \mu$,and
-$G$ is not $k$-connected.    
+\subsection{Universal condition}
+%Here we will present the QBF.
+We will model the search problem for the universal condition as a quantified Boolean formula, and resultant formula will be solved with the help of a QBF solver.
+%
+The QBF is a generalization of the Boolean satisfiability problem in which every variable is quantified using either existential or universal quantifiers.
+%
+The QBFs enables potentially more succinct encodings than propositional logic.
+ 
+%\ankit{This is a dummy template. need a rewrite.} 
+\subsubsection{$\fqbf$ search problem.} For a given $k$, size $\nu$, and molecule number $\mu$, we are searching for a $k$-connected graph such that there is no assignment for well-structured, stable, and well-fused VTS $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ with $|\nodes| = \nu$, $|\mols| = \mu$.    
 
 %
 %In this section, we will present a list of synthesis problems that may
@@ -93,7 +94,7 @@ $G$ is not $k$-connected.
 %for the problems.
 
 %\subsection{Problem Statements}
-\subsection{Synthesis:}
+\subsection{Synthesis of VTS}
 We will assume that we are given a VTS, whose all components
 are not specified.
 %
