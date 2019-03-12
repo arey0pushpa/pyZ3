@@ -404,7 +404,6 @@ activity of molecules on the nodes and edges.
 % For the version A, every present molecule is in active state.
 %
 
-
 In the table~\ref{tab:var-grph}, we present the constraints involved in each version.
 %
 The column two of the table shows that the constraints V1-V8, R1-R2, and D1-D4 are present
@@ -780,10 +779,7 @@ Similar to the previous encoding, we solve the
 satisfiability of the above formula to obtain additional molecules
 that may be added to the edge labels to satisfy the properties.
 
-
-
 \subsubsection{Fixing VTS by learning activity functions:}
-
 Now we consider a scenario where some of the activity functions for
 some of the molecules are missing.
 %
@@ -814,10 +810,9 @@ Both are stitched to define \texttt{NNFTemplate}.
 To encode the set of NNF formulas with $\lambda$ literals, it has
 finite-range integer variables
 $z_1,..,z_{2\lambda}$ as parameters.
-
 % \paragraph{Encoding low depth cnf circuits}
 % \paragraph{Encoding boolean gates}
-
+%
 \begin{align*}
 &\texttt{Gate}( x, w_1, w_2 ) = ( x  = 1 \limplies w_1  \land w_2 ) \land  
 ( x = 2  \limplies w_1  \lor w_2 ) \\
@@ -827,7 +822,7 @@ $z_1,..,z_{2\lambda}$ as parameters.
 &\exists w_1,..,w_{2\lambda}.\;w_1 \land \Land_{l=1}^{\lambda} w_{\lambda+l} = \texttt{Leaf}( z_{\lambda+l}, [y_1,..,y_\mu] ) \land
 w_{l} = \texttt{Gate}( z_l, w_{2l},w_{2l+1})
 \end{align*}
-
+%
 Using the template we define the constraints $\texttt{FindFunctions}(z,\lambda)$
 that encodes the candidate functions that satisfy the activity requirements,
 where $z$ is the vectors of parameters for encoding parameters
