@@ -1,84 +1,97 @@
-The conjecture relates graph-connectedness to a particular variation of SNARE pairing and regulation rules of the VTS.
+We analyze the model against our desired properties.
 %
-We are interested in the following two type of properties of the transport graph:
+Since in biology there are are no declared specifications or properties,
+we conjecture some properties that appear to be true in all known
+biological systems.
+%
+In this paper, we choose graph connectedness to be a key property.
+%
+We will also seek two kinds of questions give the property.
+
+% %
+% In this paper,
+% our conjecture relates graph-connectedness to a particular variation of SNARE pairing and
+% regulation rules of the VTS.
+% %
+% We are interested in the following two type of properties of the transport graph:
 
 \begin{enumerate}
-\item Existential condition:
-%the structural connectedness of the transport graph required for the system driven by a particular set of rules. 
-structural connectedness of a transport graph which satisfies the stated set of rules. 
+\item {\em Existential condition:}
+if there is a VTS that satisfies the connectedness property. 
 
-%there is a transport graph with the structural connectedness which satisfies the stated set of rules. 
-
-%that a transport graph satisfies driven by a particular set of rules. 
-%And we are interested in the least one. 
-
-\item Universal condition: 
-%every graph with the structural connectedness satisfies the stated set of rules. 
-the structural connectedness that ensures every transport graph with that fundamental structure satisfies the stated set of rules. 
-%The goal is to find the minimum graph connectivity that satisfies sufficient condition.
+\item {\em Universal condition:}
+  if there is a connectedness property that is satisfied by each valid VTS.
 \end{enumerate}
 
-The goal is to find the minimum graph connectivity that satisfies each of these condition.
+The goal is to find the minimum graph connectivity properties that for each of the condition.
 
-%We express both these conditions as assertions in our program.
 
-In our program, the rules VTS needs to follow 
-%
-%are we represent the stability, fusion, SNARE pairing and regulation rules, and the connectedness property that the system needs to follow, as 
-%
-are represented as constrained over the transport graphs (G), label on the nodes and edges and activity of those labels (determined by a Boolean function f). 
-%
-Each of these constrained functions is defined to be TRUE for a G and f: if and only if the corresponding condition holds for the given G and f. 
-%
-We use these functions to define the assertion that characterizes the corresponding condition to be checked. 
-%
-We will show in later sections how we encode these Boolean functions. 
+% In our program, the rules VTS needs to follow 
+% %
+% are represented as constrained over the transport graphs (G), label on the nodes and edges and activity of those labels (determined by a Boolean function f). 
+% %
+% Each of these constrained functions is defined to be TRUE for a G and f: if and only if the corresponding condition holds for the given G and f. 
+% %
+% We use these functions to define the assertion that characterizes the corresponding condition to be checked. 
+% %
+% We will show in later sections how we encode these Boolean functions. 
 
-\subsubsection{Checking existential conditions} 
-
-To ensure that k-connectedness is an existential condition, we have to find a k-connected graph that satisfies all the rules (and constraints) of the system. 
+\subsubsection{Search for existential condition} 
 %
-We also have to ensure that the particular k is the least one. 
+% To ensure that k-connectedness is an existential condition,
+%
+We need to find a $k$-connected graph that satisfies all the rules (and constraints) of the system. 
+%
+We also aim to find the minimum $k$. 
 %
 %Let's fix our conjecture: ``k-connectedness is a necessary condition for the system regulated by a Boolean function on the node and SNARE-SNARE inhibition on the edge". 
 %
-To find a k-connected graph (G) we specify our property as a query for the existence of a model for a conjunction of the formula representing stability, fusion and specific graph connectivity constraint. 
+To find a k-connected graph we specify our property as a query for the existence
+of a model for a conjunction of the formula representing stability, fusion and specific
+graph connectivity constraint. 
 %
-
-\begin{align*}
-  &\texttt{LabeledVTS} = \texttt{Stability} \, \land \, \texttt{Fusion} \land \, \texttt{MinConnectivity(k)}
- \tag{E}\label{eq:existcond}
-\end{align*}
-
-We will start with the value of k = 1 and check for the satisfiability of the above formula.
+% \begin{align*}
+%   &\texttt{LabeledVTS} = \texttt{Stability} \, \land \, \texttt{Fusion} \land \, \texttt{MinConnectivity(k)}
+%  \tag{E}\label{eq:existcond}
+% \end{align*}
 %
-In case the formula is satisfiable the procedure terminates and we report the value of k. 
+We will start with the value of $k = 1$ and check for the satisfiability of the formula.
 %
-If the formula is not satisfiable we increment the k by 1 and perform the same procedure. 
+In case the formula is satisfiable the procedure terminates and we report the value of $k$. 
 %
-In this way, we ensure that the reported k is the minimum connectivity of the VTS that satisfies the existential condition.  
+If the formula is not satisfiable we increment the $k$ by $1$ and perform the same procedure. 
+%
+In this way, we ensure that the reported $k$ is the minimum connectivity of the VTS that
+satisfies the existential condition.
+%
 % Used E as edge and L_e L_n as label for node and the edge,
 
 
-\subsubsection{Checking universal conditions}
-
-Similarly, for the conjecture that k-connectedness is a universal condition for the VTS, we have to ensure that every graph of k-connected structure satisfies all the rules (and constraints) of the system. 
+\subsubsection{Search for universal problem}
 %
-We also have to ensure that the particular k is the least one. 
+% Similarly, for the conjecture that k-connectedness is a universal condition for the VTS,
+For some $k>0$,
+we have to ensure that every graph of $k$-connected structure satisfies all
+the rules of the system.
+%
+We also aim to find the minimum $k$. 
+% We also have to ensure that the particular k is the least one. 
 %
 This condition can be specified as: for every k-connected graph, there exists a satisfiable assignment following the rules of the system. 
-
-\begin{align*}
-  & \forall G \, \texttt{Connectivity(k)} \implies  \exists
-                        f,p: \texttt{Stability} \, \land \, \texttt{Fusion}  
-  \tag{U}\label{eq:univcond}
-\end{align*}
-
+%
+% \begin{align*}
+%   & \forall G \, \texttt{Connectivity(k)} \implies  \exists
+%                         f,p: \texttt{Stability} \, \land \, \texttt{Fusion}  
+%   \tag{U}\label{eq:univcond}
+% \end{align*}
+%
 We will use the same procedure as the existential condition to ensure the k to be the least one.
 %
-Note that the specification of this requires quantifier alternation. 
+The formula for the problem has quantifier alternation. 
 %
-Most SAT solvers can check (at least efficiently) only quantifier-free formulas. 
+Most SAT solvers can check (at least efficiently) only quantifier-free formulas.
+%
+We need a QBF solvers for such queries.
 %
 %To handle this challenge, we used a combination of nondeterminism and Boolean enumeration at the C-source level to eliminate quantifiers, as explained further below.
 
