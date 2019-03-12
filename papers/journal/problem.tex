@@ -28,9 +28,9 @@ The search problem is to find an assignment of variables that satisfies all the 
 %
 We have used a form of this technique called satisfiability modulo theories (SMT).
 %
-The SMT is a generalization of Boolean satisfiability problem with domain-specific reasoning. 
+The SMT is a generalization of Boolean satisfiability problem with domain-specific reasoning, for example, support for uninterpreted functions, equality, arithmetic and data structures like arrays, bit-vectors etc. 
 %
-It includes formulas with variables from other domains, including real numbers, integers, and support for various data structures such as lists, arrays, bit vectors.
+%It includes formulas with variables from other domains, including real numbers, integers, and support for various data structures such as lists, arrays, bit vectors.
 % is satisfiability of formulas with respect to some background theory.
 %
 Throughout the paper we will address these two subcategories as $\fbmc$ and $\fsmt$ search problems.
@@ -41,7 +41,7 @@ Throughout the paper we will address these two subcategories as $\fbmc$ and $\fs
 Here, we will present both $\fbmc$ and $\fsmt$ search problem for the existential condition.
 
 \subsubsection{$\fbmc$ Search problem:}
-For a given $k$, size $\nu$, molecule number $\mu$, and unwinding depth w,
+For a given $k$, size $\nu$, molecule number $\mu$, and unwinding depth $w$,
 we are searching for well-structured, stable, and well-fused VTS
 $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ such that
 $|\nodes| = \nu$, $|\mols| = \mu$, and $G$ is not $k$-connected with w depth of unwinding.    
