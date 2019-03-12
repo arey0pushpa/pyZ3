@@ -1,55 +1,84 @@
 This section will present the different search problems of VTS.
+%
+We categorize the search problems into three different categories, search problem to solve the existential condition, search problem for universal condition and performing synthesis on the incomplete VTS. 
 
 \subsection{Existential condition}
-
-Based upon earlier discussion, we need to answer the following search
-question among VTSs.
+We employ two techniques to investigate the existential condition. 
 %
-Here, we will present both BMC and SMT search problem.
+First, using bounded model checking (BMC).
+%
+%The Bounded model checking technique
+It performs a search for violation of the property in the program executions whose length is bounded by some fixed integer value, a \textit{depth}. 
+%
+In the case of no violation for a particular depth, one can iteratively increase the depth until either property is violated, the problem becomes intractable, or an upper bound of the system is reached.
+%
+For our case, the depth (called as \textit{unwinding} in the technical terms) is the length of the path in the underline graph.
+%
+%
+For the experimentation, we will restrict ourselves to the elementary cycles (cycles of length one). 
+%
+This restriction puts an upper limit of $N$ on the length of each searched path. 
+%
+%
+%and the upper bound is the number of nodes $N$.
 
-\textbf{SMT Search problem:}
+Second, using constraint solving, where the rules are represented as a constraint over the variables defined in the system.
+%
+The search problem is to find an assignment of variables that satisfies all the generated constraints.
+%
+We have used a form of this technique called satisfiability modulo theories (SMT).
+%
+The SMT is a generalization of Boolean satisfiability problem with domain-specific reasoning. 
+%
+It includes formulas with variables from other domains, including real numbers, integers, and support for various data structures such as lists, arrays, bit vectors.
+% is satisfiability of formulas with respect to some background theory.
+%
+Throughout the paper we will address these two subcategories as $\fbmc$ and $\fsmt$ search problems.
+%The existential condition search problem is represented as a bounded model checking and constraint solving. 
+%
+%Based upon earlier discussion, we need to answer the following search question among VTSs.
+%
+Here, we will present both $\fbmc$ and $\fsmt$ search problem for the existential condition.
+
+\subsubsection{$\fbmc$ Search problem:}
+For a given $k$, size $\nu$, molecule number $\mu$, and unwinding depth w,
+we are searching for well-structured, stable, and well-fused VTS
+$G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ such that
+$|\nodes| = \nu$, $|\mols| = \mu$, and $G$ is not $k$-connected with w depth of unwinding.    
+
+\subsubsection{$\fsmt$ Search problem:}
 For a given $k$, size $\nu$, and molecule number $\mu$,
 we are searching for well-structured, stable, and well-fused VTS
 $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ such that
 $|\nodes| = \nu$, $|\mols| = \mu$, and
 $G$ is not $k$-connected.    
 
-\noindent
-The notion of stability and connectivity varies slightly for BMC encoding. 
-%In this subsection, we will present the concept of stability and connectivity for BMC encoding. 
+%\noindent
+%The notion of stability and connectivity varies slightly for BMC encoding. 
+%%In this subsection, we will present the concept of stability and connectivity for BMC encoding. 
+%%
+%We call a graph $G$ {\em stable} if for each $(n,M',n') \in \edges$ and $m \in M'$,
+%there exists a $m$-path in G with $n_1 = n'$ and $n_\ell = n$.
+%%
+%%
+%We call a graph $G$ {\em connected} if for each $n,n' \in \nodes$,
+%$n'$ there is a path from $n$ to $n'$ in G.
 %
-We call a graph $G$ {\em stable} if for each $(n,M',n') \in \edges$ and $m \in M'$,
-there exists a $m$-path in G with $n_1 = n'$ and $n_\ell = n$.
+%We call a graph $G$ $k$-connected if for each $\edges' \subseteq \edges$ and $|\edges'| < k$,
+%VTS $(\nodes,\mols,\edges-E',\nlabel,\pairs,\edgef,\nodef)$ is connected.
+%%	
+%We use $m$-${path}_i^j$ to denote an $m$-path between source node i and target node is j. 
 %
 %
-We call a graph $G$ {\em connected} if for each $n,n' \in \nodes$,
-$n'$ there is a path from $n$ to $n'$ in G.
+%Creating a formula to search a path of length N-1 for each molecule m on every edge E will be extremely large and harder for the solvers to handle.  
+%%
+%Even if there exist shorter paths we have to create the formula of maximum size N-1. 
+%% 
+%To resolve these problems we will use a technique called bounded model checking, where the depth of the path can be specified and consequently increased or decreased.  
 %
-We call a graph $G$ $k$-connected if for each $\edges' \subseteq \edges$ and $|\edges'| < k$,
-VTS $(\nodes,\mols,\edges-E',\nlabel,\pairs,\edgef,\nodef)$ is connected.
-%	
-We use $m$-${path}_i^j$ to denote an $m$-path between source node i and target node is j. 
 
-For the experimentation, we will restrict ourselves to the elementary cycles (cycles of length one). 
-%
-This restriction puts an upper limit of N-1 on the length of each searched path. 
-%
-Creating a formula to search a path of length N-1 for each molecule m on every edge E will be extremely large and harder for the solvers to handle.  
-%
-Even if there exist shorter paths we have to create the formula of maximum size N-1. 
-% 
-To resolve these problems we will use a technique called bounded model checking, where the depth of the path can be specified and consequently increased or decreased.  
-%
-This specified depth is called unwinding in the technical terms.
-
-\textbf{BMC Search problem:}
-For a given $k$, size $\nu$, molecule number $\mu$, and unwinding depth w,
-we are searching for well-structured, stable, and well-fused VTS
-$G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ such that
-$|\nodes| = \nu$, $|\mols| = \mu$, and $G$ is not $k$-connected with w depth of unwinding.    
-
-\subsection{QBF and synthesis}
-Here we will present the QBF and Synthesis search problem.
+\subsection{Universal condition:}
+Here we will present the QBF.
 
 \ankit{This is a dummy template. need a rewrite.} \textbf{QBF search problem:}
 For a given $k$, size $\nu$, and molecule number $\mu$,
@@ -64,7 +93,7 @@ $G$ is not $k$-connected.
 %for the problems.
 
 %\subsection{Problem Statements}
-\textbf{Synthesis problem statement:}
+\subsection{Synthesis:}
 We will assume that we are given a VTS, whose all components
 are not specified.
 %
@@ -93,17 +122,17 @@ we have encoded the following variants of VTS synthesis problem.
 
 \subsubsection{Encoding synthesis property}
 
-We will do synthesis against the following property that says the VTS
+We will do synthesis against the property that the VTS
 is stable and 3-connected.
 %
 % The property is designed to balance the search space such that the synthesis procedure does not
 % succeed with simply adding too many edges. 
 %
-\begin{align*}
-\texttt{Property} =  \texttt{Stability} \land \texttt{Connected}(3) 
-%\land \texttt{DisConnected}(4)
-\end{align*}
-The property was proposed in~\cite{shukla2017discovering}.
+%\begin{align*}
+%\texttt{Property} =  \texttt{Stability} \land \texttt{Connected}(3) 
+%%\land \texttt{DisConnected}(4)
+%\end{align*}
+This property was proposed in~\cite{shukla2017discovering}.
 %
 However, the biological relevance of the property is debatable and open for change.
 %
