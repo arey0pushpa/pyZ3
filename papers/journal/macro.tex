@@ -2,7 +2,7 @@
 \usepackage{makecell}
 %\usepackage[]{graphics}
 \usepackage[dvipdfmx]{graphicx}
-%\graphicspath{ {./images/} }
+\graphicspath{ {./images/} }
 
 \usepackage{amsmath}
 \usepackage{pdflscape}
@@ -77,7 +77,7 @@
 \usepackage{catchfilebetweentags}
 
 \usepackage{tkz-orm}
-\usetikzlibrary{arrows,shapes,snakes,automata,backgrounds,petri}
+\usetikzlibrary{arrows,shapes,automata,backgrounds,petri}
 \usetikzlibrary{matrix,positioning,decorations.pathreplacing,calc,tikzmark}
 
 % added package for the matrix
@@ -97,6 +97,9 @@
 \def\fbmc{\mathsf{BMC}}
 \def\fqbf{\mathsf{QBF}}
 
+%\usepackage{epstopdf}
+%\epstopdfsetup{outdir=./}
+
 \usepackage{lineno}
 \linenumbers
 
@@ -106,6 +109,8 @@
 
 \usepackage{verbatim}
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.15}
+
 \newcommand*{\equal}{=}
  \usepackage{tikz}
  \usetikzlibrary{arrows}

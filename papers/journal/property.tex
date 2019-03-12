@@ -1,3 +1,4 @@
+\ankit{This section requires a revision}
 We analyze the model against our desired properties.
 %
 Since in biology there are are no declared specifications or properties,
@@ -59,7 +60,7 @@ We will start with the value of $k = 1$ and check for the satisfiability of the 
 %
 In case the formula is satisfiable the procedure terminates and we report the value of $k$. 
 %
-If the formula is not satisfiable we increment the $k$ by $1$ and perform the same procedure. 
+If the formula is not satisfiable we increment the $k$ by $1$ and repeat the same procedure. 
 %
 In this way, we ensure that the reported $k$ is the minimum connectivity of the VTS that
 satisfies the existential condition.
@@ -91,7 +92,7 @@ The formula for the problem has quantifier alternation.
 %
 Most SAT solvers can check (at least efficiently) only quantifier-free formulas.
 %
-We need a QBF solvers for such queries.
+We need a QBF solver for such queries.
 %
 %To handle this challenge, we used a combination of nondeterminism and Boolean enumeration at the C-source level to eliminate quantifiers, as explained further below.
 
