@@ -31,7 +31,7 @@ Second, using constraint solving, where the rules are represented as a constrain
 %
 The search problem is to find an assignment of variables that satisfies all the specified constraints.
 %
-We have used a form of this technique called satisfiability modulo theories (SMT).
+We have used a form of this technique called satisfiability modulo theories (SMT)~\cite{nieuwenhuis2006solving, barrett2018satisfiability}.
 %
 The SMT is a generalization of Boolean satisfiability problem with domain-specific reasoning, for example, support for uninterpreted functions, equality, arithmetic and data structures like arrays, bit-vectors etc. 
 %
@@ -84,14 +84,14 @@ $G$ is not $k$-connected.
 
 \subsection{Universal condition}
 %Here we will present the QBF.
-We will model the search problem for the universal condition as a quantified Boolean formula, and resultant formula will be solved with the help of a QBF solver.
+We will model the search problem for the universal condition as a quantified Boolean formula (QBF)~\cite{buning2009theory, benedetti2008qbf}, and resultant formula will be solved with the help of a QBF solver.
 %
 The QBF is a generalization of the Boolean satisfiability problem in which every variable is quantified using either existential or universal quantifiers.
 %
-The QBFs enables potentially more succinct encodings than propositional logic.
+The QBFs enables potentially more succinct encodings than SAT but with a higher complexity class decision problem~\cite{buning2009theory}.
  
 %\ankit{This is a dummy template. need a rewrite.} 
-\subsubsection{$\fqbf$ search problem.} For a given $k$, size $\nu$, and molecule number $\mu$, we are searching for a $k$-connected graph such that there is no assignment to make it a well-structured, stable, and well-fused VTS $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ with $|\nodes| = \nu$, $|\mols| = \mu$.    
+\subsubsection{$\fqbf$ search problem.} For a given $k$, size $\nu$, and molecule number $\mu$, we are searching for a $k$-connected graph such that there is no assignment that makes it a well-structured, stable, and well-fused VTS $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ with $|\nodes| = \nu$, $|\mols| = \mu$.    
 
 %
 %In this section, we will present a list of synthesis problems that may
