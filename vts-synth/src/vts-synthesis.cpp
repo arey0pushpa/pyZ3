@@ -275,7 +275,6 @@ z3::expr vts::vts_synthesis(unsigned variation) {
   /** Connectedness Constraints */
   z3::expr kConnCons = k_connected_graph_constraint(3, false);
   // z3::expr V5 = no_self_edges();
-
   // z3::expr inputCons = ctx.bool_val(true);
 
   /** Known and Unknown Bit variables */
@@ -303,9 +302,9 @@ z3::expr vts::vts_synthesis(unsigned variation) {
   z3::expr_vector listE = edge_list();
   z3::expr_vector listPresenceE = presence_edge_list();
   z3::expr_vector listActiveE = active_edge_list();
-  // z3::expr_vector listPairingM = pairing_m_list();
   z3::expr_vector listReach = reach_list();
   z3::expr_vector listPairing4M = pairing_m_4d_list();
+  // z3::expr_vector listPairingM = pairing_m_list();
 
   z3::expr knownVarConstraint(ctx);
 
@@ -340,8 +339,8 @@ z3::expr vts::vts_synthesis(unsigned variation) {
     unassigned_bits(listE, knownEdges, unknownE);
     unassigned_bits(listPresenceE, knownPresenceEdges, unknownPresenceE);
     unassigned_bits(listActiveE, knownActiveEdges, unknownActiveE);
-    // unassigned_bits ( listPairingM, knownPairingMatrix, unknownPairingM );
     unassigned_bits(listPairing4M, knownPairingMatrix, unknownPairingM);
+    // unassigned_bits ( listPairingM, knownPairingMatrix, unknownPairingM );
 
     z3::expr_vector list_expr(ctx);
 
