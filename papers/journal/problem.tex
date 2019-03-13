@@ -10,7 +10,7 @@ First, using the bounded model checking (BMC) technique~\cite{biere1999symbolic1
 %It  represents the executions of a program symbolically and 
 %
 %The Bounded model checking technique
-BMC is an automatic technique that performs a search for the violation of the property in the program executions whose length is bounded by some fixed integer value $w$ (\textit{unwinding depth}). 
+BMC is an automatic technique that performs a search for the violation of the property in the program executions whose length is bounded by some fixed positive integer value $w$ (\textit{unwinding depth}). 
 %
 The bounded execution is represented symbolically as a propositional formula and solved using a SAT solver.
 % is used to check the satisfiability of the resultant propositional formula.
@@ -20,9 +20,9 @@ In case there is no violation for a particular depth, one can progressively incr
 For our case, the unwinding depth is the length of the path of the underline graph.
 %
 %
-For the experimentation, we restrict the check only to the elementary cycles, cycles of length one. 
+For the experimentation, we restrict the check only to the elementary cycles; cycles of length one. 
 %
-This restriction puts an upper limit of number of node, $N$ on the length of the searched path. 
+This restriction puts an upper limit of number of nodes, $N$ on the length of the searched path. 
 %
 %
 %and the upper bound is the number of nodes $N$.
