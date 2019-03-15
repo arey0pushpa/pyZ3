@@ -308,31 +308,7 @@ z3::expr vts::vts_synthesis(unsigned variation) {
 
   z3::expr knownVarConstraint(ctx);
 
-  /*
-  if ( variation != 5 ) {
-    unassigned_2d_bits( knownNodesTuple, knownNodes, unknownN, nodes, N, M,
-  false ); unassigned_2d_bits( knownActiveNodesTuple, knownActiveNodes,
-                        unknownActiveN, active_node, N, M, false );
-    unassigned_2d_bits( knownPairingMatrixTuple, knownPairingMatrix,
-                        unknownPairingM, pairing_m, M, M, true );
-
-    unassigned_3d_bits( knownEdgesTuple, knownEdges, unknownE,
-                        edges, N, N, E_arity, true );
-
-    unassigned_4d_bits( knownPresenceEdgesTuple, knownPresenceEdges,
-                        unknownPresenceE, presence_edge, N, N, E_arity, M, true
-  ); unassigned_4d_bits( knownActiveEdgesTuple, knownActiveEdges,
-                        unknownActiveE, active_edge, N, N, E_arity, M, true );
-
-    knownVarConstraint =  z3::mk_and( knownEdges )
-                              && z3::mk_and( knownActiveNodes )
-                              && z3::mk_and( knownPresenceEdges )
-                              && z3::mk_and( knownActiveEdges )
-                              && z3::mk_and( knownNodes )
-                              && z3::mk_and( knownPairingMatrix );
-  }
-  */
-
+  // TODO: Check how the knownbits are fixed
   if (variation != 5) {
     unassigned_bits(listN, knownNodes, unknownN);
     unassigned_bits(listActiveN, knownActiveNodes, unknownActiveN);
@@ -381,7 +357,6 @@ z3::expr vts::vts_synthesis(unsigned variation) {
       std::cout << "known edge: " << knownEdges[i] << "\n";
     }
     */
-    //
     // auto edgeActivityC = !at_least_three( unknownActiveE );
     // auto edgePresenceC = !at_least_four( unknownPresenceE );
     // auto nodeC = !at_least_four( unknownN );
