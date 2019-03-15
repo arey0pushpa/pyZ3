@@ -280,20 +280,19 @@ Precise analysis of the properties of the VTS would be hindered by the same reas
 Previous analyses of vesicle traffic networks dealt with this combinatorial
 explosion by using a sampling approach~\cite{mani2016stacking}. 
 %
-In these analyses, vesicle traffic is
-modelled as a dynamical system. 
+In these analyses, vesicle traffic is modelled as an update system. 
 %
-The traffic rule specifies how the system transitions from one
-time point to the next. 
+%The traffic rule specifies how the system transitions from one
+%time point to the next. 
 %
-Given a traffic rule and an initial condition, the system is evolved over
-time until a steady state is reached. 
+Given a traffic rule and an initial condition, the system is updates one step a time, updating molecular flux of the compartments, until a steady state is reached. 
 %
-By studying a large sample of randomly generated traffic
-rules, such analyses can make statistical claims about vesicle traffic. 
+The update rule defines the flux transition for the next step. 
+%
+By studying a large sample of randomly generated update rules, such analyses can make statistical claims about vesicle traffic. 
 %
 
-In contrast, here we seek understand properties of vesicle traffic networks over all possible traffic rules, not just for a sampled subset. 
+In contrast, here we seek understand properties of vesicle traffic networks over all possible update rules, not just for a sampled subset. 
 %
 We would also like to directly make statements about steady state properties, rather
 than using transition dynamics to first search for steady states. 
