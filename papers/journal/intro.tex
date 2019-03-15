@@ -98,6 +98,23 @@ Other paths are used for cross talk between the secretory and the endocytic rout
 %		\caption{Number of simple 3-edge-connected unlabelled N-node graphs.}
 %	\end{center}	
 %\end{table}
+
+\subsection{The model}
+\ankit{Requires rewriting and some explanation}
+Our model is inspired by~\cite{shukla2017discovering}. On the timescales of minutes, our following assumptions reasonably capture the important aspects of the Rothman-Schekman-Sudhof (RSS) model~\cite{rothman2002machinery} of vesicle traffic system.
+\begin{enumerate}
+\item A cell is a set of compartments exchanging vesicles.
+\item Compartments are neither created nor destroyed.
+\item Each compartment is in steady state, gain and loss balance.
+\item Molecules are neither created nor destroyed.
+\item Molecules move via vesicles of uniform size.
+\item Identical vesicles have identical target compartments.
+\item Fusion of vesicles to compartments is driven by specific SNARE pairing.
+\item The activity of a SNARE can be regulated by other molecules present on the same compartment
+or vesicle.
+\item An active SNARE pair is necessary and sufficient for fusion. 
+\end{enumerate}
+
 \subsection{Abstraction of VTS as a graph problem}
 
 %In this section, we will describe the basic constraints imposed by cell biology. These are all incorporated into an abstract model of a VTS, whose properties will then be explored using SMT solvers.
@@ -197,12 +214,14 @@ Precise analysis of the properties of the VTS would be hindered by the same reas
 %3-connected graphs and all possible variations of SNARE regulation rules. 
 %
 %The number of graphs of specified connectivity grows exponentially with the number of nodes: Table~\ref{tab:threec} shows how many 3-edge-connected graphs~\cite{a052448-oeis} exist (without parallel or self edges) as node number N increases.
-
 \subsubsection{Graph connectivity is an interesting and accessible property of the VTS.} 
-%\ankit{This section requires some rewrite and best written by Mukund.}
+\ankit{Requires rewriting and better explanation}
 %\textbf{Properties of a VTS that satisfies all cell-biological constraints:} 
-
-Interactions between the molecules of the VTS together produce a functional vesicle transport network, in which molecules flow between intracellular compartments using specified paths. The molecules of the VTS, their interactions and modes of regulation have been worked out to a large extent through cell-biological experiments. But we do not know if this information is complete. In order to assess how completely we know the VTS, we need easily readable benchmarks. 
+Interactions between the molecules of the VTS together produce a functional vesicle transport network, in which molecules flow between intracellular compartments using specified paths.
+%
+The molecules of the VTS, their interactions and modes of regulation have been worked out to a large extent through cell-biological experiments. 
+%
+But we do not know if this information is complete. In order to assess how completely we know the VTS, we need easily readable benchmarks. 
 
 %\ankit{Need more clarity on the importance and relevance of the CONNECTIVITY and it's relevance.}
 One such benchmark is provided by our result about connectivity of the VTS graph. Graph connectivity is defined as the minimum number of edges that need to be removed from an undirected graph to render it disconnected. For example, in a directed cyclic graph, every node has at least one incoming and one outgoing edge, at least 2 edges need to be removed in order to disconnect the graph. Therefore the underlying undirected graph is 2-connected. 
