@@ -82,35 +82,12 @@
 \usetikzlibrary{arrows,shapes,automata,backgrounds,petri}
 \usetikzlibrary{matrix,positioning,decorations.pathreplacing,calc,tikzmark}
 
-% added package for the matrix
-\usepackage{blkarray, bigstrut} %
-
-
-\usetikzlibrary{matrix, positioning}
-\tikzset{
-    every left delimiter/.style={xshift=1ex},
-    every right delimiter/.style={xshift=-1ex},
-    bmatrix/.style={matrix of math nodes,
-        inner sep=0pt,
-        left delimiter={[},
-        right delimiter={]},
-        nodes={anchor=center, inner sep=.3333em},
-        }
-}
-
 \def\fsmt{\mathsf{SMT}}
 \def\fbmc{\mathsf{BMC}}
 \def\fqbf{\mathsf{QBF}}
 
-%\usepackage{epstopdf}
-%\epstopdfsetup{outdir=./}
-
 \usepackage{lineno}
 \linenumbers
-
-%%%<
-%\usepackage[active,tightpage]{preview}
-%\PreviewEnvironment{tikzpicture}
 
 \usepackage{verbatim}
 \usepackage{pgfplots}
