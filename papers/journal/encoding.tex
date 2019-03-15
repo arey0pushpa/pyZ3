@@ -440,8 +440,7 @@ As an experiment, we have implemented a direct SMT version of the universal prob
 %
 The basic idea is to conjunct the formula for each combination value of the quantified variable. 
 %
-
-
+%
 \input{satqbf-table}
 %
 The table~\ref{tab:satqbf-graph}, shows the search results of this encoding for the universal condition with 5 nodes and 3-connected graphs. 
@@ -449,6 +448,7 @@ The table~\ref{tab:satqbf-graph}, shows the search results of this encoding for 
 The SMT extended version was not able to scale it to the desired results and either timed-out (T/O) or ran out of memory (M/O).
 %
 This can be due to the fact that directly translating a quantified formula into a quantifier-free  by introducing a vector of variables for each boolean possibility will blow up the size of the formula and may not be solvable by a solver.
+%
 
 \textbf{$\fqbf$ search encoding of the universal condition:}
 We will describe several constraints that encode VTSs in this section.
