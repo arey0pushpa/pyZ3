@@ -100,7 +100,7 @@ Other paths are used for cross talk between the secretory and the endocytic rout
 %\end{table}
 
 \subsection{The model}
-\ankit{Requires rewriting and some explanation}
+\ankit{A template: Requires rewriting and some explanation}
 Our model is inspired by~\cite{shukla2017discovering}. On the timescales of minutes, our following assumptions reasonably capture the important aspects of the Rothman-Schekman-Sudhof (RSS) model~\cite{rothman2002machinery} of vesicle traffic system.
 \begin{enumerate}
 \item A cell is a set of compartments exchanging vesicles.
@@ -200,15 +200,8 @@ This is motivated by the idea that pairing must generate an inactive bi-molecula
 
 %We assume that for fusion to occur, the pair of SNARE types involved on the vesicle and compartment must both be in an active state. Whether these SNAREs are active or inactive depends on the other molecules found on the vesicle or compartment, respectively. We test many different versions of this kind of molecular regulation. Most generally, the activity state of a given SNARE can be a Boolean function of all the molecular types on a compartment or vesicle. We have also tested \cite{shukla} a particularly simple regulation mechanism in which two SNAREs that can pair to drive fusion inhibit one another; this is the \textit{pairing inhibition}. This is motivated by the idea that pairing must generate an inactive bi-molecular complex.
 
-\textbf{Difficulty of the analysis:}
-The analysis of vesicle traffic systems is a difficult problem
-because of the combinatorial scaling of possible traffic topologies and regulatory rules. 
-%
-For example, we might want to check some conjecture of interest for all graphs of a certain structure. 
-%
-The number of graphs with that specific structure with a combination of the possible regulatory rule will be large to handle by any tool.
-%
-Precise analysis of the properties of the VTS would be hindered by the same reason. 
+%\textbf{Difficulty of the analysis:}
+
 %
 %Properties of the VTS would be hindered by the same reason. 
 %3-connected graphs and all possible variations of SNARE regulation rules. 
@@ -274,10 +267,46 @@ This is a 3-connected graph.
 
 \subsection{Combinatorial problem and use of Formal methods}
 %
+\ankit{A template: Requires complete rewriting}
+The analysis of vesicle traffic systems is a difficult problem
+because of the combinatorial scaling of possible traffic topologies and regulatory rules. 
+%
+For example, we might want to check some conjecture of interest for all graphs of a certain structure. 
+%
+The number of graphs with that specific structure with a combination of the possible regulatory rule will be large to handle by any tool.
+%
+Precise analysis of the properties of the VTS would be hindered by the same reason. 
+
+Previous analyses of vesicle traffic networks dealt with this combinatorial
+explosion by using a sampling approach~\cite{mani2016stacking}. 
+%
+In these analyses, vesicle traffic is
+modelled as a dynamical system. 
+%
+The traffic rule specifies how the system transitions from one
+time point to the next. 
+%
+Given a traffic rule and an initial condition, the system is evolved over
+time until a steady state is reached. 
+%
+By studying a large sample of randomly generated traffic
+rules, such analyses can make statistical claims about vesicle traffic. 
+%
+
+In contrast, here we seek understand properties of vesicle traffic networks over all possible traffic rules, not just for a sampled subset. 
+%
+We would also like to directly make statements about steady state properties, rather
+than using transition dynamics to first search for steady states. 
+%
+Formal verification tools like model checkers, SAT and SMT solvers serve precisely this purpose. 
+%
+The tools model the computation symbolically for the graphs of finite size and can verify the and hence make prediction about the hypothesis for all possible states of the system. 
+%
+
+
 
 % i.e., formally as a boolean function that given requisite labels of nodes and vesicles that returns true if the required regulations are met. 
 %
-
 %
 % Note that the formulas define among other things constraints over
 % paths between nodes in the graph model of VTS. Similarly, one can
