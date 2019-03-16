@@ -285,9 +285,12 @@ In these analyses, vesicle traffic is modelled as an update system.
 %The traffic rule specifies how the system transitions from one
 %time point to the next. 
 %
-Given a traffic rule and an initial condition, the system is updates one step a time, updating molecular flux of the compartments, until a steady state is reached. 
+Given a traffic rule and an initial condition, the system updates molecular flux of the compartments one step a time choosing one among the possibly exponential choices of the rule.
 %
 The update rule defines the flux transition for the next step. 
+%
+This process is performed until a steady state is reached. 
+%
 %
 By studying a large sample of randomly generated update rules, such analyses can make statistical claims about vesicle traffic. 
 %
