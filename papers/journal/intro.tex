@@ -115,6 +115,16 @@ or vesicle.
 \item An active SNARE pair is necessary and sufficient for fusion. 
 \end{enumerate}
 
+A cell is a set of compartments exchanging molecules via vesicles of uniform size.
+%
+On the timescale of minutes, compartments are neither created nor destroyed, rather, they are in steady state. We assume that molecules are also neither created nor destroyed.
+%
+The identities of compartments and vesicles is encoded in their molecules, and identical vesicles fuse with identical target compartments.
+%
+Fusion of vesicles to compartments is driven by specific SNARE pairing, and a single active SNARE complex is necessary and sufficient for fusion.
+%
+The activity of a SNARE can be regulated by other molecules present on the same compartment or vesicle.
+
 \subsection{Abstraction of VTS as a graph problem}
 
 %In this section, we will describe the basic constraints imposed by cell biology. These are all incorporated into an abstract model of a VTS, whose properties will then be explored using SMT solvers.
@@ -267,7 +277,6 @@ This is a 3-connected graph.
 
 \subsection{Combinatorial problem and use of Formal methods}
 %
-\ankit{A template: Requires complete rewriting}
 The analysis of vesicle traffic systems is a difficult problem
 because of the combinatorial scaling of possible traffic topologies and regulatory rules. 
 %
@@ -277,22 +286,32 @@ The number of graphs with that specific structure with a combination of the poss
 %
 Precise analysis of the properties of the VTS would be hindered by the same reason. 
 
-Previous analyses of vesicle traffic networks dealt with this combinatorial
-explosion by using a sampling approach~\cite{mani2016stacking}. 
+In previous work, a sampling approach was undertaken. 
 %
-In these analyses, vesicle traffic is modelled as an update system. 
+The study used a rule-based approach~\cite{mani2016stacking}, where given an initial condition of the cell, and rules for molecular traffic, the state of each compartment in the cell is updated until a steady state is reached. 
+%
+With this study, statistical claims can be made, but improbable albeit biologically possible solutions could have been missed.
+%
+Also, there are many ways in which the dynamics of vesicle transport can be played out, while a single one was explored in this work. 
+%
+It is possible that a different scheme for the dynamics could lead to a different set of solution
+
+%Previous analyses of vesicle traffic networks dealt with this combinatorial
+%explosion by using a sampling approach~\cite{mani2016stacking}. 
+%
+%In these analyses, vesicle traffic is modelled as an update system. 
 %
 %The traffic rule specifies how the system transitions from one
 %time point to the next. 
 %
-Given a traffic rule and an initial condition, the system updates molecular flux of the compartments one step a time choosing one among the possibly exponential choices of the rule.
+%Given a traffic rule and an initial condition, the system updates molecular flux of the compartments one step a time choosing one among the possibly exponential choices of the rule.
 %
-The update rule defines the flux transition for the next step. 
+%The update rule defines the flux transition for the next step. 
 %
-This process is performed until a steady state is reached. 
+%This process is performed until a steady state is reached. 
 %
 %
-By studying a large sample of randomly generated update rules, such analyses can make statistical claims about vesicle traffic. 
+%By studying a large sample of randomly generated update rules, such analyses can make statistical claims about vesicle traffic. 
 %
 
 In contrast, here we seek understand properties of vesicle traffic networks over all possible update rules, not just for a sampled subset. 
