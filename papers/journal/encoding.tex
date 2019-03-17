@@ -265,6 +265,10 @@ unreachable pair of nodes in the underlying undirected graph.
 
 The $\fbmc$ search encoding differs with the presented $\fsmt$ encoding slightly in the way variables are represented and how we encode reachability.  
 %
+Here, we will only present the stability encoding.  
+%
+Rest of the encoding are similar to the one presented in the previous section, Section~\ref{enc:smt}.
+
 In the $\fbmc$ encoding, variables are represented as an array of bit vectors of size $M$. 
 %
 %We initialize the system with a fixed number of node size (N) and distinct molecular types (M). 
@@ -292,14 +296,11 @@ Where $M_{1}, M_{2}, M_{3}$ are Q-SNAREs while $M_{4}$ is a R-SNARE.
 Also, each $M_i$ can be either 0 or 1, representing the presence or absence of the $i^{th}$ molecule.
 %
 For example, the variable \texttt{bvEdge}[1][2][1] = 1001 represent first edge between node 1 and node 2 with molecule $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) present. 
-
+%
 Similarly, a node in the graph is also labelled as a bit vector of length $M$.   
 %
 We leave the graph completely arbitrary and add the constraint to enforce that the graph is k-connected. 
 %
-Here, we will only present the stability encoding.  
-%
-Rest of the encoding are similar to the one presented in the Section~\ref{enc:smt}.
 
 In order to specify the stability condition, we use a combination of enumeration and nondeterminism.
 %
