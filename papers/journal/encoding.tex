@@ -263,13 +263,25 @@ unreachable pair of nodes in the underlying undirected graph.
 
 \subsection{$\fbmc$ search encoding}
 
-The $\fbmc$ search encoding differs with the presented $\fsmt$ encoding slightly in the way variables are represented and how we encode reachability.  
+Our first attempt was to encode the existential condition check as a $\fbmc$ search problem.
 %
-Here, we will only present the stability encoding.  
+%In this section we will present the $\fbmc$ encoding of the same.
+%
+Although the techniques used for $\fbmc$ and $\fsmt$ is very different because we are not unrolling the complete program in the case of $\fbmc$, the encoding is very similar.
+% 
+The $\fbmc$ search encoding differs with the presented $\fsmt$ encoding slightly in the way variables are represented and how we encode reachability (both for the stability and connectivity).  
+%
+Hence, we will only present the stability encoding.  
 %
 Rest of the encodings are similar to the one presented in the previous section, Section~\ref{enc:smt}.
 
-In the $\fbmc$ encoding, variables are represented as an array of bit vectors of size $M$. 
+
+In the $\fbmc$ encoding, the label of edges and nodes are represented as an array of bit vector of size $M$. 
+%
+For example, the bit vector \texttt{bvEdge}$[i][j][q]$ is the label is the $q$th edge between node $i$ and $j$.
+% with each bit corresponding to the presence or absence of the molecule. 
+%
+%In the $\fbmc$ encoding, variables are represented as an array of bit vectors of size $M$. 
 %
 %We initialize the system with a fixed number of node size (N) and distinct molecular types (M). 
 %%
@@ -278,29 +290,35 @@ In the $\fbmc$ encoding, variables are represented as an array of bit vectors of
 %graph [i] [j] = x.
 %\end{align*}
 %
-For example, every edge is represented as a bit vector of size $M$ with each bit corresponding to the presence or absence of the molecule. 
+%For example, every edge is represented as a bit vector of size $M$ with each bit corresponding to the presence or absence of the molecule. 
 %
-Bit vector \texttt{bvEdge}$[i][j][q]$ represent the $q$th edge between node $i$ and $j$.
+%Bit vector \texttt{bvEdge}$[i][j][q]$ represent the $q$th edge between node $i$ and $j$.
 %
-The index of the bit vector implicitly determines the corresponding molecule we are referring to in the edge.
+%The index of the bit vector implicitly determines the corresponding molecule we are referring to in the edge.
 % 
 
-The molecule set is divided into Q and R-SNAREs. 
+%The molecule set is divided into Q and R-SNAREs. 
+%
+%For clarity, we consider the first part of the bit vector as Q-SNAREs and rest as R-SNAREs.
+%
+%An edge in the system with $M$ = 4 molecules is interpreted as a label [$M_{1}, M_{2}, M_{3}, M_{4}$]. 
+%
+%Where $M_{1}, M_{2}, M_{3}$ are Q-SNAREs while $M_{4}$ is a R-SNARE.
+%
+%Also, each $M_i$ can be either 0 or 1, representing the presence or absence of the $i^{th}$ molecule.
+%
+%For example, the variable \texttt{bvEdge}[1][2][1] = 1001, represents the first edge between node 1 and node 2 with molecule $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) present. 
+%
+%Similarly, a node in the graph is also labelled as a bit vector of length $M$.   
+%
+%We leave the graph completely arbitrary and add the constraint to enforce that the graph is k-connected. 
+%
+
+The value of the bit vector describes the presence of corresponding molecules at the particular location. 
 %
 For clarity, we consider the first part of the bit vector as Q-SNAREs and rest as R-SNAREs.
 %
-An edge in the system with $M$ = 4 molecules is interpreted as a label [$M_{1}, M_{2}, M_{3}, M_{4}$]. 
-%
-Where $M_{1}, M_{2}, M_{3}$ are Q-SNAREs while $M_{4}$ is a R-SNARE.
-%
-Also, each $M_i$ can be either 0 or 1, representing the presence or absence of the $i^{th}$ molecule.
-%
-For example, the variable \texttt{bvEdge}[1][2][1] = 1001, represents the first edge between node 1 and node 2 with molecule $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) present. 
-%
-Similarly, a node in the graph is also labelled as a bit vector of length $M$.   
-%
-We leave the graph completely arbitrary and add the constraint to enforce that the graph is k-connected. 
-%
+For example, the variable \texttt{bvEdge}[0][2][1] = 1001, means the molecule  $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) are present on the first edge between node 1 and node 2.
 
 In order to specify the stability condition, we use a combination of enumeration and nondeterminism.
 %
