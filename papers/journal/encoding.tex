@@ -2,9 +2,15 @@
 %\externaldocument{smt-table}
 %\externaldocument{qbf-table}
 
-In this section we will present the $\fsmt$, $\fbmc$ and $\fqbf$ search encodings with the encoding for synthesis problem. We will start with the $\fsmt$ search encoding and later present the contrast with the $\fbmc$ encoding.
+In the previous section, we have discussed four problems.
+%
+In this section we will present encodings fof the
+$\fsmt$ search, $\fbmc$ search, $\fqbf$ search and synthesis problems.
+%
+We will start with the $\fsmt$ search encoding and later present the
+contrast with the $\fbmc$ encoding.
 
-\subsection{$\fsmt$ search encoding}
+\subsection{Encoding for $\fsmt$ search problem}
 \label{enc:smt}
 
 %\subsection{Boolean satisfiability of the search problem}
@@ -261,9 +267,9 @@ unreachable pair of nodes in the underlying undirected graph.
 % We can go down or up using -C \_ option.  \newline 
 
 
-\subsection{$\fbmc$ search encoding}
+\subsection{Encoding for $\fbmc$ search problem}
 
-Our first attempt was to encode the existential condition check as a $\fbmc$ search problem.
+Our first attempt was to encode the existential condition check as a $\fbmc$ search problem~\cite{plospaper}.
 %
 %In this section we will present the $\fbmc$ encoding of the same.
 %
@@ -448,7 +454,7 @@ is described by pairing matrix; Aep.
 The constraints for the variants can be given to a SAT or a SMT solver to find
 VTSs that belong to the variants.
 
-\subsection{Universal condition}
+\subsection{Encoding for $\fqbf$ search problem}
 \label{enc:univ-cond}
 %
 Recall that the specification for universal condition~\ref{sec:property} requires quantifier alternation. 
@@ -651,7 +657,7 @@ quantified, $\texttt{Connected}(k)$ introduces quantifier alternations.
 %solvable by a SAT solver.
 %
 
-\subsection{Synthesis of VTS}
+\subsection{Encoding for the synthesis problem}
 In this section, we will present our synthesis method for
 the synthesis problems.
 %

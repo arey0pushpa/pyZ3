@@ -1,6 +1,7 @@
 This section will present the different search problems of VTS.
 %
-We categorize the search problems into three different categories, search problem for existential condition, search problem for universal condition and performing synthesis on the incomplete VTS. 
+We categorize the search problems into three different categories, search problem for existential condition, search problem for universal condition,
+and performing synthesis on the incomplete VTS. 
 
 \subsection{Existential condition}
 We employ two techniques to examine the existential condition. 
@@ -100,6 +101,9 @@ The QBFs enables potentially more succinct encodings than SAT but with a higher 
 
 %\subsection{Problem Statements}
 \subsection{Synthesis of VTS}
+%
+We also consider another variant of analysis of VTSs.
+%
 We will assume that we are given a VTS, whose all components
 are not specified.
 %
@@ -126,7 +130,7 @@ we have encoded the following variants of VTS synthesis problem.
 	\item  Fixing VTS by both adding/deleting parts
 \end{enumerate}
 
-\subsubsection{Encoding synthesis property}
+\subsubsection{Synthesis problem}
 
 We will do synthesis against the property that the VTS
 is stable and 3-connected.
@@ -142,8 +146,8 @@ This property was proposed in~\cite{shukla2017discovering}.
 %
 However, the biological relevance of the property is debatable and open for change.
 %
-Our tool is easily modifiable to support any other property that may be deemed 
-interesting by the biologists.
+% Our tool is easily modifiable to support any other property that may be deemed 
+% interesting by the biologists.
 
 
 %%% Local Variables:
