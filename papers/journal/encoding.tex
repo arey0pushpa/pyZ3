@@ -318,15 +318,15 @@ The value of the bit vector variable describe the presence of the corresponding 
 %
 For clarity, we consider the first part of the bit vector as Q-SNAREs and rest as R-SNAREs.
 %
-For example, the variable \texttt{bvEdge}[0][2][1] = $1001$, means the molecule  $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) are present on the first edge between node 2 and node 1.
+For an edge in the system with $M$ = 4 molecules, the variable \texttt{bvEdge}[0][2][1] = $1001$, means the molecule  $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) are present on the first edge between node 2 and node 1.
 
 To specify the stability condition, we use a combination of enumeration and nondeterminism.
 %
-The encoding here presents a simpler version of the implementation. 
-%Nondeterminism can be viewed as an oracle that guesses a correct $m$-path for a specific $m$ if it exists. 
+%Nondeterminism can be viewed as an oracle that guesses a correct path for a specific $m$ if it exists. 
 %
 %We then use this path as a witness to ensures that stability is maintained for each outgoing molecule $m$ on every edge $E$.
 %
+The encoding here presents a simpler version of the implementation. 
 
 \subsubsection{Constraints for stability condition}
 %
