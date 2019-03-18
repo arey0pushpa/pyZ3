@@ -327,7 +327,8 @@ To specify the stability condition, we use nondeterminism to perform enumeration
 %We then use this path as a witness to ensures that stability is maintained for each outgoing molecule $m$ on every edge $E$.
 %
 The encoding here presents a simpler version of the implementation. 
-
+%
+Note that the enumeration is done only till an unwinding depth $w$.
 \subsubsection{Constraints for stability condition}
 %
 A path between node $i$ and $j$ in the graph is a $m$-$path_{ij}$, if there exists a path with molecule $m$ present on edges along the path between node $i$ and $j$.
