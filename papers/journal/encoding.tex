@@ -267,18 +267,18 @@ Our first attempt was to encode the existential condition check as a $\fbmc$ sea
 %
 %In this section we will present the $\fbmc$ encoding of the same.
 %
-Although the techniques used for $\fbmc$ and $\fsmt$ is very different because we are not unrolling the complete program in the case of $\fbmc$, the encoding is very similar.
+Although the techniques used for $\fbmc$ and $\fsmt$ is very different because we are not unrolling the complete program in the case of $\fbmc$, the encoding is not considerably different.
 % 
-The $\fbmc$ search encoding differs with the presented $\fsmt$ encoding slightly in the way variables are represented and how we encode reachability (both for the stability and connectivity).  
+The $\fbmc$ search encoding differs with the presented $\fsmt$ encoding in the way variables are represented and how we encode reachability (both for the stability and connectivity).  
 %
 Hence, we will only present the stability encoding.  
 %
 Rest of the encodings are similar to the one presented in the previous section, Section~\ref{enc:smt}.
 
 
-In the $\fbmc$ encoding, the label of edges and nodes are represented as an array of bit vector of size $M$. 
+In the $\fbmc$ encoding, the label of the edges and nodes are represented by variables of type arrays of bit vector of size $M$. 
 %
-For example, the bit vector \texttt{bvEdge}$[i][j][q]$ is the label is the $q$th edge between node $i$ and $j$.
+For example, the variable \texttt{bvEdge}$[i][j][q]$, represent the label of the $q$th edge between node $i$ and $j$.
 
 % with each bit corresponding to the presence or absence of the molecule. 
 %
@@ -314,11 +314,11 @@ For example, the bit vector \texttt{bvEdge}$[i][j][q]$ is the label is the $q$th
 %We leave the graph completely arbitrary and add the constraint to enforce that the graph is k-connected. 
 %
 %
-The value of the bit vector describe the presence of the corresponding molecules at that particular location. 
+The value of the bit vector variable describe the presence of the corresponding molecules at that particular location. 
 %
 For clarity, we consider the first part of the bit vector as Q-SNAREs and rest as R-SNAREs.
 %
-For example, the variable \texttt{bvEdge}[0][2][1] = $1001$, means the molecule  $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) are present on the first edge between node 1 and node 2.
+For example, the variable \texttt{bvEdge}[0][2][1] = $1001$, means the molecule  $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) are present on the first edge between node 2 and node 1.
 
 To specify the stability condition, we use a combination of enumeration and nondeterminism.
 %
