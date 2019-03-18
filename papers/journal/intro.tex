@@ -101,29 +101,29 @@ Other paths are used for cross talk between the secretory and the endocytic rout
 
 \subsection{The model}
 \ankit{A template: Requires rewriting and some explanation}
-Our model is inspired by~\cite{shukla2017discovering}. On the timescales of minutes, our following assumptions reasonably capture the important aspects of the Rothman-Schekman-Sudhof (RSS) model~\cite{rothman2002machinery} of vesicle traffic system.
+%
+\todo{Ankit: The Rothman model has no intuition; Add couple of lines relating it to VTS; Also, relate it to previous subsection. The connect is lacking.} The VTS model for this paper is inspired by~\cite{shukla2017discovering}. 
+%
+On the timescales of minutes, we have tried to capture important aspect of Rothman-Schekman-Sudhof (RSS) model~\cite{rothman2002machinery} of vesicle traffic system.
+%
+The following are the basic component and assumptions of our model. 
 \begin{enumerate}
-\item A cell is a set of compartments exchanging vesicles.
-\item Compartments are neither created nor destroyed.
-\item Each compartment is in steady state, gain and loss balance.
-\item Molecules are neither created nor destroyed.
+\item A cell is a set of compartments exchanging molecules via vesicles of uniform size.
+\item On the timescale of minutes, compartments are neither created nor destroyed.
+\item Each compartment is in steady state, gain and loss of the molecules is balance\todo{Ankit: Need intuition and also reasoning why this is okay to add this as an assumption}.
+\item We assume that molecules are neither created nor destroyed.
 \item Molecules move via vesicles of uniform size.
 \item Identical vesicles have identical target compartments.
 \item Fusion of vesicles to compartments is driven by specific SNARE pairing.
+\item The identities of compartments and vesicles is encoded in their molecules, and identical vesicles fuse with identical target compartments.
 \item The activity of a SNARE can be regulated by other molecules present on the same compartment
 or vesicle.
 \item An active SNARE pair is necessary and sufficient for fusion. 
 \end{enumerate}
 
-A cell is a set of compartments exchanging molecules via vesicles of uniform size.
-%
-On the timescale of minutes, compartments are neither created nor destroyed, rather, they are in steady state. We assume that molecules are also neither created nor destroyed.
-%
-The identities of compartments and vesicles is encoded in their molecules, and identical vesicles fuse with identical target compartments.
-%
-Fusion of vesicles to compartments is driven by specific SNARE pairing, and a single active SNARE complex is necessary and sufficient for fusion.
-%
-The activity of a SNARE can be regulated by other molecules present on the same compartment or vesicle.
+\todo{Ankit: Need some additional discussion;4 lines max about the legitamecy of the assumptions.}
+%On the timescale of minutes, compartments are neither created nor destroyed, rather, they are in steady state. We assume that molecules are also neither created nor destroyed.
+%The activity of a SNARE can be regulated by other molecules present on the same compartment or vesicle.
 
 \subsection{Abstraction of VTS as a graph problem}
 
@@ -243,7 +243,7 @@ A mismatch between our predictions and experiments would indicate that our curre
 %
 Note that, on the other hand, if our predictions are experimentally confirmed, it does not imply that our understanding of the VTS is complete.\\
 %
-%\ankit{Added this as a template. Will change it soon.}
+\ankit{Added this as a template. Will change it soon.}
 \begin{example}
 %
 In figure~\ref{fig:M1}, we present a VTS that has 3 compartments and 8 molecules, and a corresponding pairing matrix.
@@ -276,13 +276,14 @@ This is a 3-connected graph.
 \label{subsec:graphmodel}
 
 \subsection{Combinatorial problem and use of Formal methods}
-%
+\ankit{Needs revision; overlapping writing.}
 The analysis of vesicle traffic systems is a difficult problem
 because of the combinatorial scaling of possible traffic topologies and regulatory rules. 
 %
-For example, we might want to check some conjecture of interest for all graphs of a certain structure. 
+%For example, we might want to check some conjecture of interest for all graphs of a certain structure. 
 %
-The number of graphs with that specific structure with a combination of the possible regulatory rule will be large to handle by any tool.
+%If the analysis is done on a large number of graphs, the joined effect of large quantity of graphs and combinatorially many possible regulatory rules will be difficult to handle by any tool.
+If the analysis is done on a large number of graphs, the joined effect of this with combinatorially many possible regulatory rules will be difficult to handle by any tool.
 %
 Precise analysis of the properties of the VTS would be hindered by the same reason. 
 
@@ -294,7 +295,7 @@ With this study, statistical claims can be made, but improbable albeit biologica
 %
 Also, there are many ways in which the dynamics of vesicle transport can be played out, while a single one was explored in this work. 
 %
-It is possible that a different scheme for the dynamics could lead to a different set of solution
+It is possible that a different scheme for the dynamics could lead to a different set of solutions.
 
 %Previous analyses of vesicle traffic networks dealt with this combinatorial
 %explosion by using a sampling approach~\cite{mani2016stacking}. 
@@ -321,10 +322,8 @@ than using transition dynamics to first search for steady states.
 %
 Formal verification tools like model checkers, SAT and SMT solvers serve precisely this purpose. 
 %
-The tools model the computation symbolically for the graphs of finite size and can verify the and hence make prediction about the hypothesis for all possible states of the system. 
+The tools model the computation symbolically for the graphs of finite size and can make prediction about the hypothesis for all possible states of the system without explicit enumeration of rules. 
 %
-
-
 
 % i.e., formally as a boolean function that given requisite labels of nodes and vesicles that returns true if the required regulations are met. 
 %
@@ -399,7 +398,7 @@ two found-in-nature VTSs.
 Our experiments suggest that some of the synthesis problems are solvable by modern solvers and the synthesis technology may be useful for biological research. \\
 %
 %
-%ankit{Added this as a template. Will change it soon.}
+\ankit{Added this as a template. Will change it soon.}
 \begin{example}
 	%
 	In figure~\ref{fig:synth-vts}, we present a partial VTS that has 3 compartments and it's complete VTS by our tool. The synthesis is performed on the basis of steady state property and the  k-connectivity of the graph.
