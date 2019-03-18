@@ -279,6 +279,7 @@ Rest of the encodings are similar to the one presented in the previous section, 
 In the $\fbmc$ encoding, the label of edges and nodes are represented as an array of bit vector of size $M$. 
 %
 For example, the bit vector \texttt{bvEdge}$[i][j][q]$ is the label is the $q$th edge between node $i$ and $j$.
+
 % with each bit corresponding to the presence or absence of the molecule. 
 %
 %In the $\fbmc$ encoding, variables are represented as an array of bit vectors of size $M$. 
@@ -296,7 +297,6 @@ For example, the bit vector \texttt{bvEdge}$[i][j][q]$ is the label is the $q$th
 %
 %The index of the bit vector implicitly determines the corresponding molecule we are referring to in the edge.
 % 
-
 %The molecule set is divided into Q and R-SNAREs. 
 %
 %For clarity, we consider the first part of the bit vector as Q-SNAREs and rest as R-SNAREs.
@@ -313,25 +313,29 @@ For example, the bit vector \texttt{bvEdge}$[i][j][q]$ is the label is the $q$th
 %
 %We leave the graph completely arbitrary and add the constraint to enforce that the graph is k-connected. 
 %
-
-The value of the bit vector describes the presence of corresponding molecules at the particular location. 
+%
+The value of the bit vector describe the presence of the corresponding molecules at that particular location. 
 %
 For clarity, we consider the first part of the bit vector as Q-SNAREs and rest as R-SNAREs.
 %
-For example, the variable \texttt{bvEdge}[0][2][1] = 1001, means the molecule  $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) are present on the first edge between node 1 and node 2.
+For example, the variable \texttt{bvEdge}[0][2][1] = $1001$, means the molecule  $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) are present on the first edge between node 1 and node 2.
 
-In order to specify the stability condition, we use a combination of enumeration and nondeterminism.
+To specify the stability condition, we use a combination of enumeration and nondeterminism.
 %
-Nondeterminism can be viewed as an oracle that guesses a correct $m$-path for a specific $m$ if it exists. 
+The encoding here presents a simpler version of the implementation. 
+%Nondeterminism can be viewed as an oracle that guesses a correct $m$-path for a specific $m$ if it exists. 
 %
-We then use this path as a witness to ensures that stability is maintained for each outgoing molecule $m$ on every edge $E$.
+%We then use this path as a witness to ensures that stability is maintained for each outgoing molecule $m$ on every edge $E$.
 %
 
 \subsubsection{Constraints for stability condition}
 %
-We use \texttt{NOracle} to represent the required path to encode the stability condition in VTS.
+A path between node $i$ and $j$ in the graph is a $m$-$path_{ij}$, if there exists a path with molecule $m$ present on edges along the path between node $i$ and $j$.
 %
-A naive implementation is shown in~\ref{eq:reachbmc1} where \texttt{NOracle}$(m, i, j, w)$ represent the presence of a $m$-$path$ from node $i$ to node $j$ of maximum $w$ length.
+%We use {\npath} to represent the required path to encode the stability condition in VTS.
+%
+%A naive implementation is shown in~\ref{eq:reachbmc1} where 
+We use {\npath}$(m, i, j, w)$ to represent the presence of a $m$-$path_{ij}$ of maximum $w$ length.
 %there is a edge between $i^{\prime \prime}$ and01
 %$(i \neq i^{\prime \prime})$ with $m$ present, and j is $m$-reachable from $i'$ in less than $p-1$ steps.
 %
@@ -342,9 +346,9 @@ A naive implementation is shown in~\ref{eq:reachbmc1} where \texttt{NOracle}$(m,
 % \end{align}
 %The NOracle can be thought of as a disjunction of $m$-path of increment length. 
 %
-It performs enumeration of every $m$-$path$, $m$-${paths}_i^j$, of at most $w$ length. 
+The~\ref{eq:reachbmc1} performs enumeration of every $m$-$path_{ij}$ of at most $w$ length. 
 %
-Starting with exploring $m$-${paths}_i^j$ of length 1, a direct edge between $i$ and $j$ with molecule $m$ present on it, until every $m$-${paths}_i^j$ of length $w-1$ is explored.
+Starting with exploring $m$-${paths}_{ij}$ of length 1, a direct edge between $i$ and $j$ with molecule $m$ present on it, until every $m$-${paths}_{ij}$ of length $w-1$ is explored.
 %by performing series of node hops till final node destination j is reached.
 %Starting with $m$-${paths}_i^j$ of length 1 which is a direct edge between $i$ and $j$ with molecule $m$ present on the edge or performing series of node hops till final node destination j is reached.
 
@@ -352,16 +356,16 @@ Starting with exploring $m$-${paths}_i^j$ of length 1, a direct edge between $i$
 %\bigvee\limits_{l = 1}^{|path| - 1} |m-path| = l
 
 \begin{align}
-\texttt{NOracle}(m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} | {m-path}_i^j | = l
+\npath(m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} (\texttt{Length} (m-path_{ij}) == l)
   \tag{S1}\label{eq:reachbmc1}
 \end{align}
 
-We encode stability using \texttt{NOracle}. If there is an $m$-edge between node $i$ and $j$, there has to be a $m$-$path_i^j$ from $j$ to $i$ of maximum $w$ length.
+We encode stability using \npath. For every edge with $m^{th}$ molecule present between node $i$ and $j$ then there exists a $m$-$path_{ji}$ of maximum $w$ length.
 %
 The expression (\texttt{bv} $\unrhd$ $m$) extracts the $m^{th}$ bit of the bitvector \texttt{bv}. 
 
 \begin{align}
-	\bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m) := 1) \limplies \texttt{NOracle}(m, j, i, w)
+	\bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m) := 1) \limplies \npath(m, j, i, w)
   \tag{S2}\label{eq:reachbmc2}
 \end{align}
 
