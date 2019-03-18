@@ -320,7 +320,7 @@ For clarity, we consider the first part of the bit vector as Q-SNAREs and rest a
 %
 For an edge in the system with $M$ = 4 molecules, the variable \texttt{bvEdge}[0][2][1] = $1001$, means the molecule  $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) are present on the first edge between node 2 and node 1.
 
-To specify the stability condition, we use a combination of enumeration and nondeterminism.
+To specify the stability condition, we use nondeterminism to perform enumeration.
 %
 %Nondeterminism can be viewed as an oracle that guesses a correct path for a specific $m$ if it exists. 
 %
@@ -365,7 +365,7 @@ We encode stability using \npath. For every edge with $m^{th}$ molecule present 
 The expression (\texttt{bv} $\unrhd$ $m$) extracts the $m^{th}$ bit of the bitvector \texttt{bv}. 
 
 \begin{align}
-	\bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m) := 1) \limplies \npath(m, j, i, w)
+	\bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m) == 1) \limplies \npath(m, j, i, w)
   \tag{S2}\label{eq:reachbmc2}
 \end{align}
 
