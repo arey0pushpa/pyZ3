@@ -473,7 +473,7 @@ The basic idea is to conjunct the formula for each combination value of the quan
 %
 \input{satqbf-table}
 %
-The table~\ref{tab:satqbf-graph}, shows the search results of this encoding for the universal condition with 5 nodes and 3-connected graphs. 
+\todo{Fix the table; the entries of constraint is incorrect}The table~\ref{tab:satqbf-graph}, shows the search results of this encoding for the universal condition with 4 nodes and 3-connected graphs. 
 %
 The SMT extended version was not able to scale it to the desired results and either timed-out (T/O) or ran out of memory (M/O).
 %
@@ -656,6 +656,12 @@ quantified, $\texttt{Connected}(k)$ introduces quantifier alternations.
 %However, this will blow up the size of the formula and may not be
 %solvable by a SAT solver.
 %
+%\begin{align*}
+%  & \forall G \, \texttt{Connectivity(k)} \limplies  \exists
+%                        f,p: \texttt{Stability} \, \land \, \texttt{Consistancy}  
+%  \tag{U}\label{eq:univcond}
+%\end{align*}
+
 
 \subsection{Encoding for the synthesis problem}
 In this section, we will present our synthesis method for
