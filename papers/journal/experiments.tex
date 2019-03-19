@@ -56,7 +56,7 @@ All the experiments were done
 %Each test was run 
 on a machine with Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz processor and 16GB RAM.
 %
-A 120 min (7200 sec) timeout was used for the tool.
+A 45 min (2700 sec) timeout was used for the tool.
 
 %\input{sat-table}
 
@@ -207,13 +207,16 @@ No graph results suggests that a functional VTS necessarily needs some form of r
 %
 Table~\ref{tab:satsmt-graph} presents the comparison of the running times of {\smttool} and {\sattool} on VTS variations of sizes 2 to 10.
 %
-For this comparison we have fixed the total number of molecules minimum twice the node count 
+For this comparison we have fixed the total number of molecules minimum four times the node count 
 %for $ |N|> 2$ and $2|N| + 1$ for $|N| = 2$
 %
 %For each variant, we fix 1
 and maximum number of parallel
 edges to be 2.
 %
+For our analysis we relax the 3:1 requirement for the Q and R-SNARES and treat a Q-SNARE triple helix as a single complex as modelled in~\cite{shukla2017discovering}.
+%
+The 
 %
 In the table M/O indicates the search results in out of memory, T/O indicates a time out and ``!'' indicate that no model exists for the constraint  (constraints were unsatisfiable).
 %In the table we have shown comparison for specific connectivity, for example variant A is checked against any graph with connectivity 2, variant B with connectivity 3 similarly for the rest of the variants.
@@ -258,7 +261,7 @@ For biological cells, this means that the whole space of 3-connected graphs is a
 %(there is a satisfying assignments to satisfy constraints of VTS) is valid VTS.   
 %\textbf{Synthesis}:
 
-We have applied~\ourtool~on six partially defined VTSs.
+We have applied~\ourtool~on seven partially defined VTSs.
 %
 The results are presented in Fig~\ref{tab:synth-graph} for both the solvers
 \depqbf and \zthree.
@@ -271,8 +274,9 @@ quantifier-free.
 %
 %The experiments were conducted with a 900s timeout.
 %
-The first four VTSs are synthetic but inspire from literature for
+The first four and the sixth VTSs are synthetic but inspire from literature for
 typical motifs in VTSs. 
+%
 The third VTS is a subgraph of the last VTS.
 %
 %
