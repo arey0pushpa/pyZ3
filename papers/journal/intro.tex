@@ -17,41 +17,49 @@ The phenomenology of vesicle traffic is unlikely to be familiar to many readers;
 Therefore, we give an overview of the molecular mechanism of the VTS and then we sketch out a few interesting problems that are key to an understanding of the VTS.
 
 \subsection{Vesicle traffic system}
-Vesicles were discovered decades ago, in the early 1950s, and major molecules of the vesicle traffic system and their functions were discovered soon after~\cite{wells2005discovery}. 
-%
-These molecules can roughly be categorized as budding molecules, whose role is in the formation and budding of transport vesicles from the source compartment, and fusion molecules, which enable fusion of transport vesicles with the target compartments. 
+%Vesicles were discovered decades ago, in the early 1950s, and 
+
+The major molecules involved in the vesicle traffic system~\cite{wells2005discovery} can roughly be categorized as budding molecules, whose role is in the formation and budding of transport vesicles from the source compartment, and fusion molecules, which enable fusion of transport vesicles with the target compartments. 
 %
 Below, we give a brief description of the sequence of steps involved in the vesicle transport process. 
 %
 Through this description, we wish to provide a glimpse of the kind of molecular regulatory interactions that we encode in our model.
-%\includegraphics{akbar}
 
 \begin{figure}
 	\includegraphics[height=10cm,width=12cm]{diavts.eps}
-	\caption{Schematic of the vesicle transport system. Steps involved in vesicle transport between two compartments; a source and a target compartment are shown. 
+	\caption{Schematic of the vesicle transport system. Steps involved in vesicle transport between two compartments: a source and a target compartment are shown. 
 	%
 	The symbols used for different molecules involved in vesicle traffic are explained in the key. At the source compartment, transmembrane cargo proteins are sorted by cytosolic adaptor proteins. 
 	%
 	Here, the different colours indicate different types of cargo and adaptor proteins. Coat proteins are recruited to the forming vesicle by adaptor proteins. 
 	%
-	Note here that a single type of coat protein can interact with multiple types of adaptor proteins. Subsequently, the vesicle is pinched off at its neck by dynamin. 
+	Note here that a single type of coat protein can interact with multiple types of adaptor proteins. Subsequently, the vesicle is pinched off at its neck, for example by dynamin. 
 	%
-	Once the vesicle has left the source compartment, the coat and adaptor proteins fall off and the vesicle is recognized and bound by a tethering complex whose one end is attached to the target compartment. At the target compartment, the tethered vesicle undergoes fusion, thereby releasing its contents into the target compartment.}
+	Once the vesicle has left the source compartment, the coat and adaptor proteins fall off and the vesicle is recognized and bound by a tethering complex which is linked to the target compartment. 
+	%
+	At the target compartment the tethered vesicle undergoes fusion, thereby releasing its contents.}
     \label{fig:vts}
 \end{figure}
 
 \textbf{Vesicle budding} involves sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment~\ref{fig:vts}.
 %
 Cargo sorting is performed by cytosolic adaptor proteins. 
-Adaptors are recruited to the source compartment through interactions with the lipids that form the compartment's membrane, and interactions with molecular switches called Arf/Sar which signal the initiation of vesicle formation~\cite{paczkowski2015cargo}. Then these adaptors bind to cargo molecules and thereby sequester them for packaging. 
+Adaptors are recruited to the source compartment through interactions with the lipids that form the compartment's membrane, and interactions with molecular switches called Arf/Sar which signal the initiation of vesicle formation~\cite{paczkowski2015cargo}. 
 %
-Different adaptor proteins act at different compartments, for eg., vesicle formation at the ER requires the adaptor sec23/24, and AP2 adaptor is used for packaging vesicles at the plasma membrane.
+Then these adaptors bind to cargo molecules and thereby sequester them for packaging. 
+%
+Different adaptor proteins act at different compartments, for example, vesicle formation at the ER requires the adaptor sec23/24, and the AP2 adaptor is used for packaging vesicles at the plasma membrane.
 %
 
-The next step is membrane deformation, which involves cytosolic coat proteins. Coat proteins are recruited to the forming vesicle through their interaction with adaptor proteins. These are naturally curved proteins, and their assembly on membranes leads to membrane deformation.
+The next step is membrane deformation, which involves cytosolic coat proteins. 
+%
+Coat proteins are recruited to the forming vesicle through their interaction with adaptor proteins. 
+%
+These are naturally curved proteins, and their assembly on membranes leads to membrane deformation.
+%
 A single kind of coat protein can bind to multiple kinds of adaptors, thereby allowing the packaging of multiple types of cargo within the same vesicle. 
 %
-There are three major types of coat proteins; Clathrin, COP2 and COP1. These act on different compartments; the clathrin coat operates at multiple compartments, and can interact with multiple adaptors proteins, whereas the COP2 and COP1 coat are only involved in vesicle formation at a single compartment; the ER and the Golgi respectively~\cite{faini2013vesicle}.
+There are three major types of coat proteins: Clathrin, COP2 and COP1. These act on different compartments: the clathrin coat operates at multiple compartments, and can interact with multiple adaptors proteins, whereas the COP2 and COP1 coat are only involved in vesicle formation at a single compartment; the ER and the Golgi respectively~\cite{faini2013vesicle}.
 
 Finally, transport vesicles bud out from the source compartment. This process requires ATP and is performed by the cytosolic dynamin proteins, which are recruited to the vesicle neck by the coat proteins~\cite{cocucci2014dynamin}.
 %
