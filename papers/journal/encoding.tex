@@ -76,32 +76,47 @@ $q$ will range over edges between two nodes, i.e., from $1$ to $\pi$.
 
 \subsubsection{Constraints on presence, activity of the molecule, and pairing matrix}
 %
-We need the following constraints~\eqref{eq:f0} and~\eqref{eq:c3}
-to encode the basic structure of VTSs.
+We need the following constraints \texttt{EdgeC},
+\texttt{ActivityC} and \texttt{PairingC} to encode the basic structure of VTSs.
 %
 For an edge to exist it should have one molecule present. 
 %
-\begin{align}
-  \bigwedge\limits_{i,j,q} (\bigvee_m e_{i,j,q,m} )\limplies e_{i,j,q}\tag{V1}\label{eq:f0}
-\end{align}
+\begin{align*}
+  \texttt{PresentEdge} = \bigwedge\limits_{i,j,q} (\bigvee_m e_{i,j,q,m} )\limplies e_{i,j,q}
+\end{align*}
+The edge labels are subset of the node labels of the source and target nodes.
+\begin{align*}
+  \texttt{LabelEdge} = \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies (n_{i,m} \land n_{j,m} )
+\end{align*}
+Self edges are not allowed. 
+\begin{align*}
+  \texttt{SelfEdge} = \bigwedge\limits_{i,q} \neg e_{i,i,q}
+\end{align*}
+
+We use \texttt{EdgeC} to collect all the edge related constraints. 
+%
+\texttt{EdgeC} states that each edge has at least one molecule,
+ edge labels are consistent with node labels and there are no self loops.    
+\begin{align*}
+  \texttt{EdgeC} = \texttt{PresentEdge} \land \texttt{SelfEdge} \land \texttt{LabelEdge} 
+\end{align*}
+
 If a molecule is active on an edge, it should be present on the edge.
 %
-\begin{align}
-  \bigwedge\limits_{i,j,q,m} b_{i,j,q,m} \limplies e_{i,j,q,m}\tag{V2}\label{eq:f1}
-\end{align}
+\begin{align*}
+  \texttt{ActivityMol} = \bigwedge\limits_{i,j,q,m} b_{i,j,q,m} \limplies e_{i,j,q,m}\label{eq:f1}
+\end{align*}
 A molecule should be present to be active on a node.  
-\begin{align}
-  \bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
-  \tag{V3}\label{eq:c4}
-\end{align}
-The edge labels are subset of the node labels of the source and target nodes.
-\begin{align}
-  \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies (n_{i,m} \land n_{j,m} )\tag{V4}\label{eq:c0}
-\end{align}
-Self edges are not allowed. 
-\begin{align}
-   \bigwedge\limits_{i,q} \neg e_{i,i,q}\tag{V5}\label{eq:c2}
-\end{align}
+\begin{align*}
+    \texttt{PresentMol} = \bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
+\end{align*}
+
+We use \texttt{ActivityC} to collect all the molecule activity related constraints. 
+\texttt{ActivityC} states that active molecule are present.
+\begin{align*}
+  \texttt{ActivityC} = \texttt{ActivityMol} \land \texttt{PresentMol} 
+\end{align*}
+
 We divide the pairing matrix into Q-SNAREs and R-SNAREs blocks and set the dependency bits of Q-SNAREs to Q-SNAREs (and similarly R-SNAREs to R-SNAREs) in the pairing matrix to be 0's.
 %It reduces the search space.
 % Condition on $p_{kk'}$. \ashu{why???} .
@@ -110,37 +125,29 @@ We divide the pairing matrix into Q-SNAREs and R-SNAREs blocks and set the depen
 %  \tag{V6}\label{eq:c3}
 %\end{align}
 
-\begin{align}
-  \bigwedge\limits_{(x < 3M/4 \, \land  \, y < 3M/4) \lor  (x >= 3M/4 \, \land \, y >= 3M/4)} \neg p(x,y)
-  \tag{V6}\label{eq:c3}
-\end{align}
+\begin{align*}
+ \texttt{PairingC} =\;& \bigwedge\limits_{(x < 3M/4 \, \land  \, y < 3M/4) \lor  (x >= 3M/4 \, \land \, y >= 3M/4)} \neg p(x,y)
+\end{align*}
 
 \subsubsection{Well-fused constraints}
-Constraint~\eqref{eq:fuse1} encodes that each edge must fuse with
+Constraint \texttt{Fusion1} encodes that each edge must fuse with
 its destination node.
 %
-Constraint~\eqref{eq:fuse2} encodes that each edge should not
+Constraint \texttt{Fusion2} encodes that each edge should not
 be able to potentially fuse with any node other than its destination node.
-\begin{align}
-  \bigwedge\limits_{i,j,q} e_{i,j,q} \limplies 
-\bigvee_{{m_1,m_2,m_3,m_4}} (\Land_{l=1}^4 ( b_{i,j,q,m_l} \lor a_{j,m_l} ) \land
-\Lor\limits_{l=1}^4 b_{i,j,q,m_l} \land
-  \notag \\
-	\qquad \qquad \qquad \qquad
-	\Lor\limits_{l=1}^4 a_{j,m_l} \land p_{\{m_1,m_2,m_3,m_4\}})
-  \tag{V7}\label{eq:fuse1}  
-\end{align}
-
-\begin{align}
-	\bigwedge\limits_{\mathclap{i,j,q,m_1,m_2,m_3, l \in \{1,..,3\}}} b_{i,j,q,m_1} \land ..\land b_{i,j,q,m_l} \limplies
-\mspace{300mu}
-  \notag \\
-	\qquad \qquad \qquad \qquad
-	\neg
+\begin{align*}
+\texttt{Fusion1} =\;&
+\bigwedge\limits_{i,j,q} e_{i,j,q} \limplies
+\bigvee_{{m_1,m_2,m_3,m_4}} (\Land_{l=1}^4 ( b_{i,j,q,m_l} \lor a_{j,m_l} ) \land 
+\Lor\limits_{l=1}^4 b_{i,j,q,m_l} \land\\
+& \qquad \qquad \qquad \qquad \Lor\limits_{l=1}^4 a_{j,m_l}\land p_{\{m_1,m_2,m_3,m_4\}})
+\\
+\texttt{Fusion2} =\;&
+\bigwedge\limits_{\mathclap{i,j,q,m_1,m_2,m_3, l \in \{1,..,3\}}} b_{i,j,q,m_1} \land ..\land b_{i,j,q,m_l} \limplies \\
+& \hspace{2cm} \neg 
 \bigvee_{\mathclap{j \neq j^{\prime}, m_{l+1}^{\prime},..,m_{4}^{\prime}}} ( a_{j^{\prime},m_{l+1}^{\prime}} \land .. \land a_{j^{\prime},m_4^{\prime}} \land p_{\{m_1,..,m_l,m^{\prime}_{l+1},..,m^{\prime}_4\}})
-\mspace{50mu}
-  \tag{V8}\label{eq:fuse2}  
-\end{align}
+\\
+\end{align*}
 
 % Fusion rules consist of two different mechanisms.
 % \begin{enumerate}
@@ -155,47 +162,51 @@ be able to potentially fuse with any node other than its destination node.
 % F5: To ensure that fusion respects the graph structure by the edge under consideration, it should not be possible to fuse with any other node.
 
 
-\subsubsection{Regulation on nodes and edges}
+\subsubsection{Regulation on nodes and edges (Activity function)}
 We are considering several models that differ in constraints on
 the activity of molecules.
 %
-We will present~\eqref{eq:ann}-~\eqref{eq:aep} that encodes
-the varying constraints.
+%We will present~\eqref{eq:ann}-~\eqref{eq:aep} that encodes
+%the varying constraints.
 %
+The activity of the molecules are controlled by activity functions.
+%
+We will have encoded five variation of the boolean functions based on the biological discussion.
+%
+The concrete functions encoding is presented below.
+%
+We will use \texttt{NodeFun}$_m$ and \texttt{EdgeFun}$_m$ for node and edge regulations respectively.
+
 The following constraint encodes no conditions on activities on nodes,
 i.e., all the present molecules on the nodes are active.
-\begin{align}
-\bigwedge\limits_{i,m} n_{i,m} = a_{i,m}    \tag{Ann}\label{eq:ann}
-\end{align}
+\begin{align*}
+\texttt{NodeFunOn} =& \bigwedge\limits_{i,m} n_{i,m} = a_{i,m}  
+\end{align*}
 The following constraint encodes that activity of a molecule $m$ on the node is
 defined by a Boolean function $\nodef_m$ of presence of molecules present on that node.
-\begin{align}
-\bigwedge\limits_{i,m} n_{i,m} \limplies a_{i,m} =  \nodef_m (n_{i,1},\dots,n_{i,\mu}) 
-\tag{Anb}\label{eq:anb}
-\end{align}
+\begin{align*}
+\texttt{NodeFunBf} =& \bigwedge\limits_{i,m} n_{i,m} \limplies a_{i,m} =  \nodef_m (n_{i,1},\dots,n_{i,\mu}) 
+\end{align*}
 The following constraint encodes no conditions on activities on edges,
 i.e., all the present molecules on the edges are active.
-\begin{align}
-  \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} = b_{i,j,q,m}
-\tag{Aen}\label{eq:aen}
-\end{align}
+\begin{align*}
+ \texttt{EdgeFunOn} =& \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} = b_{i,j,q,m}
+\end{align*}
 The following constraint encodes that activity of a molecule $m$ on the edge is
 defined by a Boolean function $\edgef_m$ of presence of molecules present on that edge.
-\begin{align}
-   \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies b_{i,j,q,m} = \edgef_k(e_{i,j,q,1}, .., e_{i,j,q,\mu} )
-  \tag{Aeb}\label{eq:aeb}
-\end{align}
+\begin{align*}
+ \texttt{EdgeFunBf} =& \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies b_{i,j,q,m} = \edgef_k(e_{i,j,q,1}, .., e_{i,j,q,\mu} )
+\end{align*}
 %
 The following constraint encodes that the activity of the molecules on
 edges is defined by inhibition by other molecules based on the pairing
 matrix. 
-\begin{align}
-	\bigwedge\limits_{i,j,q, m}  [e_{i,j,q,m} \land \bigwedge_{m_l \neq m,l \in \{1,..,3\}} e_{i,j,q,m'} \land p_{m, m_l}] \limplies 
-	\notag \\
-	  \qquad \qquad \qquad \qquad
+\begin{align*}
+\texttt{EdgeFunPairing} =&	
+\bigwedge\limits_{i,j,q, m}  [e_{i,j,q,m} \land   \\
+      \bigwedge_{m_l \neq m,l \in \{1,..,3\}} e_{i,j,q,m'} \land p_{m, m_l}] \limplies 
 	(\neg b_{i,j,q,m} \land \bigwedge_{\mathclap{m_l \neq m,l, p_{m, m_l} \in \{1,..,3\}}} \neg b_{i,j,q,m_l})
-  \tag{Aep}\label{eq:aep}
-\end{align}
+\end{align*}
 %
 \subsubsection{Constraints for stability condition}
 %
@@ -205,17 +216,15 @@ The following constraint recursively encodes that node $j$ is $m$-reachable from
 if either there is a direct edge between $i$ and $j$ with $m$ present on the edge or there is a edge between $i^{\prime \prime}$ and
 $(i \neq i^{\prime \prime})$ with $m$ present, and j is $m$-reachable from $i'$ in less than $p-1$ steps.
 %
-\begin{align}
-  \bigwedge\limits_{i,j,m,p} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
-  \tag{R1}\label{eq:reach1}
-\end{align}
+\begin{align*}
+  \texttt{Paths}(r) &= \bigwedge\limits_{i,j,m,p} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
+\end{align*}
 Now we can encode stability using the reachability variables.
 and say if there is an $m$-edge between $i$ and $j$, there is
 $m$-reachable path from $j$ to $i$.
-\begin{align}
- \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,\nu}
-  \tag{R2}\label{eq:reach2}
-\end{align}
+\begin{align*}
+ \texttt{Loop}(r) &= \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,\nu}
+\end{align*}
 
 % Boolean variable
 % F3 and F2 are used to model these constraints. 
@@ -233,36 +242,34 @@ $m$-reachable path from $j$ to $i$.
 To check whether $k$-connected is a necessary condition, we remove (drop) $k-1$ edges from the graph and if it
 disconnects the graph, and we get an assignment. We have a graph that is not  $k$-connected.
 %
-Constraints~\ref{eq:drop1}-\ref{eq:drop4}
+Constraints \texttt{Fail}(d,k), \texttt{FReach}(d,r') and \texttt{Connected}(r')
 encode the relevant constraints for reachability
 in the modified VTS. 
 %
 The following constraints encode that only
 existing edges can be dropped and exactly $k-1$ edges are dropped.
-\begin{align}
-  \bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \tag{D1}\label{eq:drop1}\\
-  \sum_{i,j,q} d_{i,j,q} = k-1
-  \tag{D2}\label{eq:drop2}
-\end{align}
+\begin{align*}
+\texttt{Fail}(d,k) = & 
+\bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \land 
+\sum_{i,j,q} d_{i,j,q} = k-1\\
+\end{align*}
 We need to define reachability in the modified VTS, therefore we use
 a new variable $r'_{i,j}$ to encode reachability from $i$ to $j$.
 In the following constraint, we encode $r'_{i,j}$ is true if there is an
 edge $(i,\_,j)$ and it is not dropped, or there is a node
 $i^{\prime}$ such that, there is an edge $(i,\_,i^{\prime})$ which is
 not dropped and $r'_{i',j}$ is true.
-\begin{align}
-\bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}_{i,j}  
-  \tag{D3}\label{eq:drop3}
-\end{align}
+\begin{align*}
+\texttt{FReach}(d,r') = &  \bigwedge\limits_{i,j}  [\bigvee_{q} (e_{i,j,q} \land  \neg d_{i,j,q}) \lor  (\bigvee_{i' \neq i}  r^{\prime}_{i',j} \land  \bigvee_{q} (e_{i,i',q} \land \neg d_{i,i',q}) ] \limplies r^{\prime}_{i,j}  
+\end{align*}
 Since we search for disconnected modified VTS,
 the following constraint encodes that there are 
 unreachable pair of nodes in the underlying undirected graph.
 % nodes such that
 % there is no path between them .
-\begin{align}
-   \bigvee\limits_{i,j} \neg (r^{\prime}_{i,j} \lor r^{\prime}_{j,i})
-  \tag{D4}\label{eq:drop4}
-\end{align}
+\begin{align*}
+   \texttt{Connected}(r')  = & \bigvee\limits_{i,j} \neg (r^{\prime}_{i,j} \lor r^{\prime}_{j,i})
+\end{align*}
 
 % We can go down or up using -C \_ option.  \newline 
 
@@ -353,7 +360,7 @@ We use {\npath}$(m, i, j, w)$ to represent the presence of a $m$-$path_{ij}$ of 
 % \end{align}
 %The NOracle can be thought of as a disjunction of $m$-path of increment length. 
 %
-The~\ref{eq:reachbmc1} performs enumeration of every $m$-$path_{ij}$ of at most $w$ length. 
+$\npath(m, i, j, w)$ performs enumeration of every $m$-$path_{ij}$ of at most $w$ length. 
 %
 Starting with exploring $m$-${paths}_{ij}$ of length 1; a direct edge between $i$ and $j$ with molecule $m$ present, until every $m$-${paths}_{ij}$ of length $w-1$ is explored.
 %by performing series of node hops till final node destination j is reached.
@@ -362,19 +369,17 @@ Starting with exploring $m$-${paths}_{ij}$ of length 1; a direct edge between $i
 %|m-path| = 1 \lor  |m-path| = 2 \lor ...  |m-path| = w.     \\
 %\bigvee\limits_{l = 1}^{|path| - 1} |m-path| = l
 
-\begin{align}
+\begin{align*}
 \npath(m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} (\texttt{Length} (m-path_{ij}) == l)
-  \tag{S1}\label{eq:reachbmc1}
-\end{align}
+\end{align*}
 
 We encode stability using \npath. For every edge with $m^{th}$ molecule present between node $i$ and $j$ then there exists a $m$-$path_{ji}$ of maximum $w$ length.
 %
 The expression (\texttt{bv} $\unrhd$ $m$) extracts the $m^{th}$ bit of the bitvector \texttt{bv}. 
 
-\begin{align}
+\begin{align*}
 	\bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m) == 1) \limplies \npath(m, j, i, w)
-  \tag{S2}\label{eq:reachbmc2}
-\end{align}
+\end{align*}
 
 %A variant of the definition may be sensitive to the $m$-connectedness, but
 %we are not considering the variation.
