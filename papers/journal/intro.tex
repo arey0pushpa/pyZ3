@@ -1,14 +1,29 @@
-A characteristic feature of eukaryotic cells is the presence of multiple internal membrane-bound compartments. These compartments exchange molecules amongst themselves in small membrane-bound packets called vesicles ~\cite{alberts2002molecular}.  The molecular interaction network that controls the vesicle transport system involves tens of kinds of molecules which regulate each others activities and modes of action. Due to this, obtaining a complete understanding of the vesicle transport system through physical experimentation alone is a hard problem.
+A characteristic feature of eukaryotic cells is the presence of multiple internal membrane-bounded compartments. 
 %
-High complexity of problems in VTS also restricts the use of traditional methods like simulation and statistical reasoning~\cite{mani2016wine, mani2016stacking}. 
+These compartments exchange molecules amongst themselves in small membrane-bounded packets called vesicles ~\cite{alberts2002molecular}. 
+%
+The molecular interaction network that controls the vesicle transport system involves dozens of varieties of molecules that regulate flow of cargo. 
+%
+Due to this, obtaining a complete understanding of the vesicle transport system through physical experimentation alone is a hard problem.
+%
+Highly reduced models of vesicle traffic have previously provided insight into how the chemical composition of various cellular compartments can emerge out of molecular regulation and cargo flow. 
+%
+However, high complexity of problems in VTS also restricts the use of traditional methods like simulation and statistical reasoning~\cite{mani2016wine, mani2016stacking}. 
 %The high complexity of problem restricts the use of traditional methods like simulation and statistical reasoning and the requirement of precise analysis makes formal methods an ideal candidate. 
-In this paper, using formal methods, we solve the problem of completing incomplete VTS graphs while also considering constraints due to molecular interactions, thereby demonstrating the aptitude of such methods.
+In this paper, using formal methods, we solve the problem of completing incomplete VTS graphs while also considering constraints due to molecular interactions, thereby demonstrating the effectiveness of such methods.
 
-First, we give an overview of the molecular mechanism of the VTS and then we sketch out a few interesting problems that are key to an understanding of the VTS.
+The phenomenology of vesicle traffic is unlikely to be familiar to many readers; however, the details are important for the rest of our discussion. 
+%
+Therefore, we give an overview of the molecular mechanism of the VTS and then we sketch out a few interesting problems that are key to an understanding of the VTS.
 
 \subsection{Vesicle traffic system}
-Vesicles were discovered decades ago, in the early 1950s, and major molecules of the vesicle traffic system and their functions were discovered soon after~\cite{wells2005discovery}. These molecules can roughly be categorized as budding molecules, whose role is in the formation and budding of transport vesicles from the source compartment, and fusion molecules, which enable fusion of transport vesicles with the target compartments. Below, we give a brief description of the sequence of steps involved in the vesicle transport process. Through this description, we wish to provide a glimpse of the kind of molecular regulatory interactions that we encode in our model.
-
+Vesicles were discovered decades ago, in the early 1950s, and major molecules of the vesicle traffic system and their functions were discovered soon after~\cite{wells2005discovery}. 
+%
+These molecules can roughly be categorized as budding molecules, whose role is in the formation and budding of transport vesicles from the source compartment, and fusion molecules, which enable fusion of transport vesicles with the target compartments. 
+%
+Below, we give a brief description of the sequence of steps involved in the vesicle transport process. 
+%
+Through this description, we wish to provide a glimpse of the kind of molecular regulatory interactions that we encode in our model.
 %\includegraphics{akbar}
 
 \begin{figure}
