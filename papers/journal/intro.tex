@@ -59,23 +59,36 @@ These are naturally curved proteins, and their assembly on membranes leads to me
 %
 A single kind of coat protein can bind to multiple kinds of adaptors, thereby allowing the packaging of multiple types of cargo within the same vesicle. 
 %
-There are three major types of coat proteins: Clathrin, COP2 and COP1. These act on different compartments: the clathrin coat operates at multiple compartments, and can interact with multiple adaptors proteins, whereas the COP2 and COP1 coat are only involved in vesicle formation at a single compartment; the ER and the Golgi respectively~\cite{faini2013vesicle}.
-
-Finally, transport vesicles bud out from the source compartment. This process requires ATP and is performed by the cytosolic dynamin proteins, which are recruited to the vesicle neck by the coat proteins~\cite{cocucci2014dynamin}.
+There are three major types of coat proteins: Clathrin, COP2 and COP1. These act on different compartments: the clathrin coat operates at multiple compartments, and can interact with multiple adaptors proteins, whereas the COP2 and COP1 coat are only involved in vesicle formation at a single compartment: the ER and the Golgi respectively~\cite{faini2013vesicle}.
+%
+Finally, transport vesicles bud out from the source compartment~\cite{cocucci2014dynamin}.
 %
 The vesicle is now ready for transport and subsequent fusion with a target compartment.
 
 \textbf{Vesicle fusion involves two steps:} recognition of the correct target compartment and fusion of the transport vesicle~\ref{fig:vts}.
 
-Target compartment recognition involves molecular switches called Rabs and  tethering complexes. Distinct compartments of the cell are associated with distinct Rabs. For example, Rab5 is associated early endosomes and  Rab7 with late endosomes\cite{rink2005rab}.  Rabs are master regulators; in their active form Rabs recruit many downstream proteins, including tethering complexes, fusion regulators, motor proteins, etc, to their compartment. ~\cite{muller2018molecular}
+Target compartment recognition involves molecular switches called Rabs and  tethering complexes. Distinct compartments of the cell are associated with distinct Rabs. For example, Rab5 is associated early endosomes and  Rab7 with late endosomes\cite{rink2005rab}.  
+%
+Rabs are master regulators; in their active form Rabs recruit many downstream proteins, including tethering complexes, fusion regulators, motor proteins, etc, to their compartment ~\cite{muller2018molecular}.
 
-Tethering complexes sequester vesicles to their target compartments by binding to the vesicle on one end and the target compartment on the other end, thereby bridging the two before fusion. They are also believed to function as chaperones for assembly of SNARE protein complexes, which enable vesicle fusion. 
-A clear mechanism for action of these tethers is missing, but evidence from experiments indicate that tethers bind to vesicles through molecular interactions with vesicle coat proteins, vesicle associated Rabs, SNAREs and SNARE regulators. They can also sense membrane curvature (vesicles are highly curved) ~\cite{baker2016chaperoning}.
+Tethering complexes sequester vesicles to their target compartments by binding to the vesicle on one end and the target compartment on the other end, thereby bridging the two before fusion. 
+%
+They are also believed to function as chaperones for assembly of SNARE protein complexes, which enable vesicle fusion. 
+%
+A clear mechanism for action of these tethers is missing, but evidence from experiments indicate that tethers bind to vesicles through molecular interactions with vesicle coat proteins, vesicle, associated Rabs, SNAREs and SNARE regulators. 
+%
+They can also sense membrane curvature (vesicles are highly curved) ~\cite{baker2016chaperoning}.
 
-The final step in vesicle transport is fusion of vesicle with the target compartment.This is brought about by SNARE proteins. 
-There are four kinds of SNAREs: R, Qa, Qb, and Qc; and vesicle fusion requires formation of a SNARE complex containing one of each type. In all known cases, one SNARE protein of the complex is contributed by the vesicle and the other three SNAREs by the target compartment (A few SNARE proteins, such as SNAP25, contain both Qb- and Qc-SNARE motifs)~\cite{yoon2018snare}.
+The final step in vesicle transport is fusion of vesicle with the target compartment is brought about by SNARE proteins. 
+%
+There are four kinds of SNAREs: R, Qa, Qb, and Qc; and vesicle fusion requires formation of a SNARE complex containing one of each type. 
+%
+In all known cases, one SNARE protein of the complex is contributed by the vesicle and the other three SNAREs by the target compartment. 
+%
+A few SNARE proteins, such as SNAP25, contain both Qb- and Qc-SNARE motifs~\cite{yoon2018snare}.
 
 %\somya{schematic of snare regulatory network}
+\textbf{Schematic of snare regulatory network:}
 In keeping with their central role in vesicle transport, both the activity and the localization of SNARE proteins are regulated. Notable regulators are Sec17/18 and the SM proteins.
 %
 Sec17/18 bring about disassembly of SNARE complexes post-fusion in order that these SNAREs may be reused. 
@@ -123,8 +136,6 @@ Other paths are used for cross talk between the secretory and the endocytic rout
 %\end{table}
 
 \subsection{The model}
-\ankit{A template: Requires rewriting and some explanation}
-%
 \todo{Ankit: The Rothman model has no intuition; Add couple of lines relating it to VTS; Also, relate it to previous subsection. The connect is lacking.} The VTS model for this paper is inspired by~\cite{shukla2017discovering}. 
 %
 On the timescales of minutes, we have tried to capture important aspect of Rothman-Schekman-Sudhof (RSS) model~\cite{rothman2002machinery} of vesicle traffic system.
@@ -178,7 +189,7 @@ The vesicle transfer will change the molecular composition (distinct molecule co
 In our model, we assume that the cell is in steady state. As a further simplification, we also assume that the incoming and outgoing flux is balanced for each of the molecular types at each compartment. 
 Indeed, it is well accepted that on the scale of minutes and hours the molecular composition remains the same. 
 %
-In this paper, we refer to the steady state of the cell (refered as \textit{homeostasis} in biological literature) as the stability condition over the annotated graph.
+In this paper, we refer to the steady state of the cell (referred to as \textit{homeostasis} in biological literature) as the stability condition over the annotated graph.
 
 
 %Each edge is associated with a flux of all the molecular types carried by the corresponding vesicle. The total amount of each molecular type on each compartment can therefore increase or decrease. We assume the cell is in a steady state where each compartment’s composition does not vary over short time scales. Therefore, incoming and outgoing fluxes are balanced for each molecular type at each compartment; it is the \textit{stability cond1ition}.
@@ -241,7 +252,6 @@ This is motivated by the idea that pairing must generate an inactive bi-molecula
 %
 %The number of graphs of specified connectivity grows exponentially with the number of nodes: Table~\ref{tab:threec} shows how many 3-edge-connected graphs~\cite{a052448-oeis} exist (without parallel or self edges) as node number N increases.
 \subsection{Graph connectivity is an interesting and accessible property of the VTS.} 
-\ankit{Requires rewriting and better explanation}
 %\textbf{Properties of a VTS that satisfies all cell-biological constraints:} 
 Interactions between the molecules of the VTS together produce a functional vesicle transport network, in which molecules flow between intracellular compartments using specified paths.
 %
@@ -266,7 +276,7 @@ A mismatch between our predictions and experiments would indicate that our curre
 %
 Note that, on the other hand, if our predictions are experimentally confirmed, it does not imply that our understanding of the VTS is complete.\\
 %
-\ankit{Added this as a template. Will change it soon.}
+
 \begin{example}
 %
 In figure~\ref{fig:M1}, we present a VTS that has 3 compartments and 8 molecules, and a corresponding pairing matrix.
@@ -299,7 +309,6 @@ This is a 3-connected graph.
 \label{subsec:graphmodel}
 
 \subsection{Combinatorial problem and use of Formal methods}
-\ankit{Needs revision; overlapping writing.}
 The analysis of vesicle traffic systems is a difficult problem
 because of the combinatorial scaling of possible traffic topologies and regulatory rules. 
 %
@@ -347,7 +356,6 @@ Formal verification tools like model checkers, SAT and SMT solvers serve precise
 %
 The tools model the computation symbolically for the graphs of finite size and can make prediction about the hypothesis for all possible states of the system without explicit enumeration of rules. 
 %
-
 % i.e., formally as a boolean function that given requisite labels of nodes and vesicles that returns true if the required regulations are met. 
 %
 %
@@ -355,20 +363,15 @@ The tools model the computation symbolically for the graphs of finite size and c
 % paths between nodes in the graph model of VTS. Similarly, one can
 % define fusion rules as constraints over the boolean functions modeling
 % the regulations.  
-\
 % For example, the steady state condition, described informally earlier, can be defined by the formula shown in Listing~1.1.
-
 %\begin{itemize}
 %\item \srivas{Detailed BIO to Graph problem}
 %\end{itemize}
-
-
 %Given definitions of fusion and budding rules and the steady state conditions, whether a VTS meets maximum connectivity requirement, i.e. the LGC property, can be verified by checking if the formula show in Listing~1.2 is valid.  Here we have defined the property by checking over existence of any fusion/budding rules.  We can eliminate the existential quantifier if we are interested in checking the property for a particular fusion/budding rule.
 %
 %\subsection{Converting the Graph Problem into Boolean SAT problem}
 %\label{subsec:satproblem}
 %To convert the graph problem described in sec~\ref{subsec:graphmodeling}, into a boolean SAT problem, we need to define a scheme to represent graphs and boolean functions using a suitable set of propositional variables.  In our earlier work, we modeled the graph problem in C using arrays to model graphs and boolean function.  We then used the CBMC model checker to convert the graph problem into a SAT problem.  One of the challenges we had in our earlier work is dealing with quantifiers.  Note that the connectedness property defined in Listing~1.2 has quantifier alternation.  Even if we were to eliminate the existential quantifier by instantiating the problem for a fixed set of fusion rules, we would have embedded quantifiers in the antecedent of implications.   CBMC supports only a quantifier-free logic n its assertion language.  In our earlier work we used a combination of explicit enumeration at the C-level and clever use f non-determinism to eliminate alternation of quantifiers.  This enumeration was one source of bottleneck for scaling in our earlier work.  In the current work we eliminate this bottleneck by modeling the problem directly as a SAT instance using uninterpreted functions and recursive relations.  The details of te hnew encding will described in subsequent sections.
-
 %A VTS is {\em $k$-connected} if every pair of compartments remain reachable after dropping $k-1$ vesicles.
 %
 %This property of VTSs has been considered informative and studied by~\cite{shukla}.
@@ -418,10 +421,8 @@ We have implemented the encoding in a flexible tool, which can handle a wide ran
 We have applied our tool on several VTSs including
 two found-in-nature VTSs.
 %
-Our experiments suggest that some of the synthesis problems are solvable by modern solvers and the synthesis technology may be useful for biological research. \\
+Our experiments suggest that some of the synthesis problems are solvable by modern solvers and the synthesis technology may be useful for biological research.
 %
-%
-\ankit{Added this as a template. Will change it soon.}
 \begin{example}
 	%
 	In figure~\ref{fig:synth-vts}, we present a partial VTS that has 3 compartments and it's complete VTS by our tool. The synthesis is performed on the basis of steady state property and the  k-connectivity of the graph.
