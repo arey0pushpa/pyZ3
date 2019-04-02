@@ -41,7 +41,7 @@ Through this description, we wish to provide a glimpse of the kind of molecular 
     \label{fig:vts}
 \end{figure}
 
-\textbf{Vesicle budding} involves sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment~\ref{fig:vts}.
+\subsubsection{Vesicle budding} involves sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment~\ref{fig:vts}.
 %
 Cargo sorting is performed by cytosolic adaptor proteins. 
 Adaptors are recruited to the source compartment through interactions with the lipids that form the compartment's membrane, and interactions with molecular switches called Arf/Sar which signal the initiation of vesicle formation~\cite{paczkowski2015cargo}. 
@@ -65,7 +65,7 @@ Finally, transport vesicles bud out from the source compartment~\cite{cocucci201
 %
 The vesicle is now ready for transport and subsequent fusion with a target compartment.
 
-\textbf{Vesicle fusion involves two steps:} recognition of the correct target compartment and fusion of the transport vesicle~\ref{fig:vts}.
+\subsubsection{Vesicle fusion involves two steps} recognition of the correct target compartment and fusion of the transport vesicle~\ref{fig:vts}.
 
 Target compartment recognition involves molecular switches called Rabs and  tethering complexes. Distinct compartments of the cell are associated with distinct Rabs. For example, Rab5 is associated early endosomes and  Rab7 with late endosomes\cite{rink2005rab}.  
 %
@@ -88,7 +88,7 @@ In all known cases, one SNARE protein of the complex is contributed by the vesic
 A few SNARE proteins, such as SNAP25, contain both Qb- and Qc-SNARE motifs~\cite{yoon2018snare}.
 
 %\somya{schematic of snare regulatory network}
-\textbf{Schematic of snare regulatory network:}
+\subsubsection{Schematic of snare regulatory network}
 In keeping with their central role in vesicle transport, both the activity and the localization of SNARE proteins are regulated. Notable regulators are Sec17/18 and the SM proteins.
 %
 Sec17/18 bring about disassembly of SNARE complexes post-fusion in order that these SNAREs may be reused. 
@@ -109,7 +109,7 @@ Whereas, SM proteins have following multiple modes of SNARE regulation:
 \end{itemize}
 
 %\somya{schematic of intracellular compartments and  major routes}
-\textbf{Major paths in the vesicle transport network}:
+\subsubsection{Major paths in the vesicle transport network}
 Molecules traverse the cell in a series of vesicles, and there are two major routes of vesicle transport in all eukaryotic cells.
 %
 \begin{itemize}
@@ -118,10 +118,7 @@ Molecules traverse the cell in a series of vesicles, and there are two major rou
 	\item The endocytic route takes proteins from the outside of the cell, through the plasma membrane, to the endocytic compartments and the lysosome where they are digested. 
 \end{itemize}
 Other paths are used for cross talk between the secretory and the endocytic routes. For example, vesicles are sent back and forth between the Trans-Golgi network (secretory route) to the early and the late endosomes(endocytic route)\cite{progida2016bidirectional}. Also, recently, unconventional vesicle-mediated secretory routes have been found, which bypass the Golgi apparatus. The molecules involved in these routes are as yet unknown\cite{nickel2018unconventional}. 
-
-
 %
-
 %\begin{table}
 %	\begin{center}
 %		\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
@@ -166,7 +163,7 @@ In this section, we will abstract from the biological description of the VTS and
 %
 The constraints imposed by cell biology are incorporated in the  annotations of the graph. 
 
-\textbf{The cell as a transport graph:} 
+\subsubsection{The cell as a transport graph} 
 %We consider a cell to be a collection of compartments (nodes) and vesicles (edges), thus defining a transport graph. Every compartment or vesicle has a set of molecular labels, such as SNARE proteins, associated with it.
 The cell can be abstractly represented as an annotated graph. 
 Every compartment in the cell can be represented as a node in the graph. 
@@ -182,7 +179,7 @@ The label represents the associated flux of all molecular types carried by the c
 %
 %
 
-\textbf{Steady state:} 
+\subsubsection{Steady state} 
 The vesicle transfer will change the molecular composition (distinct molecule count) on both the source compartment and the target compartment. 
 %
 In our model, we assume that the cell is in steady state. As a further simplification, we also assume that the incoming and outgoing flux is balanced for each of the molecular types at each compartment. 
@@ -193,7 +190,7 @@ In this paper, we refer to the steady state of the cell (referred to as \textit{
 
 %Each edge is associated with a flux of all the molecular types carried by the corresponding vesicle. The total amount of each molecular type on each compartment can therefore increase or decrease. We assume the cell is in a steady state where each compartment’s composition does not vary over short time scales. Therefore, incoming and outgoing fluxes are balanced for each molecular type at each compartment; it is the \textit{stability cond1ition}.
 
-\textbf{Vesicle fusion:}
+\subsubsection{Vesicle fusion}
 %Based on the earlier discussion of fusion, the vesicle targeting is driven by molecular interactions.  
 %
 %Particularly, molecules composition (SNARE proteins etc) present on the budded vesicle determines it's properties, which 
@@ -224,7 +221,7 @@ Therefore, we can abstract the underlying cell biology by labeling the nodes and
 %
 Given a relation of all allowed fusion SNARE pairings, we can computationally determine whether a particular transfer vesicle will fuse to a particular target compartment (the edge between two compartments) based on the above condition.  
 
-\textbf{Molecular regulation:} 
+\subsubsection{Molecular regulation} 
 Fusion takes place only if the SNARE types involved in the vesicle and compartment are both in an active state.
 %We assume that for fusion to occur, the pair of 
 %
