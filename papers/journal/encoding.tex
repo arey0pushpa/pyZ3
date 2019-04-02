@@ -1,8 +1,7 @@
 %\externaldocument{sat-table}
 %\externaldocument{smt-table}
 %\externaldocument{qbf-table}
-
-In the previous section, we have discussed four problems.
+\noindent In the previous section, we have discussed four problems.
 %
 In this section we will present encodings fof the
 $\fsmt$ search, $\fbmc$ search, $\fqbf$ search and synthesis problems.
@@ -14,7 +13,7 @@ contrast with the $\fbmc$ encoding.
 \label{enc:smt}
 
 %\subsection{Boolean satisfiability of the search problem}
-We translate the search problem into a Boolean satisfiability
+\noindent We translate the search problem into a Boolean satisfiability
 problem and use SMT solvers to find the satisfying VTSs.
 %
 We will first present the variables used to encode the
@@ -292,7 +291,7 @@ We define $\texttt{Connected}(k)$ that says graph is not k-connected.
 
 \subsection{Encoding for $\fbmc$ search problem}
 
-Our first attempt was to encode the existential condition check as a $\fbmc$ search problem~\cite{shukla2017discovering}.
+\noindent Our first attempt was to encode the existential condition check as a $\fbmc$ search problem~\cite{shukla2017discovering}.
 %
 %In this section we will present the $\fbmc$ encoding of the same.
 %
@@ -400,7 +399,7 @@ The expression (\texttt{bv} $\unrhd$ $m$) extracts the $m^{th}$ bit of the bitve
 %A variant of the definition may be sensitive to the $m$-connectedness, but
 %we are not considering the variation.
 
-\subsubsection{The key difference in the reachability encoding}:
+\subsubsection{The key difference in the reachability encoding}
 The key improvement of the $\fsmt$ search encoding over the $\fbmc$ is the
 encoding of reachability.
 % which was done using an enumeration of paths.
@@ -476,7 +475,7 @@ VTSs that belong to the variants.
 \subsection{Encoding for $\fqbf$ search problem}\label{enc:univ-cond}
 %
 \input{satqbf-table}
-Recall that the specification for universal condition~\ref{sec:property} requires quantifier alternation. 
+\noindent The specification for universal condition~\ref{sec:property} requires quantifier alternation. 
 %
 Most SAT solvers can not efficiently handle the quantifier in the formulas. 
 % 
@@ -498,7 +497,7 @@ The SMT extended version was not able to scale it to the desired results and eit
 This can be due to the fact that directly translating a quantified formula into a quantifier-free  by introducing a vector of variables for each boolean possibility will blow up the size of the formula and may not be solvable by a solver.
 %
 %
-\subsubsection{$\fqbf$ search encoding of the universal condition:}
+\subsubsection{$\fqbf$ search encoding of the universal condition}
 We will describe several constraints that encode universal condition based on QBF formulation in this section.
 %
 To avoid cumbersome notation, we will not explicitly write the ranges
@@ -699,7 +698,7 @@ quantified, $\texttt{QConnected}(k)$ introduces quantifier alternations.
 
 
 \subsection{Encoding for the synthesis problem}
-In this section, we will present our synthesis method for
+\noindent In this section, we will present our synthesis method for
 the synthesis problems.
 %
 %We assume that certain properties of the partial input VTS always hold, for example, the activity of the molecules and well-fused constraints. 
@@ -845,8 +844,8 @@ becomes satisfiable.
 In the later synthesis problems, we will construct a similar QBF
 formula with same first two parts and the last two are due the
 requirements of the synthesis problem.
-
-\paragraph{\bf Fixing VTS by adding molecules to the labels:}
+%
+\subsubsection{Fixing VTS by adding molecules to the labels}
 The system may also be fixed only by modifying labels on the edges or the nodes instead
 of adding edges.
 %
@@ -869,7 +868,7 @@ Similar to the previous encoding, we solve the
 satisfiability of the above formula to obtain additional molecules
 that may be added to the edge labels to satisfy the properties.
 
-\subsubsection{Fixing VTS by learning activity functions:}
+\subsubsection{Fixing VTS by learning activity functions}
 Now we consider a scenario where some of the activity functions for
 some of the molecules are missing.
 %
@@ -948,7 +947,7 @@ variations.
 By reading of the values of $z$ in a satisfying model of the formula,
 we learn the synthesized function.
 
-\subsubsection{Fixing VTS by both adding/deleting parts:}
+\subsubsection{Fixing VTS by both adding/deleting parts}
 %
 Now we will consider repairing of VTS by allowing not only addition but also
 deletion of the molecules, edges, functions, or pairing matrix.

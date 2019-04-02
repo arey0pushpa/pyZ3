@@ -1,4 +1,4 @@
-A characteristic feature of eukaryotic cells is the presence of multiple internal membrane-bounded compartments. 
+\noindent A characteristic feature of eukaryotic cells is the presence of multiple internal membrane-bounded compartments. 
 %
 These compartments exchange molecules amongst themselves in small membrane-bounded packets called vesicles ~\cite{alberts2002molecular}. 
 %
@@ -17,14 +17,13 @@ The phenomenology of vesicle traffic is unlikely to be familiar to many readers;
 Therefore, we give an overview of the molecular mechanism of the VTS and then we sketch out a few interesting problems that are key to an understanding of the VTS.
 
 \subsection{Vesicle traffic system}
-%Vesicles were discovered decades ago, in the early 1950s, and 
-
-The major molecules involved in the vesicle traffic system~\cite{wells2005discovery} can roughly be categorized as budding molecules, whose role is in the formation and budding of transport vesicles from the source compartment, and fusion molecules, which enable fusion of transport vesicles with the target compartments. 
+%Vesicles were discovered decades ago, in the early 1950s, and s
+\noindent The major molecules involved in the vesicle traffic system~\cite{wells2005discovery} can roughly be categorized as budding molecules, whose role is in the formation and budding of transport vesicles from the source compartment, and fusion molecules, which enable fusion of transport vesicles with the target compartments. 
 %
 Below, we give a brief description of the sequence of steps involved in the vesicle transport process. 
 %
 Through this description, we wish to provide a glimpse of the kind of molecular regulatory interactions that we encode in our model.
-
+ 
 \begin{figure}
 	\includegraphics[height=10cm,width=12cm]{diavts.eps}
 	\caption{Schematic of the vesicle transport system. Steps involved in vesicle transport between two compartments: a source and a target compartment are shown. 
@@ -41,7 +40,7 @@ Through this description, we wish to provide a glimpse of the kind of molecular 
     \label{fig:vts}
 \end{figure}
 
-\subsubsection{Vesicle budding} involves sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment~\ref{fig:vts}.
+\subsubsection{Vesicle budding} The process of vesicle budding involves sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment~\ref{fig:vts}.
 %
 Cargo sorting is performed by cytosolic adaptor proteins. 
 Adaptors are recruited to the source compartment through interactions with the lipids that form the compartment's membrane, and interactions with molecular switches called Arf/Sar which signal the initiation of vesicle formation~\cite{paczkowski2015cargo}. 
@@ -65,7 +64,7 @@ Finally, transport vesicles bud out from the source compartment~\cite{cocucci201
 %
 The vesicle is now ready for transport and subsequent fusion with a target compartment.
 
-\subsubsection{Vesicle fusion involves two steps} recognition of the correct target compartment and fusion of the transport vesicle~\ref{fig:vts}.
+\subsubsection{Vesicle fusion} The vesicle fusion involves two steps recognition of the correct target compartment and fusion of the transport vesicle~\ref{fig:vts}.
 
 Target compartment recognition involves molecular switches called Rabs and  tethering complexes. Distinct compartments of the cell are associated with distinct Rabs. For example, Rab5 is associated early endosomes and  Rab7 with late endosomes\cite{rink2005rab}.  
 %
@@ -133,7 +132,7 @@ Other paths are used for cross talk between the secretory and the endocytic rout
 %\end{table}
 
 \subsection{The model}
-The VTS model for this paper is inspired by~\cite{shukla2017discovering}. 
+\noindent The VTS model for this paper is inspired by~\cite{shukla2017discovering}. 
 %
 On the timescales of minutes, we have tried to capture important aspect of Rothman-Schekman-Sudhof (RSS) model~\cite{rothman2002machinery} of vesicle traffic system.
 %
@@ -158,7 +157,7 @@ The following are the basic component and assumptions of our model.
 
 %In this section, we will describe the basic constraints imposed by cell biology. These are all incorporated into an abstract model of a VTS, whose properties will then be explored using SMT solvers.
 
-In this section, we will abstract from the biological description of the VTS and represent the whole network as an annotated transport graph. 
+\noindent In this section, we will abstract from the biological description of the VTS and represent the whole network as an annotated transport graph. 
 %
 The constraints imposed by cell biology are incorporated in the  annotations of the graph. 
 
@@ -246,9 +245,9 @@ This is motivated by the idea that pairing must generate an inactive bi-molecula
 %3-connected graphs and all possible variations of SNARE regulation rules. 
 %
 %The number of graphs of specified connectivity grows exponentially with the number of nodes: Table~\ref{tab:threec} shows how many 3-edge-connected graphs~\cite{a052448-oeis} exist (without parallel or self edges) as node number N increases.
-\subsection{Graph connectivity is an interesting and accessible property of the VTS.} 
+\subsection{Graph connectivity is an interesting and accessible property of the VTS} 
 %\textbf{Properties of a VTS that satisfies all cell-biological constraints:} 
-Interactions between the molecules of the VTS together produce a functional vesicle transport network, in which molecules flow between intracellular compartments using specified paths.
+\noindent Interactions between the molecules of the VTS together produce a functional vesicle transport network, in which molecules flow between intracellular compartments using specified paths.
 %
 The molecules of the VTS, their interactions and modes of regulation have been worked out to a large extent through cell-biological experiments. 
 %
@@ -304,7 +303,7 @@ This is a 3-connected graph.
 \label{subsec:graphmodel}
 
 \subsection{Combinatorial problem and use of Formal methods}
-The analysis of vesicle traffic systems is a difficult problem
+\noindent The analysis of vesicle traffic systems is a difficult problem
 because of the combinatorial scaling of possible traffic topologies and regulatory rules. 
 %
 %For example, we might want to check some conjecture of interest for all graphs of a certain structure. 
@@ -352,7 +351,7 @@ Formal verification tools like model checkers, SAT and SMT solvers serve precise
 The tools model the computation symbolically for the graphs of finite size and can make prediction about the hypothesis for all possible states of the system without explicit enumeration of rules. 
 %
 
-\subsubsection{Size of the system}
+\subsubsection{Size of the VTS system}
 Let us discuss rough sizes of the system and expected behaviors.
 %%
 %A typical VTS may have about 10 compartments.
@@ -413,7 +412,7 @@ We use the above information during the encoding of all search problems presente
 %
 %Here we have build an {\em efficient} tool that studies properties of VTSs that are not $k$-connected, from some $k$. 
 \subsection{Synthesis of VTS }
-The current picture of the vesicle transport network is far from complete; we do not yet know how many of the cellular proteins reach their resident compartments within the cell, and new vesicle routes are being discovered every year ~\cite{nickel2018unconventional,weill2018toolbox}. 
+\noindent The current picture of the vesicle transport network is far from complete; we do not yet know how many of the cellular proteins reach their resident compartments within the cell, and new vesicle routes are being discovered every year ~\cite{nickel2018unconventional,weill2018toolbox}. 
 %
 Completing the vesicle traffic network is a difficult task for the many important reasons: 
 \begin{enumerate}
@@ -482,8 +481,7 @@ In Sect.~\ref{sec:encoding}, we present the encoding of BMC, SMT, QBF and Synthe
 In Sect.~\ref{sec:experiments}, we present our implementation and experimental results. 
 %
 In Sect.~\ref{sec:related}, we discuss related work and conclude in Sect.~\ref{sec:conclusion}.
-
-
+%
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"

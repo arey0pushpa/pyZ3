@@ -1,8 +1,7 @@
 %\externaldocument{sat-table}
-
 %We have developed four different tools (\sattool, \smttool, \qbftool, \ourtool) for implementation of proposed encodings.
 %
-We have developed the {\vtstool} tool to conjecture the properties of the VTS (explained in Section 6). 
+\noindent We have developed the {\vtstool} tool to conjecture the properties of the VTS (explained in Section 6). 
 %
 %
 The {\vtstool} tool includes about 10,000 lines of code.
@@ -19,7 +18,7 @@ We will refer to existential subblocks as {\sattool} and {\smttool}, universal b
 
 \subsection{Implementation}
 %The existential condition problem is implemented with two separate encodings.
-We have implemented two separate encodings to determine the existential condition of the VTS. 
+\noindent We have implemented two separate encodings to determine the existential condition of the VTS. 
 %To solve the existential condition we have implemented two separate encodings. 
 %
 The first encoding is implemented in {\sattool}
@@ -63,7 +62,7 @@ A 45 min (2700 sec) timeout was used for the tool.
 %\input{tab:satqbf-grabh}
 %\ExecuteMetaData[result-table.tex]{tab:satqbf-grabh}
 
-\textbf{{\sattool (Bounded model checker based tool)}}:
+\textbf{{\sattool (Bounded model checker based tool)}}
 The $\fbmc$ encoding based on enumeration of paths (presented in section 6.2) for each variants of VTS is implemented in {\sattool}.
 	%We have implemented the encodings for different variants of VTS (presented in section 6.2) using
 The tool is based on CBMC, a successful bounded model checker, for C and C++ programs. 
@@ -107,7 +106,7 @@ For our experimentation purpose, the SAT solver backend used were MiniSat~\cite{
 %CBMC has a built-in SAT solver called MiniSat~\cite{sorensson2005minisat}, but it is also possible to use various other SAT solver blackboxes for property verification. Besides using MiniSat as a default SAT solver for our model, we have used different SAT solvers for the verification of the property, particularly CryptoMiniSat~\cite{soos2016cryptominisat} which was the winner of SAT 2015 Competition~\cite{balyo2016sat}. 
 %		MiniSat performed satisfactorily in comparison to other SAT solvers.
 
-\textbf{{\smttool} (SMT based tool)}:
+\textbf{{\smttool} (SMT based tool)}
 The $\fsmt$ encoding based on recursive reachability definition (presented in section 6.1)  
 %We have implemented the encodings 
 for each variant is implemented in {\smttool}.
@@ -126,7 +125,7 @@ a VTS and represent a visual output to the user in form of coloured annotated gr
 %
  
 
-\textbf{{\qbftool} (QBF based universal condition):}
+\textbf{{\qbftool} (QBF based universal condition)}
 The $\fqbf$ encoding (presented in section 6.5) is implemented in the {\qbftool}. 
 %
 The tool is developed in C++ and uses~\zthree~\cite{z3} infrastructure to encode the constraints.
@@ -138,7 +137,7 @@ QDIMACS~\cite{qdimacs} format and use QBF solvers to solve the formula.
 %
 We have used~\depqbf~\cite{lonsing2010depqbf} for solving QBF formulas with alternation of quantifiers. 
 
-\textbf{{\ourtool} (QBF based synthesis tool):}
+\textbf{{\ourtool} (QBF based synthesis tool)}
 \input{synth-table}
 The synthesis encodings (presented in section 6.6) is implemented  in~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
 %
@@ -156,7 +155,7 @@ learning activity functions.
 The tool returns a complete VTS with visual graph representation as an output to the user.  
 
 \subsection{Results}
-The results and timings of three blocks of the {\vtstool} are presented in the table~\ref{tab:smt-grph} and table~\ref{tab:satsmt-graph}, for both {\sattool} and {\smttool}, in table~\ref{tab:qbf-graph} for {\qbftool} and in table~\ref{tab:synth-graph} for~{\ourtool}.
+\noindent The results and timings of three blocks of the {\vtstool} are presented in the table~\ref{tab:smt-grph} and table~\ref{tab:satsmt-graph}, for both {\sattool} and {\smttool}, in table~\ref{tab:qbf-graph} for {\qbftool} and in table~\ref{tab:synth-graph} for~{\ourtool}.
 
 
 %To illustrate usability of our tool in the last column of the Table~\ref{tab:smt-grph}, we present the minimum connectedness needed for the different variants after applying our tool for sizes from 2 to 10. 
