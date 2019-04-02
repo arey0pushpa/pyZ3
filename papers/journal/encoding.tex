@@ -14,7 +14,6 @@ contrast with the $\fbmc$ encoding.
 \label{enc:smt}
 
 %\subsection{Boolean satisfiability of the search problem}
-
 We translate the search problem into a Boolean satisfiability
 problem and use SMT solvers to find the satisfying VTSs.
 %
@@ -474,10 +473,9 @@ The last two columns of the table lists the activity constraints that are differ
 %
 The constraints for the variants can be given to a SAT or a SMT solver to find
 VTSs that belong to the variants.
-
-\subsection{Encoding for $\fqbf$ search problem}
-\label{enc:univ-cond}
+\subsection{Encoding for $\fqbf$ search problem}\label{enc:univ-cond}
 %
+\input{satqbf-table}
 Recall that the specification for universal condition~\ref{sec:property} requires quantifier alternation. 
 %
 Most SAT solvers can not efficiently handle the quantifier in the formulas. 
@@ -487,22 +485,21 @@ Although, it is possible to encode the universal condition as a SAT or SMT probl
 There is always a danger of a blow-up in the formula size, making it harder for the SAT solver to handle. 
 %Which may blow up the formula size for the solver to solve.
 % 
-As an experiment, we have implemented a direct SMT version of the universal problem extending the current $\fsmt$ search encodings.
+As an experiment, we have implemented a direct SMT version (encoding not presented) of the universal problem extending the current $\fsmt$ search encodings.
 %
 The basic idea is to conjunct the formula for each combination value of the quantified variable. 
 %
+The table~\ref{tab:satqbf-graph}, shows the search results of this encoding for the universal condition with 4 nodes and 3-connected graphs. 
 %
-\input{satqbf-table}
-%
-\todo{Fix the table; the entries of constraint is incorrect}The table~\ref{tab:satqbf-graph}, shows the search results of this encoding for the universal condition with 4 nodes and 3-connected graphs. 
+The connectivity constraint and connectedness constraints are tagged with subscript $U$, $\texttt{StabilityC}_{U}$, $\texttt{Connected}(k)_{U}$,  to distinguish from earlier presented encodings of existential condition.
 %
 The SMT extended version was not able to scale it to the desired results and either timed-out (T/O) or ran out of memory (M/O).
 %
 This can be due to the fact that directly translating a quantified formula into a quantifier-free  by introducing a vector of variables for each boolean possibility will blow up the size of the formula and may not be solvable by a solver.
 %
-
-\textbf{$\fqbf$ search encoding of the universal condition:}
-We will describe several constraints that encode VTSs in this section.
+%
+\subsubsection{$\fqbf$ search encoding of the universal condition:}
+We will describe several constraints that encode universal condition based on QBF formulation in this section.
 %
 To avoid cumbersome notation, we will not explicitly write the ranges
 of the indexing in the constraints.
@@ -514,70 +511,70 @@ $m$ will range over molecules, i.e., from $1$ to $\mu$.
 $q$ will range over edges between two nodes, i.e., from $1$ to $\pi$.
 %
 
-The following constraints encode the basic consistency of VTSs. 
+Using constraints for VTS from Section~\ref{enc:smt}, we encode the basic consistency of VTSs. 
 %
-Recall that the molecule set is divided into 3:1 Q and R pairs (or partition).
+%Recall that the molecule set is divided into 3:1 Q and R pairs (or partition).
 \begin{align*}
-\texttt{EdgeC} =\;&\hspace{-1ex}\bigwedge\limits_{i,j,q} (\bigvee_m e_{i,j,q,m} )\limplies e_{i,j,q}
-\land
-\bigwedge\limits_{i,q} \neg e_{i,i,q}
-\land
-% \tag{\texttt{NodeC}}\label{eq:f0}\\
-\bigwedge\limits_{\mathclap{i,j,q,m}} e_{i,j,q,m} \limplies (n_{i,m} \land n_{j,m} )
-\\
-\texttt{ActivityC} =\;&
-\bigwedge\limits_{\mathclap{i,j,q,m}} b_{i,j,q,m} \limplies e_{i,j,q,m} \quad\land\quad
-\bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
-% \tag{V2}\label{eq:f1}\\
-\\
-\texttt{PairingC} =\;&
-\exists qr. \Land\limits_{\mathrlap{m_1,m_2,m_3,m_4}\;\;}
-(p_{\{m_1,m_2,m_3,m_4\}} \limplies qr_{m_1} + qr_{m_2} + qr_{m_3} + qr_{m_4} = 3) 
-% \land\\ 
-%   & \quad\quad\quad ( m_1 = m_2 = m_3 = m_4  \limplies \lnot p_{m_1,m_2,m_3,m_4} )
-% \bigwedge\limits_{m} 
-% (\Lor\limits_{m'} p_{mm'} \limplies \Land_{m'} \lnot p_{m'm} ) \land
-% (\Lor\limits_{m'} p_{m'm} \limplies \Land_{m'} \lnot p_{mm'} )
-\\
-\texttt{Fusion1} =\;&
-\bigwedge\limits_{i,j,q} e_{i,j,q} \limplies
-\bigvee_{{m_1,m_2,m_3,m_4}} (\Land_{l=1}^4 ( b_{i,j,q,m_l} \lor a_{j,m_l} ) \land 
-\Lor\limits_{l=1}^4 b_{i,j,q,m_l} \land\\
-& \qquad \qquad \qquad \qquad \Lor\limits_{l=1}^4 a_{j,m_l}\land p_{\{m_1,m_2,m_3,m_4\}})
-\\
-\texttt{Fusion2} =\;&
-\bigwedge\limits_{\mathclap{i,j,q,m_1,m_2,m_3, l \in \{1,..,3\}}} b_{i,j,q,m_1} \land ..\land b_{i,j,q,m_l} \limplies \\
-& \hspace{2cm} \neg 
-\bigvee_{\mathclap{j \neq j^{\prime}, m_{l+1}^{\prime},..,m_{4}^{\prime}}} ( a_{j^{\prime},m_{l+1}^{\prime}} \land .. \land a_{j^{\prime},m_4^{\prime}} \land p_{\{m_1,..,m_l,m^{\prime}_{l+1},..,m^{\prime}_4\}})
-\\
+%\texttt{EdgeC} =\;&\hspace{-1ex}\bigwedge\limits_{i,j,q} (\bigvee_m e_{i,j,q,m} )\limplies e_{i,j,q}
+%\land
+%\bigwedge\limits_{i,q} \neg e_{i,i,q}
+%\land
+%% \tag{\texttt{NodeC}}\label{eq:f0}\\
+%\bigwedge\limits_{\mathclap{i,j,q,m}} e_{i,j,q,m} \limplies (n_{i,m} \land n_{j,m} )
+%\\
+%\texttt{ActivityC} =\;&
+%\bigwedge\limits_{\mathclap{i,j,q,m}} b_{i,j,q,m} \limplies e_{i,j,q,m} \quad\land\quad
+%\bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
+%% \tag{V2}\label{eq:f1}\\
+%\\
+%\texttt{PairingC} =\;&
+%\exists qr. \Land\limits_{\mathrlap{m_1,m_2,m_3,m_4}\;\;}
+%(p_{\{m_1,m_2,m_3,m_4\}} \limplies qr_{m_1} + qr_{m_2} + qr_{m_3} + qr_{m_4} = 3) 
+%% \land\\ 
+%%   & \quad\quad\quad ( m_1 = m_2 = m_3 = m_4  \limplies \lnot p_{m_1,m_2,m_3,m_4} )
+%% \bigwedge\limits_{m} 
+%% (\Lor\limits_{m'} p_{mm'} \limplies \Land_{m'} \lnot p_{m'm} ) \land
+%% (\Lor\limits_{m'} p_{m'm} \limplies \Land_{m'} \lnot p_{mm'} )
+%\\
+%\texttt{Fusion1} =\;&
+%\bigwedge\limits_{i,j,q} e_{i,j,q} \limplies
+%\bigvee_{{m_1,m_2,m_3,m_4}} (\Land_{l=1}^4 ( b_{i,j,q,m_l} \lor a_{j,m_l} ) \land 
+%\Lor\limits_{l=1}^4 b_{i,j,q,m_l} \land\\
+%& \qquad \qquad \qquad \qquad \Lor\limits_{l=1}^4 a_{j,m_l}\land p_{\{m_1,m_2,m_3,m_4\}})
+%\\
+%\texttt{Fusion2} =\;&
+%\bigwedge\limits_{\mathclap{i,j,q,m_1,m_2,m_3, l \in \{1,..,3\}}} b_{i,j,q,m_1} \land ..\land b_{i,j,q,m_l} \limplies \\
+%& \hspace{2cm} \neg 
+%\bigvee_{\mathclap{j \neq j^{\prime}, m_{l+1}^{\prime},..,m_{4}^{\prime}}} ( a_{j^{\prime},m_{l+1}^{\prime}} \land .. \land a_{j^{\prime},m_4^{\prime}} \land p_{\{m_1,..,m_l,m^{\prime}_{l+1},..,m^{\prime}_4\}})
 \texttt{Consistancy} =\;& \texttt{EdgeC} \land
 \texttt{ActivityC} \land \texttt{PairingC} \land
-\texttt{Fusion1} \land \texttt{Fusion2} 
+\texttt{Fusion} 
 \end{align*}
-\texttt{EdgeC} states that each edge has at least one molecule,
-there are no self loops, and edge labels are consistent with node labels.   
-\texttt{ActivityC} states that active molecule are present.
-\texttt{PairingC} states that all molecules are divided into two types
-using $qr_m$ bit, which encodes if $m$ belongs to one type or another,
-and any fusing set of molecules must have three molecules involved
-from one type and one molecule from the other.
-\texttt{Fusion1}, and \texttt{Fusion2} states the well-fused condition.
-\texttt{Consistancy} is the conjunction of all of the above.
+%\texttt{EdgeC} states that each edge has at least one molecule,
+%there are no self loops, and edge labels are consistent with node labels.   
+%\texttt{ActivityC} states that active molecule are present.
+%\texttt{PairingC} states that all molecules are divided into two types
+%using $qr_m$ bit, which encodes if $m$ belongs to one type or another,
+%and any fusing set of molecules must have three molecules involved
+%from one type and one molecule from the other.
+%\texttt{Fusion1}, and \texttt{Fusion2} states the well-fused condition.
+%\texttt{Consistancy} is the conjunction of all of the above.
 
 \paragraph{Activity functions}
 %
-We also need to encode that the activity of the molecules are
-controlled by activity functions.
+Activity functions are encoded as presented in the Section~\ref{enc:smt}.
+%We also need to encode that the activity of the molecules are
+%controlled by activity functions.
 %
-The input VTS may include concrete activity functions for some molecules,
-and for the others the functions may be unknown and to be synthesized. 
+%The input VTS may include concrete activity functions for some molecules,
+%and for the others the functions may be unknown and to be synthesized. 
 %
-The concrete functions can be given to us in many different ways,
-for example as a lookup table, or a concise Boolean formula.
+%The concrete functions can be given to us in many different ways,
+%for example as a lookup table, or a concise Boolean formula.
 %
-In the following section, we will assume the appropriate encoding is
-used for the concrete functions and represent them by \texttt{NodeFun}$_m$
-and \texttt{EdgeFun}$_m$ for node and edge regulations respectively.
+%In the following section, we will assume the appropriate encoding is
+%used for the concrete functions and represent them by \texttt{NodeFun}$_m$
+%and \texttt{EdgeFun}$_m$ for node and edge regulations respectively.
 %
 %We will use $\nodef_m$ and $\edgef_m$ to represent functions that
 %are unknown in a VTS.
@@ -601,30 +598,34 @@ Next, we will discuss stability and $k$-connectedness.
 
 \paragraph{Stability property}
 %
-We use Boolean variable $r_{i,j,m,p}$ to indicate if there is an
-$m$-path from $i$ to $j$ of length less than or equal to $p$.
+%We use Boolean variable $r_{i,j,m,p}$ to indicate if there is an
+%$m$-path from $i$ to $j$ of length less than or equal to $p$.
 %
-We use $m$-reachability to encode the stability condition in VTSs.
+%We use $m$-reachability to encode the stability condition in VTSs.
+%%
+%The following constraint recursively encodes that node $j$ is
+%$m$-reachable from node $i$ in less than $p$ steps.
+%%
+We encode stability condition using the reachability variables like presented in Section~\ref{enc:smt}. 
 %
-The following constraint recursively encodes that node $j$ is
-$m$-reachable from node $i$ in less than $p$ steps.
-%
-Subsequently, we encode stability condition using the reachability variables.
+Recall the definition of $\texttt{Paths}(r)$ and $\texttt{Loop}(r)$ constraint from Section~\ref{enc:smt}.
+%  
 \begin{align*}
 \texttt{Paths}(r) &= \bigwedge\limits_{\mathclap{i,j,m,p}} r_{i,j,m,p} \limplies (\bigvee_{q} \, e_{i,j,q,m} \lor \bigvee_{i\neq i^{\prime}} ( \, \bigvee_{q} e_{i,i^{\prime},q,m}) \land r_{i^{\prime},j,m,p-1} )
 \\
 \texttt{Loop}(r) &= \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,\nu}
-\\
-\texttt{Stability} &= \exists r. \; \texttt{Paths}(r) \land \texttt{Loop}(r)
 \end{align*}
-
+We encode stability, \texttt{QStability} using quantifiers as existence of reachability bits such that constraints $\texttt{Paths}(r)$ and $\texttt{Loop}(r)$ are satisfied.
+\begin{align*}
+\texttt{QStability} &= \exists r. \; \texttt{Paths}(r) \land \texttt{Loop}(r)
+\end{align*}
 \paragraph{$k$-connected property}
 %
-$k$-connectedness expresses robustness against failure of few edges.
+The $k$-connectedness expresses robustness against failure of few edges.
 %
-Let us use $d_{i,j,q}$ to indicate $q$th edge between $i$ and $j$ is failed
-and $r'_{i,j}$ to indicate if there is a path from $i$ to $j$ in
-the modified VTS.
+%Let us use $d_{i,j,q}$ to indicate $q$th edge between $i$ and $j$ is failed
+%and $r'_{i,j}$ to indicate if there is a path from $i$ to $j$ in
+%the modified VTS.
 %
 % To check whether $k$-connected is a
 % necessary condition, we remove (drop) $k-1$ edges from the graph and
@@ -632,16 +633,17 @@ the modified VTS.
 % %
 % We have a graph that is not $k$-connected.
 %
-In the following, $\texttt{Fail}(d,k)$ encodes that only
-existing edges can be failed and exactly $k-1$ edges are failed.
-%
-$\texttt{FReach}(d,r')$ defines reachability in the modified VTS.
-%
-We use a new variable $r'_{i,j,p}$ to encode reachability from
-$i$ to $j$ in at most $p$ steps.
-%
-$\texttt{Connected}(r')$ says that all nodes are reachable from any
-other node.
+Recall the definition of $\texttt{Fail}(d,k)$, $\texttt{FReach}(d,r')$ and $\texttt{Connected}(r')$ constraint from Section~\ref{enc:smt}.
+%In the following,  encodes that only
+%existing edges can be failed and exactly $k-1$ edges are failed.
+%%
+% defines reachability in the modified VTS.
+%%
+%We use a new variable $r'_{i,j,p}$ to encode reachability from
+%$i$ to $j$ in at most $p$ steps.
+%%
+%$\texttt{Connected}(r')$ says that all nodes are reachable from any
+%other node.
 \begin{align*}
 \texttt{Fail}(d,k) = & 
 \bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \land 
@@ -654,10 +656,10 @@ other node.
 \end{align*}
 %We will be synthesizing $k$-connected graphs.
 %
-We define $\texttt{Connected}(k)$ that says for all possible valid failures
+We define $\texttt{QConnected}(k)$ that says for all possible valid failures
 the graph remains reachable. 
 \begin{align*}
-\texttt{Connected}(k) = & \forall d.\;
+\texttt{QConnected}(k) = & \forall d.\;
 (\texttt{Fail}(d,k) \limplies \exists r'.\;\texttt{FReach}(d,r')
 \land \texttt{Connected}(r'))
 % \\
@@ -665,8 +667,8 @@ the graph remains reachable.
 %         (\texttt{Drop}(d,k) \land \exists r'.\;\texttt{ReachAbove}(d,r')
 %                               \land \lnot \texttt{Connected}(r'))
 \end{align*}
-Since $d$ variables in $\texttt{Connected}(k)$ are universally
-quantified, $\texttt{Connected}(k)$ introduces quantifier alternations.
+Since $d$ variables in $\texttt{QConnected}(k)$ are universally
+quantified, $\texttt{QConnected}(k)$ introduces quantifier alternations.
 %
 %Therefore, synthesis against this property will require QBF reasoning.
 %%
@@ -742,10 +744,29 @@ as sets.
 %
 They will be converted into formulas depending
 on the different usage in the synthesis problems. 
-
 % Since not all the activity functions are defined some of the functions
 % appearing in $\texttt{ActiveE}$ and $\texttt{ActiveN}$ are
 % uninterpreted function symbols.
+%
+\subsubsection{Encoding synthesis property}
+%
+We will do synthesis against the following property that says the VTS
+is stable and $k$-connected.
+%
+Where $k$ is the minimum connectivity constraint for the corresponding variant in the result of existential condition.
+% The property is designed to balance the search space such that the synthesis procedure does not
+% succeed with simply adding too many edges. 
+%
+\begin{align*}
+\texttt{Property} =  \texttt{QStability} \land \texttt{QConnected}(k) 
+%\land \texttt{DisConnected}(4)
+\end{align*}
+The property was proposed in~\cite{shukla2017discovering}.
+%
+However, the biological relevance of the property is debatable and open for change.
+%
+Our tool is easily modifiable to support any other property that may be deemed 
+interesting by the biologists.
 
 \subsubsection{Encoding synthesis constraints}
 
