@@ -49,15 +49,14 @@
 	    \\\hline
 		
 		A. & \multirow{5}{*}{
-			\makecell{ \texttt{Consistancy}, \\  \texttt{Stability}, \\
-				\texttt{Connected(k)}  }
+			\makecell{ $\texttt{EdgeC}$,  $\texttt{ActivityC}$, \\ $\texttt{PairingC}$, $\texttt{FusionC}$, \\ $\texttt{StabilityC}$, \\ $\texttt{Connected}(k)$  }
 		}
-		& \ref{eq:ann} & \ref{eq:aen} &  T/O  \\
-		B. & & \ref{eq:anb} & \ref{eq:aen} & T/O \\
-		C. & & \ref{eq:ann} &  \ref{eq:aeb} & T/O \\
-		D. & & \ref{eq:anb} & \ref{eq:aeb} & T/O \\
-		E. & & \ref{eq:ann} & \ref{eq:aep} & M/O   \\
-		F. & & \ref{eq:anb} &  \ref{eq:aep} & M/O \\\hline
+		& \texttt{FunOnN} & \texttt{FunOnE} &  T/O \\
+	B. & & \texttt{FunBfN} & \texttt{FunOnE} &  T/O \\
+	C. & & \texttt{FunOnN} &  \texttt{FunBfE} &  T/O  \\
+	D. & & \texttt{FunBfN} & \texttt{FunBfE} &  T/O\\
+	E. & & \texttt{FunOnN} & \texttt{FunPairE}  &  M/O \\
+	F. & & \texttt{FunBfN} &  \texttt{FunPairE} &  M/O \\\hline
 		
 		% C_es :Self edges are allowed
 		% C_ed : Every edge is distinct 
