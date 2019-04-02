@@ -411,19 +411,19 @@ In the $\fbmc$ encoding, reachability is encoded by enumerating all the possible
 This encoding is non-optimal in the sense that in the worst case an exponential number of paths needs to be explored.
 %
 Whereas in the $\fsmt$ encoding, reachability is encoded in two different
-ways in constraints~\eqref{eq:reach1} and~\eqref{eq:drop3}.
+ways in constraints $\texttt{Paths}(r)$ and $\texttt{FReach}(d,r')$.
 %
-The reachability is recursively defined in~\eqref{eq:drop3} and has
+The reachability is recursively defined in~$\texttt{FReach}(d,r')$ and has
 trivial solutions by making all $r'$s true.
 %
-However, the trivial solutions are disallowed by constraint~\eqref{eq:drop4} and we find
+However, the trivial solutions are disallowed by constraint~$\texttt{Connected}(r')$ and we find
 only the solutions that captures the evidence of non-reachability.
 %
-On the other hand, we have added length of paths in our reachability encoding in constraint~\eqref{eq:reach1}, which needs relatively more auxiliary variables.
+On the other hand, we have added length of paths in our reachability encoding in constraint~$\texttt{Paths}(r)$, which needs relatively more auxiliary variables.
 %
-This is because constraint~\eqref{eq:reach2} has only positive
+This is because constraint~$\texttt{Loop}(r)$ has only positive
 occurrences of the reachability variables and if we had defined
-$r$s in ~\eqref{eq:reach1} without paths,
+$r$s in~$\texttt{Paths}(r)$ without paths,
 the circular dependencies in the recursive definitions of $r$s
 may have resulted in spurious satisfying assignments that
 do not encode reachability.
