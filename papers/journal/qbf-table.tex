@@ -26,7 +26,7 @@
 %		% C_es :Self edges are allowed
 %		% C_ed : Every edge is distinct 
 %	\end{tabular}
-	\begin{tabular}{ c|c c c|c }
+	\begin{tabular}{ c|c | c| c|c }
 	\hline
 	{\multirow{3}{*}{Variant}}  &
 	\multicolumn{3}{c|} {Constraints} & 
@@ -41,15 +41,15 @@
 	\\\hline
 	
 	A. & \multirow{5}{*}{
-					\makecell{ \texttt{Consistancy}, \\  \texttt{Stability}, \\
-						 \texttt{Connected(k)}  }
+					\makecell{ \texttt{Consistancy}, \\  \texttt{QStability}, \\
+						 \texttt{QConnected(k)}  }
 	}
-	& \ref{eq:ann} & \ref{eq:aen} & No graph  \\
-	B. & & \ref{eq:anb} & \ref{eq:aen} & No graph \\
-	C. & & \ref{eq:ann} &  \ref{eq:aeb} &  3-connected \\
-	D. & & \ref{eq:anb} & \ref{eq:aeb} & 3-connected \\
-	E. & & \ref{eq:ann} & \ref{eq:aep} & No graph  \\
-	F. & & \ref{eq:anb} &  \ref{eq:aep} & 4-connected \\\hline
+	& \texttt{FunOnN} & \texttt{FunOnE}  & No graph \\
+B. & & \texttt{FunBfN} & \texttt{FunOnE}  & No graph  \\
+C. & & \texttt{FunOnN} &  \texttt{FunBfE} & 3-connected  \\
+D. & & \texttt{FunBfN} & \texttt{FunBfE} & 3-connected\\
+E. & & \texttt{FunOnN} & \texttt{FunPairE}  & No graph  \\
+F. & & \texttt{FunBfN} &  \texttt{FunPairE} & 4-connected  \\\hline
 	
 	% C_es :Self edges are allowed
 	% C_ed : Every edge is distinct 
