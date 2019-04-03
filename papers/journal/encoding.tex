@@ -111,7 +111,7 @@ A molecule should be present to be active on a node.
 \begin{align*}
   \texttt{ActivityC} = \texttt{ActiveMolE} \land \texttt{ActiveMolN} 
 \end{align*}
-\noindent We divide the pairing matrix into Q-SNAREs and R-SNAREs blocks and set the dependency bits of Q-SNAREs to Q-SNAREs and R-SNAREs to R-SNAREs in the pairing matrix to be all 0's.
+\noindent We divide the pairing matrix into Q-SNAREs and R-SNAREs blocks and set the dependency bits of R-SNAREs to R-SNAREs in the pairing matrix to be all 0's.
 %It reduces the search space.
 % Condition on $p_{kk'}$. \ashu{why???} .
 %\begin{align}
@@ -120,7 +120,7 @@ A molecule should be present to be active on a node.
 %\end{align}
 
 \begin{align*}
- \texttt{PairingC} =\;& \bigwedge\limits_{(x < 3M/4 \, \land  \, y < 3M/4) \lor  (x >= 3M/4 \, \land \, y >= 3M/4)} \neg p(x,y)
+ \texttt{PairingC} =\;& \bigwedge\limits_{(x >= 3M/4 \, \land \, y >= 3M/4)} \neg p(x,y)
 \end{align*}
 
 \subsubsection{Well-fused constraints}
