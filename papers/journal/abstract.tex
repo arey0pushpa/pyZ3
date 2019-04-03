@@ -4,30 +4,32 @@ The compartments are viewed as nodes that are labeled by their chemical identity
 %
 Several interesting questions about VTSs translate to combinatorial search and synthesis problems. 
 %
-We present novel SAT, SMT and QBF based encodings of the properties over vesicle traffic systems.
+We present novel encoding based on Boolean satisfiability (SAT), satisfiability modulo theories (SMT) and quantified Boolean formula (QBF) of the properties over vesicle traffic systems.
 %
 We have implemented the presented encoding in a tool that searches for the networks that satisfy properties related to transport consistency conditions using these solvers. 
 %
 In our numerical experiments, we show that our tool can search for networks of sizes that are relevant to real cellular systems.
 %
-Understanding VTSs is an ongoing area of
-research and for many cells they are partially known. 
+%Understanding VTSs is an ongoing area of research and for many cells they are partially known. 
 %
-For example, there
-may be undiscovered edges, nodes, or their labels in a VTS of a cell. 
+%We do not have a complete picture of the VTS graph, and in many cases we know only partial information known.
+%
+The biological VTS graphs known to date are incomplete in the sense that we do not know all the edges, and we also do not know all the molecules that populate the edges and the nodes of the VTS.
+%Complete picture of VTSs are not clear and only partial 
+%For example, there may be undiscovered edges, nodes, or their labels in a VTS of a cell. 
+%
+%In this sense the picture of the VTS graphs is only partially complete. 
 %
 It has been speculated that there are properties that the VTSs must satisfy.
 For example, stability, i.e., every chemical that is leaving a compartment
 comes back. 
 %
-Many synthesis questions may arise in this scenario, where
-we want to complete a partially known VTS under a given property.
+\todo{Text below this is just a copy of last paper}Many synthesis questions may arise in this scenario, where we want to complete a partially known VTS under a given property.
 %
 In the paper, we present novel encodings of the above questions into
-the QBF (quantified Boolean formula) satisfiability problems. 
+the QBF satisfiability problems. 
 %
-We have implemented the encodings in a highly configurable tool and applied to a
-couple of found-in-nature VTSs and several synthetic graphs.
+We have implemented the encodings in a highly configurable tool and applied to a couple of VTSs found in the literature and to several synthetic graphs.
 %
 Our results demonstrate that our method can scale up to the graphs of interest.
 % Vesicle Traffic Systems(VTSs) are the material transport 
