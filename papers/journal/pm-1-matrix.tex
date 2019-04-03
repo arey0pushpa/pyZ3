@@ -1,29 +1,48 @@
 \begin{figure}[t]
 \centering
-
-
 %\begin{minipage}{0.45\linewidth}
-\begin{tikzpicture}[node distance = 30mm]
-   \begin{scope}[]
-	  \node[draw] (n0) {$n_0:\overline{01234}$};
-	  \node[draw,below left of=n0] (n1) {$n_1:\overline{01236}$};
-	  \node[draw,below right of=n0] (n2) {$n_2:\overline{12357}$};
-	
-	  \draw[->,thick] (n0) -- node[left=1mm]  {$0\overline{1}$} (n1);
-	  \draw [->,thick] (n0) to [bend right=-30] node[right=1mm]  {$\overline{01}23$} (n1);
-	  \draw [->,thick] (n1) to [bend right=-30] node[left=1mm]  {$01\overline{3}$} (n0);
-	
-	  \draw [->,thick] (n1) -- node[below=1mm]  {$1\overline{2}3$} (n2);
-	  \draw [->,thick] (n2) to [bend right=-45] node[below=2pt]  {$\overline{1}3$} (n1);
-	
-	  \draw [->,thick] (n2) -- node[right=2pt]  {$2\overline{3}$} (n0);
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
+thick,main node/.style={circle,draw,font=\sffamily,minimum size=0.8cm}]
+\begin{scope}[]
+
+\node[main node] (1) {$s_{1}$};
+\node[main node] (2) [right of=1] {$s_{2}$};
+%\node[main node] (3) [below right of=1] {$s_{3}$};
+
+\path[every node/.style={font=\sffamily\small}]
+%(3) edge node [left] {} (1)
+(1) edge [loop above] node {} ()
+(2) edge [loop above] node {} ()
+(1) edge node [right] {} (2)
+(1) edge [bend right=45] node [left] {} (2)
+(2) edge [bend right=45] node[right] {} (1)
+(2) edge [bend right = 20] node[right] {} (1)
+(1) edge [bend right=20] node[right] {} (2);
+%(2) edge node[right] {} (3)
+%(3) edge[bend left, below] node{} (2);
+%(3) edge [bend right] node[right] {} (2)
+%\end{scope}
+%\begin{tikzpicture}[node distance = 30mm]
+%   \begin{scope}[]
+%	  \node[draw] (n0) {$n_0:\overline{01234}$};
+%	  \node[draw,below left of=n0] (n1) {$n_1:\overline{01236}$};
+%	  \node[draw,below right of=n0] (n2) {$n_2:\overline{12357}$};
+%	
+%	  \draw[->,thick] (n0) -- node[left=1mm]  {$0\overline{1}$} (n1);
+%	  \draw [->,thick] (n0) to [bend right=-30] node[right=1mm]  {$\overline{01}23$} (n1);
+%	  \draw [->,thick] (n1) to [bend right=-30] node[left=1mm]  {$01\overline{3}$} (n0);
+%	
+%	  \draw [->,thick] (n1) -- node[below=1mm]  {$1\overline{2}3$} (n2);
+%	  \draw [->,thick] (n2) to [bend right=-45] node[below=2pt]  {$\overline{1}3$} (n1);
+%	
+%	  \draw [->,thick] (n2) -- node[right=2pt]  {$2\overline{3}$} (n0);
   \end{scope}
 
-  \begin{scope}[xshift=7cm,yshift=-1.4cm]
+  \begin{scope}[xshift=8cm,yshift=-0.0cm]
   
 	
 	\matrix [matrix of math nodes,left delimiter=(,right delimiter=),
-	         row sep=0.07cm,column sep=0.07cm] (m) {
+	         row sep=0.05cm,column sep=0.05cm] (m) {
 	\times & \times & \times &\times&\times&\times & \times & \times\\
 	\times & \times & \times&\times&\times&\times& 1 &\times \\
 	\times & \times & \times&\times&\times&1&\times &\times\\

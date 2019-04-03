@@ -852,6 +852,7 @@ of adding edges.
 Here let us consider only adding molecules to the labels of edges.
 %
 In the following, the formula encodes that only $slimit$ edge labels may be added.
+%
 \begin{align*}
 &\texttt{AddLabelEdge}(slimit) = 
 \sum~\texttt{UnknwonEdgeLabel}  \leq slimit\\
@@ -864,10 +865,11 @@ In the following, the formula encodes that only $slimit$ edge labels may be adde
 (  \texttt{Consistancy}\land \texttt{Property} \land
 \texttt{FixedForLabel} \land \texttt{AddLabelEdge}(slimit) )
 \end{align*} 
+%
 Similar to the previous encoding, we solve the
 satisfiability of the above formula to obtain additional molecules
 that may be added to the edge labels to satisfy the properties.
-
+%
 \subsubsection{Fixing VTS by learning activity functions}
 Now we consider a scenario where some of the activity functions for
 some of the molecules are missing.

@@ -55,6 +55,7 @@
 % Use package Listing to add code in our Manuscript
 \usepackage{listings} 
 
+%\usepackage[figurename=Fig]{caption}
 % Added for the sub-pictures
 \usepackage{subcaption}
 
@@ -62,7 +63,7 @@
 \usepackage[british]{babel}
 \usepackage{hhline}
 \usepackage{multirow}
-\usepackage[figurename=Fig]{caption}
+
 
 %ADEDED BY ANKIT
 % use (a) and i in the enumerate
@@ -109,12 +110,12 @@
 
 \newcommand*{\equal}{=}
  \usepackage{tikz}
- \usetikzlibrary{arrows}
+% \usetikzlibrary{arrows}
  \usepackage{xparse}
-\usetikzlibrary{matrix,backgrounds}
+%\usetikzlibrary{}
 \pgfdeclarelayer{myback}
 \pgfsetlayers{myback,background,main}
-
+\usetikzlibrary{tikzmark,decorations.pathreplacing,arrows,shapes,positioning,shadows,trees,shapes.gates.logic.US,arrows.meta,shapes,automata,petri,calc,matrix,backgrounds}
 \tikzset{mycolor/.style = {line width=1bp,color=#1}}%
 \tikzset{myfillcolor/.style = {draw,fill=#1}}%
 

@@ -139,17 +139,22 @@ On the timescales of minutes, we have tried to capture important aspect of Rothm
 The following are the basic component and assumptions of our model. 
 \begin{enumerate}
 \item A cell is a set of compartments exchanging vesicles.
-\item Compartments are neither created nor destroyed.
-\item Each compartment is in steady state, gain and loss of the molecules is balance.
-\item Molecules are neither created nor destroyed.
+\item Compartments are neither created nor destroyed~\cite{braell1984glycoprotein}.
+\item Each compartment is in steady state, gain and loss of the molecules is balance~\cite{braell1984glycoprotein}.
+\item Molecules are neither created nor destroyed~\cite{he2009differential}.
 \item Molecules move via vesicles of uniform size.
-\item Identical vesicles have identical target compartments.
-\item Fusion of vesicles to compartments is driven by specific SNARE pairing.
+\item Identical vesicles have identical target compartments~\cite{fries1981transient}.
+\item Fusion of vesicles to compartments is driven by specific SNARE pairing~\cite{mcnew2000compartmental}.
 %\item The identities of compartments and vesicles is encoded in their molecules, and identical vesicles fuse with identical target compartments.
-\item The activity of a SNARE can be regulated by other molecules present on the same compartment or vesicle.
-\item An active SNARE pair is necessary and sufficient for fusion. 
+\item The activity of a SNARE can be regulated by other molecules present on the same compartment or vesicle~\cite{mima2008reconstituted}.
+\item An active SNARE pair is necessary and sufficient for fusion~\cite{weber1998snarepins}
+. 
 \end{enumerate}
-
+%
+All our assumptions, except assumption 5, are held up by cell biological results.
+%
+Although vesicles produced in a cell do vary in size~\cite{jena2008intracellular}, they are much smaller than compartments, hence, for the sake of simplicity, we assume a uniform size for intracellular vesicles.
+%The assumptions 
 %On the timescale of minutes, compartments are neither created nor destroyed, rather, they are in steady state. We assume that molecules are also neither created nor destroyed.
 %The activity of a SNARE can be regulated by other molecules present on the same compartment or vesicle.
 
@@ -457,12 +462,12 @@ two found-in-nature VTSs.
 %
 Our experiments suggest that some of the synthesis problems are solvable by modern solvers and the synthesis technology may be useful for biological research.
 %
-\begin{example}
-	%
-	In figure~\ref{fig:synth-vts}, we present a partial VTS that has 3 compartments and it's complete VTS by our tool. The synthesis is performed on the basis of steady state property and the  k-connectivity of the graph.
-	
-\end{example}
-\input{synth-dia}
+%\begin{example}
+%	%
+%	In figure~\ref{fig:synth-vts}, we present a partial VTS that has 3 compartments and it's complete VTS by our tool. The synthesis is performed on the basis of steady state property and the  k-connectivity of the graph.
+%	
+%\end{example}
+%\input{synth-dia}
 
 The rest of the paper is organized as follows. 
 %
