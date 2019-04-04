@@ -293,18 +293,19 @@ Note that, on the other hand, if our predictions are experimentally confirmed, i
 
 \begin{example}
 %
-In figure~\ref{fig:M1}, we present a VTS that has 3 compartments and 8 molecules, and a corresponding pairing matrix.
+In figure~\ref{fig:M1}, we present a VTS that has 2 compartments and 16 molecules, and a corresponding pairing matrix.
 %
-Molecules are numbered 0-7.
+Molecules are represented as $Q_{i}$ or $R_{i}$.
 %
-In the VTS, labels are a string of molecule ids, and an overline over an id indicates that the molecule is active.
+In the VTS, labels are a string of molecule, and red color text indicates that the molecule is active.
 %
-Every molecule on the node is active.
+The activity of the molecules are controlled
+by presence of the other molecules. 
+%Every molecule on the node is active.
 %
-The activity of the molecules on an edge are controlled
-by presence of the other molecules on the edge.
+The activity of the molecules on an edge is determined by the corresponding pairing matrix on the edge.
 %
-On the right side of the figure, we show the pairing matrix.
+Below of the figure, we show the pairing matrix.
 %
 An entry 1 represents pairing between molecules.
 %
@@ -315,7 +316,7 @@ columns corresponds to the labels of nodes.
 %
 Every molecule flows on a cycle, ensuring steady state.
 %
-This is a 3-connected graph.
+This is a 4-connected graph.
 \end{example}
 %
 \input{pm-1-matrix}
@@ -471,7 +472,7 @@ We output various completed versions of VTS against these properties which can t
 %
 \begin{example}
 	%
-	In figure~\ref{fig:synth-vts}, we present a partial VTS that has 3 compartments and it's complete VTS. The synthesis is performed on the basis of steady state property and the  k-connectivity of the graph.
+	In figure~\ref{fig:synth-vts}, we present a partial VTS that has 3 compartments and it's complete VTS. The synthesis is performed on the basis of steady state property and the  3-connectivity of the graph. PM, EE, LE are the tags representing the node. Edge in the red colour represent the added edge and molecules in blue represent added molecules on the corresponding edge by synthesis. For the sake of clarity we have not presented the activity, pairing matrix and rest of the molecules on the nodes.
 	
 \end{example}
 \input{synth-dia}

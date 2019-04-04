@@ -36,7 +36,7 @@
 	
 	  %pm <-> ee
 	  \path (ee) edge[bend left=32] node [below, rotate=-15] {\^{R3}} (pm);
-	  \path (pm) edge[bend left=30, text width=2.0cm] node [above,rotate=-45] {\^{R2} {Qa7} Qbc7, R7, Qc7, Qa2} (ee);
+	  \path (pm) edge[bend left=30, text width=2.0cm] node [above,rotate=-45] {\^{R2}, {Qa7} Qbc7, R7, Qc7, Qa2,} (ee);
 	\end{tikzpicture}
 	\caption{Input partial VTS} 
 		 \label{fig:synth-vts1}
@@ -58,11 +58,11 @@
 	  {\color{red} { \path (le) edge[bend right] node [below,rotate=50] {\color{blue} { {\textbf{\^{R8},Qa7}}}} (ee);
 	  }}
 	  %ee -> le
-	  \path (ee) edge[bend right] node [text width=1.5cm, below,rotate=50] {\^{R8},Qa7, Qbc7,R7} (le);	  
+	  \path (ee) edge[bend right] node [text width=1.5cm, below,rotate=50] {\^{R8}, Qa7, Qbc7,R7} (le);	  
 	  
 	  %pm <-> ee
 	  \path (ee) edge[bend left=30] node [below, text width=2.0cm] {\^{R3, {\color{blue} { \textbf{\^{Qa2}, \^{Qa7}, \^{R2}}}}}} (pm);
-	  \path (pm) edge[bend left=30] node [above,rotate=-45,text width = 2.5cm] {\^{R2} {Qa7} Qbc7, R7, Qc7, Qa2} (ee);	    
+	  \path (pm) edge[bend left=30] node [above,rotate=-45,text width = 2.5cm] {\^{R2} {Qa7} Qbc7, R7, Qc7, Qa2, \color{blue} { \textbf{R3}}} (ee);	    
 	 % \end{scope}
 
 	 \end{tikzpicture}
