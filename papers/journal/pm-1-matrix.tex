@@ -1,6 +1,6 @@
 \begin{figure}[t]
 \centering
-\begin{tikzpicture}[node distance=3cm and 3cm]
+\begin{tikzpicture}[node distance=3cm and 5cm]
 \tikzset{
 	sh2n/.style={shift={(0,1)}},
 	sh2s/.style={shift={(0,-1)}},
@@ -11,6 +11,7 @@
 	sh2ne/.style={shift={(1,1)}},
 	sh2sw/.style={shift={(-1,-1)}},
 	sh2se/.style={shift={(1,-1)}},
+	sh2sm/.style={shift={(0.8,-2)}},
 	%
 	rc/.style={rounded corners=2mm,line width=1pt},
 	%
@@ -20,10 +21,12 @@
 \node[place,left=of a] (b) {$n_{0}$};
 %\node[place,above right=of a] (c) {c};
 
-\draw[-stealth,rc] (a) -- node[above]{a to b} (b);
+\draw[-stealth,rc] (a) -- node[above]{$Q$} (b);
 %\draw[-stealth,rc] (a) |- node[green!50!black,above,pos=.75]{a to c} (c);
 \draw[-stealth,rc] (a) -- ([sh2nw]a.center) -- node[above,red] {a to c (bis)} ([sh2n]b.center) -- (b);
-%\draw[-stealth,rc] (b) -- ([sh2se]b.center) -| node[below,blue,pos=.25] {b to c} (c);
+%\draw[-stealth,rc] (b) -- ([sh2nw]a.center) -- node[above,red] {} ([sh2n]b.center) -- (a);
+\draw[-stealth,rc] (b) -- ([sh2se]b.center) -| node[below,blue,pos=.25] {b to c} (a);
+\draw[-stealth,rc] (b) -- ([sh2sm]b.center) -| node[below,blue,pos=.25] {b to c} (a);
 \end{tikzpicture}
 
 \vspace{0.9cm}
