@@ -106,7 +106,11 @@
 
 \usepackage{verbatim}
 \usepackage{pgfplots}
+%\usepackage{colortbl}
+%\usepackage{pgfplotstable}
 \pgfplotsset{compat=1.15}
+	
+\def\cca#1{\cellcolor{black!#10}\ifnum #1>2\color{white}\fi{#1}}
 
 \newcommand*{\equal}{=}
  \usepackage{tikz}
