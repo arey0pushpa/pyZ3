@@ -15,10 +15,10 @@
 	%
 	rc/.style={rounded corners=2mm,line width=1pt},
 	%
-	place/.style={draw,rectangle,fill=cyan!10,inner sep=.5mm,minimum size=6mm, text width=3cm,rounded corners,align=center},
+	place/.style={draw,rectangle,fill=cyan!10,inner sep=.5mm,minimum size=6mm, text width=4cm,rounded corners,align=center},
 }
-\node[place] (a) {$Node_{1}:$ $Q_{1a} Q_{1b} Q_{1c}, \color{red}Q_{2a} Q_{2b}$ ${\color{red}Q_{2c} Q_{3a} Q_{3b} Q_{3c}} Q_{4a}$ $Q_{4b} Q_{4c} R_{1} R_{2} R_{3} R_{4}$};
-\node[place,left=of a] (b) {$Node_{0}:$ ${\color{red}Q_{1a} Q_{1b} Q_{1c}} Q_{2a} Q_{2b}$ $Q_{2c} Q_{3a} Q_{3b} Q_{3c} \color{red}Q_{4a}$ ${\color{red}Q_{4b} Q_{4c}} R_{1} R_{2} R_{3} R_{4}$};
+\node[place] (a) {$Node_{1}$:\\ Qa1 Qb1 Qc1 {\color{red}Qa2 Qb2} {\color{red}Qc2 Qa3 Qb3 Qc3} Qa4 Qb4 Qc4 R1 R2 R3 R4};
+\node[place,left=of a] (b) {$Node_{0}$:\\ {\color{red}Qa1 Qb1 Qc1 } Qa2 Qb2 Qc2 Qa3 Qb3 Qc3 {\color{red}Qa4} {\color{red}Qb4 Qc4} R1 R2 R3 R4};
 %\node[place,above right=of a] (c) {c};
 
 \draw[-stealth,rc] (a) -- node[above]{$Q_{1a} Q_{1b} Q_{1c} R_{1}$ $Q_{2a} Q_{2b} Q_{2c} R_{2}$  $\color{red}R_{4}$} (b);
@@ -32,23 +32,23 @@
 \vspace{0.9cm}
 \begin{minipage}[t]{0.75\linewidth}
   \begin{tabular}{ccccccccccccccccc}
-				& $Q_{1a}$ & $Q_{1b}$ & $Q_{1c}$ &  $Q_{2a}$ & $Q_{2b}$ & $Q_{2c}$ &  $Q_{3a}$ & $Q_{3b}$ & $Q_{3c}$ &  $Q_{4a}$ & $Q_{4b}$ & $Q_{4c}$ & $R_{1}$ & $R_{2}$ & $R_{3}$  & $R_{4}$\\
-				\textbf{$Q_{1a}$} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{1} & \cca{0}  & \cca{0}  & \cca{0} \\
-				$Q_{1b}$ & \cca{1} & \cca{0} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{1} & \cca{0}  & \cca{0}  & \cca{0} \\
-				$Q_{1c}$ & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{1} & \cca{0}  & \cca{0}  & \cca{0} \\
-				$Q_{2a}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{1}  & \cca{0}  & \cca{0} \\
-				$Q_{2b}$ & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{0} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{1}  & \cca{0}  & \cca{0} \\
-				$Q_{2c}$ & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{1}  & \cca{0}  & \cca{0} \\
-				$Q_{3a}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{1}  & \cca{0} \\
-				$Q_{3b}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{0} & \cca{1} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{1}  & \cca{0} \\
-				$Q_{3c}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{1}  & \cca{0} \\
-				$Q_{4a}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1}  & \cca{1} & \cca{0} & \cca{0}  & \cca{0}  & \cca{1} \\
-				$Q_{4b}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{0}  & \cca{1} & \cca{0} & \cca{0}  & \cca{0}  & \cca{1} \\
-				$Q_{4c}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{1} \\
-				$R_{1}$ & \cca{1} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{0} \\
-				$R_{2}$ & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{0} \\
-				$R_{3}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{1} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{0} \\
-				$R_{4}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1}  & \cca{1} & \cca{0} & \cca{0}  & \cca{0}  & \cca{0} \\
+				& $Qa1$ & $Qb1$ & $Qc1$ &  $Qa2$ & $Qb2$ & $Qc2$ &  $Qa3$ & $Qb3$ & $Qc3$ &  $Qa4$ & $Qb4$ & $Qc4$ & $R1$ & $R2$ & $R3$  & $R4$\\
+				$Qa1$ & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{1} & \cca{0}  & \cca{0}  & \cca{0} \\
+				$Qb1$ & \cca{1} & \cca{0} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{1} & \cca{0}  & \cca{0}  & \cca{0} \\
+				$Qc1$ & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{1} & \cca{0}  & \cca{0}  & \cca{0} \\
+				$Qa2$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{1}  & \cca{0}  & \cca{0} \\
+				$Qb2$ & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{0} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{1}  & \cca{0}  & \cca{0} \\
+				$Qc2$ & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{1}  & \cca{0}  & \cca{0} \\
+				$Qa3$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{1}  & \cca{0} \\
+				$Qb3$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{0} & \cca{1} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{1}  & \cca{0} \\
+				$Qc3$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{1}  & \cca{0} \\
+				$Qa4$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1}  & \cca{1} & \cca{0} & \cca{0}  & \cca{0}  & \cca{1} \\
+				$Qb4$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{0}  & \cca{1} & \cca{0} & \cca{0}  & \cca{0}  & \cca{1} \\
+				$Qc4$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{1} \\
+				$R1$ & \cca{1} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{0} \\
+				$R2$ & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{0} \\
+				$R3$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{1} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{0} \\
+				$R4$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1}  & \cca{1} & \cca{0} & \cca{0}  & \cca{0}  & \cca{0} \\
   \end{tabular}
   % \captionof{figure}{pairing matrix}
 \end{minipage}
