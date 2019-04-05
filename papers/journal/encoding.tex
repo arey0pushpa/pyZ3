@@ -299,13 +299,14 @@ We define $\texttt{Connected}(k)$ that says graph is not k-connected.
 %
 %In this section we will present the $\fbmc$ encoding of the same.
 %
-Although the techniques used for $\fbmc$ and $\fsmt$ is very different because we are not unrolling the complete program in the case of $\fbmc$, the encoding is not considerably different.
+%Although the techniques used for $\fbmc$ and $\fsmt$ is very different because we are 
+%In $\fbmc$ we only partially unroll the program to check for the solutions within that subset. 
+%in the case of $\fbmc$, the encoding is not considerably different.
 % 
-The $\fbmc$ search encoding differs with the presented $\fsmt$ encoding in the way variables are represented and how we encode reachability (both for the stability and connectivity).  
-%
+In comparison to $\fsmt$, the $\fbmc$ search encodes reachability (both for the stability and connectivity) differently.  
+%]
 Here, we will only present the stability encoding.
 %the rest of the encodings are similar to the one presented in the previous section, Section~\ref{enc:smt}.
-
 
 In the $\fbmc$ encoding, the label of the edges and nodes are represented by variables of type, \textit{array of bit vector} of size $M$. 
 %
