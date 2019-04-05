@@ -295,7 +295,7 @@ We define $\texttt{Connected}(k)$ that says graph is not k-connected.
 
 \subsection{Encoding for $\fbmc$ search problem}
 
-\noindent Our first attempt was to encode the existential condition check as a $\fbmc$ search problem~\cite{shukla2017discovering}.
+\noindent Our first attempt was to encode the existential condition as a $\fbmc$ search problem~\cite{shukla2017discovering}.
 %
 %In this section we will present the $\fbmc$ encoding of the same.
 %
@@ -303,7 +303,9 @@ We define $\texttt{Connected}(k)$ that says graph is not k-connected.
 %In $\fbmc$ we only partially unroll the program to check for the solutions within that subset. 
 %in the case of $\fbmc$, the encoding is not considerably different.
 % 
-In comparison to $\fsmt$, the $\fbmc$ search encodes reachability (both for the stability and connectivity) differently.  
+The main difference between $\fsmt$ and $\fbmc$ is the encoding of 
+%I n comparison to $\fsmt$, the $\fbmc$ search encodes 
+reachability (both for the stability and connectivity).  
 %]
 Here, we will only present the stability encoding.
 %the rest of the encodings are similar to the one presented in the previous section, Section~\ref{enc:smt}.
