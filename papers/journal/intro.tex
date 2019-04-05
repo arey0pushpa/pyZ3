@@ -290,17 +290,17 @@ Note that, on the other hand, if our predictions are experimentally confirmed, i
 %			$D_6$ & \cca{2} & \cca{2} & \cca{7} & \cca{2} & \cca{6} &  && $D_6$ & \cca{2} & \cca{2} & \cca{3} & \cca{0} & \cca{4} & \\
 %	\end{tabular}}
 %\end{table}
-
+%
 \begin{example}
 %
 In figure~\ref{fig:M1}, we present a VTS that has 2 compartments and 16 molecules, and a corresponding pairing matrix.
 %
-Molecules are represented as $Q_{i}$ or $R_{i}$.
+Molecules are represented as $Q_{i}$'s or $R_{i}$'s to make a clear distinction between Q and R SNAREs.
 %
-In the VTS, labels are a string of molecule, and red color text indicates that the molecule is active.
+In the VTS, labels are a string of molecule, and red colored molecules are active.
 %
-The activity of the molecules are controlled
-by presence of the other molecules. 
+On the node, the activity of molecules is controlled
+by the presence of the other molecules (exact Boolean function is not shown). 
 %Every molecule on the node is active.
 %
 The activity of the molecules on an edge is determined by the corresponding pairing matrix on the edge.
@@ -309,7 +309,7 @@ Below of the figure, we show the pairing matrix.
 %
 An entry 1 represents pairing between molecules.
 %
-$\times$ represents no pairing.
+0 represents no pairing.
 %
 Rows corresponds to the labels of edges, and
 columns corresponds to the labels of nodes.
@@ -322,7 +322,7 @@ This is a 4-connected graph.
 \input{pm-1-matrix}
 %\subsection{Modeling and Symbolic Analysis of VTS: An Overview}
 \label{subsec:graphmodel}
-
+%
 \subsection{Combinatorial problem and use of Formal methods}
 \noindent The analysis of vesicle traffic systems is a difficult problem
 because of the combinatorial scaling of possible traffic topologies and regulatory rules. 
@@ -472,7 +472,13 @@ We output various completed versions of VTS against these properties which can t
 %
 \begin{example}
 	%
-	In figure~\ref{fig:synth-vts}, we present a partial VTS that has 3 compartments and it's complete VTS. The synthesis is performed on the basis of steady state property and the  3-connectivity of the graph. PM, EE, LE are the tags representing the node. Edge in the red colour represent the added edge and molecules in blue represent added molecules on the corresponding edge by synthesis. For the sake of clarity we have not presented the activity, pairing matrix and rest of the molecules on the nodes.
+	In figure~\ref{fig:synth-vts1}, we present a partial input VTS that has 3 compartments. Figure~\ref{fig:synth-vts2} present it's complete output VTS. 
+	%
+	The synthesis is performed against the steady state property and 3-connectivity. The tags PM, EE, and LE represent the corresponding nodes (please refer to Appendix~\ref{sec:ex-vts} for proper discussion about the nodes and molecules). 
+	%
+	Synthesized edge is in red color and synthesized molecules are represented with blue.
+	 %
+	For clarity, we have not presented the activity of molecules, the corresponding pairing matrix and remaining molecules on the nodes.
 	
 \end{example}
 \input{synth-dia}
