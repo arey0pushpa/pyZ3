@@ -1,6 +1,6 @@
 \begin{figure}[t]
 \centering
-\begin{tikzpicture}[node distance=3cm and 5cm]
+\begin{tikzpicture}[node distance=3.3cm and 5cm]
 \tikzset{
 	sh2n/.style={shift={(0,1)}},
 	sh2s/.style={shift={(0,-1)}},
@@ -9,42 +9,42 @@
 	%
 	sh2nw/.style={shift={(-1,1)}},
 	sh2ne/.style={shift={(1,1)}},
-	sh2sw/.style={shift={(-1,-1)}},
+	sh2sw/.style={shift={(-1.5,-1)}},
 	sh2se/.style={shift={(1,-1)}},
 	sh2sm/.style={shift={(0.8,-2)}},
 	%
 	rc/.style={rounded corners=2mm,line width=1pt},
 	%
-	place/.style={draw,rectangle,fill=cyan!10,inner sep=.5mm,minimum size=6mm, text width=3cm,rounded corners,align=center},
+	place/.style={draw,rectangle,fill=cyan!10,inner sep=.5mm,minimum size=6mm, text width=3.0cm,rounded corners,align=center},
 }
-\node[place] (a) {$Node_{1}:$ $Q_{1a} Q_{1b} Q_{1c}, \color{red}Q_{2a} Q_{2b}$ ${\color{red}Q_{2c} Q_{3a} Q_{3b} Q_{3c}} Q_{4a}$ $Q_{4b} Q_{4c} R_{1} R_{2} R_{3} R_{4}$};
-\node[place,left=of a] (b) {$Node_{0}:$ ${\color{red}Q_{1a} Q_{1b} Q_{1c}} Q_{2a} Q_{2b}$ $Q_{2c} Q_{3a} Q_{3b} Q_{3c} \color{red}Q_{4a}$ ${\color{red}Q_{4b} Q_{4c}} R_{1} R_{2} R_{3} R_{4}$};
+\node[place] (a) {$Node_{1}:$ $Q_{a1} Q_{b1} Q_{c1}, \color{red}Q_{b1} Q_{b2}$ ${\color{red}Q_{c2} Q_{a3} Q_{b3} Q_{c3}} Q_{a4}$ $Q_{b4} Q_{c4} R_{1} R_{2} R_{3} R_{4}$};
+\node[place,left=of a] (b) {$Node_{0}:$ ${\color{red}Q_{a1} Q_{b1} Q_{c1}} Q_{a2} Q_{b2}$ $Q_{c2} Q_{a3} Q_{b3} Q_{c3} \color{red}Q_{a4}$ ${\color{red}Q_{b4} Q_{c4}} R_{1} R_{2} R_{3} R_{4}$};
 %\node[place,above right=of a] (c) {c};
 
-\draw[-stealth,rc] (a) -- node[above]{$Q_{1a} Q_{1b} Q_{1c} R_{1}$ $Q_{2a} Q_{2b} Q_{2c} R_{2}$  $\color{red}R_{4}$} (b);
+\draw[-stealth,rc] (a) -- node[above]{$Q_{a1} Q_{b1} Q_{c1} R_{1}$ $Q_{b1} Q_{b2} Q_{c2} R_{2}$  $\color{red}R_{4}$} (b);
 %\draw[-stealth,rc] (a) |- node[green!50!black,above,pos=.75]{a to c} (c);
-\draw[-stealth,rc] (a) -- ([sh2nw]a.center) -- node[above] {$R_{3} Q_{3a} Q_{3b} Q_{3c}$  $Q_{4a} Q_{4b} Q_{4c}$ $\color{red}R_{1}$} ([sh2n]b.center) -- (b);
+\draw[-stealth,rc] (a) -- ([sh2nw]a.center) -- node[above] {$R_{3} Q_{a3} Q_{b3} Q_{c3}$  $Q_{a4} Q_{b4} Q_{c4}$ $\color{red}R_{1}$} ([sh2n]b.center) -- (b);
 %\draw[-stealth,rc] (b) -- ([sh2nw]a.center) -- node[above,red] {} ([sh2n]b.center) -- (a);
-\draw[-stealth,rc] (b) -- ([sh2se]b.center) -| node[below,pos=.25] {$R_{1} Q_{1a} Q_{1b} Q_{1c}$ $\color{red}Q_{3a} Q_{3b} Q_{3c}$ $\color{red}R_{2}$} (a);
-\draw[-stealth,rc] (b) -- ([sh2sm]b.center) -| node[below,pos=.25] {$R_{4} Q_{4a} Q_{4b} Q_{4c}$ $\color{red}Q_{2a} Q_{2b} Q_{2c}$ $\color{red}R_{3}$} (a);
+\draw[-stealth,rc] (b) -- ([sh2se]b.center) -| node[below,pos=.25] {$R_{1} Q_{a1} Q_{b1} Q_{c1}$ $\color{red}Q_{a3} Q_{b3} Q_{c3}$ $\color{red}R_{2}$} (a);
+\draw[-stealth,rc] (b) -- ([sh2sm]b.center) -| node[below,pos=.25] {$R_{4} Q_{a4} Q_{b4} Q_{c4}$ $\color{red}Q_{b1} Q_{b2} Q_{c2}$ $\color{red}R_{3}$} (a);
 \end{tikzpicture}
 
 \vspace{0.9cm}
 \begin{minipage}[t]{0.75\linewidth}
   \begin{tabular}{ccccccccccccccccc}
-				& $Q_{1a}$ & $Q_{1b}$ & $Q_{1c}$ &  $Q_{2a}$ & $Q_{2b}$ & $Q_{2c}$ &  $Q_{3a}$ & $Q_{3b}$ & $Q_{3c}$ &  $Q_{4a}$ & $Q_{4b}$ & $Q_{4c}$ & $R_{1}$ & $R_{2}$ & $R_{3}$  & $R_{4}$\\
-				\textbf{$Q_{1a}$} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{1} & \cca{0}  & \cca{0}  & \cca{0} \\
-				$Q_{1b}$ & \cca{1} & \cca{0} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{1} & \cca{0}  & \cca{0}  & \cca{0} \\
-				$Q_{1c}$ & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{1} & \cca{0}  & \cca{0}  & \cca{0} \\
-				$Q_{2a}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{1}  & \cca{0}  & \cca{0} \\
-				$Q_{2b}$ & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{0} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{1}  & \cca{0}  & \cca{0} \\
-				$Q_{2c}$ & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{1}  & \cca{0}  & \cca{0} \\
-				$Q_{3a}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{1}  & \cca{0} \\
-				$Q_{3b}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{0} & \cca{1} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{1}  & \cca{0} \\
-				$Q_{3c}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{1}  & \cca{0} \\
-				$Q_{4a}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1}  & \cca{1} & \cca{0} & \cca{0}  & \cca{0}  & \cca{1} \\
-				$Q_{4b}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{0}  & \cca{1} & \cca{0} & \cca{0}  & \cca{0}  & \cca{1} \\
-				$Q_{4c}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{1} \\
+				& $Q_{a1}$ & $Q_{b1}$ & $Q_{c1}$ &  $Q_{b1}$ & $Q_{b2}$ & $Q_{c2}$ &  $Q_{a3}$ & $Q_{b3}$ & $Q_{c3}$ &  $Q_{a4}$ & $Q_{b4}$ & $Q_{c4}$ & $R_{1}$ & $R_{2}$ & $R_{3}$  & $R_{4}$\\
+				\textbf{$Q_{a1}$} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{1} & \cca{0}  & \cca{0}  & \cca{0} \\
+				$Q_{b1}$ & \cca{1} & \cca{0} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{1} & \cca{0}  & \cca{0}  & \cca{0} \\
+				$Q_{c1}$ & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{1} & \cca{0}  & \cca{0}  & \cca{0} \\
+				$Q_{a2}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{1}  & \cca{0}  & \cca{0} \\
+				$Q_{b2}$ & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{0} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{1}  & \cca{0}  & \cca{0} \\
+				$Q_{c2}$ & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{1}  & \cca{0}  & \cca{0} \\
+				$Q_{a3}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{1}  & \cca{0} \\
+				$Q_{b3}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{0} & \cca{1} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{1}  & \cca{0} \\
+				$Q_{c3}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{1}  & \cca{0} \\
+				$Q_{a4}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1}  & \cca{1} & \cca{0} & \cca{0}  & \cca{0}  & \cca{1} \\
+				$Q_{b4}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{0}  & \cca{1} & \cca{0} & \cca{0}  & \cca{0}  & \cca{1} \\
+				$Q_{c4}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{1} \\
 				$R_{1}$ & \cca{1} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{0} \\
 				$R_{2}$ & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{1} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{0} \\
 				$R_{3}$ & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{0} & \cca{1} & \cca{1} & \cca{1} & \cca{0} & \cca{0}  & \cca{0} & \cca{0} & \cca{0}  & \cca{0}  & \cca{0} \\
