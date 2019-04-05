@@ -298,12 +298,21 @@ We define $\texttt{Connected}(k)$ that says graph is not k-connected.
 \noindent Our first attempt was to encode the existential condition as a $\fbmc$ search problem~\cite{shukla2017discovering}.
 %
 %In this section we will present the $\fbmc$ encoding of the same.
+%The basic idea is to search the solution only upto a certain depth $w$. 
 %
+%\begin{align*}
+%\npath(m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} (\texttt{Length} (m-path_{ij}) == l)
+%\end{align*}
+%
+%
+%\begin{align*}
+%\bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m) == 1) \limplies \npath(m, j, i, w)
+%\end{align*}
 %Although the techniques used for $\fbmc$ and $\fsmt$ is very different because we are 
 %In $\fbmc$ we only partially unroll the program to check for the solutions within that subset. 
 %in the case of $\fbmc$, the encoding is not considerably different.
 % 
-The main difference between $\fsmt$ and $\fbmc$ is the encoding of 
+The main differences between $\fsmt$ and $\fbmc$ are the representation of variables and the encoding of 
 %I n comparison to $\fsmt$, the $\fbmc$ search encodes 
 reachability (both for the stability and connectivity).  
 %]
