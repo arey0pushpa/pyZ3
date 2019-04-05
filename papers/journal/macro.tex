@@ -45,7 +45,8 @@
 \DisableLigatures[f]{encoding = *, family = * }
 
 % color can be used to apply background shading to table cells only
-\usepackage[table]{xcolor}
+%\usepackage[table]{xcolor}
+\usepackage[dvipsnames,table]{xcolor}
 
 \usepackage{todonotes}
 
@@ -111,6 +112,52 @@
 \pgfplotsset{compat=1.15}
 	
 \def\cca#1{\cellcolor{blue!#10}\ifnum #1>5\color{white}\fi{#1}}
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,decorations.pathreplacing,arrows,shapes,positioning,shadows,trees,shapes.gates.logic.US,arrows.meta,shapes,automata,petri,calc}
+\usepackage{caption}
+\usepackage{adjustbox}
+\usepackage{todonotes}
+\usepackage{verbatim}
+\usepackage{scalefnt}
+\usepackage{wrapfig}
+\usepackage{pgfplots}
+\usepackage{tikz-qtree}
+\usepackage{pgfplots}
+
+
+
+%\definecolor{ai}{RGB}{179, 255, 179}
+%\colorlet{fv}{red!55}
+%\colorlet{ai}{blue!10}
+%\colorlet{ar}{green!56}
+
+\colorlet{fv}{gray!55}
+\colorlet{ai}{gray!10}
+\colorlet{ar}{gray!38}
+
+\usepackage[edges]{forest}
+\usepackage[T1]{fontenc}
+%\usepackage{lmodern}
+
+\tikzset{%
+  parent/.style={align=center,text width=3cm,rounded corners=3pt},
+  child/.style={align=center,text width=3cm,rounded corners=3pt},
+}
+
+% argument #1: any options
+\newenvironment{customlegend}[1][]{%
+	\begingroup
+	% inits/clears the lists (which might be populated from previous
+	% axes):
+	\csname pgfplots@init@cleared@structures\endcsname
+	\pgfplotsset{#1}%
+}{%
+	% draws the legend:
+	\csname pgfplots@createlegend\endcsname
+	\endgroup
+}%
+\def\addlegendimage{\csname pgfplots@addlegendimage\endcsname}
 
 \newcommand*{\equal}{=}
  \usepackage{tikz}

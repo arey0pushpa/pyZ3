@@ -1,8 +1,72 @@
 \noindent This section will present the different search problems of VTS.
 %
-We categorize the search problems into three different categories, search problem for existential condition, search problem for universal condition, and performing synthesis on the incomplete VTS. 
+We categorize the search problem, Figure~\ref{fig:vts-search} into three different categories, search problem for existential condition, search problem for universal condition, and performing synthesis on the incomplete VTS. 
 %
 We will present two encodings for existential condition and one each for universal condition condition and synthesis.
+
+\begin {figure}[!h]
+\centering
+\begin{adjustbox}{width=\columnwidth}
+{\Large
+%{	\scalefont{1.0}
+%\forestset{parent color/.style args={#1}{
+%		{fill=#1},
+%		for tree={fill/.wrap pgfmath arg={#1!##1}{1/level()*80},draw=#1!80!darkgray}},
+%	root color/.style args={#1}{fill={{#1!60!gray!25},draw=#1!80!darkgray}}
+%}
+
+\begin{forest}
+ /tikz/every node/.append style={font=\sffamily,minimum size=1.0cm},
+	for tree={
+		edge+={->,thick},% uncomment for arrows
+		draw,
+		rounded corners,
+		node options={align=center,},
+		text width=1.7cm,
+		calign=fixed edge angles, calign primary angle=-84,calign secondary angle=85,
+	%	anchor=center,	
+    %	calign=center,
+	},
+	where level=0{%
+		parent anchor=children,
+	}{%
+		folder,
+		grow'=0,
+		if level=1{% this changes the edges from level 0 to nodes at level 1
+			before typesetting nodes={child anchor=north},
+			edge path'={(!u.parent anchor) -- ++(0,-5pt) -| (.child anchor)},
+		}{},
+	}
+    [\textbf{VTS Search \\ Problems}, fill=white!20, parent, s sep=1mm,
+	[\textbf{Existential Condition}, for tree={fill=fv, child}, 
+	[BMC, for tree={fill=ai, child}]
+	[SMT \\, for tree={fill=ai, child}]
+	]
+	[\textbf{Universal Condition}, for tree={fill=fv, child},
+	[QBF, for tree={fill=ai, child}]
+	]
+	[\textbf{VTS Synthesis}, for tree={fill=fv,child}, 
+	[Synthesis, for tree={fill=ai, child}]
+	]
+	]
+\end{forest}
+}
+\end{adjustbox}
+\vspace{0.01cm}
+
+\begin{tikzpicture}
+\begin{customlegend}[legend columns=-1,legend style={draw=none,column sep=1ex},legend entries={ \small Problem Statement, \small Encodings}]
+\addlegendimage{fill=fv,area legend} 
+\addlegendimage{fill=ai,area legend} 
+%\addlegendimage{fill=ar,area legend}
+%\addlegendimage{red,fill=black!50!red,ybar,ybar legend}
+\end{customlegend}
+\end{tikzpicture}
+
+\caption{Overview of the VTS search problems with respective encodings}
+\label{fig:vts-search}
+\end{figure}
+
 \subsection{Existential condition}
 \noindent We employ two techniques to examine the existential condition. 
 %
