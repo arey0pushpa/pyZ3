@@ -17,7 +17,7 @@
 	%
 	place/.style={draw,rectangle,fill=cyan!10,inner sep=.5mm,minimum size=6mm, text width=3cm,rounded corners,align=center},
 }
-\node[place] (a) {$Node_{1}:$ $Q_{1a} Q_{1b} Q_{1c} Q_{2a} Q_{2b}$ $Q_{2c} Q_{3a} Q_{3b} Q_{3c} Q_{4a}$ $Q_{4b} Q_{4c} R_{1} {\color{red}R_{2} R_{3}} R_{4}$};
+\node[place] (a) {$Node_{1}:$ $Q_{1a} Q_{1b} Q_{1c}, \color{red}Q_{2a} Q_{2b}$ ${\color{red}Q_{2c} Q_{3a} Q_{3b} Q_{3c}} Q_{4a}$ $Q_{4b} Q_{4c} R_{1} R_{2} R_{3} R_{4}$};
 \node[place,left=of a] (b) {$Node_{0}:$ ${\color{red}Q_{1a} Q_{1b} Q_{1c}} Q_{2a} Q_{2b}$ $Q_{2c} Q_{3a} Q_{3b} Q_{3c} \color{red}Q_{4a}$ ${\color{red}Q_{4b} Q_{4c}} R_{1} R_{2} R_{3} R_{4}$};
 %\node[place,above right=of a] (c) {c};
 
