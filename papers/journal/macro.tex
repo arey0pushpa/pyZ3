@@ -46,9 +46,9 @@
 
 % color can be used to apply background shading to table cells only
 %\usepackage[table]{xcolor}
-\usepackage[dvipsnames,table]{xcolor}
-
-\usepackage{todonotes}
+\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+\usepackage[pdftex,dvipsnames,table]{xcolor}  % Coloured text etc.
+%\usepackage{todonotes}
 
 % array package and thick rules for tables
 \usepackage{array}
@@ -117,7 +117,12 @@
 \usetikzlibrary{tikzmark,decorations.pathreplacing,arrows,shapes,positioning,shadows,trees,shapes.gates.logic.US,arrows.meta,shapes,automata,petri,calc}
 \usepackage{caption}
 \usepackage{adjustbox}
-\usepackage{todonotes}
+%\usepackage{todonotes}
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improve}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
 \usepackage{verbatim}
 \usepackage{scalefnt}
 \usepackage{wrapfig}

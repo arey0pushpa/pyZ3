@@ -1,14 +1,14 @@
 \noindent A characteristic feature of eukaryotic cells is the presence of multiple internal membrane-bounded compartments. 
 %
-These compartments exchange molecules amongst themselves in small membrane-bounded packets called vesicles ~\cite{alberts2002molecular}. 
+These compartments exchange molecules amongst themselves in small membrane-bounded packets called vesicles~\cite{alberts2002molecular}. 
 %
-The molecular interaction network that controls the vesicle transport system involves dozens of varieties of molecules that regulate flow of cargo. 
+The molecular interaction network that controls the \unsure{Transport/Traffic}vesicle transport system involves dozens of varieties of molecules that regulate the flow of cargo. 
 %
 Due to this, obtaining a complete understanding of the vesicle transport system through physical experimentation alone is a hard problem.
 %
 Highly reduced models of vesicle traffic have previously provided insight into how the chemical composition of various cellular compartments can emerge out of molecular regulation and cargo flow. 
 %
-However, high complexity of problems in VTS also restricts the use of traditional methods like simulation and statistical reasoning~\cite{mani2016wine, mani2016stacking}. 
+However, the high complexity of problems in VTS restricts the use of traditional methods like simulation and statistical reasoning~\cite{mani2016wine, mani2016stacking}\change{Should only cite 3?}. 
 %The high complexity of problem restricts the use of traditional methods like simulation and statistical reasoning and the requirement of precise analysis makes formal methods an ideal candidate. 
 In this paper, using formal methods, we solve the problem of completing incomplete VTS graphs while also considering constraints due to molecular interactions, thereby demonstrating the effectiveness of such methods.
 %
@@ -30,19 +30,19 @@ Through this description, we wish to provide a glimpse of the kind of molecular 
 	%
 	The symbols used for different molecules involved in vesicle traffic are explained in the key. At the source compartment, transmembrane cargo proteins are sorted by cytosolic adaptor proteins. 
 	%
-	Here, the different colours indicate different types of cargo and adaptor proteins. Coat proteins are recruited to the forming vesicle by adaptor proteins. 
+	Here, different colours indicate different types of cargo and adaptor proteins. Coat proteins are recruited to the forming vesicle by adaptor proteins. 
 	%
 	Note here that a single type of coat protein can interact with multiple types of adaptor proteins. Subsequently, the vesicle is pinched off at its neck, for example by dynamin. 
 	%
 	Once the vesicle has left the source compartment, the coat and adaptor proteins fall off and the vesicle is recognized and bound by a tethering complex which is linked to the target compartment. 
 	%
-	At the target compartment the tethered vesicle undergoes fusion, thereby releasing its contents.}
+	At the target compartment, the tethered vesicle undergoes fusion, thereby releasing its contents.}
     \label{fig:vts}
 \end{figure}
 
-\subsubsection{Vesicle budding} The process of vesicle budding involves sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment~\ref{fig:vts}.
+\subsubsection{Vesicle budding} \unsure{Somya should we say it involve three mojor steps? This line is not optimal. Use of "see" okay?}The process of vesicle budding involves sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment, see Figure~\ref{fig:vts}.
 %
-Cargo sorting is performed by cytosolic adaptor proteins. 
+\unsure{new line start or this is ok?}Cargo sorting is performed by cytosolic adaptor proteins. 
 Adaptors are recruited to the source compartment through interactions with the lipids that form the compartment's membrane, and interactions with molecular switches called Arf/Sar which signal the initiation of vesicle formation~\cite{paczkowski2015cargo}. 
 %
 Then these adaptors bind to cargo molecules and thereby sequester them for packaging. 
@@ -58,27 +58,27 @@ These are naturally curved proteins, and their assembly on membranes leads to me
 %
 A single kind of coat protein can bind to multiple kinds of adaptors, thereby allowing the packaging of multiple types of cargo within the same vesicle. 
 %
-There are three major types of coat proteins: Clathrin, COP2 and COP1. These act on different compartments: the clathrin coat operates at multiple compartments, and can interact with multiple adaptors proteins, whereas the COP2 and COP1 coat are only involved in vesicle formation at a single compartment: the ER and the Golgi respectively~\cite{faini2013vesicle}.
+There are three major types of coat proteins: Clathrin, COP2, and COP1. These act on different compartments: the clathrin coat operates at multiple compartments, and can interact with multiple adaptors proteins, whereas the COP2 and COP1 coat are only involved in vesicle formation at a single compartment: the ER and the Golgi respectively~\cite{faini2013vesicle}.
 %
 Finally, transport vesicles bud out from the source compartment~\cite{cocucci2014dynamin}.
 %
 The vesicle is now ready for transport and subsequent fusion with a target compartment.
 
-\subsubsection{Vesicle fusion} The vesicle fusion involves two steps recognition of the correct target compartment and fusion of the transport vesicle~\ref{fig:vts}.
+\subsubsection{Vesicle fusion} \info{Calling them process okay?}The process of vesicle fusion involves two steps recognition of the correct target compartment and fusion of the transport vesicle, Figure~\ref{fig:vts}.
 
-Target compartment recognition involves molecular switches called Rabs and  tethering complexes. Distinct compartments of the cell are associated with distinct Rabs. For example, Rab5 is associated early endosomes and  Rab7 with late endosomes\cite{rink2005rab}.  
+Target compartment recognition involves molecular switches called Rabs and tethering complexes. Distinct compartments of the cell are associated with distinct Rabs. For example, Rab5 is associated with early endosomes and Rab7 with late endosomes~\cite{rink2005rab}.  
 %
-Rabs are master regulators; in their active form Rabs recruit many downstream proteins, including tethering complexes, fusion regulators, motor proteins, etc, to their compartment ~\cite{muller2018molecular}.
+Rabs are master regulators; in their active form, Rabs recruit many downstream proteins, including tethering complexes, fusion regulators, motor proteins, etc, to their compartment~\cite{muller2018molecular}.
 
 Tethering complexes sequester vesicles to their target compartments by binding to the vesicle on one end and the target compartment on the other end, thereby bridging the two before fusion. 
 %
 They are also believed to function as chaperones for assembly of SNARE protein complexes, which enable vesicle fusion. 
 %
-A clear mechanism for action of these tethers is missing, but evidence from experiments indicate that tethers bind to vesicles through molecular interactions with vesicle coat proteins, vesicle, associated Rabs, SNAREs and SNARE regulators. 
+A clear mechanism for the action of these tethers is missing, but evidence from experiments indicate that tethers bind to vesicles through molecular interactions with vesicle coat proteins, vesicle, associated Rabs, SNAREs and SNARE regulators. 
 %
 They can also sense membrane curvature (vesicles are highly curved) ~\cite{baker2016chaperoning}.
 
-The final step in vesicle transport is fusion of vesicle with the target compartment is brought about by SNARE proteins. 
+The final step in vesicle transport is the fusion of the vesicle with the target compartment is brought about by SNARE proteins. 
 %
 There are four kinds of SNAREs: R, Qa, Qb, and Qc; and vesicle fusion requires formation of a SNARE complex containing one of each type. 
 %
@@ -98,8 +98,7 @@ Whereas, SM proteins have following multiple modes of SNARE regulation:
 	the Qa-SNAREs in an inhibited state and prevent or postpone their assembly into SNARE
 	complexes.
 	%
-	\item Some SM proteins can act as a template upon which an early SNARE complex intermediate can
-	form.
+	\item Some SM proteins can act as a template upon which an early SNARE complex intermediate can form.
 	%
 	\item Finally, SM proteins bind the fully assembled
 	SNARE complexes to protect them from premature disassembly by Sec17/18~\cite{baker2016chaperoning}.
@@ -112,11 +111,11 @@ Whereas, SM proteins have following multiple modes of SNARE regulation:
 Molecules traverse the cell in a series of vesicles, and there are two major routes of vesicle transport in all eukaryotic cells.
 %
 \begin{itemize}
-	\item The secretory route takes proteins from the ER (their site of production) to the plasma membrane( from where they are secreted out of the cell) via the Golgi apparatus\cite{alberts2002molecular}.
+	\item The secretory route takes proteins from the ER (their site of production) to the plasma membrane( from where they are secreted out of the cell) via the Golgi apparatus~\cite{alberts2002molecular}.
 	%
 	\item The endocytic route takes proteins from the outside of the cell, through the plasma membrane, to the endocytic compartments and the lysosome where they are digested. 
 \end{itemize}
-Other paths are used for cross talk between the secretory and the endocytic routes. For example, vesicles are sent back and forth between the Trans-Golgi network (secretory route) to the early and the late endosomes(endocytic route)\cite{progida2016bidirectional}. Also, recently, unconventional vesicle-mediated secretory routes have been found, which bypass the Golgi apparatus. The molecules involved in these routes are as yet unknown\cite{nickel2018unconventional}. 
+Other paths are used for cross talk between the secretory and the endocytic routes. For example, vesicles are sent back and forth between the Trans-Golgi network (secretory route) to the early and the late endosomes (endocytic route)~\cite{progida2016bidirectional}. Also, recently, unconventional vesicle-mediated secretory routes have been found, which bypass the Golgi apparatus. The molecules involved in these routes are as yet unknown~\cite{nickel2018unconventional}. 
 %
 %\begin{table}
 %	\begin{center}
@@ -132,7 +131,7 @@ Other paths are used for cross talk between the secretory and the endocytic rout
 %\end{table}
 
 \subsection{The model}
-\noindent The VTS model for this paper is inspired by~\cite{shukla2017discovering}. 
+\noindent \info{Ashutosh. Should we say this. We have done this uniformally.}The VTS model for this paper is inspired by~\cite{shukla2017discovering}. 
 %
 On the timescales of minutes, we have tried to capture important aspect of Rothman-Schekman-Sudhof (RSS) model~\cite{rothman2002machinery} of vesicle traffic system.
 %
@@ -153,7 +152,7 @@ The following are the basic component and assumptions of our model.
 %
 All our assumptions, except assumption 5, are held up by cell biological results.
 %
-Although vesicles produced in a cell do vary in size~\cite{jena2008intracellular}, they are much smaller than compartments, hence, for the sake of simplicity, we assume a uniform size for intracellular vesicles.
+Although vesicles produced in a cell do vary in size~\cite{jena2008intracellular}, they are much smaller than compartments, hence for the \unsure{Is it a simplification or simplification to suite our Boolean Model. Should we say Boolean model? Or this looks fine?}sake of simplicity, we assume a uniform size for intracellular vesicles.
 %The assumptions 
 %On the timescale of minutes, compartments are neither created nor destroyed, rather, they are in steady state. We assume that molecules are also neither created nor destroyed.
 %The activity of a SNARE can be regulated by other molecules present on the same compartment or vesicle.
@@ -164,7 +163,7 @@ Although vesicles produced in a cell do vary in size~\cite{jena2008intracellular
 
 \noindent In this section, we will abstract from the biological description of the VTS and represent the whole network as an annotated transport graph. 
 %
-The constraints imposed by cell biology are incorporated in the  annotations of the graph. 
+The constraints imposed by cell biology are incorporated in the annotations of the graph. 
 
 \subsubsection{The cell as a transport graph} 
 %We consider a cell to be a collection of compartments (nodes) and vesicles (edges), thus defining a transport graph. Every compartment or vesicle has a set of molecular labels, such as SNARE proteins, associated with it.
@@ -185,7 +184,7 @@ The label represents the associated flux of all molecular types carried by the c
 \subsubsection{Steady state} 
 The vesicle transfer will change the molecular composition (distinct molecule count) on both the source compartment and the target compartment. 
 %
-In our model, we assume that the cell is in steady state. As a further simplification, we also assume that the incoming and outgoing flux is balanced for each of the molecular types at each compartment. 
+In our model, we assume that the cell is in a steady state. As a further simplification, we also assume that the incoming and outgoing flux is balanced for each of the molecular types at each compartment. 
 Indeed, it is well accepted that on the scale of minutes and hours the molecular composition remains the same. 
 %
 In this paper, we refer to the steady state of the cell (referred to as \textit{homeostasis} in biological literature) as the stability condition over the annotated graph.
@@ -208,17 +207,17 @@ In this paper, we refer to the steady state of the cell (referred to as \textit{
 %Once a vesicle has budded out of the source, the molecules it carries determine its properties. In particular, for any given pair of a vesicle and a compartment, the set of SNARE proteins that label the former and latter influence whether the vesicle will fuse to that compartment. Biophysically, fusion requires a direct physical interaction between at least one SNARE type on the vesicle and one SNARE type on the compartment. 
 %
 %SNAREs are of two types (known as Q and R in the cell biology iterature) and 
-Vesicle fusion requires a pairing of 3 Qsnares and 1 Rsnare that are distributed between the transfer vesicle and the target compartment. 
+Vesicle fusion requires a pairing of 3 Q-SNAREs and 1 R-SNARE that are distributed between the transfer vesicle and the target compartment. 
 %For any given pair of a vesicle and a compartment, vesicle fusion requires a pairing of a Q-SNARE with an R-SNARE on 
 %the SNARE proteins present on both influence the fusion of the vesicle to that compartment.
 %
 %The list of molecular pairs that can drive a fusion event is given in a pairing matrix between Q and R SNAREs. 
 %
-Not all sets of Q and R SNAREs are allowed to fuse with each other.
+Not all sets of \unsure{R-SNARE? or R SNARE is Okay?}Q and R SNAREs are allowed to fuse with each other.
 %
-In the model, we assume that the cell has an equal number of Q and R SNARE types.
+%In the model, we assume that the cell has an equal number of Q and R SNARE types.
 %
-Therefore, we can abstract the underlying cell biology by labeling the nodes and edges with an equal number of Q and R SNAREs. 
+Therefore, we can abstract the underlying cell biology by labeling the nodes and edges with Q and R SNAREs. 
 % equal number of Q and R SNAREs as a part of node and edge label.
 %
 %
@@ -231,7 +230,7 @@ Fusion takes place only if the SNARE types involved in the vesicle and compartme
 The activity of these SNAREs is dependent on the presence of other molecules on the vesicle or compartment, respectively.
 %
 In our abstract model, 
-we create a hierarchy of models for varying degrees of regulation of SNARE activity.
+we create a hierarchy of variants for varying degrees of regulation of SNARE activity.
 %we create a set of variations of different kind of molecular regulations.
 %
 Most generally, the activity state of a given SNARE can be a Boolean function of all the molecular types on a compartment or vesicle. 
@@ -254,13 +253,12 @@ This is motivated by the idea that pairing must generate an inactive bi-molecula
 %\textbf{Properties of a VTS that satisfies all cell-biological constraints:} 
 \noindent Interactions between the molecules of the VTS together produce a functional vesicle transport network, in which molecules flow between intracellular compartments using specified paths.
 %
-The molecules of the VTS, their interactions and modes of regulation have been worked out to a large extent through cell-biological experiments. 
+The molecules of the VTS, their interactions, and modes of regulation have been worked out to a large extent through cell-biological experiments. 
 %
 But we do not know if this information is complete. In order to assess how completely we know the VTS, we need easily readable benchmarks. 
 
-%\ankit{Need more clarity on the importance and relevance of the CONNECTIVITY and it's relevance.}
-One such benchmark is provided by our result about connectivity of the VTS graph. Graph connectivity is defined as the minimum number of edges that need to be removed from an undirected graph to render it disconnected. For example, in a directed cyclic graph, every node has at least one incoming and one outgoing edge, at least 2 edges need to be removed in order to disconnect the graph. Therefore the underlying undirected graph is 2-connected. 
-From our result, for a given set of biomolecular interactions, for a cell that is in steady state, we expect the VTS graph to have a certain k-connectivity. When regulation is given by arbitrary Boolean rules, we find that VTS graphs must be 3-connected. And when we add the constraint of the specific form of regulatory interactions seen between VTS molecules, we expect vesicle transport graphs to be 2-strongly connected.
+One such benchmark is provided by our result about the connectivity of the VTS graph. Graph connectivity is defined as the minimum number of edges that need to be removed from an undirected graph to render it disconnected. For example, in a directed cyclic graph, every node has at least one incoming and one outgoing edge, at least 2 edges need to be removed in order to disconnect the graph. Therefore the underlying undirected graph is 2-connected. 
+From our result, for a given set of biomolecular interactions, for a cell that is in a steady state, we expect the VTS graph to have a certain k-connectivity. When regulation is given by arbitrary Boolean rules, we find that VTS graphs must be 3-connected. And when we add the constraint of the specific form of regulatory interactions seen between VTS molecules, we expect vesicle transport graphs to be \change{We have used 4 connected in results! 2 strongly or 4 what to put?}2-strongly connected.
 
 %\ankit{We need not specify Synthesis here. Only connectivity use next subsection to build this.}
 %\somya{But this is the para where we explain why connectivity is interesting an biological property}
@@ -273,7 +271,7 @@ These predictions are intended to be used as guides for future experiments.
 %
 A mismatch between our predictions and experiments would indicate that our current understanding of the VTS molecules is necessarily incomplete. 
 %
-Note that, on the other hand, if our predictions are experimentally confirmed, it does not imply that our understanding of the VTS is complete.\\
+Note that, on the other hand, if our predictions are experimentally confirmed, it does not imply that our understanding of the VTS is \unsure{shld we say something about example in one line before the start?}complete.\\
 %
 %\begin{table}[!t]
 %	\caption{Table Caption}
@@ -291,28 +289,25 @@ Note that, on the other hand, if our predictions are experimentally confirmed, i
 %	\end{tabular}}
 %\end{table}
 %
+\vspace{-0.5cm}
 \begin{example}
 %
-In figure~\ref{fig:M1}, we present a VTS that has 2 compartments and 16 molecules, and a corresponding pairing matrix.
+In Figure~\ref{fig:M1}, \improve{require improvement in the description of this example}we present a VTS that has 2 compartments and 18 molecules with its corresponding pairing matrix.
 %
-Molecules are represented as $Q_{i}$'s or $R_{i}$'s to make a clear distinction between Q and R SNAREs.
+%Molecules are represented as $Q_{i}$'s or $R_{i}$'s to make a clear distinction between Q and R SNAREs.
 %
-In the VTS, labels are a string of molecule, and red colored molecules are active.
+In the VTS, labels are a string of molecule, where we show active molecules in red color.
 %
-On the node, the activity of molecules is controlled
+The activity of the molecules on the node is controlled
 by the presence of the other molecules (exact Boolean function is not shown). 
-%Every molecule on the node is active.
 %
 The activity of the molecules on an edge is determined by the corresponding pairing matrix.
 %
-Below of the figure, we show the pairing matrix.
+Below the VTS, we show the pairing matrix.
 %
-An entry 1 represents pairing between molecules.
+Rows in the matrix correspond to the labels of edges, and columns correspond to the labels of nodes.
 %
-0 represents no pairing.
-%
-Rows corresponds to the labels of edges, and
-columns corresponds to the labels of nodes.
+An entry 1 represents pairing between molecules and 0 represents no pairing.
 %
 Every molecule flows on a cycle, ensuring steady state.
 %
@@ -365,11 +360,11 @@ It is possible that a different scheme for the dynamics could lead to a differen
 In contrast, here we seek understand properties of vesicle traffic networks over all possible update rules, not just for a sampled subset. 
 %
 We would also like to directly make statements about steady state properties, rather
-than using transition dynamics to first search for steady states. 
+than using transition dynamics to the first search for steady states. 
 %
 Formal verification tools like model checkers, SAT and SMT solvers serve precisely this purpose. 
 %
-The tools model the computation symbolically for the graphs of finite size and can make prediction about the hypothesis for all possible states of the system without explicit enumeration of rules. 
+The tools model the computation symbolically for the graphs of finite size and can make a prediction about the hypothesis for all possible states of the system without explicit enumeration of rules. 
 %
 
 \subsubsection{Size of the VTS system}
