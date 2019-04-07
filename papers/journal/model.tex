@@ -1,14 +1,14 @@
 \noindent In this section, we will present our formal model of VTS.
 %
 Our model attempts to capture only the relevant aspects of the
-system to develop understanding the flow structure of VTSs.
+system to develop an understanding of the flow structure of VTSs.
 %
 The model assumes that a cell consists of clearly defined compartments
 that are well stirred within themselves.
 %
 The model assumes that all chemical reactions get sufficient time to complete.
 %
-The model describes stable flow of molecules and does not
+The model describes the stable flow of molecules and does not
 capture the transient nature of VTSs.
 %
 The model also does not capture concentrations of the molecules and
@@ -18,12 +18,11 @@ only captures their presence or absence.
 In the model, the compartments are nodes of a graph
 and vesicles are the edges between the nodes.
 %
-There is a set of relevant molecules that participate in
-management of the VTS.
+There is a set of relevant molecules that participate in the management of the VTS.
 %
-Both nodes and edges are labelled with subsets of the molecules.
+Both nodes and edges are labeled with subsets of the molecules.
 %
-The molecules are activity and their control is defined using
+The molecules activity and their control is defined using
 activity functions and a pairing matrix.
 %
 
@@ -110,7 +109,7 @@ for each $(n,M',n') \in \edges$, $n \neq n'$ and
 $M' \subseteq \nlabel(n) \intersection \nlabel(n')$.
 %
 In addition to fuse compatibility, the well-structured property requires that
-here are no self loops, and 
+here are no self-loops, and 
 each edge carry only those molecules that are present in its source
 and destination nodes.
 %
@@ -135,7 +134,7 @@ to be on the other side of the fusion.
 % For example, the unique edge between two nodes, the activity of molecules is
 % not constrained by $\nodef$ and $\edgef$, etc.
 %
-
+%
 \vspace{0.2cm}
 %\subsection{Uniform}
 \noindent
