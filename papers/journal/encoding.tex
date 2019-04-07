@@ -1,16 +1,13 @@
 %\externaldocument{sat-table}
 %\externaldocument{smt-table}
 %\externaldocument{qbf-table}
-\noindent In the previous section, we have discussed four problems, $\fbmc$ search, $\fsmt$ search, $\fqbf$ search and synthesis problem.
+\noindent In the previous section, we have discussed in total four problems, $\fbmc$ search, $\fsmt$ search, $\fqbf$ search and synthesis problem.
 %
-In this section we will present encodings for each of them.
+In this section, we will present encodings for each of them.
 %
 Although the underlying technique for $\fbmc$ and $\fsmt$ search varies, the encoding is very similar. 
 %
-So, instead of presenting serially the complete encoding of both, 
-%$\fsmt$ search, $\fbmc$ search, $\fqbf$ search and synthesis problems.
-%
-we will start with the complete $\fsmt$ search encoding and present only the relevant part of the the $\fbmc$ encoding to show a contrast.
+So, instead of presenting serially the complete encoding of both, we will start with the complete $\fsmt$ search encoding and present only the relevant part of the $\fbmc$ encoding to show a contrast.
 %contrast with the $\fbmc$ encoding.
 
 \subsection{Encoding for $\fsmt$ search problem}
@@ -23,19 +20,18 @@ problem and use SMT solvers to find the satisfying VTSs.
 We will first present the variables used to encode the
 VTSs and the properties.
 %
-Afterwards, we will present the constraints corresponding to the
+Afterward, we will present the constraints corresponding to the
 properties.
 
 \subsubsection{Variables for VTS description}
 %
-We assume that size of the graph is $\nu$ and number of molecules is
+We assume that the size of the graph is $\nu$ and number of molecules is
 $\mu$.
 %
-Furthermore, we also limit the maximum number $\pi$ of edges present
+Furthermore, we also limit the maximum number of $\pi$ of edges present
 between two nodes.
 %
-Here, we list the vector of Boolean variables and uninterpreted function symbols
-that encode the VTSs.
+Here, we list the vector of Boolean variables and uninterpreted function symbols that encode the VTSs.
 \begin{enumerate}
 
 \item Boolean variable $n_{i,m}$ indicates if $m \in \nlabel(i)$
@@ -97,7 +93,7 @@ Self edges are not allowed.
 \noindent We define \texttt{EdgeC} to collect all the edge related constraints. 
 %
 \texttt{EdgeC} states that each edge has at least one molecule,
- edge labels are consistent with node labels and there are no self loops.    
+ edge labels are consistent with node labels and there are no self-loops.    
 \begin{align*}
   \texttt{EdgeC} = \texttt{PresentE} \land \texttt{LabelE}  \land \texttt{SelfE} 
 \end{align*}
@@ -146,7 +142,7 @@ be able to potentially fuse with any node other than its destination node.
 \bigvee_{\mathclap{j \neq j^{\prime}, m_{l+1}^{\prime},..,m_{4}^{\prime}}} ( a_{j^{\prime},m_{l+1}^{\prime}} \land .. \land a_{j^{\prime},m_4^{\prime}} \land p_{\{m_1,..,m_l,m^{\prime}_{l+1},..,m^{\prime}_4\}})
 \\
 \end{align*}
-We define \texttt{FusionC} to collect all the fusion related constraints.
+We define \texttt{FusionC} \change{Use of the word collect looks weird! change it.}to collect all the fusion related constraints.
 % 
 \texttt{FusionC} states that every edge in the graph is well-fused.
 \begin{align*}
@@ -172,9 +168,9 @@ We are considering several models of VTS that differ in types of regulations on 
 %We will present~\eqref{eq:ann}-~\eqref{eq:aep} that encodes
 %the varying constraints.
 %
-The activity of the molecules are controlled by activity functions.
+The activity of the molecules is controlled by activity functions.
 %
-We will have encoded five variation of the Boolean functions based on the biological discussion.
+We will have encoded five variations of the Boolean functions based on the biological discussion.
 %
 The concrete functions encoding is presented below.
 %
@@ -184,7 +180,7 @@ We will use \texttt{NodeFun}$_m$ and \texttt{EdgeFun}$_m$ for node and edge regu
 The following constraint encodes no conditions on activities on nodes,
 i.e., all the present molecules on the nodes are active.
 \begin{align*}
-\texttt{FunOnN} =& \bigwedge\limits_{i,m} n_{i,m} = a_{i,m}  
+\texttt{FunNoN} =& \bigwedge\limits_{i,m} n_{i,m} = a_{i,m}  
 \end{align*}
 The following constraint encodes that activity of a molecule $m$ on the node is
 defined by a Boolean function $\nodef_m$ of presence of molecules present on that node.
@@ -194,10 +190,9 @@ defined by a Boolean function $\nodef_m$ of presence of molecules present on tha
 The following constraint encodes no conditions on activities on edges,
 i.e., all the present molecules on the edges are active.
 \begin{align*}
- \texttt{FunOnE} =& \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} = b_{i,j,q,m}
+ \texttt{FunNoE} =& \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} = b_{i,j,q,m}
 \end{align*}
-The following constraint encodes that activity of a molecule $m$ on the edge is
-defined by a Boolean function $\edgef_m$ of presence of molecules present on that edge.
+The following constraint encodes that activity of a molecule $m$ on the edge is defined by a Boolean function $\edgef_m$ of the presence of molecules present on that edge.
 \begin{align*}
  \texttt{FunBfE} =& \bigwedge\limits_{i,j,q,m} e_{i,j,q,m} \limplies b_{i,j,q,m} = \edgef_k(e_{i,j,q,1}, .., e_{i,j,q,\mu} )
 \end{align*}
@@ -295,7 +290,7 @@ We define $\texttt{Connected}(k)$ that says graph is not k-connected.
 
 \subsection{Encoding for $\fbmc$ search problem}
 
-\noindent Our first attempt was to encode the existential condition as a $\fbmc$ search problem~\cite{shukla2017discovering}.
+\noindent Our first attempt was to encode the existential condition as a $\fbmc$ search \unsure{Should we cite it here or not?}problem~\cite{shukla2017discovering}.
 %
 %In this section we will present the $\fbmc$ encoding of the same.
 %The basic idea is to search the solution only upto a certain depth $w$. 
@@ -357,25 +352,25 @@ For example, the variable \texttt{bvEdge}$[i][j][q]$, represent the label of the
 %We leave the graph completely arbitrary and add the constraint to enforce that the graph is k-connected. 
 %
 %
-The value of the bit vector variable describe the presence of the corresponding molecules at that particular location. 
+The value of the bit vector variable describes the presence of the corresponding molecules at that particular location. 
 %
 For clarity, we consider the first part of the bit vector as Q-SNAREs and rest as R-SNAREs.
 %
-For an edge in the system with $M$ = 4 molecules, the variable \texttt{bvEdge}[0][2][1] = $1001$, means the molecule  $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) are present on the first edge between node 2 and node 1.
+For an edge in the system with $M$ = 4 molecules, the variable \texttt{bvEdge}[2][1][0] = $1001$, means the molecule  $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) are present on the first edge between node 2 and node 1.
 
-To specify the stability condition, we use nondeterminism to perform enumeration.
+To specify the stability condition, we use \improve{Nondet usage is not clear in the encoding. improve.}nondeterminism to perform enumeration.
 %
 %Nondeterminism can be viewed as an oracle that guesses a correct path for a specific $m$ if it exists. 
 %
 %We then use this path as a witness to ensures that stability is maintained for each outgoing molecule $m$ on every edge $E$.
 %
 %
-Note that the enumeration is done only for an unwinding depth $w$.
+Note that the enumeration is done only for an unwinding depth of $w$.
 %
 The encoding presented below is a simpler version of the implementation. 
 \subsubsection{Constraints for stability condition}
 %
-A path between node $i$ and $j$ in the graph is a $m$-$path_{ij}$, if molecule $m$ is present on edges along that path.
+A path between node $i$ and $j$ in the graph is an $m$-$path_{ij}$ if molecule $m$ is present on edges along that path.
 %
 %We use {\npath} to represent the required path to encode the stability condition in VTS.
 %
@@ -393,7 +388,7 @@ We use {\npath}$(m, i, j, w)$ to represent the presence of a $m$-$path_{ij}$ of 
 %
 $\npath(m, i, j, w)$ performs enumeration of every $m$-$path_{ij}$ of at most $w$ length. 
 %
-Starting with exploring $m$-${paths}_{ij}$ of length 1; a direct edge between $i$ and $j$ with molecule $m$ present, until every $m$-${paths}_{ij}$ of length $w-1$ is explored.
+Starting with exploring $m$-${paths}_{ij}$ of length 1; a direct edge between $i$ and $j$ with molecule $m$ present, until every $m$-${paths}_{ij}$ of length $w-1$ is explored.\change{m-path looks - sign in the align}
 %by performing series of node hops till final node destination j is reached.
 %Starting with $m$-${paths}_i^j$ of length 1 which is a direct edge between $i$ and $j$ with molecule $m$ present on the edge or performing series of node hops till final node destination j is reached.
 
@@ -420,7 +415,7 @@ The key improvement of the $\fsmt$ search encoding over the $\fbmc$ is the
 encoding of reachability.
 % which was done using an enumeration of paths.
 %
-In the $\fbmc$ encoding, reachability is encoded by enumerating all the possible paths using non-determinism.
+In the $\fbmc$ encoding, reachability is encoded by enumerating all the possible paths using \improve{Do not show up in the encoding}nondeterminism.
 %
 This encoding is non-optimal in the sense that in the worst case an exponential number of paths needs to be explored.
 %
@@ -431,9 +426,9 @@ The reachability is recursively defined in~$\texttt{FReach}(d,r')$ and has
 trivial solutions by making all $r'$s true.
 %
 However, the trivial solutions are disallowed by constraint~$\texttt{Connected}(r')$ and we find
-only the solutions that captures the evidence of non-reachability.
+only the solutions that capture the evidence of non-reachability.
 %
-On the other hand, we have added length of paths in our reachability encoding in constraint~$\texttt{Paths}(r)$, which needs relatively more auxiliary variables.
+On the other hand, we have added the length of paths in our reachability encoding in constraint~$\texttt{Paths}(r)$, which needs relatively more auxiliary variables.
 %
 This is because constraint~$\texttt{Loop}(r)$ has only positive
 occurrences of the reachability variables and if we had defined
@@ -458,17 +453,17 @@ activity of molecules on the nodes and edges.
 %
 \begin{enumerate}
 \item Every present molecule is considered to be active.
-\item Activity of molecules on the nodes is based on Boolean function of presence of other molecules. 
-\item Activity of molecules on the edges is based on Boolean function of presence of other molecules
-\item Activity of molecules both on the edges and nodes is based on Boolean function of presence of other molecules.
+\item Activity of molecules on the nodes is based on Boolean function of the presence of other molecules. 
+\item Activity of molecules on the edges is based on Boolean function of the presence of other molecules
+\item Activity of molecules both on the edges and nodes is based on Boolean function of the presence of other molecules.
 \item Activity of molecules on the edges is driven by pairing inhibition.
-\item Activity of molecules on the nodes is based on Boolean function of presence of other molecules and on edge by pairing inhibition.
+\item Activity of molecules on the nodes is based on Boolean function of the presence of other molecules and on edge by pairing inhibition.
 \end{enumerate}
 %
 % For the version A, every present molecule is in active state.
 %
 
-In the table~\ref{tab:var-grph}, we present the constraints involved in each version.
+In the Table~\ref{tab:var-grph}, we present the constraints involved in each version.
 %
 The column two of the table shows that the constraints $\texttt{EdgeC}$, $\texttt{ActivityC}$, $\texttt{PairingC}$, $\texttt{FusionC}$, $\texttt{StabilityC}$ and $\texttt{Connected}(k)$ are present for every variant.
 %
@@ -504,13 +499,13 @@ As an experiment, we have implemented a direct SMT version (encoding not present
 %
 The basic idea is to conjunct the formula for each combination value of the quantified variable. 
 %
-The table~\ref{tab:satqbf-graph}, shows the search results of this encoding for the universal condition with 4 nodes and 3-connected graphs. 
+The Table~\ref{tab:satqbf-graph}, shows the search results of this encoding for the universal condition with 4 nodes and 3-connected graphs. 
 %
 The connectivity constraint and connectedness constraints are tagged with subscript $U$, $\texttt{StabilityC}_{U}$, $\texttt{Connected}(k)_{U}$,  to distinguish from earlier presented encodings of existential condition.
 %
 The SMT extended version was not able to scale it to the desired results and either timed-out (T/O) or ran out of memory (M/O).
 %
-This can be due to the fact that directly translating a quantified formula into a quantifier-free  by introducing a vector of variables for each boolean possibility will blow up the size of the formula and may not be solvable by a solver.
+This can be due to the fact that directly translating a quantified formula into a quantifier-free by introducing a vector of variables for each boolean possibility \change{Increase the formula size exponentially.. the current statement is a repeat of the forth line. Improve.}will blow up the size of the formula and may not be solvable by a solver.
 %
 %
 \subsubsection{$\fqbf$ search encoding of the universal condition}
@@ -794,8 +789,7 @@ The property was proposed in~\cite{shukla2017discovering}.
 %
 However, the biological relevance of the property is debatable and open for change.
 %
-Our tool is easily modifiable to support any other property that may be deemed 
-interesting by the biologists.
+Our tool is easily modifiable to support any other property that may be deemed interesting by the biologists.
 
 \subsubsection{Encoding synthesis constraints}
 
@@ -851,7 +845,7 @@ the rest two are defined just above.
 A satisfying model of $\texttt{SynthE}$ will make 
 some of the edges in $\texttt{AbsentE}$ true such that~$\texttt{Property}$ is satisfied.
 %
-We limit the addition of the edges, since we look for a fix that require minimum number
+We limit the addition of the edges since we look for a fix that requires a minimum number
 of changes in the given VTS.
 %
 We start with $slimit = 1$ and grow one by one until $\texttt{SynthE}(slimit)$
@@ -936,7 +930,7 @@ where $z$ is the vectors of parameters for encoding parameters
 for each molecule,
 and $\lambda$ limits the size of the candidate functions. 
 %
-We fix the all other aspects of the VTS to be fixed via constraints
+We fix all other aspects of the VTS to be fixed via constraints
 $\texttt{FixedForFunctions}$.
 %
 \begin{align*}
