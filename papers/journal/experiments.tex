@@ -156,7 +156,8 @@ learning activity functions.
 The tool returns a complete VTS with visual graph representation as an output to the user.  
 
 \subsection{Results}
-\noindent The results and timings of three blocks of the {\vtstool} are presented in the table~\ref{tab:smt-grph} and table~\ref{tab:satsmt-graph}, for both {\sattool} and {\smttool}, in table~\ref{tab:qbf-graph} for {\qbftool} and in table~\ref{tab:synth-graph} for~{\ourtool}.
+\noindent The results and timings of {\sattool} and {\smttool} is presented in the Table~\ref{tab:smt-grph} and Table~\ref{tab:satsmt-graph} respectively.
+The Table~\ref{tab:qbf-graph} present the results for {\qbftool} and Table~\ref{tab:synth-graph} for~{\ourtool}.
 
 
 %To illustrate usability of our tool in the last column of the Table~\ref{tab:smt-grph}, we present the minimum connectedness needed for the different variants after applying our tool for sizes from 2 to 10. 
@@ -173,26 +174,24 @@ The tool returns a complete VTS with visual graph representation as an output to
 
 \input{smt-table}
 
-The minimal connectivity results for each variation of the existential condition are presented in table~\ref{tab:smt-grph}.
+The minimal connectivity results for each variation of the existential condition are presented in Table~\ref{tab:smt-grph}.
 %
-%No matter what the rules of molecular interactions and regulation, steady state requires the graph structure to be at least strongly connected, and therefore 2-connected.
-The steady-state constraint requires that structure of the graph is at least 2-connected. 
+The steady-state constraint requires that the structure of the graph is at least 2-connected. 
 %
 We found that 3-connectedness is the existential condition for the Boolean regulation model on vesicles, while 4-connectedness is the existential condition for the more constrained SNARE-SNARE inhibition on vesicles and Boolean regulation on compartments.
 %Beyond this, we find that 3-connectedness is existential condition for the Boolean regulation model on vesicles, while 4-connectedness is existential condition for the more constrained SNARE-SNARE inhibition on vesicles and Boolean regulation on compartments.
 %
 For all other constrained regulation models of VTS, the experimentation was unable to find any graphs representing the vesicle transport networks in the stable state.
-%(including the case where SNAREs are always active) we did not find any possible graphs representing stable vesicle transport networks. 
 %
 This strongly suggests that no such graphs exist, as our graphs are of finite size, this does not amount to a  proof. 
 
-For biological cells, the steady state condition implies that every compartment that gives a vesicle necessarily receives a vesicle too.
+\unsure{The bio discussion looks pale and irrelevant!}For biological cells, the steady state condition implies that every compartment that gives a vesicle necessarily receives a vesicle too.
 %
 On top of this, for the case where traffic molecules are regulated in some form, every pair of compartments with a vesicle going between them, have two additional vesicle paths connecting them; where these two paths go in opposite directions.
 %
 Finally, when we take into account the exact manner in which SNAREs interact in real cells, we find that the biological VTS must conform to a very specific structure; any two compartments that are connected by a vesicle, must be connected by 4 vesicle paths, two of them going in the same direction, and the other two in the opposite direction. 
 %
-No graph results suggests that a functional VTS necessarily needs some form of regulation, where the molecules of the VTS are kept inactive in places where they might disrupt other interactions
+No graph results suggest that a functional VTS necessarily needs some form of regulation, where the molecules of the VTS are kept inactive in places where they might disrupt other interactions
 
 %This strongly suggests (but does not prove, since we only checked graphs of finite size) that no such graphs exist.
 %We have found no graphs for Variants A where no regulation is enforced on the activity of the molecules both on the edges and nodes.
@@ -205,45 +204,34 @@ No graph results suggests that a functional VTS necessarily needs some form of r
 
 
 %
-Table~\ref{tab:satsmt-graph} presents the comparison of the running times of {\smttool} and {\sattool} on VTS variations of sizes 2 to 10.
+The Table~\ref{tab:satsmt-graph} presents the comparison of the running times of {\smttool} and {\sattool} on VTS variations of sizes 2 to 10.
 %
-For this comparison we have fixed the total number of molecules minimum four times the node count 
-%for $ |N|> 2$ and $2|N| + 1$ for $|N| = 2$
+For this comparison, we have fixed the total number of molecules minimum four times for each SNARE type of the node count. 
 %
-%For each variant, we fix 1
-and maximum number of parallel
-edges to be 2.
+The maximum number of parallel edges is 2.
 %
 %For our analysis we relax the 3:1 requirement for the Q and R-SNARES and treat a Q-SNARE triple helix as a single complex as modelled in~\cite{shukla2017discovering}.
 %
 %The 
 %
 In the table M/O indicates the search results in out of memory, T/O indicates a time out and ``!'' indicate that no model exists for the constraint  (constraints were unsatisfiable).
-%In the table we have shown comparison for specific connectivity, for example variant A is checked against any graph with connectivity 2, variant B with connectivity 3 similarly for the rest of the variants.
 %
-%We have compared our performance with the performance of our earlier CBMC based implementation (old-encoding).
-%
-As an example, the result of verifying the formula for variation C of 2-connected, 10 compartment graph took 1977.72 secs for a satisfying result.
+As an example, the result of verifying the formula for variation C of 3-connected, 10 compartment graph took 1977.72 secs for a satisfying result.
 %
 In comparison, {\sattool} was unable to solve the instance and ran out of memory.
-% for $|N|$ greater than 5.
 %
-% 
 The recursive encoding also performed better for the cases where the instance was unsatisfiable (Variant A timing comparison).
-%instead of enumeration, not only we got efficiency improved for finding a SAT model but also did better in the case of refutation that no model exist (table~\ref{tab:satsmt-graph} Variant A timing comparison and Variant D with N =2). 
 %
-Hence with the use of improved encoding of reachability, we were able to scale the system to the biologically relevant compartment size, the
-%a much larger compartmentalized system, especially to interesting 
-the case of eukaryotic cells with a total number of 10 compartments.
+Hence with the use of improved encoding of reachability, we were able to scale the system to the biologically relevant compartment size, the case of eukaryotic cells with a total number of 10 compartments.
 %
-Furthermore, we experimented with limits of our tools and found that {\smttool} was able to solve the constraints up to $18$ nodes.
+Furthermore, we experimented with the limits of our tools and found that {\smttool} was able to solve the constraints up to $18$ nodes.
 
 \input{qbf-table}
 %\textbf{Universal Condition:}
 
-Table~\ref{tab:qbf-graph} presents the result of the QBF tool.
+The Table~\ref{tab:qbf-graph} presents the result of the QBF tool.
 %
-The table represents the result of the graph connectivity for each variation of the VTS.  
+The result of the graph connectivity for each variation of the VTS is shown.  
 %
 For example, we found that the 3-connected graph satisfies the universal condition for the variation 2. 
 %
@@ -253,7 +241,7 @@ For every other version, the results remained the same.
 %
 This implies that for every 3-connected graph there is a valid VTS that satisfies all the constraints of the system.
 % 
-For biological cells, this means that the whole space of 3-connected graphs is available for evolutionary exploration
+For biological cells, this means that the whole space of 3-connected graphs is available for evolutionary exploration.
 %
 %The experimentations were done using two QBF solvers: \depqbf and \rarqbf.
 
@@ -263,16 +251,11 @@ For biological cells, this means that the whole space of 3-connected graphs is a
 
 We have applied~\ourtool~on seven partially defined VTSs.
 %
-The results are presented in Fig~\ref{tab:synth-graph} for both the solvers
+The results are presented in Figure~\ref{tab:synth-graph} for both the solvers
 \depqbf and \zthree.
 %
 To use~\zthree, we remove \texttt{Connected} constraints, such that the queries becomes
 quantifier-free.
-%
-% The experiments were conducted on a machine,
-% with \ashu{?}MHz processor, \ashu{?}GB memory, and 900s timeout.
-%
-%The experiments were conducted with a 900s timeout.
 %
 The first four and the sixth VTSs are synthetic but inspire from literature for
 typical motifs in VTSs. 
@@ -284,7 +267,7 @@ The fifth VTS is taken from~\cite{burri2004complete}.
 %
 The last VTS represent mammalian SNARE map created by studying the literature references.  
 %
-The fig shows timing for various synthesis queries.
+The figure shows timing for various synthesis queries.
 %
 For each synthesis query, we have two columns.
 %
@@ -292,12 +275,10 @@ One column reports the timing and the other reports the minimum changes needed t
 %
 $\infty$ indicates that any number of changes with the synthesis query
 search space can obtain the VTS.
-%
-%\ashu{@ankit: please discuss all the synthesis queries in the table.}
 
-In the Fig~\ref{tab:synth-graph}, we report five synthesis queries.
+In the Figure~\ref{tab:synth-graph}, we report five synthesis queries.
 %
-The first one only adds new labelled edges to the graph.
+The first one only adds new labeled edges to the graph.
 %
 We have ranked the all possible graph edits with the simple rank of
 minimum updates.
@@ -306,8 +287,6 @@ minimum updates.
 % and nine new molecules in 210s.
 %
 The second query adds new labels to the edge.
-%  and was able to
-% fix the graphs with eleven new molecule labels in 180s.
 %
 The third query synthesizes NNF Boolean functions only containing
 $\land$ and $\lor$ gates for activity functions, while allowing
@@ -315,15 +294,10 @@ more edges to be added.
 %
 The result shows the basic template of 4 leaves and 3 gates.
 %
-% The tool was able to synthesize the Boolean functions in 470s.
-%
 To illustrate the versatility of our tool, the fourth query
 synthesizes $3$-CNF functions (encoding not presented).
-%  and was able to
-% synthesis the results for all graphs in 500s.
 %
-Finally, we report queries that allows both addition and deletion of edges, and labels
-of node and labels. 
+Finally, we report queries that allow both addition and deletion of edges and labels of node and labels. 
 
 %Each completed graph is a prediction of our model. For every single incomplete graph, there are multiple ways to complete it, although, in this paper, we output the minimum number of changes required to complete the input graph.
 %%
@@ -341,7 +315,6 @@ These results are intended to be used as guides for further discoveries, where t
 %Our experiments suggest that the synthesis problems are solvable by modern 
 %solvers and the synthesis technology may be useful for biological research.
 %
-
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"
