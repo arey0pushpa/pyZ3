@@ -1,8 +1,8 @@
 \noindent This section will present the different search problems of VTS.
 %
-We categorize the search problem, Figure~\ref{fig:vts-search} into three different categories, search problem for existential condition, search problem for universal condition, and performing synthesis on the incomplete VTS. 
+We categorize the search problem (Figure~\ref{fig:vts-search}) into three different categories, search problem for the existential condition, search problem for the universal condition, and performing synthesis on the incomplete VTS. 
 %
-We will present two encodings for existential condition and one each for universal condition condition and synthesis.
+We will present two encodings for existential condition and one each for universal condition and synthesis.
 
 \begin {figure}[!h]
 \centering
@@ -39,14 +39,14 @@ We will present two encodings for existential condition and one each for univers
 	}
     [\textbf{VTS Search \\ Problems}, fill=white!20, parent, s sep=1mm,
 	[\textbf{1.Existential Condition}, for tree={fill=fv, child}, 
-	[BMC Sec.6.2, for tree={fill=ai, child}]
-	[SMT Sec.6.1\\, for tree={fill=ai, child}]
+	[BMC Section 6.2, for tree={fill=ai, child}]
+	[SMT Section 6.1\\, for tree={fill=ai, child}]
 	]
 	[\textbf{2.Universal Condition}, for tree={fill=fv, child},
-	[QBF \\ Sec.6.3, for tree={fill=ai, child}]
+	[QBF \\ Section 6.3, for tree={fill=ai, child}]
 	]
 	[\textbf{3.VTS Synthesis}, for tree={fill=fv,child}, 
-	[Synthesis Sec.6.4, for tree={fill=ai, child}]
+	[Synthesis Section 6.4, for tree={fill=ai, child}]
 	]
 	]
 \end{forest}
@@ -75,10 +75,9 @@ First, using the bounded model checking (BMC) technique~\cite{biere1999symbolic1
 %It  represents the executions of a program symbolically and 
 %
 %The Bounded model checking technique
-BMC is an automatic technique that performs a search for the violation of the property in the program executions whose length is bounded by some fixed positive integer value $w$ (\textit{unwinding depth}). 
+\improve{The violation connect to search for the VTS; what about counterexamples?}BMC is an automatic technique that performs a search for the violation of the property in the program executions whose length is bounded by some fixed positive integer value $w$ (\textit{unwinding depth}). 
 %
 The bounded execution is represented symbolically as a propositional formula and solved using a SAT solver.
-% is used to check the satisfiability of the resultant propositional formula.
 %
 In case there is no violation for a particular depth, one can progressively increase the depth until either property is violated, the problem becomes intractable, or an upper bound of the system is reached, indicating the satisfiability of the property.
 %
@@ -87,7 +86,7 @@ For our case, the unwinding depth is the length of the path of the underline gra
 %
 For the experimentation, we restrict the check only to the elementary cycles; cycles of length one. 
 %
-This restriction puts an upper limit of number of nodes, $N$ on the length of the searched path. 
+This restriction puts an upper limit of the number of nodes on the length of the searched path. 
 %
 %
 %and the upper bound is the number of nodes $N$.
@@ -98,17 +97,17 @@ The search problem is to find an assignment of variables that satisfies all the 
 %
 We have used a form of this technique called satisfiability modulo theories (SMT)~\cite{nieuwenhuis2006solving, barrett2018satisfiability}.
 %
-The SMT is a generalization of Boolean satisfiability problem with domain-specific reasoning, for example, support for uninterpreted functions, equality, arithmetic and data structures like arrays, bit-vectors etc. 
+The SMT is a generalization of Boolean satisfiability problem with domain-specific reasoning, for example, support for uninterpreted functions, equality, arithmetic and data structures like arrays, bit-vectors, etc. 
 %
 %It includes formulas with variables from other domains, including real numbers, integers, and support for various data structures such as lists, arrays, bit vectors.
 % is satisfiability of formulas with respect to some background theory.
 %
-Throughout the paper we will address these two subcategories as $\fbmc$ and $\fsmt$ search problems.
+Throughout the paper, we will address these two subcategories as $\fbmc$ and $\fsmt$ search problems.
 %The existential condition search problem is represented as a bounded model checking and constraint solving. 
 %
 %Based upon earlier discussion, we need to answer the following search question among VTSs.
 %
-Here, we will present both $\fbmc$ and $\fsmt$ search problem for the existential condition.
+Here, we present both the $\fbmc$ and $\fsmt$ search problem for the existential condition.
 
 \subsubsection{$\fbmc$ search problem.}
 For a given $k$, size $\nu$, molecule number $\mu$, and unwinding depth $w$,
@@ -179,7 +178,7 @@ For example, some undiscovered edges or nodes, or insufficient
 knowledge about the presence of molecules in some part of the VTS.
 %
 To cover most of the likely variations of this missing information,
-we have encoded the following variants of VTS synthesis problem.
+we have encoded the following variants of the VTS synthesis problem.
 
 \begin{enumerate}
 	\item Fixing VTS by adding edges 
