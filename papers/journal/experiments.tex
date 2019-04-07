@@ -10,9 +10,9 @@ The tool is divided into three different blocks,
 %
 checking existential condition, checking the universal condition and performing synthesis on the incomplete VTS. 
 %
-The existential condition is subdivided into two sub-block, bounded model checking and constraint solving. 
+The existential condition is subdivided into two sub-blocks, bounded model checking and constraint solving. 
 %
-We will refer to existential subblocks as {\sattool} and {\smttool}, universal block as {\qbftool} and synthesis block as {\ourtool}.
+We will refer to existential subblocks \unsure{The fonts of toolset looks different make them uniform. The reason is valid although.}as {\sattool} and {\smttool}, universal block as {\qbftool} and synthesis block as {\ourtool}.
 %
 
 
@@ -34,7 +34,9 @@ and perform path enumeration to encode the reachability.
 %is based on 
 %industrial strength SMT solver, Z3, that uses a 
 %recursive encoding of finding a least fixed point to encode the same. 
-The second encoding is implemented in {\smttool} and employs a recursive encoding of finding a least fixed point for the reachability. 
+The second encoding is implemented in {\smttool} and employs a recursive encoding
+% of finding a least fixed point 
+for the reachability. 
 %
 %The encoding is implemented in {\smttool}.
 % and uses industrial strength SMT solver, Z3.
@@ -61,16 +63,18 @@ A 45 min (2700 sec) timeout was used for the tool.
 %\input{tab:satqbf-grabh}
 %\ExecuteMetaData[result-table.tex]{tab:satqbf-grabh}
 
-\textbf{{\sattool (Bounded model checker based tool)}}
-The $\fbmc$ encoding based on enumeration of paths (presented in section 6.2) for each variants of VTS is implemented in {\sattool}.
+%\textbf{{
+\subsubsection{{\sattool} (Bounded model checker based tool)}
+%}}
+The $\fbmc$ encoding based on enumeration of paths (Section~\ref{enc:bmc}) for each variants of VTS is implemented in {\sattool}.
 	%We have implemented the encodings for different variants of VTS (presented in section 6.2) using
 The tool is based on CBMC, a successful bounded model checker, for C and C++ programs. 
 %
 %Unlike a general model checker~\cite{cimatti2002nusmv}, CBMC
 %
-It verify property for all the possible states, up to a certain “depth,” a parametric limit on the size of the model.
+It verifies property for all the possible states, up to a certain “depth,” a parametric limit on the size of the model.
 %
-The depth of model is specified by the user and can be  incrementally increased to a desired value.
+The depth of the model is specified by the user and can be incrementally increased to the desired value.
 %
 %The CBMC architecture consists of a C-language front-end (CFE) and a SAT Solver back-end (SAT). 
 %
@@ -80,7 +84,7 @@ The depth of model is specified by the user and can be  incrementally increased 
 %
 %These annotations express constraints on the model and properties to be checked. 
 %	
-The vesicle transport network was modelled as a non-deterministic C-program manipulating an annotated graph. 
+The vesicle transport network was modeled as a non-deterministic C-program manipulating an annotated graph. 
 %
 The special annotations \textit{assumes} and \textit{assertions} of CBMC's front end were used to express constraints on the model and properties to be checked. 
 %
@@ -99,33 +103,31 @@ The satisfying model is translated into a human readable format and in case of a
 %	\item Check (using a SAT solver) validity of the verification condition. {\sattool} reports successful verification if the formula is found to be valid. If not, then {\sattool} produces a counterexample,
 %an assignment to the variables of the model, that is a witness to the violation of the property.
 %	\end{itemize}
-For our experimentation purpose, the SAT solver backend used were MiniSat~\cite{sorensson2005minisat}, and CryptoMiniSat~\cite{soos2016cryptominisat}.
+For our experimentation purpose, the SAT solver backend used were MiniSat~\cite{sorensson2005minisat} and CryptoMiniSat~\cite{soos2016cryptominisat}.
 % the winner of SAT 2015 Competition~\cite{balyo2016sat}. 
 
 %CBMC has a built-in SAT solver called MiniSat~\cite{sorensson2005minisat}, but it is also possible to use various other SAT solver blackboxes for property verification. Besides using MiniSat as a default SAT solver for our model, we have used different SAT solvers for the verification of the property, particularly CryptoMiniSat~\cite{soos2016cryptominisat} which was the winner of SAT 2015 Competition~\cite{balyo2016sat}. 
 %		MiniSat performed satisfactorily in comparison to other SAT solvers.
 
-\textbf{{\smttool} (SMT based tool)}
-The $\fsmt$ encoding based on recursive reachability definition (presented in section 6.1)  
-%We have implemented the encodings 
-for each variant is implemented in {\smttool}.
+\subsubsection{{\smttool} (SMT based tool)}
+The $\fsmt$ encoding based on recursive reachability definition (Section~\ref{enc:smt})  for each variant is implemented in {\smttool}.
 %
 The tool is based on industrial strength SMT solver, Z3. 
 %
 The tool allows the user to choose a model and the size
 of the network besides other parameters like connectivity and number of parallel edges. 
-%		
-It uses Z3 Python interface to build the needed constraints and applies Z3 solver on the constraints to find a model (a satisfying assignment that follows the constraints). 
+%        
+It uses the Z3 Python interface to build the needed constraints and applies Z3 solver on the constraints to find a model (a satisfying assignment that follows the constraints). 
 %
 This tool also translates the satisfying model found by Z3 into
-a VTS and represent a visual output to the user in form of coloured annotated graph. 
+a VTS and represent a visual output to the user in the form of a colored annotated graph. 
 %
 %We also visually report the dropped edges required to disconnect the graph, it gives information about the connectivity of the graph.
 %
  
 
-\textbf{{\qbftool} (QBF based universal condition)}
-The $\fqbf$ encoding (presented in section 6.5) is implemented in the {\qbftool}. 
+\subsubsection{{\qbftool} (QBF based universal condition)}
+The $\fqbf$ encoding (Section~\ref{enc:univ-cond}) is implemented in the {\qbftool}. 
 %
 The tool is developed in C++ and uses~\zthree~\cite{z3} infrastructure to encode the constraints.
 %
@@ -136,9 +138,9 @@ QDIMACS~\cite{qdimacs} format and use QBF solvers to solve the formula.
 %
 We have used~\depqbf~\cite{lonsing2010depqbf} for solving QBF formulas with alternation of quantifiers. 
 
-\textbf{{\ourtool} (QBF based synthesis tool)}
+\subsubsection{{\ourtool} (QBF based synthesis tool)}
 \input{synth-table}
-The synthesis encodings (presented in section 6.6) is implemented  in~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
+The synthesis encodings (Section~\ref{enc:synth}) is implemented  in~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
 %
 The tool takes a partially defined VTS as input in a custom designed
 input language.
