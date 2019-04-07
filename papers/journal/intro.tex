@@ -368,7 +368,7 @@ The tools model the computation symbolically for the graphs of finite size and c
 %
 
 \subsubsection{Size of the VTS system}
-Let us discuss rough sizes of the system and expected behaviors.
+Let us discuss the rough sizes of the system and expected behaviors.
 %%
 %A typical VTS may have about 10 compartments.
 %%
@@ -385,18 +385,18 @@ Let us discuss rough sizes of the system and expected behaviors.
 %the presence of ~2-3 other molecules.
 A typical eukaryotic cell contains 9 organelles; the ER, the cis-, medial- and trans-Golgi, the early, late and recycling endosomes, the lysosome and the plasma membrane~\cite{lodish2008molecular}. 
 %
-The organellar content of cells vary across different organisms, for example, parasitic cells such as Trypanosomes have specialized secretory organelles called rhopteries and micronemes~\cite{gubbels2012evolution}. 
+The organellar content of cells varies across different organisms, for example, parasitic cells such as Trypanosomes have specialized secretory organelles called rhoptries and micronemes~\cite{gubbels2012evolution}. 
 %
 The organellar content may also vary across different states of the same cell, for e.g., during cell division, the Golgi apparatus disintegrates into vesicles~\cite{tang2013cell}. 
 %
-Also, across different cell-types, these organelles may be more or less differentiated, for example, number of stacks in the Golgi vary across different cells~\cite{polishchuk2004structural}. 
+Also, across different cell-types, these organelles may be more or less differentiated, for example, the number of stacks in the Golgi varies across different cells~\cite{polishchuk2004structural}. 
 %
 
 Going by the above description, we can assume that the VTS has of the order of 10 compartments. 
 %
-The VTS transports a large number of molecules but the molecules that actively control the system are in their tens [MBOC]. 
+The VTS transports a large number of molecules but the molecules that actively control the system are in their tens \change{What is this? A drug?}[MBOC]. 
 %
-By definition the activity of any VTS molecules can be controlled by all other molecules.
+By definition, the activity of any VTS molecules can be controlled by all other molecules.
 %
 However, in practice the activity of a molecule is directly controlled by 2-3 other molecules; for example, adaptor proteins are recruited to compartments by lipids of the compartment membrane and by ARF/SAR GTPases~\cite{kahn2009toward}. 
 %
@@ -428,36 +428,37 @@ We use the above information during the encoding of all search problems presente
 %
 %Here we have build an {\em efficient} tool that studies properties of VTSs that are not $k$-connected, from some $k$. 
 \subsection{Synthesis of VTS }
-\noindent The current picture of the vesicle transport network is far from complete; we do not yet know how many of the cellular proteins reach their resident compartments within the cell, and new vesicle routes are being discovered every year ~\cite{nickel2018unconventional,weill2018toolbox}. 
+\noindent The current picture of the vesicle transport network is far from complete; we do not yet know how many of the cellular proteins reach their resident compartments within the cell, and new vesicle routes are being discovered every year~\cite{nickel2018unconventional,weill2018toolbox}. 
 %
 Completing the vesicle traffic network is a difficult task for the many important reasons: 
 \begin{enumerate}
-	\item The core vesicle transport network is conserved across eukaryotes, the traffic network in different organisms \cite{richardson2015evolutionary,nishimoto2009differential,barlow2017seeing}, and even in different cell types within an organism can be different ~\cite{stoops2014trafficking,zhou2015arp2}.
-	
-	\item Although the basic molecular machinery is the same for all vesicle fusion events, the details of regulation can be different~\cite{davletov2007regulation,di2010calcium}.
-	
-	\item Molecules can have redundant routes within the cell ~\cite{shimizu2014compensatory,nakatsukasa2014nutrient}.
-	\item Behaviour of traffic molecules in vitro is different from their behaviour inside cells ~\cite{furukawa2014multiple}. 
-	
-	
-	\item It can be difficult to distinguish between the direct and indirect effects of experiments involving knock-downs or knock outs of traffic molecules \cite{hirst2004epsinr,mishev2013small}.
+    \item The core vesicle transport network is conserved across eukaryotes, the traffic network in different organisms~\cite{richardson2015evolutionary,nishimoto2009differential,barlow2017seeing}, and even in different cell types within an organism can be different~\cite{stoops2014trafficking,zhou2015arp2}.
+    
+    \item Although the basic molecular machinery is the same for all vesicle fusion events, the details of regulation can be different~\cite{davletov2007regulation,di2010calcium}.
+
+    \item Molecules can have redundant routes within the cell~\cite{shimizu2014compensatory,nakatsukasa2014nutrient}.
+    \item Behaviour of traffic molecules in vitro is different from their behavior inside cells~\cite{furukawa2014multiple}. 
+        
+    \item It can be difficult to distinguish between the direct and indirect effects of experiments involving knock-downs or knockouts of traffic molecules \cite{hirst2004epsinr,mishev2013small}.
 \end{enumerate}
 
 Nonetheless, completing the vesicle traffic network for different organisms is very useful. 
 %
 Many diseases are caused by the malfunction of the vesicle traffic network. 
 %
-Knowledge of the complete network would be helpful in identifying the root causes~\cite{bexiga2013human,gissen2007cargos}. 
+Knowledge of the complete network would be helpful in identifying the root causes of ~\cite{bexiga2013human,gissen2007cargos}. 
 %
-At a more basic level, having complete pictures of the vesicle traffic system for various organisms and various cell-types would allow comparative studies, and therefore would allow the deduction of modes of evolution of the form of the traffic network, and would also allow us to decipher features such as parts of the traffic system that are unchanging, and therefore likely to be its core, and parts that are more plastic \cite{barlow2017seeing}.
+At a more basic level, having complete pictures of the vesicle traffic system for various organisms and various cell-types would allow comparative studies, and therefore would allow the deduction of modes of evolution of the form of the traffic network. 
+%
+This would also allow us to decipher features such as parts of the traffic system that is unchanging, and therefore likely to be its core, and parts that are more plastic \cite{barlow2017seeing}.
 
 %\subsection{Synthesis of VTS:}
 %
 The set of basic constraints the VTS should follow is dictated by underlying cell biology.   
 %
-In order to attempt to complete a given partial VTS we have to first agree on the properties that every complete VTS should follow in spite of the basic constraints. 
+In order to attempt to complete a given partial VTS, we have to first agree on the properties that every complete VTS should follow in spite of the basic constraints. 
 %
-We can use our stability and k-connectivity constraints as a basis for this investigation.   
+We can use our stability and k-connectivity \info{do you think use of constraint is well stated? very Minor!}constraints as a basis for this investigation.   
 %
 The incomplete VTS might not respect these constraints. 
 %
@@ -467,15 +468,16 @@ We output various completed versions of VTS against these properties which can t
 %
 \begin{example}
 	%
-	In figure~\ref{fig:synth-vts1}, we present a partial input VTS that has 3 compartments. Figure~\ref{fig:synth-vts2} present it's complete output VTS. 
-	%
-	The synthesis is performed against the steady state property and 3-connectivity. The tags PM, EE, and LE represent the corresponding nodes (please refer to Appendix~\ref{sec:ex-vts} for proper discussion about the nodes and molecules depicted in the diagram). 
-	%
-	Synthesized edge is in red color and synthesized molecules are represented with blue.
-	%
-	The synthesis added one edge and 7 molecules to complete the partial VTS.
-	%
-	For clarity, we have not presented the activity of molecules, the corresponding pairing matrix and remaining molecules on the nodes.
+    In figure~\ref{fig:synth-vts1}, we present a partial input VTS that has 3 compartments. Figure~\ref{fig:synth-vts2} present it's complete output VTS. 
+    %
+    The synthesis is performed against the steady state property and 3-connectivity. 
+    %The tags PM, EE, and LE represent the corresponding nodes (please refer to Appendix~\ref{sec:ex-vts} for a proper discussion about the nodes and molecules depicted in the diagram). 
+    %
+    Synthesized edge is in red color and synthesized molecules are presented in blue.
+    %
+    The synthesis adds one edge and 7 molecules to complete the partial VTS.
+    %
+    For the sake of clarity, we have not presented the activity of molecules, the corresponding pairing matrix and remaining molecules on the nodes.
 	
 \end{example}
 \input{synth-dia}
@@ -488,23 +490,20 @@ two found-in-nature VTSs.
 Our experiments suggest that some of the synthesis problems are solvable by modern solvers and the synthesis technology may be useful for biological research.
 %
 
+%
 The rest of the paper is organized as follows. 
 %
-In Sect.~\ref{sec:prelim}, we present the notations we use in this paper. 
+In Section~\ref{sec:prelim}, we present the notations we use in this paper. 
 %
-In Sect.~\ref{sec:model}, we present graph model of VTSs and  properties of interest in Sect.~\ref{sec:property}.
+In Section~\ref{sec:model}, we present a formal model of VTSs and in Section~\ref{sec:property} the properties of interest.
 %
-%encoding of several constraints on VTSs. 
+In Section~\ref{sec:problem}, we present the formal problem statements of different search problems of VTS.
 %
-%In , we present the
+In Section~\ref{sec:encoding}, we present the encodings of corresponding search problems. 
 %
-In Sect.~\ref{sec:problem}, we present the complete formal problem statement of the verification properties.
+In Section~\ref{sec:experiments}, we present our implementation and experimental results. 
 %
-In Sect.~\ref{sec:encoding}, we present the encoding of BMC, SMT, QBF and Synthesis into SAT, SMT and QBF satisfiability. 
-%
-In Sect.~\ref{sec:experiments}, we present our implementation and experimental results. 
-%
-In Sect.~\ref{sec:related}, we discuss related work and conclude in Sect.~\ref{sec:conclusion}.
+In Section~\ref{sec:related}, we discuss related work and conclude in Section~\ref{sec:conclusion}.
 %
 %%% Local Variables:
 %%% mode: latex
