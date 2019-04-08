@@ -505,7 +505,7 @@ The connectivity constraint and connectedness constraints are tagged with subscr
 %
 The SMT extended version was not able to scale it to the desired results and either timed-out (T/O) or ran out of memory (M/O).
 %
-This can be due to the fact that directly translating a quantified formula into a quantifier-free by introducing a vector of variables for each boolean possibility \change{Increase the formula size exponentially.. the current statement is a repeat of the forth line. Improve.}will blow up the size of the formula and may not be solvable by a solver.
+This can be due to the fact that directly translating a quantified formula into a quantifier-free by introducing a vector of variables for each boolean possibility can lead to exponential increase in the formula size.
 %
 %
 \subsubsection{$\fqbf$ search encoding of the universal condition}
