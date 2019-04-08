@@ -402,7 +402,7 @@ Starting with exploring $m$-${paths}_{ij}$ of length 1; a direct edge between $i
 %\bigvee\limits_{l = 1}^{|path| - 1} |m-path| = l
 %
 \begin{align*}
-\npath(m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} (\texttt{Length} (m-path_{ij}) == l)
+\npath(m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} (\texttt{Length} (m \mhyphen path_{ij}) == l)
 \end{align*}
 
 We encode stability using \npath. For every edge with $m^{th}$ molecule present between node $i$ and $j$ then there exists a $m$-$path_{ji}$ of maximum $w$ length.
