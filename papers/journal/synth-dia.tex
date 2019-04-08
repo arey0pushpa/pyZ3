@@ -30,12 +30,12 @@
 	  \node[main node, text width=1.3cm] (le) [above of=ee,yshift=-10mm,xshift=20mm] {$\mathbf{N_{2}}$: { {$Q_{a8}$} {$Q_{b8}$} {$Q_{c8}$}}};
 	
 	  %le <-> pm
-	  \path (le) edge[bend right=55] node [above] {$Q_{b7}$, $Q_{c7}$} (pm);
-	  \path (ee) edge[bend right=32, text width=1.8cm] node [below,right=0.1] {{$R_{8}$}, $Q_{a7}$, $Q_{b7}$, $R_{7}$} (le);
+	  \path (le) edge[bend right=55] node [above] {$Q_{bc7}$} (pm);
+	  \path (ee) edge[bend right=32, text width=1.8cm] node [below,right=0.1] {{$R_{8}$}, $Q_{a7}$, $Q_{bc7}$, $R_{7}$} (le);
 	
 	  %pm <-> ee
 	  \path (ee) edge[bend left=32] node [below] {{$R_{3}$}} (pm);
-	  \path (pm) edge[bend left=30, text width=2.1cm] node [above,rotate=-45] {{$R_{2}$}, {$Q_{a7}$}, $Q_{bc7}$, $R_{7}$, $Q_{c7}$, $Q_{a2}$} (ee);
+	  \path (pm) edge[bend left=30, text width=2.1cm] node [above,rotate=-45] {{$R_{2}$}, {$Q_{a7}$}, $Q_{bc7}$, $R_{7}$, $Q_{a2}$} (ee);
 	\end{tikzpicture}
 	\caption{Input partial VTS} 
 		 \label{fig:synth-vts1}
@@ -52,19 +52,19 @@
 	  	  \node[main node, text width=1.3cm] (le) [above of=ee,yshift=-10mm,xshift=20mm] {$\mathbf{N_{2}}$: { {$Q_{a8}$} {$Q_{b8}$} {$Q_{c8}$}}...};
 	  
 	  %le <-> pm
-	  	  \path (le) edge[bend right=45] node [above] {$Q_{b7}$, $Q_{c7}$,{\color{blue}{ \textbf{$R_{7}$}}}} (pm);
+	  	  \path (le) edge[bend right=45] node [above] {$Q_{bc7}$,{\color{blue}{ \textbf{$R_{7}$}}}} (pm);
 	%  \path (le) edge[bend right=45] node [above] {Qb7 Qc7,{\color{blue} { \textbf{R7}}}} (pm);
 	  
 	  %le <-> ee
 	  {\color{red} { \path (le) edge[bend right] node [below,rotate=50] {{\color{blue} { {\textbf{{$R_{8}$}}}}}{\color{black},} {\color{blue} {$Q_{a7}$}}} (ee);
 	  }}
 	  %ee -> le
-	   \path (ee) edge[bend right=32, text width=1.8cm] node [below,right=0.1] {{$R_{8}$}, $Q_{a7}$, $Q_{b7}$, $R_{7}$} (le);
+	   \path (ee) edge[bend right=32, text width=1.8cm] node [below,right=0.1] {{$R_{8}$}, $Q_{a7}$, $Q_{bc7}$, $R_{7}$} (le);
 %	  \path (ee) edge[bend right] node [text width=1.5cm, below,rotate=50] {{R8}, Qa7, Qbc7,R7} (le);	  
 	  
 	  %pm <-> ee
 	  \path (ee) edge[bend left=30] node [below, text width=2.0cm] {{$R_{3}$,{\color{blue} { \textbf{{$Q_{a2} $}}}}, {\color{blue} {{ $ Q_{a7}$}}}, {\color{blue} {{$R_{2}$}}}}} (pm);
-	   \path (pm) edge[bend left=30, text width=2.3cm] node [above,rotate=-45] {{$R_{2}$}, {$Q_{a7}$}, $Q_{bc7}$ $R_{7}$, $Q_{c7}$, $Q_{a2}$} node [below,anchor=center] {\color{blue} { \textbf{    $R_{3}$}}} (ee);
+	   \path (pm) edge[bend left=30, text width=2.3cm] node [above,rotate=-45] {{$R_{2}$}, {$Q_{a7}$}, $Q_{bc7}$ $R_{7}$, $Q_{a2}$, \color{blue} {$R_{3}$}} (ee);
 %	  \path (pm) edge[bend left=30] node [above,rotate=-45,text width = 2.5cm] {{R2} {Qa7} Qbc7, R7, Qc7, Qa2, \color{blue} { \textbf{R3}}} (ee);	    
 	 % \end{scope}
 
