@@ -106,7 +106,7 @@ A molecule should be present to be active on a node.
 \begin{align*}
     \texttt{ActiveMolN} = \bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
 \end{align*}
-\noindent We define \texttt{ActivityC} to collect all the molecule activity related constraints. 
+\noindent We define \texttt{ActivityC} to group all the molecule activity related constraints. 
 \texttt{ActivityC} states that all active molecules are present.
 \begin{align*}
   \texttt{ActivityC} = \texttt{ActiveMolE} \land \texttt{ActiveMolN} 
@@ -142,7 +142,7 @@ be able to potentially fuse with any node other than its destination node.
 \bigvee_{\mathclap{j \neq j^{\prime}, m_{l+1}^{\prime},..,m_{4}^{\prime}}} ( a_{j^{\prime},m_{l+1}^{\prime}} \land .. \land a_{j^{\prime},m_4^{\prime}} \land p_{\{m_1,..,m_l,m^{\prime}_{l+1},..,m^{\prime}_4\}})
 \\
 \end{align*}
-We define \texttt{FusionC} \change{Use of the word collect looks weird! change it.}to collect all the fusion related constraints.
+We define \texttt{FusionC} to group all the fusion related constraints.
 % 
 \texttt{FusionC} states that every edge in the graph is well-fused.
 \begin{align*}
@@ -290,7 +290,7 @@ We define $\texttt{Connected}(k)$ that says graph is not k-connected.
 
 \subsection{Encoding for $\fbmc$ search problem}
 \label{enc:bmc}
-\noindent Our first attempt was to encode the existential condition as a $\fbmc$ search \unsure{Should we cite it here or not?}problem~\cite{shukla2017discovering}.
+\noindent Our first attempt was to encode the existential condition as a $\fbmc$ search problem~\cite{shukla2017discovering}.
 %
 %In this section we will present the $\fbmc$ encoding of the same.
 %The basic idea is to search the solution only upto a certain depth $w$. 
