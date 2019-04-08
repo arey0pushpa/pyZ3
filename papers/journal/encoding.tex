@@ -358,16 +358,22 @@ For clarity, we consider the first part of the bit vector as Q-SNAREs and rest a
 %
 For an edge in the system with $M$ = 4 molecules, the variable \texttt{bvEdge}[2][1][0] = $1001$, means the molecule  $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) are present on the first edge between node 2 and node 1.
 
-To specify the stability condition, we use nondeterminism to perform enumeration.
+To specify the stability condition, we use nondeterminism to encode the existence of a path. 
 %
+The nondeterminism can be viewed as a guess of the correct path if it exists. 
+%
+We then use this path as a witness to ensures that stability is maintained for each outgoing molecule $m$ from an edge $E$.
+%
+A basic encoding of it using enumeration is shown.
 %Nondeterminism can be viewed as an oracle that guesses a correct path for a specific $m$ if it exists. 
 %
 %We then use this path as a witness to ensures that stability is maintained for each outgoing molecule $m$ on every edge $E$.
 %
 %
-Note that the enumeration is done only for an unwinding depth of $w$.
+%Only partial enumeration up to an unwinding depth of $w$ is performed.
+Note that the enumeration is performed only up to an unwinding depth of $w$.
 %
-The encoding presented below is a simpler version of the implementation. 
+%The encoding presented below uses a nondeterministic path and perform enumeration to find it. 
 \subsubsection{Constraints for stability condition}
 %
 A path between node $i$ and $j$ in the graph is an $m$-$path_{ij}$ if molecule $m$ is present on edges along that path.
@@ -415,7 +421,7 @@ The key improvement of the $\fsmt$ search encoding over the $\fbmc$ is the
 encoding of reachability.
 % which was done using an enumeration of paths.
 %
-In the $\fbmc$ encoding, reachability is encoded by enumerating all the possible paths using \improve{Do not show up in the encoding}nondeterminism.
+In the $\fbmc$ encoding, reachability is encoded by enumerating all the possible paths using nondeterminism.
 %
 This encoding is non-optimal in the sense that in the worst case an exponential number of paths needs to be explored.
 %
