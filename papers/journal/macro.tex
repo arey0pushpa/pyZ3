@@ -131,6 +131,10 @@
 \usepackage{pgfplots}
 
 \mathchardef\mhyphen="2D
+\newcommand{\shorteq}{%
+  \settowidth{\@tempdima}{-}% Width of hyphen
+  \resizebox{\@tempdima}{\height}{=}%
+}
 
 
 %\definecolor{ai}{RGB}{179, 255, 179}

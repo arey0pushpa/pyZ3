@@ -402,7 +402,7 @@ Starting with exploring $m$-${paths}_{ij}$ of length 1; a direct edge between $i
 %\bigvee\limits_{l = 1}^{|path| - 1} |m-path| = l
 %
 \begin{align*}
-\npath(m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} (\texttt{Length} (m \mhyphen path_{ij}) == l)
+\npath(m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} (\texttt{Length} (m \mhyphen path_{ij})~\texttt{=}\texttt{=}~l)
 \end{align*}
 
 We encode stability using \npath. For every edge with $m^{th}$ molecule present between node $i$ and $j$ then there exists a $m$-$path_{ji}$ of maximum $w$ length.
@@ -410,7 +410,7 @@ We encode stability using \npath. For every edge with $m^{th}$ molecule present 
 The expression (\texttt{bv} $\unrhd$ $m$) extracts the $m^{th}$ bit of the bitvector \texttt{bv}. 
 
 \begin{align*}
-	\bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m) == 1) \limplies \npath(m, j, i, w)
+	\bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m)~\texttt{=}\texttt{=}~1) \limplies \npath(m, j, i, w)
 \end{align*}
 
 %A variant of the definition may be sensitive to the $m$-connectedness, but
