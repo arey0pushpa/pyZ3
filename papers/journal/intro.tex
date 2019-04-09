@@ -8,7 +8,7 @@ Due to this, obtaining a complete understanding of the vesicle transport system 
 %
 Highly reduced models of vesicle traffic have previously provided insight into how the chemical composition of various cellular compartments can emerge out of molecular regulation and cargo flow. 
 %
-However, the high complexity of problems in VTS restricts the use of traditional methods like simulation and statistical reasoning~\cite{mani2016wine, mani2016stacking}\change{Should only cite 3?}. 
+However, the high complexity of problems in VTS restricts the use of traditional methods like simulation and statistical reasoning~\cite{mani2016stacking}. 
 %The high complexity of problem restricts the use of traditional methods like simulation and statistical reasoning and the requirement of precise analysis makes formal methods an ideal candidate. 
 In this paper, using formal methods, we solve the problem of completing incomplete VTS graphs while also considering constraints due to molecular interactions, thereby demonstrating the effectiveness of such methods.
 %
@@ -40,9 +40,9 @@ Through this description, we wish to provide a glimpse of the kind of molecular 
     \label{fig:vts}
 \end{figure}
 
-\subsubsection{Vesicle budding} \unsure{Somya should we say it involve three mojor steps? This line is not optimal. Use of "see" okay?}The process of vesicle budding involves sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment, see Figure~\ref{fig:vts}.
+\subsubsection{Vesicle budding} The process of vesicle budding involves three major steps, sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment (Figure~\ref{fig:vts}).
 %
-\unsure{new line start or this is ok?}Cargo sorting is performed by cytosolic adaptor proteins. 
+Cargo sorting is performed by cytosolic adaptor proteins. 
 Adaptors are recruited to the source compartment through interactions with the lipids that form the compartment's membrane, and interactions with molecular switches called Arf/Sar which signal the initiation of vesicle formation~\cite{paczkowski2015cargo}. 
 %
 Then these adaptors bind to cargo molecules and thereby sequester them for packaging. 
@@ -64,7 +64,7 @@ Finally, transport vesicles bud out from the source compartment~\cite{cocucci201
 %
 The vesicle is now ready for transport and subsequent fusion with a target compartment.
 
-\subsubsection{Vesicle fusion} \info{Calling them process okay?}The process of vesicle fusion involves two steps recognition of the correct target compartment and fusion of the transport vesicle, Figure~\ref{fig:vts}.
+\subsubsection{Vesicle fusion} The process of vesicle fusion involves two steps recognition of the correct target compartment and fusion of the transport vesicle (Figure~\ref{fig:vts}).
 
 Target compartment recognition involves molecular switches called Rabs and tethering complexes. Distinct compartments of the cell are associated with distinct Rabs. For example, Rab5 is associated with early endosomes and Rab7 with late endosomes~\cite{rink2005rab}.  
 %
@@ -131,7 +131,7 @@ Other paths are used for cross talk between the secretory and the endocytic rout
 %\end{table}
 
 \subsection{The model}
-\noindent \info{Ashutosh. Should we say this. We have done this uniformally.}The VTS model for this paper is inspired by~\cite{shukla2017discovering}. 
+\noindent The VTS model for this paper is inspired by~\cite{shukla2017discovering}. 
 %
 On the timescales of minutes, we have tried to capture important aspect of Rothman-Schekman-Sudhof (RSS) model~\cite{rothman2002machinery} of vesicle traffic system.
 %
@@ -152,7 +152,7 @@ The following are the basic component and assumptions of our model.
 %
 All our assumptions, except assumption 5, are held up by cell biological results.
 %
-Although vesicles produced in a cell do vary in size~\cite{jena2008intracellular}, they are much smaller than compartments, hence for the \unsure{Is it a simplification or simplification to suite our Boolean Model. Should we say Boolean model? Or this looks fine?}sake of simplicity, we assume a uniform size for intracellular vesicles.
+Although vesicles produced in a cell do vary in size~\cite{jena2008intracellular}, they are much smaller than compartments, hence for the sake of simplicity, we assume a uniform size for intracellular vesicles.
 %The assumptions 
 %On the timescale of minutes, compartments are neither created nor destroyed, rather, they are in steady state. We assume that molecules are also neither created nor destroyed.
 %The activity of a SNARE can be regulated by other molecules present on the same compartment or vesicle.
@@ -213,11 +213,11 @@ Vesicle fusion requires a pairing of 3 Q-SNAREs and 1 R-SNARE that are distribut
 %
 %The list of molecular pairs that can drive a fusion event is given in a pairing matrix between Q and R SNAREs. 
 %
-Not all sets of \unsure{R-SNARE? or R SNARE is Okay?}Q and R SNAREs are allowed to fuse with each other.
+Not all sets of Q and R-SNAREs are allowed to fuse with each other.
 %
 %In the model, we assume that the cell has an equal number of Q and R SNARE types.
 %
-Therefore, we can abstract the underlying cell biology by labeling the nodes and edges with Q and R SNAREs. 
+Therefore, we can abstract the underlying cell biology by labeling the nodes and edges with Q and R-SNAREs. 
 % equal number of Q and R SNAREs as a part of node and edge label.
 %
 %
@@ -258,7 +258,7 @@ The molecules of the VTS, their interactions, and modes of regulation have been 
 But we do not know if this information is complete. In order to assess how completely we know the VTS, we need easily readable benchmarks. 
 
 One such benchmark is provided by our result about the connectivity of the VTS graph. Graph connectivity is defined as the minimum number of edges that need to be removed from an undirected graph to render it disconnected. For example, in a directed cyclic graph, every node has at least one incoming and one outgoing edge, at least 2 edges need to be removed in order to disconnect the graph. Therefore the underlying undirected graph is 2-connected. 
-From our result, for a given set of biomolecular interactions, for a cell that is in a steady state, we expect the VTS graph to have a certain k-connectivity. When regulation is given by arbitrary Boolean rules, we find that VTS graphs must be 3-connected. And when we add the constraint of the specific form of regulatory interactions seen between VTS molecules, we expect vesicle transport graphs to be \change{We have used 4 connected in results! 2 strongly or 4 what to put?}2-strongly connected.
+From our result, for a given set of biomolecular interactions, for a cell that is in a steady state, we expect the VTS graph to have a certain k-connectivity. When regulation is given by arbitrary Boolean rules, we find that VTS graphs must be 3-connected. And when we add the constraint of the specific form of regulatory interactions seen between VTS molecules, we expect vesicle transport graphs to be 4-connected.
 
 %\ankit{We need not specify Synthesis here. Only connectivity use next subsection to build this.}
 %\somya{But this is the para where we explain why connectivity is interesting an biological property}
@@ -271,7 +271,7 @@ These predictions are intended to be used as guides for future experiments.
 %
 A mismatch between our predictions and experiments would indicate that our current understanding of the VTS molecules is necessarily incomplete. 
 %
-Note that, on the other hand, if our predictions are experimentally confirmed, it does not imply that our understanding of the VTS is \unsure{shld we say something about example in one line before the start?}complete.\\
+Note that, on the other hand, if our predictions are experimentally confirmed, it does not imply that our understanding of the VTS is complete.\\
 %
 %\begin{table}[!t]
 %	\caption{Table Caption}
@@ -292,7 +292,7 @@ Note that, on the other hand, if our predictions are experimentally confirmed, i
 \vspace{-0.5cm}
 \begin{example}
 %
-In Figure~\ref{fig:M1}, \improve{require improvement in the description of this example}we present a VTS that has 2 compartments and 18 molecules with its corresponding pairing matrix.
+In Figure~\ref{fig:M1}, we present a VTS that has 2 compartments and 18 molecules with its corresponding pairing matrix.
 %
 %Molecules are represented as $Q_{i}$'s or $R_{i}$'s to make a clear distinction between Q and R SNAREs.
 %
@@ -302,6 +302,8 @@ The activity of the molecules on the node is controlled
 by the presence of the other molecules (exact Boolean function is not shown). 
 %
 The activity of the molecules on an edge is determined by the corresponding pairing matrix.
+%
+Note that molecules $X$ and $Y$ do not take part in the fusion but play a part in determining activity at the corresponding nodes.
 %
 Below the VTS, we show the pairing matrix.
 %
@@ -394,7 +396,7 @@ Also, across different cell-types, these organelles may be more or less differen
 
 Going by the above description, we can assume that the VTS has of the order of 10 compartments. 
 %
-The VTS transports a large number of molecules but the molecules that actively control the system are in their tens \change{What is this? A drug?}[MBOC]. 
+The VTS transports a large number of molecules but the molecules that actively control the system are in their tens~\cite{lodish2008molecular}. 
 %
 By definition, the activity of any VTS molecules can be controlled by all other molecules.
 %
@@ -458,7 +460,7 @@ The set of basic constraints the VTS should follow is dictated by underlying cel
 %
 In order to attempt to complete a given partial VTS, we have to first agree on the properties that every complete VTS should follow in spite of the basic constraints. 
 %
-We can use our stability and k-connectivity \info{do you think use of constraint is well stated? very Minor!}constraints as a basis for this investigation.   
+We can use our stability and k-connectivity constraints as a basis for this investigation.   
 %
 The incomplete VTS might not respect these constraints. 
 %
@@ -468,7 +470,7 @@ We output various completed versions of VTS against these properties which can t
 %
 \begin{example}
 	%
-    In figure~\ref{fig:synth-vts1}, we present a partial input VTS that has 3 compartments. Figure~\ref{fig:synth-vts2} present it's complete output VTS. 
+    In Figure~\ref{fig:synth-vts1}, we present a partial input VTS that has 3 compartments. Figure~\ref{fig:synth-vts2} present it's complete output VTS. 
     %
     The synthesis is performed against the steady state property and 3-connectivity. 
     %The tags PM, EE, and LE represent the corresponding nodes (please refer to Appendix~\ref{sec:ex-vts} for a proper discussion about the nodes and molecules depicted in the diagram). 

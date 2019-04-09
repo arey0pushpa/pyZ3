@@ -106,7 +106,7 @@ A molecule should be present to be active on a node.
 \begin{align*}
     \texttt{ActiveMolN} = \bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
 \end{align*}
-\noindent We define \texttt{ActivityC} to collect all the molecule activity related constraints. 
+\noindent We define \texttt{ActivityC} to group all the molecule activity related constraints. 
 \texttt{ActivityC} states that all active molecules are present.
 \begin{align*}
   \texttt{ActivityC} = \texttt{ActiveMolE} \land \texttt{ActiveMolN} 
@@ -142,7 +142,7 @@ be able to potentially fuse with any node other than its destination node.
 \bigvee_{\mathclap{j \neq j^{\prime}, m_{l+1}^{\prime},..,m_{4}^{\prime}}} ( a_{j^{\prime},m_{l+1}^{\prime}} \land .. \land a_{j^{\prime},m_4^{\prime}} \land p_{\{m_1,..,m_l,m^{\prime}_{l+1},..,m^{\prime}_4\}})
 \\
 \end{align*}
-We define \texttt{FusionC} \change{Use of the word collect looks weird! change it.}to collect all the fusion related constraints.
+We define \texttt{FusionC} to group all the fusion related constraints.
 % 
 \texttt{FusionC} states that every edge in the graph is well-fused.
 \begin{align*}
@@ -227,7 +227,7 @@ $m$-reachable path from $j$ to $i$.
 \begin{align*}
  \texttt{Loop}(r) &= \bigwedge\limits_{i,j,m} (\bigvee_{q} e_{i,j,q,m}) \limplies r_{j,i,m,\nu}
 \end{align*}
-We define \texttt{StabilityC} to collect all the stability related constraints.
+We define \texttt{StabilityC} to group all the stability related constraints.
 % 
 \texttt{StabilityC} states that every molecule is moving in a cycle.
 \begin{align*}
@@ -290,7 +290,7 @@ We define $\texttt{Connected}(k)$ that says graph is not k-connected.
 
 \subsection{Encoding for $\fbmc$ search problem}
 \label{enc:bmc}
-\noindent Our first attempt was to encode the existential condition as a $\fbmc$ search \unsure{Should we cite it here or not?}problem~\cite{shukla2017discovering}.
+\noindent Our first attempt was to encode the existential condition as a $\fbmc$ search problem~\cite{shukla2017discovering}.
 %
 %In this section we will present the $\fbmc$ encoding of the same.
 %The basic idea is to search the solution only upto a certain depth $w$. 
@@ -358,16 +358,22 @@ For clarity, we consider the first part of the bit vector as Q-SNAREs and rest a
 %
 For an edge in the system with $M$ = 4 molecules, the variable \texttt{bvEdge}[2][1][0] = $1001$, means the molecule  $M_{1}$ (Q-SNARE) and $M_{4}$ (R-SNARE) are present on the first edge between node 2 and node 1.
 
-To specify the stability condition, we use \improve{Nondet usage is not clear in the encoding. improve.}nondeterminism to perform enumeration.
+To specify the stability condition, we use nondeterminism to encode the existence of a path. 
 %
+The nondeterminism can be viewed as a guess of the correct path if it exists. 
+%
+We then use this path as a witness to ensures that stability is maintained for each outgoing molecule $m$ from an edge $E$.
+%
+A basic encoding of it using enumeration is shown.
 %Nondeterminism can be viewed as an oracle that guesses a correct path for a specific $m$ if it exists. 
 %
 %We then use this path as a witness to ensures that stability is maintained for each outgoing molecule $m$ on every edge $E$.
 %
 %
-Note that the enumeration is done only for an unwinding depth of $w$.
+%Only partial enumeration up to an unwinding depth of $w$ is performed.
+Note that the enumeration is performed only up to an unwinding depth of $w$.
 %
-The encoding presented below is a simpler version of the implementation. 
+%The encoding presented below uses a nondeterministic path and perform enumeration to find it. 
 \subsubsection{Constraints for stability condition}
 %
 A path between node $i$ and $j$ in the graph is an $m$-$path_{ij}$ if molecule $m$ is present on edges along that path.
@@ -388,15 +394,15 @@ We use {\npath}$(m, i, j, w)$ to represent the presence of a $m$-$path_{ij}$ of 
 %
 $\npath(m, i, j, w)$ performs enumeration of every $m$-$path_{ij}$ of at most $w$ length. 
 %
-Starting with exploring $m$-${paths}_{ij}$ of length 1; a direct edge between $i$ and $j$ with molecule $m$ present, until every $m$-${paths}_{ij}$ of length $w-1$ is explored.\change{m-path looks - sign in the align}
+Starting with exploring $m$-${paths}_{ij}$ of length 1; a direct edge between $i$ and $j$ with molecule $m$ present, until every $m$-${paths}_{ij}$ of length $w-1$ is explored.
 %by performing series of node hops till final node destination j is reached.
 %Starting with $m$-${paths}_i^j$ of length 1 which is a direct edge between $i$ and $j$ with molecule $m$ present on the edge or performing series of node hops till final node destination j is reached.
-
+%
 %|m-path| = 1 \lor  |m-path| = 2 \lor ...  |m-path| = w.     \\
 %\bigvee\limits_{l = 1}^{|path| - 1} |m-path| = l
-
+%
 \begin{align*}
-\npath(m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} (\texttt{Length} (m-path_{ij}) == l)
+\npath(m, i, j, w) = \bigvee\limits_{l = 1}^{w-1} (\texttt{Length} (m \mhyphen path_{ij})~\texttt{=}\texttt{=}~l)
 \end{align*}
 
 We encode stability using \npath. For every edge with $m^{th}$ molecule present between node $i$ and $j$ then there exists a $m$-$path_{ji}$ of maximum $w$ length.
@@ -404,7 +410,7 @@ We encode stability using \npath. For every edge with $m^{th}$ molecule present 
 The expression (\texttt{bv} $\unrhd$ $m$) extracts the $m^{th}$ bit of the bitvector \texttt{bv}. 
 
 \begin{align*}
-	\bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m) == 1) \limplies \npath(m, j, i, w)
+	\bigwedge\limits_{i,j,m} (\bigvee_{q} (\texttt{bvEdge}[i][j][q] \unrhd m)~\texttt{=}\texttt{=}~1) \limplies \npath(m, j, i, w)
 \end{align*}
 
 %A variant of the definition may be sensitive to the $m$-connectedness, but
@@ -415,7 +421,7 @@ The key improvement of the $\fsmt$ search encoding over the $\fbmc$ is the
 encoding of reachability.
 % which was done using an enumeration of paths.
 %
-In the $\fbmc$ encoding, reachability is encoded by enumerating all the possible paths using \improve{Do not show up in the encoding}nondeterminism.
+In the $\fbmc$ encoding, reachability is encoded by enumerating all the possible paths using nondeterminism.
 %
 This encoding is non-optimal in the sense that in the worst case an exponential number of paths needs to be explored.
 %
@@ -505,7 +511,7 @@ The connectivity constraint and connectedness constraints are tagged with subscr
 %
 The SMT extended version was not able to scale it to the desired results and either timed-out (T/O) or ran out of memory (M/O).
 %
-This can be due to the fact that directly translating a quantified formula into a quantifier-free by introducing a vector of variables for each boolean possibility \change{Increase the formula size exponentially.. the current statement is a repeat of the forth line. Improve.}will blow up the size of the formula and may not be solvable by a solver.
+This can be due to the fact that directly translating a quantified formula into a quantifier-free by introducing a vector of variables for each boolean possibility can lead to exponential increase in the formula size.
 %
 %
 \subsubsection{$\fqbf$ search encoding of the universal condition}
