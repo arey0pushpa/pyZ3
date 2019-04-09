@@ -1,7 +1,71 @@
 \noindent This section will present the different search problems of VTS.
 %
-We categorize the search problems into three different categories, search problem for existential condition, search problem for universal condition,
-and performing synthesis on the incomplete VTS. 
+We categorize the search problem (Figure~\ref{fig:vts-search}) into three different categories, search problem for the existential condition, search problem for the universal condition, and performing synthesis on the incomplete VTS. 
+%
+We will present two encodings for existential condition and one each for universal condition and synthesis.
+
+\begin {figure}[!h]
+\centering
+\begin{adjustbox}{width=\columnwidth}
+{\Large
+%{	\scalefont{1.0}
+%\forestset{parent color/.style args={#1}{
+%		{fill=#1},
+%		for tree={fill/.wrap pgfmath arg={#1!##1}{1/level()*80},draw=#1!80!darkgray}},
+%	root color/.style args={#1}{fill={{#1!60!gray!25},draw=#1!80!darkgray}}
+%}
+
+\begin{forest}
+ /tikz/every node/.append style={font=\sffamily,minimum size=1.0cm},
+	for tree={
+		edge+={->,thick},% uncomment for arrows
+		draw,
+		rounded corners,
+		node options={align=center,},
+		text width=1.7cm,
+		calign=fixed edge angles, calign primary angle=-84,calign secondary angle=85,
+	%	anchor=center,	
+    %	calign=center,
+	},
+	where level=0{%
+		parent anchor=children,
+	}{%
+		folder,
+		grow'=0,
+		if level=1{% this changes the edges from level 0 to nodes at level 1
+			before typesetting nodes={child anchor=north},
+			edge path'={(!u.parent anchor) -- ++(0,-5pt) -| (.child anchor)},
+		}{},
+	}
+    [\textbf{VTS Search \\ Problems}, fill=white!20, parent, s sep=1mm,
+	[\textbf{1.Existential Condition}, for tree={fill=fv, child}, 
+	[BMC Section 6.2, for tree={fill=ai, child}]
+	[SMT Section 6.1\\, for tree={fill=ai, child}]
+	]
+	[\textbf{2.Universal Condition}, for tree={fill=fv, child},
+	[QBF \\ Section 6.3, for tree={fill=ai, child}]
+	]
+	[\textbf{3.VTS Synthesis}, for tree={fill=fv,child}, 
+	[Synthesis Section 6.4, for tree={fill=ai, child}]
+	]
+	]
+\end{forest}
+}
+\end{adjustbox}
+\vspace{0.01cm}
+
+\begin{tikzpicture}
+\begin{customlegend}[legend columns=-1,legend style={draw=none,column sep=1ex},legend entries={ \small Search Problems, \small Encodings}]
+\addlegendimage{fill=fv,area legend} 
+\addlegendimage{fill=ai,area legend} 
+%\addlegendimage{fill=ar,area legend}
+%\addlegendimage{red,fill=black!50!red,ybar,ybar legend}
+\end{customlegend}
+\end{tikzpicture}
+
+\caption{Overview of the VTS search problems with respective encodings}
+\label{fig:vts-search}
+\end{figure}
 
 \subsection{Existential condition}
 \noindent We employ two techniques to examine the existential condition. 
@@ -11,10 +75,9 @@ First, using the bounded model checking (BMC) technique~\cite{biere1999symbolic1
 %It  represents the executions of a program symbolically and 
 %
 %The Bounded model checking technique
-BMC is an automatic technique that performs a search for the violation of the property in the program executions whose length is bounded by some fixed positive integer value $w$ (\textit{unwinding depth}). 
+\improve{The violation connect to search for the VTS; what about counterexamples?}BMC is an automatic technique that performs a search for the violation of the property in the program executions whose length is bounded by some fixed positive integer value $w$ (\textit{unwinding depth}). 
 %
 The bounded execution is represented symbolically as a propositional formula and solved using a SAT solver.
-% is used to check the satisfiability of the resultant propositional formula.
 %
 In case there is no violation for a particular depth, one can progressively increase the depth until either property is violated, the problem becomes intractable, or an upper bound of the system is reached, indicating the satisfiability of the property.
 %
@@ -23,7 +86,7 @@ For our case, the unwinding depth is the length of the path of the underline gra
 %
 For the experimentation, we restrict the check only to the elementary cycles; cycles of length one. 
 %
-This restriction puts an upper limit of number of nodes, $N$ on the length of the searched path. 
+This restriction puts an upper limit of the number of nodes on the length of the searched path. 
 %
 %
 %and the upper bound is the number of nodes $N$.
@@ -34,17 +97,17 @@ The search problem is to find an assignment of variables that satisfies all the 
 %
 We have used a form of this technique called satisfiability modulo theories (SMT)~\cite{nieuwenhuis2006solving, barrett2018satisfiability}.
 %
-The SMT is a generalization of Boolean satisfiability problem with domain-specific reasoning, for example, support for uninterpreted functions, equality, arithmetic and data structures like arrays, bit-vectors etc. 
+The SMT is a generalization of Boolean satisfiability problem with domain-specific reasoning, for example, support for uninterpreted functions, equality, arithmetic and data structures like arrays, bit-vectors, etc. 
 %
 %It includes formulas with variables from other domains, including real numbers, integers, and support for various data structures such as lists, arrays, bit vectors.
 % is satisfiability of formulas with respect to some background theory.
 %
-Throughout the paper we will address these two subcategories as $\fbmc$ and $\fsmt$ search problems.
+Throughout the paper, we will address these two subcategories as $\fbmc$ and $\fsmt$ search problems.
 %The existential condition search problem is represented as a bounded model checking and constraint solving. 
 %
 %Based upon earlier discussion, we need to answer the following search question among VTSs.
 %
-Here, we will present both $\fbmc$ and $\fsmt$ search problem for the existential condition.
+Here, we present both the $\fbmc$ and $\fsmt$ search problem for the existential condition.
 
 \subsubsection{$\fbmc$ search problem.}
 For a given $k$, size $\nu$, molecule number $\mu$, and unwinding depth $w$,
@@ -85,9 +148,9 @@ $G$ is not $k$-connected.
 
 \subsection{Universal condition}
 %Here we will present the QBF.
-\noindent We will model the search problem for the universal condition as a quantified Boolean formula (QBF)~\cite{buning2009theory, benedetti2008qbf}, and resultant formula will be solved with the help of a QBF solver.
+\noindent We will model the search problem for the universal condition as a quantified Boolean formula (QBF)~\cite{buning2009theory, benedetti2008qbf}, and the resultant formula is solved using a QBF solver.
 %
-The QBF is a generalization of the Boolean satisfiability problem in which every variable is quantified using either existential or universal quantifiers.
+The QBF is a generalization of the Boolean satisfiability problem in which every variable is quantified using either existential or universal quantifier.
 %
 The QBFs enables potentially more succinct encodings than SAT but with a higher complexity class decision problem~\cite{buning2009theory}.
  
@@ -115,7 +178,7 @@ For example, some undiscovered edges or nodes, or insufficient
 knowledge about the presence of molecules in some part of the VTS.
 %
 To cover most of the likely variations of this missing information,
-we have encoded the following variants of VTS synthesis problem.
+we have encoded the following variants of the VTS synthesis problem.
 
 \begin{enumerate}
 	\item Fixing VTS by adding edges 

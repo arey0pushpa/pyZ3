@@ -1,4 +1,4 @@
-\noindent We will use lower case variables like $e,r,s$ etc to represent vectors of
+\noindent We will use lower case variables like $e,r,s$, etc to represent vectors of
 Boolean variables, possibly indexed, with multiple dimensions.
 %
 For example, $r_{ij}$ is a Boolean variable for index $(i,j)$.
@@ -8,8 +8,7 @@ A Boolean variable may take Boolean values $1$ or $0$.
 %
 The binary Boolean operators $\land$, $\lor$, and $\limplies$ are usually defined.
 %
-$\Land$ and $\Lor$ are operators that extend $\land$ and $\lor$ over
-collection of formulas respectively.
+$\Land$ and $\Lor$ are operators that extend $\land$ and $\lor$ over a collection of formulas respectively.
 %
 We will use the variables and operators to construct Boolean formulas to
 encode our problems.
@@ -17,7 +16,7 @@ encode our problems.
 An assignment is a map from the variables in the formula to the Boolean values.
 %
 An assignment may satisfy a formula if the interpretation of Boolean operators
-reduce the whole Formula into 1.
+reduces the whole Formula into 1.
 %
 The problem of finding a satisfying assignment for a Boolean formula is known to be hard~\cite{cook1971complexity}.
 %
@@ -29,7 +28,7 @@ For example, $\forall x \exists y. (x \lor y)$, for Boolean variables $x$ and $y
 The formula says that for both the values of $x$ there is a value of $y$
 such that $x \lor y$ is 1.
 %
-The problem of finding satisfying assignment for QBFs is even harder problem~\cite{arora2009computational}.\\
+The problem of finding a satisfying assignment for QBFs is even harder problem~\cite{stockmeyer1973word, arora2009computational}.\\
 %
 
 \subsubsection{Solvers}
@@ -38,12 +37,12 @@ solutions of a Boolean formula or QBFs.
 %
 We will use BMC, SMT and QBF solvers to get the satisfying assignments.
 %
-The modern solvers are result of several decades of research
+The modern solvers are the result of several decades of research
 and implement sophisticated algorithms.
 %
 A SAT solver typically implements conflict-driven clause learning (CDCL)~\cite{biere2009conflict}.
 %1
-The QBF solver add support of quantifiers by adding more rules for quantifiers~\cite{buning2009theory}.
+The QBF solver adds support of quantifiers by adding more rules for quantifiers~\cite{buning2009theory}.
 
 %
 % Due to the combinatorial nature of the graphs, the search space is huge
