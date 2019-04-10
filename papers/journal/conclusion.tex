@@ -1,14 +1,19 @@
 \noindent 
 %
-\todo{copied frm the PLOS paper to Just a template}
+%\todo{copied frm the PLOS paper to Just a template}
 We have established a connection between vesicle transport graph connectedness and underlying rules of SNARE pairing and regulation. 
 %
 Our results contain many predictions which can in
 principle be tested through cell-biological experiments. 
 %
-However, our current knowledge of the actual vesicle transport graph of a cell is very poor: it is likely that there are many vesicle transport routes that are still uncharacterized. Even in those instances where vesicles are known to exist, the precise molecular drivers of their creation and fusion are often unknown.
+However, our current knowledge of the actual vesicle transport graph
+of a cell is very limited: it is likely that there are many vesicle
+transport routes that are still uncharacterized. Even in those
+instances where vesicles are known to exist, the precise molecular
+drivers of their creation and fusion are often unknown.
 %
-Therefore, a direct verification of our predictions based on graph connectedness alone is not likely. 
+Therefore, a direct verification of our predictions based on graph connectedness
+alone is not likely. 
 %
 However, more indirect predictions based on how SNAREs are regulated can be
 explored. 
@@ -16,21 +21,29 @@ explored.
 In this context, the Sec/MUNC proteins or SNARE longin domains are interesting
 targets of study~\cite{van2010one,rossi2004longins}.
 
-\todo{Copid just to create a template}
-In the experiments, we have demonstrated the power of SMT solvers and the
-value of careful encoding of the problems into SMT queries. 
+In the experiments, we have demonstrated the power of SMT solvers in a {\em novel} application
+and the value of careful encoding of the problems into SMT queries. 
 %
-We manage to scale the tool upto the size that makes tool biologically relevant. However, there are many further search problems or extensions that are of interest. 
+We manage to scale the tool upto the size that makes tool biologically relevant.
 %
-For example, are there any k-connected graphs that can not be annotated into a VTS? 
+% However, there are many further search problems or extensions that are of interest. 
+% %
+% For example, are there any $k$-connected graphs that can not be annotated into a VTS?
+
 %
-This problem induces a quantifier alternation in an encoding. Therefore, a simple call to SAT solver will not work. 
+We explored various variations of the search problems, such as
+are there any $k$-connected VTSs.
 %
-We are planning to use QBF(quantified Boolean
+The problem of searching for $k$-connected VTSs
+induces quantifier alternations in the encodings.
+%
+Therefore, a simple call to SAT solver may not work efficiently. 
+%
+We used QBF(quantified Boolean
 formulas) solvers or develop iterative search algorithm for such queries.
 %
-One may be interested in counting the number of graphs that satisfy a given
-property. 
+One may also be interested in counting the number of graphs that satisfy
+a given property. 
 %
 Exact counting of the graphs using SAT solvers may prove to be very
 difficult. 
@@ -38,14 +51,15 @@ difficult.
 We are also planning to employ some methods for approximate counting
 of solutions.
 
-We do not have a complete picture of the VTS graph, and so far, discoveries of new vesicles and molecular components are being made by groups interested in finding the path of a particular molecule, or they are chance discoveries. 
+
+We do not have a complete picture of the VTS graph, and so far,
+discoveries of new vesicles and molecular components are being made by
+groups interested in finding the path of a particular molecule, or
+they are chance discoveries. 
 %
-\todo{Copied till para end! Need revision}
-In this paper, we presented encodings of the synthesis problems
-that may arise from VTSs.
+We also presented encodings of the synthesis problems that may arise from VTSs.
 %
-%
-We demonstrated that our tool based on the encodings
+We also demonstrated that our tool based on the encodings
 scale up to the relevant sizes of the VTSs for some synthesis queries.
 %
 Our tool timed out on larger examples.
@@ -53,19 +67,22 @@ Our tool timed out on larger examples.
 We are working to improve the performance of our tool.
 %
 %
-With this tool, we made an attempt to present multiple new testable predictions. 
+With the tool, we made an attempt to present multiple new testable predictions. 
 %
-We will take this tool to the biologists and develop wet experiments that may validate some synthesis results from the tool.
+We will take this tool to the biologists and develop wet experiments that may
+validate some synthesis results from the tool.
 %
-These predictions may very likely increase to hasten discoveries in this field alongside pushing forward the use of formal methods in the biological field.
-
-%Our model of VTSs is static graphs.
+These predictions may very likely increase to hasten discoveries in this field
+alongside pushing forward the use of formal methods in the biological field.
 %
-However, there are a few aspects in the modeling that we have relaxed.
-%  \item What  needs  to  be  done  to  use  these  tools  to  real  world  BIO problems. In what aspect you want more, where it lagged.
-%\end{enumerate}
-%\textbf{Encode Dynamic behaviour of the VTS}
-A major aspect of the biological cell’s VTS that the current model is missing is compartment maturation. 
+Since our current knowledge of VTSs is not extensive and there are many missing parts,
+there is a huge space of potential predictions.
+%
+We also developing methods to prioritize predictions considering addition biological
+information and using a refined model.
+%
+For example, a major aspect of the biological cell’s VTS that the current model is missing
+is compartment maturation. 
 %
 We have only analyzed the VTS as a static graphs.
 %
@@ -74,6 +91,16 @@ Compartments of the cell are not in steady state; rather they are changing in mo
 Maturation  is  evident  in  the  Golgi  apparatus  and  in  the  endocytic system. 
 %
 Including this behaviour of the compartments in the model would allow it to make more accurate predictions.
+
+
+%Our model of VTSs is static graphs.
+%
+% There are a few aspects in the modeling that we have relaxed.
+%  \item What  needs  to  be  done  to  use  these  tools  to  real  world  BIO problems. In what aspect you want more, where it lagged.
+%\end{enumerate}
+%\textbf{Encode Dynamic behaviour of the VTS}
+
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"
