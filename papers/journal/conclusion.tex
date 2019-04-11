@@ -1,46 +1,19 @@
 \noindent 
-%
-%\todo{copied frm the PLOS paper to Just a template}
 We have established a connection between vesicle transport graph connectedness and underlying rules of SNARE pairing and regulation. 
 %
-Our results contain many predictions which can in
-principle be tested through cell-biological experiments. 
+The constraints implied by SNARE protein properties translates into
+mathematically elegant properties of the transport graph, namely its connectivity.
 %
-However, our current knowledge of the actual vesicle transport graph
-of a cell is very limited: it is likely that there are many vesicle
-transport routes that are still uncharacterized. Even in those
-instances where vesicles are known to exist, the precise molecular
-drivers of their creation and fusion are often unknown.
+Our approach demonstrates the power of SMT solvers in a {\em novel} application and the value of careful encoding of the problems into SMT queries. 
+We manage to scale the tool up to the size that makes the tool biologically relevant.
 %
-Therefore, a direct verification of our predictions based on graph connectedness
-alone is not likely. 
-%
-However, more indirect predictions based on how SNAREs are regulated can be
-explored. 
-%
-In this context, the Sec/MUNC proteins or SNARE longin domains are interesting
-targets of study~\cite{van2010one,rossi2004longins}.
 
-In the experiments, we have demonstrated the power of SMT solvers in a {\em novel} application
-and the value of careful encoding of the problems into SMT queries. 
-%
-We manage to scale the tool upto the size that makes tool biologically relevant.
-%
-% However, there are many further search problems or extensions that are of interest. 
-% %
-% For example, are there any $k$-connected graphs that can not be annotated into a VTS?
-
-%
-We explored various variations of the search problems, such as
-are there any $k$-connected VTSs.
-%
-The problem of searching for $k$-connected VTSs
-induces quantifier alternations in the encodings.
+However, the problem of searching for all $k$-connected VTSs induces quantifier alternation in the encodings.
 %
 Therefore, a simple call to SAT solver may not work efficiently. 
 %
-We used QBF(quantified Boolean
-formulas) solvers or develop iterative search algorithm for such queries.
+We used QBF (quantified Boolean
+formulas) solvers for such queries.
 %
 One may also be interested in counting the number of graphs that satisfy
 a given property. 
@@ -48,18 +21,13 @@ a given property.
 Exact counting of the graphs using SAT solvers may prove to be very
 difficult. 
 %
-We are also planning to employ some methods for approximate counting
-of solutions.
-
-
-We do not have a complete picture of the VTS graph, and so far,
-discoveries of new vesicles and molecular components are being made by
-groups interested in finding the path of a particular molecule, or
-they are chance discoveries. 
+We are planning to employ approximate counting methods for finding the solution.
 %
+Our results contain many predictions which can in principle be tested through cell-biological experiments. 
+
 We also presented encodings of the synthesis problems that may arise from VTSs.
 %
-We also demonstrated that our tool based on the encodings
+We demonstrated that our tool based on the encodings
 scale up to the relevant sizes of the VTSs for some synthesis queries.
 %
 Our tool timed out on larger examples.
@@ -75,22 +43,20 @@ validate some synthesis results from the tool.
 These predictions may very likely increase to hasten discoveries in this field
 alongside pushing forward the use of formal methods in the biological field.
 %
+
 Since our current knowledge of VTSs is not extensive and there are many missing parts,
 there is a huge space of potential predictions.
 %
 We also developing methods to prioritize predictions considering addition biological
 information and using a refined model.
 %
-For example, a major aspect of the biological cell’s VTS that the current model is missing
-is compartment maturation. 
+For example, in this work, we have only analyzed the VTS as static graphs. A major aspect of the biological cell’s VTS that the current model is missing is \textit{compartment maturation}, imbalances in incoming and outgoing molecular flux on vesicles.
 %
-We have only analyzed the VTS as a static graphs.
+In the future, we will study the dynamic behaviors of VTSs.
 %
-Compartments of the cell are not in steady state; rather they are changing in molecular composition due to imbalances in incoming and outgoing molecular flux on vesicles.
+%Maturation is evident in the Golgi in the endocytic system. 
 %
-Maturation  is  evident  in  the  Golgi  apparatus  and  in  the  endocytic system. 
-%
-Including this behaviour of the compartments in the model would allow it to make more accurate predictions.
+%Including this behavior of the compartments in the model would allow it to make more accurate predictions.
 
 
 %Our model of VTSs is static graphs.
