@@ -1,5 +1,5 @@
 \noindent 
-We have established a connection between vesicle transport graph connectedness and underlying rules of SNARE pairing and regulation. 
+To conclude, we have established a connection between vesicle transport graph connectedness and underlying rules of SNARE pairing and regulation. 
 %
 The constraints implied by SNARE protein properties translates into
 mathematically elegant properties of the transport graph, namely its connectivity.
@@ -8,13 +8,26 @@ Our approach demonstrates the power of SMT solvers in a {\em novel} application 
 We manage to scale the tool up to the size that makes the tool biologically relevant.
 %
 
-However, the problem of searching for all $k$-connected VTSs induces quantifier alternation in the encodings.
+The problem of searching for all $k$-connected VTSs induces quantifier alternation in the encodings.
 %
 Therefore, a simple call to SAT solver may not work efficiently. 
 %
 We used QBF (quantified Boolean
 formulas) solvers for such queries.
 %
+Our connectivity results contain many predictions which can in principle be tested through cell-biological experiments. 
+%Our connectivity results for VTS contains many predictions which can in
+%principle be tested through cell-biological experiments. 
+%%
+%However, our current knowledge of the actual vesicle transport graph of a cell is very poor: it is likely that there are many vesicle transport routes that are still uncharacterized. Even in those instances where vesicles are known to exist, the precise molecular drivers of their creation and fusion are often unknown.
+%%
+%Therefore, a direct verification of our predictions based on graph connectedness alone is not likely. 
+%%
+%However, more indirect predictions based on how SNAREs are regulated can be
+%explored. 
+%%
+%In this context, the Sec/MUNC proteins or SNARE longin domains are interesting
+%targets of study~\cite{van2010one,rossi2004longins}
 One may also be interested in counting the number of graphs that satisfy
 a given property. 
 %
@@ -23,7 +36,6 @@ difficult.
 %
 We are planning to employ approximate counting methods for finding the solution.
 %
-Our results contain many predictions which can in principle be tested through cell-biological experiments. 
 
 We also presented encodings of the synthesis problems that may arise from VTSs.
 %
