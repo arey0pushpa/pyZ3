@@ -1,6 +1,3 @@
-%\externaldocument{sat-table}
-%\externaldocument{smt-table}
-%\externaldocument{qbf-table}
 \noindent In the previous section, we have discussed in total four problems, $\fbmc$ search, $\fsmt$ search, $\fqbf$ search and synthesis problem.
 %
 In this section, we will present encodings for each of them.
@@ -107,7 +104,7 @@ A molecule should be present to be active on a node.
     \texttt{ActiveMolN} = \bigwedge\limits_{i,m} a_{i,m} \limplies n_{i,m}
 \end{align*}
 \noindent We define \texttt{ActivityC} to group all the molecule activity related constraints. 
-\texttt{ActivityC} states that all active molecules are present.
+The \texttt{ActivityC} states that all active molecules are present.
 \begin{align*}
   \texttt{ActivityC} = \texttt{ActiveMolE} \land \texttt{ActiveMolN} 
 \end{align*}
@@ -206,7 +203,7 @@ matrix.
 	(\neg b_{i,j,q,m} \land \bigwedge_{\mathclap{m_l \neq m,l, p_{m, m_l} \in \{1,..,3\}}} \neg b_{i,j,q,m_l})\end{aligned}\\
 \end{align*}
 %
-We denote the particular choice of node and edge function combined by \texttt{ActivityFun}.
+We denote the particular choice of node and edge function by \texttt{ActivityFun}.
 \begin{align*}
 \texttt{ActivityFun} = \texttt{NodeFun}_m \land \texttt{EdgeFun}_m
 \end{align*}
@@ -447,7 +444,7 @@ By adding the path length, we break the circular dependencies, the
 constraint remains polynomial in size, and satisfying assignments only
 correspond to correct reachability.
 
-\input{variation-table}
+\input{table1}
 
 \subsubsection{$\fbmc$ and $\fsmt$ search problems for different variants}
 %\ankit{Bring model variant table here}
@@ -491,8 +488,8 @@ The constraints for the variants can be given to a SAT or a SMT solver to find
 VTSs that belong to the variants.
 \subsection{Encoding for $\fqbf$ search problem}\label{enc:univ-cond}
 %
-\input{satqbf-table}
-\noindent The specification for universal condition~\ref{sec:property} requires quantifier alternation. 
+\input{table2}
+\noindent The specification for universal condition Section~\ref{sec:property} requires quantifier alternation. 
 %
 Most SAT solvers can not efficiently handle the quantifier in the formulas. 
 % 
@@ -712,8 +709,7 @@ quantified, $\texttt{QConnected}(k)$ introduces quantifier alternations.
 %                        f,p: \texttt{Stability} \, \land \, \texttt{Consistancy}  
 %  \tag{U}\label{eq:univcond}
 %\end{align*}
-
-
+%
 \subsection{Encoding for the synthesis problem}
 \label{enc:synth}
 \noindent In this section, we will present our synthesis method for
@@ -997,7 +993,7 @@ The above constraints are encoded in $\texttt{FlipN}(slimit)$.
 Similar to the earlier variations, we construct
 $\texttt{SynthRepairNode}(slimit)$ for the repair.
 %
-In that, $\texttt{FixedForNodeRepair}$ encodes all the parts of VTS that do not change.
+Where, the constraint $\texttt{FixedForNodeRepair}$ encodes all the parts of VTS that do not change.
 \begin{align*}
 % \\ 
 & \texttt{FixedForNodeRepair} =  \texttt{PresentE} \land  

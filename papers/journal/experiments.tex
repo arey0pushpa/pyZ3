@@ -1,7 +1,6 @@
-%\externaldocument{sat-table}
 %We have developed four different tools (\sattool, \smttool, \qbftool, \ourtool) for implementation of proposed encodings.
 %
-\noindent We have developed the {\vtstool} tool to conjecture the properties of the VTS (Section~\ref{sec:encoding}). 
+\noindent We have developed the {\vtstool}\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}} tool to conjecture the properties of the VTS (Section~\ref{sec:encoding}). 
 %
 %
 The {\vtstool} tool includes about 10,000 lines of code.
@@ -64,7 +63,7 @@ A 45 min (2700 sec) timeout was used for the tool.
 %\ExecuteMetaData[result-table.tex]{tab:satqbf-grabh}
 
 %\textbf{{
-\subsubsection{{\sattool} (Bounded model checker based tool)}
+\subsubsection{{\sattool} (BMC based tool)}
 %}}
 The $\fbmc$ encoding based on enumeration of paths (Section~\ref{enc:bmc}) for each variants of VTS is implemented in {\sattool}.
 	%We have implemented the encodings for different variants of VTS (presented in section 6.2) using
@@ -72,7 +71,7 @@ The tool is based on CBMC, a successful bounded model checker, for C and C++ pro
 %
 %Unlike a general model checker~\cite{cimatti2002nusmv}, CBMC
 %
-It verifies property for all the possible states, up to a certain “depth,” a parametric limit on the size of the model.
+It verifies property for all the possible states, up to a certain ``depth”, a parametric limit on the size of the model.
 %
 The depth of the model is specified by the user and can be incrementally increased to the desired value.
 %
@@ -84,7 +83,7 @@ The depth of the model is specified by the user and can be incrementally increas
 %
 %These annotations express constraints on the model and properties to be checked. 
 %	
-The vesicle transport network was modeled as a non-deterministic C-program manipulating an annotated graph. 
+The VTS was modeled as a non-deterministic C-program manipulating an annotated graph. 
 %
 The special annotations \textit{assumes} and \textit{assertions} of CBMC's front end were used to express constraints on the model and properties to be checked. 
 %
@@ -139,8 +138,7 @@ QDIMACS~\cite{qdimacs} format and use QBF solvers to solve the formula.
 We have used~\depqbf~\cite{lonsing2010depqbf} for solving QBF formulas with alternation of quantifiers. 
 
 \subsubsection{{\ourtool} (QBF based synthesis tool)}
-\input{synth-table}
-The synthesis encodings (Section~\ref{enc:synth}) is implemented  in~\ourtool\footnote{{\url{https://github.com/arey0pushpa/pyZ3}}}.
+The synthesis encodings (Section~\ref{enc:synth}) is implemented  in~\ourtool.
 %
 The tool takes a partially defined VTS as input in a custom designed
 input language.
@@ -172,8 +170,7 @@ The Table~\ref{tab:qbf-graph} present the results for {\qbftool} and Table~\ref{
 %%
 %Similarly, the results for other cases are presented in the table.
 
-\input{smt-table}
-
+\input{table3}
 The minimal connectivity results for each variation of the existential condition are presented in Table~\ref{tab:smt-grph}.
 %
 The steady-state constraint requires that the structure of the graph is at least 2-connected. 
@@ -181,7 +178,7 @@ The steady-state constraint requires that the structure of the graph is at least
 We found that 3-connectedness is the existential condition for the Boolean regulation model on vesicles, while 4-connectedness is the existential condition for the more constrained SNARE-SNARE inhibition on vesicles and Boolean regulation on compartments.
 %Beyond this, we find that 3-connectedness is existential condition for the Boolean regulation model on vesicles, while 4-connectedness is existential condition for the more constrained SNARE-SNARE inhibition on vesicles and Boolean regulation on compartments.
 %
-For all other constrained regulation models of VTS, the experimentation was unable to find any graphs representing the vesicle transport networks in the stable state.
+For all other constrained regulation models of VTS, the experimentation was unable to find any graphs representing the VTS in the stable state.
 %
 This strongly suggests that no such graphs exist, as our graphs are of finite size, this does not amount to a  proof. 
 
@@ -202,9 +199,9 @@ No graph results suggest that a functional VTS necessarily needs some form of re
 %%
 %Variants C has 3-connectedness as
 
-
+\input{table4}
 %
-The Table~\ref{tab:satsmt-graph} presents the comparison of the running times of {\smttool} and {\sattool} on VTS variations of sizes 2 to 10.
+Table~\ref{tab:satsmt-graph} presents the comparison of the running times of {\smttool} and {\sattool} on VTS variations of sizes 2 to 10.
 %
 For this comparison, we have fixed the total number of molecules minimum four times for each SNARE type of the node count. 
 %
@@ -226,10 +223,10 @@ Hence with the use of improved encoding of reachability, we were able to scale t
 %
 Furthermore, we experimented with the limits of our tools and found that {\smttool} was able to solve the constraints up to $18$ nodes.
 
-\input{qbf-table}
+\input{table5}
 %\textbf{Universal Condition:}
 
-The Table~\ref{tab:qbf-graph} presents the result of the QBF tool.
+Table~\ref{tab:qbf-graph} presents the result of the QBF tool.
 %
 The result of the graph connectivity for each variation of the VTS is shown.  
 %
@@ -248,10 +245,11 @@ For biological cells, this means that the whole space of 3-connected graphs is a
 
 %(there is a satisfying assignments to satisfy constraints of VTS) is valid VTS.   
 %\textbf{Synthesis}:
+\input{table6}
 
 We have applied~\ourtool~on seven partially defined VTSs.
 %
-The results are presented in Figure~\ref{tab:synth-graph} for both the solvers
+The results are presented in Table~\ref{tab:synth-graph} for both the solvers
 \depqbf and \zthree.
 %
 To use~\zthree, we remove \texttt{Connected} constraints, such that the queries becomes
@@ -276,7 +274,7 @@ One column reports the timing and the other reports the minimum changes needed t
 $\infty$ indicates that any number of changes with the synthesis query
 search space can obtain the VTS.
 
-In the Figure~\ref{tab:synth-graph}, we report five synthesis queries.
+In the Table~\ref{tab:synth-graph}, we report five synthesis queries.
 %
 The first one only adds new labeled edges to the graph.
 %

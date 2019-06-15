@@ -1,10 +1,10 @@
 \noindent A characteristic feature of eukaryotic cells is the presence of multiple internal membrane-bounded compartments. 
 %
-These compartments exchange molecules amongst themselves in small membrane-bounded packets called vesicles~\cite{alberts2002molecular}. 
+These compartments exchange molecules amo\-ngst themselves in small membrane-bounded packets called vesicles~\cite{alberts2002molecular}. 
 %
 The molecular interaction network that controls the vesicle traffic system involves dozens of varieties of molecules that regulate the flow of cargo. 
 %
-Due to this, obtaining a complete understanding of the vesicle transport system through physical experimentation alone is a hard problem.
+Due to this, obtaining a complete understanding of the VTS through physical experimentation alone is a hard problem.
 %
 Highly reduced models of vesicle traffic have previously provided insight into how the chemical composition of various cellular compartments can emerge out of molecular regulation and cargo flow. 
 %
@@ -16,17 +16,22 @@ The phenomenology of vesicle traffic is unlikely to be familiar to many readers;
 %
 Therefore, we give an overview of the molecular mechanism of the VTS and then we sketch out a few interesting problems that are key to an understanding of the VTS.
 %
+%\vspace{-0.5cm}
 \subsection{Vesicle traffic system}
 %Vesicles were discovered decades ago, in the early 1950s, and s
-\noindent The major molecules involved in the vesicle traffic system~\cite{wells2005discovery} can roughly be categorized as budding molecules, whose role is in the formation and budding of transport vesicles from the source compartment, and fusion molecules, which enable fusion of transport vesicles with the target compartments. 
+\noindent The major molecules involved in the VTS~\cite{wells2005discovery} can roughly be categorized as budding molecules, whose role is in the formation and budding of transport vesicles from the source compartment, and fusion molecules, which enable fusion of transport vesicles with the target compartments. 
 %
 Below, we give a brief description of the sequence of steps involved in the vesicle transport process. 
 %
 Through this description, we wish to provide a glimpse of the kind of molecular regulatory interactions that we encode in our model.
  
 \begin{figure}
-	\includegraphics[height=10cm,width=12cm]{diavts.eps}
-	\caption{Schematic of the vesicle transport system. Steps involved in vesicle transport between two compartments: a source and a target compartment are shown. 
+  \begin{center}
+
+	\includegraphics[height=10cm,width=12cm]{fig1.eps}
+	\end{center}
+
+	\caption{Schematic of the VTS. Steps involved in vesicle transport between two compartments: a source and a target compartment are shown. 
 	%
 	The symbols used for different molecules involved in vesicle traffic are explained in the key. At the source compartment, transmembrane cargo proteins are sorted by cytosolic adaptor proteins. 
 	%
@@ -36,11 +41,11 @@ Through this description, we wish to provide a glimpse of the kind of molecular 
 	%
 	Once the vesicle has left the source compartment, the coat and adaptor proteins fall off and the vesicle is recognized and bound by a tethering complex which is linked to the target compartment. 
 	%
-	At the target compartment, the tethered vesicle undergoes fusion, thereby releasing its contents.}
+	At the target compartment, the tethered vesicle undergoes fusion, thereby releasing its contents}
     \label{fig:vts}
 \end{figure}
 
-\subsubsection{Vesicle budding} The process of vesicle budding involves sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment (Figure~\ref{fig:vts}).
+\subsubsection{Vesicle budding} The process of vesicle budding involves sorting and packaging of cargo molecules, membrane deformation and budding of the vesicle from the source compartment (Fig.~\ref{fig:vts}).
 %
 Cargo sorting is performed by cytosolic adaptor proteins. 
 Adaptors are recruited to the source compartment through interactions with the lipids that form the compartment's membrane, and interactions with molecular switches called Arf/Sar which signal the initiation of vesicle formation~\cite{paczkowski2015cargo}. 
@@ -64,7 +69,7 @@ Finally, transport vesicles bud out from the source compartment~\cite{cocucci201
 %
 The vesicle is now ready for transport and subsequent fusion with a target compartment.
 
-\subsubsection{Vesicle fusion} The process of vesicle fusion involves two steps recognition of the correct target compartment and fusion of the transport vesicle (Figure~\ref{fig:vts}).
+\subsubsection{Vesicle fusion} The process of vesicle fusion involves two steps recognition of the correct target compartment and fusion of the transport vesicle (Fig.~\ref{fig:vts}).
 
 Target compartment recognition involves molecular switches called Rabs and tethering complexes. Distinct compartments of the cell are associated with distinct Rabs. For example, Rab5 is associated with early endosomes and Rab7 with late endosomes~\cite{rink2005rab}.  
 %
@@ -107,11 +112,11 @@ Whereas, SM proteins have following multiple modes of SNARE regulation:
 \end{itemize}
 
 %\somya{schematic of intracellular compartments and  major routes}
-\subsubsection{Major paths in the vesicle transport network}
+\subsubsection{Major paths in the VTS}
 Molecules traverse the cell in a series of vesicles, and there are two major routes of vesicle transport in all eukaryotic cells.
 %
 \begin{itemize}
-	\item The secretory route takes proteins from the ER (their site of production) to the plasma membrane( from where they are secreted out of the cell) via the Golgi apparatus~\cite{alberts2002molecular}.
+	\item The secretory route takes proteins from the ER (their site of production) to the plasma membrane (from where they are secreted out of the cell) via the Golgi apparatus~\cite{alberts2002molecular}.
 	%
 	\item The endocytic route takes proteins from the outside of the cell, through the plasma membrane, to the endocytic compartments and the lysosome where they are digested. 
 \end{itemize}
@@ -289,10 +294,11 @@ Note that, on the other hand, if our predictions are experimentally confirmed, i
 %	\end{tabular}}
 %\end{table}
 %
-\vspace{-0.5cm}
+\input{fig2}
+%
 \begin{example}
 %
-In Figure~\ref{fig:M1}, we present a VTS that has 2 compartments and 18 molecules with its corresponding pairing matrix.
+In Fig.~\ref{fig:M1}, we present a VTS that has 2 compartments and 18 molecules with its corresponding pairing matrix.
 %
 %Molecules are represented as $Q_{i}$'s or $R_{i}$'s to make a clear distinction between Q and R SNAREs.
 %
@@ -303,7 +309,7 @@ by the presence of the other molecules (exact Boolean function is not shown).
 %
 The activity of the molecules on an edge is determined by the corresponding pairing matrix.
 %
-Note that molecules $X$ and $Y$ do not take part in the fusion but play a part in determining activity at the corresponding nodes.
+Note that molecules $X$ and $Y$ do not take part in the fusion but determine the activity of molecules at the corresponding nodes.
 %
 Below the VTS, we show the pairing matrix.
 %
@@ -316,12 +322,11 @@ Every molecule flows on a cycle, ensuring steady state.
 This is a 4-connected graph.
 \end{example}
 %
-\input{pm-1-matrix}
 %\subsection{Modeling and Symbolic Analysis of VTS: An Overview}
 \label{subsec:graphmodel}
 %
 \subsection{Combinatorial problem and use of Formal methods}
-\noindent The analysis of vesicle traffic systems is a difficult problem
+\noindent The analysis of VTS is a difficult problem
 because of the combinatorial scaling of possible traffic topologies and regulatory rules. 
 %
 %For example, we might want to check some conjecture of interest for all graphs of a certain structure. 
@@ -329,7 +334,7 @@ because of the combinatorial scaling of possible traffic topologies and regulato
 %If the analysis is done on a large number of graphs, the joined effect of large quantity of graphs and combinatorially many possible regulatory rules will be difficult to handle by any tool.
 If the analysis is done on a large number of graphs, the joined effect of this with combinatorially many possible regulatory rules will be difficult to handle by any tool.
 %
-Precise analysis of the properties of the VTS would be hindered by the same reason. 
+Precise analysis of the properties of the VTS would be hindered for the same reason. 
 
 In previous work, a sampling approach was undertaken. 
 %
@@ -370,7 +375,7 @@ The tools model the computation symbolically for the graphs of finite size and c
 %
 
 \subsubsection{Size of the VTS system}
-Let us discuss the rough sizes of the system and expected behaviors.
+%Let us discuss the rough sizes of the system and expected behaviors.
 %%
 %A typical VTS may have about 10 compartments.
 %%
@@ -430,27 +435,24 @@ We use the above information during the encoding of all search problems presente
 %
 %Here we have build an {\em efficient} tool that studies properties of VTSs that are not $k$-connected, from some $k$. 
 \subsection{Synthesis of VTS }
-\noindent The current picture of the vesicle transport network is far from complete; we do not yet know how many of the cellular proteins reach their resident compartments within the cell, and new vesicle routes are being discovered every year~\cite{nickel2018unconventional,weill2018toolbox}. 
+\noindent The current picture of the VTS is far from complete; we do not yet know how many of the cellular proteins reach their resident compartments within the cell, and new vesicle routes are being discovered every year~\cite{nickel2018unconventional,weill2018toolbox}. 
 %
-Completing the vesicle traffic network is a difficult task for the many important reasons: 
+Completing the VTS is a difficult task for many important reasons: 
 \begin{enumerate}
-    \item The core vesicle transport network is conserved across eukaryotes, the traffic network in different organisms~\cite{richardson2015evolutionary,nishimoto2009differential,barlow2017seeing}, and even in different cell types within an organism can be different~\cite{stoops2014trafficking,zhou2015arp2}.
-    
+    \item The core VTS is conserved across eukaryotes, the traffic network in different organisms \cite{richardson2015evolutionary, barlow2017seeing}, and even in different cell types within an organism can be different~\cite{stoops2014trafficking,zhou2015arp2}.
     \item Although the basic molecular machinery is the same for all vesicle fusion events, the details of regulation can be different~\cite{davletov2007regulation,di2010calcium}.
-
     \item Molecules can have redundant routes within the cell~\cite{shimizu2014compensatory,nakatsukasa2014nutrient}.
     \item Behaviour of traffic molecules in vitro is different from their behavior inside cells~\cite{furukawa2014multiple}. 
-        
     \item It can be difficult to distinguish between the direct and indirect effects of experiments involving knock-downs or knockouts of traffic molecules \cite{hirst2004epsinr,mishev2013small}.
 \end{enumerate}
 
-Nonetheless, completing the vesicle traffic network for different organisms is very useful. 
+Nonetheless, completing the VTS for different organisms is very useful. 
 %
-Many diseases are caused by the malfunction of the vesicle traffic network. 
+Many diseases are caused by the malfunction of the VTS. 
 %
 Knowledge of the complete network would be helpful in identifying the root causes of ~\cite{bexiga2013human,gissen2007cargos}. 
 %
-At a more basic level, having complete pictures of the vesicle traffic system for various organisms and various cell-types would allow comparative studies, and therefore would allow the deduction of modes of evolution of the form of the traffic network. 
+At a more basic level, having complete pictures of the VTS for various organisms and various cell-types would allow comparative studies, and therefore would allow the deduction of modes of evolution of the form of the traffic network. 
 %
 This would also allow us to decipher features such as parts of the traffic system that is unchanging, and therefore likely to be its core, and parts that are more plastic \cite{barlow2017seeing}.
 
@@ -468,22 +470,11 @@ In this paper, using constraints on global vesicle traffic network topology due 
 %
 We output various completed versions of VTS against these properties which can then be tested experimentally.
 %
+\input{fig3}
 \begin{example}
-	%
-    In Figure~\ref{fig:synth-vts1}, we present a partial input VTS that has 3 compartments. Figure~\ref{fig:synth-vts2} present it's complete output VTS. 
-    %
-    The synthesis is performed against the steady state property and 3-connectivity. 
-    %The tags PM, EE, and LE represent the corresponding nodes (please refer to Appendix~\ref{sec:ex-vts} for a proper discussion about the nodes and molecules depicted in the diagram). 
-    %
-    Synthesized edge is in red color and synthesized molecules are presented in blue.
-    %
-    The synthesis adds one edge and 7 molecules to complete the partial VTS.
-    %
-    For the sake of clarity, we have not presented the activity of molecules, the corresponding pairing matrix and remaining molecules on the nodes.
-	
+    In Fig.~\ref{fig:synth-vts1}, we present a partial input VTS that has 3 compartments. Fig.~\ref{fig:synth-vts2} present it's complete output VTS. Every molecule present on the node is active. The activity of the molecules on an edge is determined by the presence of the other molecules. Each label represent particular type of molecule. The synthesis is performed against the stability and 3-connectivity. Synthesized edge is in red color and synthesized molecules are presented in blue. The synthesis adds one edge and 7 molecules to complete the partial VTS. For the sake of clarity, we have not presented the activity of molecules, the corresponding pairing matrix and remaining molecules on the nodes.
 \end{example}
-\input{synth-dia}
-
+%
 We have implemented the encoding in a flexible tool, which can handle a wide range of synthesis queries. 
 %
 We have applied our tool on several VTSs including

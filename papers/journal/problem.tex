@@ -1,12 +1,12 @@
 \noindent This section will present the different search problems of VTS.
 %
-We categorize the search problem (Figure~\ref{fig:vts-search}) into three different categories, search problem for the existential condition, search problem for the universal condition, and performing synthesis on the incomplete VTS. 
+We categorize the search problem (Fig.~\ref{fig:vts-search}) into three different categories, search problem for the existential condition, search problem for the universal condition, and performing synthesis on the incomplete VTS. 
 %
 We will present two encodings for existential condition and one each for universal condition and synthesis.
 
 \begin {figure}[!t]
 \centering
-\begin{adjustbox}{width=\columnwidth}
+\begin{adjustbox}{width=0.9\columnwidth}
 {\Large
 %{	\scalefont{1.0}
 %\forestset{parent color/.style args={#1}{
@@ -39,14 +39,14 @@ We will present two encodings for existential condition and one each for univers
 	}
     [\textbf{VTS Search \\ Problems}, fill=white!20, parent, s sep=1mm,
 	[\textbf{1.Existential Condition}, for tree={fill=fv, child}, 
-	[BMC Section 6.2, for tree={fill=ai, child}]
-	[SMT Section 6.1\\, for tree={fill=ai, child}]
+	[BMC, for tree={fill=ai, child}]
+	[SMT, for tree={fill=ai, child}]
 	]
 	[\textbf{2.Universal Condition}, for tree={fill=fv, child},
-	[QBF \\ Section 6.3, for tree={fill=ai, child}]
+	[QBF, for tree={fill=ai, child}]
 	]
 	[\textbf{3.VTS Synthesis}, for tree={fill=fv,child}, 
-	[Synthesis Section 6.4, for tree={fill=ai, child}]
+	[Synthesis, for tree={fill=ai, child}]
 	]
 	]
 \end{forest}
@@ -63,7 +63,7 @@ We will present two encodings for existential condition and one each for univers
 \end{customlegend}
 \end{tikzpicture}
 
-\caption{An overview of the VTS search problems with their respective encodings.}
+\caption{An overview of the VTS search problems with their respective encodings}
 \label{fig:vts-search}
 \end{figure}
 
@@ -95,7 +95,7 @@ Second, using constraint solving, where the rules are represented as a constrain
 %
 The search problem is to find an assignment of variables that satisfies all the specified constraints.
 %
-We have used a form of this technique called satisfiability modulo theories (SMT)~\cite{nieuwenhuis2006solving, barrett2018satisfiability}.
+We have used a form of this technique known as SMT~\cite{nieuwenhuis2006solving, barrett2018satisfiability}.
 %
 The SMT is a generalization of Boolean satisfiability problem with domain-specific reasoning, for example, support for uninterpreted functions, equality, arithmetic and data structures like arrays, bit-vectors, etc. 
 %
@@ -148,11 +148,11 @@ $G$ is not $k$-connected.
 
 \subsection{Universal condition}
 %Here we will present the QBF.
-\noindent We will model the search problem for the universal condition as a quantified Boolean formula (QBF)~\cite{buning2009theory, benedetti2008qbf}, and the resultant formula is solved using a QBF solver.
+\noindent We will model the search problem for the universal condition as a QBF~\cite{buning2009theory, benedetti2008qbf}, and the resultant formula is solved using a QBF solver.
 %
 The QBF is a generalization of the Boolean satisfiability problem in which every variable is quantified using either existential or universal quantifier.
 %
-The QBFs enables potentially more succinct encodings than SAT but with a higher complexity class decision problem~\cite{savitch1970relationships, stockmeyer1973word}.
+The QBFs enables potentially more succinct encodings than SAT~\cite{jussila2007compressing} although much more difficult~\cite{savitch1970relationships, stockmeyer1973word} to solve.
  
 %\ankit{This is a dummy template. need a rewrite.} 
 \subsubsection{$\fqbf$ search problem.} For a given $k$, size $\nu$, and molecule number $\mu$, we are searching for a $k$-connected graph such that there is no assignment that makes it a well-structured, stable, and well-fused VTS $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ with $|\nodes| = \nu$, $|\mols| = \mu$.    

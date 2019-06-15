@@ -1,4 +1,4 @@
-\noindent We will use lower case variables like $e,r,s$, etc to represent vectors of
+\noindent We will use lower case variables like $e$, $r$, $s$, etc to represent vectors of
 Boolean variables, possibly indexed, with multiple dimensions.
 %
 For example, $r_{ij}$ is a Boolean variable for index $(i,j)$.
@@ -21,21 +21,21 @@ reduces the whole Formula into 1.
 The problem of finding a satisfying assignment for a Boolean formula is known to be hard~\cite{cook1971complexity}.
 %
 
-Quantified Boolean formulas(QBFs) also allow quantifiers over Boolean variables.
+QBFs also allow quantifiers over Boolean variables.
 %
 For example, $\forall x \exists y. (x \lor y)$, for Boolean variables $x$ and $y$.
 %
 The formula says that for both the values of $x$ there is a value of $y$
 such that $x \lor y$ is 1.
 %
-The problem of finding a satisfying assignment for QBFs is even harder problem~\cite{savitch1970relationships, stockmeyer1973word}.\\
+The problem of finding a satisfying assignment for QBFs is even harder problem~\cite{savitch1970relationships, stockmeyer1973word}.
 %
 
 \subsubsection{Solvers}
 In this paper, we will encode several problems into finding satisfying
 solutions of a Boolean formula or QBFs.
 %
-We will use BMC, SMT and QBF solvers to get the satisfying assignments.
+We will use SAT, SMT and QBF solvers to get the satisfying assignments.
 %
 The modern solvers are the result of several decades of research
 and implement sophisticated algorithms.
