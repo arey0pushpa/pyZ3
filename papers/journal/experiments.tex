@@ -67,7 +67,7 @@ A 45 min (2700 sec) timeout was used for the tool.
 %}}
 The $\fbmc$ encoding based on enumeration of paths (Section~\ref{enc:bmc}) for each variants of VTS is implemented in {\sattool}.
 	%We have implemented the encodings for different variants of VTS (presented in section 6.2) using
-The tool is based on CBMC, a successful bounded model checker, for C and C++ programs. 
+The tool is based on CBMC~\cite{ckl2004}, a successful bounded model checker, for C and C++ programs. 
 %
 %Unlike a general model checker~\cite{cimatti2002nusmv}, CBMC
 %
@@ -111,7 +111,7 @@ For our experimentation purpose, the SAT solver backend used were MiniSat~\cite{
 \subsubsection{{\smttool} (SMT based tool)}
 The $\fsmt$ encoding based on recursive reachability definition (Section~\ref{enc:smt})  for each variant is implemented in {\smttool}.
 %
-The tool is based on industrial strength SMT solver, Z3. 
+The tool is based on industrial strength SMT solver, Z3~\cite{de2008z3}. 
 %
 The tool allows the user to choose a model and the size
 of the network besides other parameters like connectivity and number of parallel edges. 
