@@ -1,17 +1,269 @@
-\noindent A characteristic feature of eukaryotic cells is the presence of multiple internal membrane-bounded compartments. 
+\noindent 
+%A characteristic feature of eukaryotic cells is the presence of multiple internal membrane-bounded compartments. 
+The cytoplasm of all eukaryotic cells is broken up into distinct membrane-bound locations known as organelles: the
+nuclear membrane, endoplasmic reticulum (ER), Golgi apparatus, vacuoles and lysosomes are examples of these.
+%These compartments exchange molecules amo\-ngst themselves in small membrane-bounded packets called vesicles~\cite{alberts2002molecular}. 
 %
-These compartments exchange molecules amo\-ngst themselves in small membrane-bounded packets called vesicles~\cite{alberts2002molecular}. 
+%%The molecular interaction network that controls the vesicle traffic system involves dozens of varieties of molecules that regulate the flow of cargo. 
 %
-The molecular interaction network that controls the vesicle traffic system involves dozens of varieties of molecules that regulate the flow of cargo. 
+%%Due to this, obtaining a complete understanding of the VTS through physical experimentation alone is a hard problem.
 %
-Due to this, obtaining a complete understanding of the VTS through physical experimentation alone is a hard problem.
+%%Highly reduced models of vesicle traffic have previously provided insight into how the chemical composition of various cellular compartments can emerge out of molecular regulation and cargo flow. 
 %
-Highly reduced models of vesicle traffic have previously provided insight into how the chemical composition of various cellular compartments can emerge out of molecular regulation and cargo flow. 
-%
-However, the high complexity of problems in VTS restricts the use of traditional methods like simulation and statistical reasoning~\cite{mani2016stacking}. 
+%%However, the high complexity of problems in VTS restricts the use of traditional methods like simulation and statistical reasoning~\cite{mani2016stacking}. 
 %The high complexity of problem restricts the use of traditional methods like simulation and statistical reasoning and the requirement of precise analysis makes formal methods an ideal candidate. 
-In this paper, using formal methods, we solve the problem of completing incomplete VTS graphs while also considering constraints due to molecular interactions, thereby demonstrating the effectiveness of such methods.
+%%In this paper, using formal methods, we solve the problem of completing incomplete VTS graphs while also considering constraints due to molecular interactions, thereby demonstrating the effectiveness of such methods.
 %
+%
+Cargo is moved between these organelles in small membrane-bound
+transporters known as vesicles \cite{stenmark2009rab}.
+%s
+
+This organization resembles a transport logistics network, and is commonly known as the membrane traffic system.
+%
+Membrane traffic underpins nearly every aspect of eukaryotic cellular
+physiology, including human cellular physiology.
+%
+Defects in membrane traffic lead to a variety of disorders or even
+cell death \cite{stenmark2009rab}.
+%
+Understanding how membrane traffic functions is therefore one of the
+central challenges of cell biology.
+%
+Some progress has been made, as cell biologists have assembled a
+“parts list” of molecules that drive vesicle
+traffic~\cite{dacks2007evolution}.
+%
+The essential processes involve the creation of vesicles loaded with
+cargo from source organelles, known as “budding”, and the depositing
+of those vesicles and cargo into target organelles, known as “fusion”
+\cite{munro2004organelle}.
+%
+Budding is regulated by proteins known as coats and adaptors that
+select cargo.
+%
+Fusion is regulated by proteins known as SNAREs and tethers, that
+ensure that vesicles fuse to the correct target
+\cite{mani2016stacking}.
+%
+Although we know a great deal about molecular-level details, there has
+been very little work done on how such processes are integrated across
+scales to build the entire vesicle traffic system (VTS).
+%
+We have recently attempted to use ideas of graph theory to address
+this question \cite{mani2016stacking,shukla2017discovering}.
+
+The SNARE proteins and the constraints that SNARE-to-SNARE regulations
+impose on feasibile behaviors of VTSs are the focus of
+our current work.
+%
+Abstractly, we can think of these proteins as labels that are
+collected from the source compartment and taken to the target
+compartment on vesicles.
+%
+There is a corresponding set of label molecules on the target compartments.
+%
+If the two sets of labels (on vesicles and targets) are compatible,
+then the vesicle will fuse.
+%
+The question is: does this physical picture place any constrains on
+the global topology of the traffic graph? We have previously shown that one informative constraint is graph connectivity \cite{shukla2017discovering}.
+%
+The intricacies of SNARE regulation are largely unknown.
+%
+How stringent SNARE regulation is can determine whether graph
+topologies of particular level of connectivity are biologically
+realizable.
+%
+For example, if SNAREs are completely unregulated and thus always
+active, they cannot be used to generate a traffic network.
+%
+If these SNAREs are regulated by relatively simple rules then only
+highly connected traffic networks can be generated using them.
+%
+The question is can we work toward a predictive analytical framework
+of VTSs?
+
+Another interesting question is the completion of the VTS. 
+%
+The current picture of the VTS is far from complete; we do not yet know how many of the cellular proteins reach their resident compartments within the cell, and new vesicle routes are being discovered every year~\cite{nickel2018unconventional,weill2018toolbox}. 
+%
+Completing the VTS is a difficult task for many important reasons: 
+\begin{enumerate}
+	\item The core VTS is conserved across eukaryotes, the traffic network in different organisms \cite{richardson2015evolutionary, barlow2017seeing}, and even in different cell types within an organism can be different~\cite{stoops2014trafficking,zhou2015arp2}.
+	\item Although the basic molecular machinery is the same for all vesicle fusion events, the details of regulation can be different~\cite{davletov2007regulation,di2010calcium}.
+	\item Molecules can have redundant routes within the cell~\cite{shimizu2014compensatory,nakatsukasa2014nutrient}.
+	\item Behaviour of traffic molecules in vitro is different from their behavior inside cells~\cite{furukawa2014multiple}. 
+	\item It can be difficult to distinguish between the direct and indirect effects of experiments involving knock-downs or knockouts of traffic molecules \cite{hirst2004epsinr,mishev2013small}.
+\end{enumerate}
+
+Nonetheless, completing the VTS for different organisms is very useful. 
+%
+Many diseases are caused by the malfunction of the VTS. 
+%
+Knowledge of the complete network would be helpful in identifying the root causes of ~\cite{bexiga2013human,gissen2007cargos}. 
+%
+At a more basic level, having complete pictures of the VTS for various organisms and various cell-types would allow comparative studies, and therefore would allow the deduction of modes of evolution of the form of the traffic network. 
+%
+This would also allow us to decipher features such as parts of the traffic system that is unchanging, and therefore likely to be its core, and parts that are more plastic \cite{barlow2017seeing}.
+
+%\subsection{Synthesis of VTS:}
+%
+The set of basic constraints the VTS should follow is dictated by underlying cell biology.   
+%
+In order to attempt to complete a given partial VTS, we have to first agree on the properties that every complete VTS should follow in spite of the basic constraints. 
+%
+We can use our stability and k-connectivity constraints as a basis for this investigation.   
+%
+The incomplete VTS might not respect these constraints. 
+%
+In this paper, using constraints on global vesicle traffic network topology due to local molecular interactions, we take incomplete pictures of vesicle traffic networks as inputs.
+%
+We output various completed versions of VTS against these properties which can then be tested experimentally.
+%
+
+The analysis of VTSs is a difficult problem because
+of the combinatorial scaling of possible traffic topologies and
+regulatory rules.
+%
+If the analysis is done on a large number of graphs, the joined effect of this with combinatorially many possible regulatory rules will be difficult to handle by any tool.
+%
+Precise analysis of the properties of the VTS would be hindered for the same reason. 
+
+In previous work, a sampling approach was undertaken. 
+%
+The study used a rule-based approach~\cite{mani2016stacking}, where given an initial condition of the cell, and rules for molecular traffic, the state of each compartment in the cell is updated until a steady state is reached. 
+%
+With this study, statistical claims can be made, but improbable albeit biologically possible solutions could have been missed.
+%
+Also, there are many ways in which the dynamics of vesicle transport can be played out, while a single one was explored in this work. 
+%
+It is possible that a different scheme for the dynamics could lead to a different set of solutions.
+
+%Previous analyses of vesicle traffic networks dealt with this combinatorial
+%explosion by using a sampling approach~\cite{mani2016stacking}. 
+%
+%In these analyses, vesicle traffic is modelled as an update system. 
+%
+%The traffic rule specifies how the system transitions from one
+%time point to the next. 
+%
+%Given a traffic rule and an initial condition, the system updates molecular flux of the compartments one step a time choosing one among the possibly exponential choices of the rule.
+%
+%The update rule defines the flux transition for the next step. 
+%
+%This process is performed until a steady state is reached. 
+%
+%
+%By studying a large sample of randomly generated update rules, such analyses can make statistical claims about vesicle traffic. 
+%
+
+In contrast, here we seek understand properties of vesicle traffic networks over all possible update rules, not just for a sampled subset. 
+%
+We would also like to directly make statements about steady state properties, rather
+than using transition dynamics to the first search for steady states. 
+%
+Formal verification tools like model checkers, SAT and SMT solvers serve precisely this purpose. 
+%
+Formal verification tools, such as model checkers
+\cite{clarke1996symbolic, biere2003bounded, clarke2008birth,
+	cimatti2000nusmv, holzmann1997model} and SAT solvers
+\cite{moskewicz2001chaff,een2004extensible} serve precisely this
+purpose.
+%
+The tools model the computation symbolically for the graphs of finite size and can make a prediction about the hypothesis for all possible states of the system without explicit enumeration of rules. 
+%
+
+%These tools are central to formal verification methods in computer science, and are increasingly being applied to understand biological systems, including gene regulatory networks [16-18]. 
+\subsection{Previous work and our Contribution}
+In a recent work, we employed the model checker CBMC \cite{CKY03,
+	ckl2004} meant to analyze ANSI C programs for studying this problem.
+%
+In this work, VTSs and SNARE regulations were modeled as C code mostly
+using arrays to represent graphs and boolean tables.
+%
+Queries about graph connectivity requirements for different variations
+of SNARE Regulations were modeled as logical assertions to be checked
+by the model checker.
+%
+CBMC uses its own built-in encodings to reduce the analysis problem to
+boolean satisfiability problem which is solved using SAT solvers.
+%
+This work was successful in demonstrating the feasibility of this
+technology to this domain.
+%
+However, the scalability of this approach was limited (up to VTSs
+with 7-8 nodes) due to the following reasons:
+\begin{enumerate}
+	\item The encoding used to model VTSs was not completely fine-tuned
+	to the structure of the problem.
+	\item The queries to be solved involve quantified formulas, i.e., we
+	needed to solve queries of the form ``\emph{for all} graphs does there
+	\emph{exist} SNARE regulation constraints that satisfy biological
+	steady state.
+\end{enumerate} As CBMC does not directly support solving such
+quantified formulas, we had to use a technique that combined
+non-determinism and partial enumeration that is not as
+efficient.\newline
+
+%
+In this paper, we have developed a novel SAT encoding for
+searching a VTS that satisfy the given properties.
+%
+We improved the encoding of some of the conditions for VTSs.
+%
+In the earlier implementation, reachability was encoded by
+enumeration of paths.
+%
+In our encoding, we have recursively defined the reachability condition
+such that that we avoid the exponential enumeration.
+%
+We have also encoded $k$-connectivity in the similar fashion and
+avoided a blowup in the formula size.
+%
+
+We have implemented the encoding using Z3~\cite{z3} python API and searched for
+VTS satisfying various properties upto size 14-18 nodes as compare
+earlier tool that could only search graph upto size 7-8 nodes.
+%
+Since most VTSs in the cells are of 10 compartments,
+our tool will be useful for biologists to study VTSs.
+%
+Furthermore, our encoding supports several variations of
+the conditions.\newline
+
+The following are the contributions of this work:
+\begin{itemize}
+	\item We have added novel encoding reachability and 3-4 connectivity
+	\item Direct encoding into the SAT solver
+	\item A user friendly and scalable tool based on well known SMT solver Z3
+\end{itemize}
+
+
+\par We have implemented the encoding in a flexible tool, which can handle a wide range of synthesis queries. 
+%
+We have applied our tool on several VTSs including
+two found-in-nature VTSs.
+%
+Our experiments suggest that some of the synthesis problems are solvable by modern solvers and the synthesis technology may be useful for biological research.
+%
+
+%
+The rest of the paper is organized as follows. 
+%
+In Section~\ref{sec:bio}, we present the biological background and details to understand the VTS. 
+%
+In Section~\ref{sec:prelim}, we present the notations we use in this paper. 
+%
+In Section~\ref{sec:model}, we present a formal model of VTSs and in Section~\ref{sec:property} the properties of interest.
+%
+In Section~\ref{sec:problem}, we present the formal problem statements of different search problems of VTS.
+%
+In Section~\ref{sec:encoding}, we present the encodings of corresponding search problems. 
+%
+In Section~\ref{sec:experiments}, we present our implementation and experimental results. 
+%
+In Section~\ref{sec:related}, we discuss related work and conclude in Section~\ref{sec:conclusion}.
 %
 %%% Local Variables:
 %%% mode: latex
