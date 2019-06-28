@@ -17,8 +17,7 @@ nuclear membrane, endoplasmic reticulum (ER), Golgi apparatus, vacuoles and lyso
 %
 Cargo is moved between these organelles in small membrane-bound
 transporters known as vesicles \cite{stenmark2009rab}.
-%s
-
+%
 This organization resembles a transport logistics network, and is commonly known as the membrane traffic system.
 %
 Membrane traffic underpins nearly every aspect of eukaryotic cellular
@@ -30,6 +29,7 @@ cell death \cite{stenmark2009rab}.
 Understanding how membrane traffic functions is therefore one of the
 central challenges of cell biology.
 %
+
 Some progress has been made, as cell biologists have assembled a
 “parts list” of molecules that drive vesicle
 traffic~\cite{dacks2007evolution}.
@@ -158,50 +158,23 @@ It is possible that a different scheme for the dynamics could lead to a differen
 %By studying a large sample of randomly generated update rules, such analyses can make statistical claims about vesicle traffic. 
 %
 
-In contrast, here we seek understand properties of vesicle traffic networks over all possible update rules, not just for a sampled subset. 
+In contrast, here we seek understand properties of vesicle traffic networks over all possible update rules, not just for a sampled subset.
 %
-We would also like to directly make statements about steady state properties, rather
-than using transition dynamics to the first search for steady states. 
+Formal verification tools like model checkers, SAT,  SMT and QBF solvers serve precisely this purpose. 
 %
-Formal verification tools like model checkers, SAT and SMT solvers serve precisely this purpose. 
-%
-Formal verification tools, such as model checkers
-\cite{clarke1996symbolic, biere2003bounded, clarke2008birth,
-	cimatti2000nusmv, holzmann1997model} and SAT solvers
-\cite{moskewicz2001chaff,een2004extensible} serve precisely this
-purpose.
-%
+%Formal verification tools, such as model checkers
+%\cite{clarke1996symbolic, biere2003bounded, clarke2008birth,
+%	cimatti2000nusmv, holzmann1997model} and SAT solvers
+%\cite{moskewicz2001chaff,een2004extensible} serve precisely this
+%purpose.
+%%
 The tools model the computation symbolically for the graphs of finite size and can make a prediction about the hypothesis for all possible states of the system without explicit enumeration of rules. 
 %
 
 %These tools are central to formal verification methods in computer science, and are increasingly being applied to understand biological systems, including gene regulatory networks [16-18]. 
 \subsection{Previous work and our Contribution}
-In a recent work, we employed the model checker CBMC \cite{CKY03,
-	ckl2004} meant to analyze ANSI C programs for studying this problem.
-%
-In this work, VTSs and SNARE regulations were modeled as C code mostly
-using arrays to represent graphs and boolean tables.
-%
-Queries about graph connectivity requirements for different variations
-of SNARE Regulations were modeled as logical assertions to be checked
-by the model checker.
-%
-CBMC uses its own built-in encodings to reduce the analysis problem to
-boolean satisfiability problem which is solved using SAT solvers.
-%
-This work was successful in demonstrating the feasibility of this
-technology to this domain.
-%
-However, the scalability of this approach was limited (up to VTSs
-with 7-8 nodes) due to the following reasons:
-\begin{enumerate}
-	\item The encoding used to model VTSs was not completely fine-tuned
-	to the structure of the problem.
-	\item The queries to be solved involve quantified formulas, i.e., we
-	needed to solve queries of the form ``\emph{for all} graphs does there
-	\emph{exist} SNARE regulation constraints that satisfy biological
-	steady state.
-\end{enumerate} As CBMC does not directly support solving such
+
+As CBMC does not directly support solving such
 quantified formulas, we had to use a technique that combined
 non-determinism and partial enumeration that is not as
 efficient.\newline
