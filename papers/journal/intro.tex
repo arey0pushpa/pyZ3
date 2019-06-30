@@ -113,7 +113,7 @@ The set of basic constraints the VTS should follow is dictated by underlying cel
 %
 In order to attempt to complete a given partial VTS, we have to first agree on the properties that every complete VTS should follow in spite of the basic constraints. 
 %
-We can use our graph connectivity results as a basis for this investigation.   
+We use our graph connectivity results as a basis for this investigation.   
 %
 The incomplete VTS might not respect these constraints. 
 %
@@ -122,12 +122,12 @@ In this paper, using constraints on global vesicle traffic network topology due 
 We output various completed versions of VTS against these properties which can then be tested experimentally.
 %
 
-\subsection{Analysis is difficult problem}
+%\subsection{Analysis is difficult problem}
 The analysis of VTSs is a difficult problem because
 of the combinatorial scaling of possible traffic topologies and
 regulatory rules.
 %
-If the analysis is done on a large number of graphs, the joined effect of this with combinatorially many possible regulatory rules will be difficult to handle by any tool.
+Analysis on a large number of graphs~\footnote{There are total 68715 simple (no parallel edges) 3-connected graphs with 8 nodes} jointly with combinatorially many possible regulatory rules (all compatible labels of edges and nodes etc.) will be difficult to handle by any tool.
 %
 Precise analysis of the properties of the VTS would be hindered for the same reason. 
 
@@ -172,52 +172,36 @@ Formal verification tools like model checkers, SAT,  SMT and QBF solvers serve p
 The tools model the computation symbolically for the graphs of finite size and can make a prediction about the hypothesis for all possible states of the system without explicit enumeration of rules. 
 %
 
+In a recent work \cite{shukla2017discovering}, we employed the model checker CBMC \cite{ckl2004} meant to analyze ANSI C programs for studying this problem. 
+%
+VTSs and SNARE regulations were modeled as C code using arrays to represent graphs and Boolean tables. 
+%
+The graph connectivity question for different variations of SNARE regulations were modeled as logical assertions to be checked by the model checker. 
+%
+Although the performance was satisfactory the encoding was non-optimal and hence scalability of the method was insufficient (the tool was able to handle system with just 8 compartments).
+%
+Another interesting question of property involving quantifiers (was termed as sufficient condition in \cite{shukla2017discovering}; in this paper we call it universal condition) was partly handled using sampling and left open as a future work.
+%
+In this paper we present both the SMT and QBF encoding to address these two problems.
+%
 %These tools are central to formal verification methods in computer science, and are increasingly being applied to understand biological systems, including gene regulatory networks [16-18]. 
-\subsection{Previous work and our Contribution}
-
-As CBMC does not directly support solving such
-quantified formulas, we had to use a technique that combined
-non-determinism and partial enumeration that is not as
-efficient.\newline
-
+%\subsection{Previous work and our Contribution}
 %
-In this paper, we have developed a novel SAT encoding for
-searching a VTS that satisfy the given properties.
-%
-We improved the encoding of some of the conditions for VTSs.
-%
-In the earlier implementation, reachability was encoded by
-enumeration of paths.
-%
-In our encoding, we have recursively defined the reachability condition
-such that that we avoid the exponential enumeration.
-%
-We have also encoded $k$-connectivity in the similar fashion and
-avoided a blowup in the formula size.
-%
-
-We have implemented the encoding using Z3~\cite{z3} python API and searched for
-VTS satisfying various properties upto size 14-18 nodes as compare
-earlier tool that could only search graph upto size 7-8 nodes.
-%
-Since most VTSs in the cells are of 10 compartments,
-our tool will be useful for biologists to study VTSs.
-%
-Furthermore, our encoding supports several variations of
-the conditions.\newline
-
-The following are the contributions of this work:
-\begin{itemize}
-	\item We have added novel encoding reachability and 3-4 connectivity
-	\item Direct encoding into the SAT solver
-	\item A user friendly and scalable tool based on well known SMT solver Z3
-\end{itemize}
+%The following are the contributions of this work:
+%\begin{itemize}
+%	\item We have added novel encoding reachability and 3-4 connectivity
+%	\item Direct encoding into the SAT solver
+%	\item A user friendly and scalable tool based on well known SMT solver Z3
+%\end{itemize}
 
 
-\par We have implemented the encoding in a flexible tool, which can handle a wide range of synthesis queries. 
+\par We have implemented the encoding in a flexible tool, which can handle both connectivity question and a wide range of synthesis queries. 
 %
-We have applied our tool on several VTSs including
+%
+We have applied our synthesis tool on several VTSs including
 two found-in-nature VTSs.
+%
+We manage to scale the tool upto the size that makes tool biologically relevant. 
 %
 Our experiments suggest that some of the synthesis problems are solvable by modern solvers and the synthesis technology may be useful for biological research.
 %
