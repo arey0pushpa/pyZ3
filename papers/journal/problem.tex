@@ -5,7 +5,7 @@ We analyze the model against our desired properties.
 %true in  relevant inall the known biological systems.
 %
 In this paper, we choose graph connectedness to be a key property.
-
+%
 We categorize the search problem (Fig.~\ref{fig:vts-search}) into three different categories, search problem for the existential condition, search problem for the universal condition, and performing synthesis on the incomplete VTS. 
 %
 We will present two encodings for existential condition and one each for universal condition and synthesis.
@@ -73,8 +73,8 @@ We will present two encodings for existential condition and one each for univers
 \label{fig:vts-search}
 \end{figure}
 
-%
-We will also seek two kinds of questions give the property.
+\vspace{0.2cm}
+\noindent We will also seek two kinds of questions give the property.
 % %
 % In this paper,
 % our conjecture relates graph-connectedness to a particular variation of SNARE pairing and
@@ -98,7 +98,7 @@ The goal is to find the minimum graph connectivity properties for each of the co
 % We use these functions to define the assertion that characterizes the corresponding condition to be checked. 
 % %
 % We will show in later sections how we encode these Boolean functions. 
-\subsubsection{Search for existential condition} 
+\subsection{Search for existential condition} 
 %
 % To ensure that k-connectedness is an existential condition,
 %
@@ -128,39 +128,11 @@ satisfies the existential condition.
 %
 % Used E as edge and L_e L_n as label for node and the edge,
 
- We employ two techniques to examine the existential condition. 
+We employ two techniques to examine the existential condition. 
 %
-First, using the bounded model checking (BMC) technique~\cite{biere1999symbolic1, biere2003bounded}.
+First, using the BMC and second using SMT solving.
 %
-%It  represents the executions of a program symbolically and 
-%
-%The Bounded model checking technique
-%BMC is an automatic technique that performs a search for the violation of the property in the program executions whose length is bounded by some fixed positive integer value $w$ (\textit{unwinding depth}). 
-%%
-%The bounded execution is represented symbolically as a propositional formula and solved using a SAT solver.
-%%
-%In case there is no violation for a particular depth, one can progressively increase the depth until either property is violated, the problem becomes intractable, or an upper bound of the system is reached, indicating the satisfiability of the property.
-%%
-%For our case, the unwinding depth is total number of nodes in the graph.
-%the maximum length of the path of the underline graph.
-%
-%
-%For the experimentation, we restrict the check only to the elementary cycles; cycles of length one. 
-%%
-%This restriction puts an upper limit of the number of nodes on the length of the searched path. 
-%
-%
-%and the upper bound is the number of nodes $N$.
-Second, using constraint solving, where the rules are represented as a constraint over the variables defined in the system.
-%
-The search problem is to find an assignment of variables that satisfies all the specified constraints.
-%
-We have used SMT solving.
-
 Throughout the paper, we will address these two subcategories as $\fbmc$ and $\fsmt$ search problems.
-%The existential condition search problem is represented as a bounded model checking and constraint solving. 
-%
-%Based upon earlier discussion, we need to answer the following search question among VTSs.
 %
 Here, we present both the $\fbmc$ and $\fsmt$ search problem for the existential condition.
 
@@ -178,7 +150,7 @@ $|\nodes| = \nu$, $|\mols| = \mu$, and
 $G$ is not $k$-connected.    
 
 
-\subsubsection{Search for universal condition}
+\subsection{Search for universal condition}
 %
 % Similarly, for the conjecture that k-connectedness is a universal condition for the VTS,
 For some $k>0$,
