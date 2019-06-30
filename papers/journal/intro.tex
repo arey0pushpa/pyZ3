@@ -161,7 +161,7 @@ It is possible that a different scheme for the dynamics could lead to a differen
 
 In contrast, here we seek understand properties of vesicle traffic networks over all possible update rules, not just for a sampled subset.
 %
-Formal verification tools like model checkers, SAT,  SMT and QBF solvers serve precisely this purpose. 
+Formal verification tools like model checkers, SAT,  SMT, and QBF solvers serve precisely this purpose. 
 %
 %Formal verification tools, such as model checkers
 %\cite{clarke1996symbolic, biere2003bounded, clarke2008birth,
@@ -171,18 +171,17 @@ Formal verification tools like model checkers, SAT,  SMT and QBF solvers serve p
 %%
 The tools model the computation symbolically for the graphs of finite size and can make a prediction about the hypothesis for all possible states of the system without explicit enumeration of rules. 
 %
-
 In a recent work \cite{shukla2017discovering}, we employed the model checker CBMC \cite{ckl2004} meant to analyze ANSI C programs for studying this problem. 
 %
 VTSs and SNARE regulations were modeled as C code using arrays to represent graphs and Boolean tables. 
 %
-The graph connectivity question for different variations of SNARE regulations were modeled as logical assertions to be checked by the model checker. 
+The graph connectivity question for different variations of SNARE regulations was modeled as logical assertions to be checked by the model checker. 
 %
-Although the performance was satisfactory the encoding was non-optimal and hence scalability of the method was insufficient (the tool was able to handle system with just 8 compartments).
+Although the performance was satisfactory the encoding was non-optimal and hence scalability of the method was insufficient (the tool was able to handle the system with just 8 compartments).
 %
-Another interesting question of property involving quantifiers (was termed as sufficient condition in \cite{shukla2017discovering}; in this paper we call it universal condition) was partly handled using sampling and left open as a future work.
+Another interesting question of property involving quantifiers (was termed as sufficient condition in \cite{shukla2017discovering}; in this paper, we call it universal condition) was partly handled using sampling and left open as future work.
 %
-In this paper we present both the SMT and QBF encoding to address these two problems.
+In this paper, we present both the SMT and QBF encodings to address these two problems.
 %
 %These tools are central to formal verification methods in computer science, and are increasingly being applied to understand biological systems, including gene regulatory networks [16-18]. 
 %\subsection{Previous work and our Contribution}
@@ -197,11 +196,10 @@ In this paper we present both the SMT and QBF encoding to address these two prob
 
 \par We have implemented the encoding in a flexible tool, which can handle both connectivity question and a wide range of synthesis queries. 
 %
-%
 We have applied our synthesis tool on several VTSs including
 two found-in-nature VTSs.
 %
-We manage to scale the tool upto the size that makes tool biologically relevant. 
+We manage to scale the tool to the size that makes the tool biologically relevant. 
 %
 Our experiments suggest that some of the synthesis problems are solvable by modern solvers and the synthesis technology may be useful for biological research.
 %
