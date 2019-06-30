@@ -1,5 +1,11 @@
-\noindent This section will present the different search problems of VTS.
+\noindent %\improve{The weakest part of the paper; Need a serious rewrite!}
+We analyze the model against our desired properties.
 %
+%Since in biology there are no declared specifications or properties, we conjecture some properties that appear to be 
+%true in  relevant inall the known biological systems.
+%
+In this paper, we choose graph connectedness to be a key property.
+
 We categorize the search problem (Fig.~\ref{fig:vts-search}) into three different categories, search problem for the existential condition, search problem for the universal condition, and performing synthesis on the incomplete VTS. 
 %
 We will present two encodings for existential condition and one each for universal condition and synthesis.
@@ -7,50 +13,50 @@ We will present two encodings for existential condition and one each for univers
 \begin {figure}[!t]
 \centering
 \begin{adjustbox}{width=0.9\columnwidth}
-{\Large
-%{	\scalefont{1.0}
-%\forestset{parent color/.style args={#1}{
-%		{fill=#1},
-%		for tree={fill/.wrap pgfmath arg={#1!##1}{1/level()*80},draw=#1!80!darkgray}},
-%	root color/.style args={#1}{fill={{#1!60!gray!25},draw=#1!80!darkgray}}
-%}
-
-\begin{forest}
- /tikz/every node/.append style={font=\sffamily,minimum size=1.0cm},
-	for tree={
-		edge+={->,thick},% uncomment for arrows
-		draw,
-		rounded corners,
-		node options={align=center,},
-		text width=1.7cm,
-		calign=fixed edge angles, calign primary angle=-84,calign secondary angle=85,
-	%	anchor=center,	
-    %	calign=center,
-	},
-	where level=0{%
-		parent anchor=children,
-	}{%
-		folder,
-		grow'=0,
-		if level=1{% this changes the edges from level 0 to nodes at level 1
-			before typesetting nodes={child anchor=north},
-			edge path'={(!u.parent anchor) -- ++(0,-5pt) -| (.child anchor)},
-		}{},
+	{\Large
+		%{	\scalefont{1.0}
+		%\forestset{parent color/.style args={#1}{
+		%		{fill=#1},
+		%		for tree={fill/.wrap pgfmath arg={#1!##1}{1/level()*80},draw=#1!80!darkgray}},
+		%	root color/.style args={#1}{fill={{#1!60!gray!25},draw=#1!80!darkgray}}
+		%}
+		
+		\begin{forest}
+			/tikz/every node/.append style={font=\sffamily,minimum size=1.0cm},
+			for tree={
+				edge+={->,thick},% uncomment for arrows
+				draw,
+				rounded corners,
+				node options={align=center,},
+				text width=1.7cm,
+				calign=fixed edge angles, calign primary angle=-84,calign secondary angle=85,
+				%	anchor=center,	
+				%	calign=center,
+			},
+			where level=0{%
+				parent anchor=children,
+			}{%
+				folder,
+				grow'=0,
+				if level=1{% this changes the edges from level 0 to nodes at level 1
+					before typesetting nodes={child anchor=north},
+					edge path'={(!u.parent anchor) -- ++(0,-5pt) -| (.child anchor)},
+				}{},
+			}
+			[\textbf{VTS Search \\ Problems}, fill=white!20, parent, s sep=1mm,
+			[\textbf{1.Existential Condition}, for tree={fill=fv, child}, 
+			[BMC, for tree={fill=ai, child}]
+			[SMT, for tree={fill=ai, child}]
+			]
+			[\textbf{2.Universal Condition}, for tree={fill=fv, child},
+			[QBF, for tree={fill=ai, child}]
+			]
+			[\textbf{3.VTS Synthesis}, for tree={fill=fv,child}, 
+			[Synthesis, for tree={fill=ai, child}]
+			]
+			]
+		\end{forest}
 	}
-    [\textbf{VTS Search \\ Problems}, fill=white!20, parent, s sep=1mm,
-	[\textbf{1.Existential Condition}, for tree={fill=fv, child}, 
-	[BMC, for tree={fill=ai, child}]
-	[SMT, for tree={fill=ai, child}]
-	]
-	[\textbf{2.Universal Condition}, for tree={fill=fv, child},
-	[QBF, for tree={fill=ai, child}]
-	]
-	[\textbf{3.VTS Synthesis}, for tree={fill=fv,child}, 
-	[Synthesis, for tree={fill=ai, child}]
-	]
-	]
-\end{forest}
-}
 \end{adjustbox}
 \vspace{0.01cm}
 
@@ -67,42 +73,90 @@ We will present two encodings for existential condition and one each for univers
 \label{fig:vts-search}
 \end{figure}
 
-\subsection{Existential condition}
-\noindent We employ two techniques to examine the existential condition. 
+%
+We will also seek two kinds of questions give the property.
+% %
+% In this paper,
+% our conjecture relates graph-connectedness to a particular variation of SNARE pairing and
+% regulation rules of the VTS.
+% %
+% We are interested in the following two type of properties of the transport graph:
+\begin{enumerate}
+\item {\em Existential condition}:
+if there is a VTS that satisfies the connectedness property. 
+
+\item {\em Universal condition}:
+  if there is a connectedness property that is satisfied by each valid VTS.
+\end{enumerate}
+The goal is to find the minimum graph connectivity properties for each of the condition.
+% In our program, the rules VTS needs to follow 
+% %
+% are represented as constrained over the transport graphs (G), label on the nodes and edges and activity of those labels (determined by a Boolean function f). 
+% %
+% Each of these constrained functions is defined to be TRUE for a G and f: if and only if the corresponding condition holds for the given G and f. 
+% %
+% We use these functions to define the assertion that characterizes the corresponding condition to be checked. 
+% %
+% We will show in later sections how we encode these Boolean functions. 
+\subsubsection{Search for existential condition} 
+%
+% To ensure that k-connectedness is an existential condition,
+%
+We need to find a $k$-connected graph that satisfies all the rules (and constraints) of the system. 
+%
+We also aim to find the minimum $k$. 
+%
+%Let's fix our conjecture: ``k-connectedness is a necessary condition for the system regulated by a Boolean function on the node and SNARE-SNARE inhibition on the edge". 
+%
+To find a k-connected graph we specify our property as a query for the existence
+of a model for a conjunction of the formula representing stability, fusion and specific
+graph connectivity constraint. 
+%
+% \begin{align*}
+%   &\texttt{LabeledVTS} = \texttt{Stability} \, \land \, \texttt{Fusion} \land \, \texttt{MinConnectivity(k)}
+%  \tag{E}\label{eq:existcond}
+% \end{align*}
+%
+We will start with the value of $k = 1$ and check for the satisfiability of the formula.
+%
+In case the formula is satisfiable the procedure terminates and we report the value of $k$. 
+%
+If the formula is not satisfiable we increment the $k$ by $1$ and repeat the same procedure. 
+%
+In this way, we ensure that the reported $k$ is the minimum connectivity of the VTS that
+satisfies the existential condition.
+%
+% Used E as edge and L_e L_n as label for node and the edge,
+
+ We employ two techniques to examine the existential condition. 
 %
 First, using the bounded model checking (BMC) technique~\cite{biere1999symbolic1, biere2003bounded}.
 %
 %It  represents the executions of a program symbolically and 
 %
 %The Bounded model checking technique
-BMC is an automatic technique that performs a search for the violation of the property in the program executions whose length is bounded by some fixed positive integer value $w$ (\textit{unwinding depth}). 
-%
-The bounded execution is represented symbolically as a propositional formula and solved using a SAT solver.
-%
-In case there is no violation for a particular depth, one can progressively increase the depth until either property is violated, the problem becomes intractable, or an upper bound of the system is reached, indicating the satisfiability of the property.
-%
-For our case, the unwinding depth is total number of nodes in the graph.
+%BMC is an automatic technique that performs a search for the violation of the property in the program executions whose length is bounded by some fixed positive integer value $w$ (\textit{unwinding depth}). 
+%%
+%The bounded execution is represented symbolically as a propositional formula and solved using a SAT solver.
+%%
+%In case there is no violation for a particular depth, one can progressively increase the depth until either property is violated, the problem becomes intractable, or an upper bound of the system is reached, indicating the satisfiability of the property.
+%%
+%For our case, the unwinding depth is total number of nodes in the graph.
 %the maximum length of the path of the underline graph.
 %
 %
-For the experimentation, we restrict the check only to the elementary cycles; cycles of length one. 
-%
-This restriction puts an upper limit of the number of nodes on the length of the searched path. 
+%For the experimentation, we restrict the check only to the elementary cycles; cycles of length one. 
+%%
+%This restriction puts an upper limit of the number of nodes on the length of the searched path. 
 %
 %
 %and the upper bound is the number of nodes $N$.
-
 Second, using constraint solving, where the rules are represented as a constraint over the variables defined in the system.
 %
 The search problem is to find an assignment of variables that satisfies all the specified constraints.
 %
-We have used a form of this technique known as SMT~\cite{nieuwenhuis2006solving, barrett2018satisfiability}.
-%
-The SMT is a generalization of Boolean satisfiability problem with domain-specific reasoning, for example, support for uninterpreted functions, equality, arithmetic and data structures like arrays, bit-vectors, etc. 
-%
-%It includes formulas with variables from other domains, including real numbers, integers, and support for various data structures such as lists, arrays, bit vectors.
-% is satisfiability of formulas with respect to some background theory.
-%
+We have used SMT solving.
+
 Throughout the paper, we will address these two subcategories as $\fbmc$ and $\fsmt$ search problems.
 %The existential condition search problem is represented as a bounded model checking and constraint solving. 
 %
@@ -123,38 +177,39 @@ $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ such that
 $|\nodes| = \nu$, $|\mols| = \mu$, and
 $G$ is not $k$-connected.    
 
-%\noindent
-%The notion of stability and connectivity varies slightly for BMC encoding. 
-%%In this subsection, we will present the concept of stability and connectivity for BMC encoding. 
-%%
-%We call a graph $G$ {\em stable} if for each $(n,M',n') \in \edges$ and $m \in M'$,
-%there exists a $m$-path in G with $n_1 = n'$ and $n_\ell = n$.
-%%
-%%
-%We call a graph $G$ {\em connected} if for each $n,n' \in \nodes$,
-%$n'$ there is a path from $n$ to $n'$ in G.
-%
-%We call a graph $G$ $k$-connected if for each $\edges' \subseteq \edges$ and $|\edges'| < k$,
-%VTS $(\nodes,\mols,\edges-E',\nlabel,\pairs,\edgef,\nodef)$ is connected.
-%%	
-%We use $m$-${path}_i^j$ to denote an $m$-path between source node i and target node is j. 
-%
-%
-%Creating a formula to search a path of length N-1 for each molecule m on every edge E will be extremely large and harder for the solvers to handle.  
-%%
-%Even if there exist shorter paths we have to create the formula of maximum size N-1. 
-%% 
-%To resolve these problems we will use a technique called bounded model checking, where the depth of the path can be specified and consequently increased or decreased.  
-%
 
-\subsection{Universal condition}
-%Here we will present the QBF.
-\noindent We will model the search problem for the universal condition as a QBF~\cite{buning2009theory, benedetti2008qbf}, and the resultant formula is solved using a QBF solver.
+\subsubsection{Search for universal condition}
+%
+% Similarly, for the conjecture that k-connectedness is a universal condition for the VTS,
+For some $k>0$,
+we have to ensure that every graph of $k$-connected structure satisfies all
+the rules of the system.
+%
+We also aim to find the minimum $k$. 
+% We also have to ensure that the particular k is the least one. 
+%
+This condition can be specified as: for every k-connected graph, there exists a satisfiable assignment following the rules of the system. 
+%
+% \begin{align*}
+%   & \forall G \, \texttt{Connectivity(k)} \implies  \exists
+%                         f,p: \texttt{Stability} \, \land \, \texttt{Fusion}  
+%   \tag{U}\label{eq:univcond}
+% \end{align*}
+%
+We will use the same procedure as the existential condition to ensure the k to be the least one.
+%
+The formula for the problem has quantifier alternation. 
+%
+Most SAT solvers can check (at least efficiently) only quantifier-free formulas.
+%
+We need a QBF solver for such queries.
+%
+We will model the search problem for the universal condition as a QBF~\cite{buning2009theory, benedetti2008qbf}, and the resultant formula is solved using a QBF solver.
 %
 The QBF is a generalization of the Boolean satisfiability problem in which every variable is quantified using either existential or universal quantifier.
 %
 The QBFs enables potentially more succinct encodings than SAT~\cite{jussila2007compressing} although much more difficult~\cite{savitch1970relationships, stockmeyer1973word} to solve.
- 
+
 %\ankit{This is a dummy template. need a rewrite.} 
 \subsubsection{$\fqbf$ search problem.} For a given $k$, size $\nu$, and molecule number $\mu$, we are searching for a $k$-connected graph such that there is no assignment that makes it a well-structured, stable, and well-fused VTS $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ with $|\nodes| = \nu$, $|\mols| = \mu$.    
 
@@ -210,12 +265,11 @@ This property was proposed in~\cite{shukla2017discovering}.
 %
 However, the biological relevance of the property is debatable and open for change.
 %
-% Our tool is easily modifiable to support any other property that may be deemed 
-% interesting by the biologists.
 
-
+%To handle this challenge, we used a combination of nondeterminism and Boolean enumeration at the C-source level to eliminate quantifiers, as explained further below.
+%
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"
 %%% End:
-             
+          
