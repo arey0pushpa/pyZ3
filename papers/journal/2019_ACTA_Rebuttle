@@ -1,8 +1,41 @@
+We thank the reviewers for their careful reading, which helps us
+improving the submission.
+
 TODO: Structure of the paper
      - Improve the way to effectively communicate the biological 
-       problem specifically to a computational audience.
+       problem specifically to a computational audience. XXX
+Reviewers 1 and 2 both felt that structure of the paper can be improved. 
+Both reviewers felt the introduction section should provide high level 
+overview to help the reader to see the big picture.
+We have now updated the introduction section to give overview of the complete
+work and in the next section we go into the details of biolgy.  
+We have also combined the materials in Sec 1.5 and 1.6 with the introduction 
+and merged Sec 1.2 and 1.3 as a separate section with detailed biological 
+description (as suggested by reviewer 2).
 
-TODO:
-   - Compare the to the previous results by the same authors. 
+TODO: Compare the to the previous results by the same authors.  XXX
+Reviewer 2 asked for a comparision to the previous papers which is now been 
+added as part of the introduction section, with providing link to the main 
+paper upfront (as pointed out by Reviewer 1). 
+
+TODO: Why should a biologist be concerned with
+this property? XXX
+Reviewer 3 pointed out that graph connectedness is not well motivated. 
+He raise question of relevance of this property for a biologist?
+It is often the case that biological data is missing. For example, only a few 
+of the dozens of molecules involved in real VTSs have been mapped out. Therefore, 
+it is extremely likely that the description provided by the cell biologist is 
+incomplete. 
+Can we find a simple test to see whether any information is missing, given the 
+experimental data? The graph k-connectedness furnishes precisely such a test. 
+If the data provided by cell-biologists, suitably represented as a graph, does not 
+have a certain degree of connectivity, this implies that some biological data has 
+been missed. (The converse is not true: even if the required connectivity does hold, 
+there might of course be more information missing.)
+We have added a complete paragraph to motivate the graph connectedness property and 
+provided the above argument in detail as part of Sec 2. 
 
 TODO: 
+  - Experimentation setup: R3 XXX
+
+We thank for the other comments, which we appropriately implemented. 
