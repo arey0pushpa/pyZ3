@@ -812,7 +812,7 @@ Therefore, we will describe two kinds of constraints for synthesis
 problems.
 %
 One will encode the variable part in the synthesis problem and
-the other encodes the fixed parts.
+the other encodes the fixed components.
 %
 Subsequently, the two constraints will be put together with 
 $\texttt{Consistancy}$ and 
@@ -825,7 +825,7 @@ Now we will consider the case when we add new edges to VTS to satisfy the proper
 In the following, the pseudo-Boolean formula $\texttt{AddE}$ encodes
 that at most $slimit$ new undeclared edges may be added in the VTS.
 %
-\texttt{FixedForEdge} encodes the parts of the VTS that are not allowed to change.
+\texttt{FixedForEdge} encodes the components of the VTS that are not allowed to change.
 \begin{align*}
 &\texttt{AddE}(slimit) = \sum~\texttt{AbsentE} \leq slimit\\
 &\texttt{FixedForEdge} = \texttt{PresentCons} \land \texttt{UnknownActive} \land\\
@@ -855,7 +855,7 @@ We start with $slimit = 1$ and grow one by one until $\texttt{SynthE}(slimit)$
 becomes satisfiable.
 
 In the later synthesis problems, we will construct a similar QBF
-formula with same first two parts and the last two are due the
+formula with same first two components and the last two are due the
 requirements of the synthesis problem.
 %
 \subsubsection{Fixing VTS by adding molecules to the labels}
@@ -962,7 +962,7 @@ variations.
 By reading of the values of $z$ in a satisfying model of the formula,
 we learn the synthesized function.
 
-\subsubsection{Fixing VTS by both adding/deleting parts}
+\subsubsection{Fixing VTS by both adding/deleting components}
 %
 Now we will consider repairing of VTS by allowing not only addition but also
 deletion of the molecules, edges, functions, or pairing matrix.
@@ -993,7 +993,7 @@ The above constraints are encoded in $\texttt{FlipN}(slimit)$.
 Similar to the earlier variations, we construct
 $\texttt{SynthRepairNode}(slimit)$ for the repair.
 %
-Where, the constraint $\texttt{FixedForNodeRepair}$ encodes all the parts of VTS that do not change.
+Where, the constraint $\texttt{FixedForNodeRepair}$ encodes all the components of VTS that do not change.
 \begin{align*}
 % \\ 
 & \texttt{FixedForNodeRepair} =  \texttt{PresentE} \land  
