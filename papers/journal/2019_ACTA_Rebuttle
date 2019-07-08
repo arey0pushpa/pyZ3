@@ -13,15 +13,15 @@ We have also combined the materials in Sec 1.5 and 1.6 with the introduction
 and merged Sec 1.2 and 1.3 as a separate section with detailed biological 
 description (as suggested by reviewer 2).
 
+  % R1: The weighting given to each section.
+
 TODO: Compare the to the previous results by the same authors.  XXX
 Reviewer 2 asked for a comparision to the previous papers which is now been 
 added as part of the introduction section, with providing link to the main 
 paper upfront (as pointed out by Reviewer 1). 
 
-TODO: Why should a biologist be concerned with
-this property? XXX
+TODO: Why should a biologist be concerned with this property? XXX
 Reviewer 3 pointed out that graph connectedness is not well motivated. 
-He raise question of relevance of this property for a biologist?
 It is often the case that biological data is missing. For example, only a few 
 of the dozens of molecules involved in real VTSs have been mapped out. Therefore, 
 it is extremely likely that the description provided by the cell biologist is 
@@ -35,7 +35,101 @@ there might of course be more information missing.)
 We have added a complete paragraph to motivate the graph connectedness property and 
 provided the above argument in detail as part of Sec 2. 
 
-TODO: 
+TODO: Technical details
+  % R2: encoding details that were unclear
+    - encoding cardinality constraints for k-connectivity
+    - encoding of the (uninterpreted) activation functions f_m and g_m into SAT 
+  
+  % R2: Is the application of a QBF solver (or an exhaustive enumeration 
+        over the universal quantification) necessary (Sec 4.0.2)?
+    The section 4.0.2 provides a high level overview of the problem and indeed 
+    in the implementation, we search for an UNSAT answer. This is evident from 
+    the 5.2.1 QBF search problem. 
+    The possible confusion can still persist so we have merged the Sec 4 Property 
+    of interest and Sec 5 Search encodings together to avoid the same.
+  
+  % R2: I found the separation between problem statements (Sec 5) and Encoding
+        (Sec 6) confusing.
+   We now provide the search problem as a part of Sec 4 Property of Interest. 
+   Stating the problem formally we think is interesting to some of the audience
+   of the paper specially to formal methods community. Due to this restructing 
+   a computational biologist can read the informal presentations and just gloss 
+   over the formal ones.  
+
+  % R2: Large parts of Sec 5 seem like background (e.g. BMC) and should be part
+        of an introduction or preliminaries (e.g. together with 2.0.1).
+   We have moved the background to preliminaries.
+
+  % R2: If Sec 4 is required, it could be made more precise given the formal 
+         model introduced in Sec 3.
+   Merging the Sec 4 and Sec 5 makes Sec 4 more formal by providing the formal 
+   presentation. 
+
+  % R2: In Sec 5.1 it wasn’t clear what the ’length of the path of the underline 
+    graph’ referred to. Is that the graph diameter or some other property? 
+    How does the restriction to elementary cycles affect this
+  We are only talking about longest simple path. We now refer it with “total no 
+  nodes in the graph”. This will cover all elementary cycles. 
+
+  % R2: In 6.1.2, should the condition in PresentE be an ’if and only if’, since 
+    at least one molecule is required on each edge?
+  Although this requires equality; one direction conditional is sufficient as the 
+  other case is covered by the fusion rule. 
+
+  % R2 & R3: Reference [67] is repeated as [68]
+
+  % R3: A 45 minute timeout seems quite short to me, based on similar SAT problems
+        I have run in the past. Why did you opt for this cutoff? 
+  The choice of the cutoff was arbitrary. 
+
+  R3: Line 14, page 15: what do you mean by ’parts’ ?
+  We meant was missing "components". We have updated the draft with the correction.
+ 
+TODO: Biology related questions
+
+  % R2: Clarify: what role does the activity of molecules on edges
+        or in compartments play? 
+  
+  % R2: the biological description can be simplified to only what is required 
+        to understand the model, while relevant references could be provided to 
+        supply additional biological details. 
+    We have now condensed the biological description.
+
+  % R2: Given that a relatively small number of 9 different organelles/compartments 
+       is considered, perhaps a figure indicating these compartments (like the ones
+       in the appendix) would be helpful.
+    We have updated the Fig. 1 and added 1(C) to indictate these comparments.
+
+  % R2: It was surprising to see parts of Sec 1.4. as part of the introduction 
+        because this seems to discuss novel results.
+   We have removed this discussion from the front of the paper. 
+
+
+  % R3: The abstraction of the VTS and the definition of the pairing matrix 
+         could be clarified for the reader if the biological background were not 
+         quite so separated from the remainder of the manuscript.
+   We have added a simple explaination in the introduction to give an overview.
+
+  % R3: I would argue further that some of the detail of the biological section 
+         is unecessary.
+   We have condensed the details of the biological section.
+
+  % R3: A clear definition of the pairing matrix is missing.
+   Although the definition is formally present we have added the definition with 
+   explanation of the pairing matrix in subsection Molecular regulation.
+
+  % R3: Figs. 5 and 6 are not referred to in the manuscript, and could easily 
+  	have been missed. 
+   We have added a reference to these figures in the Example 2.  
+
+  % R3: The notation and colours used in Fig. 2 should be explained in the 
+        figure legend.
+  We have added the explaination of notations and colors in Fig 2.
+
+
+  
+   
+  
   - Experimentation setup: R3 XXX
 
 We thank for the other comments, which we appropriately implemented. 

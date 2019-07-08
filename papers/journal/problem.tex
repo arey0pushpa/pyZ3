@@ -168,7 +168,7 @@ This condition can be specified as: for every k-connected graph, there exists a 
 %   \tag{U}\label{eq:univcond}
 % \end{align*}
 %
-We will use the same procedure as the existential condition to ensure the k to be the least one.
+We will use the same procedure as the existential condition to ensure the $k$ to be the least one.
 %
 The formula for the problem has quantifier alternation. 
 %
@@ -176,11 +176,6 @@ Most SAT solvers can check (at least efficiently) only quantifier-free formulas.
 %
 We need a QBF solver for such queries.
 %
-We will model the search problem for the universal condition as a QBF~\cite{buning2009theory, benedetti2008qbf}, and the resultant formula is solved using a QBF solver.
-%
-The QBF is a generalization of the Boolean satisfiability problem in which every variable is quantified using either existential or universal quantifier.
-%
-The QBFs enables potentially more succinct encodings than SAT~\cite{jussila2007compressing} although much more difficult~\cite{savitch1970relationships, stockmeyer1973word} to solve.
 
 %\ankit{This is a dummy template. need a rewrite.} 
 \subsubsection{$\fqbf$ search problem.} For a given $k$, size $\nu$, and molecule number $\mu$, we are searching for a $k$-connected graph such that there is no assignment that makes it a well-structured, stable, and well-fused VTS $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ with $|\nodes| = \nu$, $|\mols| = \mu$.    
