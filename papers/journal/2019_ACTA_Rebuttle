@@ -64,6 +64,10 @@ TODO: Technical details
          model introduced in Sec 3.
    Merging the Sec 4 and Sec 5 makes Sec 4 more formal by providing the formal 
    presentation. 
+ 
+  % R2: In Sec 1.4, it would be helpful to understand where the 'large number of 
+        graphs' is coming from, though this is somewhat clarified later in the paper.
+  We have added the information upfront; in the introduction section.
 
   % R2: In Sec 5.1 it wasn’t clear what the ’length of the path of the underline 
     graph’ referred to. Is that the graph diameter or some other property? 
@@ -120,7 +124,8 @@ TODO: Biology related questions
 
   % R3: Figs. 5 and 6 are not referred to in the manuscript, and could easily 
   	have been missed. 
-   We have added a reference to these figures in the Example 2.  
+   We have added a reference to these figures in the Example 2. We have also 
+   updated the Fig 1 to add schematic Fig 1C of typic eukaryotic cell’s VTS. 
 
   % R3: The notation and colours used in Fig. 2 should be explained in the 
         figure legend.
