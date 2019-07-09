@@ -15,13 +15,12 @@ encode our problems.
 %
 An assignment is a map from the variables in the formula to the Boolean values.
 %
-An assignment may satisfy a formula if the interpretation of Boolean operators
-reduces the whole Formula into 1.
+An assignment may satisfy a formula if the interpretation of Boolean operators reduces the whole Formula into 1.
 %
-The problem of finding a satisfying assignment for a Boolean formula is known to be hard~\cite{cook1971complexity}.
+The SAT~\cite{biere2009handbook} is the problem of determining if there exists an interpretation that satisfies a given Boolean formula and is known to be hard~\cite{cook1971complexity}.
 %
 
-The SMT~\cite{barrett2018satisfiability} is a generalization of Boolean satisfiability problem with domain-specific reasoning, for example, support for uninterpreted functions, equality, arithmetic and data structures like arrays, bit-
+The SMT~\cite{nieuwenhuis2006solving, barrett2018satisfiability} is a generalization of Boolean satisfiability problem with domain-specific reasoning, for example, support for uninterpreted functions, equality, arithmetic and data structures like arrays, bit-
 vectors, etc.
 %
 For example, $f(f(u,v),v)=f(u,v)$ where $f$ is some unspecified function of two arguments has equality involving uninterpreted terms and function symbols.
@@ -50,7 +49,7 @@ and implement sophisticated algorithms.
 %
 A SAT solver typically implements conflict-driven clause learning (CDCL)~\cite{biere2009conflict}.
 %1
-SMT solvers~\cite{nieuwenhuis2006solving, barrett2018satisfiability} in addition adds supports for some first order theories like arithmetic, arrays etc.
+SMT solvers~\cite{barrett2018satisfiability} in addition adds supports for some first order theories like arithmetic, arrays etc.
 % 
 The QBF solver adds support of quantifiers by adding more rules for quantifiers~\cite{buning2009theory}.
 %
