@@ -74,7 +74,7 @@ TODO: Technical details
     graph’ referred to. Is that the graph diameter or some other property? 
     How does the restriction to elementary cycles affect this
   We are only talking about longest simple path. We now refer it with “total no 
-  nodes in the graph”. This will cover all elementary cycles. 
+  nodes in the graph”. This covers all elementary cycles. 
 
   % R2: In 6.1.2, should the condition in PresentE be an ’if and only if’, since 
     at least one molecule is required on each edge?
@@ -85,7 +85,10 @@ TODO: Technical details
 
   % R3: A 45 minute timeout seems quite short to me, based on similar SAT problems
         I have run in the past. Why did you opt for this cutoff? 
-  The choice of the cutoff was arbitrary. 
+  The choice of the cutoff time was arbitrary. 
+
+  % R3: Please provide references for CBMC (page 27) and Z3 (page 28). 
+  We have updated the draft and added reference to both.
 
   % R3: Line 14, page 15: what do you mean by ’parts’ ?
   We meant was missing "components". We have updated the draft with the correction.
