@@ -70,6 +70,11 @@ TODO: Technical details
         graphs' is coming from, though this is somewhat clarified later in the paper.
   We have added the information upfront; in the introduction section.
 
+  % R2: Large parts of Sec 5 seem like background (e.g. BMC) and should be part 
+        of an introduction or preliminaries (e.g. together with 2.0.1).
+  We have now condensed the background discussions and moved it as a part of the 
+  preliminanries.
+
   % R2: In Sec 5.1 it wasn’t clear what the ’length of the path of the underline 
     graph’ referred to. Is that the graph diameter or some other property? 
     How does the restriction to elementary cycles affect this
@@ -82,6 +87,10 @@ TODO: Technical details
   other case is covered by the fusion rule. 
 
   % R2 & R3: Reference [67] is repeated as [68]
+
+  % R3: The abbreviation QBFs is used from p11 onwards, but this abbreviation is not 
+        defined for the reader.
+  We have corrected this now. Added it within the introduction section. 
 
   % R3: A 45 minute timeout seems quite short to me, based on similar SAT problems
         I have run in the past. Why did you opt for this cutoff? 
@@ -100,14 +109,42 @@ TODO: Biology related questions
   
   % R2: the biological description can be simplified to only what is required 
         to understand the model, while relevant references could be provided to 
-        supply additional biological details. 
-    We have now condensed the biological description.
+        supply additional biological details.  For example, dynamin does not seem 
+        to be discussed in the paper at all and tethering, uncoating, etc are only 
+        mentioned as biological details but not captured in the model. Perhaps, the biological 
+        description can be simplified to only what is required to understand the model, while 
+        relevant references could be provided to supply additional biological details. 
+    To make the description of molecular events of vesicle traffic more accessible 
+    to non-biologist readers, we have simplified the text by removing details which 
+    are not necessary for understanding the current work. 
+    The references we provide in the text should be sufficient if the interested 
+    reader wishes to gain a deeper knowledge of the molecular mechanism.  
+    In section 1.1.1, we have removed details about the localization and interactions 
+    of specific examples of adaptor and coat proteins.
+    In section 1.1.2, we have removed details about the Rab protein localization and 
+    its significance. We have also removed the hypotheses about the additional 
+    functions tethers might play during vesicle fusion.
+
+  % R2: If Fig 2, I wasn’t clear why the cargo proteins seem to be attached from 
+        outside the source compartment. My understanding was that there could be
+        transmembrane as well as cargo proteins from within the compartments.
+    There indeed can be lumenal cargo in vesicles, but because lumenal proteins cannot 
+    interact directly with cytosolic adaptors, they are recruited to vesicles through 
+    their interactions with transmembrane proteins. To depict these interactions, we have 
+    now included lumenal proteins in our revised schematic (Fig 1A).
+
 
   % R2: Given that a relatively small number of 9 different organelles/compartments 
        is considered, perhaps a figure indicating these compartments (like the ones
        in the appendix) would be helpful.
     We have updated the Fig. 1 and added 1(C) to indictate these comparments.
 
+  % R2: I also found the regulatory interactions presented in Sec 1.1.3 unclear. Could this 
+       be summarized as an interaction network between the main regulators?
+   In order to depict the major interactions of SNARE proteins described in Sec 1.1.3 more 
+   clearly, we have added a figure (Fig 1B), where these interactions are represented as a 
+   network.
+ 
   % R2: It was surprising to see parts of Sec 1.4. as part of the introduction 
         because this seems to discuss novel results.
    We have removed this discussion from the front of the paper. 
@@ -124,7 +161,21 @@ TODO: Biology related questions
 
   % R3: A clear definition of the pairing matrix is missing.
    Although the definition is formally present we have added the definition with 
-   explanation of the pairing matrix in subsection Molecular regulation.
+   explanation of the pairing matrix in subsection of Sec 2 (Molecular regulation).
+
+  % R3: I would like the interpretation of your results to have been unpacked further
+       (e.g. expanding on the paragraph starting on line 32 of page 29). This again will help 
+       to communicate the contribution of your work to the biological problem being studied.
+   We have accordingly expanded our text on the interpretation of the work. In order to make 
+   the significance of our model and potential uses of our tool more explicit, we have revised 
+   the first paragraph of the conclusion section.
+
+ % R3: You refer to predictions that could be tested experimentally, but these predictions 
+       are not made explicit or translated back to definitive biological experiments that could 
+       be run. Would a biologist be able to take your tool, apply it to the VTS they are 
+       studying and formulate experiments based on the model?
+   We have added suggestions of how an experimentalist could use the outputs of our tool to 
+   hasten discoveries of new vesicles in VTSs. Updated the paragraph 2 of the conclusion section.
 
   % R3: Figs. 5 and 6 are not referred to in the manuscript, and could easily 
   	have been missed. 
