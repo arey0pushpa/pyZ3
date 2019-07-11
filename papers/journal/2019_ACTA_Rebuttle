@@ -21,6 +21,14 @@ Structure of the paper
 TODO: Compare the to the previous results by the same authors.  XXX
 % R2: The contribution of this work compared to previous papers should
       be clarified.
+      1. It seems that the model is based on previous work reported in [67-68]. Is the 
+         model extended in any way?
+      2. There seem to be some differences in terms of methodology (SAT-based
+         model checking vs SMT/SAT/QBF)
+      3. How are the problems being considered different? It seems that synthesis
+         was not considered before.
+      4. Was the simpler regulation mechanism (pairing inhibition) considered as
+         part of previous work too limiting?
   Reviewer 2 asked for a comparision to the previous papers which is now been 
   added as part of the introduction section, with providing link to the main 
   paper upfront (as pointed out by Reviewer 1). 
@@ -63,8 +71,8 @@ Reviewers raises several technical questions.
    cardinality constraints. For the SMT solver Z3, we have used pseudo-boolean
    inequality constraints to represent them.
    Representation of the uninterpreted function was used only in our original paper
-   [Shukla et al. 2017] by representing a boolean function a bit-vector. The 
-   implementation is straightforward and do not add additional value to the current 
+   [Shukla et al. 2017] by representing a boolean function a bit-vector. We feel that 
+   the implementation is straightforward and do not add additional value to the current 
    presentation and best be abstracted.
 
   % R2: Is the application of a QBF solver (or an exhaustive enumeration 
@@ -74,12 +82,10 @@ Reviewers raises several technical questions.
         satisfying the properties exists? In other words, an UNSAT answer for 
         k<k_min would imply that no such graphs exist.
     The section 4.0.2 provides a high-level overview of the problem and in 
-    the implementation, we search for an UNSAT answer. This is evident from 
+    the implementation, we indeed search for an UNSAT answer. This is evident from 
     the 5.2.1 QBF search problem. 
     The possible confusion can still persist so we have merged the Sec 4 
     Property of interest and Sec 5 Search encodings together to avoid the same. 
-    This will present a contrast between a high-level overview and optimal 
-    implementation. 
   
   % R2: I found the separation between problem statements (Sec 5) and Encoding
         (Sec 6) confusing.
@@ -138,6 +144,10 @@ Reviewers raises several technical questions.
   We have updated the draft with the correction.
  
 Reviewers raises several questions related to the biology.
+  % R1: However, the biological relevance of the property is debatable and open 
+    for change. This sentence feels very open ended and not expanded further.
+  @Ashutosh XXX.
+
   % R2: It wasn’t clear to me what role does the activity of molecules on
        edges or in compartments play. It seems that the graph corresponding 
        to the model as currently defined is purely static - the activity of 
