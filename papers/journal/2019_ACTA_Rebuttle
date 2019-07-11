@@ -178,7 +178,11 @@ Reviewers raises several questions related to the biology.
         understand the model, while relevant references could be provided to 
         supply additional biological details. 
   % R3: I would argue further that some of the detail of the biological section 
-         is unecessary.
+        is unecessary. The biological background should be condensed to cover 
+        essential features of the system that are captured by the model, to 
+        ensure that the reader understands how you have abstracted the key 
+        features of the system, and also to set up specific biological questions 
+        that this modelling approach can uniquely address.
     To make the description of molecular events of vesicle traffic more accessible 
     to non-biologist readers, we have simplified the text by removing details which 
     are not necessary for understanding the current work. 
@@ -224,7 +228,7 @@ Reviewers raises several questions related to the biology.
    But, since our model is essentially binary, the two statements 
    become equivalent.
    We have updated the Sec 1.3.2, now (updated section) 2.3.2 Steady state to 
-   clarify the confusion.
+   address this confusion.
 
   % R3: The abstraction of the VTS and the definition of the pairing matrix 
          could be clarified for the reader if the biological background were not 
