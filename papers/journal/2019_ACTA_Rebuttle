@@ -10,22 +10,21 @@ Structure of the paper
 % R2: I found the introduction to be unclear as presented currently because there
       was insufficient information to understand the aims of the paper and proposed 
       method before going into the biological details and problem formulation. 
-Reviewers 1 and 2 both felt that the structure of the paper can be improved. 
-Both reviewers suggested the introduction section should provide a high-level overview 
-to help the reader to see the big picture. We have now updated the introduction section 
-to give an overview of the complete work and in the next section, we go into the details
-of biology. We have also combined the materials in Sec 1.5 and 1.6 with the introduction 
-and merged Sec 1.2 and 1.3 as a separate section with detailed biological description 
-(as suggested by reviewer 2).
-
+  Reviewers 1 and 2 both felt that the structure of the paper can be improved. 
+  Both reviewers suggested the introduction section should provide a high-level 
+  overview to help the reader to see the big picture. We have now updated the 
+  introduction section to give an overview of the complete work and in the next 
+  section, we go into the details of biology. We have also combined the materials 
+  in Sec 1.5 and 1.6 with the introduction and merged Sec 1.2 and 1.3 as a separate 
+  section with detailed biological description (as suggested by reviewer 2).
 
 TODO: Compare the to the previous results by the same authors.  XXX
 % R2: The contribution of this work compared to previous papers should
-be clarified.
-Reviewer 2 asked for a comparision to the previous papers which is now been 
-added as part of the introduction section, with providing link to the main 
-paper upfront (as pointed out by Reviewer 1). 
-@ASHUTOSH XXX
+      be clarified.
+  Reviewer 2 asked for a comparision to the previous papers which is now been 
+  added as part of the introduction section, with providing link to the main 
+  paper upfront (as pointed out by Reviewer 1). 
+  @ASHUTOSH XXX
 
 % R1: The weighting given to each section.
 @ASHUTOSH XXX
@@ -40,26 +39,34 @@ Reviewer 3 pointed out that graph connectedness is not well motivated.
       of the stable and k-connected property is debatable. To me this statement
       undermines your work and raises the question of whether you have set up a
       modelling problem that is biologically useful.
-It is often the case that biological data is missing. For example, only a few of 
-the dozens of molecules involved in real VTSs have been mapped out. Therefore, it 
-is extremely likely that the description provided by the cell biologist is 
-incomplete. 
-Can we find a simple test to see whether any information is missing, given the 
-experimental data? The graph k-connectedness furnishes precisely such a test. 
-If the data provided by cell-biologists, suitably represented as a graph, does
-not have a certain degree of connectivity, this implies that some biological 
-data has been missed. (The converse is not true: even if the required 
-connectivity does hold, there might, of course, be more information missing.) 
-We have added a complete paragraph to motivate the graph connectedness 
-property and provided the above argument in detail as part of the (updated section)
-Sec 2. 
+  It is often the case that biological data is missing. For example, only a few of 
+  the dozens of molecules involved in real VTSs have been mapped out. Therefore, it 
+  is extremely likely that the description provided by the cell biologist is 
+  incomplete. 
+  Can we find a simple test to see whether any information is missing, given the 
+  experimental data? The graph k-connectedness furnishes precisely such a test. 
+  If the data provided by cell-biologists, suitably represented as a graph, does
+  not have a certain degree of connectivity, this implies that some biological 
+  data has been missed. (The converse is not true: even if the required 
+  connectivity does hold, there might, of course, be more information missing.) 
+  We have added a complete paragraph to motivate the graph connectedness 
+  property and provided the above argument in detail as part of the 
+  (updated section) Sec 2 Biological Problem. 
 
 Reviewers raises several technical questions.
-  % R2: encoding details that were unclear
-    - encoding cardinality constraints for k-connectivity
-    - encoding of the (uninterpreted) activation functions f_m and g_m into SAT 
-  @ASHUTOSH XXX
-  
+  % R2: In the restriction of the SMT encoding to SAT for BMC, there are few
+        encoding details that were unclear and should be discussed in more
+        detail. In particular, the approach for encoding cardinality 
+        constraints for k-connectivity and the encoding of the (uninterpreted) 
+        activation functions f_m and g_m into SAT can be clarified.
+   The modern-day model solvers provide varieties of direct functions for expressing
+   cardinality constraints. For the SMT solver Z3, we have used pseudo-boolean
+   inequality constraints to represent them.
+   Representation of the uninterpreted function was used only in our original paper
+   [Shukla et al. 2017] by representing a boolean function a bit-vector. The 
+   implementation is straightforward and do not add additional value to the current 
+   presentation and best be abstracted.
+
   % R2: Is the application of a QBF solver (or an exhaustive enumeration 
         over the universal quantification) necessary (Sec 4.0.2)? If the 
         alternation involves only two quantifiers, can the problem be inverted, 
@@ -92,7 +99,8 @@ Reviewers raises several technical questions.
    to make the presentation precise.
  
   % R2: In Sec 1.4, it would be helpful to understand where the 'large number of 
-        graphs' is coming from, though this is somewhat clarified later in the paper.
+        graphs' is coming from, though this is somewhat clarified later in the 
+        paper.
   We have added the information in the introduction section.
 
   % R2: Large parts of Sec 5 seem like background (e.g. BMC) and should be part 
@@ -114,8 +122,8 @@ Reviewers raises several technical questions.
   % R2 & R3: Reference [67] is repeated as [68]
   This is now fixed.
 
-  % R3: The abbreviation QBFs is used from p11 onwards, but this abbreviation is not 
-        defined for the reader.
+  % R3: The abbreviation QBFs is used from p11 onwards, but this abbreviation is 
+        not defined for the reader.
   We have corrected it. Added it within the introduction section. 
 
   % R3: A 45 minute timeout seems quite short to me, based on similar SAT problems
@@ -130,9 +138,7 @@ Reviewers raises several technical questions.
   We have updated the draft with the correction.
  
 Reviewers raises several questions related to the biology.
-  % R2: Clarify: what role does the activity of molecules on edges
-        or in compartments play? 
-       It wasn’t clear to me what role does the activity of molecules on
+  % R2: It wasn’t clear to me what role does the activity of molecules on
        edges or in compartments play. It seems that the graph corresponding 
        to the model as currently defined is purely static - the activity of 
        molecules depends only on which molecules are available in a 
@@ -146,12 +152,12 @@ Reviewers raises several questions related to the biology.
    implies the ability to cause membrane fusion and it only applies to SNAREs. 
    In this sense, it indeed does not matter whether the molecule interacting with 
    the SNARE is active or not. 
-   For example, Qa-SNAREs are only ’active’ on target compartments (regulation by
-   SM proteins achieves this [Baker and Hughson, 2016]), but when present on vesicles
-   with its other cognate SNAREs, it nevertheless will participate in SNARE complex
-   formation within the same vesicle membrane, and thus inhibit its SNARE partners 
-   from causing vesicle fusion.
-   We have added this paragraph in 2.3.4 Molecular regulation (Updated) section.
+   For example, Qa-SNAREs are only 'active' on target compartments (regulation by
+   SM proteins achieves this [Baker and Hughson, 2016]), but when present on 
+   vesicles with its other cognate SNAREs, it nevertheless will participate in 
+   SNARE complex formation within the same vesicle membrane, and thus inhibit 
+   its SNARE partners from causing vesicle fusion.
+   We have added this paragraph in (updated section) 2.3.4 Molecular regulation.
   
   % R2: The biological description can be simplified to only what is required 
         to understand the model, while relevant references could be provided to 
@@ -173,7 +179,7 @@ Reviewers raises several questions related to the biology.
     In section 1.1.2, we have removed details about the Rab protein localization 
     and its significance. We have also removed the hypotheses about the additional 
     functions tethers might play during vesicle fusion. 
-    All the changes are now part of the (updated section) Sec 2 Biological Problem
+    All the changes are now part of the (updated section) Sec 2 Biological Problem.
 
   % R2: If Fig 2, I wasn’t clear why the cargo proteins seem to be attached from 
         outside the source compartment. My understanding was that there could be
