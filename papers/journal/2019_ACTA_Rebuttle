@@ -215,6 +215,16 @@ Reviewers raises several questions related to the biology.
   % R2: It was surprising to see parts of Sec 1.4. as part of the introduction 
         because this seems to discuss novel results.
    We have removed this discussion from the front of the paper. 
+  
+  $ R2: I found it confusing that in Sec 1.3.1 it is stated that molecule counts 
+        are abstracted but Sec 1.3.2 starts by discussing changes in molecule counts.
+   As a simplification, we assume that the incoming and outgoing flux is balanced 
+   for each of the molecular types at each compartment. This is much stronger than 
+   the constraint that each molecule type entering a compartment must also leave it. 
+   But, since our model is essentially binary, the two statements 
+   become equivalent.
+   We have updated the Sec 1.3.2, now (updated section) 2.3.2 Steady state to 
+   clarify the confusion.
 
   % R3: The abstraction of the VTS and the definition of the pairing matrix 
          could be clarified for the reader if the biological background were not 

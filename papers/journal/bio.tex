@@ -197,13 +197,24 @@ The label represents the associated flux of all molecular types carried by the c
 %
 
 \subsubsection{Steady state} 
-The vesicle transfer will change the molecular composition (distinct molecule count) on both the source compartment and the target compartment. 
+%The vesicle transfer will change the molecular composition (distinct molecule count) on both the source compartment and the target compartment. 
 %
-In our model, we assume that the cell is in a steady state. As a further simplification, we also assume that the incoming and outgoing flux is balanced for each of the molecular types at each compartment. 
+%In our model, we assume that the cell is in a steady state. As a further simplification, we also assume that the incoming and outgoing flux is balanced for each of the molecular types at each compartment. 
+%Indeed, it is well accepted that on the scale of minutes and hours the molecular composition remains the same. 
+%
+%In this paper, we refer to the steady state of the cell (referred to as \textit{homeostasis} in biological literature) as the stability condition over the annotated graph.
+
+In eukaryotic cells, vesicle transfer will change the molecular composition (distinct molecule count) on both the source compartment and the target compartment. 
+%
+In our model, we assume that the cell is in a steady state. As a further simplification, we also assume that the incoming and outgoing flux is balanced for each of the molecular types at each compartment.
+%
+This is much stronger than the constraint that each molecule type entering a compartment must also leave it.
+%
+But, since our model is essentially binary, the two statements become equivalent. 
+%
 Indeed, it is well accepted that on the scale of minutes and hours the molecular composition remains the same. 
 %
-In this paper, we refer to the steady state of the cell (referred to as \textit{homeostasis} in biological literature) as the stability condition over the annotated graph.
-
+In this paper, we refer to the steady state of the cell (referred to as homeostasis in biological literature) as the stability condition over the annotated graph.
 
 %Each edge is associated with a flux of all the molecular types carried by the corresponding vesicle. The total amount of each molecular type on each compartment can therefore increase or decrease. We assume the cell is in a steady state where each compartment’s composition does not vary over short time scales. Therefore, incoming and outgoing fluxes are balanced for each molecular type at each compartment; it is the \textit{stability cond1ition}.
 
