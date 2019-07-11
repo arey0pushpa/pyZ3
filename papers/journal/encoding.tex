@@ -257,6 +257,10 @@ existing edges can be dropped and exactly $k-1$ edges are dropped.
 \bigwedge\limits_{i,j,q} d_{i,j,q} \limplies e_{i,j,q}  \land 
 \sum_{i,j,q} d_{i,j,q} = k-1\\
 \end{align*}
+
+%We have used logarithmic bitwise encoding to express the cardinality constraint that exactly $k-1$ edges are dropped. 
+%To encode exactly $k$ edges are dropped we need to express cardinality constraint to allow exactly $k$ edges to be true from set of all present edges $e$. 
+%
 We need to define reachability in the modified VTS, therefore we use
 a new variable $r'_{i,j}$ to encode reachability from $i$ to $j$.
 In the following constraint, we encode $r'_{i,j}$ is true if there is an

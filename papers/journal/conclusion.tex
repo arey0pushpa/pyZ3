@@ -1,17 +1,14 @@
 \noindent 
-We demonstrate in our work how local regulatory interactions between molecules of the VTS, translate
-into a global, observable properties of the VTS. 
+We demonstrate in our work how local regulatory interactions between molecules of the VTS, translate into a global, observable properties of the VTS. 
 %
-Interactions between SNARE proteins and their
-regulators, which in its simplest form can be encoded in a pairing matrix, constrain the topological
-properties of the transport graph; all VTSs based on V-SNARE T-SNARE interactions must be 2-strongly connected.
-% 
+Interactions between SNARE proteins and their regulators, which in its simplest form can be encoded in a pairing matrix, constrain the topological properties of the transport graph; all VTSs based on SNARE protein interactions must be 2-strongly connected. 
+%
 Additionally, we demonstrate how we can aid in predicting new vesicles given an incomplete VTS as input. 
 %
 Our approach demonstrates the power of SMT solvers in a novel application and the value of careful encoding of the problems into SMT queries. 
 %
-We manage to scale the tool up
-to the size that makes the tool biologically relevant.
+We manage to scale the tool up to the size that makes the tool biologically relevant.
+%
 %To conclude, we have established a connection between vesicle transport graph connectedness and underlying rules of SNARE pairing and regulation. 
 %%
 %The constraints implied by SNARE protein properties translates into
@@ -21,22 +18,19 @@ to the size that makes the tool biologically relevant.
 %We manage to scale the tool up to the size that makes the tool biologically relevant.
 %
 
-However, the problem of searching for all $k$-connected VTSs induces quantifier alternation in the encodings.
+However, the problem of searching for all $k$-connected VTSs induces quantifier alternation in the encodings. 
 %
 Therefore, a simple call to SAT solver may not work efficiently. 
 %
-We used QBF solvers for such queries.
+We used QBF solvers for such queries. Our connectivity results contain many predictions which can in principle be tested through cell-biological experiments. 
 %
-Our connectivity results contain many predictions which can in principle be tested through cell-biological experiments. 
+For any input VTS, our tool outputs multiple possible solutions in the form of predictions of undiscovered vesicles and cargo molecules on specific vesicles. 
 %
-One may also be interested in counting the number of graphs that satisfy
-a given property. 
+Such predictions could be used to guide biological experiments. Since a VTS that is close to completion is expected to have fewer alternative solutions to test, we expect that testing the predictions of our tool would become more tractable as more and more vesicles are discovered. 
 %
-Exact counting of the graphs using SAT solvers may prove to be very
-difficult. 
+One may also be interested in counting the number of graphs that satisfy a given property. 
 %
-We are planning to employ approximate counting methods for finding the solution.
-%
+Exact counting of the graphs using SAT solvers may prove to be very difficult. We are planning to employ approximate counting methods for finding the solution.
 
 We also presented encodings of the synthesis problems that may arise from VTSs.
 %
