@@ -220,8 +220,8 @@ Reviewers raises several questions related to the biology.
  % R3: You refer to predictions that could be tested experimentally, but these 
        predictions are not made explicit or translated back to definitive 
        biological experiments that could be run. Would a biologist be able to 
-       take your tool, apply it to the VTS they are studying and formulate experiments
-       based on the model?
+       take your tool, apply it to the VTS they are studying and formulate 
+       experiments based on the model?
    We have added suggestions of how an experimentalist could use the outputs of 
    our tool to hasten discoveries of new vesicles in VTSs. 
    Updated paragraph 2 of the conclusion section.
