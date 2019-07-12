@@ -1,6 +1,6 @@
 \noindent 
 %A characteristic feature of eukaryotic cells is the presence of multiple internal membrane-bounded compartments. 
-Eukaryotic cells contain distinct membrane-bound objects known as organelles: endoplasmic reticulum (ER), Golgi apparatus, vacuoles and lysosomes are examples of these.
+Eukaryotic cells contain distinct membrane-bound objects known as organelles: endoplasmic reticulum (ER), Golgi apparatus, vacuoles, and lysosomes are examples of these.
 %These compartments exchange molecules amo\-ngst themselves in small membrane-bounded packets called vesicles~\cite{alberts2002molecular}. 
 %
 %%The molecular interaction network that controls the vesicle traffic system involves dozens of varieties of molecules that regulate the flow of cargo. 
@@ -14,10 +14,12 @@ Eukaryotic cells contain distinct membrane-bound objects known as organelles: en
 %%In this paper, using formal methods, we solve the problem of completing incomplete VTS graphs while also considering constraints due to molecular interactions, thereby demonstrating the effectiveness of such methods.
 %
 %
-Cargo is moved between these organelles in small membrane-bound
+Some of the material of the cell needs to move
+between these organelles in small membrane-bound
 transporters known as vesicles \cite{stenmark2009rab}.
 %
-This organization resembles a transport logistics network, and is commonly known as the membrane traffic system.
+This organization resembles a transport logistics network
+and is commonly known as the membrane traffic system.
 %
 Membrane traffic underpins nearly every aspect of eukaryotic cellular
 physiology, including human cellular physiology.
@@ -25,11 +27,11 @@ physiology, including human cellular physiology.
 Defects in membrane traffic lead to a variety of disorders or even
 cell death \cite{stenmark2009rab}.
 %
-Understanding how membrane traffic functions is therefore one of the
+Understanding how membrane traffic functions are, therefore, one of the
 central challenges of cell biology.
 %
 
-Some progress has been made, as cell biologists have assembled a
+The cell biologists have made some progress by assembling a
 “parts list” of molecules that drive vesicle
 traffic~\cite{dacks2007evolution}.
 %
@@ -38,22 +40,21 @@ cargo from source organelles, known as “budding”, and the depositing
 of those vesicles and cargo into target organelles, known as “fusion”
 \cite{munro2004organelle}.
 %
-Budding is regulated by proteins known as coats and adaptors that
-select cargo.
+Proteins that are called coats and the adaptors that select the cargo regulate budding.
 %
-Fusion is regulated by proteins known as SNAREs and tethers, that
-ensure that vesicles fuse to the correct target
+The proteins that are known as SNAREs and tethers that ensure that vesicles
+fuse to the correct target regulate fusion
 \cite{mani2016stacking}.
 %
 Although we know a great deal about molecular-level details, there has
 been very little work done on how such processes are integrated across
 scales to build the entire vesicle traffic system (VTS).
 %
-We have recently attempted to use ideas of graph theory to address
+We have recently attempted to use the ideas of graph theory to address
 this question \cite{mani2016stacking,shukla2017discovering}.
 
 The SNARE proteins and the constraints that SNARE-to-SNARE regulations
-impose on feasibile behaviors of VTSs are the focus of
+impose on the feasible behaviors of VTSs are the focus of
 our current work.
 %
 Abstractly, we can think of these proteins as labels that are
@@ -65,51 +66,54 @@ There is a corresponding set of label molecules on the target compartments.
 If the two sets of labels (on vesicles and targets) are compatible,
 then the vesicle will fuse.
 %
-The question is: does this physical picture place any constrains on
+The question is: does this physical picture place any constraints on
 the global topology of the traffic graph? We have previously shown that one informative constraint is graph connectivity \cite{shukla2017discovering}.
 %
 The intricacies of SNARE regulation are largely unknown.
 %
-How stringent SNARE regulation is can determine whether graph
-topologies of particular level of connectivity are biologically
+How stringent SNARE regulation is can determine whether the graph
+topologies of a particular level of connectivity are biologically
 realizable.
 %
 For example, if SNAREs are completely unregulated and thus always
 active, they cannot be used to generate a traffic network.
 %
-If these SNAREs are regulated by relatively simple rules then only
+If relatively simple rules regulate the SNAREs, then only
 highly connected traffic networks can be generated using them.
 %
-The question is can we work toward a predictive analytical framework
+The question is, can we work toward a predictive analytical framework
 of VTSs?
 
 Another interesting question is the completion of the VTS \cite{synthesisGupta}. 
 %
-The current picture of the VTS is far from complete; we do not yet know how many of the cellular proteins reach their resident compartments within the cell, and new vesicle routes are being discovered every year~\cite{nickel2018unconventional,weill2018toolbox}. 
+The current picture of the VTS is far from complete; we do not yet know how many of the cellular proteins reach their resident compartments within the cell, and
+researchers are discovering new vesicle routes every
+year~\cite{nickel2018unconventional,weill2018toolbox}. 
 %
 Completing the VTS is a difficult task for many important reasons: 
 \begin{enumerate}
-	\item The core VTS is conserved across eukaryotes, the traffic network in different organisms \cite{richardson2015evolutionary, barlow2017seeing}, and even in different cell types within an organism can be different~\cite{stoops2014trafficking,zhou2015arp2}.
+	\item The core VTS is similar across eukaryotes, the traffic network in different organisms \cite{richardson2015evolutionary, barlow2017seeing}, and even in different cell types within an organism can be different~\cite{stoops2014trafficking,zhou2015arp2}.
 	\item Although the basic molecular machinery is the same for all vesicle fusion events, the details of regulation can be different~\cite{davletov2007regulation,di2010calcium}.
 	\item Molecules can have redundant routes within the cell~\cite{shimizu2014compensatory,nakatsukasa2014nutrient}.
-	\item Behaviour of traffic molecules in vitro is different from their behavior inside cells~\cite{furukawa2014multiple}. 
+	\item The behavior of traffic molecules in vitro is different from their behavior inside cells~\cite{furukawa2014multiple}. 
 	\item It can be difficult to distinguish between the direct and indirect effects of experiments involving knock-downs or knockouts of traffic molecules \cite{hirst2004epsinr,mishev2013small}.
+        \item Lastly, interpreting experimental results can be difficult, since the behavior of traffic molecules in vitro is different from their behavior inside cells.
 \end{enumerate}
-        \item Lastly, interpreting experimental results can be difficult, since behaviour of traffic molecules in vitro is different from their behavior inside cells.
 
 Nonetheless, completing the VTS for different organisms is very useful. 
 %
-Many diseases are caused by the malfunction of the VTS. 
+The malfunction of the VTS causes many diseases.
 %
-Knowledge of the complete network would be helpful in identifying the root causes of~\cite{bexiga2013human,gissen2007cargos}. 
+The knowledge of the complete network would help identify the root causes of
+the diseases~\cite{bexiga2013human,gissen2007cargos}. 
 %
 At a more basic level, having complete pictures of the VTS for various organisms and various cell-types would allow comparative studies, and therefore would allow the deduction of modes of evolution of the form of the traffic network. 
 %
-This would also allow us to decipher features such as parts of the traffic system that is unchanging, and therefore likely to be its core, and parts that are more plastic \cite{barlow2017seeing}.
+The network knowledge would also allow us to decipher features such as parts of the traffic system that is unchanging and therefore likely to be its core, and more plastic parts~\cite{barlow2017seeing}.
 
 %\subsection{Synthesis of VTS:}
 %
-The set of basic constraints the VTS should follow is dictated by underlying cell biology.   
+The underlying cell biology dictates the set of basic constraints the VTS should follow.
 %
 In order to attempt to complete a given partial VTS, we have to first agree on the properties that every complete VTS should follow in spite of the basic constraints. 
 %
