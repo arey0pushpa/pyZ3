@@ -29,13 +29,19 @@ TODO: Compare the to the previous results by the same authors.  XXX
          was not considered before.
       4. Was the simpler regulation mechanism (pairing inhibition) considered as
          part of previous work too limiting?
-  Reviewer 2 asked for a comparision to the previous papers which is now been 
-  added as part of the introduction section, with providing link to the main 
-  paper upfront (as pointed out by Reviewer 1). 
-  @ASHUTOSH XXX
+
+Our earlier papers in the topic handled the CBMC encoding, more efficient
+SMT encoding, and synthesis problem. In comparison to our earlier papers, this
+paper brings together all the results with extended experiments and more detailed
+expositions for the benefit of both biological and computation community. In this paper,
+we also explored QBF based encoding of problems.
+Due to missplaced citations, we cited our SMT encoding paper multiple times,
+while never citing our synthesis paper.
+
 
 % R1: The weighting given to each section.
-@ASHUTOSH XXX
+Since the purpose of the paper is to give detailed expositions. We explained
+everything in detail.
 
 Graph connectedness property.
 Reviewer 3 pointed out that graph connectedness is not well motivated. 
@@ -146,7 +152,10 @@ Reviewers raises several technical questions.
 Reviewers raises several questions related to the biology.
   % R1: However, the biological relevance of the property is debatable and open 
     for change. This sentence feels very open ended and not expanded further.
-  @Ashutosh XXX.
+
+  The relavent properties of VTSs are not settled and subject
+  to differences of opinion. Our method is reasonable adaptable to add and
+  remove relavent proerties.
 
   % R2: It wasn’t clear to me what role does the activity of molecules on
        edges or in compartments play. It seems that the graph corresponding 
