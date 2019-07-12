@@ -1,41 +1,268 @@
-We thank the reviewers for their careful reading, which helps us
-improving the submission.
+We would like to thank the reviewers for their very detailed and 
+helpful comments. In the following, we ellaborate on how we addressed 
+the feed in the revised version of our paper. 
 
-TODO: Structure of the paper
-     - Improve the way to effectively communicate the biological 
-       problem specifically to a computational audience. XXX
-Reviewers 1 and 2 both felt that structure of the paper can be improved. 
-Both reviewers felt the introduction section should provide high level 
-overview to help the reader to see the big picture.
-We have now updated the introduction section to give overview of the complete
-work and in the next section we go into the details of biolgy.  
-We have also combined the materials in Sec 1.5 and 1.6 with the introduction 
-and merged Sec 1.2 and 1.3 as a separate section with detailed biological 
-description (as suggested by reviewer 2).
+Some major points first. 
+Structure of the paper
+% R1: I found the structure of the introduction hard to follow. There seems to be
+      a lot of biological detail before a high level overview is introduced in 1.2
+      meaning its easy to get bogged down without seeing the bigger picture.
+% R2: I found the introduction to be unclear as presented currently because there
+      was insufficient information to understand the aims of the paper and proposed 
+      method before going into the biological details and problem formulation. 
+  Reviewers 1 and 2 both felt that the structure of the paper can be improved. 
+  Both reviewers suggested the introduction section should provide a high-level 
+  overview to help the reader to see the big picture. We have now updated the 
+  introduction section to give an overview of the complete work and in the next 
+  section, we go into the details of biology. We have also combined the materials 
+  in Sec 1.5 and 1.6 with the introduction and merged Sec 1.2 and 1.3 as a separate 
+  section with detailed biological description (as suggested by reviewer 2).
 
 TODO: Compare the to the previous results by the same authors.  XXX
-Reviewer 2 asked for a comparision to the previous papers which is now been 
-added as part of the introduction section, with providing link to the main 
-paper upfront (as pointed out by Reviewer 1). 
+% R2: The contribution of this work compared to previous papers should
+      be clarified.
+      1. It seems that the model is based on previous work reported in [67-68]. Is the 
+         model extended in any way?
+      2. There seem to be some differences in terms of methodology (SAT-based
+         model checking vs SMT/SAT/QBF)
+      3. How are the problems being considered different? It seems that synthesis
+         was not considered before.
+      4. Was the simpler regulation mechanism (pairing inhibition) considered as
+         part of previous work too limiting?
+  Reviewer 2 asked for a comparision to the previous papers which is now been 
+  added as part of the introduction section, with providing link to the main 
+  paper upfront (as pointed out by Reviewer 1). 
+  @ASHUTOSH XXX
 
-TODO: Why should a biologist be concerned with
-this property? XXX
+% R1: The weighting given to each section.
+@ASHUTOSH XXX
+
+Graph connectedness property.
 Reviewer 3 pointed out that graph connectedness is not well motivated. 
-He raise question of relevance of this property for a biologist?
-It is often the case that biological data is missing. For example, only a few 
-of the dozens of molecules involved in real VTSs have been mapped out. Therefore, 
-it is extremely likely that the description provided by the cell biologist is 
-incomplete. 
-Can we find a simple test to see whether any information is missing, given the 
-experimental data? The graph k-connectedness furnishes precisely such a test. 
-If the data provided by cell-biologists, suitably represented as a graph, does not 
-have a certain degree of connectivity, this implies that some biological data has 
-been missed. (The converse is not true: even if the required connectivity does hold, 
-there might of course be more information missing.)
-We have added a complete paragraph to motivate the graph connectedness property and 
-provided the above argument in detail as part of Sec 2. 
+% R3: Graph connectedness is identified by the authors as a ’key property’ of the
+      system, but this is not well-motivated in the paper. On page 12, line 35
+      onwards, you suggest that you have chosen graph connectedness as something
+      that ’appears’ to be relevant. Why should a biologist be concerned with
+      this property? On page 24, you further state that the biological relevance
+      of the stable and k-connected property is debatable. To me this statement
+      undermines your work and raises the question of whether you have set up a
+      modelling problem that is biologically useful.
+  It is often the case that biological data is missing. For example, only a few of 
+  the dozens of molecules involved in real VTSs have been mapped out. Therefore, it 
+  is extremely likely that the description provided by the cell biologist is 
+  incomplete. 
+  Can we find a simple test to see whether any information is missing, given the 
+  experimental data? The graph k-connectedness furnishes precisely such a test. 
+  If the data provided by cell-biologists, suitably represented as a graph, does
+  not have a certain degree of connectivity, this implies that some biological 
+  data has been missed. (The converse is not true: even if the required 
+  connectivity does hold, there might, of course, be more information missing.) 
+  We have added a complete paragraph to motivate the graph connectedness 
+  property and provided the above argument in detail as part of the 
+  (updated section) Sec 2 Biological Problem. 
 
-TODO: 
-  - Experimentation setup: R3 XXX
+Reviewers raises several technical questions.
+  % R2: In the restriction of the SMT encoding to SAT for BMC, there are few
+        encoding details that were unclear and should be discussed in more
+        detail. In particular, the approach for encoding cardinality 
+        constraints for k-connectivity and the encoding of the (uninterpreted) 
+        activation functions f_m and g_m into SAT can be clarified.
+   The modern-day model solvers provide varieties of direct functions for expressing
+   cardinality constraints. For the SMT solver Z3, we have used pseudo-boolean
+   inequality constraints to represent them.
+   Representation of the uninterpreted function was used only in our original paper
+   [Shukla et al. 2017] by representing a boolean function a bit-vector. We feel that 
+   the implementation is straightforward and do not add additional value to the current 
+   presentation and best be abstracted.
 
+  % R2: Is the application of a QBF solver (or an exhaustive enumeration 
+        over the universal quantification) necessary (Sec 4.0.2)? If the 
+        alternation involves only two quantifiers, can the problem be inverted, 
+        for example to search for the smallest k such that a k-connected graph 
+        satisfying the properties exists? In other words, an UNSAT answer for 
+        k<k_min would imply that no such graphs exist.
+    The section 4.0.2 provides a high-level overview of the problem and in 
+    the implementation, we indeed search for an UNSAT answer. This is evident from 
+    the 5.2.1 QBF search problem. 
+    The possible confusion can still persist so we have merged the Sec 4 
+    Property of interest and Sec 5 Search encodings together to avoid the same. 
+  
+  % R2: I found the separation between problem statements (Sec 5) and Encoding
+        (Sec 6) confusing.
+   We now provide the search problem as a part of (updated section) Sec 5 
+   Problem statements. Stating the problem formally we think is interesting 
+   to some of the audience of the paper specially to formal methods community. 
+   The updated structuring enables a computational biologist to read the informal 
+   presentation and just gloss over the formal ones.  
+
+  % R2: Large parts of Sec 5 seem like background (e.g. BMC) and should be part
+        of an introduction or preliminaries (e.g. together with 2.0.1).
+   We have condensed the background details and moved it to preliminaries.
+
+  % R2: If Sec 4 is required, it could be made more precise given the formal 
+         model introduced in Sec 3.
+   We have merged the Sec 4 and Sec 5 into a single (updates section) Sec 5
+   to make the presentation precise.
+ 
+  % R2: In Sec 1.4, it would be helpful to understand where the 'large number of 
+        graphs' is coming from, though this is somewhat clarified later in the 
+        paper.
+  We have added the information in the introduction section.
+
+  % R2: Large parts of Sec 5 seem like background (e.g. BMC) and should be part 
+        of an introduction or preliminaries (e.g. together with 2.0.1).
+   We have now condensed the background discussion and present it as a part of
+   the preliminaries.
+
+  % R2: In Sec 5.1 it wasn’t clear what the ’length of the path of the underline 
+    graph’ referred to. Is that the graph diameter or some other property? 
+    How does the restriction to elementary cycles affect this
+  We only talk about the longest simple path. We now refer to it as the 
+  “total number of nodes in the graph”. This covers all elementary cycles.
+  
+  % R2: In 6.1.2, should the condition in PresentE be an ’if and only if’, since 
+    at least one molecule is required on each edge?
+  Although this requires equality; one direction conditional is sufficient as the 
+  other case is covered by the fusion rule. 
+
+  % R2 & R3: Reference [67] is repeated as [68]
+  This is now fixed.
+
+  % R3: The abbreviation QBFs is used from p11 onwards, but this abbreviation is 
+        not defined for the reader.
+  We have corrected it. Added it within the introduction section. 
+
+  % R3: A 45 minute timeout seems quite short to me, based on similar SAT problems
+        I have run in the past. Why did you opt for this cutoff? 
+  The choice of the cutoff time was arbitrary. 
+
+  % R3: Please provide references for CBMC (page 27) and Z3 (page 28). 
+  We have updated the draft and added references to both.
+
+  % R3: Line 14, page 15: what do you mean by ’parts’ ?
+  The missing "parts" refers to the missing "components". 
+  We have updated the draft with the correction.
+ 
+Reviewers raises several questions related to the biology.
+  % R1: However, the biological relevance of the property is debatable and open 
+    for change. This sentence feels very open ended and not expanded further.
+  @Ashutosh XXX.
+
+  % R2: It wasn’t clear to me what role does the activity of molecules on
+       edges or in compartments play. It seems that the graph corresponding 
+       to the model as currently defined is purely static - the activity of 
+       molecules depends only on which molecules are available in a 
+       compartment/edge, which is encoded as part of the graph structure. 
+       Therefore, the more interesting regulatory dynamics of activations/
+       inhibitions are abstracted. However, this leads to a counter-intuitive 
+       model definition (def 1), where the activity of a molecule m_i can depend 
+       on another molecule m_j being present or not in a compartment but whether 
+       m_j is active or inactive in that compartment is ignored.
+   In this work, we use the term 'activity' to have very specific scope; it only 
+   implies the ability to cause membrane fusion and it only applies to SNAREs. 
+   In this sense, it indeed does not matter whether the molecule interacting with 
+   the SNARE is active or not. 
+   For example, Qa-SNAREs are only 'active' on target compartments (regulation by
+   SM proteins achieves this [Baker and Hughson, 2016]), but when present on 
+   vesicles with its other cognate SNAREs, it nevertheless will participate in 
+   SNARE complex formation within the same vesicle membrane, and thus inhibit 
+   its SNARE partners from causing vesicle fusion.
+   We have added this paragraph in (updated section) 2.3.4 Molecular regulation.
+  
+  % R2: The biological description can be simplified to only what is required 
+        to understand the model, while relevant references could be provided to 
+        supply additional biological details.  For example, dynamin does not seem 
+        to be discussed in the paper at all and tethering, uncoating, etc are only 
+        mentioned as biological details but not captured in the model. Perhaps, 
+        the biological description can be simplified to only what is required to 
+        understand the model, while relevant references could be provided to 
+        supply additional biological details. 
+  % R3: I would argue further that some of the detail of the biological section 
+        is unecessary. The biological background should be condensed to cover 
+        essential features of the system that are captured by the model, to 
+        ensure that the reader understands how you have abstracted the key 
+        features of the system, and also to set up specific biological questions 
+        that this modelling approach can uniquely address.
+    To make the description of molecular events of vesicle traffic more accessible 
+    to non-biologist readers, we have simplified the text by removing details which 
+    are not necessary for understanding the current work. 
+    The references we provide in the text should be sufficient if the interested 
+    reader wishes to gain a deeper knowledge of the molecular mechanism.  
+    In section 1.1.1, we have removed details about the localization and
+    interactions of specific examples of adaptor and coat proteins.
+    In section 1.1.2, we have removed details about the Rab protein localization 
+    and its significance. We have also removed the hypotheses about the additional 
+    functions tethers might play during vesicle fusion. 
+    All the changes are now part of the (updated section) Sec 2 Biological Problem.
+
+  % R2: If Fig 2, I wasn’t clear why the cargo proteins seem to be attached from 
+        outside the source compartment. My understanding was that there could be
+        transmembrane as well as cargo proteins from within the compartments.
+    There indeed can be lumenal cargo in vesicles, but because lumenal proteins 
+    cannot interact directly with cytosolic adaptors, they are recruited to 
+    vesicles through their interactions with transmembrane proteins. To depict 
+    these interactions, we have now included lumenal proteins in our revised 
+    schematic (Fig 1A).
+
+  % R2: Given that a relatively small number of 9 different organelles/compartments 
+       is considered, perhaps a figure indicating these compartments (like the ones
+       in the appendix) would be helpful.
+    We have updated the Fig. 1 and added 1(C) to indictate these comparments.
+
+  % R2: I also found the regulatory interactions presented in Sec 1.1.3 unclear. 
+        Could this be summarized as an interaction network between the  
+        main regulators?
+   In order to depict the major interactions of SNARE proteins described in 
+   Sec 1.1.3 more clearly, we have added a figure (Fig 1B), where these 
+   interactions are represented as a network.
+ 
+  % R2: It was surprising to see parts of Sec 1.4. as part of the introduction 
+        because this seems to discuss novel results.
+   We have removed this discussion from the front of the paper. 
+  
+  $ R2: I found it confusing that in Sec 1.3.1 it is stated that molecule counts 
+        are abstracted but Sec 1.3.2 starts by discussing changes in molecule counts.
+   As a simplification, we assume that the incoming and outgoing flux is balanced 
+   for each of the molecular types at each compartment. This is much stronger than 
+   the constraint that each molecule type entering a compartment must also leave it. 
+   But, since our model is essentially binary, the two statements 
+   become equivalent.
+   We have updated the Sec 1.3.2, now (updated section) 2.3.2 Steady state to 
+   address this confusion.
+
+  % R3: The abstraction of the VTS and the definition of the pairing matrix 
+         could be clarified for the reader if the biological background were not 
+         quite so separated from the remainder of the manuscript.
+   We have added a simple explanation in the introduction to give an overview.
+
+  % R3: A clear definition of the pairing matrix is missing.
+   We have added the definition with the explanation of the pairing matrix in the 
+   (updated section) Sec 2 Molecular regulation as suggested. 
+
+  % R3: I would like the interpretation of your results to have been unpacked 
+        further (e.g. expanding on the paragraph starting on line 32 of page 29). 
+        This again will help to communicate the contribution of your work to the 
+        biological problem being studied.
+   We have accordingly expanded our text on the interpretation of the work. In 
+   order to make the significance of our model and potential uses of our tool 
+   more explicit, we have revised the first paragraph of the conclusion section.
+
+ % R3: You refer to predictions that could be tested experimentally, but these 
+       predictions are not made explicit or translated back to definitive 
+       biological experiments that could be run. Would a biologist be able to 
+       take your tool, apply it to the VTS they are studying and formulate 
+       experiments based on the model?
+   We have added suggestions of how an experimentalist could use the outputs of 
+   our tool to hasten discoveries of new vesicles in VTSs. 
+   Updated paragraph 2 of the conclusion section.
+
+  % R3: Figs. 5 and 6 are not referred to in the manuscript, and could easily 
+  	have been missed. 
+   We have added a reference to these figures in Example 2. We have also 
+   updated the Fig 1 to add schematic, Fig 1C of typic eukaryotic cell’s VTS.  
+
+  % R3: The notation and colours used in Fig. 2 should be explained in the 
+        figure legend.
+  We have added the explanation of notations and colors in Fig 2.
+    
 We thank for the other comments, which we appropriately implemented. 

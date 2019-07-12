@@ -15,20 +15,27 @@ encode our problems.
 %
 An assignment is a map from the variables in the formula to the Boolean values.
 %
-An assignment may satisfy a formula if the interpretation of Boolean operators
-reduces the whole Formula into 1.
+An assignment may satisfy a formula if the interpretation of Boolean operators reduces the whole Formula into 1.
 %
-The problem of finding a satisfying assignment for a Boolean formula is known to be hard~\cite{cook1971complexity}.
+The SAT~\cite{biere2009handbook} is the problem of determining if there exists an interpretation that satisfies a given Boolean formula and is known to be hard~\cite{cook1971complexity}.
 %
 
-QBFs also allow quantifiers over Boolean variables.
+The SMT~\cite{nieuwenhuis2006solving, barrett2018satisfiability} is a generalization of Boolean satisfiability problem with domain-specific reasoning, for example, support for uninterpreted functions, equality, arithmetic and data structures like arrays, bit-
+vectors, etc.
 %
+For example, $f(f(u,v),v)=f(u,v)$ where $f$ is some unspecified function of two arguments has equality involving uninterpreted terms and function symbols.
+
+%QBFs also allow quantifiers over Boolean variables.
+%
+The QBF~\cite{buning2009theory, benedetti2008qbf} is a generalization of the Boolean satisfiability problem in which every variable is quantified using either existential or universal quantifier.
+%
+The QBFs enables potentially more succinct encodings than SAT~\cite{jussila2007compressing} although much more difficult~\cite{savitch1970relationships, stockmeyer1973word} to solve.
 For example, $\forall x \exists y. (x \lor y)$, for Boolean variables $x$ and $y$.
 %
 The formula says that for both the values of $x$ there is a value of $y$
 such that $x \lor y$ is 1.
 %
-The problem of finding a satisfying assignment for QBFs is even harder problem~\cite{savitch1970relationships, stockmeyer1973word}.
+%The problem of finding a satisfying assignment for QBFs is even harder problem~\cite{savitch1970relationships, stockmeyer1973word}.
 %
 
 \subsubsection{Solvers}
@@ -42,10 +49,13 @@ and implement sophisticated algorithms.
 %
 A SAT solver typically implements conflict-driven clause learning (CDCL)~\cite{biere2009conflict}.
 %1
-SMT solvers~\cite{nieuwenhuis2006solving, barrett2018satisfiability} in addition adds supports for some first order theories like arithmetic, arrays etc.
+SMT solvers~\cite{barrett2018satisfiability} in addition adds supports for some first order theories like arithmetic, arrays etc.
 % 
-
 The QBF solver adds support of quantifiers by adding more rules for quantifiers~\cite{buning2009theory}.
+%
+%We will model the search problem for the universal condition as a QBF~\cite{buning2009theory, benedetti2008qbf}, and the resultant formula is solved using a QBF solver.
+%
+
 
 We also use bounded model checkers that implements Bounded model checking (BMC) technique~\cite{biere1999symbolic1, biere2003bounded} to performs a search for the violation of the property in the program executions whose length is bounded by some fixed positive integer value $w$ (\textit{unwinding depth}). 
 %

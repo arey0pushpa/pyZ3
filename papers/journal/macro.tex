@@ -23,7 +23,9 @@
 %\renewcommand{\figurename}{Fig.{}}
 
 % To add mail sign in the author 
-\usepackage[]{ifsym}
+%\usepackage[]{ifsym}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 
 % Use adjustwidth environment to exceed column width (see example table in text)
 \usepackage{changepage}
@@ -119,7 +121,7 @@
 \usepackage{pgfplots}
 %\usepackage{colortbl}
 %\usepackage{pgfplotstable}
-\pgfplotsset{compat=1.14}
+\pgfplotsset{compat=1.15}
 	
 \def\cca#1{\cellcolor{blue!#10}\ifnum #1>5\color{white}\fi{#1}}
 

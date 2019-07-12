@@ -168,7 +168,7 @@ This condition can be specified as: for every k-connected graph, there exists a 
 %   \tag{U}\label{eq:univcond}
 % \end{align*}
 %
-We will use the same procedure as the existential condition to ensure the k to be the least one.
+We will use the same procedure as the existential condition to ensure the $k$ to be the least one.
 %
 The formula for the problem has quantifier alternation. 
 %
@@ -176,11 +176,6 @@ Most SAT solvers can check (at least efficiently) only quantifier-free formulas.
 %
 We need a QBF solver for such queries.
 %
-We will model the search problem for the universal condition as a QBF~\cite{buning2009theory, benedetti2008qbf}, and the resultant formula is solved using a QBF solver.
-%
-The QBF is a generalization of the Boolean satisfiability problem in which every variable is quantified using either existential or universal quantifier.
-%
-The QBFs enables potentially more succinct encodings than SAT~\cite{jussila2007compressing} although much more difficult~\cite{savitch1970relationships, stockmeyer1973word} to solve.
 
 %\ankit{This is a dummy template. need a rewrite.} 
 \subsubsection{$\fqbf$ search problem.} For a given $k$, size $\nu$, and molecule number $\mu$, we are searching for a $k$-connected graph such that there is no assignment that makes it a well-structured, stable, and well-fused VTS $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ with $|\nodes| = \nu$, $|\mols| = \mu$.    
@@ -198,11 +193,13 @@ The QBFs enables potentially more succinct encodings than SAT~\cite{jussila2007c
 We will assume that we are given a VTS, whose all components
 are not specified.
 %
-Our objective is to find the missing parts.
+Our objective is to find the missing components.
 %
-The missing parts can be in any of the components of VTS. 
+The missing component can
+% be in any of the components of VTS. 
 %
-For example, some undiscovered edges or nodes, or insufficient
+%For example, 
+be some undiscovered edges or nodes, or insufficient
 knowledge about the presence of molecules in some part of the VTS.
 %
 To cover most of the likely variations of this missing information,
@@ -218,7 +215,7 @@ we have encoded the following variants of the VTS synthesis problem.
 	%   \item Boolean gates with linear combination.  
 	% \end{enumerate}        
 	% - Function dependence with var occurring once.
-	\item  Fixing VTS by both adding/deleting parts
+	\item  Fixing VTS by both adding/deleting components
 \end{enumerate}
 
 \subsubsection{Synthesis problem.}

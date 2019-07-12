@@ -197,13 +197,24 @@ The label represents the associated flux of all molecular types carried by the c
 %
 
 \subsubsection{Steady state} 
-The vesicle transfer will change the molecular composition (distinct molecule count) on both the source compartment and the target compartment. 
+%The vesicle transfer will change the molecular composition (distinct molecule count) on both the source compartment and the target compartment. 
 %
-In our model, we assume that the cell is in a steady state. As a further simplification, we also assume that the incoming and outgoing flux is balanced for each of the molecular types at each compartment. 
+%In our model, we assume that the cell is in a steady state. As a further simplification, we also assume that the incoming and outgoing flux is balanced for each of the molecular types at each compartment. 
+%Indeed, it is well accepted that on the scale of minutes and hours the molecular composition remains the same. 
+%
+%In this paper, we refer to the steady state of the cell (referred to as \textit{homeostasis} in biological literature) as the stability condition over the annotated graph.
+
+In eukaryotic cells, vesicle transfer will change the molecular composition (distinct molecule count) on both the source compartment and the target compartment. 
+%
+In our model, we assume that the cell is in a steady state. As a further simplification, we also assume that the incoming and outgoing flux is balanced for each of the molecular types at each compartment.
+%
+This is much stronger than the constraint that each molecule type entering a compartment must also leave it.
+%
+But, since our model is essentially binary, the two statements become equivalent. 
+%
 Indeed, it is well accepted that on the scale of minutes and hours the molecular composition remains the same. 
 %
-In this paper, we refer to the steady state of the cell (referred to as \textit{homeostasis} in biological literature) as the stability condition over the annotated graph.
-
+In this paper, we refer to the steady state of the cell (referred to as homeostasis in biological literature) as the stability condition over the annotated graph.
 
 %Each edge is associated with a flux of all the molecular types carried by the corresponding vesicle. The total amount of each molecular type on each compartment can therefore increase or decrease. We assume the cell is in a steady state where each compartment’s composition does not vary over short time scales. Therefore, incoming and outgoing fluxes are balanced for each molecular type at each compartment; it is the \textit{stability cond1ition}.
 
@@ -260,6 +271,11 @@ $P(i,j)$ = 1 implies that molecule $i$ binds molecule $j$.
 %
 In our simple pairing inhibition scheme, if $P(i,j)$ = 1 and both molecules $i$ and $j$ are present on the same compartment, $i$ and $j$ are inactive, and therefore cannot cause fusion.
 
+In this work, we use the term activity to have very specific scope; it only implies the ability to cause membrane fusion and it only applies to SNAREs. 
+%
+In this sense, it indeed does not matter whether the molecule interacting with the SNARE is active or not. 
+%
+For example, Qa-SNAREs are only active on target compartments (regulation by SM proteins achieves this \cite{baker2016chaperoning}), but when present on vesicles with its other cognate SNAREs, it nevertheless will participate in SNARE complex formation within the same vesicle membrane, and thus inhibit its SNARE partners from causing vesicle fusion.
 %We assume that for fusion to occur, the pair of SNARE types involved on the vesicle and compartment must both be in an active state. Whether these SNAREs are active or inactive depends on the other molecules found on the vesicle or compartment, respectively. We test many different versions of this kind of molecular regulation. Most generally, the activity state of a given SNARE can be a Boolean function of all the molecular types on a compartment or vesicle. We have also tested \cite{shukla} a particularly simple regulation mechanism in which two SNAREs that can pair to drive fusion inhibit one another; this is the \textit{pairing inhibition}. This is motivated by the idea that pairing must generate an inactive bi-molecular complex.
 
 %\textbf{Difficulty of the analysis:}
