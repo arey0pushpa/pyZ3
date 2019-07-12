@@ -21,8 +21,8 @@ Structure of the paper
 TODO: Compare the to the previous results by the same authors.  XXX
 % R2: The contribution of this work compared to previous papers should
       be clarified.
-      1. It seems that the model is based on previous work reported in [67-68]. Is the 
-         model extended in any way?
+      1. It seems that the model is based on previous work reported in [67-68]. 
+         Is the model extended in any way?
       2. There seem to be some differences in terms of methodology (SAT-based
          model checking vs SMT/SAT/QBF)
       3. How are the problems being considered different? It seems that synthesis
