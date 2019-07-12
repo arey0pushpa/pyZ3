@@ -3,7 +3,7 @@ helpful comments. In the following, we ellaborate on how we addressed
 the feed in the revised version of our paper. 
 
 Some major points first. 
-Structure of the paper
+1. Structure of the paper
 % R1: I found the structure of the introduction hard to follow. There seems to be
       a lot of biological detail before a high level overview is introduced in 1.2
       meaning its easy to get bogged down without seeing the bigger picture.
@@ -19,23 +19,23 @@ section, we go into the details of biology. We have also combined the materials
 in Sec 1.5 and 1.6 with the introduction and merged Sec 1.2 and 1.3 as a separate 
 section with detailed biological description (as suggested by reviewer 2).
 
-Compare the to the previous results by the same authors. 
+2. Compare the to the previous results by the same authors. 
 % R2: The contribution of this work compared to previous papers should
       be clarified.
-      1. It seems that the model is based on previous work reported in [67-68]. 
+      - It seems that the model is based on previous work reported in [67-68]. 
          Is the model extended in any way?
-      2. There seem to be some differences in terms of methodology (SAT-based
+      - There seem to be some differences in terms of methodology (SAT-based
          model checking vs SMT/SAT/QBF)
-      3. How are the problems being considered different? It seems that synthesis
+      - How are the problems being considered different? It seems that synthesis
          was not considered before.
-      4. Was the simpler regulation mechanism (pairing inhibition) considered as
+      - Was the simpler regulation mechanism (pairing inhibition) considered as
          part of previous work too limiting?
 
 Our earlier papers in the topic handled the CBMC encoding, more efficient
 SMT encoding, and synthesis problem. In comparison to our earlier papers, this
 paper brings together all the results with extended experiments and more detailed
-expositions for the benefit of both biological and computation community. In this paper,
-we also explored QBF based encoding of problems.
+expositions for the benefit of both biological and computation community. In this 
+paper, we also explored QBF based encoding of problems.
 Due to missplaced citations, we cited our SAT encoding paper [Shukla et al. 2017], 
 multiple times, while never citing our synthesis paper.
 Therefore, reviewers had skewed understanding of the contributions.
@@ -56,7 +56,7 @@ Now we have clearly stated the contributions in the paper.
 Since the purpose of the paper is to give detailed expositions. We explained
 everything in detail.
 
-Graph connectedness property.
+3. Graph connectedness property.
 Reviewer 3 pointed out that graph connectedness is not well motivated. 
 % R3: Graph connectedness is identified by the authors as a ’key property’ of the
       system, but this is not well-motivated in the paper. On page 12, line 35
