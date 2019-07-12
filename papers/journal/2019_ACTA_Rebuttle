@@ -38,6 +38,8 @@ expositions for the benefit of both biological and computation community. In thi
 we also explored QBF based encoding of problems.
 Due to missplaced citations, we cited our SAT encoding paper [Shukla et al. 2017], 
 multiple times, while never citing our synthesis paper.
+Therefore, reviewers had skewed understanding of the contributions.
+Now we have clearly stated the contributions in the paper.
 
 % R1: The weighting given to each section.
       A large weight is given to emphasizing the difference between the new SMT
@@ -88,12 +90,13 @@ Reviewers raises several technical questions.
 
    The modern-day model solvers provide varieties of direct functions for expressing
    cardinality constraints. For the SMT solver Z3, we have used pseudo-boolean
-   inequality constraints to represent them.
-   @ASHUTOSH XXX Above statement need update. We do implemented a Log encoding (binary encoding)!
+   inequality constraints to represent them.  We do implemented a Log encoding
+   (binary encoding) such that we can try solvers that do not have native encoding!
    Representation of the uninterpreted function was used only in our original paper
    [Shukla et al. 2017] by representing a boolean function a bit-vector. We feel that 
-   the implementation is straightforward and do not add additional value to the current 
+   the implementation is standard, and do not add additional value to the current
    presentation and best be abstracted.
+   
 
   % R2: Is the application of a QBF solver (or an exhaustive enumeration 
         over the universal quantification) necessary (Sec 4.0.2)? If the 
