@@ -36,8 +36,8 @@ SMT encoding, and synthesis problem. In comparison to our earlier papers, this
 paper brings together all the results with extended experiments and more detailed
 expositions for the benefit of both biological and computation community. In this paper,
 we also explored QBF based encoding of problems.
-Due to missplaced citations, we cited our SMT encoding paper multiple times,
-while never citing our synthesis paper.
+Due to missplaced citations, we cited our SAT encoding paper [Shukla et al. 2017], 
+multiple times, while never citing our synthesis paper.
 
 % R1: The weighting given to each section.
       A large weight is given to emphasizing the difference between the new SMT
