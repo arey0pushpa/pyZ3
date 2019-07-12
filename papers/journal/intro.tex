@@ -178,7 +178,7 @@ Formal verification tools like model checkers, SAT (Boolean satisfiability), SMT
 %%
 The tools model the computation symbolically for the graphs of finite size and can predict the hypothesis for all possible states of the system without explicit enumeration of rules. 
 %
-In recent work \cite{shukla2017discovering}, we employed the model checker CBMC \cite{ckl2004} meant to analyze ANSI C programs for studying this problem. 
+In recent work~\cite{shukla2017discovering}, we employed the model checker CBMC \cite{ckl2004} meant to analyze ANSI C programs for studying this problem. 
 %
 VTSs and SNARE regulations were modeled as C code using arrays to represent graphs and Boolean tables. 
 %
@@ -188,6 +188,8 @@ Although the performance was satisfactory, the encoding was non-optimal and henc
 %
 Another interesting question of property involving quantifiers (was termed as sufficient condition in \cite{shukla2017discovering}; in this paper, we call it universal condition) was partly handled
 using sampling and left open.
+%
+In~\cite{smtVTS}, we developed more efficient direct encoding to SMT solvers. 
 %
 We also worked on the synthesis of the unknown pieces may
 be {\em assisted} by computation on the graph model of VTSs~\cite{synthesisGupta}.
