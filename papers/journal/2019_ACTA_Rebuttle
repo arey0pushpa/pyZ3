@@ -18,7 +18,7 @@ Structure of the paper
   in Sec 1.5 and 1.6 with the introduction and merged Sec 1.2 and 1.3 as a separate 
   section with detailed biological description (as suggested by reviewer 2).
 
-TODO: Compare the to the previous results by the same authors.  XXX
+Compare the to the previous results by the same authors. 
 % R2: The contribution of this work compared to previous papers should
       be clarified.
       1. It seems that the model is based on previous work reported in [67-68]. 
@@ -37,7 +37,6 @@ expositions for the benefit of both biological and computation community. In thi
 we also explored QBF based encoding of problems.
 Due to missplaced citations, we cited our SMT encoding paper multiple times,
 while never citing our synthesis paper.
-
 
 % R1: The weighting given to each section.
 Since the purpose of the paper is to give detailed expositions. We explained
