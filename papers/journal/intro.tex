@@ -123,7 +123,7 @@ The incomplete VTS might not respect these constraints.
 %
 In this paper, using constraints on global vesicle traffic network topology due to local molecular interactions, we take incomplete pictures of vesicle traffic networks as inputs.
 %
-We output various completed versions of VTS against these properties which can then be tested experimentally.
+We output various completed versions of VTS against these properties, which we can then test experimentally.
 %
 
 %\subsection{Analysis is difficult problem}
@@ -131,13 +131,15 @@ The analysis of VTSs is a difficult problem because
 of the combinatorial scaling of possible traffic topologies and
 regulatory rules.
 %
-Analysis on a large number of graphs~\footnote{There are total 68715 simple (no parallel edges) 3-connected graphs with 8 nodes} jointly with combinatorially many possible regulatory rules (all compatible labels of edges and nodes etc.) will be difficult to handle by any tool.
+An analysis of a large number of graphs~\footnote{There are total 68715 simple (no parallel edges) 3-connected graphs with 8 nodes} jointly with combinatorially many possible regulatory rules (all compatible labels of edges and nodes etc.) will be difficult to handle by any tool.
 %
-Precise analysis of the properties of the VTS would be hindered for the same reason. 
+The same reason would hinder the precise analysis of the properties of the VTS. 
 
-In previous work, a sampling approach was undertaken. 
+A previous work used a sampling approach. 
 %
-The study used a rule-based approach~\cite{mani2016stacking}, where given an initial condition of the cell, and rules for molecular traffic, the state of each compartment in the cell is updated until a steady state is reached. 
+The study used a rule-based approach~\cite{mani2016stacking}.
+Given an initial condition of the cell and rules for molecular traffic,
+the approach updates the state of each compartment in the cell until the cell reaches a steady-state. 
 %
 With this study, statistical claims can be made, but improbable albeit biologically possible solutions could have been missed.
 %
@@ -163,7 +165,8 @@ It is possible that a different scheme for the dynamics could lead to a differen
 %By studying a large sample of randomly generated update rules, such analyses can make statistical claims about vesicle traffic. 
 %
 
-In contrast, here we seek understand properties of vesicle traffic networks over all possible update rules, not just for a sampled subset.
+In contrast, here we seek to understand the properties of vesicle traffic networks
+over all possible update rules, not just for a sampled subset.
 %
 Formal verification tools like model checkers, SAT (Boolean satisfiability), SMT (satisfiability modulo theories) and QBF (quantified Boolean formula) solvers serve precisely this purpose. 
 %
@@ -173,19 +176,24 @@ Formal verification tools like model checkers, SAT (Boolean satisfiability), SMT
 %\cite{moskewicz2001chaff,een2004extensible} serve precisely this
 %purpose.
 %%
-The tools model the computation symbolically for the graphs of finite size and can make a prediction about the hypothesis for all possible states of the system without explicit enumeration of rules. 
+The tools model the computation symbolically for the graphs of finite size and can predict the hypothesis for all possible states of the system without explicit enumeration of rules. 
 %
-In a recent work \cite{shukla2017discovering}, we employed the model checker CBMC \cite{ckl2004} meant to analyze ANSI C programs for studying this problem. 
+In recent work \cite{shukla2017discovering}, we employed the model checker CBMC \cite{ckl2004} meant to analyze ANSI C programs for studying this problem. 
 %
 VTSs and SNARE regulations were modeled as C code using arrays to represent graphs and Boolean tables. 
 %
 The graph connectivity question for different variations of SNARE regulations was modeled as logical assertions to be checked by the model checker. 
 %
-Although the performance was satisfactory the encoding was non-optimal and hence scalability of the method was insufficient (the tool was able to handle the system with just 8 compartments).
+Although the performance was satisfactory, the encoding was non-optimal and hence scalability of the method was insufficient. The tool was able to handle the system with just eight compartments.
 %
-Another interesting question of property involving quantifiers (was termed as sufficient condition in \cite{shukla2017discovering}; in this paper, we call it universal condition) was partly handled using sampling and left open.
+Another interesting question of property involving quantifiers (was termed as sufficient condition i
+n \cite{shukla2017discovering}; in this paper, we call it universal condition) was partly handled
+using sampling and left open.
 %
-In this paper, we present both the SMT and QBF encodings to address these two problems.
+In this paper, we present both the SMT and QBF encodings to address the two problems.
+%
+
+
 %
 %These tools are central to formal verification methods in computer science, and are increasingly being applied to understand biological systems, including gene regulatory networks [16-18]. 
 %\subsection{Previous work and our Contribution}
@@ -198,9 +206,9 @@ In this paper, we present both the SMT and QBF encodings to address these two pr
 %\end{itemize}
 
 
-\par We have implemented the encodings in a flexible tool, which can handle both connectivity question and a wide range of synthesis queries. 
+\par We have implemented the encodings in a flexible tool, which can handle both connectivity questions and a wide range of synthesis queries. 
 %
-We have applied our synthesis tool on several VTSs including
+We have applied our synthesis tool on several VTSs, including
 two found-in-nature VTSs.
 %
 We manage to scale the tool to the size that makes the tool biologically relevant. 
@@ -209,13 +217,13 @@ Our experiments suggest that some of the synthesis problems are solvable by mode
 %
 
 %
-The rest of the paper is organized as follows. 
+We organized the rest of the paper as follows. 
 %
 In Section~\ref{sec:bio}, we present the biological background and details to understand the VTS. 
 %
 In Section~\ref{sec:prelim}, we present the notations we use in this paper. 
 %
-In Section~\ref{sec:model}, we present a formal model of VTSs and in section~\ref{sec:problem}, we present the property of interest with their formal problem statements of different search problems of VTS.
+In Section~\ref{sec:model}, we present a formal model of VTSs, and in section~\ref{sec:problem}, we present the property of interest with their formal problem statements of different search problems of VTS.
 %
 In Section~\ref{sec:encoding}, we present the encodings of corresponding search problems. 
 %
