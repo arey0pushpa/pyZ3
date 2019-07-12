@@ -89,6 +89,7 @@ Reviewers raises several technical questions.
    The modern-day model solvers provide varieties of direct functions for expressing
    cardinality constraints. For the SMT solver Z3, we have used pseudo-boolean
    inequality constraints to represent them.
+   @ASHUTOSH XXX Above statement need update. We do implemented a Log encoding (binary encoding)!
    Representation of the uninterpreted function was used only in our original paper
    [Shukla et al. 2017] by representing a boolean function a bit-vector. We feel that 
    the implementation is straightforward and do not add additional value to the current 
