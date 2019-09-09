@@ -1,3 +1,7 @@
+We would like to thank the reviewers for their very detailed and
+helpful comments. In the following, we ellaborate on how we addressed
+the feed in the revised version of our paper.
+
 % Reviewer 1:
  > My comments and concerns have been addressed in detail. Thank you.
 
@@ -127,6 +131,9 @@ Minor points:
     of these throughout the text, some of which are listed 
     below (this is not exhaustive, so I recommend carefully 
     reading the manuscript to ensure clarity):
+  Authors response: We thank the reviewer for pointing these 
+  out. We have corrected the listed errors and performed 
+  multiple careful readings fixing other errors that we found.
   
   > Page 2, lines 11-12: Understanding how membrane traffic 
     functions *is*, therefore,…
@@ -145,17 +152,14 @@ Minor points:
     synthesis problem."
   Authors response: Both corrections are incorporated.
 
-
   > Figure 1 legend, line 44: "typical" not "typic"
   Authors response: Corrections incorporated 
   (typic was in caption of Fig. 1).
-
 
   > Page 7, line 11: "We have tried to capture important 
     *aspects* of *the* Rothman-Schekman-Sudhof (RSS) model 
     of *the* vesicle…" Also "components" not "component" 
   Authors response: Both corrections are incorporated.
-
 
   > Example 1, line 40: "labels are a set of molecules"
   Authors response: Correction incorporated.
