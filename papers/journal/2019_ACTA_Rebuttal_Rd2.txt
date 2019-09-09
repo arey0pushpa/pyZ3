@@ -69,15 +69,16 @@
   several methods reported previously, should be stated clearly 
   and accurately in the main text.
 
-  Pt #4: 
--------- Handle by Ankit and Ashutosh--------------  
-  A final minor point is about the use of "Synthesis" as 
-  an encoding in Fig 4 and the relevant explanations. 
-  Since the other problems list verification techniques 
-  and solvers (e.g. BMC, SMT, QBF) and no novel synthesis 
-  algorithms were developed for this problem, it would be 
-  more appropriate to specify QBF as the encoding used for 
-  the "VTS synthesis" problem.
+  > A final minor point is about the use of "Synthesis" as 
+    an encoding in Fig 4 and the relevant explanations. 
+    Since the other problems list verification techniques 
+    and solvers (e.g. BMC, SMT, QBF) and no novel synthesis 
+    algorithms were developed for this problem, it would be 
+    more appropriate to specify QBF as the encoding used for 
+    the "VTS synthesis" problem.
+
+  Authors response: We have now incorporated this information 
+  in Fig 4.
 
 % Reviewer 4: 
  
@@ -111,6 +112,7 @@
   > There is overlap in the 3rd and 6th paragraphs of 
     the 'Related Work' section, which refer to the use 
     of SAT/SMT in GRNs.
+
   Authors response: The use of SAT/SMT in GRN is presented
   in two different context (non-overlapping references). 
   The third paragrah points to general use of SAT/SMT 
