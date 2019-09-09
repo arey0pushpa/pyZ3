@@ -108,11 +108,15 @@
   only in section 2.3.2.
 
  
-  Pt #4:
--------- Handle by Ankit--------------  
-   There is overlap in the 3rd and 6th paragraphs of 
-   the 'Related Work' section, which refer to the use 
-   of SAT/SMT in GRNs.
+  > There is overlap in the 3rd and 6th paragraphs of 
+    the 'Related Work' section, which refer to the use 
+    of SAT/SMT in GRNs.
+  Authors response: The use of SAT/SMT in GRN is presented
+  in two different context (non-overlapping references). 
+  The third paragrah points to general use of SAT/SMT 
+  solvers in GRN, whereas 6th paragraph refers to a specific
+  use (synthesis). We have updated the text to improve this
+  distinction. 
 
 
 Minor points: 

@@ -51,8 +51,21 @@ the background technology, i.e. solving of quantified
 constraints has been evolving rapidly~\cite{lonsing2010depqbf,z3Quant}.
 %
 
-There has been some work in applying synthesis technique in biology especially in gene regulatory networks~\cite{shavit2016automated, fisher2015synthesising}. A very recent work~\cite{fisher2015synthesising} synthesize executable gene regulatory networks from single-cell gene expression data.
-Synthesis technique is also used in optimal synthesis for chemical reaction networks~\cite{cardelli2017syntax}. The~\cite{fisher2015synthesising} uses constraint (satisfiability) solving techniques for the synthesis whereas ~\cite{shavit2016automated} uses SMT for synthesis. The paper~\cite{cardelli2017syntax} in addition to using SMT over ODE, uses a template-guided approach. In our case queries contain quantifiers so we have employed QBF solving with Z3 for solving the synthesis problem. To our best knowledge, this is the first application of synthesis in VTS.
+There has been some work in applying synthesis technique in biology. %especially in gene regulatory networks~\cite{shavit2016automated, fisher2015synthesising}. 
+A recent work by \cite{fisher2015synthesising} synthesize executable gene regulatory networks from single-cell gene expression data.
+%
+In \cite{shavit2016automated} synthesis of switching GRN (with changing topology) is performed.
+%
+The~\cite{fisher2015synthesising} uses constraint (satisfiability) solving techniques whereas \cite{shavit2016automated} uses SMT to perform synthesis. 
+%
+Synthesis technique is also used in optimal synthesis for chemical reaction networks~\cite{cardelli2017syntax}.
+%
+%
+The work
+%The paper \cite{cardelli2017syntax} in addition to using SMT over  ODE, 
+use a template-guided approach in addition to using SMT over ODE. In our case queries contain quantifiers so we have employed QBF solving with Z3 for solving the synthesis problem. 
+%
+To our best knowledge, this is the first application of synthesis in VTS.
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"
