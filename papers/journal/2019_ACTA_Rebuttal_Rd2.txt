@@ -81,20 +81,32 @@
 
 % Reviewer 4: 
  
-  Pt #1:
--------- Handle by Somya--------------  
-  Point 6 on page 3 is the same as point 4.
+  > Point 6 on page 3 is the same as point 4.
 
-  Pt #2:
--------- Handle by Somya--------------  
-  I would argue still that the biological section has 
-  unnecessary detail and could be simplified further.
+  Authors response: We thank the reviewer for pointing 
+  this out. The two points were indeed duplicates. We 
+  have now removed point 6.
+
+  > I would argue still that the biological section has 
+    unnecessary detail and could be simplified further.
+  
+  Authors response: We acknowledge that in the paper, 
+  we only deal explicitly with SNARE proteins. Although 
+  it is not required for an understanding of the work, 
+  we feel a glimpse of the kinds of processes involved 
+  in vesicle traffic, and its molecular machinery might 
+  help the reader appreciate why we have built our model 
+  in this particular way.
  
-  Pt #3:
--------- Handle by Somya--------------  
-  That the steady-state condition corresponds to the 
-  biological meaning of homeostasis is repeated. This 
-  only needs to be mentioned once. 
+ 
+  > That the steady-state condition corresponds to the 
+    biological meaning of homeostasis is repeated. This 
+    only needs to be mentioned once. 
+  
+  Authors response: We now state the equivalence of our 
+  steady state condition and homeostasis of compartments
+  only in section 2.3.2.
+
  
   Pt #4:
 -------- Handle by Ankit--------------  
