@@ -11,7 +11,7 @@
   the necessary encoding details presented in the manuscript.
  
   Pt #1:
--------- Handle by Mukund and Ashutosh --------------
+-------- Handle by Mukund --------------
   One point that I think requires further attention is the 
   motivation for using connectedness and the explanation of 
   this property, which is at the core of the proposed approach. 
@@ -122,40 +122,56 @@
 
 
 Minor points: 
--------- Handle by Lakhsman--------------   
-  Small typos / grammatical errors. There are a number 
-  of these throughout the text, some of which are listed 
-  below (this is not exhaustive, so I recommend carefully 
-  reading the manuscript to ensure clarity):
-  
-  Page 2, lines 11-12: Understanding how membrane traffic 
-  functions *is*, therefore,…
-  
-  Page 2, line 13: Cell biologists have made… (not 'The')
  
-   Page 3, line 14: "…parts of the traffic system that 
-   *are* unchanging…"
+  > Small typos / grammatical errors. There are a number 
+    of these throughout the text, some of which are listed 
+    below (this is not exhaustive, so I recommend carefully 
+    reading the manuscript to ensure clarity):
+  
+  > Page 2, lines 11-12: Understanding how membrane traffic 
+    functions *is*, therefore,…
+  Authors response: Correction incorporated.
+  
+  > Page 2, line 13: Cell biologists have made… (not 'The')
+  Authors response: Correction incorporated.
+ 
+  > Page 3, line 14: "…parts of the traffic system that 
+    *are* unchanging…"
+  Authors response: Correction incorporated.
    
-   Page 4, line 6: "We also worked on the synthesis of the 
-   unknown pieces *that* may be assisted…" Just after this: 
-   "In the work, we developed *an* encoding for the 
+  > Page 4, line 6: "We also worked on the synthesis of the 
+    unknown pieces *that* may be assisted…" Just after this: 
+    "In the work, we developed *an* encoding for the 
     synthesis problem."
+  Authors response: Both corrections are incorporated.
 
-   Figure 1 legend, line 44: "typical" not "typic"
 
-   Page 7, line 11: "We have tried to capture important 
-   *aspects* of *the* Rothman-Schekman-Sudhof (RSS) model 
-   of *the* vesicle…" Also "components" not "component"
+  > Figure 1 legend, line 44: "typical" not "typic"
+  Authors response: Corrections incorporated 
+  (typic was in caption of Fig. 1).
 
-   Example 1, line 40: "labels are a set of molecules"
 
-   Example 2, line 36: "Fig. 3b presents its complete output VTS."
+  > Page 7, line 11: "We have tried to capture important 
+    *aspects* of *the* Rothman-Schekman-Sudhof (RSS) model 
+    of *the* vesicle…" Also "components" not "component" 
+  Authors response: Both corrections are incorporated.
 
-   Page 14, line 16: "We will also seek *to answer* two 
-   kinds of questions, *given* the property."
 
-   Page 15, line 14: "to ensure the k to be the least one" 
-   -> "to ensure that k is minimized"
+  > Example 1, line 40: "labels are a set of molecules"
+  Authors response: Correction incorporated.
 
-   Page 22: "The specification for *the* universal condition 
+  > Example 2, line 36: "Fig. 3b presents its complete output VTS."
+  Authors response: Correction incorporated.
+
+  > Page 14, line 16: "We will also seek *to answer* two 
+    kinds of questions, *given* the property."
+  Authors response: Both corrections are incorporated.
+
+  > Page 15, line 14: "to ensure the k to be the least one" 
+    -> "to ensure that k is minimized"
+  Authors response: Correction incorporated.
+
+  > Page 22: "The specification for *the* universal condition 
    *described in* Section 5" 
+  Authors response: Both corrections are incorporated.
+
