@@ -315,15 +315,15 @@ Suppose we are given a particular transport graph, a particular labeling of all 
 
 The biological problem often boils down to such an analysis. A cell biologist might determine which molecules flow between which set of compartments, and biochemical experiments could be used to see how these molecules activate one another. We can then ask: is this a complete and consistent description? That is, do all the required properties listed above hold, given what the experimentalists have told us? It is often the case that biological data is missing. For example, only a few of the dozens of molecules involved in real VTSs have been mapped out. Therefore, it is extremely likely that the description provided by the cell biologist is incomplete. We can use our model to find out which properties have failed to hold, and thus prescribe new experiments in order to fill in the missing information.
 
-Can we find a simple test to see whether any information is missing, given the experimental data? It has shown that graph k-connectedness furnishes precisely such a test \cite{shukla2017discovering}.
+Can we find a simple test to see whether any information is missing, given the experimental data? It has shown that graph $k$-connectedness furnishes precisely such a test \cite{shukla2017discovering}.
 %
 If the data provided by cell-biologists, suitably represented as a graph, does not have a certain degree of connectivity, this implies that some biological data has been missed. (The converse is not true: even if the required connectivity does hold, there might of course be more information missing.)
 
-%The result about k-connectedness being a useful test of missing information \cite{shukla2017discovering} was obtained using SAT solvers for graphs up to a certain size, and a certain number of molecules. This was due to limitations in how we encoded the problem. Here we present a much more natural encoding that allows our result to be extended to graph sizes and molecule numbers that are typical of those found in real cells.
+%The result about $k$-connectedness being a useful test of missing information \cite{shukla2017discovering} was obtained using SAT solvers for graphs up to a certain size, and a certain number of molecules. This was due to limitations in how we encoded the problem. Here we present a much more natural encoding that allows our result to be extended to graph sizes and molecule numbers that are typical of those found in real cells.
 
 
 %For example, in a directed cyclic graph, every node has at least one incoming and one outgoing edge, at least 2 edges need to be removed in order to disconnect the graph. Therefore the underlying undirected graph is 2-connected. 
-%From our result, for a given set of biomolecular interactions, for a cell that is in a steady state, we expect the VTS graph to have a certain k-connectivity. When regulation is given by arbitrary Boolean rules, we find that VTS graphs must be 3-connected. And when we add the constraint of the specific form of regulatory interactions seen between VTS molecules, we expect vesicle transport graphs to be 2 strongly connected.
+%From our result, for a given set of biomolecular interactions, for a cell that is in a steady state, we expect the VTS graph to have a certain $k$-connectivity. When regulation is given by arbitrary Boolean rules, we find that VTS graphs must be 3-connected. And when we add the constraint of the specific form of regulatory interactions seen between VTS molecules, we expect vesicle transport graphs to be 2 strongly connected.
 
 %\ankit{We need not specify Synthesis here. Only connectivity use next subsection to build this.}
 %\somya{But this is the para where we explain why connectivity is interesting an biological property}

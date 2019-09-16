@@ -6,7 +6,7 @@ We analyze the model against our desired properties.
 %
 In this paper, we choose graph connectedness to be a key property.
 %
-We categorize the search problem (Fig.~\ref{fig:vts-search}) into three different categories, search problem for the existential condition, search problem for the universal condition, and performing synthesis on the incomplete VTS. 
+We categorize the search problem into three different categories (Fig.~\ref{fig:vts-search}), search problem for the existential condition, search problem for the universal condition, and performing synthesis on the incomplete VTS. 
 %
 We will present two encodings for existential condition and one each for universal condition and synthesis.
 
@@ -108,7 +108,7 @@ We also aim to find the minimum $k$.
 %
 %Let's fix our conjecture: ``k-connectedness is a necessary condition for the system regulated by a Boolean function on the node and SNARE-SNARE inhibition on the edge". 
 %
-To find a k-connected graph we specify our property as a query for the existence
+To find a $k$-connected graph we specify our property as a query for the existence
 of a model for a conjunction of the formula representing stability, fusion and specific
 graph connectivity constraint. 
 %
@@ -126,6 +126,12 @@ If the formula is not satisfiable we increment the $k$ by $1$ and repeat the sam
 In this way, we ensure that the reported $k$ is the minimum connectivity of the VTS that
 satisfies the existential condition.
 %
+
+The $k$-connectedness property is computationally challenging as it requires reasoning about all possible $k - 1$ edge removals. 
+%
+So instead of checking for the graph to be $k$-connected, the encoding and the implementation checks whether the graph is not $k+1$-connected.
+%
+Note that this check is sufficient as we are starting from smallest $k$ ($k = 1$) and subsequently incrementing it by one.     
 % Used E as edge and L_e L_n as label for node and the edge,
 
 We employ two techniques to examine the existential condition. 
@@ -160,7 +166,7 @@ the rules of the system.
 We also aim to find the minimum $k$. 
 % We also have to ensure that the particular k is the least one. 
 %
-This condition can be specified as: for every k-connected graph, there exists a satisfiable assignment following the rules of the system. 
+This condition can be specified as: for every $k$-connected graph, there exists a satisfiable assignment following the rules of the system. 
 %
 % \begin{align*}
 %   & \forall G \, \texttt{Connectivity(k)} \implies  \exists

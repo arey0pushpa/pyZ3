@@ -139,7 +139,7 @@ Minor points:
     reading the manuscript to ensure clarity):
   Authors response: We thank the reviewer for pointing these 
   out. We have corrected the listed errors and performed 
-  multiple careful readings fixing other errors that we found.
+  careful readings fixing other errors that we found.
   
   > Page 2, lines 11-12: Understanding how membrane traffic 
     functions *is*, therefore,…
