@@ -14,7 +14,7 @@ the feed in the revised version of our paper.
   largely due to the complexity of the biological system and 
   the necessary encoding details presented in the manuscript.
  
-  Pt #1:
+  Pt #1a:
 -------- Handle by Mukund --------------
   One point that I think requires further attention is the 
   motivation for using connectedness and the explanation of 
@@ -32,14 +32,11 @@ the feed in the revised version of our paper.
   the fact that VTSs are indeed robust. In addition, the problem as 
   formulated does not seem to seek the most robust networks as 
   explained in the following.
+    
 
-  > I also found the formulation of the main problems with respect 
-    to connectedness somewhat confusing. For example, in Sec. 5.1.1 
-    and Sec. 5.1.2 the problems are formulated as a search for VTS G 
-    such that G is not k-connected. Yet, Sec. 5.1 specifies that 
-    "In case the formula is satisfiable the procedure terminates and 
-    we report the value of k", which seems contradictory. Finally, 
-    it is not clear why the goal is to find the minimum graph 
+  Pt #1b:
+-------- Handle by Mukund [Subpoint added]--------------
+    Finally, it is not clear why the goal is to find the minimum graph 
     connectivity, given that larger connectivity corresponds to a 
     more robust network. I was expecting an approach involving 
     incrementing k to find the smallest value that makes the formula 
@@ -49,13 +46,23 @@ the feed in the revised version of our paper.
     what the paper is currently proposing, or else further  
     clarifications are needed.
   
-  Authors response: Sec. 5 gives a high-level explanation of 
-  the problems and present a formal search statement 
-  (implementation based). We have now rewritten the parts of 
-  the text to address the clarity and the distinction between 
-  high-level overview and the implementation. 
-  We have also removed the specific search problems (as suggested 
-  by Reviewer #3 in the first revision) for clarity and accessibility.  
+
+  > I also found the formulation of the main problems with respect 
+    to connectedness somewhat confusing. For example, in Sec. 5.1.1 
+    and Sec. 5.1.2 the problems are formulated as a search for VTS G 
+    such that G is not k-connected. Yet, Sec. 5.1 specifies that 
+    "In case the formula is satisfiable the procedure terminates and 
+    we report the value of k", which seems contradictory. 
+
+  Authors response: In Sec. 5 we try to achieve two aims: give a 
+  high-level explanation of the problem, followed by a formal search 
+  statement (from a prespective of an efficient implementation). 
+  This difference was only hinted but not explicitely stated. We have 
+  now rewritten the parts of the text to address the distinction 
+  between high-level overview and the implementation. 
+  We have also removed the specific search problems (as suggested by 
+  Reviewer #3 in the first revision) for further apparent accessibility 
+  of the subject matter. 
 
   Pt #3: 
 -------- Handle by Ashutosh --------------   
