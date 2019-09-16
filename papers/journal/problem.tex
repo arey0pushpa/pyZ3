@@ -129,7 +129,7 @@ satisfies the existential condition.
 
 The specification of the $k$-connectedness property is challenging as it requires reasoning about all possible $k - 1$ edge removals. 
 %
-So instead of checking for the graph to be $k$-connected, the encoding and the implementation checks whether the graph is not $k+1$-connected.
+So instead of checking for the graph to be $k$-connected, the encoding (and the implementation) checks whether the graph is not $k+1$-connected.
 %
 Note that this check is sufficient as we are starting from smallest $k$ ($k = 1$) and subsequently incrementing it by one.     
 % Used E as edge and L_e L_n as label for node and the edge,
@@ -177,10 +177,10 @@ This condition can be specified as: for every $k$-connected graph, there exists 
 We will use the same procedure as the existential condition to ensure that $k$ is minimized.
 %
 
-%For the implementation purpose, to conclude that a given $k$-connectedness is not a universal condition it is suffice to search for a $k$-connected graph that has no satisfying assignment of all the rules of the system (checking the negation of the condition is unsatisfiable).  
-In the implementation, to conclude that a given $k$-connectedness is not a universal condition we search for a $k$-connected graph that has no satisfying assignment of all the rules of the system, i.e., checking the negation of the condition is unsatisfiable.
+%In the implementation, to conclude that a given $k$-connectedness is not a universal condition it is suffice to search for a $k$-connected graph that has no satisfying assignment of all the rules of the system, i.e., checking the negation of the condition is unsatisfiable.
+%In the implementation, to conclude that a given $k$-connectedness is not a universal condition we search for a $k$-connected graph that has no satisfying assignment of all the rules of the system, i.e., checking the negation of the condition is unsatisfiable.
 %
-   
+In the implementation instead of checking the satisfiability of the formula, we check whether the negation of the formula is unsatisfiable. That is to conclude that a given $k$-connectedness is not a universal condition we search for a $k$-connected graph that has no satisfying assignment of all the rules of the system.
  
 The formula for the problem has quantifier alternation. 
 %
