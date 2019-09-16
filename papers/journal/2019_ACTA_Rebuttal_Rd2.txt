@@ -67,27 +67,31 @@ the feed in the revised version of our paper.
   Reviewer #3 in the first revision) for further apparent accessibility 
   of the subject matter. 
 
-  Pt #3: 
--------- Handle by Ashutosh --------------   
-  Another point that should be revised further is around 
-  clarifying the contributions of this paper. The response 
-  document summarizes nicely that, together with additional 
-  QBF encoding, "this paper brings together all the results 
-  with extended experiments and more detailed expositions for 
-  the benefit of both biological and computation community." 
-  However, I did not find a similar concise statement of the 
-  contributions in the text. In addition, some of the stated 
-  advances over previous approaches seem incremental and minor. 
-  For example, for the previous CBMC-based method it is stated 
-  that "...the scalability of the method was insufficient. 
-  The tool was able to handle the system with just eight 
-  compartments". Yet, we learn that "A typical eukaryotic 
-  cell contains 9 organelles" and even one of the methods 
-  presented in this paper fails for some of the experimental 
-  evaluations with 7 or more compartments. The contributions 
-  of this work, perhaps in the integration and evaluation of
-  several methods reported previously, should be stated clearly 
-  and accurately in the main text.
+  > Another point that should be revised further is around 
+    clarifying the contributions of this paper. The response 
+    document summarizes nicely that, together with additional 
+    QBF encoding, "this paper brings together all the results 
+    with extended experiments and more detailed expositions for 
+    the benefit of both biological and computation community." 
+    However, I did not find a similar concise statement of the 
+    contributions in the text. In addition, some of the stated 
+    advances over previous approaches seem incremental and minor. 
+    For example, for the previous CBMC-based method it is stated 
+    that "...the scalability of the method was insufficient. 
+    The tool was able to handle the system with just eight 
+    compartments". Yet, we learn that "A typical eukaryotic 
+    cell contains 9 organelles" and even one of the methods 
+    presented in this paper fails for some of the experimental 
+    evaluations with 7 or more compartments. The contributions 
+    of this work, perhaps in the integration and evaluation of
+    several methods reported previously, should be stated clearly 
+    and accurately in the main text.
+
+  Authors response: We clarified the concerns of the reviewers 
+  and clearly stated in the Sec 1. Introduction that the CBMC 
+  method does not scale and the direct encoding does. 
+  We have also stated that the key purpose of this paper is 
+  one unified exposition of our work.
 
   > A final minor point is about the use of "Synthesis" as 
     an encoding in Fig 4 and the relevant explanations. 
