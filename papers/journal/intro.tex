@@ -184,10 +184,17 @@ VTSs and SNARE regulations were modeled as C code using arrays to represent grap
 %
 The graph connectivity question for different variations of SNARE regulations was modeled as logical assertions to be checked by the model checker. 
 %
-Although the performance was satisfactory, the encoding was non-optimal and hence scalability of the method was insufficient. The tool was able to handle the system with just eight compartments.
+Although the performance was satisfactory, the encoding was non-optimal and hence scalability of the method was insufficient.
 %
+The tool was able to handle the system with just eight compartments
+and failed to scale.
+% 
 Another interesting question of property involving quantifiers (was termed as sufficient condition in \cite{shukla2017discovering}; in this paper, we call it universal condition) was partly handled
 using sampling and left open.
+%
+We have included this method in the current paper for the completeness of
+exposition.
+
 %
 In~\cite{smtVTS}, we developed more efficient direct encoding to SMT solvers. 
 %
@@ -245,4 +252,3 @@ In Section~\ref{sec:related}, we discuss related work and conclude in Section~\r
 %%% mode: latex
 %%% TeX-master: "main"
 %%% End:
-~        
