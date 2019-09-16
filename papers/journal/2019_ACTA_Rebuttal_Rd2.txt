@@ -15,8 +15,8 @@ the feed in the revised version of our paper.
   the necessary encoding details presented in the manuscript.
  
   Pt #1a:
--------- Handle by Mukund --------------
-  One point that I think requires further attention is the 
+-------- Mukund --------------
+  > One point that I think requires further attention is the 
   motivation for using connectedness and the explanation of 
   this property, which is at the core of the proposed approach. 
   I did not find the additional explanations provided in the 
@@ -32,11 +32,13 @@ the feed in the revised version of our paper.
   the fact that VTSs are indeed robust. In addition, the problem as 
   formulated does not seem to seek the most robust networks as 
   explained in the following.
+  
+  Authors response: ...
     
 
   Pt #1b:
--------- Handle by Mukund [Subpoint added]--------------
-    Finally, it is not clear why the goal is to find the minimum graph 
+-------- Mukund [Subpoint added]--------------
+  > Finally, it is not clear why the goal is to find the minimum graph 
     connectivity, given that larger connectivity corresponds to a 
     more robust network. I was expecting an approach involving 
     incrementing k to find the smallest value that makes the formula 
@@ -45,7 +47,8 @@ the feed in the revised version of our paper.
     satisfied. However, to the best of my understanding, this is not 
     what the paper is currently proposing, or else further  
     clarifications are needed.
-  
+    
+  Authors response: ...
 
   > I also found the formulation of the main problems with respect 
     to connectedness somewhat confusing. For example, in Sec. 5.1.1 
