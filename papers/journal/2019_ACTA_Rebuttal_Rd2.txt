@@ -3,7 +3,9 @@ helpful comments. In the following, we ellaborate on how we addressed
 the feed in the revised version of our paper.
 
 % Reviewer 1:
- > My comments and concerns have been addressed in detail. Thank you.
+  > My comments and concerns have been addressed in detail. 
+    Thank you.
+  Authors response: Thank you for your valuable comments.  
 
 % Reviewer 3: 
 
@@ -57,9 +59,9 @@ the feed in the revised version of our paper.
     "In case the formula is satisfiable the procedure terminates and 
     we report the value of k", which seems contradictory. 
 
-  Authors response: In Sec. 5 we try to achieve two aims: give a 
-  high-level explanation of the problem, followed by a formal search 
-  statement (from a prespective of an efficient implementation). 
+  Authors response: In Sec. 5 we try to give a high-level 
+  explanation of the procedure, followed by a formal search statement 
+  from the prespective of an efficient implementation. 
   This difference was only hinted but not explicitely stated. We have 
   now rewritten the parts of the text to address the distinction 
   between high-level overview and the implementation. 

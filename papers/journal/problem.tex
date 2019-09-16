@@ -176,11 +176,17 @@ This condition can be specified as: for every $k$-connected graph, there exists 
 %
 We will use the same procedure as the existential condition to ensure that $k$ is minimized.
 %
+
+For the implementation purpose, to conclude that a given $k$-connectedness is not a universal condition it is suffice to search for a $k$-connected graph that has no satisfying assignment of all the rules of the system (checking the negation of the condition is unsatisfiable).   
+ 
 The formula for the problem has quantifier alternation. 
 %
 Most SAT solvers can check (at least efficiently) only quantifier-free formulas.
 %
-We need a QBF solver for such queries.
+%
+We need a QBF solver for such queries. 
+%
+We refer the corresponding search problem as $\fqbf$ search problem.
 %
 
 %%\ankit{This is a dummy template. need a rewrite.} 
