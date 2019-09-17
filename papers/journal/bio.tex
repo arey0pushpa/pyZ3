@@ -99,7 +99,7 @@ before fusion \cite{baker2016chaperoning}.
 
 %The final step in vesicle transport is the fusion of the vesicle with the target compartment is brought about by SNARE proteins. 
 %
-The final step in vesicle transport is the fusion of the vesicle with the target compartment. 
+The final step in vesicle transport is fusion of the vesicle with the target compartment. 
 %
 It is brought about by SNARE proteins.
 %
@@ -115,7 +115,7 @@ In keeping with their central role in vesicle transport, both the activity and t
 %
 Sec17/18 bring about disassembly of SNARE complexes post-fusion in order that these SNAREs may be reused. 
 %
-Whereas, SM proteins have following multiple modes of SNARE regulation: 
+Whereas, SM proteins have multiple modes of SNARE regulation: 
 \begin{itemize}
 	\item SM proteins can hold
 	the Qa-SNAREs in an inhibited state and prevent or postpone their assembly into SNARE
@@ -131,7 +131,7 @@ Whereas, SM proteins have following multiple modes of SNARE regulation:
 
 %\somya{schematic of intracellular compartments and  major routes}
 \subsubsection{Major paths in the VTS}
-Molecules traverse the cell in a series of vesicles, and there are two major routes of vesicle transport in all eukaryotic cells.
+Molecules traverse the cell in a series of vesicles. There are two major routes of vesicle transport in all eukaryotic cells.
 %
 \begin{itemize}
 	\item The secretory route takes proteins from the ER (their site of production) to the plasma membrane (from where they are secreted out of the cell) via the Golgi apparatus~\cite{alberts2002molecular}.
@@ -162,7 +162,7 @@ The following are the basic components and assumptions of our model.
 \begin{enumerate}
 \item A cell is a set of compartments exchanging vesicles.
 \item Compartments are neither created nor destroyed~\cite{braell1984glycoprotein}.
-\item Each compartment is in steady state, gain and loss of the molecules is balance~\cite{braell1984glycoprotein}.
+\item Each compartment is in steady state, where gain and loss of molecules is balanced~\cite{braell1984glycoprotein}.
 \item Molecules are neither created nor destroyed~\cite{he2009differential}.
 \item Molecules move via vesicles of uniform size.
 \item Identical vesicles have identical target compartments~\cite{fries1981transient}.
@@ -193,7 +193,7 @@ The constraints imposed by cell biology are incorporated in the annotations of t
 The cell can be abstractly represented as an annotated graph. 
 Every compartment in the cell can be represented as a node in the graph. 
 %
-The set of molecules present in the compartment, for example, SNARE proteins associated with it, are represented as a label to the corresponding nodes.
+The set of molecules present in compartments, for example, SNARE proteins associated with it, are represented as labels to the corresponding nodes.
 %
 The label of each node will be unique molecules present on the compartment, i.e we abstract over the quantity of the molecule present in a compartment.
 %This represents the flux of the molecule type present at that compartment.
@@ -220,7 +220,7 @@ This is much stronger than the constraint that each molecule type entering a com
 %
 But, since our model is essentially binary, the two statements become equivalent. 
 %
-Indeed, it is well accepted that on the scale of minutes and hours the molecular composition remains the same. 
+Indeed, it is well accepted that on the scale of minutes and hours the molecular composition of compartments remains the same. 
 %
 In this paper, we refer to the steady state of the cell \cite{mani2016stacking} as the stability condition over the annotated graph.
 
@@ -267,9 +267,9 @@ In our abstract model,
 we create a hierarchy of variants for varying degrees of regulation of SNARE activity.
 %we create a set of variations of different kind of molecular regulations.
 %
-Most generally, the activity state of a given SNARE can be a Boolean function of all the molecular types on a compartment or vesicle. 
+Most generally, the activity state of a given SNARE can be a Boolean function of all the molecular types on the compartment or vesicle. 
 %
-We have also tested \cite{shukla2017discovering} a particularly simple regulation mechanism in which two SNAREs that can pair to drive fusion to inhibit one another; this is the \textit{pairing inhibition}. 
+We have also tested \cite{shukla2017discovering} a particularly simple regulation mechanism in which two SNAREs that can pair to drive fusion to inhibit one another; this is \textit{pairing inhibition}. 
 %
 This is motivated by the idea that pairing must generate an inactive bi-molecular complex.
 %
@@ -281,7 +281,7 @@ In our simple pairing inhibition scheme, if $P(i,j)$ = 1 and both molecules $i$ 
 
 In this work, we use the term activity to have very specific scope; it only implies the ability to cause membrane fusion and it only applies to SNAREs. 
 %
-In this sense, it indeed does not matter whether the molecule interacting with the SNARE is active or not. 
+In this sense, it does not matter whether the molecule interacting with the SNARE is active or not. 
 %
 For example, Qa-SNAREs are only active on target compartments (regulation by SM proteins achieves this \cite{baker2016chaperoning}), but when present on vesicles with its other cognate SNAREs, it nevertheless will participate in SNARE complex formation within the same vesicle membrane, and thus inhibit its SNARE partners from causing vesicle fusion.
 %We assume that for fusion to occur, the pair of SNARE types involved on the vesicle and compartment must both be in an active state. Whether these SNAREs are active or inactive depends on the other molecules found on the vesicle or compartment, respectively. We test many different versions of this kind of molecular regulation. Most generally, the activity state of a given SNARE can be a Boolean function of all the molecular types on a compartment or vesicle. We have also tested \cite{shukla} a particularly simple regulation mechanism in which two SNAREs that can pair to drive fusion inhibit one another; this is the \textit{pairing inhibition}. This is motivated by the idea that pairing must generate an inactive bi-molecular complex.
@@ -315,7 +315,7 @@ Suppose we are given a particular transport graph, a particular labeling of all 
 
 The biological problem often boils down to such an analysis. A cell biologist might determine which molecules flow between which set of compartments, and biochemical experiments could be used to see how these molecules activate one another. We can then ask: is this a complete and consistent description? That is, do all the required properties listed above hold, given what the experimentalists have told us? It is often the case that biological data is missing. For example, only a few of the dozens of molecules involved in real VTSs have been mapped out. Therefore, it is extremely likely that the description provided by the cell biologist is incomplete. We can use our model to find out which properties have failed to hold, and thus prescribe new experiments in order to fill in the missing information.
 
-Can we find a simple test to see whether any information is missing, given the experimental data? It has shown that graph $k$-connectedness furnishes precisely such a test \cite{shukla2017discovering}.
+Can we find a simple test to see whether any information is missing, given the experimental data? It has been shown that graph $k$-connectedness furnishes precisely such a test \cite{shukla2017discovering}.
 %
 If the data provided by cell-biologists, suitably represented as a graph, does not have a certain degree of connectivity, this implies that some biological data has been missed. (The converse is not true: even if the required connectivity does hold, there might of course be more information missing.)
 
@@ -362,18 +362,18 @@ In Fig.~\ref{fig:M1}, we present a VTS that has 2 compartments and 18 molecules 
 %
 %Molecules are represented as $Q_{i}$'s or $R_{i}$'s to make a clear distinction between Q and R SNAREs.
 %
-In the VTS, labels are a set of molecules, where we show active molecules in red color.
+In the VTS, labels are sets of molecules, where we show active molecules in red color.
 %
 The activity of the molecules on the node is controlled
 by the presence of the other molecules (exact Boolean function is not shown). 
 %
 The activity of the molecules on an edge is determined by the corresponding pairing matrix.
 %
-Note that molecules $X$ and $Y$ do not take part in the fusion but determine the activity of molecules at the corresponding nodes.
+Note that molecules $X$ and $Y$ do not take part in fusion but determine the activity of molecules at the corresponding nodes.
 %
 Below the VTS, we show the pairing matrix.
 %
-Rows in the matrix correspond to the labels of edges, and columns correspond to the labels of nodes.
+Rows in the matrix correspond to edge-labels, and columns correspond to node-labels.
 %
 An entry 1 represents pairing between molecules and 0 represents no pairing.
 %
@@ -383,7 +383,7 @@ This is a 4-connected graph.
 \end{example}
 \input{fig3}
 \begin{example}
-	In Fig.~\ref{fig:synth-vts1}, we present a partial input VTS that has 3 compartments. Fig.~\ref{fig:synth-vts2} presents its complete output VTS. Every molecule present on the node is active. The activity of the molecules on an edge is determined by the presence of the other molecules. Each label represent particular type of molecule. The synthesis is performed against the stability and 3-connectivity. Synthesized edge is in red color and synthesized molecules are presented in blue. The synthesis adds one edge and 7 molecules to complete the partial VTS. For the sake of clarity, we have not presented the activity of molecules, the corresponding pairing matrix and remaining molecules on the nodes. This synthetic example is a sub-graph of the VTS shown in the \ref{fig:mukund-vts}. Please refer to \ref{sec:ex-vts} for complete detail. 
+	In Fig.~\ref{fig:synth-vts1}, we present a partial input VTS that has 3 compartments. Fig.~\ref{fig:synth-vts2} presents its complete output VTS. Every molecule present on the node is active. The activity of molecules on an edge is determined by the presence of other molecules on the edge. Each label represents a particular type of molecule. The synthesis is performed against the stability and 3-connectivity conditions. The synthesized edge is in red color and synthesized molecules are presented in blue. The synthesis adds one edge and 7 molecules to complete the partial VTS. For the sake of clarity, we have not presented the activity of molecules, the corresponding pairing matrix and remaining molecules on the nodes. This synthetic example is a sub-graph of the VTS shown in the \ref{fig:mukund-vts}. Please refer to \ref{sec:ex-vts} for details. 
 	%The presented graph is a subgraph of a VTS discussed in details in appendix.
 \end{example}
 
@@ -429,7 +429,7 @@ Going by the above description, we can assume that the VTS has of the order of 1
 %
 The VTS transports a large number of molecules but the molecules that actively control the system are in their tens~\cite{lodish2008molecular}. 
 %
-By definition, the activity of any VTS molecules can be controlled by all other molecules.
+By definition, the activity of any VTS molecule can be controlled by all other VTS molecules.
 %
 However, in practice the activity of a molecule is directly controlled by 2-3 other molecules; for example, adaptor proteins are recruited to compartments by lipids of the compartment membrane and by ARF/SAR GTPases~\cite{kahn2009toward}. 
 %
