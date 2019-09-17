@@ -36,14 +36,14 @@ Cell biologists have made some progress by assembling a
 traffic~\cite{dacks2007evolution}.
 %
 The essential processes involve the creation of vesicles loaded with
-cargo from source organelles, known as ``budding”, and the depositing
+cargo from source organelles, known as ``budding”, and the deposition
 of those vesicles and cargo into target organelles, known as ``fusion”
 \cite{munro2004organelle}.
 %
-Proteins that are called coats and the adaptors that select the cargo regulate budding.
+Proteins called coats and adaptors select cargo and regulate budding.
 %
-The proteins that are known as SNAREs and tethers that ensure that vesicles
-fuse to the correct target regulate fusion
+Proteins known as SNAREs and tethers ensure that vesicles
+fuse to correct target compartments and regulate fusion
 \cite{mani2016stacking}.
 %
 Although we know a great deal about molecular-level details, there has
@@ -53,7 +53,7 @@ scales to build the entire vesicle traffic system (VTS).
 We have recently attempted to use the ideas of graph theory to address
 this question \cite{mani2016stacking,shukla2017discovering}.
 
-The SNARE proteins and the constraints that SNARE-to-SNARE regulations
+SNARE proteins and the constraints that SNARE-to-SNARE regulations
 impose on the feasible behaviors of VTSs are the focus of
 our current work.
 %
@@ -61,17 +61,17 @@ Abstractly, we can think of these proteins as labels that are
 collected from the source compartment and taken to the target
 compartment on vesicles.
 %
-There is a corresponding set of label molecules on the target compartments.
+There is a corresponding set of labels on the target compartment.
 %
 If the two sets of labels (on vesicles and targets) are compatible,
 then the vesicle will fuse.
 %
 The question is: does this physical picture place any constraints on
-the global topology of the traffic graph? We have previously shown that one informative constraint is graph connectivity \cite{shukla2017discovering}.
+the global topology of the vesicle traffic graph? We have previously shown that one informative constraint is graph connectivity \cite{shukla2017discovering}.
 %
 The intricacies of SNARE regulation are largely unknown.
 %
-How stringent SNARE regulation is can determine whether the graph
+The stringency of SNARE regulation can determine whether the graph
 topologies of a particular level of connectivity are biologically
 realizable.
 %
@@ -79,18 +79,18 @@ For example, if SNAREs are completely unregulated and thus always
 active, they cannot be used to generate a traffic network.
 %
 If relatively simple rules regulate the SNAREs, then only
-highly connected traffic networks can be generated using them.
+highly connected traffic networks can be generated.
 %
 The question is, can we work toward a predictive analytical framework
 of VTSs?
 
 Another interesting question is the completion of the VTS \cite{synthesisGupta}. 
 %
-The current picture of the VTS is far from complete; we do not yet know how many of the cellular proteins reach their resident compartments within the cell, and
+The current picture of VTS is far from complete; for many cellular proteins, we do not know how they reach their resident compartments within the cell, and
 researchers are discovering new vesicle routes every
 year~\cite{nickel2018unconventional,weill2018toolbox}. 
 %
-Completing the VTS is a difficult task for many important reasons: 
+Completing the VTS is a difficult task for many reasons: 
 \begin{enumerate}
 	\item The core VTS is similar across eukaryotes, the traffic network in different organisms \cite{richardson2015evolutionary, barlow2017seeing}, and even in different cell types within an organism can be different~\cite{stoops2014trafficking,zhou2015arp2}.
 	\item Although the basic molecular machinery is the same for all vesicle fusion events, the details of regulation can be different~\cite{davletov2007regulation,di2010calcium}.
@@ -107,15 +107,15 @@ The malfunction of the VTS causes many diseases.
 The knowledge of the complete network would help identify the root causes of
 the diseases~\cite{bexiga2013human,gissen2007cargos}. 
 %
-At a more basic level, having complete pictures of the VTS for various organisms and various cell-types would allow comparative studies, and therefore would allow the deduction of modes of evolution of the form of the traffic network. 
+At a more basic level, having complete pictures of the VTS for various organisms and various cell-types would allow comparative studies, and therefore would allow the deduction of modes of evolution of the form of the vesicle traffic network. 
 %
-The network knowledge would also allow us to decipher features such as parts of the traffic system that are unchanging and therefore likely to be its core, and more plastic parts~\cite{barlow2017seeing}.
+knowing the vesicle traffic network would also allow us to decipher features such as parts of the traffic system that are unchanging and therefore likely to be its core, and the more plastic parts~\cite{barlow2017seeing}.
 
 %\subsection{Synthesis of VTS:}
 %
 The underlying cell biology dictates the set of basic constraints the VTS should follow.
 %
-In order to attempt to complete a given partial VTS, we have to first agree on the properties that every complete VTS should follow in spite of the basic constraints. 
+In order to attempt to complete a given partial VTS, we have to first agree on the properties that every complete VTS should have in spite of basic constraints. 
 %
 We use our graph connectivity results as a basis for this investigation.   
 %
@@ -135,7 +135,7 @@ An analysis of a large number of graphs~\footnote{There are total 68715 simple (
 %
 The same reason would hinder the precise analysis of the properties of the VTS. 
 
-A previous work used a sampling approach. 
+In previous work, a sampling approach was used. 
 %
 The study used a rule-based approach~\cite{mani2016stacking}.
 Given an initial condition of the cell and rules for molecular traffic,
@@ -189,23 +189,23 @@ Although the performance was satisfactory, the encoding was non-optimal and henc
 The tool was able to handle the system with just eight compartments
 and failed to scale.
 % 
-Another interesting question of property involving quantifiers (was termed as sufficient condition in \cite{shukla2017discovering}; in this paper, we call it universal condition) was partly handled
+Another interesting question about a property involving quantifiers (termed as sufficient condition in \cite{shukla2017discovering}; in this paper, we call it the universal condition) was partly handled
 using sampling and left open.
 %
-We have included this method in the current paper for the completeness of
+We have included this method in the current paper for completeness of the
 exposition.
 
 %
-In~\cite{smtVTS}, we developed more efficient direct encoding to SMT solvers. 
+In~\cite{smtVTS}, we developed a more efficient direct encoding to SMT solvers. 
 %
 We also worked on the synthesis of the unknown pieces that may
 be {\em assisted} by computation on the graph model of VTSs~\cite{synthesisGupta}.
 %
-In the work, we developed an encoding for the synthesis problem.
+In this work, we have developed an encoding for the synthesis problem.
 %
 This paper brings together the above encodings with extended experiments and more detailed
-expositions for the benefit of both biological and computation community.
-We additionally explored QBF based encoding of some of the problems.
+expositions for the benefit of both the biological and the computation communities.
+We additionally explored QBF based encodings of some of the problems.
 
 
 % In this paper, we present both the SMT and QBF encodings to address the two problems.
@@ -223,7 +223,7 @@ We additionally explored QBF based encoding of some of the problems.
 %\end{itemize}
 
 
-\par We have implemented the encodings in a flexible tool, which can handle both connectivity questions and a wide range of synthesis queries. 
+\par We have implemented these encodings in a flexible tool, which can handle both connectivity questions and a wide range of synthesis queries. 
 %
 We have applied our synthesis tool on several VTSs, including
 two found-in-nature VTSs.
@@ -236,7 +236,7 @@ Our experiments suggest that some of the synthesis problems are solvable by mode
 %
 We organized the rest of the paper as follows. 
 %
-In Section~\ref{sec:bio}, we present the biological background and details to understand the VTS. 
+In Section~\ref{sec:bio}, we present biological background and details to understand the VTS. 
 %
 In Section~\ref{sec:prelim}, we present the notations we use in this paper. 
 %
