@@ -180,7 +180,6 @@ We will use the same procedure as the existential condition to ensure that $k$ i
 %In the implementation, to conclude that a given $k$-connectedness is not a universal condition it is suffice to search for a $k$-connected graph that has no satisfying assignment of all the rules of the system, i.e., checking the negation of the condition is unsatisfiable.
 %In the implementation, to conclude that a given $k$-connectedness is not a universal condition we search for a $k$-connected graph that has no satisfying assignment of all the rules of the system, i.e., checking the negation of the condition is unsatisfiable.
 %
-In the implementation instead of checking the satisfiability of the formula, we check whether the negation of the formula is unsatisfiable. That is to conclude that a given $k$-connectedness is not a universal condition we search for a $k$-connected graph that has no satisfying assignment of all the rules of the system.
  
 The formula for the problem has quantifier alternation. 
 %
@@ -192,6 +191,11 @@ We need a QBF solver for such queries.
 We refer the corresponding search problem as $\fqbf$ search problem.
 %
 
+For the efficient implementation of the specification instead of checking the satisfiability of the formula, we check whether the negation of the formula is unsatisfiable. 
+%
+That is to conclude that a given $k$-connectedness is not a universal condition we search for a $k$-connected graph that has no satisfying assignment to all the rules of the system.
+%
+In case no such graph exists for a specific $k$ we reported the corresponding $k$.
 %%\ankit{This is a dummy template. need a rewrite.} 
 %\subsubsection{$\fqbf$ search problem.} For a given $k$, size $\nu$, and molecule number $\mu$, we are searching for a $k$-connected graph such that there is no assignment that makes it a well-structured, stable, and well-fused VTS $G = (\nodes,\mols,\edges,\nlabel,\pairs,\edgef,\nodef)$ with $|\nodes| = \nu$, $|\mols| = \mu$.    
 
