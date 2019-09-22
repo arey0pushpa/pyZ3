@@ -94,12 +94,21 @@ in the revised version of our paper.
   This difference was only hinted but not explicitly stated. 
   We have now rewritten the parts of the text to address the 
   distinction between high-level overview and the implementation.
+
+  "The implementation of the k-connectedness property is 
+  challenging as it requires reasoning about all possible k − 1 
+  edge removals. So instead of checking for the graph to be 
+  k-connected, the encoding (and the implementation) checks 
+  whether the graph is not k + 1-connected..."
+ 
+  The use of "k" in the 6.1.6 k-connectivity constraints, 
+  is overloaded. This subsection specifies how we encode 
+  a graph that is not k-connected. 
+
   We have also removed the specific search problems (as suggested 
   by Reviewer #3 in the first revision) for further apparent 
   accessibility of the subject matter. 
-  The use of "k" in the 6.1.6 k-connectivity constraints, 
-  is overloaded. It just specifies how we encode a graph 
-  that is not k-connected. 
+  
 
   >> Another point that should be revised further is around 
     clarifying the contributions of this paper. The response 
