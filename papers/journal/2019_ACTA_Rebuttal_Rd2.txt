@@ -1,6 +1,4 @@
-We would like to thank the reviewers for their very detailed and
-helpful comments. In the following, we ellaborate on how we addressed
-the feed in the revised version of our paper.
+We would like to thank the reviewers for their very detailed and helpful comments. In the following, we elaborate on how we addressed the feedback in the revised version of our paper.
 
 % Reviewer 1:
   > My comments and concerns have been addressed in detail. 
@@ -15,59 +13,40 @@ the feed in the revised version of our paper.
   I still found the paper challenging to read, but this is 
   largely due to the complexity of the biological system and 
   the necessary encoding details presented in the manuscript.
+
+  Authors response: Thank you for this feedback. As we are trying to reach an interdisciplinary audience we are forced to balance to some extent the biological detail with the technical discussions. We appreciate the feedback from the reviewers, which has helped us improve readability.
  
-  Pt #1a:
--------- Mukund --------------
+
   > One point that I think requires further attention is the 
   motivation for using connectedness and the explanation of 
   this property, which is at the core of the proposed approach. 
   I did not find the additional explanations provided in the 
   response and the revised manuscript sufficient. Simply stating 
   that "The graph k-connectedness furnishes precisely" a test to 
-  determine if information is missing from the model and that 
-  "If the data […] does not have a certain degree of connectivity, 
-  this implies that some biological data has been missed" does not 
-  justify connectedness as a fundamental and required biological 
-  property that all valid models should respect. The intuition of 
-  connectedness as a robustness property provided elsewhere in the 
-  manuscript helps but it is still not clear what evidence supports 
-  the fact that VTSs are indeed robust. In addition, the problem as 
-  formulated does not seem to seek the most robust networks as 
-  explained in the following.
-  
-  Authors response: ...
-    
+  determine if information is missing from the model.
 
-  Pt #1b:
--------- Mukund [Subpoint added]--------------
-  > Finally, it is not clear why the goal is to find the minimum graph 
-    connectivity, given that larger connectivity corresponds to a 
-    more robust network. I was expecting an approach involving 
-    incrementing k to find the smallest value that makes the formula 
-    unsatisfiable, thus identifying the maximum graph connectedness 
-    possible for a given VTS with all other constraints being 
-    satisfied. However, to the best of my understanding, this is not 
-    what the paper is currently proposing, or else further  
-    clarifications are needed.
-    
-  Authors response: ...
+Authors response:
 
-  > I also found the formulation of the main problems with respect 
-    to connectedness somewhat confusing. For example, in Sec. 5.1.1 
-    and Sec. 5.1.2 the problems are formulated as a search for VTS G 
-    such that G is not k-connected. Yet, Sec. 5.1 specifies that 
-    "In case the formula is satisfiable the procedure terminates and 
-    we report the value of k", which seems contradictory. 
+We have removed the word ``precisely'', which the Reviewer has correctly pointed out is too strong. We have replaced this by the sentence ``It has been shown that graph $k$-connectedness furnishes one such test''.
+
+>  "If the data […] does not have a certain degree of connectivity,  this implies that some biological data has been missed" does not  justify connectedness as a fundamental and required biological  property that all valid models should respect. The intuition of  connectedness as a robustness property provided elsewhere in the  manuscript helps but it is still not clear what evidence supports  the fact that VTSs are indeed robust. In addition, the problem as  formulated does not seem to seek the most robust networks as  explained in the following.
+ 
+Author response: We have added several paragraphs to motivate our focus on k-edge-connectedness: 
+
+``The informativeness and usefulness of using $k$-connectedness is motivated by the following example. ... In summary, the higher the edge-connectedness of a measured VTS graph, the more of the underlying biological constraints can be satisfied by appropriately placing SNAREs on each node and edge.''
+
+
+  > Finally, it is not clear why the goal is to find the minimum graph connectivity, given that larger connectivity corresponds to a more robust network. I was expecting an approach involving incrementing k to find the smallest value that makes the formula unsatisfiable, thus identifying the maximum graph connectedness possible for a given VTS with all other constraints being satisfied. However, to the best of my understanding, this is not what the paper is currently proposing, or else further clarifications are needed.
+    
+Author response: We apologise for the confusing structure of our text. To clarify this point we have added a new paragraph: 
+
+``It is perhaps counter-intuitive that, beyond a certain degree of edge-connectedness, any VTS graph can be implemented as a biological system. This is because we have not placed any constraints on the number of distinct SNAREs and other trafficking molecules a cell contains. In practice there is an upper bound on the number of molecules a cell can genetically encode. This question (``What is the maximum edge-connectedness possible given a certain number of SNAREs?'') is complementary to the question we have asked here (``What is the minimum edge-connectedness possible given any number of SNARES operating under certain physical constraints?'').''
+
+  > I also found the formulation of the main problems with respect to connectedness somewhat confusing. For example, in Sec. 5.1.1 and Sec. 5.1.2 the problems are formulated as a search for VTS G such that G is not k-connected. Yet, Sec. 5.1 specifies that "In case the formula is satisfiable the procedure terminates and we report the value of k", which seems contradictory. 
 
   Authors response: In Sec. 5 we try to give a high-level 
-  explanation of the procedure, followed by a formal search statement 
-  from the prespective of an efficient implementation. 
-  This difference was only hinted but not explicitely stated. We have 
-  now rewritten the parts of the text to address the distinction 
-  between high-level overview and the implementation. 
-  We have also removed the specific search problems (as suggested by 
-  Reviewer #3 in the first revision) for further apparent accessibility 
-  of the subject matter. 
+  explanation of the procedure, followed by a formal search statement from the perspective of an efficient implementation. 
+  This difference was only hinted but not explicitly stated. We have  now rewritten the parts of the text to address the distinction between high-level overview and the implementation. We have also removed the specific search problems (as suggested by Reviewer #3 in the first revision) for further apparent accessibility of the subject matter. 
 
   > Another point that should be revised further is around 
     clarifying the contributions of this paper. The response 
@@ -125,7 +104,6 @@ the feed in the revised version of our paper.
   help the reader appreciate why we have built our model 
   in this particular way.
  
- 
   > That the steady-state condition corresponds to the 
     biological meaning of homeostasis is repeated. This 
     only needs to be mentioned once. 
@@ -134,7 +112,6 @@ the feed in the revised version of our paper.
   steady state condition and homeostasis of compartments
   only in section 2.3.2.
 
- 
   > There is overlap in the 3rd and 6th paragraphs of 
     the 'Related Work' section, which refer to the use 
     of SAT/SMT in GRNs.
