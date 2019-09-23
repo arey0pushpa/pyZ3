@@ -102,13 +102,12 @@ in the revised version of our paper.
   whether the graph is not k + 1-connected..."
  
   The use of "k" in the 6.1.6 k-connectivity constraints, 
-  is overloaded. This subsection specifies how we encode 
+  is overloaded. This subsection simply specifies how we encode 
   a graph that is not k-connected. 
 
   We have also removed the specific search problems (as suggested 
   by Reviewer #3 in the first revision) for further apparent 
   accessibility of the subject matter. 
-  
 
   >> Another point that should be revised further is around 
     clarifying the contributions of this paper. The response 
@@ -130,11 +129,16 @@ in the revised version of our paper.
     several methods reported previously, should be stated clearly 
     and accurately in the main text.
 
-  Authors response: We clarified the concerns of the reviewers and 
-  clearly stated in the Sec 1. Introduction that the CBMC method 
-  does not scale and the direct encoding does. 
-  We have also stated that the key purpose of this paper 
-  is one unified exposition of our work.
+  Authors response: We have stated that the key purpose of this 
+  paper is one unified exposition of our work.
+  
+  "This paper brings together the above encodings with extended
+   experiments and more detailed expositions for the benefit of
+   both the biological and the computation communities..."
+
+  We clarified the concerns of the reviewers and clearly 
+  stated in the Sec 1. Introduction that the CBMC 
+  method does not scale and the direct encoding does. 
 
   >> A final minor point is about the use of "Synthesis" as 
     an encoding in Fig 4 and the relevant explanations. 
@@ -144,8 +148,8 @@ in the revised version of our paper.
     more appropriate to specify QBF as the encoding used for 
     the "VTS synthesis" problem.
 
-  Authors response: We have now incorporated this information 
-  in Fig 4.
+  Authors response: This is indeed the case. We have now 
+  incorporated this information in Fig 4.
 
 % Reviewer 4: 
  
