@@ -1,5 +1,5 @@
 \noindent 
-We demonstrate in our work how local regulatory interactions between molecules of the VTS, translate into a global, observable properties of the VTS. 
+We demonstrate in our work how local regulatory interactions between molecules of the VTS, translate into global, observable properties of the VTS. 
 %
 Interactions between SNARE proteins and their regulators, which in its simplest form can be encoded in a pairing matrix, constrain the topological properties of the transport graph; all VTSs based on SNARE protein interactions must be 2-strongly connected. 
 %
@@ -7,7 +7,7 @@ Additionally, we demonstrate how we can aid in predicting new vesicles given an 
 %
 Our approach demonstrates the power of SMT solvers in a novel application and the value of careful encoding of the problems into SMT queries. 
 %
-We manage to scale the tool up to the size that makes the tool biologically relevant.
+We manage to scale the tool up to the size that makes it biologically relevant.
 %
 %To conclude, we have established a connection between vesicle transport graph connectedness and underlying rules of SNARE pairing and regulation. 
 %%
@@ -20,7 +20,7 @@ We manage to scale the tool up to the size that makes the tool biologically rele
 
 However, the problem of searching for all $k$-connected VTSs induces quantifier alternation in the encodings. 
 %
-Therefore, a simple call to SAT solver may not work efficiently. 
+Therefore, a simple call to SAT solvers may not work efficiently. 
 %
 We used QBF solvers for such queries. Our connectivity results contain many predictions which can in principle be tested through cell-biological experiments. 
 %
@@ -34,18 +34,16 @@ Exact counting of the graphs using SAT solvers may prove to be very difficult. W
 
 We also presented encodings of the synthesis problems that may arise from VTSs.
 %
-We demonstrated that our tool based on the encodings
-scale up to the relevant sizes of the VTSs for some synthesis queries.
+We demonstrated that our tool based on encodings
+scales up to the relevant sizes of the VTSs for some synthesis queries.
 %
-Our tool timed out on larger examples.
-%
-We are working to improve the performance of our tool.
+Our tool timed out on larger examples, and we are working to improve its performance.
 %
 %
-With the tool, we made an attempt to present multiple new testable predictions. 
+With the tool, we have made an attempt to present multiple new testable predictions. 
 %
-We will take this tool to the biologists and develop wet experiments that may
-validate some synthesis results from the tool.
+We plan to take this tool to biologists and develop wet experiments that may
+validate some of our synthesis results.
 %
 %These predictions may very likely increase to hasten discoveries in this field alongside pushing forward the use of formal methods in the biological field.
 %
@@ -53,12 +51,12 @@ validate some synthesis results from the tool.
 Since our current knowledge of VTSs is not extensive and there are many missing parts,
 there is a huge space of potential predictions.
 %
-We also developing methods to prioritize predictions considering addition biological
+We are also developing methods to prioritize predictions considering additional biological
 information and using a refined model.
 %
-For example, in this work, we have only analyzed the VTS as static graphs. A major aspect of the biological cell’s VTS that the current model is missing is \textit{compartment maturation}, imbalances in incoming and outgoing molecular flux on vesicles.
+For example, in this work, we have only analyzed VTSs as static graphs. A major aspect of the biological cell’s VTS that the current model is missing is \textit{compartment maturation} that arises from imbalances in incoming and outgoing molecular flux on vesicles.
 %
-In the future, we will study the dynamic behaviors of VTSs.
+In the future, we will study dynamic behaviors of VTSs.
 
 %%% Local Variables:
 %%% mode: latex

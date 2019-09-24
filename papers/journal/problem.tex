@@ -6,9 +6,9 @@ We analyze the model against our desired properties.
 %
 In this paper, we choose graph connectedness to be a key property.
 %
-We categorize the search problem into three different categories (Fig.~\ref{fig:vts-search}), search problem for the existential condition, search problem for the universal condition, and performing synthesis on the incomplete VTS. 
+%We categorize the search problem into three different categories (Fig.~\ref{fig:vts-search}), search problem for the existential condition, search problem for the universal condition, and performing synthesis on the incomplete VTS. 
 %
-We will present two encodings for existential condition and one each for universal condition and synthesis.
+%We will present two encodings for the existential condition and one each for the universal condition and synthesis.
 
 \begin {figure}[!t]
 \centering
@@ -74,7 +74,7 @@ We will present two encodings for existential condition and one each for univers
 \end{figure}
 
 \vspace{0.2cm}
-\noindent We will also seek to answer two kinds of questions given the property.
+\noindent We seek to answer three kinds of questions given the property (Fig.~\ref{fig:vts-search}).
 % %
 % In this paper,
 % our conjecture relates graph-connectedness to a particular variation of SNARE pairing and
@@ -87,8 +87,10 @@ if there is a VTS that satisfies the connectedness property.
 
 \item {\em Universal condition}:
   if there is a connectedness property that is satisfied by each valid VTS.
+\item{\em synthesis on incomplete VTS}:
+    Given an incomplete VTS, if we can predict missing parts.
 \end{enumerate}
-The goal is to find the minimum graph connectivity properties for each of the condition.
+The goal is to find the minimum graph connectivity properties for each of the condition. We will present two encodings for the existential condition and one each for the universal condition and synthesis.
 % In our program, the rules VTS needs to follow 
 % %
 % are represented as constrained over the transport graphs (G), label on the nodes and edges and activity of those labels (determined by a Boolean function f). 
@@ -109,7 +111,7 @@ We also aim to find the minimum $k$.
 %Let's fix our conjecture: ``k-connectedness is a necessary condition for the system regulated by a Boolean function on the node and SNARE-SNARE inhibition on the edge". 
 %
 To find a $k$-connected graph we specify our property as a query for the existence
-of a model for a conjunction of the formula representing stability, fusion and specific
+of a model for a conjunction of the formula representing stability, fusion and the specific
 graph connectivity constraint. 
 %
 % \begin{align*}
@@ -121,7 +123,7 @@ We will start with the value of $k = 1$ and check for the satisfiability of the 
 %
 In case the formula is satisfiable the procedure terminates and we report the value of $k$. 
 %
-If the formula is not satisfiable we increment the $k$ by $1$ and repeat the same procedure. 
+If the formula is not satisfiable we increment $k$ by $1$ and repeat the same procedure. 
 %
 In this way, we ensure that the reported $k$ is the minimum connectivity of the VTS that
 satisfies the existential condition.
@@ -134,9 +136,7 @@ So instead of checking for the graph to be $k$-connected, the encoding (and the 
 Note that this check is sufficient as we are starting from smallest $k$ ($k = 1$) and subsequently incrementing it by one.     
 % Used E as edge and L_e L_n as label for node and the edge,
 
-We employ two techniques to examine the existential condition. 
-%
-First, using the BMC and second using SMT solving.
+We employ two techniques to examine the existential condition: first, using BMC and second using SMT solving.
 %
 Throughout the paper, we will address these two subcategories as $\fbmc$ and $\fsmt$ search problems.
 %
@@ -160,10 +160,10 @@ Throughout the paper, we will address these two subcategories as $\fbmc$ and $\f
 %
 % Similarly, for the conjecture that k-connectedness is a universal condition for the VTS,
 For some $k>0$,
-we have to ensure that every graph of $k$-connected structure satisfies all
+we have to ensure that every $k$-connected graph satisfies all
 the rules of the system.
 %
-We also aim to find the minimum $k$. 
+We also aim to find the minimum such $k$. 
 % We also have to ensure that the particular k is the least one. 
 %
 This condition can be specified as: for every $k$-connected graph, there exists a satisfiable assignment following the rules of the system. 
@@ -191,9 +191,9 @@ We need a QBF solver for such queries.
 We refer the corresponding search problem as $\fqbf$ search problem.
 %
 
-For the efficient implementation of the specification instead of checking the satisfiability of the formula, we check whether the negation of the formula is unsatisfiable. 
+For an efficient implementation of the specification, instead of checking the satisfiability of the formula, we check whether the negation of the formula is unsatisfiable. 
 %
-That is to conclude that a given $k$-connectedness is not a universal condition we search for a $k$-connected graph that has no satisfying assignment to all the rules of the system.
+That is, to conclude that a given $k$-connectedness is not a universal condition, we search for a $k$-connected graph that has no satisfying assignment to all the rules of the system.
 %
 %In case no such graph exists for a specific $k$ we report the $k$.
 %%\ankit{This is a dummy template. need a rewrite.} 
@@ -207,9 +207,9 @@ That is to conclude that a given $k$-connectedness is not a universal condition 
 %\subsection{Problem Statements}
 \subsection{Synthesis of VTS}
 %
-\noindent We also consider another variant of analysis of VTSs.
+\noindent We consider another variant of analysis of VTSs.
 %
-We will assume that we are given a VTS, whose all components
+We will assume that we are given a VTS, all of whose components
 are not specified.
 %
 Our objective is to find the missing components.
@@ -218,7 +218,7 @@ The missing component can
 % be in any of the components of VTS. 
 %
 %For example, 
-be some undiscovered edges or nodes, or insufficient
+be undiscovered edges or nodes, or insufficient
 knowledge about the presence of molecules in some part of the VTS.
 %
 To cover most of the likely variations of this missing information,

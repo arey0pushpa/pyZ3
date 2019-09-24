@@ -1,49 +1,49 @@
-\noindent The previous analysis of VTS used simulation and statistical reasoning~\cite{mani2016stacking}. 
+\noindent Previous analysis of VTS used simulation and statistical reasoning~\cite{mani2016stacking}. 
 %
-Such analysis is far from complete and can only make statistical claims about VTS based on a subset of samples. 
+Such analysis is far from complete and can only make statistical claims about the VTS based on a subset of samples. 
 %
 The properties of VTS discussed in this paper require precise analysis for all possible rules and variations, that make formal methods a suitable alternative.
 
-The SAT solvers are used to solve a wide range of problems including
+SAT solvers are used to solve a wide range of problems including
 %
 software and hardware verification~\cite{biere1999symbolic1, biere1999symbolic2, bjesse2001finding, velev2003effective}, equivalence checking~\cite{goldberg2001using}, automatic test case generation~\cite{stephan1996combinational},
 AI planning~\cite{kautz1996pushing} and scheduling~\cite{gomes1998randomization}. 
 %
-The enormous progress in the performance of SAT and SMT solvers
+Enormous progress in the performance of SAT and SMT solvers
 %Improvement in SAT and SMT solvers
 in the past decades have led to their use in modeling and understanding complex biological systems~\cite{heule2010exact,yordanov2013smt,mangla2010timing}. 
 %
-Many of which involve reasoning about graphs and networks rules~\cite{guerra2012reasoning,chin2008biographe} with possible exhaustive search.
+Many of these applications involve reasoning about graphs and networks rules~\cite{guerra2012reasoning,chin2008biographe} with possible exhaustive search.
 % and hence can be reduced to solving a SAT/SMT question. 
 %
 
-One of the prominent areas of application of SAT and SMT solvers is modeling and understanding the gene regulatory networks (GRN)~\cite{giacobbe2015model,rosenblueth2014inference, yordanov2016method, dunn2014defining, paoletti2014analyzing, koksal2013synthesis}.
+One of the prominent areas of application of SAT and SMT solvers is modeling and understanding gene regulatory networks (GRN)~\cite{giacobbe2015model,rosenblueth2014inference, yordanov2016method, dunn2014defining, paoletti2014analyzing, koksal2013synthesis}.
 %
-The gene regulatory network question is encoded either directly as a Boolean satisfiability problem or in addition with the combinations of background theories.
+The gene regulatory network question is encoded either directly as a Boolean satisfiability problem or in addition with combinations of background theories.
 %
 The generated formula is then solved with the help of a SAT solver. 
 %
-The~\cite{rosenblueth2014inference} uses symbolic model checking approach on the qualitative
+~\cite{rosenblueth2014inference} uses a symbolic model checking approach on qualitative
 models of regulatory networks.
 %
-Whereas,~\cite{dunn2014defining}  uses symbolic, SAT-based approach on the Boolean network model. 
+Whereas,~\cite{dunn2014defining} uses a symbolic, SAT-based approach on the Boolean network model. 
 %
-The~\cite{giacobbe2015model, yordanov2016method} presents an SMT based encoding of the problem based on the presented Boolean model.
+~\cite{giacobbe2015model, yordanov2016method} presents an SMT based encoding of the problem based on the presented Boolean model.
 %
 
-We have extended the application of SAT and SMT solvers to a comparatively more complex biological transport network~\cite{mani2016stacking} namely VTS. 
+We have extended the application of SAT and SMT solvers to a comparatively more complex biological transport network~\cite{mani2016stacking}, namely VTS. 
 %
-We have presented both SAT and SMT based encoding for our Boolean model of the VTS.
+We have presented both SAT and SMT based encodings for our Boolean model of the VTS.
 %
 We have also introduced the use of QBF solvers and it's encoding in this context.
 % 
 %To our best knowledge, this series of work is the first application
 %of formal methods to the vesicle traffic networks.
 
-In recent years, there has been a wide range of methods
-developed for similar synthesis problems~\cite{sketch,sygus,exampleSynth}.
+In recent years, a wide range of methods
+have been developed for similar synthesis problems~\cite{sketch,sygus,exampleSynth}.
 %
-They range from filling gaps an implementation of C programs from the pool of template predicates to learn a program from the example
+They range from filling gaps in implementation of C programs from the pool of template predicates, to learning a program from the example
 runs of the program.
 %
 In the course of developing such methods,
@@ -57,9 +57,9 @@ Recent work by \cite{fisher2015synthesising} synthesize executable gene regulato
 %
 In \cite{shavit2016automated} synthesis of switching GRN (with changing topology) is performed.
 %
-The~\cite{fisher2015synthesising} uses constraint (satisfiability) solving techniques whereas \cite{shavit2016automated} uses SMT to perform synthesis. 
+~\cite{fisher2015synthesising} uses constraint (satisfiability) solving techniques, whereas \cite{shavit2016automated} uses SMT to perform synthesis. 
 %
-Synthesis technique is also used in optimal synthesis for chemical reaction networks~\cite{cardelli2017syntax}.
+A synthesis technique is also used in optimal synthesis of chemical reaction networks~\cite{cardelli2017syntax}.
 %
 %
 The work uses a template-guided approach in addition to using SMT over ODE. In our case, queries contain quantifiers so we have employed QBF solving with Z3 for solving the synthesis problem. 
