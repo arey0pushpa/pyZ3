@@ -87,8 +87,8 @@ if there is a VTS that satisfies the connectedness property.
 
 \item {\em Universal condition}:
   if there is a connectedness property that is satisfied by each valid VTS.
-\item{\em synthesis on incomplete VTS}:
-    Given an incomplete VTS, if we can predict missing parts.
+\item{\em Synthesis on incomplete VTS}:
+    given an incomplete VTS, if we can predict missing parts.
 \end{enumerate}
 The goal is to find the minimum graph connectivity properties for each of the condition. We will present two encodings for the existential condition and one each for the universal condition and synthesis.
 % In our program, the rules VTS needs to follow 
@@ -129,11 +129,14 @@ In this way, we ensure that the reported $k$ is the minimum connectivity of the 
 satisfies the existential condition.
 %
 
-The implementation of the $k$-connectedness property is challenging as it requires reasoning about all possible $k - 1$ edge removals. 
+The implementation of the $k$-connectedness property is challenging as it requires reasoning about each combination of $k - 1$ edge removal. 
 %
-So instead of checking for the graph to be $k$-connected, the encoding (and the implementation) checks whether the graph is not $k+1$-connected.
+%The implementation of the k-connectedness property is challenging as it requires reasoning about every possible k − 1 edge removals.
 %
-Note that this check is sufficient as we are starting from smallest $k$ ($k = 1$) and subsequently incrementing it by one.     
+So instead of checking for the graph to be $k$-connected, the encoding (and the implementation) checks whether the graph is not $k+1$-connected, i.e., search for a $k$ edge removal that disconnects the graph.
+%
+Note that this suffices to find the exact $k$, as we are starting from the smallest value of $k$ and subsequently incrementing it by one.
+%Note that this suffice to find the correct $k$ as we are starting from smallest $k$ ($k = 1$) and subsequently increment it by one.     
 % Used E as edge and L_e L_n as label for node and the edge,
 
 We employ two techniques to examine the existential condition: first, using BMC and second using SMT solving.

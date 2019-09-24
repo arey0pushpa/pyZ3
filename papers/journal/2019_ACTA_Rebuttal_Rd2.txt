@@ -96,8 +96,7 @@ in the revised version of our paper.
   distinction between high-level overview and the implementation.
 
   "The implementation of the k-connectedness property is 
-  challenging as it requires reasoning about all possible k − 1 
-  edge removals. So instead of checking for the graph to be 
+  challenging ... So instead of checking for the graph to be 
   k-connected, the encoding (and the implementation) checks 
   whether the graph is not k + 1-connected..."
  
